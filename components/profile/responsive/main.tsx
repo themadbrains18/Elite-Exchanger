@@ -1,0 +1,52 @@
+import React, { useEffect, useState } from 'react'
+import Dashboard from '../dashboard';
+import SecuritySettings from '../securitySettings';
+import NotificationSettings from '../notificationSettings';
+import KycAuth from '../kycAuth';
+import Referal from '../referal';
+import Activity from '../activity/activity';
+import { useSession } from 'next-auth/react';
+import KycPending from '../kyc-pending';
+import KycDone from '../kyc-done';
+interface showTabContent {
+  show: number;
+  setShow: any;
+  profileInfo1?: any;
+  kycInfo?: any;
+  referalList?:any;
+  activity?:any;
+}
+const MainResponsivePage = (props: showTabContent) => {
+
+  const { data: session } = useSession();
+
+  return (
+    <>
+
+      {/* for profile page in mobile */}
+      <Dashboard fixed={true} show={props.show} setShow={props.setShow} userDetail={props.profileInfo1} session={session}/>
+
+      <SecuritySettings fixed={true} show={props.show} setShow={props.setShow} session={session} activity={props?.activity}/>
+
+      <NotificationSettings fixed={true} show={props.show} setShow={props.setShow} />
+      {
+        props.kycInfo && props.kycInfo.length === 0 &&
+        <KycAuth fixed={true} show={props.show} setShow={props.setShow} num={2}/>
+      }
+
+      {
+        props.kycInfo?.isVerified == false &&
+        <KycPending fixed={true} show={props.show} setShow={props.setShow} session={session} />
+      }
+      {
+        props.kycInfo?.isVerified == true &&
+        <KycDone fixed={true} show={props.show} setShow={props.setShow} session={session} />
+      }
+
+      <Referal fixed={true} show={props.show} setShow={props.setShow} session={session} referalList={props.referalList}/>
+
+    </>
+  )
+}
+
+export default MainResponsivePage;

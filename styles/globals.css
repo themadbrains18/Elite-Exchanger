@@ -1,0 +1,432 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Public+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  /* background: linear-gradient(to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb)); */
+}
+*{
+  font-family: 'Inter', sans-serif;
+}
+img{
+  max-width: 100%;
+}
+
+
+
+@layer components {
+  
+  .trade_history_scroll::-webkit-scrollbar {
+    @apply !hidden
+  }
+
+
+  ::-webkit-scrollbar {
+    @apply w-[4px] bg-[#90caf929];
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    @apply bg-[#80808F] rounded-md;  
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+   @apply bg-[#555];
+  }
+/* Common css */
+.container {
+  @apply mx-auto my-0 max-w-[1630px] w-full px-5;
+}
+
+  /*/======= Navbar text css =======/*/
+
+  /* Large Navbar Text (fs-18)  */
+  .nav-text-lg{
+    @apply font-normal text-[16px] leading-22 text-nav-primary dark:text-d-nav-primary;
+  }
+
+  /* Large Navbar Text (fs-14)  */
+  .nav-text-sm {
+    @apply font-normal text-[14px] leading-17 text-nav-secondary dark:text-d-nav-secondary;
+  }
+  /*/==================================/*/
+
+
+  /*/======= admin css =======/*/
+    .admin-nav-text{
+      @apply font-public-sans text-[16px] dark:text-white text-[#1B283F] font-normal  tracking-[0.15px]
+    }
+    .admin-body-text{
+      @apply font-public-sans text-[14px] dark:text-white  font-normal text-[#1B283F] tracking-[0.15px]
+    }
+    .admin-component-heading{
+      @apply font-public-sans text-[20px] dark:text-white font-medium text-[#212121] tracking-[0.15px] leading-8
+    }
+
+    .admin-table-heading{
+      @apply font-public-sans text-xs font-medium leading-[17px] text-table-heading tracking-[0.17px]
+    }
+    .admin-table-data{
+      @apply font-public-sans text-sm font-medium leading-5 dark:text-white text-table-data tracking-[0.17px]
+    }
+
+  /*/======= admin css =======/*/
+
+
+  /*/======= Heading text css =======/*/
+
+  /* Section Heading Typography (fs-19)  */
+  .sec-title {
+    @apply font-medium text-[14px] md:text-[18px] leading-22 md:leading-24 tracking-wide text-primary dark:text-primary;
+  }
+  /* section Heading ) Typography (fs-48)  */
+  .sec-subTitle {
+    @apply font-semibold text-[23px] md:text-[48px] leading-28 md:leading-56 tracking-wide md:tracking-normal text-h-primary dark:text-d-h-primary;
+  }
+
+  /* Double Extra Large Heading Typography (fs-60)  */
+  .xxl-heading {                                                                                                                                                                                                                                                                          
+    @apply font-bold text-[23px] md:text-[50px] lg:text-[60px] leading-28 md:leading-60 lg:leading-72 tracking-wide md:tracking-normal;
+  }
+
+
+  /* Large Heading Typography (fs-39)  */
+  .lg-heading {
+    @apply font-medium text-[18px] md:text-[39px] leading-24 md:leading-47 tracking-wide md:tracking-normal dark:text-d-h-primary text-h-primary;
+  }
+
+  /* Medium Heading Typography (fs-33)  */
+  .md-heading {
+    @apply font-medium text-[23px] md:text-[33px] leading-28 md:leading-40 tracking-wide;
+  }
+
+  /* Small Heading Typography (fs-19)  */ 
+  .sm-heading {
+    @apply font-medium text-[14px] md:text-[19px] leading-20 md:leading-23 tracking-wide;
+  }
+
+  /*/==================================/*/
+
+
+  /*/======= Body Text Typography =======/*/
+
+  /* Large Text Typography (fs-18)  */
+  .sec-text {
+    @apply font-normal text-[14px] md:text-[18px] leading-22 md:leading-24 dark:text-white;
+  }
+
+  /* Medium Text Typography (fs-16)  */
+  .md-text {
+    @apply font-normal text-[12px] md:text-[16px] leading-18 md:leading-24 dark:text-white;
+  }
+
+  /* Small Text Typography (fs-14)  */
+  .sm-text   {
+    @apply font-normal text-[12px] md:text-[14px] leading-18 md:leading-17 text-body-primary dark:text-d-body-primary;
+  }
+
+  .sec-title {
+    @apply font-medium text-[18px] md:text-[23px] leading-24 md:leading-28 text-h-primary dark:text-white;
+  }
+
+  .info-14-18 {
+    @apply font-normal text-[14px] md:text-[18px] leading-17 md:leading-22 text-gamma;
+  }
+  .info-16-18 {
+    @apply font-normal text-[16px] md:text-[18px] leading-24 md:leading-22 dark:text-white;
+  }
+
+  .info-12 {
+    @apply font-normal text-[12px] leading-18  text-gamma;
+  }
+
+  .info-10-14 {
+    @apply font-normal text-[10px] md:text-[14px] leading-[14px] md:leading-17 text-gamma dark:text-beta;
+  }
+  .info-10 {
+    @apply font-normal text-[10px]  leading-[14px]  text-gamma dark:text-beta;
+  }
+
+
+
+
+  /*/==================================/*/
+
+
+
+  /*/======= Footer Text Typo ==========/*/
+
+  /* Small Heading Typography (fs-19)  */
+  .footer-heading {
+    @apply font-medium text-[18px] md:text-[19px] leading-24 md:leading-23 tracking-wide text-footer-heading dark:text-d-footer-heading;
+  }
+
+  .footer-text {
+    @apply font-normal text-[14px] leading-17 tracking-wide text-footer-text dark:text-d-footer-text;
+  }
+
+  .footer-text-secondary {
+    @apply font-normal text-[16px] md:text-[18px] leading-22 md:leading-24 tracking-wide text-footer-text dark:text-d-footer-text;
+  }
+
+  /*/==============================/*/
+
+
+
+
+  /*/======= Button Typo ==========/*/
+
+  .solid-button {
+    @apply font-medium text-[16px] md:text-[18px] leading-24 text-white bg-primary rounded-10 p-[15px] md:p-[19px];
+  }
+  .solid-button2 {
+    @apply font-medium text-[18px] leading-24 text-primary bg-grey-v-2 rounded-10 py-[15px] md:py-[19px] px-[23px] md:px-[37px];
+  }
+
+  /* Border Button :- for Have only Border */
+  .outline-button {
+    @apply font-normal text-[16px] leading-22 bg-[transparent] px-[20px] py-[15px] text-beta rounded-5 border border-solid border-beta;
+  }
+
+  /* Pill Shape Solid Button */
+  .pill-solid-button {
+    @apply font-medium text-[18px] leading-24 bg-white text-[#0D0D2B] px-[32px] py-[15px] rounded-full;
+  }
+
+  .admin-solid-button{
+    @apply dark:bg-admin-primary-100 bg-primary dark:text-[#212121] text-[#fff] py-[6px] px-[18px] !text-[14px] rounded-[4px];
+  }
+  .admin-outline-button{
+    @apply border dark:border-admin-primary-100 border-[#E1F0FF] dark:text-admin-primary-100 text-admin-primary py-[6px] px-[18px] !text-[14px] rounded-[4px];
+  }
+
+
+  /*/==================================/*/
+  .bannerSwiper  .swiper-wrapper{
+    @apply !grid grid-cols-3  md:!transform-none gap-3 ;
+  }
+
+
+  /**  Inputs style */
+
+.input-cta{
+  @apply outline-none border border-[transparent] p-5 h-[62px] rounded-8 focus:border-primary-700 dark:bg-black-v-1 lg:dark:bg-d-bg-primary bg-primary-100 text-beta
+}
+.input-cta2{
+  @apply outline-none border border-[transparent] py-[14px] px-5 md:h-[50px] h-[46px] rounded-8 focus:border-primary-700 dark:bg-black-v-1  bg-bg-secondary text-beta
+}
+
+}
+
+/* width */
+.listWrapper::-webkit-scrollbar {
+  @apply w-[7px] rounded-[10px];
+}
+
+/* Track */
+.listWrapper::-webkit-scrollbar-track {
+  @apply bg-[#f1f1f1] rounded-[10px]; 
+}
+ 
+/* Handle */
+.listWrapper::-webkit-scrollbar-thumb {
+  @apply bg-[#888] rounded-[10px]
+}
+
+.tmb-swiper .swiper-pagination{
+  @apply static mt-[25px];
+}
+.tmb-swiper .swiper-pagination-bullet{
+  @apply bg-[#808080];
+}
+.tmb-swiper .swiper-pagination-bullet.swiper-pagination-bullet-active{
+  @apply bg-primary;
+}
+
+input[type=date]::-webkit-calendar-picker-indicator {
+  
+  color: rgba(0, 0, 0, 0);
+  opacity: 0;
+
+}
+.filter-wrapper::-webkit-scrollbar{
+  display: none;
+}
+/** history pagination **/
+.history_pagination{
+@apply flex gap-[5px] md:gap-5
+
+}
+
+.history_pagination li {
+  @apply info-14-18 w-7 md:w-30 h-7 md:h-30 flex items-center justify-center
+}
+.history_pagination li.previous {
+  @apply w-30 h-30 border border-primary text-primary rounded-5 flex
+}
+.history_pagination li.previous a {
+  @apply  ml-[3px]
+}
+
+.history_pagination li.next {
+  @apply border border-primary text-primary rounded-5 
+}
+.history_pagination li.next a {
+  @apply mt-[-1px] ml-[3px]
+}
+.history_pagination  li.disabled {
+  @apply border-[transparent] text-beta
+}
+
+.history_pagination li.selected{
+  @apply info-14-18 !text-primary
+}
+
+@media(min-width:1024px){
+
+  .card[index="0"],
+  .card[index="1"]
+  {
+    @apply ml-[-60px]
+  }
+}
+
+input[name="colored-radio-dd"]:checked + .custom-radio,
+input[name="market_type" ]:checked + .custom-radio,
+input[name="colored-radio2" ]:checked + .custom-radio,
+input[name="colored-radio" ]:checked + .custom-radio,
+input[name="token_id" ]:checked + .custom-radio
+{
+  @apply border-primary
+}
+
+input[name="colored-radio-dd"]:checked + .custom-radio p,
+input[name="market_type" ]:checked + .custom-radio p,
+input[name="colored-radio2" ]:checked+ .custom-radio p,
+input[name="colored-radio" ]:checked+ .custom-radio p,
+input[name="token_id" ]:checked + .custom-radio p
+{
+  @apply !text-primary
+}
+input[name="colored-radio-dd"]:checked + .custom-radio:after,
+input[name="market_type" ]:checked + .custom-radio:after,
+input[name="colored-radio2" ]:checked + .custom-radio:after,
+input[name="colored-radio" ]:checked + .custom-radio:after,
+input[name="token_id" ]:checked + .custom-radio::after
+{
+  @apply dark:bg-omega  border-primary;
+}
+input[name="colored-radio-dd"]:checked + .custom-radio:before,
+input[name="market_type" ]:checked + .custom-radio:before,
+input[name="colored-radio2" ]:checked + .custom-radio:before,
+input[name="colored-radio" ]:checked + .custom-radio:before,
+input[name="token_id" ]:checked + .custom-radio::before
+{
+  @apply bg-primary;
+}
+input[name="colored-radio-dd"]:checked +  .custom-radio,
+input[name="colored-radio"]:checked +  .custom-radio{
+  @apply !text-primary;
+}
+input[name="colored-radio"].contactform:checked + .custom-radio{
+  @apply !text-gamma dark:!text-white
+
+}
+.dateInput{
+  background-position: 137px 15px;
+  background-image: url(/assets/calender-new.svg);
+  background-repeat:  no-repeat;
+}
+
+.dateInputIcon2 {
+  background-position: 310px 15px;
+  
+}
+.clip-bg{
+  clip-path: circle(50% at 50% 50%);
+}
+.fullWidthContent {
+  grid-column: 1/4;
+  height: 0;
+  overflow: hidden;
+  transition: 0.4s;
+}
+.links_wrapper::-webkit-scrollbar{
+  display: none;
+}
+.bottom-right{
+  border-bottom-right-radius: 0;
+}
+.bottom-left{
+  border-bottom-left-radius: 0;
+}
+.chatContainor::-webkit-scrollbar{
+  display: none;
+}
+.position-fixed{
+  display: none;
+}
+.profile-wrapper:hover .dropdown_wrapper{
+  opacity: 1;
+  visibility: visible; 
+}
+.profile-wrapper:hover .arrow{
+  transform: rotate(180deg);
+}
+.header-wrapper{
+  grid-template-columns: auto auto;
+}
+.methods:checked + label::before{
+  opacity: 1;
+}
+.methods:checked + label::after{
+  border: 1px solid #5367FF;
+}
+.all-user-table input[type="checkbox"]:checked + label::after{
+  @apply  dark:bg-admin-primary-100 bg-admin-primary border-none 
+}
+.all-user-table input[type="checkbox"]:checked + label::before{
+  @apply block dark:border-[#212121] border-[#fff]
+}
+
+.tradingview-widget-copyright{display: none;}
+
+#tradingview_46b68 div{
+  margin: 0px !important;
+  width: 100% !important;
+}
+
+.active ~ .network_info{
+  @apply flex py-[15px]
+}
+
+.react-datepicker-wrapper{
+  display: block !important;
+}

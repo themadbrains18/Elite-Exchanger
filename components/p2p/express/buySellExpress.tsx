@@ -1,0 +1,210 @@
+import BuySellCard from "@/components/snippets/buySellCard";
+import FilterSelectMenuWithCoin from "@/components/snippets/filter-select-menu-with-coin";
+import IconsComponent from "@/components/snippets/icons";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import secImgLight from "../../../public/assets/home/trade-anywhare-light.png";
+import secImgDark from "../../../public/assets/home/trade-anywhare-dark.png";
+
+interface propsData {
+  coins: any;
+  session: any;
+  // assets:any
+}
+const BuySellExpress = (props: propsData) => {
+  const [active1, setActive1] = useState(1);
+  const [show, setShow] = useState(1);
+  const [selectedToken, setSelectedToken] = useState(Object);
+  const [firstCurrency, setFirstCurrency] = useState("");
+  const [secondCurrency, setSecondCurrency] = useState("");
+  const [totalAmount, setTotalAmount] = useState(0.0);
+
+  const list = props.coins;
+
+  const router = useRouter();
+
+  const setCurrencyName = (symbol: string, dropdown: number) => {
+    if (dropdown === 1) {
+      setFirstCurrency(symbol);
+      let token = list.filter((item: any) => {
+        return item.symbol === symbol;
+      });
+
+      setSelectedToken(token[0]);
+
+      //   if (userAssets.message !== undefined) {
+      //     signOut();
+      //     return;
+      //   }
+      // get assets balance
+      //   let selectAssets = userAssets.filter((item: any) => {
+      //     return item.token_id === token[0].id;
+      //   });
+      //   if (selectAssets.length > 0) {
+      //     setPrice(selectAssets[0].balance);
+      //   } else {
+      //     setPrice(0.0);
+      //   }
+    } else {
+      setSecondCurrency(symbol);
+    }
+  };
+
+  return (
+    <div className="flex items-center mt-[30px] justify-around">
+      <div className="max-w-full md:max-w-[554px] w-full">
+        <Image
+          src={secImgLight}
+          className="dark:hidden"
+          alt="error"
+          width={454}
+          height={578}
+        />
+        <Image
+          src={secImgDark}
+          className="hidden dark:block"
+          alt="error"
+          width={454}
+          height={578}
+        />
+      </div>
+      <div className="p-20 md:p-20 rounded-10  bg-white dark:bg-d-bg-primary max-w-[500px] w-full border border-grey-v-1 dark:border-opacity-[15%] ">
+        <div className="flex border-b border-grey-v-1">
+          <button
+            className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${
+              active1 === 1 && "!text-primary border-primary"
+            }`}
+            onClick={() => setActive1(1)}
+          >
+            Buy
+          </button>
+          <button
+            className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${
+              active1 === 2 && "!text-primary border-primary"
+            }`}
+            onClick={() => setActive1(2)}
+          >
+            Sell
+          </button>
+        </div>
+        <form>
+          <div className="py-20">
+            {/* First Currency Inputs */}
+            <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
+              <div className="">
+                <p className="sm-text dark:text-white">
+                  I want to {active1 === 1 ? "pay" : "sell"}
+                </p>
+                <input
+                  type="number"
+                  placeholder="$0"
+                  step="any"
+                  //   {...register("token_amount", {
+                  //     onChange: () => {
+                  //       convertTotalAmount();
+                  //     },
+                  //   })}
+                  name="token_amount"
+                  className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text "
+                />
+              </div>
+
+              <div>
+                {router.pathname.includes("/chart") ? (
+                  <div className="flex items-center gap-[5px] rounded-[5px] mr-[15px] pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d]">
+                    {/* <Image
+                              src={`${props?.token?.image !== undefined ? props?.token?.image : '/assets/home/coinLogo.png'}`}
+                              alt="error"
+                              width={20}
+                              height={20}
+                            /> */}
+                    <p
+                      className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text`}
+                    >
+                      {/* {props?.token?.fullName} */}
+                    </p>
+                  </div>
+                ) : (
+                  <FilterSelectMenuWithCoin
+                    data={list}
+                    border={false}
+                    setCurrencyName={setCurrencyName}
+                    dropdown={1}
+                  />
+                )}
+              </div>
+            </div>
+            {/* {errors.token_amount && (
+                      <p style={{ color: "red" }}>{errors?.token_amount?.message}</p>
+                    )} */}
+
+            {/* Second Currency Inputs */}
+            <div className="mt-30 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
+              <div className="">
+                <p className="sm-text dark:text-white">I will receive≈</p>
+                <input
+                  type="number"
+                  placeholder="$0"
+                  step="any"
+                  //   {...register("limit_usdt", {
+                  //     onChange: () => {
+                  //       convertTotalAmount();
+                  //     },
+                  //   })}
+                  name="limit_usdt"
+                  className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full "
+                />
+              </div>
+
+              <div>
+                <FilterSelectMenuWithCoin
+                  data={list}
+                  border={false}
+                  setCurrencyName={setCurrencyName}
+                  dropdown={2}
+                />
+              </div>
+            </div>
+            {/* {errors.limit_usdt && (
+                      <p style={{ color: "red" }}>{errors.limit_usdt.message}</p>
+                    )} */}
+
+            <div className="mt-5 flex gap-2">
+              <p className="sm-text dark:text-white">
+                Estimated price: 1{secondCurrency} = 12{firstCurrency}
+              </p>
+              {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
+              {/* <p className="sm-text dark:text-white">{totalAmount}</p> */}
+            </div>
+          </div>
+          {props?.session ? (
+            <button type="submit" className={`solid-button w-full ${active1==1 ?'bg-[#0ECB81] dark:bg-[#089b61]':'bg-[#f6465d]'}`}>
+              {active1 === 1
+                ? `Buy ${
+                    selectedToken?.symbol !== undefined
+                      ? selectedToken?.symbol
+                      : ""
+                  }`
+                : `Sell ${
+                    selectedToken?.symbol !== undefined
+                      ? selectedToken?.symbol
+                      : ""
+                  }`}
+            </button>
+          ) : (
+            <Link
+              href="/login"
+              className="solid-button w-full block text-center"
+            >
+              Login
+            </Link>
+          )}
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default BuySellExpress;

@@ -1,0 +1,68 @@
+import IconsComponent from '@/components/snippets/icons';
+import Image from 'next/image';
+import React from 'react'
+import Avtar from '../../../public/assets/header/Avatar.png';
+import { useSession } from 'next-auth/react';
+
+interface propsData {
+    userDetail?: any;
+}
+
+const UserCenterProfile = (props: propsData) => {
+
+    const { status, data: session } = useSession();
+
+    return (
+        <div>
+            <div className='mt-40 mb-30'>
+                <div className='flex items-center justify-center md:justify-between'>
+
+                    <div className='flex md:flex-row flex-col items-center gap-[20px] cursor-pointer  relative'>
+                        <div>
+                            {props?.userDetail && props?.userDetail?.image &&
+                                <Image src={`${process.env.NEXT_PUBLIC_APIURL}/dp/${props?.userDetail?.image}`} alt='profile' width={100} height={100} className='rouned-full' />
+                            }
+                            {props?.userDetail?.fName === undefined &&
+                                <Image src={Avtar} alt='error' width={100} height={100} className='rouned-full' />
+                            }
+
+                        </div>
+                        <div className='md:text-start text-center'>
+                            <p className='sec-title'>{props?.userDetail ? props?.userDetail.fName : session?.user?.name}</p>
+                            <p className='sec-text !text-gamma'>{props?.userDetail ? props?.userDetail.uName : session?.user?.name}</p>
+                        </div>
+                    </div>
+
+                    {/* <div className="py-[13px] px-[15px] border cursor-pointer dark:border-opacity-[15%] border-grey-v-1 items-center rounded-5 hidden md:flex gap-[10px]">
+
+                        <Image src="/assets/profile/edit.svg" width={24} height={24} alt="edit"></Image>
+                        <p className="nav-text-sm">Edit</p>
+                    </div> */}
+
+                </div>
+            </div>
+            <div className='overflow-x-auto'>
+                <div className='flex items-center gap-[24px] w-fit'>
+                    <div className='flex items-center gap-[15px] border dark:border-opacity-[15%] border-grey-v-1 p-10 md:px-[20px] md:py-[14px] rounded-[5px]'>
+                        <IconsComponent type='verified' hover={false} active={false} />
+                        <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text whitespace-nowrap'>E-mail</p>
+                    </div>
+                    <div className='flex items-center gap-[15px] border dark:border-opacity-[15%] border-grey-v-1 p-10 md:px-[20px] md:py-[14px] rounded-[5px]'>
+                        <IconsComponent type={( props?.userDetail && props?.userDetail?.User?.tradingPassword!== "" && props?.userDetail?.User?.tradingPassword!== null)?'verified':'infoIconRed'} hover={false} active={false} />
+                        <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text'>Trade Password</p>
+                    </div>
+                    <div className='flex items-center gap-[15px] border dark:border-opacity-[15%] border-grey-v-1 p-10 md:px-[20px] md:py-[14px] rounded-[5px]'>
+                        <IconsComponent type={(props?.userDetail && props?.userDetail?.User?.user_kyc!== "" && props?.userDetail?.User?.user_kyc!== null)?'verified':'infoIconRed'} hover={false} active={false} />
+                        <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text'>KYC</p>
+                    </div>
+                    <div className='flex items-center gap-[15px] border dark:border-opacity-[15%] border-grey-v-1 p-10 md:px-[20px] md:py-[14px] rounded-[5px]'>
+                        <IconsComponent type={( props?.userDetail &&props?.userDetail?.User?.number!== "" && props?.userDetail?.User?.number!== null)?'verified':'infoIconRed'} hover={false} active={false} />
+                        <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text'>SMS</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}
+
+export default UserCenterProfile;

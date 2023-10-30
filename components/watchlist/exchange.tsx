@@ -1,0 +1,280 @@
+import React, { useState } from "react";
+import Image from "next/image";
+import FilterSelectMenuWithCoin from "../snippets/filter-select-menu-with-coin";
+import { toast } from 'react-toastify';
+import { signOut, useSession } from 'next-auth/react'
+import AES from 'crypto-js/aes';
+
+interface DynamicId {
+  id: number;
+  coinList?: any;
+  assets?: any;
+  refreshData?:any;
+}
+
+const Exchange = (props: DynamicId): any => {
+  const [active1, setActive1] = useState(1);
+  const [firstCurrency, setFirstCurrency] = useState('');
+  const [secondCurrency, setSecondCurrency] = useState('');
+  const [selectedToken, setSelectedToken] = useState(Object);
+  const [selectedSecondToken, setSelectedSecondToken] = useState(Object);
+  const [firstMannual, setFirstMannual] = useState(false);
+  const [secondMannual, setSecondMannual] = useState(false);
+  const [amount, setAmount] = useState(0);
+  const [receiveAmount, setReceivedAmount] = useState(0);
+  const [requestBody, setRequestBody] = useState(Object);
+
+  const [isConvert, setIsConvert] = useState(false);
+
+  let { status, data: session } = useSession();
+
+  const list = props?.coinList;
+
+  let newCoinListWithBalance = [];
+  if(props?.coinList !== undefined  && props?.assets !== undefined){
+  for (const ls of props?.coinList) {
+    ls.avail_bal = 0.00;
+    for (const as of props?.assets) {
+      if (as.token_id === ls.id && as.balance > 0) {
+        ls.avail_bal = as.balance;
+        newCoinListWithBalance.push(ls)
+      }
+    }
+  }
+}
+
+  const setCurrencyName = (symbol: string, dropdown: number) => {
+    if (dropdown === 1) {
+      setFirstCurrency(symbol);
+      let token = list.filter((item: any) => {
+        return item.symbol === symbol
+      });
+      setSelectedToken(token[0]);
+      if (token[0]?.tokenType === 'mannual') {
+        setFirstMannual(true);
+      }
+      else {
+        setFirstMannual(false);
+      }
+    }
+    else {
+      setSecondCurrency(symbol)
+      let token = list.filter((item: any) => {
+        return item.symbol === symbol
+      });
+      setSelectedSecondToken(token[0]);
+      if (token[0]?.tokenType === 'mannual') {
+        setSecondMannual(true);
+      }
+      else {
+        setSecondMannual(false);
+      }
+    }
+  }
+
+  const priceConversion = async () => {
+
+    if (firstCurrency === '') {
+      toast.error('Please select first currency from list');
+      return;
+    }
+    if (secondCurrency === '') {
+      toast.error('Please select second currency from list');
+      return;
+    }
+
+    if (amount === 0 || amount === null || amount === undefined) {
+      toast.error('Please add amount that use want to convert');
+      return;
+    }
+
+    let conversionPrice = 0;
+    let currentPrice = 0;
+    let spendBalance = 0;
+    let receivedBalance = 0;
+
+    if (firstMannual === false || secondMannual === false) {
+      let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${firstMannual === true ? 'USDT' : firstCurrency}&tsyms=${secondMannual === true ? 'USDT' : secondCurrency}`, {
+        method: "GET"
+      }).then(response => response.json());
+
+      if (firstMannual === true && priceData?.data.USDT === undefined) {
+        currentPrice = selectedToken?.price * priceData?.data[secondCurrency];
+        conversionPrice = amount * currentPrice;
+      }
+      else if (secondMannual === true) {
+        currentPrice = priceData?.data['USDT'] / selectedSecondToken?.price;
+
+        // console.log(`1 ${firstCurrency} of ${priceData?.data['USDT']} USDT`);
+
+        // console.log(`1 ${secondCurrency} of ${selectedSecondToken.price} USDT`);
+
+        // console.log(`1 ${firstCurrency} == ${currentPrice} ${secondCurrency}`);
+
+        // console.log(`${amount} ${firstCurrency} of ${amount * currentPrice} ${secondCurrency}`);
+
+        conversionPrice = amount * currentPrice;
+      }
+      else if (firstMannual === false && secondMannual === false) {
+        currentPrice = priceData?.data[secondCurrency];
+        conversionPrice = amount * priceData?.data[secondCurrency];
+      }
+    }
+    else {
+      currentPrice = selectedToken?.price / selectedSecondToken?.price;
+      conversionPrice = amount * currentPrice;
+    }
+
+    setReceivedAmount(conversionPrice);
+    // return;
+
+    // get current balance of user
+    for (const as of props?.assets) {
+      if (as.token_id === selectedToken.id && as.balance > 0) {
+        spendBalance = as.balance - amount;
+      }
+      else {
+        if (as.token_id === selectedSecondToken.id && as.balance > 0) {
+          receivedBalance = as.balance + conversionPrice;
+        }
+        else {
+          if(receivedBalance === 0){
+            receivedBalance = conversionPrice;
+          }
+          
+        }
+      }
+    }
+
+    // user_convert_history form data
+    let history = [];
+    let spendObj = { token_id: selectedToken.id, type: 'Consumption', amount: amount, fee: 0, balance: spendBalance };
+    let receivedObj = { token_id: selectedSecondToken.id, type: 'Gain', amount: conversionPrice.toFixed(8), fee: 0, balance: receivedBalance.toFixed(8) };
+
+    history.push(spendObj);
+    history.push(receivedObj);
+
+    // user_convert form data
+    let convertPayload = {
+      converted: amount + ` ${firstCurrency}`,
+      received: conversionPrice.toFixed(8) + ` ${secondCurrency}`,
+      fees: 0,
+      conversion_rate: `1 ${firstCurrency} = ${currentPrice.toFixed(8)} ${secondCurrency}`,
+      consumption_token_id: selectedToken?.id,
+      gain_token_id: selectedSecondToken?.id,
+      consumption_amount: amount,
+      gain_amount: parseFloat(conversionPrice.toFixed(8))
+    };
+    setRequestBody({ convert: convertPayload, history: history });
+    setIsConvert(true);
+  }
+
+  const sendConvertRequest = async () => {
+
+    if (status === 'authenticated') {
+      const ciphertext = AES.encrypt(JSON.stringify(requestBody), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+      let record = encodeURIComponent(ciphertext.toString());
+
+      let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": session?.user?.access_token
+        },
+        body: JSON.stringify(record)
+      })
+
+      let res = await responseData.json();
+
+      if (res.data.status === 200) {
+        toast.success('Your request successfully!!.');
+        props.refreshData();
+        setIsConvert(false);
+        setFirstCurrency('');
+        setSecondCurrency('');
+        setAmount(0);
+        setReceivedAmount(0);
+      }
+      else {
+        toast.error(res.data.data);
+        setIsConvert(false)
+        setFirstCurrency('');
+        setSecondCurrency('');
+        setAmount(0);
+        setReceivedAmount(0);
+      }
+    }
+
+    else {
+      toast.error('Your session is expired!!. You are auto redirect to login page!!');
+      setTimeout(() => {
+        signOut();
+      }, 3000);
+    }
+
+
+  }
+
+  return (
+    <>
+      <div className="p-20 md:p-40 rounded-10 bg-white dark:bg-d-bg-primary">
+        <div className="flex border-b border-grey-v-1">
+          <button className={`sec-text text-center text-gamma  max-w-[100%] w-full relative  after:block after:top-full after:mx-[auto] after:mt-[25px] after:h-[3px] after:w-[0%] after:bg-primary after:transition-all after:ease-linear after:duration-500 ${active1 === 1 && "text-primary border-primary after:w-[100%] after:bottom"}`} onClick={() => setActive1(1)}>
+            Convert Coin
+          </button>
+
+        </div>
+        <div className="py-50">
+          <div className="flex gap-[18px]">
+            <Image src="/assets/market/walletpayment.svg" alt="wallet2" width={24} height={24} />
+            <p className="md-text w-full">${selectedToken?.avail_bal}</p>
+            <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} />
+            {props.coinList && props.coinList.map((item:any)=>{
+              if(item.symbol === selectedToken?.symbol){
+                return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? item?.price?.toFixed(5) : '0.00'}</p>
+              }
+            })}
+          </div>
+          <div className="mt-20 lg:mt-40 rounded-5 p-[10px] justify-between flex border items-center border-grey-v-1 dark:border-opacity-[15%] relative">
+            <div className="">
+              <p className="sm-text dark:text-white">Quantity({firstCurrency})</p>
+              <input type="number" placeholder="$0" onChange={(e) => setAmount(parseFloat(e.target?.value))} className="bg-[transparent] outline-none md-text border-l px-[5px] mt-[10px] border-h-primary" />
+            </div>
+            <div>
+              <FilterSelectMenuWithCoin data={props?.coinList} border={false} dropdown={1} setCurrencyName={setCurrencyName} />
+            </div>
+          </div>
+
+          <div className="py-[10px]">
+            <Image src="/assets/market/exchange.svg" width={30} height={30} alt="exchange" className=" mx-auto" />
+          </div>
+
+          <div className=" rounded-5 p-[10px] justify-between flex border items-center border-grey-v-1 dark:border-opacity-[15%] relative">
+            <div className="">
+              <p className="sm-text dark:text-white">Buy For ({secondCurrency})</p>
+              <input type="number" value={receiveAmount > 0 ? receiveAmount.toFixed(8) : 0} readOnly placeholder="$0" className="bg-[transparent] md-text outline-none border-l px-[5px] mt-[10px] border-h-primary" />
+            </div>
+            <div>
+              <FilterSelectMenuWithCoin data={list} border={false} dropdown={2} setCurrencyName={setCurrencyName} />
+            </div>
+          </div>
+
+          <div className="mt-5">
+            <p className="sm-text dark:text-white">No extra fees</p>
+          </div>
+        </div>
+
+        {isConvert === false ? <button className=" solid-button w-full" onClick={() => priceConversion()}>Preview</button>
+          :
+          <div className="flex gap-[18px]">
+            <button className=" solid-button w-full bg-grey-v-2 !text-primary" onClick={() => setIsConvert(false)}>Cancel</button>
+            <button className=" solid-button w-full" onClick={() => sendConvertRequest()}>Convert</button>
+          </div>
+        }
+      </div>
+    </>
+  );
+};
+
+export default Exchange;

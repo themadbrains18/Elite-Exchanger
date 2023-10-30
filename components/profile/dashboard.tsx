@@ -1,0 +1,308 @@
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import IconsComponent from "../snippets/icons";
+
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+
+import AES from 'crypto-js/aes';
+
+const schema = yup.object().shape({
+  fName: yup.string().required('this field is required'),
+  lName: yup.string().required('this field is required'),
+  dName: yup.string().required('this field is required'),
+  uName: yup.string().required('this field is required'),
+});
+
+interface fixSection {
+  fixed?: boolean;
+  show?: number;
+  setShow?: Function;
+  profileInfo?: any;
+  session?: any,
+  userDetail?: any;
+}
+
+const Dashboard = (props: fixSection) => {
+  const [editable, setEditable] = useState(false);
+
+  let { register, setValue, handleSubmit, watch, setError, formState: { errors } } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  useEffect(() => {
+    if (props.userDetail) {
+      setValue('fName', props?.userDetail?.fName);
+      setValue('lName', props?.userDetail?.lName);
+      setValue('dName', props?.userDetail?.dName);
+      setValue('uName', props?.userDetail?.uName);
+    }
+  }, []);
+
+  const onHandleSubmit = async (data: any) => {
+    const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
+    let record = encodeURIComponent(ciphertext.toString());
+
+    let response = await fetch(
+      `${process.env.NEXT_PUBLIC_BASEURL}/profile/dashboard`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": props?.session?.user?.access_token
+        },
+        body: JSON.stringify(record),
+      }
+    ).then((response) => response.json());
+
+    if (response?.data?.status === 200) {
+      setEditable(false);
+      const websocket = new WebSocket('ws://localhost:3001/');
+      let profile = {
+        ws_type: 'profile',
+        user_id: props?.session?.user?.user_id,
+      }
+      websocket.onopen = () => {
+        websocket.send(JSON.stringify(profile));
+      }
+    }
+    else {
+
+    }
+  }
+
+  return (
+    <>
+      <section
+        className={`${props.show == 1 && "!left-[50%]"} ${props.fixed &&
+          "duration-300 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary overflow-y-scroll"
+          } p-5 md:p-40 `}
+      >
+        {/* only for mobile view */}
+        <div className="lg:hidden flex dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 bg-black-v-1 w-full  rounded-bl-[20px] rounded-br-[20px]  z-[6] dark:bg-omega bg-white  h-[105px]">
+          <div className="grid grid-cols-[auto_1fr_auto] m-auto w-full px-[20px] items-center">
+            <div
+              onClick={() => {
+                props?.setShow !== undefined && props.setShow(0);
+              }}
+            >
+              <IconsComponent type="backIcon" hover={false} active={false} />
+            </div>
+            <div className="text-center">
+              <p className="sec-title">My Profile</p>
+            </div>
+            <div onClick={() => { setEditable(true) }} className="cursor-pointer">
+              <IconsComponent type="editIcon" hover={false} active={false} />
+            </div>
+          </div>
+        </div>
+
+        <div className="max-[1023px] lg:p-0 p-20 dark:bg-omega bg-white rounded-[10px]">
+          <div className="flex items-center gap-5 justify-between">
+            <p className="sec-title">My Profile</p>
+            <div className="py-[13px] px-[15px] border dark:border-opacity-[15%] border-grey-v-1 items-center rounded-5 hidden md:flex gap-[10px] cursor-pointer" onClick={() => { setEditable(true) }}>
+              <Image
+                src="/assets/profile/edit.svg"
+                width={24}
+                height={24}
+                alt="edit"
+              />
+              <p className="nav-text-sm">Edit</p>
+            </div>
+          </div>
+          <div className="py-[30px] md:py-[50px]">
+            <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
+              Personal Information
+            </p>
+            <p className="sm-text ">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry.
+            </p>
+            <form onSubmit={handleSubmit(onHandleSubmit)}>
+              <div className="mt-[30px] ">
+                <div className="flex md:flex-row flex-col gap-[30px]">
+                  <div className=" w-full">
+                    <p className="sm-text mb-[10px]">First Name</p>
+                    <input
+                      type="text"
+                      {...register('fName')} name="fName"
+                      readOnly={editable ? false : true}
+                      placeholder={editable ? "Enter first name" : "Allie"}
+                      className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}
+                    />
+                    {errors.fName && <p style={{ color: 'red' }}>{errors.fName.message}</p>}
+                  </div>
+                  <div className=" w-full">
+                    <p className="sm-text mb-[10px]">Last Name</p>
+                    <input
+                      type="text"
+                      {...register('lName')} name="lName"
+                      readOnly={editable ? false : true}
+                      placeholder={editable ? "Enter Last name" : "Joe"}
+                      className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}
+                    />
+                    {errors.lName && <p style={{ color: 'red' }}>{errors.lName.message}</p>}
+                  </div>
+                </div>
+                <div className="mt-5 flex gap-[30px] md:flex-row flex-col">
+                  <div className=" w-full">
+                    <p className="sm-text mb-[10px]">Display Name</p>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        {...register('dName')} name="dName"
+                        readOnly={editable ? false : true}
+                        placeholder={editable ? "Enter display name" : "Allie Joe"}
+                        className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}
+
+                      />
+                      {/* <Image
+                        src="/assets/profile/edit.svg"
+                        alt="editicon"
+                        width={22}
+                        height={22}
+                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                      /> */}
+                      {errors.dName && <p style={{ color: 'red' }}>{errors.dName.message}</p>}
+                    </div>
+                  </div>
+                  <div className=" w-full">
+                    <p className="sm-text mb-[10px]">User Name</p>
+                    <input
+                      type="text"
+                      {...register('uName')} name="uName"
+                      readOnly={editable ? false : true}
+                      placeholder={editable ? "Enter user name" : "AllieJoe"}
+                      className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}
+                    />
+                    {errors.uName && <p style={{ color: 'red' }}>{errors.uName.message}</p>}
+                  </div>
+                </div>
+              </div>
+              {editable && (
+                <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-between pt-5 md:pt-[30px]">
+                  <p className="sm-text">
+                    This account was created on January 10, 2022, 02:12 PM
+                  </p>
+                  <div className="flex gap-[30px]">
+                    <button type="button" className="solid-button2 " onClick={() => { setEditable(false) }}>Cancel</button>
+                    <button type="submit" className="solid-button px-[23px] md:px-[51px]">
+                      Save Changes
+                    </button>
+                  </div>
+                </div>
+              )}
+            </form>
+          </div>
+          <div className="h-[1px] w-full bg-grey-v-2 dark:bg-opacity-[15%]"></div>
+
+          <div className="py-[30px] md:py-[50px]">
+            <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
+              Contact Information
+            </p>
+            <p className="sm-text ">
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry. Lorem Ipsum has been the industry.
+            </p>
+            <div className="mt-[30px] ">
+              <div className="flex md:flex-row flex-col gap-[30px]">
+                <div className=" w-full">
+                  <p className="sm-text mb-[10px]">Email</p>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      value={props.session?.user?.email}
+                      placeholder="AllieGrater12345644@gmail.com"
+                      className={`sm-text input-cta2 w-full cursor-not-allowed`}
+                    />
+                    <Image
+                      src="/assets/profile/mail.svg"
+                      alt="mail"
+                      width={22}
+                      height={22}
+                      className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                    />
+                  </div>
+                </div>
+                <div className=" w-full">
+                  <p className="sm-text mb-[10px]">Phone Number</p>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      value={props.session?.user?.number}
+                      placeholder="Enter phone number"
+                      className={`sm-text input-cta2 w-full cursor-not-allowed`}
+                    />
+                    <Image
+                      src="/assets/profile/phone.svg"
+                      alt="phone"
+                      width={22}
+                      height={22}
+                      className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="mt-5 flex gap-[30px] md:flex-row flex-col">
+                <div className=" w-full">
+                  <p className="sm-text mb-[10px]">Location</p>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value="abc"
+                      placeholder="Enter location"
+                      className={`sm-text input-cta2 w-full cursor-not-allowed`}
+                    />
+                    <Image
+                      src="/assets/profile/downarrow.svg"
+                      alt="editicon"
+                      width={24}
+                      height={24}
+                      className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                    />
+                  </div>
+                </div>
+                <div className=" w-full">
+                  <p className="sm-text mb-[10px]">Currency</p>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value="US Dollar"
+                      placeholder="Enter currency"
+                      className={`sm-text input-cta2 w-full cursor-not-allowed`}
+                    />
+                    <Image
+                      src="/assets/profile/downarrow.svg"
+                      alt="editicon"
+                      width={24}
+                      height={24}
+                      className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="h-[1px] w-full bg-grey-v-2 dark:bg-opacity-[15%]"></div>
+
+          {/* {editable && (
+            <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-between pt-5 md:pt-[30px]">
+              <p className="sm-text">
+                This account was created on January 10, 2022, 02:12 PM
+              </p>
+              <div className="flex gap-[30px]">
+                <button type="button" className="solid-button2 " onClick={() => { setEditable(false) }}>Cancel</button>
+                <button type="submit" className="solid-button px-[23px] md:px-[51px]">
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          )} */}
+        </div>
+      </section>
+    </>
+  );
+};
+
+export default Dashboard;
