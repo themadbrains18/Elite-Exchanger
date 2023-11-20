@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import IconsComponent from './icons';
 
 interface dataList {
-  data: any;
-  placeholder: string;
-  auto: boolean;
-  widthFull: boolean;
+  data?: any;
+  placeholder?: string;
+  auto?: boolean;
+  widthFull?: boolean;
   onNetworkChange?: any;
   onDocumentChange?: any;
   value?: string;

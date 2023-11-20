@@ -3,8 +3,8 @@ import Context from "../contexts/context";
 
 interface svgType {
   type: string;
-  hover: boolean;
-  active: boolean;
+  hover?: boolean;
+  active?: boolean;
 }
 
 const IconsComponent = (props: svgType) => {
@@ -375,6 +375,23 @@ const IconsComponent = (props: svgType) => {
             fill="#5367FF"
           />
         </svg>
+      )}
+      {props.type === "rightArrowWithoutBg" && (
+        <svg
+          width={20}
+          height={20}
+          viewBox="0 0 30 30"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M13.1251 21.2491C12.8051 21.2491 12.4851 21.1266 12.2413 20.8828C11.7526 20.3941 11.7526 19.6041 12.2413 19.1153L16.3726 14.9841L12.3976 10.8678C11.9188 10.3703 11.9326 9.57909 12.4288 9.10034C12.9263 8.62159 13.7176 8.63534 14.1963 9.13034L19.0238 14.1303C19.4976 14.6216 19.4913 15.4003 19.0088 15.8828L14.0088 20.8828C13.7651 21.1266 13.4451 21.2491 13.1251 21.2491"
+            fill={mode == "dark" ? "#ffffff8f" : "#b5b5c3"}
+          />
+        </svg>
+      
       )}
       {props.type === "addUser" && (
         <svg
@@ -2503,6 +2520,53 @@ const IconsComponent = (props: svgType) => {
             />
           </svg>
         </>
+      )}
+       {props.type == "swap" && (
+        <>
+          <svg className="max-w-[14px] w-full h-[12px]" fill={mode == "dark" ? "#ffffff8f" : "#b5b5c3"} xmlns="http://www.w3.org/2000/svg">
+              <path d="m10.082 6.107.033.013H12l-1.556 1.49-.008-.001L8.012 10l-.938-.922 1.486-1.47H0V6.12h10.068l.014-.013ZM3.998 0l.936.928-1.488 1.468H12v1.49H1.935l-.008.007-.018-.007H0l1.556-1.49h.011L3.997 0Z" />
+          </svg>
+        </>
+      )}
+      {props.type == "swap-calender" && (
+        <svg
+          width={12}
+          height={14}
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className=""
+        >
+          <path
+            fillRule="evenodd"
+            clipRule="evenodd"
+            d="M1.625.875h8.75c.483 0 .875.392.875.875v10.5a.875.875 0 0 1-.875.875h-8.75a.875.875 0 0 1-.875-.875V1.75c0-.483.392-.875.875-.875Zm8.75.875v10.5h-8.75V1.75h8.75Zm-1.4 1.487H2.85V4.55h6.125V3.237ZM2.85 5.862h.875v.875H2.85v-.875Zm0 2.188h.875v.875H2.85V8.05Zm.875 2.188H2.85v.875h.875v-.875Zm5.25 0H8.1v.875h.875v-.875Zm0-2.188H8.1v.875h.875V8.05ZM6.35 10.238h-.875v.875h.875v-.875ZM5.475 8.05h.875v.875h-.875V8.05Zm.875-2.188h-.875v.875h.875v-.875Zm1.75 0h.875v.875H8.1v-.875Z"
+            fill="#A3A8B7"
+          />
+        </svg>
+      )}
+      {props.type == "swap-calender-with-circle" && (
+        <svg
+          
+        width={12}
+        height={12}
+        viewBox="0 0 12 12"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="cursor-pointer"
+      >
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M4.19687 2.86726H6.66746C7.06837 2.86726 7.26914 3.35197 6.98566 3.63546L3.40138 7.21974L2.87105 6.68941L5.94319 3.61726H4.19687V2.86726ZM5.06732 8.20545L8.65159 4.62117L9.18192 5.1515L6.10978 8.22365H7.8561V8.97365H5.38551C4.98461 8.97365 4.78383 8.48893 5.06732 8.20545Z"
+          fill="#A3A8B7"
+        />
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M11.25 6C11.25 3.1005 8.8995 0.75 6 0.75C3.1005 0.75 0.75 3.1005 0.75 6C0.75 8.8995 3.10051 11.25 6 11.25C8.8995 11.25 11.25 8.89949 11.25 6ZM12 6C12 2.68629 9.31371 -1.44847e-07 6 0C2.68629 1.44847e-07 -1.44845e-07 2.68629 0 6C1.44848e-07 9.31371 2.68629 12 6 12C9.31371 12 12 9.31371 12 6Z"
+          fill="#A3A8B7"
+        />
+      </svg>
       )}
     </>
   );

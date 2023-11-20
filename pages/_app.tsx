@@ -25,7 +25,7 @@ export default function App({ Component, pageProps: { sessions, ...pageProps } }
   }, [mode])
 
   return (
-    <div className={mode === "dark" ? "dark bg-black" : "light"}>
+    <div className={mode === "dark" ? "dark bg-black" : "light" }>
       <SessionProvider session={pageProps.session} refetchInterval={1 * 60}
           refetchOnWindowFocus={false}>
         <Context.Provider value={{ mode, setMode }}>
@@ -36,7 +36,7 @@ export default function App({ Component, pageProps: { sessions, ...pageProps } }
               <Preference />
             </>
           }
-          <div className={` ${router.pathname != '/register' && router.pathname != '/login' && router.pathname != '/forget' && !router.pathname.includes('/admin') ? "mt-[80px] lg:mt-[100px]" : ""} `}>
+          <div className={` ${router.pathname != '/register' && router.pathname != '/login' && router.pathname != '/forget' && !router.pathname.includes('/admin') ? "mt-[105px] lg:mt-[129px]" : ""} `}>
             <Component {...pageProps} />
           </div>
           {

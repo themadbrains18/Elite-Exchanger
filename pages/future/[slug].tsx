@@ -14,6 +14,8 @@ import { authOptions } from '../api/auth/[...nextauth]';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
+import TopBar from '/components/future/top-bar';
+import BuySell from '/components/future/buy-sell';
 
 interface Session {
     session: {
@@ -168,40 +170,8 @@ const FutureTrading = (props: Session) => {
 
     return (
         <>
-            <div>
-                <ToastContainer />
-                <div className=" bg-light-v-1 py-20 dark:bg-black-v-1">
-                    <div className="container p-[15px] lg:p-20 gap-30">
-                        <ChartBanner token={currentToken[0]} />
-                    </div>
-                    <div className="container p-[15px] lg:p-20 flex gap-30 flex-wrap">
-                        <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
-                            <ChartSec slug={`${slug}`} />
-                            {/* hidden on mobile */}
-                            <div className='lg:block hidden'>
-                                <ChartTabs coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
-                            </div>
-                        </div>
-                        <div className="max-w-full lg:max-w-[432px] w-full">
-                            <div className="lg:block hidden ">
-                                <BuySellCard id={1} coins={allCoins} session={props.session} token={currentToken[0]} slug={slug} assets={props.assets} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
-                                {/* hidden on mobile */}
-                                <div className='lg:block hidden'>
-                                    <OrderBook slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} />
-                                </div>
-                            </div>
-                            {/* hidden on desktop */}
-                            <div className='lg:hidden'>
-                                <OrderBookMobile slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} />
-                                <ChartTabs coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="lg:hidden">
-                        <ResponsiveFixCta coins={allCoins} session={props.session} token={currentToken[0]} slug={slug} assets={props.assets} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
-                    </div>
-                </div>
-            </div>
+           <TopBar />
+           <BuySell />
         </>
     )
 }
