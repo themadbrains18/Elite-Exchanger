@@ -9,18 +9,7 @@ const Head = () => {
   const router = useRouter();
   const { status, data: session } = useSession();
   const [active, setActive] = useState(1);
-  const [coins, setCoins] = useState([]);
 
-  useEffect(() => {
-    getCoinsList();
-  }, []);
-
-  const getCoinsList = async () => {
-    let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
-      method: "GET",
-    }).then((response) => response.json());
-    setCoins(tokenList?.data);
-  };
 
   // console.log(session?.user,'p2p head ',status);
 
@@ -104,7 +93,7 @@ const Head = () => {
             Lorem Ipsum is simply dummy text of the printing.
           </p>
         </div>
-        <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[370px] w-full py-[13px] px-[10px] ">
+        {/* <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[370px] w-full py-[13px] px-[10px] ">
           <Image
             alt="search"
             loading="lazy"
@@ -120,7 +109,7 @@ const Head = () => {
             placeholder="Search"
             className="nav-text-sm !text-beta outline-none bg-[transparent] w-full"
           />
-        </div>
+        </div> */}
       </div>
 
       {/* Tabs */}

@@ -71,7 +71,7 @@ const DashboardHeader = () => {
               )
             })
           }
-            <p className='admin-nav-text !text-[14px] dark:!text-[#ffffff80] !text-table-heading'>With all of the styling tool options available in today`s market</p>
+            {/* <p className='admin-nav-text !text-[14px] dark:!text-[#ffffff80] !text-table-heading'>With all of the styling tool options available in today`s market</p> */}
         </div>
         <div className='flex items-center gap-30'>
           <div>

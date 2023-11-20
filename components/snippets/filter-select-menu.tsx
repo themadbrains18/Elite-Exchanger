@@ -38,7 +38,7 @@ const FiliterSelectMenu = (props: dataList) => {
     <>
       <div className={`relative max-w-full ${props.widthFull ? 'max-w-full' : 'lg:max-w-[300px]'} w-full ${props.auto && 'mx-auto'}`}>
         {/* top dropdown input */}
-        <div className='border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[8px] px-[15px]'>
+        <div className={`border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[${props.type === 'express' ? '15px' : '8px'}] px-[15px]`}>
           <div className="coin-dropdown flex items-center gap-10 cursor-pointer justify-between" onClick={() => { setShow(!show) }}>
             <div>
               <input type="text" id='paymentMethod' className="sm-text max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-[transparent] pr-0 outline-none bg-transparent w-full  cursor-pointer dark:text-white"
@@ -67,7 +67,8 @@ const FiliterSelectMenu = (props: dataList) => {
           </div>
         }
 
-        {props.type === 'pmethod' &&
+        {(props.type === 'pmethod' || props.type === 'express') &&
+
           <div className={`absolute z-[1] shadow-lg shadow-[#0000000d] left-0 right-0 dark:bg-black-v-1 bg-white border border-grey-v-1 dark:border-[#ccced94d] rounded-10 p-[15px] duration-300 ${show ? "top-[calc(100%+7px)] opacity-1 visible" : "top-[calc(100%+17px)] opacity-0 invisible"}`}>
             <ul>
               {props?.data && props?.data.map((item: any, index: number) => {
@@ -111,6 +112,7 @@ const FiliterSelectMenu = (props: dataList) => {
             </ul>
           </div>
         }
+
       </div>
     </>
   )

@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PaymentMethod from "./paymentMethod";
 import Response from "./response";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
 interface propsData {
   masterPayMethod?: any;
   userPaymentMethod?: any;
   tokenList?: any;
-  assets?:any;
+  assets?: any;
 }
 
 const schema = yup.object().shape({
@@ -30,6 +31,20 @@ const Adverstisement = (props: propsData) => {
 
   const assets = props.tokenList;
   const cash = ["INR"];
+
+  const router = useRouter()
+  
+  useEffect(()=>{
+    if(Object.keys(router?.query).length>0 ){
+      let token = props.tokenList.filter((item:any)=>{
+        return item?.id === router?.query?.token_id
+      })
+      selectToken(token[0]);
+      let price:any = router?.query?.price;
+      setValue('price',price);
+    }
+    
+  },[router.query]);
 
   let {
     register,
@@ -51,13 +66,22 @@ const Adverstisement = (props: propsData) => {
     setValue('token_id', item?.id);
     clearErrors('token_id');
 
-    let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
-      method: "GET",
-    }).then(response => response.json());
+    if (item?.tokenType === 'global') {
+      let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${item?.symbol}&tsyms=INR`, {
+        method: "GET",
+      }).then(response => response.json());
 
-    setInrPrice(usdtToINR?.data?.INR);
+      setInrPrice(usdtToINR?.data?.INR);
+    }
+    else {
+      let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
+        method: "GET",
+      }).then(response => response.json());
+      setInrPrice(item?.price * usdtToINR?.data?.INR);
+    }
+
     setSelectedAssets(item);
-    let balances= props?.assets?.filter((e:any)=>{
+    let balances = props?.assets?.filter((e: any) => {
       return e.token_id === item?.id
     })
     setAssetsBalance(balances[0]?.balance);
@@ -247,12 +271,12 @@ const Adverstisement = (props: propsData) => {
                 <div className="md:py-50 py-20">
                   <div className="flex items-center justify-between gap-2 pb-[15px] border-b border-grey-v-1 dark:border-opacity-20">
                     <p className="info-14-18 dark:!text-white">Your Price</p>
-                    <p className="sec-title md:!text-[18px] !text-[14px]">₹ {(selectedAssets?.price * inrPrice).toFixed(2)}</p>
+                    <p className="sec-title md:!text-[18px] !text-[14px]">₹ {(inrPrice).toFixed(2)}</p>
                   </div>
-                  <div className="flex items-center justify-between gap-2 pt-[15px] ">
+                  {/* <div className="flex items-center justify-between gap-2 pt-[15px] ">
                     <p className="info-14-18 dark:!text-white">Highest Order Price</p>
                     <p className="sec-title md:!text-[18px] !text-[14px]">₹ 79.29</p>
-                  </div>
+                  </div> */}
                   <div className="md:mt-30 mt-20">
                     <p className="info-10-14">Fixed (INR)</p>
                     <input type="number" step={0.000001} {...register('price', { required: true })} name="price" placeholder="Enter Amount" className="py-[14px] px-[15px] border rounded-5 border-grey-v-1 mt-[10px] w-full bg-[transparent] dark:border-opacity-20 outline-none info-16-18" />
@@ -272,8 +296,8 @@ const Adverstisement = (props: propsData) => {
           </form>
         </div>
       )}
-      {step === 2 && <PaymentMethod step={step} setStep={setStep} setPaymentMethod={setPaymentMethod} masterPayMethod={props.masterPayMethod} userPaymentMethod={props.userPaymentMethod} selectedAssets={selectedAssets} assetsBalance={assetsBalance} price={step1Data.price}/>}
-      {step === 3 && <Response step={step} setStep={setStep} step1Data={step1Data} step2Data={step2Data}/>}
+      {step === 2 && <PaymentMethod step={step} setStep={setStep} setPaymentMethod={setPaymentMethod} masterPayMethod={props.masterPayMethod} userPaymentMethod={props.userPaymentMethod} selectedAssets={selectedAssets} assetsBalance={assetsBalance} price={step1Data.price} />}
+      {step === 3 && <Response step={step} setStep={setStep} step1Data={step1Data} step2Data={step2Data} />}
     </>
   );
 };

@@ -1,22 +1,43 @@
 import P2pLayout from '@/components/layout/p2p-layout'
 import Adverstisement from '@/components/p2p/postadv/adverstisement'
-import React from 'react'
-import { getProviders } from "next-auth/react"
+import React, { useEffect, useState } from 'react'
+import { getProviders, useSession } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
+import AuthenticationModelPopup from '@/components/snippets/authenticationPopup'
 
 interface propsData {
   masterPayMethod?: any;
   userPaymentMethod?: any;
   tokenList?: any;
-  assets?:any;
+  assets?: any;
 }
 
-const Postad = (props:propsData) => {
+const Postad = (props: propsData) => {
+
+  const { status, data: session } = useSession();
+  const [show, setShow] = useState(false);
+  const [active, setActive] = useState(false);
+
+  useEffect(()=>{
+    if(session?.user?.kyc !== 'approve' || session?.user?.TwoFA === false){
+      setShow(true);
+      setActive(true);
+    }
+  },[]);
+
+
   return (
     <P2pLayout>
-      <Adverstisement masterPayMethod={props.masterPayMethod} userPaymentMethod={props.userPaymentMethod} tokenList={props.tokenList} assets={props.assets}/>
+      {(session?.user?.kyc === 'approve' ||  session?.user?.TwoFA === true || (session?.user?.tradingPassword !== '' || session?.user?.tradingPassword !== null) || (session?.user?.email !== '' || session?.user?.email !== null)) && 
+        <Adverstisement masterPayMethod={props.masterPayMethod} userPaymentMethod={props.userPaymentMethod} tokenList={props.tokenList} assets={props.assets} />
+      }
+
+      {(session?.user?.kyc !== 'approve' || session?.user?.TwoFA === false || (session?.user?.tradingPassword === '' || session?.user?.tradingPassword === null) || (session?.user?.email === '' || session?.user?.email === null)) &&
+        <AuthenticationModelPopup title='Confirmation' message='Please complete your kyc' setShow={setShow} setActive={setActive} show={show} />
+      }
+
     </P2pLayout>
   )
 }

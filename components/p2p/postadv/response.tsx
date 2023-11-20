@@ -30,6 +30,8 @@ const Response = (props: activeSection) => {
   const { data: session } = useSession();
   const route = useRouter();
 
+  console.log(props.step2Data,'=======payment method form');
+  
   let {
     register,
     setValue,

@@ -2,14 +2,16 @@ import AddPayment from "@/components/snippets/addPayment";
 import Successfull from "@/components/snippets/successfull";
 import TradingPassword from "@/components/snippets/tradingPassword";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
 
 const schema = yup.object().shape({
-  p_method: yup.array().min(1, "Please select atleast 1 payment method").required().typeError("Please select atleast 1 payment method"),
+  p_method: yup.lazy(val => (Array.isArray(val) ? yup.array().of(yup.string().min(1).required()).required('Please select 1 payment method') : yup.string().min(1).required('Please select 1 payment method'))),
+  // yup.array().of(yup.string().min(1).required()).required().nullable(),
   quantity: yup.number().positive().required("Please enter quantity to sell").typeError("Please enter quantity to sell"),
   min_limit: yup.number().positive().required("Please enter min limit amount").typeError("Please enter min limit amount"),
   max_limit: yup.number().positive().required("Please enter max limit amount").typeError("Please enter max limit amount"),
@@ -37,6 +39,17 @@ const PaymentMethod = (props: activeSection) => {
 
   // let list = props.userPaymentMethod;
 
+  const router = useRouter()
+  
+  useEffect(()=>{
+    if(Object.keys(router?.query).length>0 ){
+      let qty:any = router?.query?.qty;
+      setValue('quantity', qty );
+      setValue('max_limit', props.price * qty);
+    }
+    
+  },[router.query]);
+
   let {
     register,
     setValue,
@@ -61,6 +74,19 @@ const PaymentMethod = (props: activeSection) => {
       });
       setFocus('quantity');
       return;
+    }
+    if (data.p_method === "false") {
+      setError("p_method", {
+        type: "custom",
+        message: `Please select at least 1 payment method`,
+      });
+      setFocus('p_method');
+      return;
+    }
+
+    let ans = Array.isArray(data.p_method);
+    if(ans === false){
+      data.p_method = [data.p_method];
     }
     props.setPaymentMethod(data);
     props.setStep(3);

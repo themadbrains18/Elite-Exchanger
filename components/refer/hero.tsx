@@ -2,7 +2,7 @@ import AdminIcons from "@/admin/admin-snippet/admin-icons";
 import Image from "next/image"
 const Hero = () => {
     return(
-        <div className="pb-[125px] md:py-[91px]  md:pb-[160px] w-full bg-[url(/assets/refer/refer-hero-bg-res.png)] md:bg-[url(/assets/refer/refer-hero-bg.png)] bg-bottom bg-cover">
+        <div className="pb-[125px] md:py-[91px]  md:pb-[160px] w-full md:bg-[url(/assets/refer/refer-hero-bg-light.png)] bg-[url(/assets/refer/refer-hero-bg-res-light.png)] dark:bg-[url(/assets/refer/refer-hero-bg-res.png)] md:dark:bg-[url(/assets/refer/refer-hero-bg.png)] bg-bottom bg-cover">
             <div className="">
                 <div className="container">
                     <div className="heroGrid grid lg:grid-cols-2  gap-4 " >

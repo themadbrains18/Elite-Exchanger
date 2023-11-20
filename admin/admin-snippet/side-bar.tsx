@@ -43,14 +43,14 @@ const  { mode , setMode } = useContext(Context);
         "link":"/wallet"
     },
     {
-        "title":"Trades",
-        "svgType":"tradeicon",
-        "link":"/trades"
+        "title":"Spot Pair",
+        "svgType":"Wallet",
+        "link":"/trade-pair"
     },
     {
-        "title":"Trade Pair",
-        "svgType":"tradepair",
-        "link":"/trade-pair"
+        "title":"Future Pair",
+        "svgType":"Wallet",
+        "link":"/future"
     },
     {
         "title":"Whithdrawals",
@@ -61,6 +61,11 @@ const  { mode , setMode } = useContext(Context);
         "title":"Reports",
         "svgType":"Reports",
         "link":"/reports"
+    },
+    {
+        "title":"Site Maintenance",
+        "svgType":"adminSettings",
+        "link":"/sitemaintenance"
     },
     {
         "title":"Settings",

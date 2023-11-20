@@ -102,10 +102,10 @@ const EditToken = (props: activeSection) => {
             })
 
             if (previous.length > 0) {
-                setValue(`network[${index}].id`, previous[0].id);
-                setValue(`network[${index}].checked`, true);
-                setValue(`network[${index}].fee`, previous[0].fee);
-                setValue(`network[${index}].contract`, previous[0].contract);
+                setValue(`network.${index}.id`, previous[0].id);
+                setValue(`network.${index}.checked`, true);
+                setValue(`network.${index}.fee`, previous[0].fee);
+                setValue(`network.${index}.contract`, previous[0].contract);
             }
             index++;
         }
@@ -421,30 +421,30 @@ const EditToken = (props: activeSection) => {
                                         <label
                                             htmlFor={`checbox-${index + 1}-item-token`}
                                             className=" pl-[35px] cursor-pointer
-                          relative
-                          sm-text
-                          after:w-20
-                          after:h-20
-                          after:border-[2px]
-                          after:border-[#B5B5C3]
-                          after:rounded-[4px]
-                          after:block
-                          after:absolute
-                          after:top-0
+                                                    relative
+                                                    sm-text
+                                                    after:w-20
+                                                    after:h-20
+                                                    after:border-[2px]
+                                                    after:border-[#B5B5C3]
+                                                    after:rounded-[4px]
+                                                    after:block
+                                                    after:absolute
+                                                    after:top-0
 
-                          before:w-[12px]
-                          before:h-[6px]
-                          before:z-[1]
-                          before:border-l-[2px]
-                          before:border-b-[2px]
-                          border:dark:border-[#212121]
-                          border:border-[#fff]
-                          before:absolute
-                          before:left-[4px]
-                          before:top-[6px]
-                          before:rotate-[-45deg]
-                          before:hidden
-                        "
+                                                    before:w-[12px]
+                                                    before:h-[6px]
+                                                    before:z-[1]
+                                                    before:border-l-[2px]
+                                                    before:border-b-[2px]
+                                                    border:dark:border-[#212121]
+                                                    border:border-[#fff]
+                                                    before:absolute
+                                                    before:left-[4px]
+                                                    before:top-[6px]
+                                                    before:rotate-[-45deg]
+                                                    before:hidden
+                                                    "
                                         >
                                             {item?.fullname}({item?.symbol})
                                         </label>

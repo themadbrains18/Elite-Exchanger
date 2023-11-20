@@ -1,12 +1,11 @@
 import AdminIcons from "@/admin/admin-snippet/admin-icons";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AddToken from "./addToken";
 import EditToken from "./editToken";
-import AddStake from "../stake/stake";
-import EditStake from "../stake/editstake";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import ReactPaginate from "react-paginate";
+import Context from "@/components/contexts/context";
+import AddNetwork from "./addNetwork";
 
 interface Session {
   coinList?: any,
@@ -17,9 +16,35 @@ const AllCoins = (props: Session) => {
 
   const [show, setShow] = useState(false);
   const [editShow, setEditShow] = useState(false);
-  const [stakeShow, setStackShow] = useState(false);
-  const [editstakeShow, setEditStackShow] = useState(false);
+  const [networkShow, setNetworkShow] = useState(false);
   const [editToken, setEditToken] = useState(Object);
+  const [itemOffset, setItemOffset] = useState(0);
+  const { mode } = useContext(Context)
+  const [total, setTotal] = useState(0)
+  const [list, setList] = useState([])
+
+  let itemsPerPage = 10;
+
+  useEffect(() => {
+    getToken(itemOffset)
+  }, [itemOffset])
+
+  const getToken = async (itemOffset: number) => {
+    if (itemOffset === undefined) {
+      itemOffset = 0;
+    }
+    let tokenList = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/all/${itemOffset}/${itemsPerPage}`, {
+      method: "GET"
+    }).then(response => response.json());
+    setList(tokenList?.data)
+    setTotal(tokenList?.total);
+  }
+  const pageCount = Math.ceil(total / itemsPerPage);
+
+  const handlePageClick = async (event: any) => {
+    const newOffset = (event.selected * itemsPerPage) % total;
+    setItemOffset(newOffset);
+  };
 
   const updateStatus = async (data: any) => {
     let responseStatus = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/change/status`, {
@@ -33,28 +58,13 @@ const AllCoins = (props: Session) => {
     if (responseStatus) {
       props.refreshTokenList(responseStatus);
     }
+
   }
-
-  const updateStakeStatus = async (data: any) => {
-    let responseStatus = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/stake/status`, {
-      headers: {
-        "content-type": "application/json"
-      },
-      method: "PUT",
-      body: JSON.stringify(data),
-    }).then((response) => response.json());
-
-    if (responseStatus) {
-      props.refreshTokenList(responseStatus);
-    }
-  }
-
 
   return (
     <>
-      <ToastContainer />
       <div
-        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${(show || editShow || stakeShow) ? "opacity-80 visible" : "opacity-0 invisible"
+        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${(show || editShow) ? "opacity-80 visible" : "opacity-0 invisible"
           }`}
       ></div>
       <div className=" mt-[24px] py-6 px-5  rounded-10 bg-white dark:bg-grey-v-4">
@@ -160,15 +170,12 @@ const AllCoins = (props: Session) => {
                     />
                   </div>
                 </th>
-                {/* <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading">
+                <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading">
                   24h
-                </th> */}
+                </th>
 
                 <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading">
                   Status
-                </th>
-                <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading">
-                  Stake
                 </th>
                 <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading">
                   Action
@@ -176,7 +183,7 @@ const AllCoins = (props: Session) => {
               </tr>
             </thead>
             <tbody>
-              {props.coinList?.map((item: any, index: number) => {
+              {list && list.length > 0 && list?.map((item: any, index: number) => {
                 return (
                   <tr
                     key={index}
@@ -231,7 +238,7 @@ const AllCoins = (props: Session) => {
                     <td className="admin-table-data">{item?.maxSupply}</td>
                     <td className="admin-table-data">{item?.totalSupply}</td>
                     <td className="admin-table-data">${item?.price?.toFixed(2)}</td>
-                    {/* <td className="admin-table-data">
+                    <td className="admin-table-data">
                       <span className="dark:bg-[#0bb7831f] bg-[#D7F9EF] py-[2px] px-1 rounded-5 flex w-max">
                         <p className="text-xs font-public-sans font-medium leading-5 text-[#0BB783]">
                           5%
@@ -249,7 +256,7 @@ const AllCoins = (props: Session) => {
                           />
                         </svg>
                       </span>
-                    </td> */}
+                    </td>
                     {/* <td className="admin-table-data">{item?.created}</td> */}
 
                     <td className="admin-table-data">
@@ -278,21 +285,6 @@ const AllCoins = (props: Session) => {
                     </td>
                     <td className="">
                       <div className="inline-flex items-center gap-10">
-                        <button onClick={() => { item?.token_stakes?.length === 0 ? setStackShow(true) : setEditStackShow(true); setEditToken(item) }}
-                          className={`admin-outline-button ${item?.token_stakes?.length == 0
-                            ? "dark:text-[#66BB6A] text-[#0BB783] !border-[#0bb78380] dark:!border-[#66bb6a1f]"
-                            : "dark:text-[#F44336] text-[#F64E60] !border-[#f64e6080] dark:!border-[#f443361f]"
-                            } !px-[10px] !py-[4px] whitespace-nowrap	`}
-                        >
-                          {item?.token_stakes?.length === 0 ? "Add Stake " : "Edit Stake"}
-                        </button>
-                        <button className={`admin-outline-button ${item?.token_stakes?.length === 0 ? '!dark:text-[#F44336] text-[#F64E60]' : 'dark:text-[#66BB6A] text-[#0BB783]'} !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap`} onClick={(e) => { item?.token_stakes?.length > 0 ?updateStakeStatus(item?.token_stakes[0]):'' }}>
-                          {item?.token_stakes?.length > 0 && item?.token_stakes[0]?.status === false ? "Disable" : "Enable"}
-                        </button>
-                      </div>
-                    </td>
-                    <td className="">
-                      <div className="inline-flex items-center gap-10">
                         <button onClick={() => updateStatus(item)}
                           className={`admin-outline-button ${item?.status == 0
                             ? "dark:text-[#66BB6A] text-[#0BB783] !border-[#0bb78380] dark:!border-[#66bb6a1f]"
@@ -303,10 +295,17 @@ const AllCoins = (props: Session) => {
                         </button>
                         {item?.tokenType === 'mannual' &&
                           <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap" onClick={(e) => { setEditShow(true); setEditToken(item) }}>
-                            Edit
+                            Edit Token
                           </button>
                         }
-
+                        {item?.tokenType === 'global' &&
+                          <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap" onClick={(e) => {
+                            setNetworkShow(true); console.log(item, '======item');
+                            setEditToken(item)
+                          }}>
+                            Add Network
+                          </button>
+                        }
                       </div>
                     </td>
                   </tr>
@@ -314,6 +313,19 @@ const AllCoins = (props: Session) => {
               })}
             </tbody>
           </table>
+        </div>
+        <div className="flex pt-[25px] items-center justify-end">
+
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null} />
         </div>
       </div>
 
@@ -325,13 +337,8 @@ const AllCoins = (props: Session) => {
         editShow &&
         <EditToken setEditShow={setEditShow} networkList={props?.networkList} editToken={editToken} refreshTokenList={props.refreshTokenList} />
       }
-
-      {stakeShow &&
-        <AddStake setStackShow={setStackShow} token_id={editToken?.id} refreshTokenList={props.refreshTokenList}/>
-      }
-
-      {editstakeShow &&
-        <EditStake setEditStackShow={setEditStackShow} token_id={editToken?.id} data={editToken?.token_stakes} refreshTokenList={props.refreshTokenList} />
+      {networkShow &&
+        <AddNetwork setNetworkShow={setNetworkShow} networkList={props?.networkList} editToken={editToken} getToken={getToken} itemOffset={itemOffset} />
       }
     </>
   );

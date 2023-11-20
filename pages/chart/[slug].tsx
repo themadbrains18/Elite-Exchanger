@@ -139,8 +139,8 @@ const Chart = (props: Session) => {
             },
         }).then(response => response.json());
 
-        setAllTradeHistory(marketHistory?.data);
-        filterBuySellRecords(marketHistory?.data);
+        setAllTradeHistory(marketHistory?.data?.orderAll);
+        filterBuySellRecords(marketHistory?.data?.orderAll);
 
     }
 

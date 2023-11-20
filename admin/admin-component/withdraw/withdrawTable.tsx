@@ -1,9 +1,14 @@
+import Context from "@/components/contexts/context";
 import AdminIcons from "../../admin-snippet/admin-icons";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
+import { useRouter } from "next/router";
 
-interface Details {
-  withdraw: any;
+
+interface propData{
+  type?:string,
+  name?:string
 }
 
 function formatDate(date: Date) {
@@ -15,24 +20,67 @@ function formatDate(date: Date) {
   return new Date(date).toLocaleDateString("en-US", options);
 }
 
-const WithdrawTable = (props: Details) => {
-  const [list, setList] = useState(props?.withdraw);
+const WithdrawTable = (props:propData) => {
+  const router = useRouter()
+  const [list, setList] = useState([]);
+  const [filterlist, setFilterList] = useState([]);
   const [active, setActive] = useState(1);
+
+  const [itemOffset, setItemOffset] = useState(0);
+  const { mode } = useContext(Context);
+  const [total, setTotal] = useState(0);
+
+  let itemsPerPage = 10;
+
+  useEffect(() => {
+    getToken(itemOffset);
+  }, [itemOffset]);
+
+  const getToken = async (itemOffset: number) => {
+    if (itemOffset === undefined) {
+      itemOffset = 0;
+    }
+     let withdraw=[];
+    if(props?.type==="details"){
+       withdraw = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/withdraw/history/${router?.query?.id}/${itemOffset}/${itemsPerPage}`, {
+        method: "GET",
+      
+      }).then(response => response.json());
+    }
+    else{
+       withdraw = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/withdraw/admin/withdrawListByLimit/${itemOffset}/${itemsPerPage}`, {
+        method: "GET",
+      
+      }).then(response => response.json());
+
+    }
+    setFilterList(withdraw?.data)
+    setList(withdraw?.data);
+    setTotal(withdraw?.total);
+  };
+  const pageCount = Math.ceil(total / itemsPerPage);
+
+  const handlePageClick = async (event: any) => {
+    const newOffset = (event.selected * itemsPerPage) % total;
+    setItemOffset(newOffset);
+  };
+
+
 
   const filterData = (e: any) => {
     if (e.target.innerHTML === "Pending") {
-      let data = props?.withdraw?.filter((e: any) => e.status === "pending");
+      let data = filterlist?.filter((e: any) => e.status === "pending");
       setList(data);
     } else if (e.target.innerHTML === "Rejected") {
-      let data = props?.withdraw?.filter((e: any) => e.isReject === true);
+      let data = filterlist?.filter((e: any) => e.isReject === true);
       setList(data);
     } else {
-      setList(props?.withdraw);
+      setList(filterlist);
     }
   };
   return (
     <div className=" mt-[24px] py-6 px-5  rounded-10 bg-white dark:bg-grey-v-4">
-      <div className="flex items-center justify-between  mb-[26px]">
+      <div className={`${props?.name==="wallet"?'hidden':'flex'} items-center justify-between  mb-[26px]`}>
         <div className="flex items-center gap-[15px]">
           <button
             className={`${
@@ -145,6 +193,18 @@ const WithdrawTable = (props: Details) => {
                   />
                 </div>
               </th>
+             { props?.name==="wallet" && <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading ">
+                <div className="flex items-center gap-[5px]">
+                  <p>TxId</p>
+                  <Image
+                    src="/assets/history/uparrow.svg"
+                    className="rotate-[180deg] "
+                    width={15}
+                    height={15}
+                    alt="uparrow"
+                  />
+                </div>
+              </th>}
               <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading ">
                 <div className="flex items-center gap-[5px]">
                   <p>Network</p>
@@ -175,27 +235,32 @@ const WithdrawTable = (props: Details) => {
               <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading">
                 Status
               </th>
+              {
+                 props?.name!=='wallet' && 
               <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading">
                 Action
               </th>
+              }
             </tr>
           </thead>
           <tbody>
-            {list?.map((item: any, index: number) => {
-              return (
-                <tr
-                  key={index}
-                  className=" border-b-[0.5px] border-[#ECF0F3] dark:border-[#ffffff1a] hover:bg-[#3699ff14] rounded-10 dark:hover:bg-[#90caf929]"
-                >
-                  <td className="px-10 py-[14px] admin-table-data">
-                    <input
-                      id={`checbox-${index}-item`}
-                      type="checkbox"
-                      className="hidden"
-                    />
-                    <label
-                      htmlFor={`checbox-${index}-item`}
-                      className="
+            {list &&
+              list.length > 0 &&
+              list?.map((item: any, index: number) => {
+                return (
+                  <tr
+                    key={index}
+                    className=" border-b-[0.5px] border-[#ECF0F3] dark:border-[#ffffff1a] hover:bg-[#3699ff14] rounded-10 dark:hover:bg-[#90caf929]"
+                  >
+                    <td className="px-10 py-[14px] admin-table-data">
+                      <input
+                        id={`checbox-${index}-item`}
+                        type="checkbox"
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor={`checbox-${index}-item`}
+                        className="
                           relative
                           
                           after:w-20
@@ -217,80 +282,105 @@ const WithdrawTable = (props: Details) => {
                           before:rotate-[-45deg]
                           before:hidden
                         "
-                    ></label>
-                  </td>
-                  <td className=" py-[14px] flex gap-[10px] items-center admin-table-data">
-                    {/* <Image
+                      ></label>
+                    </td>
+                    <td className=" py-[14px] flex gap-[10px] items-center admin-table-data">
+                      {/* <Image
                         src={`/assets/admin/${item?.coin}`}
                         width={32}
                         height={32}
                         alt="avtar"
                         /> */}
-                    <div>
-                      <p>{item?.tokenName}</p>
-                      <p className="admin-table-heading">{item?.symbol}</p>
-                    </div>
-                  </td>
-                  <td className="admin-table-data !text-admin-primary">
-                    #{item?.user_id.split("").splice(0, 5)}
-                  </td>
+                      <div>
+                        <p>{item?.tokenName}</p>
+                        <p className="admin-table-heading">{item?.symbol}</p>
+                      </div>
+                    </td>
+                    <td className="admin-table-data !text-admin-primary">
+                      #{item?.user_id.split("").splice(0, 5)}
+                    </td>
 
-                  <td className="admin-table-data">
-                    {formatDate(item?.createdAt)}
-                  </td>
-                  <td className="admin-table-data">{item?.network?.fullname}</td>
+                    <td className="admin-table-data">
+                      {formatDate(item?.createdAt)}
+                    </td>
+                  {props?.name==="wallet" &&  <td className="admin-table-data">{item?.tx_hash}</td>}
+                    <td className="admin-table-data">
+                      {item?.network?.fullname}
+                    </td>
 
-                  <td className="admin-table-data">${item?.amount}</td>
-                  <td className="admin-table-data ">
-                    <div className="max-w-[94px] w-full overflow-hidden text-ellipsis">
-                      {item?.withdraw_wallet}
-                    </div>
-                  </td>
-                  <td className="admin-table-data">
-                    <div className="flex gap-[5px] items-center">
-                      <div
-                        className={`w-[7px] h-[7px] mr-[5px] rounded-full ${
-                          item?.status === "success"
-                            ? "dark:bg-[#66BB6A] bg-[#0BB783]"
+                    <td className="admin-table-data">${item?.amount}</td>
+                    <td className="admin-table-data ">
+                      <div className="max-w-[94px] w-full overflow-hidden text-ellipsis">
+                        {item?.withdraw_wallet}
+                      </div>
+                    </td>
+                    <td className="admin-table-data">
+                      <div className="flex gap-[5px] items-center">
+                        <div
+                          className={`w-[7px] h-[7px] mr-[5px] rounded-full ${
+                            item?.status === "success"
+                              ? "dark:bg-[#66BB6A] bg-[#0BB783]"
+                              : item?.status === "pending"
+                              ? "dark:bg-[#90CAF9] bg-[#3699FF] "
+                              : "dark:bg-[#F44336] bg-[#F64E60]"
+                          }`}
+                        ></div>
+                        <p
+                          className={`text-[13px] font-public-sans font-normal leading-5 ${
+                            item?.status === "success"
+                              ? "dark:text-[#66BB6A] text-[#0BB783]"
+                              : item?.status === "pending"
+                              ? "dark:text-[#90CAF9] text-[#3699FF] "
+                              : "dark:text-[#F44336] text-[#F64E60]"
+                          }`}
+                        >
+                          {item?.status === "success"
+                            ? "Approved"
                             : item?.status === "pending"
-                            ? "dark:bg-[#90CAF9] bg-[#3699FF] "
-                            : "dark:bg-[#F44336] bg-[#F64E60]"
-                        }`}
-                      ></div>
-                      <p
-                        className={`text-[13px] font-public-sans font-normal leading-5 ${
-                          item?.status === "success"
-                            ? "dark:text-[#66BB6A] text-[#0BB783]"
-                            : item?.status === "pending"
-                            ? "dark:text-[#90CAF9] text-[#3699FF] "
-                            : "dark:text-[#F44336] text-[#F64E60]"
-                        }`}
-                      >
-                        {item?.status === "success"?"Approved":item?.status === "pending"?"Pending":"Rejected"}
-                      </p>
-                    </div>
-                    {/* <span className={`border ${item?.status==="Active"?'border-[#0bb78380] dark:border-[#66bb6a1f] ':'border-[#f64e6080] dark:border-[#f443361f] '}   py-[3px] px-1 rounded-[6px] flex w-max`}>
+                            ? "Pending"
+                            : "Rejected"}
+                        </p>
+                      </div>
+                      {/* <span className={`border ${item?.status==="Active"?'border-[#0bb78380] dark:border-[#66bb6a1f] ':'border-[#f64e6080] dark:border-[#f443361f] '}   py-[3px] px-1 rounded-[6px] flex w-max`}>
                     <p className={`text-[13px] font-public-sans font-normal leading-[18px] ${item?.status==='Active'?'text-[#0BB783] dark:text-[#66BB6A]':'dark:text-[#F44336] text-[#F64E60]'} `}>
                     {item?.status}
                     </p>
                     
                   </span> */}
-                  </td>
-                  <td className="w-[20%]">
-                    <div className="inline-flex items-center gap-10">
-                      <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap	">
-                        On Hold
-                      </button>
-                      <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap	">
-                        Blocked
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                    </td>
+                    {
+                      props?.name!=='wallet' &&
+                    <td className="w-[20%]">
+                      <div className="inline-flex items-center gap-10">
+                        <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap	">
+                          On Hold
+                        </button>
+                        <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap	">
+                          Blocked
+                        </button>
+                      </div>
+                    </td>
+                    }
+                  </tr>
+                );
+              })}
           </tbody>
         </table>
+      </div>
+      <div className="flex pt-[25px] items-center justify-end">
+        <ReactPaginate
+          className={`history_pagination ${
+            mode === "dark" ? "paginate_dark" : ""
+          }`}
+          breakLabel="..."
+          nextLabel=">"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={1}
+          marginPagesDisplayed={2}
+          pageCount={pageCount}
+          previousLabel="<"
+          renderOnZeroPageCount={null}
+        />
       </div>
     </div>
   );

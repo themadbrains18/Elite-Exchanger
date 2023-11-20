@@ -15,13 +15,13 @@ interface activeSection {
 type UserSubmitForm = {
   symbol: string;
   decimal: number;
-  price?: number;
+  price?: number | undefined;
   fullName: string;
   image: any;
   minimum_withdraw: string;
   tokenType: string;
-  min_price?: number;
-  max_price?: number;
+  min_price?: number | undefined;
+  max_price?: number | undefined;
   network: {
     checked: boolean;
     id?: string | any;
@@ -367,7 +367,7 @@ const AddToken = (props: activeSection) => {
             )}
           </div>
           <div className="pt-[30px]">
-            {props?.networkList?.map((item: any, index: any) => {
+            {props?.networkList?.map((item: any, index: number) => {
               // const fieldName = `network[${index}]`;
               return (
                 <>
@@ -379,7 +379,7 @@ const AddToken = (props: activeSection) => {
                       {...register(`network.${index}.checked`)}
                       onClick={(e: any) => {
                         clickHandler(e, index);
-                        setValue(`network[${index}].id`, item?.id);
+                        setValue(`network.${index}.id`, item?.id);
                       }}
                     />
                     <label

@@ -26,7 +26,7 @@ const HighRevenue = (props:Session) => {
                 </tr>
               </thead>
               <tbody>
-                {
+                { props.coinList !== null && props?.coinList !== undefined &&
                   props.coinList?.map((item:any , index:number)=>{
                     return(
                       <tr key={index} className=" border-b-[0.5px] border-[#ECF0F3] dark:border-[#ffffff1a] hover:bg-[#3699ff14] dark:hover:bg-[#90caf929]">

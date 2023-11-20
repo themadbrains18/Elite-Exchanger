@@ -7,15 +7,12 @@ import { getServerSession } from "next-auth";
 import { getProviders } from "next-auth/react";
 import React from "react";
 
-interface Session {
-  kycs:any
-}
 
-const Kyc = (props:Session) => {
+const Kyc = () => {
   return (
     <DasboardLayout>
       <KycHead />
-      <AllKycUsers kycs={props?.kycs}/>
+      <AllKycUsers/>
     </DasboardLayout>
   )
 }
@@ -27,10 +24,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders();
 
-   let kyc = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/kyc/all/All`, {
-      method: "GET",
-    
-    }).then(response => response.json());
+
 
     // console.log(kyc,"==all kyc");
     
@@ -40,7 +34,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       session: session,
       sessions: session,
       provider: providers,
-      kycs : kyc
     },
   }
 }

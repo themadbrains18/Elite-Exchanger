@@ -89,9 +89,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const providers = await getProviders();
 
    let users = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/user/admin/userList`, {
-      method: "GET",
-    
+      method: "GET",    
     }).then(response => response.json());
+
    let networks = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/network`, {
       method: "GET",
     

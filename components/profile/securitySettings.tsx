@@ -8,6 +8,7 @@ import ConfirmPopup from "@/pages/profile/confirm-popup";
 import Activity from "./activity/activity";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TradingPassword from "./tradingPassword";
 import AES from "crypto-js/aes";
 
 import * as yup from "yup";
@@ -32,7 +33,7 @@ interface fixSection {
   show?: number;
   setShow?: Function | any;
   session: any;
-  activity:any;
+  activity: any;
   // showActivity:boolean,
   // setShowActivity:any
 }
@@ -52,6 +53,7 @@ const SecuritySettings = (props: fixSection) => {
   const [googleAuth, setGoogleAuth] = useState(props.session?.user?.TwoFA)
   const [formData, setFormData] = useState<UserSubmitForm | null>();
   const { status, data: session } = useSession()
+  const [tradePassword,setTradePassword] = useState(false);
 
   let data = [
     {
@@ -86,6 +88,14 @@ const SecuritySettings = (props: fixSection) => {
       Add: false,
       ctaLink: "/activity",
       CtaText: "Activity log",
+    },
+    {
+      image: "activity.svg",
+      bg: "green",
+      title: "Trading Password",
+      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum",
+      Add: false,
+      CtaText: "Enable",
     },
   ];
 
@@ -273,7 +283,7 @@ const SecuritySettings = (props: fixSection) => {
         </div>
 
         {showActivity ? (
-          <Activity activity={props?.activity} setShowActivity={setShowActivity} showActivity={showActivity}/>
+          <Activity activity={props?.activity} setShowActivity={setShowActivity} showActivity={showActivity} />
         ) : (
           <div className="max-[1023px] dark:bg-omega bg-white rounded-[10px]">
             <p className="sec-title lg:p-0 pl-20 pt-20">Security</p>
@@ -287,10 +297,10 @@ const SecuritySettings = (props: fixSection) => {
                     <div className="flex items-start w-full gap-5">
                       <div
                         className={`p-2 rounded-5 max-w-[40px] w-full ${item.bg === "blue"
-                            ? "bg-primary-400"
-                            : item.bg === "red"
-                              ? "bg-[#F87171]"
-                              : "bg-[#6EE7B7]"
+                          ? "bg-primary-400"
+                          : item.bg === "red"
+                            ? "bg-[#F87171]"
+                            : "bg-[#6EE7B7]"
                           }`}
                       >
                         <Image
@@ -337,12 +347,13 @@ const SecuritySettings = (props: fixSection) => {
                         )}
                       </div>
                     )}
+
                     {item.CtaText == "Enable" ? (
                       index === 0 ? (
                         <button
                           className={`max-w-full w-full md:max-w-[130px] h-40 ${props?.session?.user?.email == "null"
-                              ? "bg-primary text-white"
-                              : "bg-grey-v-2 !text-primary"
+                            ? "bg-primary text-white"
+                            : "bg-grey-v-2 !text-primary"
                             }  rounded-5 info-16-18 `}
                           onClick={() => {
                             setEnable(index + 1);
@@ -356,8 +367,8 @@ const SecuritySettings = (props: fixSection) => {
                       ) : index === 1 ? (
                         <button
                           className={`max-w-full w-full md:max-w-[130px] h-40 ${props?.session?.user?.number == "null"
-                              ? "bg-primary text-white"
-                              : "bg-grey-v-2 !text-primary"
+                            ? "bg-primary text-white"
+                            : "bg-grey-v-2 !text-primary"
                             }  rounded-5 info-16-18 `}
                           onClick={() => {
                             setEnable(index + 1);
@@ -368,20 +379,30 @@ const SecuritySettings = (props: fixSection) => {
                             ? "Enable"
                             : "Disable"}
                         </button>
-                      ) : (
-                        index === 2 && (
-                          <button
-                            className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${googleAuth === false ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
-                            onClick={() => {
-                              setEnable(index + 1);
-                              setShow(true);
-                            }}
-                          >
-                            {googleAuth === false
-                              ? "Enable"
-                              : "Disable"}
-                          </button>
-                        )
+                      ) : index === 2 ? (
+                        <button
+                          className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${googleAuth === false ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
+                          onClick={() => {
+                            setEnable(index + 1);
+                            setShow(true);
+                          }}
+                        >
+                          {googleAuth === false
+                            ? "Enable"
+                            : "Disable"}
+                        </button>
+                      ) : index === 4 && (
+                        <button
+                          className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null) ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
+                          onClick={() => {
+                            setEnable(index + 1);
+                            setShow(true);
+                          }}
+                        >
+                          {(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null)
+                            ? "Add"
+                            : "Edit"}
+                        </button>
                       )
                     ) : (
                       <button
@@ -510,6 +531,14 @@ const SecuritySettings = (props: fixSection) => {
           data={formData}
           session={props?.session}
           snedOtpToUser={snedOtpToUser}
+        />
+      )}
+      {enable === 5 && (
+        <TradingPassword
+          setEnable={setEnable}
+          setShow={setShow}
+          session={props?.session}
+          setTradePassword={setTradePassword}
         />
       )}
       {active === 1 && (

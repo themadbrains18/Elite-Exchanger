@@ -32,6 +32,7 @@ interface fixSection {
   show?: number;
   setShow?: Function | any;
   session?: any;
+  activity?:any;
   // showActivity:boolean,
   // setShowActivity:any
 }
@@ -238,8 +239,8 @@ const AdminSettings = (props: fixSection) => {
     <>
       <ToastContainer />
       <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"}`}></div>
-      <section className={` lg:p-40 px-[15px] bg-white rounded-16`}>
-          <div className="max-[1023px] dark:bg-omega bg-white rounded-[10px]">
+      <section className={`  mt-[24px] py-6 px-5  rounded-10 bg-white dark:bg-grey-v-4`}>
+          <div className="max-[1023px]  rounded-[10px]">
             <p className="sec-title lg:p-0 pl-20 pt-20">Security</p>
             <div className="py-[30px] md:py-[50px] px-20 lg:px-0">
               {data.map((item, index: number) => {

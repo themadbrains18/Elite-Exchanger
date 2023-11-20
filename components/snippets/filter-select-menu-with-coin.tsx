@@ -53,6 +53,9 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
     })
   }, [props?.dropdown])
 
+  let drop1Image = (props.dropdown === 1 || props.dropdown === 2) && props?.value === 'INR' ? 'https://lcw.nyc3.cdn.digitaloceanspaces.com/production/currencies/32/inr.png' : '';
+  let drop2Image = (props.dropdown === 1 || props.dropdown === 2) && props?.value === 'USDT' ? 'https://lcw.nyc3.cdn.digitaloceanspaces.com/production/currencies/32/usdt.png' : '';
+  
   return (
 
     <>
@@ -65,7 +68,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
               <div className=" cursor-pointer max-w-full w-full">
                 <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} onClick={() => { setShow(!show) }}>
                   <li className='flex items-center gap-[5px] rounded-[5px] mr-[15px]'>
-                    <Image src={`${image === 'Coin.svg' ? `/assets/history/Coin.svg` : image}`} alt="error" width={20} height={20} />
+                    <Image src={`${(image === 'Coin.svg' && (props?.value === null || props?.value === undefined)) ? `/assets/history/Coin.svg` : drop1Image !== '' ? drop1Image : drop2Image !==''?drop2Image :image}`} alt="error" width={20} height={20} />
                     <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text ${props.dropdown === 1 ? ' one' : ' two'}`}>{text}</p>
                   </li>
                   <IconsComponent type="downArrow" hover={false} active={false} />
@@ -102,7 +105,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
               <div className=" cursor-pointer max-w-full w-full">
                 <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} onClick={() => { setShowSecond(!showSecond) }}>
                   <li className='flex items-center gap-[5px] rounded-[5px] mr-[15px]'>
-                    <Image src={`${image === 'Coin.svg' ? `/assets/history/Coin.svg` : image}`} alt="error" width={20} height={20} />
+                    <Image src={`${(image === 'Coin.svg' && (props?.value === null || props?.value === undefined)) ? `/assets/history/Coin.svg` : drop1Image !== '' ? drop1Image : drop2Image !==''?drop2Image :image}`} alt="error" width={20} height={20} />
                     <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text ${props.dropdown === 2 ? ' one' : ' two'}`}>{text}</p>
                   </li>
                   <IconsComponent type="downArrow" hover={false} active={false} />

@@ -12,6 +12,8 @@ declare module "next-auth" {
       refer_code:any,
       secret:any;
       TwoFA:any;
+      kyc:any;
+      tradingPassword:any;
     } & DefaultSession["user"]
   }
 }

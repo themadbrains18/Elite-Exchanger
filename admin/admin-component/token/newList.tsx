@@ -15,72 +15,7 @@ const NewList = (props:propsData) => {
     return new Date(date).toLocaleDateString('en-US', options)
   }
 
-  // let data = [
-  //   {
-  //     coin: "coin1.svg",
-  //     coinName: "Cardano",
-  //     symbol: "BTC",
-  //     contract: "BNB Smart Chain",
-  //     address: "0X1BD8F7DB....",
-  //     email: "test@example.com",
-  //     created: "17 Oct 2022",
-  //   },
-  //   {
-  //     coin: "coin2.svg",
-  //     coinName: "Bitcoin",
-  //     symbol: "BTC",
-  //     contract: "ERC-20",
-  //     address: "0X1BD8F7DB....",
-  //     email: "abcd@example.com",
-  //     created: "17 Oct 2022",
-  //   },
-  //   {
-  //     coin: "coin3.svg",
-  //     coinName: "Shiba",
-  //     symbol: "BTC",
-  //     contract: "Ploygon",
-  //     address: "0X1BD8F7DB....",
-  //     email: "young@example.com",
-  //     created: "17 Oct 2022",
-  //   },
-  //   {
-  //     coin: "coin4.svg",
-  //     coinName: "Bitcoin",
-  //     symbol: "BTC",
-  //     contract: "Avalanche",
-  //     address: "0X1BD8F7DB....",
-  //     email: "jennings@example.com",
-  //     created: "17 Oct 2022",
-  //   },
-  //   {
-  //     coin: "coin1.svg",
-  //     coinName: "Bitcoin",
-  //     symbol: "BTC",
-  //     contract: "Ploygon",
-  //     address: "0X1BD8F7DB....",
-  //     email: "young@example.com",
-  //     created: "17 Oct 2022",
-  //   },
-  //   {
-  //     coin: "coin3.svg",
-  //     coinName: "Bitcoin",
-  //     symbol: "BTC",
-  //     contract: "ERC-20",
-  //     address: "0X1BD8F7DB....",
-  //     email: "young@example.com",
-  //     created: "17 Oct 2022",
-  //   },
-  //   {
-  //     coin: "coin4.svg",
-  //     coinName: "Bitcoin",
-  //     symbol: "BTC",
-  //     contract: "Avalanche",
-  //     address: "0X1BD8F7DB....",
-  //     email: "jennings@example.com",
-  //     created: "17 Oct 2022",
-  //   },
-  // ];
-
+ 
   return (
     <section className="py-6 px-5  rounded-10 bg-white dark:bg-grey-v-4">
       <div className="flex gap-10 justify-between mb-[15px]">

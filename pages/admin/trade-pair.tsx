@@ -8,18 +8,13 @@ import { getProviders } from "next-auth/react";
 
 interface Session {
   coinList?: any;
-  pairList:any;
 }
 
 const TradePair = (props: Session) => {
-  const [pairList, setFreshPairList] = useState(props.pairList);
 
-  const refreshPairList=(data:any)=>{
-    setFreshPairList(data);
-  }
   return (
     <DasboardLayout>
-      <PairList list={props?.coinList} pairs={pairList} refreshPairList={refreshPairList}/>
+      <PairList list={props?.coinList} />
     </DasboardLayout>
   );
 };
@@ -35,9 +30,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       method: "GET",
     }
   ).then((response) => response.json());
-  let pairList = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/pair`, {
-    method: "GET",
-  }).then((response) => response.json());
 
 
   return {
@@ -46,16 +38,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       sessions: session,
       provider: providers,
       coinList: tokenList?.data,
-      pairList:pairList
     },
   };
 
-  // if (session) {
-
-  // }
-  // return {
-  //   redirect: { destination: "/" },
-  // };
 }
 
 export default TradePair;

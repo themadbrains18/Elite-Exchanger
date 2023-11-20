@@ -10,6 +10,7 @@ interface ActiveSession {
   data: any;
   show: boolean;
   setShow: Function;
+  refreshPairList?:any;
 }
 
 type PairSubmitForm = {
@@ -17,6 +18,9 @@ type PairSubmitForm = {
   tokenTwo: string;
   symbolOne: string;
   symbolTwo: string;
+  maker?: number;
+  taker?: number;
+  min_trade: number;
 };
 
 const schema = yup.object().shape({
@@ -24,6 +28,10 @@ const schema = yup.object().shape({
   tokenTwo: yup.string().required("Please enter symbol"),
   symbolOne: yup.string().required("Please enter symbol"),
   symbolTwo: yup.string().required("Please enter symbol"),
+  maker: yup.number().notRequired(),
+  taker: yup.number().notRequired(),
+  min_trade: yup.number().positive().required("Please enter symbol"),
+
 });
 
 const AddPair = (props: ActiveSession) => {
@@ -41,7 +49,7 @@ const AddPair = (props: ActiveSession) => {
     formState,
     control,
     formState: { errors },
-  } = useForm<PairSubmitForm>({
+  } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
   });
@@ -53,7 +61,7 @@ const AddPair = (props: ActiveSession) => {
       setValue("symbolOne", symbol?.symbol);
       clearErrors("tokenOne");
     } else {
-     
+
       setValue("tokenTwo", symbol?.id);
       setValue("symbolTwo", symbol?.symbol);
       clearErrors("tokenTwo");
@@ -61,10 +69,10 @@ const AddPair = (props: ActiveSession) => {
   };
 
   const onHandleSubmit = async (data: any) => {
-    if(getValues("tokenOne")=== getValues("tokenTwo")){
-      setError("tokenTwo",{message:"Same tokens are not allowed"})
+    if (getValues("tokenOne") === getValues("tokenTwo")) {
+      setError("tokenTwo", { message: "Same tokens are not allowed" })
     }
-    else{
+    else {
       data.status = true;
       let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/pair/create`, {
         headers: {
@@ -77,6 +85,13 @@ const AddPair = (props: ActiveSession) => {
       console.log(result);
       if (result?.status === 200) {
         toast.success(result.message);
+        props.refreshPairList();
+        setTimeout(() => {
+          props?.setShow(false);
+        }, 1000);
+      }
+      if (result?.status === 409) {
+        toast.warning(result.message);
         setTimeout(() => {
           props?.setShow(false);
         }, 1000);
@@ -137,6 +152,45 @@ const AddPair = (props: ActiveSession) => {
           />
           {errors?.tokenTwo && (
             <p style={{ color: "#ff0000d1" }}>{errors?.tokenTwo?.message}</p>
+          )}
+        </div>
+        <div className=" relative ">
+          <p className="sm-text mb-2">Maker fee</p>
+          <input
+            type="text"
+            {...register("maker")}
+            name="maker"
+            placeholder="Please enter limit case fee"
+            className="sm-text input-cta2 w-full"
+          />
+          {errors?.maker && (
+            <p style={{ color: "#ff0000d1" }}>{errors?.maker?.message}</p>
+          )}
+        </div>
+        <div className=" relative ">
+          <p className="sm-text mb-2">Taker fee</p>
+          <input
+            type="text"
+            {...register("taker")}
+            name="taker"
+            placeholder="Please enter limit case fee"
+            className="sm-text input-cta2 w-full"
+          />
+          {errors?.taker && (
+            <p style={{ color: "#ff0000d1" }}>{errors?.taker?.message}</p>
+          )}
+        </div>
+        <div className=" relative ">
+          <p className="sm-text mb-2">Minimum trade amount</p>
+          <input
+            type="text"
+            {...register("min_trade")}
+            name="min_trade"
+            placeholder="Please enter limit case fee"
+            className="sm-text input-cta2 w-full"
+          />
+          {errors?.min_trade && (
+            <p style={{ color: "#ff0000d1" }}>{errors?.min_trade?.message}</p>
           )}
         </div>
         <button className="solid-button w-full mt-30">Submit</button>

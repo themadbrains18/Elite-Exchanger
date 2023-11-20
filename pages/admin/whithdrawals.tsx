@@ -6,14 +6,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { GetServerSidePropsContext } from "next";
 
-interface Session {
-  withdraw:any
-}
 
-const Whithdrawals = (props:Session) => {
+
+const Whithdrawals = () => {
   return (
     <DasboardLayout>
-      <WithdrawTable withdraw={props?.withdraw}/>
+      <WithdrawTable/>
     </DasboardLayout>
   );
 };
@@ -25,10 +23,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders();
 
-   let withdraw = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/withdraw/admin/withdrawList`, {
-      method: "GET",
-    
-    }).then(response => response.json());
 
     // console.log(withdraw);
     
@@ -38,7 +32,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       session: session,
       sessions: session,
       provider: providers,
-      withdraw : withdraw
+    
     },
   };
   // if (session) {
