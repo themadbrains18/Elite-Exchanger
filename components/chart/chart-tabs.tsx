@@ -117,7 +117,7 @@ const ChartTabs = (props: propsData) => {
           {/* Coin List */}
           <div>
             <button className={`w-full max-w-full sec-text text-center text-gamma border-b-2 border-[transparent] pb-[32px]  ${activeTab === 1 && "!text-primary border-primary"}`} onClick={() => setActiveTab(1)}>
-              Trade Market
+              Open Position
             </button>
           </div>
           {/* User Open Order */}

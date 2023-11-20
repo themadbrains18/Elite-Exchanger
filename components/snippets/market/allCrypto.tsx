@@ -72,7 +72,7 @@ const AllCrypto = (props:propsData) => {
                     <tbody>
                         {currentItems && currentItems.length>0 && currentItems?.map((item: any, index: any) => {
                             return (
-                                <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => router.push(`/chart/${item.symbol}`)}>
+                                <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => (item?.tradePair !== null ? router.push(`/chart/${item.symbol}`) : '')}>
                                     
                                     <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">

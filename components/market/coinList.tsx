@@ -17,6 +17,9 @@ const CoinList = (props: propsData) => {
   const [topgainer, setTopGainers] = useState([]);
   const [favouriteToken, setFavouriteToken] = useState([]);
 
+  const [spotTrade, SetSpotTrade] = useState([]);
+  const [futureTrade, SetFutureTrade] = useState([]);
+
   let tabsData = [
     {
       id: 1,
@@ -33,10 +36,6 @@ const CoinList = (props: propsData) => {
     {
       id: 4,
       name: "Future"
-    },
-    {
-      id: 5,
-      name: "Top Gainers"
     },
     {
       id: 6,
@@ -62,6 +61,17 @@ const CoinList = (props: propsData) => {
       }
       setFavouriteToken(array);
     }
+
+    let spot = props.coins.filter((item:any)=>{
+      return item.tradePair !== null
+    });
+
+    SetSpotTrade(spot);
+
+    let future = props.coins.filter((item:any)=>{
+      return item.futureTradePair !== null
+    });
+    SetFutureTrade(future);
 
     // Get top gainer token list
     getTopGainersList();
@@ -112,13 +122,10 @@ const CoinList = (props: propsData) => {
           <AllCrypto coins={props.coins} />
         }
         {active1 === 3 &&
-          <Spot coins={props.coins} />
+          <Spot coins={spotTrade} />
         }
         {active1 === 4 &&
-          <Future coins={props.coins} />
-        }
-        {active1 === 5 &&
-          <TopGainers coins={topgainer} />
+          <Future coins={futureTrade} />
         }
         {active1 === 6 &&
           <NewListing coins={newCoins} />
