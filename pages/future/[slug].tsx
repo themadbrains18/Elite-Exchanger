@@ -75,7 +75,10 @@ const FutureTrading = (props: Session) => {
         let ccurrentToken = tokenList?.data.filter((item: any) => {
             return item.symbol === slug
         })
-        setAllCoins(tokenList?.data);
+        let future = tokenList?.data.filter((item: any) => {
+            return item.futureTradePair !== null
+        });
+        setAllCoins(future);
         setCurrentToken(ccurrentToken);
     }
 
@@ -127,8 +130,8 @@ const FutureTrading = (props: Session) => {
         }
     }
 
-    const getAllMarketOrderByToken = async (symbol:any) => {
-        
+    const getAllMarketOrderByToken = async (symbol: any) => {
+
         let currentToken = allCoins.filter((item: any) => {
             return item.symbol === symbol
         })
@@ -144,7 +147,7 @@ const FutureTrading = (props: Session) => {
 
     }
 
-    const filterBuySellRecords = (data:any) => {
+    const filterBuySellRecords = (data: any) => {
         if (data && data.length > 0) {
             let sellRecord = data.filter((item: any) => {
                 return item.order_type === 'sell'
@@ -156,13 +159,13 @@ const FutureTrading = (props: Session) => {
             setSellTrade(sellRecord);
             setBuyTrade(buyRecord);
         }
-        else{
+        else {
             setSellTrade([]);
             setBuyTrade([]);
         }
     }
 
-    
+
     return (
         <>
             <div>
@@ -184,13 +187,13 @@ const FutureTrading = (props: Session) => {
                                 <BuySellCard id={1} coins={allCoins} session={props.session} token={currentToken[0]} slug={slug} assets={props.assets} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
                                 {/* hidden on mobile */}
                                 <div className='lg:block hidden'>
-                                    <OrderBook slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade}/>
+                                    <OrderBook slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} />
                                 </div>
                             </div>
                             {/* hidden on desktop */}
                             <div className='lg:hidden'>
-                                <OrderBookMobile slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade}/>
-                                <ChartTabs coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory}/>
+                                <OrderBookMobile slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} />
+                                <ChartTabs coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
                             </div>
                         </div>
                     </div>
@@ -214,9 +217,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         method: "GET"
     }).then(response => response.json());
 
-    let future = tokenList?.data.filter((item:any)=>{
+    let future = tokenList?.data.filter((item: any) => {
         return item.futureTradePair !== null
-      });
+    });
 
     let userAssets: any = [];
     if (session) {
