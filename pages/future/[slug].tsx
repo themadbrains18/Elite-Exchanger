@@ -16,6 +16,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
 import TopBar from '/components/future/top-bar';
 import BuySell from '/components/future/buy-sell';
+import MarginRatio from '/components/future/margin-ratio';
+import OrderBookFuture from '/components/future/order-book/order-book';
+import MarketTrades from '@/components/future/order-book/market-trade-table';
+import CoinTypes from '@/components/future/coin-types';
 
 interface Session {
     session: {
@@ -104,7 +108,7 @@ const FutureTrading = (props: Session) => {
             let currentToken = allCoins.filter((item: any) => {
                 return item.symbol === symbol
             })
-            let openOrder = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market?token_id=${currentToken[0].id}&userid=${props.session?.user?.user_id}`, {
+            let openOrder = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market?token_id=${currentToken[0]?.id}&userid=${props.session?.user?.user_id}`, {
                 method: "GET",
                 headers: {
                     "Authorization": props.session?.user?.access_token
@@ -121,7 +125,7 @@ const FutureTrading = (props: Session) => {
             let currentToken = allCoins.filter((item: any) => {
                 return item.symbol === symbol
             })
-            let tradeHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market/user_trade_history?token_id=${currentToken[0].id}&userid=${props.session?.user?.user_id}`, {
+            let tradeHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market/user_trade_history?token_id=${currentToken[0]?.id}&userid=${props.session?.user?.user_id}`, {
                 method: "GET",
                 headers: {
                     "Authorization": props.session?.user?.access_token
@@ -171,7 +175,14 @@ const FutureTrading = (props: Session) => {
     return (
         <>
            <TopBar />
-           <BuySell />
+           <div className='flex items-start'>
+
+                <BuySell />
+                <MarginRatio />
+                <OrderBookFuture />
+                <MarketTrades />
+                <CoinTypes />
+           </div>
         </>
     )
 }

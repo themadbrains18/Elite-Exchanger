@@ -135,7 +135,7 @@ img{
   }
 
   .top-label{
-    @apply font-normal text-[12px] leading-22 text-[#91a5b1];
+    @apply font-normal text-[12px] leading-22 text-[#a3a8b7];
   }
   /*/==================================/*/
 
@@ -502,9 +502,9 @@ input[name="colored-radio"].contactform:checked + .custom-radio{
 }
 
 .range-slider_line {
-	height: 1vmin;
+	height: 4px;
 	width: 100%;
-	background-color: #e1e1e1;
+	background-color: #03A66D;
 	top: 50%;
 	transform: translateY(-50%);
 	left: 0;
@@ -514,7 +514,7 @@ input[name="colored-radio"].contactform:checked + .custom-radio{
 
 .range-slider_line-fill {  
 	position: absolute;
-	height: 1vmin;
+	height: 4px;
 	width: 0;
 	background-color: #03A66D;
 }
