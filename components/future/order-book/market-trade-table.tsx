@@ -1,13 +1,15 @@
 import React from 'react'
 interface setState {
     show?: number;
+    setShow?:any;
     fullHeight?:boolean;
     showPrice?:boolean;
 }
 const MarketTrades = (props:setState) => {
   return (
-    <div className='bg-[#fafafa] dark:bg-[#1a1b1f] border-l border-b dark:border-[#25262a] border-[#e5e7eb] py-[14px] px-[16px] max-w-[300px] w-full'>
-        <div className={`overflow-y-auto orderTable ${props.fullHeight ? 'max-h-[290px]':'max-h-[170px]'}`}>
+    <div className={`bg-[#fafafa] dark:bg-[#1a1b1f] border-l border-b dark:border-[#25262a] border-[#e5e7eb] py-[14px] px-[16px] max-w-[300px] w-full`}>
+        <h3 className='top-label dark:!text-white !text-[#000]'>Market Trades</h3>
+        <div className={`overflow-y-auto orderTable max-h-[170px]`}>
             {/* head */}
             <div className='grid grid-cols-3 gap-[10px] sticky top-0 bg-light bg-[#fafafa] dark:bg-[#1a1b1f]'>
                 <p className='top-label text-start py-[5px]'>Price (USDT)</p>

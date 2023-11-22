@@ -1,16 +1,19 @@
 import React, { useState } from 'react'
 import BuyTableFuture from './buy-table';
 import SelltableFuture from './sell-table';
-
-const OrderBookFuture = () => {
-    const [show,setShow] = useState(1);
+interface setHeight {
+    show?:number;
+    setShow?:any
+}
+const OrderBookFuture = (props:setHeight) => {
+    // const [show,setShow] = useState(1);
   return (
     <div className='max-w-[300px] w-full bg-[#fafafa] dark:bg-[#1a1b1f] border-l border-b dark:border-[#25262a] border-[#e5e7eb] '>
         {/* order book head */}
-        <div className='flex items-center justify-between gap-[10px] bg-[#fafafa] dark:bg-[#1a1b1f] border-b dark:border-[#25262a] border-[#e5e7eb] py-[14px] px-[16px] max-w-[300px] w-full'>
+        <div className='flex items-center justify-between gap-[10px] bg-[#fafafa] dark:bg-[#1a1b1f] border-b dark:border-[#25262a] border-[#e5e7eb] py-[10px] px-[16px] max-w-[300px] w-full'>
             <h3 className='top-label dark:!text-white !text-[#000]'>Order Book</h3>
             <div className='flex items-center justify-between gap-[10px] '> 
-                <button className={`p-[5px] border border-[#ffffff26] rounded  ${show === 1 ? "dark:bg-[#373d4e] bg-[#e5ecf0]":"bg-transparent"}`} onClick={()=>{setShow(1)}}>
+                <button className={`p-[5px] border border-[#ffffff26] rounded  ${props.show === 1 ? "dark:bg-[#373d4e] bg-[#e5ecf0]":"bg-transparent"}`} onClick={()=>{props.setShow(1)}}>
                     <svg
                     width={16}
                     height={16}
@@ -44,7 +47,7 @@ const OrderBookFuture = () => {
                     />
                     </svg>
                 </button>
-                <button className={`p-[5px] border border-[#ffffff26] rounded  ${show === 2 ? "dark:bg-[#373d4e] bg-[#e5ecf0]":"bg-transparent"}`} onClick={()=>{setShow(2)}}>
+                <button className={`p-[5px] border border-[#ffffff26] rounded  ${props.show === 2 ? "dark:bg-[#373d4e] bg-[#e5ecf0]":"bg-transparent"}`} onClick={()=>{props.setShow(2)}}>
                     <svg
                     width={16}
                     height={16}
@@ -78,7 +81,7 @@ const OrderBookFuture = () => {
                     />
                     </svg>
                 </button>
-                <button className={`p-[5px] border border-[#ffffff26] rounded  ${show === 3 ? "dark:bg-[#373d4e] bg-[#e5ecf0]":"bg-transparent"}`} onClick={()=>{setShow(3)}}>
+                <button className={`p-[5px] border border-[#ffffff26] rounded  ${props.show === 3 ? "dark:bg-[#373d4e] bg-[#e5ecf0]":"bg-transparent"}`} onClick={()=>{props.setShow(3)}}>
                     <svg
                     width={16}
                     height={16}
@@ -115,11 +118,11 @@ const OrderBookFuture = () => {
             </div>
         </div>
         {
-            show === 2 &&
+            props.show === 2 &&
             <BuyTableFuture fullHeight={true} showPrice={true} />
         }
         {
-            show === 1 &&
+            props.show === 1 &&
             <>
                 <BuyTableFuture />
                 <div className='bg-card-bg py-[6px] px-[20px] flex items-center justify-between dark:bg-omega bg-white my-[10px]'>
@@ -130,8 +133,8 @@ const OrderBookFuture = () => {
             </>
         }
         {
-            show === 3 &&
-            <SelltableFuture show={show} fullHeight={true} showPrice={true} />
+            props.show === 3 &&
+            <SelltableFuture show={props.show} fullHeight={true} showPrice={true} />
         }
     </div>
   )

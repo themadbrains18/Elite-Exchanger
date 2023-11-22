@@ -5,6 +5,8 @@ interface svgType {
   type: string;
   hover?: boolean;
   active?: boolean;
+  fill?:boolean;
+  setFill?:Function;
 }
 
 const IconsComponent = (props: svgType) => {
@@ -2568,6 +2570,7 @@ const IconsComponent = (props: svgType) => {
         />
       </svg>
       )}
+      
     </>
   );
 };

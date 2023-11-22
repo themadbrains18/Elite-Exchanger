@@ -20,6 +20,8 @@ import MarginRatio from '/components/future/margin-ratio';
 import OrderBookFuture from '/components/future/order-book/order-book';
 import MarketTrades from '@/components/future/order-book/market-trade-table';
 import CoinTypes from '@/components/future/coin-types';
+import ChartTabsFuture from '@/components/future/chart-tabs-future';
+import FutureChart from '@/components/future/future-chart';
 
 interface Session {
     session: {
@@ -33,7 +35,8 @@ interface Session {
 const FutureTrading = (props: Session) => {
 
     const router = useRouter();
-
+    const [show,setShow] = useState(1);
+    const [show1,setShow1] = useState(false)
     const [orders, setMarketOrders] = useState([]);
     const [userTradeHistory, setUserTradeHistory] = useState([]);
     const [currentToken, setCurrentToken] = useState([]);
@@ -174,7 +177,34 @@ const FutureTrading = (props: Session) => {
 
     return (
         <>
-           <TopBar />
+
+        <div className='flex'>
+            <div className='w-full max-w-[calc(100%-300px)]'>
+                <TopBar show={show1} setShow={setShow1} />
+                <div className='flex'>
+                    <div className='w-full max-w-full max-w-[calc(100%-300px)]'>
+                        <div className='flex relative w-full max-w-full'>
+                            <div className={`w-full max-w-[380px] max-[1500px]:absolute duration-300 z-[99] max-[1500px]:top-0 ${show1 ? 'max-[1500px]:left-0':'max-[1500px]:left-[-100%]'}`}>
+                                <CoinTypes />
+                            </div>
+                            <div className='max-[1499px]:pl-[20px] w-full max-w-full min-[1500px]:max-w-[calc(100%-380px)]'>
+                                <FutureChart />
+                            </div>
+                        </div>
+                    </div>
+                    <div className='w-full max-w-[300px]'>
+                        <OrderBookFuture setShow={setShow} show={show} />
+                        <MarketTrades setShow={setShow} show={show} />
+                    </div>
+                </div>
+                <ChartTabsFuture />
+            </div>
+            <div>
+                <BuySell />
+                <MarginRatio />
+            </div>
+        </div>
+           {/* <TopBar />
            <div className='flex items-start'>
 
                 <BuySell />
@@ -182,7 +212,10 @@ const FutureTrading = (props: Session) => {
                 <OrderBookFuture />
                 <MarketTrades />
                 <CoinTypes />
+
            </div>
+            <ChartTabsFuture />
+            <FutureChart /> */}
         </>
     )
 }
