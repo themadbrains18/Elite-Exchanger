@@ -22,6 +22,7 @@ interface propsData {
 const WalletList = (props: propsData): any => {
   const { mode } = useContext(Context);
   const [coinItemOffset, setCoinItemOffset] = useState(0);
+  const [futureItemOffset, setFutureItemOffset] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
   const [active1, setActive1] = useState(1);
   const [show1, setShow1] = useState(0);
@@ -83,29 +84,49 @@ const WalletList = (props: propsData): any => {
 
   let dataWithdraw = props?.withdrawList;
   let dataCoinWallet = props.coinList;
-
-  let newCoinListWithBalance = [];
-
-  for (const ls of dataCoinWallet) {
-    ls.avail_bal = 0.00;
-    for (const as of props?.assets) {
-      if (as.token_id === ls.id && as.balance > 0) {
-        ls.avail_bal = as.balance;
-        newCoinListWithBalance.push(ls)
-      }
-    }
-  }
-
   let itemsCoinsPerPage = 10;
+
+  //==========================================================
+  // =========== Filter Spot Assets ====================  
+  //==========================================================
+  let spotAssets = props?.assets.filter((item: any) => {
+    return item.walletTtype === 'main_wallet'
+  });
+
+  //==========================================================
+  //============ Filter Future Assets ==================
+  //==========================================================
+  let futureAssets = props?.assets.filter((item: any) => {
+    return item.walletTtype === 'future_wallet'
+  });
+
+  //==========================================================
+  //=============Spot wallet pagging start==================
+  //==========================================================
   const coinendOffset = coinItemOffset + itemsCoinsPerPage;
-  const coincurrentItems = newCoinListWithBalance.slice(coinItemOffset, coinendOffset);
-  const coinpageCount = Math.ceil(newCoinListWithBalance.length / itemsCoinsPerPage);
+  const spotWalletItems = spotAssets.slice(coinItemOffset, coinendOffset);
+  const coinpageCount = Math.ceil(spotAssets.length / itemsCoinsPerPage);
 
   const handleCoinsPageClick = async (event: any) => {
-    const newOffset = (event.selected * itemsCoinsPerPage) % newCoinListWithBalance.length;
+    const newOffset = (event.selected * itemsCoinsPerPage) % spotAssets.length;
     setCoinItemOffset(newOffset);
   };
 
+  //==========================================================
+  //=============Future wallet pagging start==================
+  //==========================================================
+  const futureOffset = futureItemOffset + itemsCoinsPerPage;
+  const futureWalletItems = futureAssets.slice(futureItemOffset, futureOffset);
+  const futurepageCount = Math.ceil(futureAssets.length / itemsCoinsPerPage);
+
+  const handleFuturePageClick = async (event: any) => {
+    const newOffset = (event.selected * itemsCoinsPerPage) % futureAssets.length;
+    setFutureItemOffset(newOffset);
+  };
+
+  //==========================================================
+  //============ Deposit List item pagging ===============
+  //==========================================================
   let itemsPerPage = 10;
   const endOffset = itemOffset + itemsPerPage;
   const currentItems = walletDepositHistory.slice(itemOffset, endOffset);
@@ -116,6 +137,9 @@ const WalletList = (props: propsData): any => {
     setItemOffset(newOffset);
   };
 
+  //==========================================================
+  //=========== Withdraw List item pagging ================
+  //==========================================================
   let itemsWithdrawPerPage = 10;
   const withdrawendOffset = itemOffset + itemsPerPage;
   const currentWithdrawItems = dataWithdraw && dataWithdraw.length > 0 ? dataWithdraw.slice(itemOffset, withdrawendOffset) : [];
@@ -125,6 +149,7 @@ const WalletList = (props: propsData): any => {
     const newOffset = (event.selected * itemsWithdrawPerPage) % dataWithdraw && dataWithdraw.length > 0 ? dataWithdraw.length : 0;
     setItemOffset(newOffset);
   }
+
 
   return (
     <>
@@ -145,11 +170,11 @@ const WalletList = (props: propsData): any => {
 
           <div className="flex items-center gap-[25px] justify-between mt-[51px]">
             <div className="flex  gap-[25px]  w-max trade_history_scroll overflow-auto">
-              <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] ${active1 === 4 && "!text-primary border-primary"}`} onClick={() => setActive1(4)}>
-                All Coin
+              <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] ${active1 === 1 && "!text-primary border-primary"}`} onClick={() => { setActive1(1); }}>
+                Spot Wallet
               </button>
-              <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] ${active1 === 1 && "!text-primary border-primary"}`} onClick={() => setActive1(1)}>
-                Wallet Coin
+              <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] ${active1 === 4 && "!text-primary border-primary"}`} onClick={() => { setActive1(4) }}>
+                Future Wallet
               </button>
               <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px]  ${active1 === 2 && "!text-primary border-primary"}`} onClick={() => setActive1(2)}>
                 Deposit History
@@ -208,82 +233,115 @@ const WalletList = (props: propsData): any => {
                       </th>
                       <th className="py-5 max-[1023px]:hidden ">
                         <div className="flex ">
-                          <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Action</p>
+                          <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Deposit/Withdraw/Transfer</p>
+                          <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                        </div>
+                      </th>
+                      <th className="py-5 max-[1023px]:hidden ">
+                        <div className="flex ">
+                          <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Stacking</p>
+                          <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                        </div>
+                      </th>
+                      <th className="py-5 max-[1023px]:hidden ">
+                        <div className="flex ">
+                          <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Trade</p>
                           <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                         </div>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {coincurrentItems && coincurrentItems.length > 0 && coincurrentItems?.map((item: any, index: number) => {
-                      if (item.avail_bal > 0) {
-                        return (
-                          <tr key={index} className="rounded-5 group ">
-                            <td className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
-                              <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                <Image src={`${item.image}`} width={30} height={30} alt="coins" />
-                                <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                  <p className="info-14-18 dark:text-white">{item.symbol}</p>
-                                  <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
-                                </div>
+                    {spotWalletItems && spotWalletItems.length > 0 && spotWalletItems?.map((item: any, index: number) => {
+                      return (
+                        <tr key={index} className="rounded-5 group ">
+                          <td className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
+                            <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
+                              <Image src={`${item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" />
+                              <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
+                                <p className="info-14-18 dark:text-white">{item.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
+                                <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
                               </div>
-                            </td>
-                            <td>
-                              <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.avail_bal.toFixed(5)}</p>
-                            </td>
-                            <td className="lg:text-start text-end">
-                              <p className="info-14-18 dark:text-white">${item?.price.toFixed(5)}</p>
-                            </td>
-                            <td className="max-[1023px]:hidden">
-                              <p className="info-14-18 dark:text-white">${(item?.price * item?.avail_bal).toFixed(2)}</p>
-                            </td>
-                            <td className="max-[1023px]:hidden ">
-                              <div className="flex items-center gap-[20px]">
-                                <button onClick={() => { setShow1(1) }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Deposit</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
+                            </div>
+                          </td>
+                          <td>
+                            <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance.toFixed(5)}</p>
+                          </td>
+                          <td className="lg:text-start text-end">
+                            <p className="info-14-18 dark:text-white">${item.token !== null ? item?.token?.price.toFixed(5) : item?.global_token?.price.toFixed(5)}</p>
+                          </td>
+                          <td className="max-[1023px]:hidden">
+                            <p className="info-14-18 dark:text-white">${(item.token !== null ? item?.token?.price * item?.balance : item?.global_token?.price * item?.balance).toFixed(2)}</p>
+                          </td>
+                          <td className="max-[1023px]:hidden ">
+                            <div className="flex items-center gap-[10px]">
+                              <button onClick={() => { setShow1(1) }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                <span className="text-primary block">Deposit</span>
+                                <IconsComponent type="openInNewTab" hover={false} active={false} />
+                              </button>
+                              <button onClick={() => {
+                                setSelectedCoinBalance(item?.balance);
+                                setShow1(2);
+                                setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                              }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                <span className="text-primary block">Withdraw</span>
+                                <IconsComponent type="openInNewTab" hover={false} active={false} />
+                              </button>
+
+                              <button className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                <span className="text-primary block">Transfer</span>
+                                <IconsComponent type="openInNewTab" hover={false} active={false} />
+                              </button>
+                            </div>
+                          </td>
+                          <td className="max-[1023px]:hidden px-[10px]">
+                            <div className="flex items-center gap-[10px]">
+                              {item.token !== null && item?.token?.token_stakes?.length > 0 && item?.token?.token_stakes[0]?.status === true &&
                                 <button onClick={() => {
-                                  for (const as of props?.assets) {
-                                    if (as.token_id === item.id) {
-                                      setSelectedCoinBalance(as.balance);
-                                    }
-                                  }
-                                  setShow1(2);
-                                  setSelectedCoin(item)
-                                }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Withdraw</span>
+                                  setSelectedCoin(item?.token);
+                                  setSelectedCoinBalance(item?.balance);
+                                  setShow1(3);
+                                }} className=" max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                  <span className="text-primary block">Staking</span>
                                   <IconsComponent type="openInNewTab" hover={false} active={false} />
                                 </button>
-                                <button onClick={() => router.push(`/chart/${item.symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                              }
+
+                              {item.global_token !== null && item?.global_token?.token_stakes?.length > 0 && item?.global_token?.token_stakes[0]?.status === true &&
+                                <button onClick={() => {
+                                  setSelectedCoin(item?.global_token);
+                                  setSelectedCoinBalance(item?.balance);
+                                  setShow1(3);
+                                }} className=" max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                  <span className="text-primary block">Staking</span>
+                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                </button>
+                              }
+                            </div>
+                          </td>
+                          <td className="max-[1023px]:hidden px-[10px]">
+                            <div className="flex items-center gap-[10px]">
+                              {item.token !== null && item?.token?.tradePair !== null &&
+                                <button onClick={() => router.push(`/chart/${item?.token?.symbol}`)} className=" max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                   <span className="text-primary block">Trade</span>
                                   <IconsComponent type="openInNewTab" hover={false} active={false} />
                                 </button>
-                                {item?.token_stakes?.length > 0 && item?.token_stakes[0]?.status === true &&
-                                  <button onClick={() => {
+                              }
+                              {item.global_token !== null && item?.global_token?.tradePair !== null &&
+                                <button onClick={() => router.push(`/chart/${item?.global_token?.symbol}`)} className=" max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                  <span className="text-primary block">Trade</span>
+                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                </button>
+                              }
 
-                                    setSelectedCoin(item);
-                                    for (const as of props?.assets) {
-                                      if (as.token_id === item.id) {
-                                        setSelectedCoinBalance(as.balance);
-                                      }
-                                    }
-                                    setShow1(3);
-                                  }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                    <span className="text-primary block">Staking</span>
-                                    <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                  </button>
-                                }
-
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      }
+                            </div>
+                          </td>
+                        </tr>
+                      );
 
                     })}
 
-                    {coincurrentItems.length === 0 &&
+                    {spotWalletItems && spotWalletItems.length === 0 &&
                       <tr>
                         <td colSpan={5}>
                           <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
@@ -301,6 +359,7 @@ const WalletList = (props: propsData): any => {
                     }
                   </tbody>
                 </table>
+
                 {/* This is for responsive Version */}
                 <div className="lg:hidden">
                   {/* table head */}
@@ -325,60 +384,79 @@ const WalletList = (props: propsData): any => {
 
                   {/* table content */}
                   <div className="">
-                    {coincurrentItems && coincurrentItems.length > 0 && coincurrentItems?.map((item: any, index: number) => {
+                    {spotWalletItems && spotWalletItems.length > 0 && spotWalletItems?.map((item: any, index: number) => {
                       return (
                         <div key={index} className="rounded-5 group grid grid-cols-3  gap-x-[10px]  items-center">
                           <div className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                             <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                              <Image src={`${item.image}`} width={28} height={28} alt="coins" className="max-w-[20px] md:max-w-[30px] w-full" />
+                              <Image src={`${item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={28} height={28} alt="coins" className="max-w-[20px] md:max-w-[30px] w-full" />
                               <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                <p className="info-14-18 dark:text-white">{item.symbol}</p>
+                                <p className="info-14-18 dark:text-white">{item.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                 <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
                               </div>
                             </div>
                           </div>
                           <div>
-                            <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.avail_bal.toFixed(2)}</p>
+                            <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance.toFixed(2)}</p>
                           </div>
                           <div className="iconParent lg:text-start text-end flex items-center justify-between">
-                            <p className="info-14-18 dark:text-white">${item?.price.toFixed(2)}</p>
+                            <p className="info-14-18 dark:text-white">${item.token !== null ? item?.token?.price.toFixed(5) : item?.global_token?.price.toFixed(5)}</p>
                             <div onClick={(e) => { setHeight(e) }}>
                               <IconsComponent type="downArrow" hover={false} active={false} />
                             </div>
                           </div>
                           <div className={`fullWidthContent`}>
                             <div className="flex items-center gap-[10px] justify-center pb-[10px]">
-                              <button onClick={() => { setShow1(1) }} className=" px-[10px] py-[6.5px]  justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                              <button onClick={() => { setShow1(1) }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Deposit</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
                               <button onClick={() => {
+
+                                setSelectedCoinBalance(item?.balance);
                                 setShow1(2);
-                                setSelectedCoin(item);
-                                for (const as of props?.assets) {
-                                  if (as.token_id === item.id) {
-                                    setSelectedCoinBalance(as.balance);
-                                  }
-                                }
-                              }} className="  justify-center px-[10px] py-[6.5px]  flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                              }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Withdraw</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
-                              <button onClick={() => router.push(`/chart/${item.symbol}`)} className="  justify-center px-[10px] py-[6.5px]  flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                <span className="text-primary block">Trade</span>
+
+                              <button className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                <span className="text-primary block">Transfer</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
-                              {item?.token_stakes?.length > 0 && item?.token_stakes[0]?.status === true &&
+
+                              {item.token !== null && item?.token?.token_stakes?.length > 0 && item?.token?.token_stakes[0]?.status === true &&
                                 <button onClick={() => {
-                                  setSelectedCoin(item);
-                                  for (const as of props?.assets) {
-                                    if (as.token_id === item.id) {
-                                      setSelectedCoinBalance(as.balance);
-                                    }
-                                  }
+                                  setSelectedCoin(item?.token);
+                                  setSelectedCoinBalance(item?.balance);
                                   setShow1(3);
                                 }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                   <span className="text-primary block">Staking</span>
+                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                </button>
+                              }
+
+                              {item.global_token !== null && item?.global_token?.token_stakes?.length > 0 && item?.global_token?.token_stakes[0]?.status === true &&
+                                <button onClick={() => {
+                                  setSelectedCoin(item?.global_token);
+                                  setSelectedCoinBalance(item?.balance);
+                                  setShow1(3);
+                                }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                  <span className="text-primary block">Staking</span>
+                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                </button>
+                              }
+
+                              {item.token !== null && item?.token?.tradePair !== null &&
+                                <button onClick={() => router.push(`/chart/${item?.token?.symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                  <span className="text-primary block">Trade</span>
+                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                </button>
+                              }
+                              {item.global_token !== null && item?.global_token?.tradePair !== null &&
+                                <button onClick={() => router.push(`/chart/${item?.global_token?.symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                  <span className="text-primary block">Trade</span>
                                   <IconsComponent type="openInNewTab" hover={false} active={false} />
                                 </button>
                               }
@@ -387,7 +465,7 @@ const WalletList = (props: propsData): any => {
                         </div>
                       );
                     })}
-                    {coincurrentItems.length === 0 &&
+                    {spotWalletItems && spotWalletItems.length === 0 &&
                       <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                         <Image
                           src="/assets/refer/empty.svg"
@@ -401,8 +479,9 @@ const WalletList = (props: propsData): any => {
                   </div>
                 </div>
               </div>
+
               <div className="flex pt-[25px] items-center justify-between">
-                <p className="info-12 md:footer-text !text-gamma">{newCoinListWithBalance?.length} assets</p>
+                <p className="info-12 md:footer-text !text-gamma">{spotAssets?.length} assets</p>
                 <ReactPaginate className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`} breakLabel="..." nextLabel=">" onPageChange={handleCoinsPageClick} pageRangeDisplayed={10} marginPagesDisplayed={2} pageCount={coinpageCount} previousLabel="<" renderOnZeroPageCount={null} />
               </div>
             </>
@@ -620,37 +699,83 @@ const WalletList = (props: propsData): any => {
                     </tr>
                   </thead>
                   <tbody>
-                    {dataCoinWallet && dataCoinWallet.length > 0 && dataCoinWallet?.map((item: any, index: number) => {
+                    {futureWalletItems && futureWalletItems.length > 0 && futureWalletItems?.map((item: any, index: number) => {
                       return (
                         <tr key={index} className="rounded-5 group ">
                           <td className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                             <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                              <Image src={`${item.image}`} width={30} height={30} alt="coins" />
+                              <Image src={`${item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" />
                               <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                <p className="info-14-18 dark:text-white">{item.symbol}</p>
+                                <p className="info-14-18 dark:text-white">{item.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                 <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
                               </div>
                             </div>
                           </td>
                           <td>
-                            <p className="info-14-18 dark:text-white  lg:text-start text-center">{0.00}</p>
+                            <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance.toFixed(5)}</p>
                           </td>
                           <td className="lg:text-start text-end">
-                            <p className="info-14-18 dark:text-white">${item?.price.toFixed(5)}</p>
+                            <p className="info-14-18 dark:text-white">${item.token !== null ? item?.token?.price.toFixed(5) : item?.global_token?.price.toFixed(5)}</p>
                           </td>
                           <td className="max-[1023px]:hidden">
-                            <p className="info-14-18 dark:text-white">${(item?.price * item?.avail_bal).toFixed(2)}</p>
+                            <p className="info-14-18 dark:text-white">${(item.token !== null ? item?.token?.price * item?.balance : item?.global_token?.price * item?.balance).toFixed(2)}</p>
                           </td>
                           <td className="max-[1023px]:hidden ">
                             <div className="flex items-center gap-[20px]">
-                              <button onClick={() => { setShow1(1) }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                              {/* <button onClick={() => { setShow1(1) }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Deposit</span>
+                                <IconsComponent type="openInNewTab" hover={false} active={false} />
+                              </button>
+                              <button onClick={() => {
+                                for (const as of props?.assets) {
+                                  if (as.token_id === item.id) {
+                                    setSelectedCoinBalance(as.balance);
+                                  }
+                                }
+                                setShow1(2);
+                                setSelectedCoin(item)
+                              }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                <span className="text-primary block">Withdraw</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
                               <button onClick={() => router.push(`/chart/${item.symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Trade</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
+                              <button onClick={() => router.push(`/chart/${item.symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                <span className="text-primary block">Transfer</span>
+                                <IconsComponent type="openInNewTab" hover={false} active={false} />
+                              </button>
+                              {item?.token_stakes?.length > 0 && item?.token_stakes[0]?.status === true &&
+                                <button onClick={() => {
+
+                                  setSelectedCoin(item);
+                                  for (const as of props?.assets) {
+                                    if (as.token_id === item.id) {
+                                      setSelectedCoinBalance(as.balance);
+                                    }
+                                  }
+                                  setShow1(3);
+                                }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                  <span className="text-primary block">Staking</span>
+                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                </button>
+                              } */}
+
+
+                              {item.token !== null && item?.token?.futureTradePair !== null &&
+                                <button onClick={() => router.push(`/future/${item?.token?.futureTradePair?.coin_symbol}${item?.token?.futureTradePair?.usdt_symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                  <span className="text-primary block">Trade</span>
+                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                </button>
+                              }
+                              {item.global_token !== null && item?.global_token?.futureTradePair !== null &&
+                                <button onClick={() => router.push(`/future/${item?.global_token?.futureTradePair?.coin_symbol}${item?.global_token?.futureTradePair?.usdt_symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                  <span className="text-primary block">Trade</span>
+                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                </button>
+                              }
+
                             </div>
                           </td>
                         </tr>
@@ -658,7 +783,7 @@ const WalletList = (props: propsData): any => {
 
                     })}
 
-                    {dataCoinWallet.length === 0 &&
+                    {futureWalletItems && futureWalletItems.length === 0 &&
                       <tr>
                         <td colSpan={5}>
                           <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
@@ -700,30 +825,30 @@ const WalletList = (props: propsData): any => {
 
                   {/* table content */}
                   <div className="">
-                    {dataCoinWallet && dataCoinWallet.length > 0 && dataCoinWallet?.map((item: any, index: number) => {
+                    {futureWalletItems && futureWalletItems.length > 0 && futureWalletItems?.map((item: any, index: number) => {
                       return (
                         <div key={index} className="rounded-5 group grid grid-cols-3  gap-x-[10px]  items-center">
                           <div className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                             <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                              <Image src={`${item.image}`} width={28} height={28} alt="coins" className="max-w-[20px] md:max-w-[30px] w-full" />
+                              <Image src={`${item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={28} height={28} alt="coins" className="max-w-[20px] md:max-w-[30px] w-full" />
                               <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                <p className="info-14-18 dark:text-white">{item.symbol}</p>
+                                <p className="info-14-18 dark:text-white">{item.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                 <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
                               </div>
                             </div>
                           </div>
                           <div>
-                            <p className="info-14-18 dark:text-white  lg:text-start text-center">{0.00}</p>
+                            <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance.toFixed(2)}</p>
                           </div>
                           <div className="iconParent lg:text-start text-end flex items-center justify-between">
-                            <p className="info-14-18 dark:text-white">${item?.price.toFixed(2)}</p>
+                            <p className="info-14-18 dark:text-white">${item.token !== null ? item?.token?.price.toFixed(5) : item?.global_token?.price.toFixed(5)}</p>
                             <div onClick={(e) => { setHeight(e) }}>
                               <IconsComponent type="downArrow" hover={false} active={false} />
                             </div>
                           </div>
                           <div className={`fullWidthContent`}>
                             <div className="flex items-center gap-[10px] justify-center pb-[10px]">
-                              <button onClick={() => { setShow1(1) }} className=" px-[10px] py-[6.5px]  justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                              {/* <button onClick={() => { setShow1(1) }} className=" px-[10px] py-[6.5px]  justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Deposit</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
@@ -743,12 +868,38 @@ const WalletList = (props: propsData): any => {
                                 <span className="text-primary block">Trade</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
+                              {item?.token_stakes?.length > 0 && item?.token_stakes[0]?.status === true &&
+                                <button onClick={() => {
+                                  setSelectedCoin(item);
+                                  for (const as of props?.assets) {
+                                    if (as.token_id === item.id) {
+                                      setSelectedCoinBalance(as.balance);
+                                    }
+                                  }
+                                  setShow1(3);
+                                }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                  <span className="text-primary block">Staking</span>
+                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                </button>
+                              } */}
+                              {item.token !== null && item?.token?.futureTradePair !== null &&
+                                <button onClick={() => router.push(`/future/${item?.token?.futureTradePair?.coin_symbol}${item?.token?.futureTradePair?.usdt_symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                  <span className="text-primary block">Trade</span>
+                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                </button>
+                              }
+                              {item.global_token !== null && item?.global_token?.futureTradePair !== null &&
+                                <button onClick={() => router.push(`/future/${item?.global_token?.futureTradePair?.coin_symbol}${item?.global_token?.futureTradePair?.usdt_symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                  <span className="text-primary block">Trade</span>
+                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                </button>
+                              }
                             </div>
                           </div>
                         </div>
                       );
                     })}
-                    {coincurrentItems.length === 0 &&
+                    {futureWalletItems && futureWalletItems.length === 0 &&
                       <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                         <Image
                           src="/assets/refer/empty.svg"
@@ -763,8 +914,8 @@ const WalletList = (props: propsData): any => {
                 </div>
               </div>
               <div className="flex pt-[25px] items-center justify-between">
-                <p className="info-12 md:footer-text !text-gamma">{newCoinListWithBalance?.length} assets</p>
-                <ReactPaginate className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`} breakLabel="..." nextLabel=">" onPageChange={handleCoinsPageClick} pageRangeDisplayed={10} marginPagesDisplayed={2} pageCount={coinpageCount} previousLabel="<" renderOnZeroPageCount={null} />
+                <p className="info-12 md:footer-text !text-gamma">{futureAssets?.length} assets</p>
+                <ReactPaginate className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`} breakLabel="..." nextLabel=">" onPageChange={handleFuturePageClick} pageRangeDisplayed={10} marginPagesDisplayed={2} pageCount={futurepageCount} previousLabel="<" renderOnZeroPageCount={null} />
               </div>
             </>
           }
@@ -911,7 +1062,7 @@ const WalletList = (props: propsData): any => {
                         </div>
                       );
                     })}
-                    {coincurrentItems.length === 0 &&
+                    {props.userConvertList && props.userConvertList.length === 0 &&
                       <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                         <Image
                           src="/assets/refer/empty.svg"
@@ -926,7 +1077,7 @@ const WalletList = (props: propsData): any => {
                 </div>
               </div>
               <div className="flex pt-[25px] items-center justify-between">
-                <p className="info-12 md:footer-text !text-gamma">{newCoinListWithBalance?.length} assets</p>
+                <p className="info-12 md:footer-text !text-gamma">{props.userConvertList?.length} assets</p>
                 <ReactPaginate className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`} breakLabel="..." nextLabel=">" onPageChange={handleCoinsPageClick} pageRangeDisplayed={10} marginPagesDisplayed={2} pageCount={coinpageCount} previousLabel="<" renderOnZeroPageCount={null} />
               </div>
             </>
