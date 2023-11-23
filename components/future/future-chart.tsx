@@ -1,8 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 
 let tvScriptLoadingPromise;
-
-const FutureChart = () => {
+interface id{
+  id?:string;
+  height?:boolean;
+}
+const FutureChart = (props:id) => {
   const onLoadScriptRef = useRef();
 
   useEffect(() => {
@@ -25,7 +28,7 @@ const FutureChart = () => {
     return () => (onLoadScriptRef.current = null);
 
     function createWidget() {
-      if (document.getElementById('tradingview_0d0de') && 'TradingView' in window) {
+      if (props.id && 'TradingView' in window) {
         new window.TradingView.widget({
           autosize: true,
           symbol: 'NASDAQ:AAPL',
@@ -36,7 +39,7 @@ const FutureChart = () => {
           locale: 'en',
           enable_publishing: false,
           allow_symbol_change: true,
-          container_id: 'tradingview_0d0de',
+          container_id: props.id,
         });
       }
     }
@@ -44,7 +47,13 @@ const FutureChart = () => {
 
   return (
     <div className='tradingview-widget-container' style={{ height: '100%', width: '100%' }}>
-      <div id='tradingview_0d0de' style={{ height: '600px', width: '100%' }} />
+      {
+        props.height 
+        ? 
+        <div id={props.id} className='!h-[600px]  w-full' />
+        :
+        <div id={props.id} className='!h-[350px]  w-full' />
+      }
       <div className='tradingview-widget-copyright'>
         <a href='https://www.tradingview.com/' rel='noopener nofollow' target='_blank'>
           <span className='blue-text'>Track all markets on TradingView</span>

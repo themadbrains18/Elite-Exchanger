@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import IconsComponent from '../snippets/icons';
 import FiliterSelectMenu from '../snippets/filter-select-menu';
 import RangeSlider from './range-slider';
+import Image from 'next/image';
+import SelectDropdown from './snippet/select-dropdown';
 
 const BuySell = () => {
 
@@ -10,12 +12,16 @@ const BuySell = () => {
     const [show, setShow] = useState(1);
 
     const list = ['USDT', 'BTC'];
+    const timeInForceList = ['GTC', 'FOK', 'IOC'];
+    const triggerPriceList = ['Mark', 'Last'];
+    const PriceList = ['Limit', 'Market'];
+    const TriggerList = ['Trigger', 'Maker Only', 'Trailing Stop'];
 
 
     // nested tabs
     const [showNes, setShowNes] = useState(1);
     return (
-        <div className='p-[16px] dark:bg-[#1f2127] bg-[#fff] max-w-[300px] w-full border-l border-b dark:border-[#25262a] border-[#e5e7eb]'>
+        <div className='p-[16px] h-[677px] dark:bg-[#1f2127] bg-[#fff] max-w-[300px] w-full border-l border-b dark:border-[#25262a] border-[#e5e7eb]'>
             <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer'>
                 <div className='flex items-center gap-10'>
                     <p className='top-label dark:!text-white !text-[#000]'>Isolated</p>
@@ -33,7 +39,9 @@ const BuySell = () => {
                 <div className='flex items-center gap-[10px]'>
                     <button className={`admin-body-text ${showNes === 1 ? '!text-black dark:!text-white' : '!text-[#a3a8b7]'}`} onClick={() => { setShowNes(1) }}>Limit</button>
                     <button className={`admin-body-text ${showNes === 2 ? '!text-black dark:!text-white' : '!text-[#a3a8b7]'}`} onClick={() => { setShowNes(2) }}>Market</button>
-                    <button className={`admin-body-text ${showNes === 3 ? '!text-black dark:!text-white' : '!text-[#a3a8b7]'}`} onClick={() => { setShowNes(3) }}>Trigger</button>
+                    <div className='relative' onClick={() => { setShowNes(3) }}>
+                        <SelectDropdown list={TriggerList} showNes={showNes} defaultValue="Trigger" />
+                    </div>
                 </div>
                 <IconsComponent type='swap-calender' />
             </div>
@@ -45,25 +53,74 @@ const BuySell = () => {
                 <IconsComponent type='swap-calender-with-circle' />
             </div>
 
-            {/* price input */}
-            <div className='mt-10 rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
+            {/* trigger price input */}
+            {/* <div className='mt-10 rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
                 <div>
-                    <p className='top-label'>Price </p>
-                    <input type="number" placeholder="$0" step="any" value="37268.5" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "></input>
+                    <p className='top-label'>Trigger Price</p>
+                    <input type="number" placeholder="Enter the Trigger Price" step="any" value="37268.5" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "></input>
                 </div>
                 <div>
+                    <SelectDropdown list={triggerPriceList} whiteColor={true} showNes={showNes} defaultValue="Mark" />
                     <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p>
                 </div>
-            </div>
+            </div> */}
 
+            {/* Activation Price input */}
+            {/* <div className='mt-10 rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
+                <div>
+                    <p className='top-label'>Activation Price </p>
+                    <input type="number" placeholder="Enter the Trigger Price" step="any" value="37268.5" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "></input>
+                </div>
+                <div>
+                    <SelectDropdown list={triggerPriceList} whiteColor={true} showNes={showNes} defaultValue="Mark" />
+                    <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p>
+                </div>
+            </div> */}
+
+            {/* trailing Stop input */}
+            {/* <div className='mt-10 flex gap-[2px]'>
+                <div className='rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
+                    <div>
+                        <p className='top-label'>Callback Rate</p>
+                        <input type="number" placeholder="" step="any"  name="token_amount" autoFocus={true} className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "></input>
+                    </div>
+                    <div>
+                        <p className='admin-body-text !text-[12px] dark:!text-white'>%</p>
+                    </div>
+                </div>
+                <div className='max-w-[50px] w-full justify-center cursor-pointer rounded-5 py-[6px] px-[10px] flex border items-center dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
+                    <p className='top-label dark:!text-white !text-black'>1%</p>
+                </div>
+                <div className='max-w-[50px] w-full justify-center cursor-pointer rounded-5 py-[6px] px-[10px] flex border items-center dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
+                    <p className='top-label dark:!text-white !text-black'>2%</p>
+                </div>
+            </div> */}
+
+            {/* price input */}
+            {
+                showNes === 1 &&
+                <>
+                    <div className='mt-10 rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
+                        <div>
+                            <p className='top-label'>Price </p>
+                            <input type="number" placeholder="$0" step="any" value="37268.5" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "></input>
+                        </div>
+                        <div>
+                            <SelectDropdown list={PriceList} showNes={showNes} defaultValue="Trigger" whiteColor={true} />
+                            <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p>
+                        </div>
+                    </div>
+                </>
+            }
             {/* Size input */}
-            <div className='mt-10 rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
+            <div className='mt-10 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
                 <div>
                     <p className='top-label'>Size  </p>
                     <input type="number" placeholder="Min Qty is 37.3USDT" step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
                 </div>
                 <div>
-                    <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p>
+                    {/* <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p> */}
+                    <SelectDropdown list={list} showNes={showNes} defaultValue="USDT" whiteColor={true} />
                 </div>
             </div>
 
@@ -72,7 +129,7 @@ const BuySell = () => {
 
             {/* TP/SL */}
             <div className='flex items-center justify-between mt-[20px]'>
-           
+
                 <div className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`} >
                     <input id={`custom-radio`} type="checkbox" value="" name="colored-radio" className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                     <label htmlFor={`custom-radio`} className="
@@ -96,13 +153,17 @@ const BuySell = () => {
                         before:z-[1]
                         
                         ">
-                    <p className="ml-2 md-text !text-[14px]">TP/SL</p>
+                        <p className="ml-2 md-text !text-[14px]">TP/SL</p>
                     </label>
                 </div>
-                <div className='flex items-center gap-[5px] w-full justify-end'>
-                    <p className='top-label'>Time in Force:</p>
-                    <p className='top-label dark:!text-white'>FOK</p>
-                </div>
+                {
+                    showNes === 1 &&
+                    <div className='flex items-center gap-[5px] w-full justify-end'>
+                        <p className='top-label'>Time in Force:</p>
+                        {/* <p className='top-label dark:!text-white'>FOK</p> */}
+                        <SelectDropdown list={timeInForceList} showNes={showNes} defaultValue="KOC" whiteColor={true} />
+                    </div>
+                }
             </div>
 
             {/* open long */}

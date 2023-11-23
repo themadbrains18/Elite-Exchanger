@@ -36,6 +36,7 @@ const FutureTrading = (props: Session) => {
 
     const router = useRouter();
     const [show,setShow] = useState(1);
+    const [showMob,setShowMob] = useState(1);
     const [show1,setShow1] = useState(false)
     const [orders, setMarketOrders] = useState([]);
     const [userTradeHistory, setUserTradeHistory] = useState([]);
@@ -178,44 +179,60 @@ const FutureTrading = (props: Session) => {
     return (
         <>
 
-        <div className='flex'>
-            <div className='w-full max-w-[calc(100%-300px)]'>
-                <TopBar show={show1} setShow={setShow1} />
-                <div className='flex'>
-                    <div className='w-full max-w-full max-w-[calc(100%-300px)]'>
-                        <div className='flex relative w-full max-w-full'>
-                            <div className={`w-full max-w-[380px] max-[1500px]:absolute duration-300 z-[99] max-[1500px]:top-0 ${show1 ? 'max-[1500px]:left-0':'max-[1500px]:left-[-100%]'}`}>
-                                <CoinTypes />
-                            </div>
-                            <div className='max-[1499px]:pl-[20px] w-full max-w-full min-[1500px]:max-w-[calc(100%-380px)]'>
-                                <FutureChart />
+            <div className='max-[991px]:hidden flex'>
+                <div className='w-full max-w-[calc(100%-300px)]'>
+                    <TopBar show={show1} setShow={setShow1} />
+                    <div className='flex'>
+                        <div className='w-full max-w-full max-w-[calc(100%-300px)]'>
+                            <div className='flex relative w-full max-w-full'>
+                                <div className={`w-full max-w-[380px] max-[1500px]:absolute duration-300 z-[4] max-[1500px]:top-0 ${show1 ? 'max-[1500px]:left-0':'max-[1500px]:left-[-100%]'}`}>
+                                    <CoinTypes />
+                                </div>
+                                <div className='max-[1499px]:pl-[20px] w-full max-w-full min-[1500px]:max-w-[calc(100%-380px)]'>
+                                    <FutureChart id={'tradingview_0d0de'} height={true} />
+                                </div>
                             </div>
                         </div>
+                        <div className='w-full max-w-[300px]'>
+                            <OrderBookFuture setShow={setShow} show={show} />
+                            <MarketTrades setShow={setShow} show={show} widthFull={true} />
+                        </div>
                     </div>
-                    <div className='w-full max-w-[300px]'>
-                        <OrderBookFuture setShow={setShow} show={show} />
-                        <MarketTrades setShow={setShow} show={show} />
+                    <ChartTabsFuture />
+                </div>
+                <div>
+                    <BuySell />
+                    <MarginRatio />
+                </div>
+            </div>
+            <div className='max-[991px]:block hidden'>
+                <div className='relative'>
+                    <TopBar show={show1} setShow={setShow1} />
+                    <div className={`w-full max-w-full absolute duration-300 z-[4] top-[76px] ${show1 ? 'left-0':'left-[-100%]'}`}>
+                        <CoinTypes />
                     </div>
                 </div>
-                <ChartTabsFuture />
+                <div className='overflow-x-auto hide-scroller dark:bg-[#1a1b1f] bg-[#fafafa]'>
+                    <div className='flex items-center gap-[20px] w-max p-[16px] '>
+                        <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[30px] after:translate-x-[-50%] after:h-[2px] ${showMob === 1 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(1) }}>Chart</button>
+                        <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[30px] after:translate-x-[-50%] after:h-[2px] ${showMob === 2 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(2) }}>Order Book</button>
+                        <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[30px] after:translate-x-[-50%] after:h-[2px] ${showMob === 3 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(3) }}>Market Trades</button>
+                    </div>
+                    {
+                        showMob === 1 &&
+                        <FutureChart id={'tradingview_0d0de12'}  />
+                    }
+                    {
+                        showMob === 2 &&
+                        <OrderBookFuture setShow={setShow} show={show} widthFull={true} />
+                    }
+                    {
+                        showMob === 3 &&
+                        <MarketTrades widthFull={true} setShow={setShow} show={show} />
+                    }
+                </div>
             </div>
-            <div>
-                <BuySell />
-                <MarginRatio />
-            </div>
-        </div>
-           {/* <TopBar />
-           <div className='flex items-start'>
 
-                <BuySell />
-                <MarginRatio />
-                <OrderBookFuture />
-                <MarketTrades />
-                <CoinTypes />
-
-           </div>
-            <ChartTabsFuture />
-            <FutureChart /> */}
         </>
     )
 }

@@ -3,15 +3,16 @@ import BuyTableFuture from './buy-table';
 import SelltableFuture from './sell-table';
 interface setHeight {
     show?:number;
-    setShow?:any
+    setShow?:any;
+    widthFull?:boolean;
 }
 const OrderBookFuture = (props:setHeight) => {
     // const [show,setShow] = useState(1);
   return (
-    <div className='max-w-[300px] w-full bg-[#fafafa] dark:bg-[#1a1b1f] border-l border-b dark:border-[#25262a] border-[#e5e7eb] '>
+    <div className={`w-full bg-[#fafafa] dark:bg-[#1a1b1f] min-[990px]:border-l max-[991px]:border-t border-b dark:border-[#25262a] border-[#e5e7eb] ${props.widthFull ? "max-w-full":"max-w-[300px]"}  `}>
         {/* order book head */}
-        <div className='flex items-center justify-between gap-[10px] bg-[#fafafa] dark:bg-[#1a1b1f] border-b dark:border-[#25262a] border-[#e5e7eb] py-[10px] px-[16px] max-w-[300px] w-full'>
-            <h3 className='top-label dark:!text-white !text-[#000]'>Order Book</h3>
+        <div className='flex items-center justify-between gap-[10px] bg-[#fafafa] dark:bg-[#1a1b1f] border-b dark:border-[#25262a] border-[#e5e7eb] py-[10px]  px-[16px]  w-full'>
+            <h3 className='top-label dark:!text-white !text-[#000] max-[991px]:hidden'>Order Book</h3>
             <div className='flex items-center justify-between gap-[10px] '> 
                 <button className={`p-[5px] border border-[#ffffff26] rounded  ${props.show === 1 ? "dark:bg-[#373d4e] bg-[#e5ecf0]":"bg-transparent"}`} onClick={()=>{props.setShow(1)}}>
                     <svg

@@ -6,7 +6,7 @@ const ChartTabsFuture = () => {
     const [show, setShow] = useState(1);
 
     return (
-        <div className='bg-[#fafafa] dark:bg-[#1a1b1f] border-t dark:border-[#25262a] border-[#e5e7eb] py-[14px] px-[16px] max-w-full w-full'>
+        <div className='bg-[#fafafa] dark:bg-[#1a1b1f] border-t border-b dark:border-[#25262a] border-[#e5e7eb] py-[14px] px-[16px] max-w-full w-full'>
             {/* tabs */}
             <div className='overflow-x-auto hide-scroller'>
                 <div className='flex items-center gap-[20px] mb-[10px] w-max'>
