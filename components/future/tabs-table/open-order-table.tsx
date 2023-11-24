@@ -1,8 +1,99 @@
+import IconsComponent from '@/components/snippets/icons';
 import Image from 'next/image';
 import React from 'react'
 
 const OpenOrderTable = () => {
     const currentItems = [
+        {
+            time:"19:48:43",
+            date:"2022-02-23",
+            symbol1:"BTCUSDT",
+            symbol2:"Perpetual",
+            type:"Limit",
+            side:"Open Long",
+            price:"-",
+            Amount:'Close position',
+            filled:"0.0 USDT",
+            reduceonly:"Yes",
+            postOnly:"No",
+            triggerCondition:"Mark Price >= 40,000.0",
+            tpsl:"--"
+        },
+        {
+            time:"19:48:43",
+            date:"2022-02-23",
+            symbol1:"BTCUSDT",
+            symbol2:"Perpetual",
+            type:"Limit",
+            side:"Open Long",
+            price:"-",
+            Amount:'Close position',
+            filled:"0.0 USDT",
+            reduceonly:"Yes",
+            postOnly:"No",
+            triggerCondition:"Mark Price >= 40,000.0",
+            tpsl:"--"
+        },
+        {
+            time:"19:48:43",
+            date:"2022-02-23",
+            symbol1:"BTCUSDT",
+            symbol2:"Perpetual",
+            type:"Limit",
+            side:"Open Long",
+            price:"-",
+            Amount:'Close position',
+            filled:"0.0 USDT",
+            reduceonly:"Yes",
+            postOnly:"No",
+            triggerCondition:"Mark Price >= 40,000.0",
+            tpsl:"--"
+        },
+        {
+            time:"19:48:43",
+            date:"2022-02-23",
+            symbol1:"BTCUSDT",
+            symbol2:"Perpetual",
+            type:"Limit",
+            side:"Open Long",
+            price:"-",
+            Amount:'Close position',
+            filled:"0.0 USDT",
+            reduceonly:"Yes",
+            postOnly:"No",
+            triggerCondition:"Mark Price >= 40,000.0",
+            tpsl:"--"
+        },
+        {
+            time:"19:48:43",
+            date:"2022-02-23",
+            symbol1:"BTCUSDT",
+            symbol2:"Perpetual",
+            type:"Limit",
+            side:"Open Long",
+            price:"-",
+            Amount:'Close position',
+            filled:"0.0 USDT",
+            reduceonly:"Yes",
+            postOnly:"No",
+            triggerCondition:"Mark Price >= 40,000.0",
+            tpsl:"--"
+        },
+        {
+            time:"19:48:43",
+            date:"2022-02-23",
+            symbol1:"BTCUSDT",
+            symbol2:"Perpetual",
+            type:"Limit",
+            side:"Open Long",
+            price:"-",
+            Amount:'Close position',
+            filled:"0.0 USDT",
+            reduceonly:"Yes",
+            postOnly:"No",
+            triggerCondition:"Mark Price >= 40,000.0",
+            tpsl:"--"
+        },
         {
             time:"19:48:43",
             date:"2022-02-23",
@@ -69,7 +160,7 @@ const OpenOrderTable = () => {
          <div className="overflow-x-auto h-[234px]">
               <table width="100%" className="min-w-[1200px] w-full">
                 <thead>
-                    <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">
+                    <tr className="border-b border-grey-v-3 dark:border-opacity-[15%] sticky top-[0] bg-[#fafafa] dark:bg-[#1a1b1f]">
                         <th className="py-[10px]">
                             <div className="flex ">
                                 <p className="text-start top-label dark:text-gamma">Time</p>
@@ -136,6 +227,12 @@ const OpenOrderTable = () => {
                                 <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                             </div>
                         </th>
+                        <th className="py-[10px]">
+                            <div className="flex ">
+                                <p className="text-start top-label dark:text-gamma">Action</p>
+                                <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                            </div>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -179,6 +276,11 @@ const OpenOrderTable = () => {
                             </td>
                             <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                 <p className="top-label !font-[600] dark:!text-white !text-black">{item.tpsl}</p>
+                            </td>
+                            <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                                <div className='cursor-pointer w-fit'>
+                                    <IconsComponent type='deleteIcon' />
+                                </div>
                             </td>
                         </tr>
                     )

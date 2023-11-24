@@ -10,7 +10,7 @@ const TopBar = (props:showSidebar) => {
         <div className='overflow-x-auto hide-scroller'>
             <div className='flex items-center gap-[26px] w-[1100px]'>
                 {/* coin name */}
-                <div onClick={()=>{console.log(props.show); props.setShow(!props.show)}} className='max-[1140px]:left-0 max-[1140px]:top-0 max-[1140px]:sticky dark:bg-[#232428] rounded-[4px] cursor-pointer border border-[#9db3ba33] p-[5px] flex items-center gap-10'>
+                <div onClick={()=>{console.log(props.show); props.setShow(!props.show)}} className='max-[1140px]:left-0 max-[1140px]:top-0 max-[1140px]:sticky dark:bg-[#232428] bg-[#fff] rounded-[4px] cursor-pointer border border-[#9db3ba33] p-[5px] flex items-center gap-10'>
                     <div>
                         <p className='info-14-18 dark:!text-white'>BTCUSDT</p>
                         <p className='admin-body-text !text-[#a3a8b7]'>Perpetual</p>

@@ -40,7 +40,7 @@ export default function App({ Component, pageProps: { sessions, ...pageProps } }
             <Component {...pageProps} />
           </div>
           {
-            router.pathname != '/register' && router.pathname != '/login' && router.pathname != '/forget' && !router.pathname.includes('/admin') && <Footer />
+            router.pathname != '/register' && router.pathname != '/login' && router.pathname != '/forget' && !router.pathname.includes('/admin') && !router.pathname.includes('/future') && <Footer />
           }
         </Context.Provider>
       </SessionProvider>

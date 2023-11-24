@@ -4,8 +4,17 @@ import FiliterSelectMenu from '../snippets/filter-select-menu';
 import RangeSlider from './range-slider';
 import Image from 'next/image';
 import SelectDropdown from './snippet/select-dropdown';
-
-const BuySell = () => {
+interface fullWidth{
+    fullWidth?:boolean;
+    heightAuto?:boolean;
+    inputId?:string;
+    thumbId?:string;
+    lineId?:string;
+    radioId?:string;
+    marginMode?:boolean;
+    setMarginMode?:any;
+}
+const BuySell = (props:fullWidth) => {
 
 
     // main tabs
@@ -13,16 +22,16 @@ const BuySell = () => {
 
     const list = ['USDT', 'BTC'];
     const timeInForceList = ['GTC', 'FOK', 'IOC'];
-    const triggerPriceList = ['Mark', 'Last'];
-    const PriceList = ['Limit', 'Market'];
-    const TriggerList = ['Trigger', 'Maker Only', 'Trailing Stop'];
+    // const triggerPriceList = ['Mark', 'Last'];
+    // const PriceList = ['Limit', 'Market'];
+    // const TriggerList = ['Trigger', 'Maker Only', 'Trailing Stop'];
 
 
     // nested tabs
     const [showNes, setShowNes] = useState(1);
     return (
-        <div className='p-[16px] h-[677px] dark:bg-[#1f2127] bg-[#fff] max-w-[300px] w-full border-l border-b dark:border-[#25262a] border-[#e5e7eb]'>
-            <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer'>
+        <div className={`p-[16px] dark:bg-[#1f2127] bg-[#fff] ${props.fullWidth ? 'max-w-full h-auto':'max-w-[300px] h-[677px]'} w-full border-l border-b dark:border-[#25262a] border-[#e5e7eb]`}>
+            <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer' onClick={()=>{props.setMarginMode(true)}}>
                 <div className='flex items-center gap-10'>
                     <p className='top-label dark:!text-white !text-[#000]'>Isolated</p>
                     <p className='bg-[#13c2c21f] px-[5px] text-[#13c2c2] text-[12px]'>5X</p>
@@ -39,11 +48,12 @@ const BuySell = () => {
                 <div className='flex items-center gap-[10px]'>
                     <button className={`admin-body-text ${showNes === 1 ? '!text-black dark:!text-white' : '!text-[#a3a8b7]'}`} onClick={() => { setShowNes(1) }}>Limit</button>
                     <button className={`admin-body-text ${showNes === 2 ? '!text-black dark:!text-white' : '!text-[#a3a8b7]'}`} onClick={() => { setShowNes(2) }}>Market</button>
-                    <div className='relative' onClick={() => { setShowNes(3) }}>
+                    <button className={`admin-body-text ${showNes === 3 ? '!text-black dark:!text-white' : '!text-[#a3a8b7]'}`} onClick={() => { setShowNes(3) }}>Stop Limit</button>
+                    {/* <div className='relative' onClick={() => { setShowNes(3) }}>
                         <SelectDropdown list={TriggerList} showNes={showNes} defaultValue="Trigger" />
-                    </div>
+                    </div> */}
                 </div>
-                <IconsComponent type='swap-calender' />
+                {/* <IconsComponent type='swap-calender' /> */}
             </div>
 
             {/* available */}
@@ -106,7 +116,6 @@ const BuySell = () => {
                             <input type="number" placeholder="$0" step="any" value="37268.5" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "></input>
                         </div>
                         <div>
-                            <SelectDropdown list={PriceList} showNes={showNes} defaultValue="Trigger" whiteColor={true} />
                             <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p>
                         </div>
                     </div>
@@ -125,14 +134,14 @@ const BuySell = () => {
             </div>
 
             {/* range slider */}
-            <RangeSlider />
+            <RangeSlider inputId={props.inputId} thumbId={props.thumbId} lineId={props.lineId} rangetype={'%'} />
 
             {/* TP/SL */}
             <div className='flex items-center justify-between mt-[20px]'>
 
                 <div className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`} >
-                    <input id={`custom-radio`} type="checkbox" value="" name="colored-radio" className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
-                    <label htmlFor={`custom-radio`} className="
+                    <input id={`custom-radio${props.radioId}`} type="checkbox" value="" name="colored-radio" className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                    <label htmlFor={`custom-radio${props.radioId}`} className="
                         custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
                         cursor-pointer
                         after:dark:bg-omega

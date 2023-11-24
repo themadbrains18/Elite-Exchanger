@@ -16,7 +16,7 @@ const SelectDropdown = (props:list) => {
         input.innerHTML = itemText;
     }
   return (
-    <div className='relative dropdown-parent'>
+    <div className='relative dropdown-parent z-[5]'>
         <div className='flex items-center' onClick={()=>{setShowDrop(!showDrop)}}>
             <p className={`inputText top-label cursor-pointer ${props.whiteColor && 'dark:!text-[#fff] !text-[#000]' } ${props.showNes === 3 && 'dark:!text-[#fff] !text-[#000]'}`}>{props.defaultValue}</p>
             {/* <input type="text" id='paymentMethod' className="top-label outline-none cursor-pointer dark:bg-[#1f2127] bg-[#fff] max-w-[100px] w-full"

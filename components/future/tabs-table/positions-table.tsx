@@ -54,6 +54,57 @@ const PositionsTable = () => {
             ClosePositions1:"39,855.0",
             ClosePositions2:"0.003",
             Tpsl:"40,000 / 38,000"
+        },
+        {
+            symbol1:"BTCUSDT",
+            symbol2:"Perpetual",
+            symbol3X:"5x",
+            Size:"119.71 USDT",
+            Eprice:"39,904.30",
+            Mprice:"39,905.10",
+            Lqprice:"--",
+            MarginRatio:"0.10%",
+            Margin:"23.94 USDT",
+            MarginType:"Cross",
+            PnlRoe:"-0.01 USDT",
+            PnlRoePer:"(--0.02%)",
+            ClosePositions1:"39,855.0",
+            ClosePositions2:"0.003",
+            Tpsl:"40,000 / 38,000"
+        },
+        {
+            symbol1:"BTCUSDT",
+            symbol2:"Perpetual",
+            symbol3X:"5x",
+            Size:"119.71 USDT",
+            Eprice:"39,904.30",
+            Mprice:"39,905.10",
+            Lqprice:"--",
+            MarginRatio:"0.10%",
+            Margin:"23.94 USDT",
+            MarginType:"Cross",
+            PnlRoe:"-0.01 USDT",
+            PnlRoePer:"(--0.02%)",
+            ClosePositions1:"39,855.0",
+            ClosePositions2:"0.003",
+            Tpsl:"40,000 / 38,000"
+        },
+        {
+            symbol1:"BTCUSDT",
+            symbol2:"Perpetual",
+            symbol3X:"5x",
+            Size:"119.71 USDT",
+            Eprice:"39,904.30",
+            Mprice:"39,905.10",
+            Lqprice:"--",
+            MarginRatio:"0.10%",
+            Margin:"23.94 USDT",
+            MarginType:"Cross",
+            PnlRoe:"-0.01 USDT",
+            PnlRoePer:"(--0.02%)",
+            ClosePositions1:"39,855.0",
+            ClosePositions2:"0.003",
+            Tpsl:"40,000 / 38,000"
         }
     ]
   return (
@@ -61,7 +112,7 @@ const PositionsTable = () => {
         <div className="overflow-x-auto h-[234px]">
               <table width="100%" className="min-w-[1200px] w-full">
                 <thead>
-                  <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">
+                  <tr className="border-b border-grey-v-3 dark:border-opacity-[15%] sticky top-[0px] bg-[#fafafa] dark:bg-[#1a1b1f] ">
 
                     <th className="py-[10px]">
                       <div className="flex ">

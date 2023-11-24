@@ -8,7 +8,7 @@ const ChartTabsFuture = () => {
     return (
         <div className='bg-[#fafafa] dark:bg-[#1a1b1f] border-t border-b dark:border-[#25262a] border-[#e5e7eb] py-[14px] px-[16px] max-w-full w-full'>
             {/* tabs */}
-            <div className='overflow-x-auto hide-scroller'>
+            <div className='overflow-x-auto hide-scroller border-b border-grey-v-3 dark:border-opacity-[15%]'>
                 <div className='flex items-center gap-[20px] mb-[10px] w-max'>
                     <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[50px] after:translate-x-[-50%] after:h-[2px] ${show === 1 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShow(1) }}>Current Position <span>(0)</span></button>
                     <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[50px] after:translate-x-[-50%] after:h-[2px] ${show === 2 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShow(2) }}>Open Orders <span>(0)</span></button>
