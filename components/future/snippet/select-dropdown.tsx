@@ -1,12 +1,12 @@
 import Image from 'next/image';
 import React, { useState } from 'react'
-interface list{
-    list?:[];
+interface propsData{
+    list?:string[];
     showNes?:number;
     defaultValue?:string;
     whiteColor?:boolean;
 }
-const SelectDropdown = (props:list) => {
+const SelectDropdown = (props:propsData) => {
     const [showDrop,setShowDrop] = useState(false);
     function changeInputVal(e:any){
         console.log(e.currentTarget.innerHTML);

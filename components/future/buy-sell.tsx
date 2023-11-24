@@ -169,14 +169,13 @@ const BuySell = (props:fullWidth) => {
                         <p className="ml-2 md-text !text-[14px]">TP/SL</p>
                     </label>
                 </div>
-                {
+                {/* {
                     showNes === 1 &&
                     <div className='flex items-center gap-[5px] w-full justify-end'>
                         <p className='top-label'>Time in Force:</p>
-                        {/* <p className='top-label dark:!text-white'>FOK</p> */}
                         <SelectDropdown list={timeInForceList} showNes={showNes} defaultValue="KOC" whiteColor={true} />
                     </div>
-                }
+                } */}
             </div>
 
             {/* open long */}

@@ -30,11 +30,11 @@ interface Session {
 const FutureTrading = (props: Session) => {
 
     const router = useRouter();
-    const [show,setShow] = useState(1);
-    const [marginMode,setMarginMode] = useState(0);
-    const [overlay,setOverlay] = useState(false);
-    const [showMob,setShowMob] = useState(1);
-    const [show1,setShow1] = useState(false)
+    const [show, setShow] = useState(1);
+    const [marginMode, setMarginMode] = useState(0);
+    const [overlay, setOverlay] = useState(false);
+    const [showMob, setShowMob] = useState(1);
+    const [show1, setShow1] = useState(false)
     const [orders, setMarketOrders] = useState([]);
     const [userTradeHistory, setUserTradeHistory] = useState([]);
     const [currentToken, setCurrentToken] = useState([]);
@@ -114,13 +114,13 @@ const FutureTrading = (props: Session) => {
                     },
                 }).then(response => response.json());
 
-                if(positionData?.error){
+                if (positionData?.error) {
 
                 }
-                else{
+                else {
                     setOpenOrders(positionData?.data);
                 }
-                
+
             }
         } catch (error) {
 
@@ -149,7 +149,7 @@ const FutureTrading = (props: Session) => {
                             <MarketTrades setShow={setShow} show={show} widthFull={true} />
                         </div>
                     </div>
-                    <ChartTabsFuture positions={positions} openOrders={openOrders}/>
+                    <ChartTabsFuture positions={positions} openOrders={openOrders} />
                 </div>
                 <div>
                     <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setMarginMode={setMarginMode} marginMode={marginMode} setOverlay={setOverlay} />
@@ -184,19 +184,19 @@ const FutureTrading = (props: Session) => {
                         <MarketTrades widthFull={true} setShow={setShow} show={show} />
                     }
                 </div>
-                <ChartTabsFuture positions={positions} openOrders={openOrders}/>
-                <BuySell setOverlay={setOverlay}  inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} setMarginMode={setMarginMode} marginMode={marginMode}  />
+                <ChartTabsFuture positions={positions} openOrders={openOrders} />
+                <BuySell setOverlay={setOverlay} inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} setMarginMode={setMarginMode} marginMode={marginMode} />
                 <MarginRatio fullWidth={true} heightAuto={true} />
             </div>
 
             {/* overlay */}
-            <div className={`sdsadsadd bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${ overlay && '!opacity-[70%] !visible' }`}></div>
+            <div className={`sdsadsadd bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${overlay && '!opacity-[70%] !visible'}`}></div>
 
             {/* popups */}
-            <MarginMode setOverlay={setOverlay}  inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setMarginMode={setMarginMode} marginMode={marginMode} />
+            <MarginMode setOverlay={setOverlay} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setMarginMode={setMarginMode} marginMode={marginMode} />
             {/* swap popup */}
-            <SwapModal setOverlay={setOverlay}  setMarginMode={setMarginMode} marginMode={marginMode} />
-        
+            <SwapModal setOverlay={setOverlay} setMarginMode={setMarginMode} marginMode={marginMode} />
+
         </>
     )
 }
