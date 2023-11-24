@@ -1,3 +1,4 @@
+import IconsComponent from '@/components/snippets/icons';
 import Image from 'next/image';
 import React from 'react'
 

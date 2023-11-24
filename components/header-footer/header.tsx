@@ -109,8 +109,7 @@ const Header = (props: propsData) => {
   return (
     <>
       <header
-        className={`py-[35px] h-[105px] z-[5] lg:h-[129px] xl:py-[32px] dark:bg-omega bg-white z-9 ${showMenu ? "rounded-0" : "rounded-bl-[20px]  rounded-br-[20px]"
-          }  xl:rounded-none dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 w-full `}
+        className={`py-[35px] h-[105px] z-[6] lg:h-[129px] xl:py-[32px] dark:bg-omega bg-white z-9 xl:rounded-none dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 w-full border-b dark:border-[#25262a] border-[#e5e7eb]`}
       >
         <div className="container">
           {/* this is for desktop */}
