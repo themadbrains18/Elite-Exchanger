@@ -232,27 +232,34 @@ const WalletList = (props: propsData): any => {
                         </div>
                       </th>
                       <th className="py-5 max-[1023px]:hidden ">
-                        <div className="flex ">
-                          <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Deposit/Withdraw/Transfer</p>
-                          <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
-                        </div>
-                      </th>
-                      <th className="py-5 max-[1023px]:hidden ">
-                        <div className="flex ">
-                          <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Stacking</p>
-                          <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
-                        </div>
-                      </th>
-                      <th className="py-5 max-[1023px]:hidden ">
-                        <div className="flex ">
-                          <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Trade</p>
-                          <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                        <div className=" ">
+                          <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Action</p>
                         </div>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     {spotWalletItems && spotWalletItems.length > 0 && spotWalletItems?.map((item: any, index: number) => {
+                      // ===================================
+                      // Stacking button enable or disable
+                      // ===================================
+                      let cursor = false;
+                      if (item?.token !== null && item?.token?.token_stakes?.length > 0 && item?.token?.token_stakes[0]?.status === true) {
+                        cursor = true;
+                      }
+                      if (item?.global_token !== null && item?.global_token?.token_stakes?.length > 0 && item?.global_token?.token_stakes[0]?.status === true) {
+                        cursor = true;
+                      }
+                      // ================================
+                      // Trade button enable or disable
+                      // ================================
+                      let tradeCusrsor = false;
+                      if (item.token !== null && item?.token?.tradePair !== null) {
+                        tradeCusrsor = true;
+                      }
+                      if (item.global_token !== null && item?.global_token?.tradePair !== null) {
+                        tradeCusrsor = true;
+                      }
                       return (
                         <tr key={index} className="rounded-5 group ">
                           <td className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
@@ -292,48 +299,20 @@ const WalletList = (props: propsData): any => {
                                 <span className="text-primary block">Transfer</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
-                            </div>
-                          </td>
-                          <td className="max-[1023px]:hidden px-[10px]">
-                            <div className="flex items-center gap-[10px]">
-                              {item.token !== null && item?.token?.token_stakes?.length > 0 && item?.token?.token_stakes[0]?.status === true &&
-                                <button onClick={() => {
-                                  setSelectedCoin(item?.token);
-                                  setSelectedCoinBalance(item?.balance);
-                                  setShow1(3);
-                                }} className=" max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Staking</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              }
 
-                              {item.global_token !== null && item?.global_token?.token_stakes?.length > 0 && item?.global_token?.token_stakes[0]?.status === true &&
-                                <button onClick={() => {
-                                  setSelectedCoin(item?.global_token);
-                                  setSelectedCoinBalance(item?.balance);
-                                  setShow1(3);
-                                }} className=" max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Staking</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              }
-                            </div>
-                          </td>
-                          <td className="max-[1023px]:hidden px-[10px]">
-                            <div className="flex items-center gap-[10px]">
-                              {item.token !== null && item?.token?.tradePair !== null &&
-                                <button onClick={() => router.push(`/chart/${item?.token?.symbol}`)} className=" max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Trade</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              }
-                              {item.global_token !== null && item?.global_token?.tradePair !== null &&
-                                <button onClick={() => router.push(`/chart/${item?.global_token?.symbol}`)} className=" max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Trade</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              }
+                              <button onClick={() => {
+                                setSelectedCoin(item?.token !== null ? item?.token : item?.global_token);
+                                setSelectedCoinBalance(item?.balance);
+                                setShow1(3);
+                              }} disabled={!cursor} className={` max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  ${cursor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
+                                <span className="text-primary block">Staking</span>
+                                <IconsComponent type="openInNewTab" hover={false} active={false} />
+                              </button>
 
+                              <button onClick={() => router.push(`/chart/${item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}`)} disabled={!tradeCusrsor} className={`max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  ${tradeCusrsor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
+                                <span className="text-primary block">Trade</span>
+                                <IconsComponent type="openInNewTab" hover={false} active={false} />
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -385,6 +364,26 @@ const WalletList = (props: propsData): any => {
                   {/* table content */}
                   <div className="">
                     {spotWalletItems && spotWalletItems.length > 0 && spotWalletItems?.map((item: any, index: number) => {
+                      // ===================================
+                      // Stacking button enable or disable
+                      // ===================================
+                      let cursor = false;
+                      if (item?.token !== null && item?.token?.token_stakes?.length > 0 && item?.token?.token_stakes[0]?.status === true) {
+                        cursor = true;
+                      }
+                      if (item?.global_token !== null && item?.global_token?.token_stakes?.length > 0 && item?.global_token?.token_stakes[0]?.status === true) {
+                        cursor = true;
+                      }
+                      // ================================
+                      // Trade button enable or disable
+                      // ================================
+                      let tradeCusrsor = false;
+                      if (item.token !== null && item?.token?.tradePair !== null) {
+                        tradeCusrsor = true;
+                      }
+                      if (item.global_token !== null && item?.global_token?.tradePair !== null) {
+                        tradeCusrsor = true;
+                      }
                       return (
                         <div key={index} className="rounded-5 group grid grid-cols-3  gap-x-[10px]  items-center">
                           <div className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
@@ -412,7 +411,6 @@ const WalletList = (props: propsData): any => {
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
                               <button onClick={() => {
-
                                 setSelectedCoinBalance(item?.balance);
                                 setShow1(2);
                                 setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
@@ -420,46 +418,23 @@ const WalletList = (props: propsData): any => {
                                 <span className="text-primary block">Withdraw</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
-
                               <button className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Transfer</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
-
-                              {item.token !== null && item?.token?.token_stakes?.length > 0 && item?.token?.token_stakes[0]?.status === true &&
-                                <button onClick={() => {
-                                  setSelectedCoin(item?.token);
-                                  setSelectedCoinBalance(item?.balance);
-                                  setShow1(3);
-                                }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Staking</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              }
-
-                              {item.global_token !== null && item?.global_token?.token_stakes?.length > 0 && item?.global_token?.token_stakes[0]?.status === true &&
-                                <button onClick={() => {
-                                  setSelectedCoin(item?.global_token);
-                                  setSelectedCoinBalance(item?.balance);
-                                  setShow1(3);
-                                }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Staking</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              }
-
-                              {item.token !== null && item?.token?.tradePair !== null &&
-                                <button onClick={() => router.push(`/chart/${item?.token?.symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Trade</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              }
-                              {item.global_token !== null && item?.global_token?.tradePair !== null &&
-                                <button onClick={() => router.push(`/chart/${item?.global_token?.symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Trade</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              }
+                              <button onClick={() => {
+                                setSelectedCoin(item?.token !== null ? item?.token : item?.global_token);
+                                setSelectedCoinBalance(item?.balance);
+                                setShow1(3);
+                              }} disabled={!cursor} className={` max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  ${cursor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
+                                <span className="text-primary block">Staking</span>
+                                <IconsComponent type="openInNewTab" hover={false} active={false} />
+                              </button>
+                              <button onClick={() => router.push(`/chart/${item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}`)} disabled={!tradeCusrsor}
+                                className={`max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  ${tradeCusrsor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
+                                <span className="text-primary block">Trade</span>
+                                <IconsComponent type="openInNewTab" hover={false} active={false} />
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -691,15 +666,24 @@ const WalletList = (props: propsData): any => {
                         </div>
                       </th>
                       <th className="py-5 max-[1023px]:hidden ">
-                        <div className="flex ">
+                        <div className=" ">
                           <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Action</p>
-                          <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                         </div>
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     {futureWalletItems && futureWalletItems.length > 0 && futureWalletItems?.map((item: any, index: number) => {
+                      // ================================
+                      // Trade button enable or disable
+                      // ================================
+                      let tradeCusrsor = false;
+                      if (item.token !== null && item?.token?.futureTradePair !== null) {
+                        tradeCusrsor = true;
+                      }
+                      if (item.global_token !== null && item?.global_token?.futureTradePair !== null) {
+                        tradeCusrsor = true;
+                      }
                       return (
                         <tr key={index} className="rounded-5 group ">
                           <td className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
@@ -722,60 +706,16 @@ const WalletList = (props: propsData): any => {
                           </td>
                           <td className="max-[1023px]:hidden ">
                             <div className="flex items-center gap-[20px]">
-                              {/* <button onClick={() => { setShow1(1) }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                <span className="text-primary block">Deposit</span>
-                                <IconsComponent type="openInNewTab" hover={false} active={false} />
-                              </button>
-                              <button onClick={() => {
-                                for (const as of props?.assets) {
-                                  if (as.token_id === item.id) {
-                                    setSelectedCoinBalance(as.balance);
-                                  }
-                                }
-                                setShow1(2);
-                                setSelectedCoin(item)
-                              }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                <span className="text-primary block">Withdraw</span>
-                                <IconsComponent type="openInNewTab" hover={false} active={false} />
-                              </button>
-                              <button onClick={() => router.push(`/chart/${item.symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                <span className="text-primary block">Trade</span>
-                                <IconsComponent type="openInNewTab" hover={false} active={false} />
-                              </button>
-                              <button onClick={() => router.push(`/chart/${item.symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+
+                              <button className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Transfer</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
-                              {item?.token_stakes?.length > 0 && item?.token_stakes[0]?.status === true &&
-                                <button onClick={() => {
 
-                                  setSelectedCoin(item);
-                                  for (const as of props?.assets) {
-                                    if (as.token_id === item.id) {
-                                      setSelectedCoinBalance(as.balance);
-                                    }
-                                  }
-                                  setShow1(3);
-                                }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Staking</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              } */}
-
-
-                              {item.token !== null && item?.token?.futureTradePair !== null &&
-                                <button onClick={() => router.push(`/future/${item?.token?.futureTradePair?.coin_symbol}${item?.token?.futureTradePair?.usdt_symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Trade</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              }
-                              {item.global_token !== null && item?.global_token?.futureTradePair !== null &&
-                                <button onClick={() => router.push(`/future/${item?.global_token?.futureTradePair?.coin_symbol}${item?.global_token?.futureTradePair?.usdt_symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Trade</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              }
-
+                              <button onClick={() => router.push(`/future/${item?.token !== null ? item?.token?.futureTradePair?.coin_symbol : item?.global_token?.futureTradePair?.coin_symbol}${item?.token !== null ? item?.token?.futureTradePair?.usdt_symbol : item?.global_token?.futureTradePair?.usdt_symbol}`)} disabled={!tradeCusrsor} className={` max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  ${tradeCusrsor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
+                                <span className="text-primary block">Trade</span>
+                                <IconsComponent type="openInNewTab" hover={false} active={false} />
+                              </button>
                             </div>
                           </td>
                         </tr>
@@ -826,6 +766,16 @@ const WalletList = (props: propsData): any => {
                   {/* table content */}
                   <div className="">
                     {futureWalletItems && futureWalletItems.length > 0 && futureWalletItems?.map((item: any, index: number) => {
+                      // ================================
+                      // Trade button enable or disable
+                      // ================================
+                      let tradeCusrsor = false;
+                      if (item.token !== null && item?.token?.futureTradePair !== null) {
+                        tradeCusrsor = true;
+                      }
+                      if (item.global_token !== null && item?.global_token?.futureTradePair !== null) {
+                        tradeCusrsor = true;
+                      }
                       return (
                         <div key={index} className="rounded-5 group grid grid-cols-3  gap-x-[10px]  items-center">
                           <div className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
@@ -848,52 +798,16 @@ const WalletList = (props: propsData): any => {
                           </div>
                           <div className={`fullWidthContent`}>
                             <div className="flex items-center gap-[10px] justify-center pb-[10px]">
-                              {/* <button onClick={() => { setShow1(1) }} className=" px-[10px] py-[6.5px]  justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                <span className="text-primary block">Deposit</span>
+
+                              <button className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                <span className="text-primary block">Transfer</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
-                              <button onClick={() => {
-                                setShow1(2);
-                                setSelectedCoin(item);
-                                for (const as of props?.assets) {
-                                  if (as.token_id === item.id) {
-                                    setSelectedCoinBalance(as.balance);
-                                  }
-                                }
-                              }} className="  justify-center px-[10px] py-[6.5px]  flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                <span className="text-primary block">Withdraw</span>
-                                <IconsComponent type="openInNewTab" hover={false} active={false} />
-                              </button>
-                              <button onClick={() => router.push(`/chart/${item.symbol}`)} className="  justify-center px-[10px] py-[6.5px]  flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                              <button onClick={() => router.push(`/future/${item?.token !== null ? item?.token?.futureTradePair?.coin_symbol : item?.global_token?.futureTradePair?.coin_symbol}${item?.token !== null ? item?.token?.futureTradePair?.usdt_symbol : item?.global_token?.futureTradePair?.usdt_symbol}`)} disabled={!tradeCusrsor} className={` max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  ${tradeCusrsor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
                                 <span className="text-primary block">Trade</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
-                              {item?.token_stakes?.length > 0 && item?.token_stakes[0]?.status === true &&
-                                <button onClick={() => {
-                                  setSelectedCoin(item);
-                                  for (const as of props?.assets) {
-                                    if (as.token_id === item.id) {
-                                      setSelectedCoinBalance(as.balance);
-                                    }
-                                  }
-                                  setShow1(3);
-                                }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Staking</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              } */}
-                              {item.token !== null && item?.token?.futureTradePair !== null &&
-                                <button onClick={() => router.push(`/future/${item?.token?.futureTradePair?.coin_symbol}${item?.token?.futureTradePair?.usdt_symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Trade</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              }
-                              {item.global_token !== null && item?.global_token?.futureTradePair !== null &&
-                                <button onClick={() => router.push(`/future/${item?.global_token?.futureTradePair?.coin_symbol}${item?.global_token?.futureTradePair?.usdt_symbol}`)} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                  <span className="text-primary block">Trade</span>
-                                  <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                </button>
-                              }
+                              
                             </div>
                           </div>
                         </div>
