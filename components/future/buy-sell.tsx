@@ -11,8 +11,10 @@ interface fullWidth{
     thumbId?:string;
     lineId?:string;
     radioId?:string;
-    marginMode?:boolean;
+    marginMode?:number;
     setMarginMode?:any;
+    setOverlay?:any;
+    overlay?:boolean;
 }
 const BuySell = (props:fullWidth) => {
 
@@ -31,7 +33,7 @@ const BuySell = (props:fullWidth) => {
     const [showNes, setShowNes] = useState(1);
     return (
         <div className={`p-[16px] dark:bg-[#1f2127] bg-[#fff] ${props.fullWidth ? 'max-w-full h-auto':'max-w-[300px] h-[677px]'} w-full border-l border-b dark:border-[#25262a] border-[#e5e7eb]`}>
-            <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer' onClick={()=>{props.setMarginMode(true)}}>
+            <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer' onClick={()=>{ props.setOverlay(true); props.setMarginMode(1)}}>
                 <div className='flex items-center gap-10'>
                     <p className='top-label dark:!text-white !text-[#000]'>Isolated</p>
                     <p className='bg-[#13c2c21f] px-[5px] text-[#13c2c2] text-[12px]'>5X</p>
@@ -53,7 +55,9 @@ const BuySell = (props:fullWidth) => {
                         <SelectDropdown list={TriggerList} showNes={showNes} defaultValue="Trigger" />
                     </div> */}
                 </div>
-                {/* <IconsComponent type='swap-calender' /> */}
+                <div className='cursor-pointer' onClick={()=>{ props.setOverlay(true); props.setMarginMode(2)}}>
+                    <IconsComponent type='swap-calender' />
+                </div>
             </div>
 
             {/* available */}

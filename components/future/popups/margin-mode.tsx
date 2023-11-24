@@ -6,8 +6,10 @@ interface fullWidth{
     thumbId?:string;
     lineId?:string;
     radioId?:string;
-    marginMode?:boolean;
+    marginMode?:number;
     setMarginMode?:any;
+    setOverlay?:any;
+    overlay?:boolean;
 }
 const MarginMode = (props:fullWidth) => {
     const { mode } = useContext(Context);
@@ -24,11 +26,11 @@ const MarginMode = (props:fullWidth) => {
         }
     }
   return (
-    <div className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[720px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.marginMode ? 'top-[50%] opacity-1 visible':'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
+    <div className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[720px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.marginMode == 1 ? 'top-[50%] opacity-1 visible':'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
         <div className="flex items-center justify-between mb-[20px]">
           <p className="sec-title !text-[20px]">Margin Mode </p>
           <svg
-            onClick={()=>{props.setMarginMode(false)}}
+            onClick={()=>{props.setOverlay(false); props.setMarginMode(0)}}
             enableBackground="new 0 0 60.963 60.842"
             version="1.1"
             id="Layer_1"
@@ -104,7 +106,7 @@ const MarginMode = (props:fullWidth) => {
         <p className='top-label mb-[25px]'>Selecting higher leverage such as [10x] increases your liquidation risk. Always manage your risk levels.</p>
 
         <div className='flex items-center gap-[15px] mt-[15px]'>
-            <button className='border dark:text-white text-[#1A1B1F] dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[15px] px-[10px] w-full max-w-full' onClick={()=>{props.setMarginMode(false)}}>Cancel</button>
+            <button className='border dark:text-white text-[#1A1B1F] dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[15px] px-[10px] w-full max-w-full' onClick={()=>{props.setOverlay(false); props.setMarginMode(0)}}>Cancel</button>
             <button className='border bg-[#13c2c2] text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[15px] px-[10px] w-full max-w-full'>Confirm</button>
         </div>
 
