@@ -43,7 +43,8 @@ const Wallet = (props: Session) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
             if (eventDataType === "price") {
-                refreshTokenList()
+                refreshTokenList();
+                refreshData();
             }
         }
 
