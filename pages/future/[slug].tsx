@@ -1,23 +1,15 @@
-import ChartBanner from '@/components/chart/chart-banner'
-import BuySellCard from '@/components/snippets/buySellCard'
 import React, { useEffect, useState } from 'react'
-import ChartSec from '@/components/chart/chart-sec';
-import OrderBook from '@/components/chart/order-book-desktop';
-import ChartTabs from '@/components/chart/chart-tabs';
-import OrderBookMobile from '@/components/chart/order-book-mobile';
-import ResponsiveFixCta from '@/components/market/responsive-fix-cta';
-
 import { getProviders, signOut } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
-import TopBar from '/components/future/top-bar';
-import BuySell from '/components/future/buy-sell';
-import MarginRatio from '/components/future/margin-ratio';
-import OrderBookFuture from '/components/future/order-book/order-book';
+import TopBar from '@/components/future/top-bar';
+import BuySell from '@/components/future/buy-sell';
+import MarginRatio from '@/components/future/margin-ratio';
+import OrderBookFuture from '@/components/future/order-book/order-book';
 import MarketTrades from '@/components/future/order-book/market-trade-table';
 import CoinTypes from '@/components/future/coin-types';
 import ChartTabsFuture from '@/components/future/chart-tabs-future';
@@ -35,23 +27,16 @@ interface Session {
 const FutureTrading = (props: Session) => {
 
     const router = useRouter();
-    const [show,setShow] = useState(1);
-    const [showMob,setShowMob] = useState(1);
-    const [show1,setShow1] = useState(false)
-    const [orders, setMarketOrders] = useState([]);
-    const [userTradeHistory, setUserTradeHistory] = useState([]);
+    const [show, setShow] = useState(1);
+    const [showMob, setShowMob] = useState(1);
+    const [show1, setShow1] = useState(false);
     const [currentToken, setCurrentToken] = useState([]);
     const [allCoins, setAllCoins] = useState(props.coinList);
-    const [allTradeHistory, setAllTradeHistory] = useState([]);
 
-    const [sellTrade, setSellTrade] = useState([]);
-    const [BuyTrade, setBuyTrade] = useState([]);
+    const [positions, setPositionData] = useState([]);
+    const [openOrders, setOpenOrders] = useState([]);
 
     const { slug } = router.query;
-
-    // let currentToken = props.coinList.filter((item: any) => {
-    //     return item.symbol === slug
-    // })
 
     useEffect(() => {
         const websocket = new WebSocket('ws://localhost:3001/');
@@ -64,129 +49,88 @@ const FutureTrading = (props: Session) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
             if (eventDataType === "price") {
-                refreshTokenList()
-            }
-            if (eventDataType === "market") {
-                if (props.session) {
-                    getUserOpenOrder(slug);
-                    getUserTradeHistory(slug);
-                }
-                getAllMarketOrderByToken(slug);
+                refreshTokenList();
+                getUserFuturePositionData();
             }
         }
 
-    }, [slug])
+    }, [slug]);
+
+    useEffect(() => {
+        let ccurrentToken = props.coinList.filter((item: any) => {
+            return item.coin_symbol + item.usdt_symbol === slug
+        })
+        setCurrentToken(ccurrentToken);
+
+        getUserFuturePositionData();
+        getUserOpenOrderData();
+    }, [slug]);
 
     const refreshTokenList = async () => {
-        let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
+        let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future`, {
             method: "GET"
         }).then(response => response.json());
 
         let ccurrentToken = tokenList?.data.filter((item: any) => {
-            return item.symbol === slug
+            return item.coin_symbol + item.usdt_symbol === slug
         })
-        let future = tokenList?.data.filter((item: any) => {
-            return item.futureTradePair !== null
-        });
-        setAllCoins(future);
+        setAllCoins(tokenList?.data);
         setCurrentToken(ccurrentToken);
     }
 
-    useEffect(() => {
-        if (props.session) {
-            getUserOpenOrder(slug);
-            getUserTradeHistory(slug);
-        }
-        let ccurrentToken = props.coinList.filter((item: any) => {
-            return item.symbol === slug
-        })
+    const getUserFuturePositionData = async () => {
+        try {
 
-        setCurrentToken(ccurrentToken);
-        getAllMarketOrderByToken(slug);
+            if (props?.session) {
+                let positionData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/position?userid=${props?.session?.user?.user_id}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": props?.session?.user?.access_token
+                    },
+                }).then(response => response.json());
 
-    }, [slug]);
+                setPositionData(positionData?.data);
+            }
 
-    const getUserOpenOrder = async (symbol: any) => {
+        } catch (error) {
 
-        if (props.session) {
-            let currentToken = allCoins.filter((item: any) => {
-                return item.symbol === symbol
-            })
-            let openOrder = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market?token_id=${currentToken[0]?.id}&userid=${props.session?.user?.user_id}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": props.session?.user?.access_token
-                },
-            }).then(response => response.json());
-
-            setMarketOrders(openOrder.data);
         }
     }
 
-    const getUserTradeHistory = async (symbol: any) => {
+    const getUserOpenOrderData = async () => {
+        try {
+            if (props?.session) {
+                let positionData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/openorder?userid=${props?.session?.user?.user_id}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": props?.session?.user?.access_token
+                    },
+                }).then(response => response.json());
 
-        if (props.session) {
-            let currentToken = allCoins.filter((item: any) => {
-                return item.symbol === symbol
-            })
-            let tradeHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market/user_trade_history?token_id=${currentToken[0]?.id}&userid=${props.session?.user?.user_id}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": props.session?.user?.access_token
-                },
-            }).then(response => response.json());
+                if(positionData?.error){
 
-            setUserTradeHistory(tradeHistory?.data);
+                }
+                else{
+                    setOpenOrders(positionData?.data);
+                }
+                
+            }
+        } catch (error) {
+
         }
     }
-
-    const getAllMarketOrderByToken = async (symbol: any) => {
-
-        let currentToken = allCoins.filter((item: any) => {
-            return item.symbol === symbol
-        })
-        let marketHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market/token_trade_history?token_id=${currentToken[0]?.id}`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then(response => response.json());
-
-        setAllTradeHistory(marketHistory?.data?.orderAll);
-        filterBuySellRecords(marketHistory?.data?.orderAll);
-
-    }
-
-    const filterBuySellRecords = (data: any) => {
-        if (data && data.length > 0) {
-            let sellRecord = data.filter((item: any) => {
-                return item.order_type === 'sell'
-            })
-
-            let buyRecord = data.filter((item: any) => {
-                return item.order_type === 'buy'
-            })
-            setSellTrade(sellRecord);
-            setBuyTrade(buyRecord);
-        }
-        else {
-            setSellTrade([]);
-            setBuyTrade([]);
-        }
-    }
-
 
     return (
         <>
-
+            {/* For Desktop use */}
             <div className='max-[991px]:hidden flex'>
                 <div className='w-full max-w-[calc(100%-300px)]'>
                     <TopBar show={show1} setShow={setShow1} />
                     <div className='flex'>
                         <div className='w-full max-w-full max-w-[calc(100%-300px)]'>
                             <div className='flex relative w-full max-w-full'>
-                                <div className={`w-full max-w-[380px] max-[1500px]:absolute duration-300 z-[4] max-[1500px]:top-0 ${show1 ? 'max-[1500px]:left-0':'max-[1500px]:left-[-100%]'}`}>
-                                    <CoinTypes />
+                                <div className={`w-full max-w-[380px] max-[1500px]:absolute duration-300 z-[4] max-[1500px]:top-0 ${show1 ? 'max-[1500px]:left-0' : 'max-[1500px]:left-[-100%]'}`}>
+                                    <CoinTypes coins={props?.coinList} />
                                 </div>
                                 <div className='max-[1499px]:pl-[20px] w-full max-w-full min-[1500px]:max-w-[calc(100%-380px)]'>
                                     <FutureChart id={'tradingview_0d0de'} height={true} />
@@ -198,18 +142,20 @@ const FutureTrading = (props: Session) => {
                             <MarketTrades setShow={setShow} show={show} widthFull={true} />
                         </div>
                     </div>
-                    <ChartTabsFuture />
+                    <ChartTabsFuture positions={positions} openOrders={openOrders}/>
                 </div>
                 <div>
                     <BuySell />
                     <MarginRatio />
                 </div>
             </div>
+
+            {/* For mobile use */}
             <div className='max-[991px]:block hidden'>
                 <div className='relative'>
                     <TopBar show={show1} setShow={setShow1} />
-                    <div className={`w-full max-w-full absolute duration-300 z-[4] top-[76px] ${show1 ? 'left-0':'left-[-100%]'}`}>
-                        <CoinTypes />
+                    <div className={`w-full max-w-full absolute duration-300 z-[4] top-[76px] ${show1 ? 'left-0' : 'left-[-100%]'}`}>
+                        <CoinTypes coins={props?.coinList} />
                     </div>
                 </div>
                 <div className='overflow-x-auto hide-scroller dark:bg-[#1a1b1f] bg-[#fafafa]'>
@@ -220,7 +166,7 @@ const FutureTrading = (props: Session) => {
                     </div>
                     {
                         showMob === 1 &&
-                        <FutureChart id={'tradingview_0d0de12'}  />
+                        <FutureChart id={'tradingview_0d0de12'} />
                     }
                     {
                         showMob === 2 &&
@@ -244,13 +190,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const session = await getServerSession(context.req, context.res, authOptions);
     const providers = await getProviders();
 
-    let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
+    let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future`, {
         method: "GET"
     }).then(response => response.json());
 
-    let future = tokenList?.data.filter((item: any) => {
-        return item.futureTradePair !== null
-    });
 
     let userAssets: any = [];
     if (session) {
@@ -267,7 +210,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
             session: session,
             sessions: session,
             provider: providers,
-            coinList: future,
+            coinList: tokenList?.data,
             assets: userAssets
         },
     };
