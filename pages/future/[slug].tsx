@@ -25,6 +25,7 @@ import FutureChart from '@/components/future/future-chart';
 import MarginMode from '@/components/future/popups/margin-mode';
 import BlockBusterCard from '@/components/future/test';
 import SwapModal from '@/components/future/popups/swap-modal';
+import TipsModal from '@/components/future/popups/tips.modal';
 
 interface Session {
     session: {
@@ -249,6 +250,9 @@ const FutureTrading = (props: Session) => {
             <MarginMode setOverlay={setOverlay} setOverlay={setOverlay} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setMarginMode={setMarginMode} marginMode={marginMode} />
             {/* swap popup */}
             <SwapModal setOverlay={setOverlay} setOverlay={setOverlay} setMarginMode={setMarginMode} marginMode={marginMode} />
+
+            {/* tips modal */}
+            <TipsModal  setOverlay={setOverlay} setOverlay={setOverlay} setMarginMode={setMarginMode} marginMode={marginMode}/>
         
         </>
     )

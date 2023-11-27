@@ -143,7 +143,7 @@ const BuySell = (props:fullWidth) => {
             {/* TP/SL */}
             <div className='flex items-center justify-between mt-[20px]'>
 
-                <div className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`} >
+                <div className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`} onClick={()=>{ props.setOverlay(true); props.setMarginMode(3)}}>
                     <input id={`custom-radio${props.radioId}`} type="checkbox" value="" name="colored-radio" className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                     <label htmlFor={`custom-radio${props.radioId}`} className="
                         custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]

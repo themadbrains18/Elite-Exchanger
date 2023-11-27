@@ -8,7 +8,7 @@ const CoinTypes = () => {
 
   let { mode } = useContext(Context);
 
-
+  
     function fillSvg(e:any){
         console.log(e.currentTarget);
         // if(mode == "dark"){

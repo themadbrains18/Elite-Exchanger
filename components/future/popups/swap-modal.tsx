@@ -11,6 +11,7 @@ interface showPopup{
 
 const SwapModal = (props:showPopup) => {
     const list = ['BTCUSDT_SWAP', 'ETHUSDT SWAP','BCHUSDT_SWAP','ETCUSDT_SWAP','LTCUSDT SWAP','FETUSDT SWAP','BNBUSDT_SWAP'];
+    const list2 = ['Isolated',"Cross"]
     let { mode } = useContext(Context);
     const [show,setShow] = useState(1);
     const [long,setLong] = useState(1);
@@ -48,9 +49,13 @@ const SwapModal = (props:showPopup) => {
             <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-full after:translate-x-[-50%] after:h-[2px] ${show === 1 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShow(1) }}>PNL</button>
             <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-full after:translate-x-[-50%] after:h-[2px] ${show === 2 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShow(2) }}>Liquidation Price</button>
         </div>
-        <div className='flex mt-[25px] gap-[20px]'>
+        <div className='flex mt-[25px] gap-[20px] flex-col md:flex-row'>
             <div className='max-[991px]:max-w-full max-w-[50%] w-full'>
-                <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[2px] relative z-[4]'>
+                {
+                    show === 2 &&
+                    <SelectDropdown list={list2} defaultValue="Isolated" whiteColor={true} />
+                }
+                <div className='flex items-center dark:bg-[#373d4e] mt-[15px] bg-[#e5ecf0] rounded-[2px] relative z-[4]'>
                     <button className={`w-full p-[5px] rounded-[4px] border ${long === 1 ? 'text-buy border-buy' : 'text-[#a3a8b7] border-[#f0f8ff00]'}`} onClick={() => { setLong(1) }}>Long</button>
                     <button className={`w-full p-[5px] rounded-[4px] border ${long === 2 ? 'text-sell border-sell ' : 'text-[#a3a8b7] border-[#f0f8ff00]'}`} onClick={() => { setLong(2) }}>Short</button>
                 </div>
@@ -72,10 +77,24 @@ const SwapModal = (props:showPopup) => {
                 </div>
                 <button className="border bg-[#13c2c2] text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px]">Calculate</button>
             </div>
-            <div className='max-[991px]:max-w-full max-w-[50%] w-full dark:bg-[#30333e] bg-[#fafafa] p-[20px]'>
-                <p className='admin-body-text !text-[16px]'>Result</p>
-                <p className='admin-body-text !text-[16px]'>PNL</p>
-                <p className='admin-body-text !text-[16px]'>ROE</p>
+            <div className='max-[991px]:max-w-full max-w-[50%] w-full dark:bg-[#30333e] bg-[#fafafa] p-[20px] relative'>
+                <p className='admin-body-text !text-[16px] mb-[10px]'>Result</p>
+                {
+                    show == 1 &&
+                    <>
+                        <p className='admin-body-text !text-[16px] mb-[10px]'>Initial Margin</p>
+                        <p className='admin-body-text !text-[16px] mb-[10px]'>PNL</p>
+                        <p className='admin-body-text !text-[16px]'>ROE</p>
+                    </>
+                }
+                {
+                    show == 2 &&
+                    <>
+                        <p className='admin-body-text !text-[16px]'>Liquidation Price</p>
+                        <p className='top-label !text-[10px] leading-[17px] absolute bottom-[16px] left-[20px] pr-[10px] md:block hidden'> Your open positions will be taken into consideration when calculating the liquidation price. Unrealized PNL and maintenance margin of your open position will affect the calculation of liquidation price.</p>
+                    </>
+                }
+                  
             </div>
         </div>
     </div>
