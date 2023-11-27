@@ -31,13 +31,14 @@ const FutureTrading = (props: Session) => {
 
     const router = useRouter();
     const [show, setShow] = useState(1);
-    const [marginMode, setMarginMode] = useState(0);
+    const [marginMode, setMarginMode] = useState({ margin: 'Isolated', leverage: 10 });
+
+    const [popupMode, setPopupMode] = useState(0);
     const [overlay, setOverlay] = useState(false);
     const [showMob, setShowMob] = useState(1);
     const [show1, setShow1] = useState(false)
     const [currentToken, setCurrentToken] = useState([]);
     const [allCoins, setAllCoins] = useState(props.coinList);
-
     const [positions, setPositionData] = useState([]);
     const [openOrders, setOpenOrders] = useState([]);
 
@@ -129,7 +130,11 @@ const FutureTrading = (props: Session) => {
         return item.walletTtype === 'future_wallet'
     });
 
-    
+    const setMarginModeAndLeverage = (marginType: string, leverage: number) => {
+        setMarginMode({ margin: marginType, leverage: leverage });
+        setPopupMode(0);
+        setOverlay(false);
+    }
 
     return (
         <>
@@ -156,7 +161,7 @@ const FutureTrading = (props: Session) => {
                     <ChartTabsFuture positions={positions} openOrders={openOrders} />
                 </div>
                 <div>
-                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setMarginMode={setMarginMode} marginMode={marginMode} setOverlay={setOverlay} futureAssets={futureAssets} currentToken={currentToken[0]}/>
+                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} futureAssets={futureAssets} currentToken={currentToken[0]} marginMode={marginMode} />
                     <MarginRatio />
                 </div>
             </div>
@@ -189,7 +194,7 @@ const FutureTrading = (props: Session) => {
                     }
                 </div>
                 <ChartTabsFuture positions={positions} openOrders={openOrders} />
-                <BuySell setOverlay={setOverlay} inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} setMarginMode={setMarginMode} marginMode={marginMode} />
+                <BuySell setOverlay={setOverlay} inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} setPopupMode={setPopupMode} popupMode={popupMode} />
                 <MarginRatio fullWidth={true} heightAuto={true} />
             </div>
 
@@ -197,9 +202,9 @@ const FutureTrading = (props: Session) => {
             <div className={`sdsadsadd bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${overlay && '!opacity-[70%] !visible'}`}></div>
 
             {/* popups */}
-            <MarginMode setOverlay={setOverlay} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setMarginMode={setMarginMode} marginMode={marginMode} />
+            <MarginMode setOverlay={setOverlay} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setPopupMode={setPopupMode} popupMode={popupMode} setMarginModeAndLeverage={setMarginModeAndLeverage} />
             {/* swap popup */}
-            <SwapModal setOverlay={setOverlay} setMarginMode={setMarginMode} marginMode={marginMode} />
+            <SwapModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
 
         </>
     )

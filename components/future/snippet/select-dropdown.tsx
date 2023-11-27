@@ -5,7 +5,7 @@ interface propsData {
     showNes?: number;
     defaultValue?: string;
     whiteColor?: boolean;
-    setSymbol?:any;
+    onCoinDropDownChange?:any;
 }
 const SelectDropdown = (props: propsData) => {
     const [showDrop, setShowDrop] = useState(false);
@@ -14,7 +14,7 @@ const SelectDropdown = (props: propsData) => {
         let parent = e.currentTarget.closest(".dropdown-parent");
         let input = parent.querySelector(".inputText");
         input.innerHTML = itemText;
-        props?.setSymbol(itemText);
+        props?.onCoinDropDownChange(itemText);
     }
     return (
         <div className='relative dropdown-parent z-[5]'>
