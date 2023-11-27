@@ -35,8 +35,6 @@ const FutureTrading = (props: Session) => {
     const [overlay, setOverlay] = useState(false);
     const [showMob, setShowMob] = useState(1);
     const [show1, setShow1] = useState(false)
-    const [orders, setMarketOrders] = useState([]);
-    const [userTradeHistory, setUserTradeHistory] = useState([]);
     const [currentToken, setCurrentToken] = useState([]);
     const [allCoins, setAllCoins] = useState(props.coinList);
 
@@ -127,12 +125,18 @@ const FutureTrading = (props: Session) => {
         }
     }
 
+    let futureAssets = props?.assets.filter((item: any) => {
+        return item.walletTtype === 'future_wallet'
+    });
+
+    
+
     return (
         <>
             {/* For Desktop use */}
             <div className='max-[991px]:hidden flex'>
                 <div className='w-full max-w-[calc(100%-300px)]'>
-                    <TopBar show={show1} setShow={setShow1} />
+                    <TopBar show={show1} setShow={setShow1} currentToken={currentToken[0]} />
                     <div className='flex'>
                         <div className='w-full max-w-full max-w-[calc(100%-300px)]'>
                             <div className='flex relative w-full max-w-full'>
@@ -152,7 +156,7 @@ const FutureTrading = (props: Session) => {
                     <ChartTabsFuture positions={positions} openOrders={openOrders} />
                 </div>
                 <div>
-                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setMarginMode={setMarginMode} marginMode={marginMode} setOverlay={setOverlay} />
+                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setMarginMode={setMarginMode} marginMode={marginMode} setOverlay={setOverlay} futureAssets={futureAssets} currentToken={currentToken[0]}/>
                     <MarginRatio />
                 </div>
             </div>
@@ -160,7 +164,7 @@ const FutureTrading = (props: Session) => {
             {/* For mobile use */}
             <div className='max-[991px]:block hidden'>
                 <div className='relative'>
-                    <TopBar show={show1} setShow={setShow1} />
+                    <TopBar show={show1} setShow={setShow1} currentToken={currentToken[0]} />
                     <div className={`w-full max-w-full absolute duration-300 z-[4] top-[76px] ${show1 ? 'left-0' : 'left-[-100%]'}`}>
                         <CoinTypes coins={props?.coinList} />
                     </div>
