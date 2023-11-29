@@ -19,6 +19,7 @@ import BlockBusterCard from '@/components/future/test';
 import SwapModal from '@/components/future/popups/swap-modal';
 import TipsModal from '@/components/future/popups/tips.modal';
 import TransferModal from '@/components/future/popups/transfer-modal';
+import TradingFeeMadal from '@/components/future/popups/trading-fee-madal';
 
 interface Session {
     session: {
@@ -211,6 +212,8 @@ const FutureTrading = (props: Session) => {
 
 
             <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
+
+            <TradingFeeMadal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
         
         </>
     )

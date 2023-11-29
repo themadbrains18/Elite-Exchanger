@@ -374,7 +374,7 @@ const BuySell = (props: fullWidth) => {
                         <p className="top-label !text-[#000] dark:!text-[#fff]">{avaibalance * props?.marginMode?.leverage} USDT</p>
                     </div>
                 </div>
-                <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[10px]'>
+                <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[10px]' onClick={() => { props.setOverlay(true); props.setPopupMode(4) }}>
                     <div className='flex items-center gap-10'>
                         <p className='top-label dark:!text-white !text-[#000]'>Fee Rate</p>
                     </div>
