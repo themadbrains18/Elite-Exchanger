@@ -15,9 +15,12 @@ import CoinTypes from '@/components/future/coin-types';
 import ChartTabsFuture from '@/components/future/chart-tabs-future';
 import FutureChart from '@/components/future/future-chart';
 import MarginMode from '@/components/future/popups/margin-mode';
-import BlockBusterCard from '@/components/future/test';
+// import BlockBusterCard from '@/components/future/test';
 import SwapModal from '@/components/future/popups/swap-modal';
 import ChartSec from '@/components/chart/chart-sec';
+// import TipsModal from '@/components/future/popups/tips.modal';
+import TransferModal from '@/components/future/popups/transfer-modal';
+import TradingFeeMadal from '@/components/future/popups/trading-fee-madal';
 
 interface Session {
     session: {
@@ -176,8 +179,7 @@ const FutureTrading = (props: Session) => {
                 <div>
                     {/* Buy/Sell open short traading component */}
                     <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} futureAssets={futureAssets} currentToken={currentToken[0]} marginMode={marginMode} />
-                    {/* Basic trading information component */}
-                    <MarginRatio />
+                    <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode}  />
                 </div>
             </div>
 
@@ -210,7 +212,7 @@ const FutureTrading = (props: Session) => {
                 </div>
                 <ChartTabsFuture positions={positions} openOrders={openOrders} />
                 <BuySell setOverlay={setOverlay} inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} setPopupMode={setPopupMode} popupMode={popupMode} />
-                <MarginRatio fullWidth={true} heightAuto={true} />
+                <MarginRatio fullWidth={true} heightAuto={true} setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode}  />
             </div>
 
             {/* overlay */}
@@ -220,6 +222,12 @@ const FutureTrading = (props: Session) => {
             <MarginMode setOverlay={setOverlay} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setPopupMode={setPopupMode} popupMode={popupMode} setMarginModeAndLeverage={setMarginModeAndLeverage} />
             {/* Future profit/loss and liquidation price calculate */}
             <SwapModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
+
+
+            <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
+
+            <TradingFeeMadal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
+        
         </>
     )
 }

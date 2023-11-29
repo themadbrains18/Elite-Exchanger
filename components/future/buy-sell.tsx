@@ -271,7 +271,9 @@ const BuySell = (props: fullWidth) => {
                 <div className='flex items-center gap-[8px] mt-10'>
                     <p className='admin-body-text !text-[12px] !text-[#a3a8b7]'>Available: {avaibalance}</p>
                     <p className='admin-body-text !text-[12px] !text-white'> {symbol}</p>
-                    <IconsComponent type='swap-calender-with-circle' />
+                    <div onClick={()=>{props.setOverlay(true); props.setPopupMode(3)}}>
+                        <IconsComponent type='swap-calender-with-circle' />
+                    </div>
                 </div>
 
                 {/* price input */}
@@ -407,7 +409,7 @@ const BuySell = (props: fullWidth) => {
                         <p className="top-label !text-[#000] dark:!text-[#fff]">{avaibalance * props?.marginMode?.leverage} USDT</p>
                     </div>
                 </div>
-                <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[10px]'>
+                <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[10px]' onClick={() => { props.setOverlay(true); props.setPopupMode(4) }}>
                     <div className='flex items-center gap-10'>
                         <p className='top-label dark:!text-white !text-[#000]'>Fee Rate</p>
                     </div>

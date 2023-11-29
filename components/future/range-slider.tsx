@@ -38,7 +38,7 @@ const RangeSlider = (props: uniqueIds) => {
 
             value = slider_input.value / (slider_input.max / 100);
 
-            props.onChangeSizeInPercentage(value);
+            // props.onChangeSizeInPercentage(value);
         }
 
     }
