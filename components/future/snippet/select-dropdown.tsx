@@ -1,19 +1,20 @@
 import Image from 'next/image';
 import React, { useState } from 'react'
-interface list{
-    list?:[];
-    showNes?:number;
-    defaultValue?:string;
-    whiteColor?:boolean;
+interface propsData {
+    list?: string[];
+    showNes?: number;
+    defaultValue?: string;
+    whiteColor?: boolean;
+    setSymbol?:any;
 }
-const SelectDropdown = (props:list) => {
-    const [showDrop,setShowDrop] = useState(false);
-    function changeInputVal(e:any){
-        console.log(e.currentTarget.innerHTML);
+const SelectDropdown = (props: propsData) => {
+    const [showDrop, setShowDrop] = useState(false);
+    function changeInputVal(e: any) {
         let itemText = e.currentTarget.innerHTML;
         let parent = e.currentTarget.closest(".dropdown-parent");
         let input = parent.querySelector(".inputText");
         input.innerHTML = itemText;
+        props?.setSymbol(itemText);
     }
   return (
     <div className='relative dropdown-parent'>
@@ -32,10 +33,10 @@ const SelectDropdown = (props:list) => {
                             )
                         })
                     }
-            </ul>
+                </ul>
+            </div>
         </div>
-    </div>
-  )
+    )
 }
 
 export default SelectDropdown;

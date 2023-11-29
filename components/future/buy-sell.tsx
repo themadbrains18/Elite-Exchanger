@@ -15,22 +15,25 @@ interface fullWidth{
     setMarginMode?:any;
     setOverlay?:any;
     overlay?:boolean;
+    futureAssets?:any;
+    currentToken?:any;
 }
 const BuySell = (props:fullWidth) => {
-
 
     // main tabs
     const [show, setShow] = useState(1);
 
-    const list = ['USDT', 'BTC'];
+    const list = ['USDT', props?.currentToken?.coin_symbol];
     const timeInForceList = ['GTC', 'FOK', 'IOC'];
-    // const triggerPriceList = ['Mark', 'Last'];
-    // const PriceList = ['Limit', 'Market'];
-    // const TriggerList = ['Trigger', 'Maker Only', 'Trailing Stop'];
-
 
     // nested tabs
     const [showNes, setShowNes] = useState(1);
+    const [symbol, setSymbol] = useState('USDT');
+
+    useEffect(()=>{
+        setSymbol('USDT');
+    },[props?.currentToken?.coin_symbol]);
+
     return (
         <div className={`p-[16px] dark:bg-[#1f2127] bg-[#fff] ${props.fullWidth ? 'max-w-full h-auto':'max-w-[300px] h-[677px]'} w-full border-l border-b dark:border-[#25262a] border-[#e5e7eb]`}>
             <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer' onClick={()=>{ props.setOverlay(true); props.setMarginMode(1)}}>
@@ -63,52 +66,9 @@ const BuySell = (props:fullWidth) => {
             {/* available */}
             <div className='flex items-center gap-[8px] mt-10'>
                 <p className='admin-body-text !text-[12px] !text-[#a3a8b7]'>Available:</p>
-                <p className='admin-body-text !text-[12px] !text-white'> USDT</p>
+                <p className='admin-body-text !text-[12px] !text-white'> {symbol}</p>
                 <IconsComponent type='swap-calender-with-circle' />
             </div>
-
-            {/* trigger price input */}
-            {/* <div className='mt-10 rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
-                <div>
-                    <p className='top-label'>Trigger Price</p>
-                    <input type="number" placeholder="Enter the Trigger Price" step="any" value="37268.5" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "></input>
-                </div>
-                <div>
-                    <SelectDropdown list={triggerPriceList} whiteColor={true} showNes={showNes} defaultValue="Mark" />
-                    <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p>
-                </div>
-            </div> */}
-
-            {/* Activation Price input */}
-            {/* <div className='mt-10 rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
-                <div>
-                    <p className='top-label'>Activation Price </p>
-                    <input type="number" placeholder="Enter the Trigger Price" step="any" value="37268.5" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "></input>
-                </div>
-                <div>
-                    <SelectDropdown list={triggerPriceList} whiteColor={true} showNes={showNes} defaultValue="Mark" />
-                    <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p>
-                </div>
-            </div> */}
-
-            {/* trailing Stop input */}
-            {/* <div className='mt-10 flex gap-[2px]'>
-                <div className='rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
-                    <div>
-                        <p className='top-label'>Callback Rate</p>
-                        <input type="number" placeholder="" step="any"  name="token_amount" autoFocus={true} className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "></input>
-                    </div>
-                    <div>
-                        <p className='admin-body-text !text-[12px] dark:!text-white'>%</p>
-                    </div>
-                </div>
-                <div className='max-w-[50px] w-full justify-center cursor-pointer rounded-5 py-[6px] px-[10px] flex border items-center dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
-                    <p className='top-label dark:!text-white !text-black'>1%</p>
-                </div>
-                <div className='max-w-[50px] w-full justify-center cursor-pointer rounded-5 py-[6px] px-[10px] flex border items-center dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
-                    <p className='top-label dark:!text-white !text-black'>2%</p>
-                </div>
-            </div> */}
 
             {/* price input */}
             {
@@ -117,10 +77,10 @@ const BuySell = (props:fullWidth) => {
                     <div className='mt-10 rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
                         <div>
                             <p className='top-label'>Price </p>
-                            <input type="number" placeholder="$0" step="any" value="37268.5" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "></input>
+                            <input type="number" placeholder="$0" step="any" value={props?.currentToken?.token !==null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price} name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "></input>
                         </div>
                         <div>
-                            <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p>
+                            <p className='admin-body-text !text-[12px] dark:!text-white'> {symbol}</p>
                         </div>
                     </div>
                 </>
@@ -129,11 +89,11 @@ const BuySell = (props:fullWidth) => {
             <div className='mt-10 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
                 <div>
                     <p className='top-label'>Size  </p>
-                    <input type="number" placeholder="Min Qty is 37.3USDT" step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
+                    <input type="number" placeholder={ props?.currentToken?.coin_symbol === symbol? props?.currentToken?.coin_min_trade : props?.currentToken?.usdt_min_trade} step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
                 </div>
                 <div>
                     {/* <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p> */}
-                    <SelectDropdown list={list} showNes={showNes} defaultValue="USDT" whiteColor={true} />
+                    <SelectDropdown list={list} showNes={showNes} defaultValue="USDT" whiteColor={true} setSymbol={setSymbol}/>
                 </div>
             </div>
 
@@ -169,14 +129,13 @@ const BuySell = (props:fullWidth) => {
                         <p className="ml-2 md-text !text-[14px]">TP/SL</p>
                     </label>
                 </div>
-                {
+                {/* {
                     showNes === 1 &&
                     <div className='flex items-center gap-[5px] w-full justify-end'>
                         <p className='top-label'>Time in Force:</p>
-                        {/* <p className='top-label dark:!text-white'>FOK</p> */}
                         <SelectDropdown list={timeInForceList} showNes={showNes} defaultValue="KOC" whiteColor={true} />
                     </div>
-                }
+                } */}
             </div>
 
             {/* open long */}
