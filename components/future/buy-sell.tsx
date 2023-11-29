@@ -41,7 +41,27 @@ const BuySell = (props: fullWidth) => {
     const [entryPrice, setEntryPrice] = useState(0);
     const [istpslchecked, setIsTpSlchecked] = useState(false);
 
-    const [tpsl, setTpSl] = useState({profit:{} , stopls:{}});
+    let openOrderObj = {
+        "position_id": "--",
+        "user_id": session?.user?.user_id,
+        "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
+        "side": "",
+        "type": 'stop market', //e.g limit, take profit market, stop market
+        "amount": 'close position', // limit order amount, close position
+        "price_usdt": 0.00, // limit order price
+        "trigger": "", // TP/SL posiotion amount , limit order --
+        "reduce_only": "Yes", // TP/SL case Yes, limit order No
+        "post_only": "No", //No
+        "status": false,
+        "leverage": 0,
+        "margin": 0.00,
+        "liq_price": 0.00,
+        "market_price": 0.00,
+        "order_type": "value",
+        "leverage_type": '--',
+        "coin_id": ""
+    }
+    const [tpsl, setTpSl] = useState({ profit: openOrderObj, stopls: openOrderObj });
 
     let marketPrice = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
 
@@ -152,7 +172,7 @@ const BuySell = (props: fullWidth) => {
             }
         }
 
-
+        // 
         const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
         let record = encodeURIComponent(ciphertext.toString());
 
@@ -170,6 +190,10 @@ const BuySell = (props: fullWidth) => {
         }
         else {
             if (istpslchecked === true) {
+                console.log(tpsl?.profit?.position_id);
+                if (tpsl.profit) {
+                    tpsl.profit.position_id = reponse?.data?.data?.result?.id;
+                }
                 let profitreponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`, {
                     method: "POST",
                     headers: {
@@ -179,6 +203,9 @@ const BuySell = (props: fullWidth) => {
                     body: JSON.stringify(tpsl?.profit)
                 }).then(response => response.json());
 
+                if (tpsl.stopls) {
+                    tpsl.stopls.position_id = reponse?.data?.data?.result?.id;
+                }
                 let stopreponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`, {
                     method: "POST",
                     headers: {
@@ -188,7 +215,15 @@ const BuySell = (props: fullWidth) => {
                     body: JSON.stringify(tpsl?.stopls)
                 }).then(response => response.json());
             }
-            toast.success(reponse?.data?.message);
+
+            const websocket = new WebSocket('ws://localhost:3001/');
+            let position = {
+                ws_type: 'position'
+            }
+            websocket.onopen = () => {
+                websocket.send(JSON.stringify(position));
+            }
+            toast.success(reponse?.data?.data?.message);
         }
     }
 
@@ -205,7 +240,7 @@ const BuySell = (props: fullWidth) => {
 
     return (
         <>
-            
+
             <div className={`p-[16px] dark:bg-[#1f2127] bg-[#fff] ${props.fullWidth ? 'max-w-full h-auto' : 'max-w-[300px] h-[677px]'} w-full border-l border-b dark:border-[#25262a] border-[#e5e7eb]`}>
                 <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer' onClick={() => { props.setOverlay(true); props.setPopupMode(1) }}>
                     <div className='flex items-center gap-10'>
@@ -360,7 +395,7 @@ const BuySell = (props: fullWidth) => {
                     {
                         show === 2 &&
                         <div className='mt-[5px]'>
-                            <button className=' solid-button w-full !bg-sell !rounded-[8px] py-[10px] px-[15px] !text-[14px]'>Open Short</button>
+                            <button className=' solid-button w-full !bg-sell !rounded-[8px] py-[10px] px-[15px] !text-[14px]' onClick={submitForm}>Open Short</button>
                         </div>
                     }
                     <div className='flex gap-5 items-center justify-between mt-[5px]'>
@@ -383,7 +418,7 @@ const BuySell = (props: fullWidth) => {
 
             {/* overlay */}
             <div className={`sdsadsadd bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${modelOverlay && '!opacity-[70%] !visible'}`}></div>
-            <ProfitLossModal setModelOverlay={setModelOverlay} setModelPopup={setModelPopup} modelPopup={modelPopup} modelOverlay={modelOverlay} entryPrice={showNes===1? entryPrice : marketPrice} currentToken={props?.currentToken} leverage={props?.marginMode?.leverage} sizeValue={sizeValue} show={show === 1?'long':'short'} setTpSl={setTpSl} />
+            <ProfitLossModal setModelOverlay={setModelOverlay} setModelPopup={setModelPopup} modelPopup={modelPopup} modelOverlay={modelOverlay} entryPrice={showNes === 1 ? entryPrice : marketPrice} currentToken={props?.currentToken} leverage={props?.marginMode?.leverage} sizeValue={sizeValue} show={show === 1 ? 'long' : 'short'} setTpSl={setTpSl} actionType="buysell" />
         </>
 
     )
