@@ -1,13 +1,20 @@
 import IconsComponent from '@/components/snippets/icons';
 import Image from 'next/image';
-import React from 'react'
+import React, { useState } from 'react';
+import ProfitLossModal from '../popups/profit-loss-model';
 
 interface propsData {
   positions?: any;
+  currentToken?:any;
 }
 
 const PositionsTable = (props: propsData) => {
-  
+
+  const [modelPopup, setModelPopup] = useState(0);
+  const [modelOverlay, setModelOverlay] = useState(false);
+  const [selectedPosition, setSelectedPosition] = useState(Object);
+  const [tpsl, setTpSl] = useState({profit:{} , stopls:{}});
+
   return (
     <>
       <div className="overflow-x-auto h-[234px]">
@@ -98,7 +105,7 @@ const PositionsTable = (props: propsData) => {
                       <p className="top-label !font-[600] dark:!text-white !text-black">{item?.entry_price}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.token!==null ?  item?.token?.price : item?.global_token?.price}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.token !== null ? item?.token?.price : item?.global_token?.price}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <p className="top-label !font-[600] dark:!text-white !text-black">{item?.liq_price}</p>
@@ -113,8 +120,8 @@ const PositionsTable = (props: propsData) => {
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <div className='flex items-center gap-[5px]'>
                         <div>
-                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy':'!text-sell'}`}>{item?.pnl}</p>
-                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy':'!text-sell'}`}>{item.order_type === 'value' ? 'USDT' : 'BTC'}</p>
+                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{item?.pnl}</p>
+                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{item.order_type === 'value' ? 'USDT' : 'BTC'}</p>
                         </div>
                         <IconsComponent type='sendIcon' />
                       </div>
@@ -136,8 +143,8 @@ const PositionsTable = (props: propsData) => {
                         <div>
                           <p className="top-label !font-[600] ">{item?.tp_sl}</p>
                         </div>
-                        <div className='cursor-pointer'>
-                          <IconsComponent type='editIcon' />
+                        <div className='cursor-pointer' onClick={()=>{setModelPopup(1); setModelOverlay(true); setSelectedPosition(item)}}>
+                          <IconsComponent type='editIcon'/>
                         </div>
                       </div>
                     </td>
@@ -149,6 +156,10 @@ const PositionsTable = (props: propsData) => {
 
         </table>
       </div>
+      {/* overlay */}
+      <div className={`sdsadsadd bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${modelOverlay && '!opacity-[70%] !visible'}`}></div>
+      <ProfitLossModal setModelOverlay={setModelOverlay} setModelPopup={setModelPopup} modelPopup={modelPopup} modelOverlay={modelOverlay} currentToken={props?.currentToken} entryPrice={selectedPosition?.entry_price} leverage={selectedPosition?.leverage} sizeValue={selectedPosition?.size} show={selectedPosition?.direction}/>
+
     </>
   )
 }

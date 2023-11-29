@@ -5,6 +5,7 @@ import OpenOrderTable from './tabs-table/open-order-table';
 interface propsData {
     positions?: any;
     openOrders?:any;
+    currentToken?:any;
 }
 
 const ChartTabsFuture = (props: propsData) => {
@@ -27,7 +28,7 @@ const ChartTabsFuture = (props: propsData) => {
             {/* content */}
             {
                 show == 1 &&
-                <PositionsTable positions={props?.positions}/>
+                <PositionsTable positions={props?.positions} currentToken={props.currentToken}/>
             }
             {
                 show == 2 &&
