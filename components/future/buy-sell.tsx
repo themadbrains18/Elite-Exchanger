@@ -6,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import AES from 'crypto-js/aes';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ProfitLossModal from './popups/profit-loss-model';
 
 interface fullWidth {
     fullWidth?: boolean;
@@ -28,15 +29,21 @@ const BuySell = (props: fullWidth) => {
     const [show, setShow] = useState(1);
     const { status, data: session } = useSession()
     const list = ['USDT', props?.currentToken?.coin_symbol];
-    const timeInForceList = ['GTC', 'FOK', 'IOC'];
-
+    // const timeInForceList = ['GTC', 'FOK', 'IOC'];
+    const [modelPopup, setModelPopup] = useState(0);
+    const [modelOverlay, setModelOverlay] = useState(false);
     // nested tabs
     const [showNes, setShowNes] = useState(1);
     const [symbol, setSymbol] = useState('USDT');
     const [avaibalance, setAvailBalance] = useState(0);
     const [sizeValue, setSizeValue] = useState(0);
     const [marketType, setMarketType] = useState('limit');
-    const [entryPrice, setEntryPrice] = useState(props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price)
+    const [entryPrice, setEntryPrice] = useState(0);
+    const [istpslchecked, setIsTpSlchecked] = useState(false);
+
+    const [tpsl, setTpSl] = useState({profit:{} , stopls:{}});
+
+    let marketPrice = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
 
     useEffect(() => {
         setSymbol('USDT');
@@ -52,6 +59,7 @@ const BuySell = (props: fullWidth) => {
         else {
             setAvailBalance(0);
         }
+
     }, [props?.currentToken?.coin_symbol]);
 
     const onCoinDropDownChange = (token: any) => {
@@ -78,40 +86,77 @@ const BuySell = (props: fullWidth) => {
 
     const submitForm = async () => {
 
-        let entry_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
-        let Liquidation_Price = (entry_price*(1-0.01))/props?.marginMode?.leverage;
+        let obj;
+        if (marketType === 'market') {
+            // let entry_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
+            let Liquidation_Price = (marketPrice * (1 - 0.01)) / props?.marginMode?.leverage;
 
-        Liquidation_Price = entry_price - Liquidation_Price;
-        if(show === 2){
-            Liquidation_Price = entry_price + Liquidation_Price;
+            // Liquidation Price for long case
+            Liquidation_Price = marketPrice - Liquidation_Price;
+
+            // Liquidation Price for short case
+            if (show === 2) {
+                Liquidation_Price = marketPrice + Liquidation_Price;
+            }
+            obj = {
+                "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
+                "user_id": session?.user?.user_id,
+                "coin_id": props?.currentToken?.coin_id,
+                "leverage": props?.marginMode?.leverage,
+                "size": sizeValue,
+                "entry_price": marketPrice,
+                "market_price": marketPrice,
+                "liq_price": Liquidation_Price,
+                "margin": sizeValue / props?.marginMode?.leverage,
+                "margin_ratio": 0.01,
+                "pnl": 0,
+                "realized_pnl": 0,
+                "tp_sl": "--",
+                "status": false,
+                "queue": false,
+                "direction": show === 1 ? "long" : 'short',
+                "order_type": "value",
+                "leverage_type": props?.marginMode?.margin,
+                "market_type": marketType
+            }
+        }
+        else {
+            let Liquidation_Price = (entryPrice * (1 - 0.01)) / props?.marginMode?.leverage;
+
+            // Liquidation Price for long case
+            Liquidation_Price = entryPrice - Liquidation_Price;
+
+            // Liquidation Price for short case
+            if (show === 2) {
+                Liquidation_Price = entryPrice + Liquidation_Price;
+            }
+            obj = {
+                "position_id": "--",
+                "user_id": session?.user?.user_id,
+                "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
+                "side": show === 1 ? "open long" : 'open short',
+                "type": marketType, //e.g limit, take profit market, stop market
+                "amount": sizeValue.toString(), // limit order amount, close position
+                "price_usdt": entryPrice, // limit order price
+                "trigger": "--", // TP/SL posiotion amount , limit order --
+                "reduce_only": "No", // TP/SL case Yes, limit order No
+                "post_only": "No", //No
+                "status": false,
+                "leverage": props?.marginMode?.leverage,
+                "margin": sizeValue / props?.marginMode?.leverage,
+                "liq_price": Liquidation_Price,
+                "market_price": props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price,
+                "order_type": "value",
+                "leverage_type": props?.marginMode?.margin,
+                "coin_id": props?.currentToken?.coin_id,
+            }
         }
 
-        let obj = {
-            "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
-            "user_id": session?.user?.user_id,
-            "coin_id": props?.currentToken?.coin_id,
-            "leverage": props?.marginMode?.leverage,
-            "size": sizeValue,
-            "entry_price": entry_price,
-            "market_price": props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price,
-            "liq_price": Liquidation_Price,
-            "margin": sizeValue / props?.marginMode?.leverage,
-            "margin_ratio": 0.01,
-            "pnl": 0,
-            "realized_pnl": 0,
-            "tp_sl": "--",
-            "status": false,
-            "queue": false,
-            "direction": show === 1 ? "long" : 'short',
-            "order_type": "value",
-            "leverage_type": props?.marginMode?.margin,
-            "market_type": marketType
-        }
 
         const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
         let record = encodeURIComponent(ciphertext.toString());
 
-        let reponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/position`, {
+        let reponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/${marketType === 'market' ? 'position' : 'openorder'}`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -120,19 +165,47 @@ const BuySell = (props: fullWidth) => {
             body: JSON.stringify(obj)
         }).then(response => response.json());
 
-        if(reponse?.data?.status !==200){
-            console.log('==============failed log');
-            toast.error(reponse?.data?.data?.message);
+        if (reponse?.data?.status !== 200) {
+            toast.error(reponse?.data?.data?.message !== undefined ? reponse?.data?.data?.message : reponse?.data?.data);
         }
-        else{
-            console.log('==============success log');
+        else {
+            if (istpslchecked === true) {
+                let profitreponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": session?.user?.access_token
+                    },
+                    body: JSON.stringify(tpsl?.profit)
+                }).then(response => response.json());
+
+                let stopreponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": session?.user?.access_token
+                    },
+                    body: JSON.stringify(tpsl?.stopls)
+                }).then(response => response.json());
+            }
             toast.success(reponse?.data?.message);
         }
     }
 
+    const profitlosspopupenable = (event: any) => {
+        if (event.currentTarget.checked === true) {
+            setModelPopup(1);
+        }
+        else {
+            setModelPopup(0);
+        }
+        setModelOverlay(event?.currentTarget?.checked);
+        setIsTpSlchecked(event?.currentTarget?.checked);
+    }
+
     return (
         <>
-            <ToastContainer />
+            
             <div className={`p-[16px] dark:bg-[#1f2127] bg-[#fff] ${props.fullWidth ? 'max-w-full h-auto' : 'max-w-[300px] h-[677px]'} w-full border-l border-b dark:border-[#25262a] border-[#e5e7eb]`}>
                 <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer' onClick={() => { props.setOverlay(true); props.setPopupMode(1) }}>
                     <div className='flex items-center gap-10'>
@@ -179,6 +252,7 @@ const BuySell = (props: fullWidth) => {
                                 <p className='admin-body-text !text-[12px] dark:!text-white'> {symbol}</p>
                             </div>
                         </div>
+                        <p className='top-label mt-[5px]'>Current Price : {marketPrice}</p>
                     </>
                 }
                 {/* Size input */}
@@ -240,7 +314,8 @@ const BuySell = (props: fullWidth) => {
                         <div className='flex items-center justify-between mt-[20px]'>
 
                             <div className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`} >
-                                <input id={`custom-radio${props.radioId}`} type="checkbox" value="" name="colored-radio" className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                                <input id={`custom-radio${props.radioId}`} type="checkbox" onChange={(e) => { profitlosspopupenable(e) }
+                                } value="" name="colored-radio" className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                                 <label htmlFor={`custom-radio${props.radioId}`} className="
                                     custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
                                     cursor-pointer
@@ -305,6 +380,10 @@ const BuySell = (props: fullWidth) => {
                 </div>
 
             </div>
+
+            {/* overlay */}
+            <div className={`sdsadsadd bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${modelOverlay && '!opacity-[70%] !visible'}`}></div>
+            <ProfitLossModal setModelOverlay={setModelOverlay} setModelPopup={setModelPopup} modelPopup={modelPopup} modelOverlay={modelOverlay} entryPrice={showNes===1? entryPrice : marketPrice} currentToken={props?.currentToken} leverage={props?.marginMode?.leverage} sizeValue={sizeValue} show={show === 1?'long':'short'} setTpSl={setTpSl} />
         </>
 
     )

@@ -138,6 +138,7 @@ const FutureTrading = (props: Session) => {
 
     return (
         <>
+            <ToastContainer />
             {/* For Desktop use */}
             <div className='max-[991px]:hidden flex'>
                 <div className='w-full max-w-[calc(100%-300px)]'>
@@ -158,7 +159,7 @@ const FutureTrading = (props: Session) => {
                             <MarketTrades setShow={setShow} show={show} widthFull={true} />
                         </div>
                     </div>
-                    <ChartTabsFuture positions={positions} openOrders={openOrders} />
+                    <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]}/>
                 </div>
                 <div>
                     <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} futureAssets={futureAssets} currentToken={currentToken[0]} marginMode={marginMode} />
@@ -205,6 +206,7 @@ const FutureTrading = (props: Session) => {
             <MarginMode setOverlay={setOverlay} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setPopupMode={setPopupMode} popupMode={popupMode} setMarginModeAndLeverage={setMarginModeAndLeverage} />
             {/* swap popup */}
             <SwapModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
+
 
         </>
     )
