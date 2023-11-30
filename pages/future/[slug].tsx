@@ -15,9 +15,10 @@ import CoinTypes from '@/components/future/coin-types';
 import ChartTabsFuture from '@/components/future/chart-tabs-future';
 import FutureChart from '@/components/future/future-chart';
 import MarginMode from '@/components/future/popups/margin-mode';
-import BlockBusterCard from '@/components/future/test';
+// import BlockBusterCard from '@/components/future/test';
 import SwapModal from '@/components/future/popups/swap-modal';
-import TipsModal from '@/components/future/popups/tips.modal';
+import ChartSec from '@/components/chart/chart-sec';
+// import TipsModal from '@/components/future/popups/tips.modal';
 import TransferModal from '@/components/future/popups/transfer-modal';
 import TradingFeeMadal from '@/components/future/popups/trading-fee-madal';
 
@@ -60,6 +61,11 @@ const FutureTrading = (props: Session) => {
             if (eventDataType === "price") {
                 refreshTokenList();
                 getUserFuturePositionData();
+            }
+
+            if (eventDataType === 'position') {
+                getUserFuturePositionData();
+                getUserOpenOrderData();
             }
         }
 
@@ -145,26 +151,33 @@ const FutureTrading = (props: Session) => {
             {/* For Desktop use */}
             <div className='max-[991px]:hidden flex mt-[83px]'>
                 <div className='w-full max-w-[calc(100%-300px)]'>
+                    {/* future trade page top header */}
                     <TopBar show={show1} setShow={setShow1} currentToken={currentToken[0]} />
                     <div className='flex'>
                         <div className='w-full max-w-full max-w-[calc(100%-300px)]'>
                             <div className='flex relative w-full max-w-full'>
+                                {/* Future trade coin list */}
                                 <div className={`w-full max-w-[380px] max-[1500px]:absolute duration-300 z-[4] max-[1500px]:top-0 ${show1 ? 'max-[1500px]:left-0' : 'max-[1500px]:left-[-100%]'}`}>
                                     <CoinTypes coins={props?.coinList} />
                                 </div>
+                                {/* Future chart */}
                                 <div className='max-[1499px]:pl-[20px] w-full max-w-full min-[1500px]:max-w-[calc(100%-380px)]'>
-                                    <FutureChart id={'tradingview_0d0de'} height={true} />
+                                    <ChartSec slug={`${slug}`} />
                                 </div>
                             </div>
                         </div>
                         <div className='w-full max-w-[300px]'>
-                            <OrderBookFuture setShow={setShow} show={show} />
+                            {/* order Book compoenent */}
+                            <OrderBookFuture setShow={setShow} show={show} currentToken={currentToken[0]} />
+                            {/* Market trade listing component */}
                             <MarketTrades setShow={setShow} show={show} widthFull={true} />
                         </div>
                     </div>
-                    <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]}/>
+                    {/* position,open order and trade history table */}
+                    <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} />
                 </div>
                 <div>
+                    {/* Buy/Sell open short traading component */}
                     <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} futureAssets={futureAssets} currentToken={currentToken[0]} marginMode={marginMode} />
                     <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode}  />
                 </div>
@@ -205,9 +218,9 @@ const FutureTrading = (props: Session) => {
             {/* overlay */}
             <div className={`sdsadsadd bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${overlay && '!opacity-[70%] !visible'}`}></div>
 
-            {/* popups */}
+            {/* Leverage and margin type popup component */}
             <MarginMode setOverlay={setOverlay} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setPopupMode={setPopupMode} popupMode={popupMode} setMarginModeAndLeverage={setMarginModeAndLeverage} />
-            {/* swap popup */}
+            {/* Future profit/loss and liquidation price calculate */}
             <SwapModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
 
 

@@ -5,6 +5,7 @@ interface setHeight {
     show?:number;
     setShow?:any;
     widthFull?:boolean;
+    currentToken?:any;
 }
 const OrderBookFuture = (props:setHeight) => {
     // const [show,setShow] = useState(1);
@@ -120,22 +121,22 @@ const OrderBookFuture = (props:setHeight) => {
         </div>
         {
             props.show === 2 &&
-            <BuyTableFuture fullHeight={true} showPrice={true} />
+            <BuyTableFuture fullHeight={true} showPrice={true} currentToken={props.currentToken}/>
         }
         {
             props.show === 1 &&
             <>
-                <BuyTableFuture />
+                <BuyTableFuture currentToken={props.currentToken}/>
                 <div className='bg-card-bg py-[6px] px-[20px] flex items-center justify-between dark:bg-omega bg-white my-[10px]'>
-                    <p className='info-18 !text-black dark:!text-white'>28,654,25.52</p>
-                    <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>28,654,25.52</p>
+                    <p className='info-18 !text-black dark:!text-white'>{props?.currentToken?.token !==null ? (props?.currentToken?.token?.price).toFixed(5):(props?.currentToken?.global_token?.price).toFixed(5)}</p>
+                    <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !==null ? (props?.currentToken?.token?.price).toFixed(5):(props?.currentToken?.global_token?.price).toFixed(5)}</p>
                 </div>
-                <SelltableFuture />
+                <SelltableFuture currentToken={props.currentToken}/>
             </>
         }
         {
             props.show === 3 &&
-            <SelltableFuture show={props.show} fullHeight={true} showPrice={true} />
+            <SelltableFuture show={props.show} fullHeight={true} showPrice={true} currentToken={props.currentToken}/>
         }
     </div>
   )

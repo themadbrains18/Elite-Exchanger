@@ -3,6 +3,7 @@ interface setState {
     show?: number;
     fullHeight?:boolean;
     showPrice?:boolean;
+    currentToken?:any;
 }
 const SelltableFuture = (props:setState) => {
   return (
@@ -170,8 +171,8 @@ const SelltableFuture = (props:setState) => {
         {
             props.showPrice &&
             <div className='bg-card-bg py-[6px] px-[20px] flex items-center justify-between dark:bg-omega bg-white my-[10px]'>
-                <p className='info-18 !text-black dark:!text-white'>28,654,25.52</p>
-                <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>28,654,25.52</p>
+                <p className='info-18 !text-black dark:!text-white'>{props?.currentToken?.token !==null ? (props?.currentToken?.token?.price).toFixed(5):(props?.currentToken?.global_token?.price).toFixed(5)}</p>
+                <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !==null ? (props?.currentToken?.token?.price).toFixed(5):(props?.currentToken?.global_token?.price).toFixed(5)}</p>
             </div>
         }
     </>

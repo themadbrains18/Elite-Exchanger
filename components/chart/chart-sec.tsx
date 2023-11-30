@@ -17,18 +17,18 @@ const ChartSec = (props: propsData) => {
   }, [mode])
 
   return (
-    <div className='p-20 md:p-20 rounded-10  bg-white dark:bg-d-bg-primary'>
+    <div className=' rounded-10  bg-white dark:bg-d-bg-primary'>
      
 
       {/* <CandleStickChart hloc_data={priceData} /> */}
-      {/* <AdvancedRealTimeChart
-        symbol={`${props.slug}USDT`}
+      <AdvancedRealTimeChart
+        symbol={`${props.slug}`}
         interval="D"
         theme={mode === "dark" ? "dark" : "light"}
-        height={550}
+        height={630}
         container_id="tradingview_46b68"
-      ></AdvancedRealTimeChart> */}
-      <DemoChart />
+      ></AdvancedRealTimeChart>
+      {/* <DemoChart /> */}
     </div>
   )
 }

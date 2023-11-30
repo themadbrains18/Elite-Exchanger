@@ -14,7 +14,9 @@ interface showPopup {
     leverage?: any;
     sizeValue?: any;
     show?: any;
-    setTpSl?:any;
+    setTpSl?: any;
+    actionType?: any;
+    positionId?: any;
 }
 
 const ProfitLossModal = (props: showPopup) => {
@@ -64,7 +66,7 @@ const ProfitLossModal = (props: showPopup) => {
         let marketPrice = e?.target?.value;
         setStopLossValue(e?.target?.value);
 
-        if (props?.show === 1) {
+        if (props?.show === 'long') {
             //=====================================
             //=========== Coin PnL ================
             //=====================================
@@ -76,7 +78,7 @@ const ProfitLossModal = (props: showPopup) => {
             let usdt_pnl: any = (coin_pnl * parseFloat(marketPrice)).toFixed(5);
             setLoss(usdt_pnl);
         }
-        else if (props?.show === 2) {
+        else if (props?.show === 'short') {
 
 
             //=====================================
@@ -98,7 +100,7 @@ const ProfitLossModal = (props: showPopup) => {
             "position_id": "--",
             "user_id": session?.user?.user_id,
             "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
-            "side": props?.show === 1 ? "Close Long" : 'Close Short',
+            "side": props?.show === 'long' ? "Close Long" : 'Close Short',
             "type": 'take profit market', //e.g limit, take profit market, stop market
             "amount": 'close position', // limit order amount, close position
             "price_usdt": props.entryPrice, // limit order price
@@ -115,15 +117,11 @@ const ProfitLossModal = (props: showPopup) => {
             "coin_id": props?.currentToken?.coin_id,
         }
 
-        
-
-        
-
         let stoplossobj = {
             "position_id": "--",
             "user_id": session?.user?.user_id,
             "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
-            "side": props?.show === 1 ? "Close Long" : 'Close Short',
+            "side": props?.show === 'long' ? "Close Long" : 'Close Short',
             "type": 'stop market', //e.g limit, take profit market, stop market
             "amount": 'close position', // limit order amount, close position
             "price_usdt": props?.entryPrice, // limit order price
@@ -140,7 +138,39 @@ const ProfitLossModal = (props: showPopup) => {
             "coin_id": props?.currentToken?.coin_id,
         }
 
-        props.setTpSl({profit : profitobj, stopls : stoplossobj});
+        if (props?.actionType === 'buysell') {
+            props.setTpSl({ profit: profitobj, stopls: stoplossobj });
+        }
+        else {
+
+            profitobj.position_id = props?.positionId;
+            stoplossobj.position_id = props?.positionId;
+            let profitreponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": session?.user?.access_token
+                },
+                body: JSON.stringify(profitobj)
+            }).then(response => response.json());
+
+            let stopreponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": session?.user?.access_token
+                },
+                body: JSON.stringify(stoplossobj)
+            }).then(response => response.json());
+        }
+
+        setProfit(0);
+        setLoss(0);
+        setStopLossValue(0);
+        setTakeProfitValue(0);
+        props.setModelOverlay(false);
+        props.setModelPopup(0);
+
     }
 
     return (
