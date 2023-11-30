@@ -20,7 +20,7 @@ const SelectDropdown = (props: propsData) => {
         if (props.filterAsset !== undefined) {
             props?.filterAsset(itemText,props?.Spot);
         }
-        // props?.onCoinDropDownChange(itemText);
+        props.onCoinDropDownChange(itemText);
     }
     return (
         <div className={`relative dropdown-parent1 ${props.fullWidth && 'max-w-full w-full'}`}>

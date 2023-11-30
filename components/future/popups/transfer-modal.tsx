@@ -25,6 +25,7 @@ const TransferModal = (props: showPopup) => {
     const [isError, setIsError] = useState(false);
     const [amount, setAmount] = useState(0);
 
+
     function setValues() {
         if (Spot == 'Spot') {
             setFuture('Spot');
@@ -47,6 +48,7 @@ const TransferModal = (props: showPopup) => {
         });
 
         setCoinList(coins);
+        filterAsset(selectedCoin, 'Spot');
 
     }, [props?.assets]);
 
@@ -71,6 +73,11 @@ const TransferModal = (props: showPopup) => {
 
     const transferToWallet = async () => {
 
+        if(amount === 0 || amount < 0 ){
+            toast.error('Transfer amount must be positive number');
+            return;
+        }
+
         let obj = {
             user_id: session?.user?.user_id,
             from: Spot === "Spot" ? 'main_wallet' : 'future_wallet',
@@ -91,8 +98,9 @@ const TransferModal = (props: showPopup) => {
         if (assetReponse?.data?.status === 200) {
             toast.success(assetReponse?.data.data.message);
             props?.refreshWalletAssets();
-            props.setOverlay(false); 
+            props.setOverlay(false);
             props.setPopupMode(0)
+            setAmount(0);
         }
         else {
             toast.error(assetReponse?.data.data);
@@ -148,7 +156,7 @@ const TransferModal = (props: showPopup) => {
                 <SelectDropdown list={coinList} defaultValue="USDT" fullWidth={true} whiteColor={true} filterAsset={filterAsset} Spot={Spot} />
             </div>
             <div className='flex items-center bg-[#e5ecf0] dark:bg-[#373d4e] p-[11px] mt-[25px] rounded-[5px] dark:text-white text-black justify-between'>
-                <input type='number' className='outline-none  bg-[#e5ecf0] dark:bg-[#373d4e]' placeholder='Minumun transfer limit 0.01 USDT' onChange={(e) => {
+                <input type='number' value={amount} className='outline-none  bg-[#e5ecf0] dark:bg-[#373d4e]' placeholder='Minumun transfer limit 0.01 USDT' onChange={(e) => {
                     setAmount(parseFloat(e.target.value));
                     if (parseFloat(e.target.value) > userAsset?.balance) {
                         setIsError(true);
@@ -161,7 +169,7 @@ const TransferModal = (props: showPopup) => {
             </div>
             <p className={`top-label !text-[16px] mt-[15px] ${isError === true ? 'visible' : 'hidden'}`} style={{ color: 'red' }}>Insufficiant Balance</p>
             <p className='top-label !text-[16px] mt-[15px]'>Available {userAsset !== undefined && userAsset !== null ? userAsset?.balance : 0} {selectedCoin}</p>
-            <button disabled={isError} onClick={transferToWallet} className={`border bg-[#13c2c2] text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px] ${isError === true ? 'cursor-not-allowed opacity-50' : ''}`}>Transfer</button>
+            <button disabled={status === 'unauthenticated' ? true : false || isError} onClick={transferToWallet} className={`border bg-[#13c2c2] text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px] ${isError === true || status === 'unauthenticated' ? 'cursor-not-allowed opacity-50' : ''}`}>Transfer</button>
         </div>
     )
 }
