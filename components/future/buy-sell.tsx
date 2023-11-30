@@ -7,6 +7,7 @@ import AES from 'crypto-js/aes';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProfitLossModal from './popups/profit-loss-model';
+import Link from 'next/link';
 
 interface fullWidth {
     fullWidth?: boolean;
@@ -22,6 +23,7 @@ interface fullWidth {
     assets?: any;
     currentToken?: any;
     marginMode?: any;
+    refreshWalletAssets?:any;
 }
 
 const BuySell = (props: fullWidth) => {
@@ -43,6 +45,7 @@ const BuySell = (props: fullWidth) => {
     const [istpslchecked, setIsTpSlchecked] = useState(false);
 
     const [buttonStyle, setButtonStyle] = useState(false);
+    const [stopPrice, setStopPrice] = useState('0');
 
     let openOrderObj = {
         "position_id": "--",
@@ -103,6 +106,9 @@ const BuySell = (props: fullWidth) => {
 
     }, [props?.currentToken?.coin_symbol, props.assets]);
 
+    // ===================================================================//
+    // =======Change wallet balance according to token change=============//
+    // ===================================================================//
     const onCoinDropDownChange = (token: any) => {
 
         let futureAssets = props?.assets?.filter((item: any) => {
@@ -129,12 +135,18 @@ const BuySell = (props: fullWidth) => {
         setSymbol(token);
     }
 
+    // ===================================================================//
+    // asset amount value using range slider //
+    // ===================================================================//
     const onChangeSizeInPercentage = (value: any) => {
 
         let actualValue = (avaibalance * value) / 100;
         setSizeValue(actualValue);
     }
 
+    // ===================================================================//
+    // Submit form data in case of limit and market trading//
+    // ===================================================================//
     const submitForm = async () => {
 
         let obj;
@@ -258,9 +270,13 @@ const BuySell = (props: fullWidth) => {
             }
             toast.success(reponse?.data?.data?.message);
             setButtonStyle(false);
+            props?.refreshWalletAssets();
         }
     }
 
+    // ===================================================================//
+    // =======Take Profit and Sop Loss popup hide and shoow===============//
+    // ===================================================================//
     const profitlosspopupenable = (event: any) => {
         if (event.currentTarget.checked === true) {
             setModelPopup(1);
@@ -272,6 +288,9 @@ const BuySell = (props: fullWidth) => {
         setIsTpSlchecked(event?.currentTarget?.checked);
     }
 
+    // ===================================================================//
+    // =====Validation in case of amount more than enter wallet value=====//
+    // ===================================================================//
     const onChangeSizeValue = (e: any) => {
         setSizeValue(parseFloat(e.target.value));
         setButtonStyle(false);
@@ -283,9 +302,65 @@ const BuySell = (props: fullWidth) => {
         }
     }
 
+    // ===================================================================//
+    // =====Submit form data in case of stop limit trading ===============//
+    // ===================================================================//
+    const submitStopLimitForm = async(type: any) => {
+        try {
+            let obj = {
+                "position_id": "--",
+                "user_id": session?.user?.user_id,
+                "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
+                "side": type,
+                "type": 'Take Profit Limit', //e.g limit, take profit market, stop market
+                "amount": sizeValue.toString(), // limit order amount, close position
+                "price_usdt": entryPrice, // limit order price
+                "trigger": stopPrice, // TP/SL posiotion amount , limit order --
+                "reduce_only": "No", // TP/SL case Yes, limit order No
+                "post_only": "No", //No
+                "status": false,
+                "leverage": 0,
+                "margin": sizeValue / props?.marginMode?.leverage,
+                "liq_price": 0,
+                "market_price": props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price,
+                "order_type": "value",
+                "leverage_type": props?.marginMode?.margin,
+                "coin_id": props?.currentToken?.coin_id,
+            }
+
+            let reponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": session?.user?.access_token
+                },
+                body: JSON.stringify(obj)
+            }).then(response => response.json());
+    
+            if (reponse?.data?.status !== 200) {
+                toast.error(reponse?.data?.data?.message !== undefined ? reponse?.data?.data?.message : reponse?.data?.data);
+                setButtonStyle(false);
+            }
+            else {
+                
+                const websocket = new WebSocket('ws://localhost:3001/');
+                let position = {
+                    ws_type: 'position'
+                }
+                websocket.onopen = () => {
+                    websocket.send(JSON.stringify(position));
+                }
+                toast.success(reponse?.data?.data?.message);
+                setButtonStyle(false);
+                props?.refreshWalletAssets();
+            }
+        } catch (error) {
+            
+        }
+    }
+
     return (
         <>
-
             <div className={`p-[16px] dark:bg-[#1f2127] bg-[#fff] ${props.fullWidth ? 'max-w-full h-auto' : 'max-w-[300px] h-[677px]'} w-full border-l border-b dark:border-[#25262a] border-[#e5e7eb]`}>
                 <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer' onClick={() => { props.setOverlay(true); props.setPopupMode(1) }}>
                     <div className='flex items-center gap-10'>
@@ -318,14 +393,12 @@ const BuySell = (props: fullWidth) => {
                         <button className={`admin-body-text ${showNes === 1 ? '!text-black dark:!text-white' : '!text-[#a3a8b7]'}`} onClick={() => { setShowNes(1); setMarketType('limit') }}>Limit</button>
                         <button className={`admin-body-text ${showNes === 2 ? '!text-black dark:!text-white' : '!text-[#a3a8b7]'}`} onClick={() => { setShowNes(2); setMarketType('market') }}>Market</button>
                         <button className={`admin-body-text ${showNes === 3 ? '!text-black dark:!text-white' : '!text-[#a3a8b7]'}`} onClick={() => { setShowNes(3); setMarketType('stop') }}>Stop Limit</button>
-
                     </div>
                     <div className='cursor-pointer' onClick={() => { props.setOverlay(true); props.setPopupMode(2) }}>
                         <IconsComponent type='swap-calender' />
                     </div>
                 </div>
-
-                {/* available */}
+                {/* available Balance*/}
                 <div className='flex items-center gap-[8px] mt-10'>
                     <p className='admin-body-text !text-[12px] !text-[#a3a8b7]'>Available: {avaibalance}</p>
                     <p className='admin-body-text !text-[12px] !text-white'> {symbol}</p>
@@ -376,8 +449,8 @@ const BuySell = (props: fullWidth) => {
                     <>
                         <div className='mt-10 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
                             <div>
-                                <p className='top-label'>Stop  </p>
-                                <input type="number" placeholder='Please enter stop amount' step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
+                                <p className='top-label'>Stop Price </p>
+                                <input type="number" placeholder='0' onChange={(e)=>setStopPrice(e.target?.value)} step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
                             </div>
                             <div>
                                 <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p>
@@ -385,8 +458,8 @@ const BuySell = (props: fullWidth) => {
                         </div>
                         <div className='mt-10 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
                             <div>
-                                <p className='top-label'>Limit  </p>
-                                <input type="number" placeholder='Please enter limit amount' step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
+                                <p className='top-label'>Price  </p>
+                                <input type="number" placeholder='0' onChange={(e)=>setEntryPrice(parseFloat(e.target?.value))} step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
                             </div>
                             <div>
                                 <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p>
@@ -394,22 +467,14 @@ const BuySell = (props: fullWidth) => {
                         </div>
                         <div className='mt-10 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
                             <div>
-                                <p className='top-label'>Amount  </p>
-                                <input type="number" placeholder={`Please enter amount`} step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
+                                <p className='top-label'>Size  </p>
+                                <input type="number" placeholder='0' onChange={(e)=>setSizeValue(parseFloat(e.target.value))} step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
                             </div>
                             <div>
-                                <p className='admin-body-text !text-[12px] dark:!text-white'> {props?.currentToken?.coin_symbol}</p>
+                                <p className='admin-body-text !text-[12px] dark:!text-white'> {symbol}</p>
                             </div>
                         </div>
-                        <div className='mt-10 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
-                            <div>
-                                <p className='top-label'>Total  </p>
-                                <input type="number" placeholder='Please enter amount' step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
-                            </div>
-                            <div>
-                                <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p>
-                            </div>
-                        </div>
+                        
                     </>
                 }
 
@@ -422,7 +487,6 @@ const BuySell = (props: fullWidth) => {
                 {(showNes === 1 || showNes === 2) &&
                     <>
                         <div className='flex items-center justify-between mt-[20px]'>
-
                             <div className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`} >
                                 <input id={`custom-radio${props.radioId}`} type="checkbox" onChange={(e) => { profitlosspopupenable(e) }
                                 } value="" name="colored-radio" className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
@@ -445,42 +509,48 @@ const BuySell = (props: fullWidth) => {
                                     before:h-[10px]
                                     before:absolute
                                     before:z-[1]
-                                    
                                     ">
                                     <p className="ml-2 md-text !text-[14px]">TP/SL</p>
                                 </label>
                             </div>
                         </div>
-
-                        <div className='mt-[20px]'>
-                            <div className='flex gap-5 items-center justify-between'>
-                                <p className="top-label">Buy</p>
-                                <p className="top-label !text-[#000] dark:!text-[#fff]">{sizeValue} {symbol}</p>
-                            </div>
-                            {
-                                show === 1 &&
-                                <div className='mt-[5px]'>
-                                    <button disabled={buttonStyle} className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true ? 'cursor-not-allowed opacity-50' : ''}`} onClick={submitForm}>Open Long</button>
+                        {
+                            status !== 'unauthenticated' &&
+                            <div className='mt-[20px]'>
+                                <div className='flex gap-5 items-center justify-between'>
+                                    <p className="top-label">Buy</p>
+                                    <p className="top-label !text-[#000] dark:!text-[#fff]">{sizeValue} {symbol}</p>
                                 </div>
-                            }
-                            {
-                                show === 2 &&
-                                <div className='mt-[5px]'>
-                                    <button disabled={buttonStyle} className={`solid-button w-full !bg-sell !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true ? 'cursor-not-allowed opacity-50' : ''}`} onClick={submitForm}>Open Short</button>
+                                {
+                                    show === 1 &&
+                                    <div className='mt-[5px]'>
+                                        <button disabled={buttonStyle} className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true ? 'cursor-not-allowed opacity-50' : ''}`} onClick={submitForm}>Open Long</button>
+                                    </div>
+                                }
+                                {
+                                    show === 2 &&
+                                    <div className='mt-[5px]'>
+                                        <button disabled={buttonStyle} className={`solid-button w-full !bg-sell !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true ? 'cursor-not-allowed opacity-50' : ''}`} onClick={submitForm}>Open Short</button>
+                                    </div>
+                                }
+                                <div className='flex gap-5 items-center justify-between mt-[5px]'>
+                                    <p className="top-label">Margin</p>
+                                    <p className="top-label !text-[#000] dark:!text-[#fff]">{sizeValue / props?.marginMode?.leverage}</p>
                                 </div>
-                            }
-                            <div className='flex gap-5 items-center justify-between mt-[5px]'>
-                                <p className="top-label">Margin</p>
-                                <p className="top-label !text-[#000] dark:!text-[#fff]">{sizeValue / props?.marginMode?.leverage}</p>
+                                <div className='flex gap-5 items-center justify-between mt-[5px]'>
+                                    <p className="top-label">Max</p>
+                                    <p className="top-label !text-[#000] dark:!text-[#fff]">{avaibalance * props?.marginMode?.leverage} {symbol}</p>
+                                </div>
                             </div>
-                            <div className='flex gap-5 items-center justify-between mt-[5px]'>
-                                <p className="top-label">Max</p>
-                                <p className="top-label !text-[#000] dark:!text-[#fff]">{avaibalance * props?.marginMode?.leverage} {symbol}</p>
-                            </div>
-                        </div>
 
+                        }
+                        {
+                            status === 'unauthenticated' &&
+                            <div className='mt-[20px]'>
+                                <Link href="/login" className="solid-button w-full block text-center !rounded-[8px] py-[10px] px-[15px] !text-[14px]">Login</Link>
+                            </div>
+                        }
                         {/* open long */}
-
                         <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[10px]' onClick={() => { props.setOverlay(true); props.setPopupMode(4) }}>
                             <div className='flex items-center gap-10'>
                                 <p className='top-label dark:!text-white !text-[#000]'>Fee Rate</p>
@@ -493,26 +563,30 @@ const BuySell = (props: fullWidth) => {
                 {/* ================================= */}
                 {/* Future trading in stop limit case */}
                 {/* ================================= */}
+
                 {
-                    showNes === 3 &&
+                    showNes === 3 && status !== 'unauthenticated' &&
                     <div className='mt-[20px]'>
                         {
                             show === 1 &&
                             <div className='mt-[5px]'>
-                                <button disabled={buttonStyle} className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true ? 'cursor-not-allowed opacity-50' : ''}`} onClick={submitForm}>Buy {props?.currentToken?.coin_symbol}</button>
+                                <button disabled={buttonStyle} className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true ? 'cursor-not-allowed opacity-50' : ''}`} onClick={() => submitStopLimitForm('Buy')}>Buy Long</button>
                             </div>
                         }
                         {
                             show === 2 &&
                             <div className='mt-[5px]'>
-                                <button disabled={buttonStyle} className={`solid-button w-full !bg-sell !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true ? 'cursor-not-allowed opacity-50' : ''}`} onClick={submitForm}>Sell {props?.currentToken?.coin_symbol}</button>
+                                <button disabled={buttonStyle} className={`solid-button w-full !bg-sell !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true ? 'cursor-not-allowed opacity-50' : ''}`} onClick={() => submitStopLimitForm('Sell')}>Sell Short</button>
                             </div>
                         }
-
                     </div>
                 }
-
-
+                {
+                    showNes === 3 && status === 'unauthenticated' &&
+                    <div className='mt-[20px]'>
+                        <Link href="/login" className="solid-button w-full block text-center !rounded-[8px] py-[10px] px-[15px] !text-[14px]">Login</Link>
+                    </div>
+                }
             </div>
 
             {/* overlay */}

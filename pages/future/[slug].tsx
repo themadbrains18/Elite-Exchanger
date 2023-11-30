@@ -190,7 +190,7 @@ const FutureTrading = (props: Session) => {
                 </div>
                 <div>
                     {/* Buy/Sell open short traading component */}
-                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} />
+                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets}/>
                     <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode}  />
                 </div>
             </div>
