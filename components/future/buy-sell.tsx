@@ -4,7 +4,7 @@ import RangeSlider from './range-slider';
 import SelectDropdown from './snippet/select-dropdown';
 import { useSession } from 'next-auth/react';
 import AES from 'crypto-js/aes';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ProfitLossModal from './popups/profit-loss-model';
 
@@ -19,10 +19,11 @@ interface fullWidth {
     setPopupMode?: any;
     setOverlay?: any;
     overlay?: boolean;
-    futureAssets?: any;
+    assets?: any;
     currentToken?: any;
     marginMode?: any;
 }
+
 const BuySell = (props: fullWidth) => {
 
     // main tabs
@@ -40,6 +41,8 @@ const BuySell = (props: fullWidth) => {
     const [marketType, setMarketType] = useState('limit');
     const [entryPrice, setEntryPrice] = useState(0);
     const [istpslchecked, setIsTpSlchecked] = useState(false);
+
+    const [buttonStyle, setButtonStyle] = useState(false);
 
     let openOrderObj = {
         "position_id": "--",
@@ -65,26 +68,41 @@ const BuySell = (props: fullWidth) => {
 
     let marketPrice = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
 
+
     useEffect(() => {
         setSymbol('USDT');
 
-        let asset = props?.futureAssets?.filter((item: any) => {
+        let futureAssets = props?.assets?.filter((item: any) => {
+            return item.walletTtype === 'future_wallet'
+        });
+
+        let asset = futureAssets?.filter((item: any) => {
             let tokenSymbol = item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol;
             return tokenSymbol === 'USDT';
         });
 
         if (asset?.length > 0) {
+            if(asset[0].balance === 0){
+                setButtonStyle(true);
+            }
+            else{
+                setButtonStyle(false);
+            }
             setAvailBalance(asset[0].balance);
         }
         else {
             setAvailBalance(0);
+            setButtonStyle(true);
         }
 
-    }, [props?.currentToken?.coin_symbol]);
+    }, [props?.currentToken?.coin_symbol, props.assets]);
 
     const onCoinDropDownChange = (token: any) => {
 
-        let asset = props?.futureAssets?.filter((item: any) => {
+        let futureAssets = props?.assets?.filter((item: any) => {
+            return item.walletTtype === 'future_wallet'
+        });
+        let asset = futureAssets?.filter((item: any) => {
             let tokenSymbol = item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol;
             return tokenSymbol === token;
         });
@@ -172,6 +190,7 @@ const BuySell = (props: fullWidth) => {
             }
         }
 
+        setButtonStyle(true);
         // 
         const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
         let record = encodeURIComponent(ciphertext.toString());
@@ -187,6 +206,7 @@ const BuySell = (props: fullWidth) => {
 
         if (reponse?.data?.status !== 200) {
             toast.error(reponse?.data?.data?.message !== undefined ? reponse?.data?.data?.message : reponse?.data?.data);
+            setButtonStyle(false);
         }
         else {
             if (istpslchecked === true) {
@@ -224,6 +244,7 @@ const BuySell = (props: fullWidth) => {
                 websocket.send(JSON.stringify(position));
             }
             toast.success(reponse?.data?.data?.message);
+            setButtonStyle(false);
         }
     }
 
@@ -236,6 +257,17 @@ const BuySell = (props: fullWidth) => {
         }
         setModelOverlay(event?.currentTarget?.checked);
         setIsTpSlchecked(event?.currentTarget?.checked);
+    }
+
+    const onChangeSizeValue = (e: any) => {
+        setSizeValue(parseFloat(e.target.value));
+        setButtonStyle(false);
+        if(parseFloat(e.target.value) > avaibalance * props?.marginMode?.leverage){
+            setButtonStyle(true);
+        }
+        if(parseFloat(e.target.value) / props?.marginMode?.leverage > avaibalance){
+            setButtonStyle(true);
+        }
     }
 
     return (
@@ -271,7 +303,7 @@ const BuySell = (props: fullWidth) => {
                 <div className='flex items-center gap-[8px] mt-10'>
                     <p className='admin-body-text !text-[12px] !text-[#a3a8b7]'>Available: {avaibalance}</p>
                     <p className='admin-body-text !text-[12px] !text-white'> {symbol}</p>
-                    <div onClick={()=>{props.setOverlay(true); props.setPopupMode(3)}}>
+                    <div onClick={() => { props.setOverlay(true); props.setPopupMode(3) }}>
                         <IconsComponent type='swap-calender-with-circle' />
                     </div>
                 </div>
@@ -292,13 +324,14 @@ const BuySell = (props: fullWidth) => {
                         <p className='top-label mt-[5px]'>Current Price : {marketPrice}</p>
                     </>
                 }
+
                 {/* Size input */}
                 {(showNes === 1 || showNes === 2) &&
                     <>
                         <div className='mt-10 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
                             <div>
                                 <p className='top-label'>Size  </p>
-                                <input type="number" placeholder={props?.currentToken?.coin_symbol === symbol ? props?.currentToken?.coin_min_trade : props?.currentToken?.usdt_min_trade} value={sizeValue} onChange={(e) => { setSizeValue(parseFloat(e.target.value)) }} step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
+                                <input type="number" placeholder={props?.currentToken?.coin_symbol === symbol ? props?.currentToken?.coin_min_trade : props?.currentToken?.usdt_min_trade} value={sizeValue} onChange={(e) => { onChangeSizeValue(e) }} step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
                             </div>
                             <div>
                                 {/* <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p> */}
@@ -391,13 +424,13 @@ const BuySell = (props: fullWidth) => {
                     {
                         show === 1 &&
                         <div className='mt-[5px]'>
-                            <button className=' solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px]' onClick={submitForm}>Open Long</button>
+                            <button disabled={buttonStyle} className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true?'cursor-not-allowed opacity-50':''}`} onClick={submitForm}>Open Long</button>
                         </div>
                     }
                     {
                         show === 2 &&
                         <div className='mt-[5px]'>
-                            <button className=' solid-button w-full !bg-sell !rounded-[8px] py-[10px] px-[15px] !text-[14px]' onClick={submitForm}>Open Short</button>
+                            <button disabled={buttonStyle} className={`solid-button w-full !bg-sell !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true?'cursor-not-allowed opacity-50':''}`} onClick={submitForm}>Open Short</button>
                         </div>
                     }
                     <div className='flex gap-5 items-center justify-between mt-[5px]'>

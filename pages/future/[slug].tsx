@@ -36,15 +36,15 @@ const FutureTrading = (props: Session) => {
     const router = useRouter();
     const [show, setShow] = useState(1);
     const [marginMode, setMarginMode] = useState({ margin: 'Isolated', leverage: 10 });
-
     const [popupMode, setPopupMode] = useState(0);
     const [overlay, setOverlay] = useState(false);
     const [showMob, setShowMob] = useState(1);
-    const [show1, setShow1] = useState(false)
+    const [show1, setShow1] = useState(false);
     const [currentToken, setCurrentToken] = useState([]);
     const [allCoins, setAllCoins] = useState(props.coinList);
     const [positions, setPositionData] = useState([]);
     const [openOrders, setOpenOrders] = useState([]);
+    const [allAssets, setAllAssets] = useState(props?.assets);
 
     const { slug } = router.query;
 
@@ -135,14 +135,26 @@ const FutureTrading = (props: Session) => {
         }
     }
 
-    let futureAssets = props?.assets.filter((item: any) => {
-        return item.walletTtype === 'future_wallet'
-    });
+    // let futureAssets = props?.assets.filter((item: any) => {
+    //     return item.walletTtype === 'future_wallet'
+    // });
 
     const setMarginModeAndLeverage = (marginType: string, leverage: number) => {
         setMarginMode({ margin: marginType, leverage: leverage });
         setPopupMode(0);
         setOverlay(false);
+    }
+
+    const refreshWalletAssets=async()=>{
+        let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${props?.session?.user?.user_id}`, {
+            method: "GET",
+            headers: {
+                "Authorization": props?.session?.user?.access_token
+            },
+        }).then(response => response.json());
+
+        setAllAssets(userAssets);
+        // console.log(userAssets,'=======refresh user Assets data ==========');
     }
 
     return (
@@ -178,7 +190,7 @@ const FutureTrading = (props: Session) => {
                 </div>
                 <div>
                     {/* Buy/Sell open short traading component */}
-                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} futureAssets={futureAssets} currentToken={currentToken[0]} marginMode={marginMode} />
+                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} />
                     <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode}  />
                 </div>
             </div>
@@ -224,7 +236,7 @@ const FutureTrading = (props: Session) => {
             <SwapModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
 
 
-            <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
+            <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} refreshWalletAssets={refreshWalletAssets}/>
 
             <TradingFeeMadal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
         
