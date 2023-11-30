@@ -18,7 +18,7 @@ const SelectDropdown = (props: propsData) => {
         // props?.onCoinDropDownChange(itemText);
     }
   return (
-    <div className={`relative dropdown-parent1 ${props.fullWidth && 'max-w-full w-full'}`}>
+    <div className={`relative dropdown-parent ${props.fullWidth && 'max-w-full w-full'}`}>
         <div className={`flex items-center ${props.fullWidth && 'max-w-full w-full justify-between'}`} onClick={()=>{setShowDrop(!showDrop)}}>
             <p className={`inputText top-label cursor-pointer ${props.whiteColor && 'dark:!text-[#fff] !text-[#000]' } ${props.showNes === 3 && 'dark:!text-[#fff] !text-[#000]'}`}>{props.defaultValue}</p>
             {/* <input type="text" id='paymentMethod' className="top-label outline-none cursor-pointer dark:bg-[#1f2127] bg-[#fff] max-w-[100px] w-full"

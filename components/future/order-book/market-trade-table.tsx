@@ -8,7 +8,7 @@ interface setState {
 }
 const MarketTrades = (props:setState) => {
   return (
-    <div className={`bg-[#fafafa] dark:bg-[#1a1b1f] min-[990px]:border-l dark:border-[#25262a] border-[#e5e7eb] py-[14px] max-[991px]:px-0 px-[16px] ${props.widthFull ? "max-w-full":"max-w-[300px]"}  w-full`}>
+    <div className={`bg-[#fafafa] dark:bg-[#1a1b1f] min-[990px]:border-l dark:border-[#25262a] border-[#e5e7eb] py-[14px] px-[16px] ${props.widthFull ? "max-w-full":"max-w-[300px]"}  w-full`}>
         <h3 className='top-label dark:!text-white !text-[#000] max-[991px]:hidden'>Market Trades</h3>
         <div className={`overflow-y-auto orderTable max-h-[172px] min-[1500px]:max-h-[170px]`}>
             {/* head */}

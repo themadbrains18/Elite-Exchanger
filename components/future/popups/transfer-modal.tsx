@@ -66,7 +66,7 @@ const TransferModal = (props:showPopup) => {
                     <p className="top-label dark:!text-white !text-black">{future}</p>
                 </div>
             </div>
-            <div onClick={()=>{setValues()}} className='dark:bg-[#373d4e] bg-[#e5ecf0] w-full h-full flex h-[96px] w-full max-w-[100px] border dark:border-[#373d4e] border-[#e5e7eb] cursor-pointer '>
+            <div onClick={()=>{setValues()}} className='dark:bg-[#373d4e] bg-[#e5ecf0] w-full flex h-[96px] w-full max-w-[100px] border dark:border-[#373d4e] border-[#e5e7eb] cursor-pointer '>
                 <div className='rotate-[90deg]'>
                     <IconsComponent type='transferIcon' />
                 </div>
