@@ -7,6 +7,7 @@ import IconsComponent from '../snippets/icons';
 import LanguageCurrency from '../snippets/language-currency';
 import { toast } from 'react-toastify';
 import { signOut, useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 interface defaultStates {
   showMenu: boolean;
@@ -20,6 +21,8 @@ interface defaultStates {
 const ResponsiveSidebar = (props: defaultStates) => {
 
   const { status, data: session } = useSession();
+  const router = useRouter();
+
 
   const [profileImg, setProfileImg] = useState('');
 
@@ -93,7 +96,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
 
   return (
 
-    <div className={` ${props.showMenu ? "opacity-1 visible" : "opacity-0 invisible"} duration-300 fixed top-[100px] left-0 w-full h-full min-h-[100vh] overflow-y-auto bg-off-white dark:bg-black-v-1 py-[40px] px-[15px] pb-[120px] z-[2]`}>
+    <div className={` ${props.showMenu ? "opacity-1 visible" : "opacity-0 invisible"} duration-300 fixed ${router.pathname.includes("/future") ? 'top-[77px]':'top-[100px]' } left-0 w-full h-full min-h-[100vh] overflow-y-auto bg-off-white dark:bg-black-v-1 py-[40px] px-[15px] pb-[120px] z-[2]`}>
       <div className='bg-white dark:bg-d-bg-primary p-[20px] rounded-[10px]'>
         <div className='flex items-center gap-[15px] cursor-pointer pb-[23px] border-b border-[#E9EAF0] dark:border-[#e9eaf00f] mb-[30px] relative' onClick={() => { props.setShowMenu(false) }}>
           <div className='relative inline-block clip-bg'>

@@ -276,7 +276,10 @@ const BuySell = (props: fullWidth) => {
             <div className={`p-[16px] dark:bg-[#1f2127] bg-[#fff] ${props.fullWidth ? 'max-w-full h-auto' : 'max-w-[300px] h-[677px]'} w-full border-l border-b dark:border-[#25262a] border-[#e5e7eb]`}>
                 <div className='flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer' onClick={() => { props.setOverlay(true); props.setPopupMode(1) }}>
                     <div className='flex items-center gap-10'>
-                        <p className='top-label dark:!text-white !text-[#000]'>{props?.marginMode?.margin}</p>
+                        <p className='top-label dark:!text-white !text-[#000]'>{
+                            props?.marginMode?.margin ?
+                            <span>{props?.marginMode?.margin}</span> : <span>Isolated </span>
+                        }</p>
                         <p className='bg-[#13c2c21f] px-[5px] text-[#13c2c2] text-[12px]'>{props?.marginMode?.leverage}X</p>
                     </div>
                     <IconsComponent type='rightArrowWithoutBg' />

@@ -161,7 +161,7 @@ const FutureTrading = (props: Session) => {
         <>
             <ToastContainer />
             {/* For Desktop use */}
-            <div className='max-[991px]:hidden flex'>
+            <div className='max-[991px]:hidden flex mt-[83px]'>
                 <div className='w-full max-w-[calc(100%-300px)]'>
                     {/* future trade page top header */}
                     <TopBar show={show1} setShow={setShow1} currentToken={currentToken[0]} />
@@ -196,7 +196,7 @@ const FutureTrading = (props: Session) => {
             </div>
 
             {/* For mobile use */}
-            <div className='max-[991px]:block hidden'>
+            <div className='max-[991px]:block hidden mt-[77px]'>
                 <div className='relative'>
                     <TopBar show={show1} setShow={setShow1} currentToken={currentToken[0]} />
                     <div className={`w-full max-w-full absolute duration-300 z-[4] top-[76px] ${show1 ? 'left-0' : 'left-[-100%]'}`}>
