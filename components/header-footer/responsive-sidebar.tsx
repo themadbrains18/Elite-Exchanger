@@ -31,18 +31,23 @@ const ResponsiveSidebar = (props: defaultStates) => {
     {
       "name": "Market",
       "url": "/market",
-      "svgType": "marketIcon"
+      "svgType": "marketIcon",
+
     },
-    // {
-    //   "name": "Trade History",
-    //   "url": "/history",
-    //   "svgType": "TradeHistory"
-    // },
-    // {
-    //   "name": "Wallet",
-    //   "url": "/wallet",
-    //   "svgType": "walletIcon"
-    // },
+    {
+      name: "Trades",
+      url: "#",
+      dropdown:true,
+      "svgType": "marketIcon",
+      rotateIcon:true
+    },
+    {
+      name: "Derivatives",
+      url: "#",
+      dropdown:true,
+      "svgType": "marketIcon",
+      rotateIcon:true
+    },
 
   ]
   const showLists = useRef<HTMLDivElement>(null);
@@ -94,6 +99,114 @@ const ResponsiveSidebar = (props: defaultStates) => {
     }.bind(this);
   };
 
+  let data = [
+    {
+      image: "Coin.svg",
+      name: "Bitcoin",
+      symbol: "BTC",
+      status: "high",
+      price: "43,975.72",
+      change24h: "+4%",
+      high:'44,727.80',
+      low:'43,318.64',
+      link:'/chart/BTC'
+    },
+    {
+      image: "Coin.svg",
+      name: "Bitcoin",
+      symbol: "BTC",
+      status: "high",
+      price: "43,975.72",
+      change24h: "+4%",
+      high:'44,727.80',
+      low:'43,318.64',
+      link:'/chart/BTC'
+    },
+    {
+      image: "Coin.svg",
+      name: "Bitcoin",
+      symbol: "BTC",
+      status: "high",
+      price: "43,975.72",
+      change24h: "+4%",
+      high:'44,727.80',
+      low:'43,318.64',
+      link:'/chart/BTC'
+    }
+  ]
+  let DerivativesData = [
+    {
+      image: "Coin.svg",
+      name: "Bitcoin",
+      symbol: "BTC",
+      status: "high",
+      price: "43,975.72",
+      change24h: "+4%",
+      high:'44,727.80',
+      low:'43,318.64',
+      link:'/future/BTCUSDT'
+    },
+    {
+      image: "Coin.svg",
+      name: "Bitcoin",
+      symbol: "BTC",
+      status: "high",
+      price: "43,975.72",
+      change24h: "+4%",
+      high:'44,727.80',
+      low:'43,318.64',
+      link:'/future/BTCUSDT'
+    },
+    {
+      image: "Coin.svg",
+      name: "Bitcoin",
+      symbol: "BTC",
+      status: "high",
+      price: "43,975.72",
+      change24h: "+4%",
+      high:'44,727.80',
+      low:'43,318.64',
+      link:'/future/BTCUSDT'
+    }
+  ]
+
+  // useEffect(()=>{
+    
+  // },[])
+
+  function setDropdownHeight(e:any){
+    console.log(e.currentTarget);
+    // set false to nav menu when click on nested items in dropdown
+        let nextSibling = e.currentTarget?.nextElementSibling;
+        if(nextSibling){
+          let nextSiblingLinks = nextSibling?.querySelectorAll('a');
+          for(let i of nextSiblingLinks){
+            i.addEventListener("click",()=>{
+              props.setShowMenu(false) 
+            })
+          }
+        }
+
+        // set height to dropdown
+        
+        if(nextSibling){
+          
+          props.setShowMenu(true);
+          e.currentTarget.classList.toggle("show");
+          let siblingHeight = nextSibling?.scrollHeight;  
+
+          if(e.currentTarget.classList.contains("show")){
+            nextSibling?.setAttribute("style",`height:${siblingHeight}px`);
+            // e.currentTarget.classList.remove("show");
+          }else{
+            nextSibling?.removeAttribute('style');
+          }
+
+        }else{
+          props.setShowMenu(false) 
+        }
+  }
+
   return (
 
     <div className={` ${props.showMenu ? "opacity-1 visible" : "opacity-0 invisible"} duration-300 fixed ${router.pathname.includes("/future") ? 'top-[57px]':'top-[100px]' } left-0 w-full h-full min-h-[100vh] overflow-y-auto bg-off-white dark:bg-black-v-1 py-[40px] px-[15px] pb-[120px] z-[2]`}>
@@ -115,24 +228,74 @@ const ResponsiveSidebar = (props: defaultStates) => {
               {
                 ResponsivelinkList.map((elem, index) => {
                   return (
-                    <li key={index} className='flex items-center justify-between mb-[36px] last:mb-0 relative' onClick={() => { props.setShowMenu(false) }}>
-                      <div className='flex items-center gap-[15px]'>
-                        <IconsComponent type={elem.svgType} hover={false} active={false} />
-                        <Link href={elem.url} className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>{elem.name}</Link>
+                    <li key={index} className='flex flex-col items-center justify-between mb-[36px] last:mb-0 relative' >
+                      <div className='flex items-center justify-between w-full dropdownCta' onClick={(e)=>{setDropdownHeight(e)}}>
+                        <div className='flex items-center gap-[15px]'>
+                          <IconsComponent type={elem.svgType} hover={false} active={false} />
+                          <Link href={elem.url} className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>{elem.name}</Link>
+                        </div>
+                        
+                          <svg
+                            className={`${elem.rotateIcon && 'rotate-[90deg]'}`}
+                            width={7}
+                            height={12}
+                            viewBox="0 0 7 12"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M0.303884 9.73692C0.000451519 10.1004 0.0501666 10.6404 0.4136 10.9438C0.777033 11.2472 1.3179 11.1975 1.62047 10.8341L5.90624 6.54831C5.94053 6.50802 5.95681 6.46002 5.98253 6.41545C6.0031 6.38031 6.0271 6.34945 6.04253 6.31088C6.08196 6.21059 6.1051 6.10602 6.1051 5.99973C6.1051 5.89345 6.08196 5.78887 6.04253 5.68858C6.0271 5.65001 6.0031 5.61916 5.98253 5.58401C5.95681 5.53944 5.94053 5.49144 5.90624 5.45115L1.62047 1.16538C1.3179 0.801093 0.777033 0.752236 0.4136 1.05567C0.0501662 1.35824 0.000451161 1.89825 0.303884 2.26254L3.41792 5.14258L4.275 5.99965L3.41585 6.85881L0.303884 9.73692Z"
+                              fill="#9295A6"
+                            />
+                          </svg>
+                        
+
                       </div>
-                      <svg
-                        width={7}
-                        height={12}
-                        viewBox="0 0 7 12"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M0.303884 9.73692C0.000451519 10.1004 0.0501666 10.6404 0.4136 10.9438C0.777033 11.2472 1.3179 11.1975 1.62047 10.8341L5.90624 6.54831C5.94053 6.50802 5.95681 6.46002 5.98253 6.41545C6.0031 6.38031 6.0271 6.34945 6.04253 6.31088C6.08196 6.21059 6.1051 6.10602 6.1051 5.99973C6.1051 5.89345 6.08196 5.78887 6.04253 5.68858C6.0271 5.65001 6.0031 5.61916 5.98253 5.58401C5.95681 5.53944 5.94053 5.49144 5.90624 5.45115L1.62047 1.16538C1.3179 0.801093 0.777033 0.752236 0.4136 1.05567C0.0501662 1.35824 0.000451161 1.89825 0.303884 2.26254L3.41792 5.14258L4.275 5.99965L3.41585 6.85881L0.303884 9.73692Z"
-                          fill="#9295A6"
-                        />
-                      </svg>
-                      <Link href={elem.url} className='absolute top-0 left-0 right-0 h-full'></Link>
+                      {elem?.dropdown && elem.name == 'Trades' &&
+                            <div className="duration-300 w-full max-w-full mobileDropdown h-0 overflow-hidden rounded-[12px] dark:bg-omega bg-white px-[15px]">
+                                <ul>
+                                  {data?.map((item:any,nesIndex:any) => {
+                                      return(
+                                        <li key={nesIndex} className="mb-[10px]">
+                                          <Link href={item.link} className='block'>
+                                            <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
+                                              <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" />
+                                              <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
+                                                <p className="info-14-18 dark:text-white">{item.name}</p>
+                                                <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
+                                              </div>
+                                            </div>
+                                          </Link>
+                                        </li>
+                                      )
+                                  })}
+                                </ul>
+
+                            </div>
+                            }
+                            {elem?.dropdown && elem.name == 'Derivatives' &&
+                            <div className="duration-300 w-full max-w-full mobileDropdown h-[0px] overflow-hidden rounded-[12px] dark:bg-omega bg-white px-[15px]">
+                                <ul>
+                                  {DerivativesData?.map((item:any,nesIndex:any) => {
+                                      return(
+                                        <li key={nesIndex} className="mb-[10px]">
+                                          <Link href={item.link} className='block'>
+                                            <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
+                                              <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" />
+                                              <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
+                                                <p className="info-14-18 dark:text-white">{item.name}</p>
+                                                <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
+                                              </div>
+                                            </div>
+                                          </Link>
+                                        </li>
+                                      )
+                                  })}
+                                </ul>
+
+                            </div>
+                            }
+                      
                     </li>
                   )
                 })
