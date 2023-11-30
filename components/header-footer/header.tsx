@@ -158,7 +158,7 @@ const Header = (props: propsData) => {
               ) : (
                 <div className="flex items-center gap-[24px] xl:gap-[30px] justify-end">
                   <Link
-                    className="solid-button flex !bg-grey items-center group gap-[10px] dark:!bg-black-v-1  border dark:border-black-v-1 !text-nav-secondary hover:!border-primary"
+                    className={`solid-button flex !bg-grey items-center group gap-[10px] dark:!bg-black-v-1  border dark:border-black-v-1 !text-nav-secondary hover:!border-primary  ${router.pathname.includes('/future/') && '!py-[12px]'}`}
                     href="/history"
                   >
                     <TradeIcon hover={true} />
@@ -167,7 +167,7 @@ const Header = (props: propsData) => {
                     </span>
                   </Link>
                   <Link
-                    className="solid-button flex !bg-grey group items-center gap-[10px] dark:!bg-black-v-1 !text-nav-secondary border dark:border-black-v-1 hover:!border-primary"
+                    className={`solid-button flex !bg-grey group items-center gap-[10px] dark:!bg-black-v-1 !text-nav-secondary border dark:border-black-v-1 hover:!border-primary  ${router.pathname.includes('/future/') && '!py-[12px]'}`}
                     href="/wallet"
                   >
                     <Wallet hover={true} />
