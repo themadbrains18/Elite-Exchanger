@@ -128,8 +128,8 @@ const OrderBookFuture = (props:setHeight) => {
             <>
                 <BuyTableFuture currentToken={props.currentToken}/>
                 <div className='bg-card-bg py-[6px] px-[20px] flex items-center justify-between dark:bg-omega bg-white my-[10px]'>
-                    <p className='info-18 !text-black dark:!text-white'>{props?.currentToken?.token !==null ? (props?.currentToken?.token?.price).toFixed(5):(props?.currentToken?.global_token?.price).toFixed(5)}</p>
-                    <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !==null ? (props?.currentToken?.token?.price).toFixed(5):(props?.currentToken?.global_token?.price).toFixed(5)}</p>
+                    <p className='info-18 !text-black dark:!text-white'>{props?.currentToken?.token !==null ? (props?.currentToken?.token?.price)?.toFixed(5):(props?.currentToken?.global_token?.price)?.toFixed(5)}</p>
+                    <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !==null ? (props?.currentToken?.token?.price)?.toFixed(5):(props?.currentToken?.global_token?.price)?.toFixed(5)}</p>
                 </div>
                 <SelltableFuture currentToken={props.currentToken}/>
             </>
