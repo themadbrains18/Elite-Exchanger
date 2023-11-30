@@ -7,6 +7,7 @@ interface svgType {
   active?: boolean;
   fill?:boolean;
   setFill?:Function;
+  chartPage?:boolean;
 }
 
 const IconsComponent = (props: svgType) => {
@@ -1326,10 +1327,7 @@ const IconsComponent = (props: svgType) => {
           <path
             d="M14.7947 8.74472C15.1279 8.46657 15.6229 8.51214 15.901 8.84529C16.1792 9.17844 16.1336 9.67423 15.8005 9.95159L11.8718 13.8802C11.8349 13.9116 11.7909 13.9266 11.7501 13.9501C11.7178 13.969 11.6896 13.991 11.6542 14.0051C11.5623 14.0413 11.4664 14.0625 11.369 14.0625C11.2715 14.0625 11.1757 14.0413 11.0838 14.0051C11.0484 13.991 11.0201 13.969 10.9879 13.9501C10.947 13.9266 10.903 13.9116 10.8661 13.8802L6.93749 9.95159C6.60356 9.67423 6.55877 9.17844 6.83692 8.84529C7.11428 8.51214 7.60928 8.46657 7.94322 8.74472L10.5833 11.5993L11.3689 12.3849L12.1565 11.5973L14.7947 8.74472Z"
             fill="#6C7080"
-            className={`${props.hover && "group-hover:fill-white"} ${
-              props.active && "fill-white"
-            } fill-[#6C7080] `}
-          />
+            className={`${props.hover && "group-hover:fill-white"} ${props.active && "fill-white"}  ${props.chartPage && 'group-hover:fill-primary'} fill-[#6C7080] `}/>
         </svg>
       )}
       {props.type === "flag" && (

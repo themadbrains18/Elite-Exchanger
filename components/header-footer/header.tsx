@@ -42,6 +42,16 @@ const Header = (props: propsData) => {
       name: "WatchList",
       url: "/watchlist",
     },
+    {
+      name: "Trades",
+      url: "#",
+      dropdown:true
+    },
+    {
+      name: "Derivatives",
+      url: "#",
+      dropdown:true
+    },
   ];
 
   useEffect(() => {
@@ -104,7 +114,32 @@ const Header = (props: propsData) => {
       setUserDetail(profileDashboard?.data);
     }
   };
-
+  let data = [
+    {
+      image: "Coin.svg",
+      name: "Bitcoin",
+      symbol: "BTC",
+      status: "high",
+      price: "43,975.72",
+      change24h: "+4%",
+      high:'44,727.80',
+      low:'43,318.64',
+      link:'/chart/BTC'
+    }
+  ]
+  let DerivativesData = [
+    {
+      image: "Coin.svg",
+      name: "Bitcoin",
+      symbol: "BTC",
+      status: "high",
+      price: "43,975.72",
+      change24h: "+4%",
+      high:'44,727.80',
+      low:'43,318.64',
+      link:'/future/BTCUSDT'
+    }
+  ]
 
   return (
     <>
@@ -120,22 +155,75 @@ const Header = (props: propsData) => {
                   <HeaderLogo />
                 </Link>
               </div>
+
               <nav className="pl-[20px]">
                 <ul className="flex items-center gap-[24px] xl:gap-[40px]">
                   {linkList.map((elem, index) => {
                     return (
-                      <li key={index}>
-                        <Link
-                          href={elem.url}
-                          className="md-text  dark:text-d-nav-primary text-nav-primary whitespace-nowrap hover:!text-primary"
-                        >
-                          {elem.name}
-                        </Link>
-                      </li>
+                      <>
+                        <li key={index} className="relative group hover:pb-[20px] hover:mb-[-20px] ">
+                          <Link
+                            href={elem.url}
+                            className="md-text flex items-center gap-[5px] dark:text-d-nav-primary text-nav-primary whitespace-nowrap group-hover:!text-primary"
+                            >
+                            <span>{elem.name}</span>
+                            {
+                              elem?.dropdown &&
+                              <IconsComponent type="downArrow" chartPage={true} />
+                            }
+                          </Link>
+                          
+                            {elem?.dropdown && elem.name == 'Trades' &&
+                            <div className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px]">
+                                <ul>
+                                  {data?.map((item:any,nesIndex:any) => {
+                                      return(
+                                        <li key={nesIndex} className="mb-[10px]">
+                                          <Link href={item.link}>
+                                            <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
+                                              <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" />
+                                              <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
+                                                <p className="info-14-18 dark:text-white">{item.name}</p>
+                                                <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
+                                              </div>
+                                            </div>
+                                          </Link>
+                                        </li>
+                                      )
+                                  })}
+                                </ul>
+
+                            </div>
+                            }
+                            {elem?.dropdown && elem.name == 'Derivatives' &&
+                            <div className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px]">
+                                <ul>
+                                  {DerivativesData?.map((item:any,nesIndex:any) => {
+                                      return(
+                                        <li key={nesIndex} className="mb-[10px]">
+                                          <Link href={item.link}>
+                                            <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
+                                              <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" />
+                                              <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
+                                                <p className="info-14-18 dark:text-white">{item.name}</p>
+                                                <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
+                                              </div>
+                                            </div>
+                                          </Link>
+                                        </li>
+                                      )
+                                  })}
+                                </ul>
+
+                            </div>
+                            }
+                        </li>
+                      </>
                     );
                   })}
                 </ul>
               </nav>
+
             </div>
             <div className="w-full ">
               {/* if user not logged in */}
