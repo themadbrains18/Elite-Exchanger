@@ -2,7 +2,6 @@ import Image from "next/image";
 import React, { use, useContext, useEffect, useState } from "react";
 import HeaderLogo from "../svg-snippets/headerLogo";
 import Link from "next/link";
-import axios from "axios";
 import TradeIcon from "../svg-snippets/trade-icon";
 import { Wallet } from "../svg-snippets/wallet-icon";
 
@@ -11,7 +10,6 @@ import ResponsiveSidebar from "./responsive-sidebar";
 
 import { useRouter } from "next/router";
 import SideBar from "../snippets/sideBar";
-import Avtar from "../../public/assets/admin/Avatar.png";
 import { useSession } from "next-auth/react";
 import IconsComponent from "../snippets/icons";
 import Notification from "../snippets/notification";
@@ -25,6 +23,9 @@ const Header = (props: propsData) => {
   const router = useRouter();
   const [userDetail, setUserDetail] = useState<any>(null);
   const [notificationData, setNotificationData] = useState([]);
+
+  const [spotTrade, SetSpotTrade] = useState([]);
+  const [futureTrade, SetFutureTrade] = useState([]);
 
   const { status, data: session } = useSession();
 
@@ -45,12 +46,12 @@ const Header = (props: propsData) => {
     {
       name: "Trades",
       url: "#",
-      dropdown:true
+      dropdown: true
     },
     {
       name: "Derivatives",
       url: "#",
-      dropdown:true
+      dropdown: true
     },
   ];
 
@@ -59,6 +60,7 @@ const Header = (props: propsData) => {
       getUserBasicDetail();
       getUserNotification();
     }
+    getTokenList();
   }, []);
 
   useEffect(() => {
@@ -75,7 +77,7 @@ const Header = (props: propsData) => {
         getUserNotification();
       }
       if (eventDataType === "profile") {
-        if(data?.user_id === session?.user?.user_id){
+        if (data?.user_id === session?.user?.user_id) {
           setUserDetail(data);
         }
       }
@@ -92,7 +94,7 @@ const Header = (props: propsData) => {
     }).then(response => response.json());
 
     if (profileDashboard) {
-      let data = profileDashboard?.data.filter((item:any)=>{
+      let data = profileDashboard?.data.filter((item: any) => {
         return item?.status === 0 || item?.status === false
       })
       setNotificationData(data)
@@ -114,39 +116,31 @@ const Header = (props: propsData) => {
       setUserDetail(profileDashboard?.data);
     }
   };
-  let data = [
-    {
-      image: "Coin.svg",
-      name: "Bitcoin",
-      symbol: "BTC",
-      status: "high",
-      price: "43,975.72",
-      change24h: "+4%",
-      high:'44,727.80',
-      low:'43,318.64',
-      link:'/chart/BTC'
-    }
-  ]
-  let DerivativesData = [
-    {
-      image: "Coin.svg",
-      name: "Bitcoin",
-      symbol: "BTC",
-      status: "high",
-      price: "43,975.72",
-      change24h: "+4%",
-      high:'44,727.80',
-      low:'43,318.64',
-      link:'/future/BTCUSDT'
-    }
-  ]
+
+  const getTokenList = async () => {
+    let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
+      method: "GET"
+    }).then(response => response.json());
+
+    let spot = tokenList?.data.filter((item: any) => {
+      return item.tradePair !== null
+    });
+
+    SetSpotTrade(spot);
+
+    let future = tokenList?.data.filter((item: any) => {
+      return item.futureTradePair !== null
+    });
+    SetFutureTrade(future);
+  }
+
 
   return (
     <>
       <header
-        className={`${ router.pathname.includes('/future/') ? 'py-[10px] lg:h-[69px]':'py-[35px] h-[105px] lg:h-[129px]' }    z-[6] dark:bg-omega bg-white z-9 xl:rounded-none dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 w-full border-b dark:border-[#25262a] border-[#e5e7eb]`}
+        className={`${router.pathname.includes('/future/') ? 'py-[10px] lg:h-[69px]' : 'py-[35px] h-[105px] lg:h-[129px]'}    z-[6] dark:bg-omega bg-white z-9 xl:rounded-none dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 w-full border-b dark:border-[#25262a] border-[#e5e7eb]`}
       >
-        <div className={`container ${ router.pathname.includes('/future/') && '!max-w-full'}`}>
+        <div className={`container ${router.pathname.includes('/future/') && '!max-w-full'}`}>
           {/* this is for desktop */}
           <div className="hidden lg:grid header-wrapper items-center justify-between">
             <div className={`flex items-center`}>
@@ -165,58 +159,58 @@ const Header = (props: propsData) => {
                           <Link
                             href={elem.url}
                             className="md-text flex items-center gap-[5px] dark:text-d-nav-primary text-nav-primary whitespace-nowrap group-hover:!text-primary"
-                            >
+                          >
                             <span>{elem.name}</span>
                             {
                               elem?.dropdown &&
                               <IconsComponent type="downArrow" chartPage={true} />
                             }
                           </Link>
-                          
-                            {elem?.dropdown && elem.name == 'Trades' &&
+
+                          {elem?.dropdown && elem.name == 'Trades' &&
                             <div className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px]">
-                                <ul>
-                                  {data?.map((item:any,nesIndex:any) => {
-                                      return(
-                                        <li key={nesIndex} className="mb-[10px]">
-                                          <Link href={item.link}>
-                                            <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                              <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" />
-                                              <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                                <p className="info-14-18 dark:text-white">{item.name}</p>
-                                                <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
-                                              </div>
-                                            </div>
-                                          </Link>
-                                        </li>
-                                      )
-                                  })}
-                                </ul>
+                              <ul>
+                                {spotTrade?.map((item: any, nesIndex: any) => {
+                                  return (
+                                    <li key={nesIndex} className="mb-[10px]">
+                                      <Link href={`/chart/${item?.tradePair?.symbolOne}`}>
+                                        <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
+                                          <Image src={`${item.image}`} width={30} height={30} alt="coins" className="min-w-[30px]" />
+                                          <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
+                                            <p className="info-14-18 dark:text-white">{item?.tradePair?.symbolOne}/{item?.tradePair?.symbolTwo}</p>
+                                            <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.tradePair?.symbolOne}{item?.tradePair?.symbolTwo}</p>
+                                          </div>
+                                        </div>
+                                      </Link>
+                                    </li>
+                                  )
+                                })}
+                              </ul>
 
                             </div>
-                            }
-                            {elem?.dropdown && elem.name == 'Derivatives' &&
+                          }
+                          {elem?.dropdown && elem.name == 'Derivatives' &&
                             <div className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px]">
-                                <ul>
-                                  {DerivativesData?.map((item:any,nesIndex:any) => {
-                                      return(
-                                        <li key={nesIndex} className="mb-[10px]">
-                                          <Link href={item.link}>
-                                            <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                              <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" />
-                                              <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                                <p className="info-14-18 dark:text-white">{item.name}</p>
-                                                <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
-                                              </div>
-                                            </div>
-                                          </Link>
-                                        </li>
-                                      )
-                                  })}
-                                </ul>
+                              <ul>
+                                {futureTrade?.map((item: any, nesIndex: any) => {
+                                  return (
+                                    <li key={nesIndex} className="mb-[10px]">
+                                      <Link href={`/future/${item?.futureTradePair?.coin_symbol}${item?.futureTradePair?.usdt_symbol}`}>
+                                        <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
+                                          <Image src={`${item.image}`} width={30} height={30} alt="coins" className="min-w-[30px]"/>
+                                          <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
+                                            <p className="info-14-18 dark:text-white">{item?.futureTradePair?.coin_symbol}{item?.futureTradePair?.usdt_symbol}</p>
+                                            <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.futureTradePair?.coin_symbol}{item?.futureTradePair?.usdt_symbol}</p>
+                                          </div>
+                                        </div>
+                                      </Link>
+                                    </li>
+                                  )
+                                })}
+                              </ul>
 
                             </div>
-                            }
+                          }
                         </li>
                       </>
                     );
@@ -305,7 +299,7 @@ const Header = (props: propsData) => {
                   </div>
                   <div className="profile-wrapper hover:pb-[32px] hover:mb-[-32px] relative">
                     <div className="flex items-center gap-[12px] cursor-pointer">
-                      <div className="relative" onClick={()=>router.push('/notification')}>
+                      <div className="relative" onClick={() => router.push('/notification')}>
                         <IconsComponent
                           type="bell"
                           hover={false}
@@ -391,6 +385,8 @@ const Header = (props: propsData) => {
               setShowMenu={setShowMenu}
               session={props.session}
               userDetail={userDetail}
+              spotTrade={spotTrade}
+              futureTrade={futureTrade}
             />
           </div>
         </div>

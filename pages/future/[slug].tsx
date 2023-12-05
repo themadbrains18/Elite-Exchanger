@@ -15,12 +15,11 @@ import CoinTypes from '@/components/future/coin-types';
 import ChartTabsFuture from '@/components/future/chart-tabs-future';
 import FutureChart from '@/components/future/future-chart';
 import MarginMode from '@/components/future/popups/margin-mode';
-// import BlockBusterCard from '@/components/future/test';
 import SwapModal from '@/components/future/popups/swap-modal';
 import ChartSec from '@/components/chart/chart-sec';
-// import TipsModal from '@/components/future/popups/tips.modal';
 import TransferModal from '@/components/future/popups/transfer-modal';
 import TradingFeeMadal from '@/components/future/popups/trading-fee-madal';
+
 
 interface Session {
     session: {
@@ -46,6 +45,9 @@ const FutureTrading = (props: Session) => {
     const [openOrders, setOpenOrders] = useState([]);
     const [allAssets, setAllAssets] = useState(props?.assets);
 
+    const [positionHistoryData, setPositionHistoryData] = useState([]);
+    const [openOrderHistoryData, setOpenOrderHistoryData] = useState([]);
+
     const { slug } = router.query;
 
     useEffect(() => {
@@ -61,17 +63,23 @@ const FutureTrading = (props: Session) => {
             if (eventDataType === "price") {
                 refreshTokenList();
                 getUserFuturePositionData();
+                getUserOpenOrderData();
+                getUserFuturePositionHistoryData();
+                getUserFutureOpenOrderHistoryData();
             }
 
             if (eventDataType === 'position') {
                 getUserFuturePositionData();
                 getUserOpenOrderData();
+                getUserFuturePositionHistoryData();
+                getUserFutureOpenOrderHistoryData();
             }
         }
 
     }, [slug]);
 
     useEffect(() => {
+
         let ccurrentToken = props.coinList.filter((item: any) => {
             return item.coin_symbol + item.usdt_symbol === slug
         })
@@ -79,8 +87,14 @@ const FutureTrading = (props: Session) => {
 
         getUserFuturePositionData();
         getUserOpenOrderData();
+        getUserFuturePositionHistoryData();
+        getUserFutureOpenOrderHistoryData();
+
     }, [slug]);
 
+    // ===================================== //
+    // Refresh token list after price update //
+    // ===================================== //
     const refreshTokenList = async () => {
         let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future`, {
             method: "GET"
@@ -93,6 +107,9 @@ const FutureTrading = (props: Session) => {
         setCurrentToken(ccurrentToken);
     }
 
+    // ================================================ //
+    // Get future position order mean market type order //
+    // ================================================ //
     const getUserFuturePositionData = async () => {
         try {
 
@@ -112,6 +129,9 @@ const FutureTrading = (props: Session) => {
         }
     }
 
+    // ============================================================== //
+    // Get future open order mean limit type, TP/SL, Stop Limit order //
+    // ============================================================== //
     const getUserOpenOrderData = async () => {
         try {
             if (props?.session) {
@@ -135,17 +155,16 @@ const FutureTrading = (props: Session) => {
         }
     }
 
-    // let futureAssets = props?.assets.filter((item: any) => {
-    //     return item.walletTtype === 'future_wallet'
-    // });
-
     const setMarginModeAndLeverage = (marginType: string, leverage: number) => {
         setMarginMode({ margin: marginType, leverage: leverage });
         setPopupMode(0);
         setOverlay(false);
     }
 
-    const refreshWalletAssets=async()=>{
+    // ================================================= //
+    // Get Refresh user wallet assets after order create //
+    // ================================================= //
+    const refreshWalletAssets = async () => {
         let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${props?.session?.user?.user_id}`, {
             method: "GET",
             headers: {
@@ -154,7 +173,46 @@ const FutureTrading = (props: Session) => {
         }).then(response => response.json());
 
         setAllAssets(userAssets);
-        // console.log(userAssets,'=======refresh user Assets data ==========');
+    }
+
+    // ================================================ //
+    // Get future position order history //
+    // ================================================ //
+    const getUserFuturePositionHistoryData = async () => {
+        try {
+            if (props?.session) {
+                let positionData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/history/position?userid=${props?.session?.user?.user_id}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": props?.session?.user?.access_token
+                    },
+                }).then(response => response.json());
+
+                setPositionHistoryData(positionData?.data);
+            }
+        } catch (error) {
+
+        }
+    }
+
+    // ================================================ //
+    // Get future open order history //
+    // ================================================ //
+    const getUserFutureOpenOrderHistoryData = async () => {
+        try {
+            if (props?.session) {
+                let positionData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/history/openorder?userid=${props?.session?.user?.user_id}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": props?.session?.user?.access_token
+                    },
+                }).then(response => response.json());
+
+                setOpenOrderHistoryData(positionData?.data);
+            }
+        } catch (error) {
+
+        }
     }
 
     return (
@@ -186,12 +244,12 @@ const FutureTrading = (props: Session) => {
                         </div>
                     </div>
                     {/* position,open order and trade history table */}
-                    <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} />
+                    <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} positionHistoryData={positionHistoryData} openOrderHistoryData={openOrderHistoryData}/>
                 </div>
                 <div>
                     {/* Buy/Sell open short traading component */}
-                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets}/>
-                    <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode}  />
+                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} />
+                    <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
                 </div>
             </div>
 
@@ -224,7 +282,7 @@ const FutureTrading = (props: Session) => {
                 </div>
                 <ChartTabsFuture positions={positions} openOrders={openOrders} />
                 <BuySell setOverlay={setOverlay} inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} setPopupMode={setPopupMode} popupMode={popupMode} />
-                <MarginRatio fullWidth={true} heightAuto={true} setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode}  />
+                <MarginRatio fullWidth={true} heightAuto={true} setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
             </div>
 
             {/* overlay */}
@@ -232,14 +290,15 @@ const FutureTrading = (props: Session) => {
 
             {/* Leverage and margin type popup component */}
             <MarginMode setOverlay={setOverlay} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setPopupMode={setPopupMode} popupMode={popupMode} setMarginModeAndLeverage={setMarginModeAndLeverage} />
+
             {/* Future profit/loss and liquidation price calculate */}
             <SwapModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
 
+            {/* Asset transfer from wallet to other walllet  */}
+            <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} refreshWalletAssets={refreshWalletAssets} />
 
-            <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} refreshWalletAssets={refreshWalletAssets}/>
-
+            {/* Show trading fee detail */}
             <TradingFeeMadal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
-        
         </>
     )
 }

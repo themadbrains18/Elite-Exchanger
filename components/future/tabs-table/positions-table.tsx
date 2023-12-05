@@ -3,6 +3,10 @@ import Image from 'next/image';
 import React, { useState } from 'react';
 import ProfitLossModal from '../popups/profit-loss-model';
 import { useSession } from 'next-auth/react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ConfirmationModel from '@/components/snippets/confirmation';
+import AES from 'crypto-js/aes';
 
 interface propsData {
   positions?: any;
@@ -14,8 +18,78 @@ const PositionsTable = (props: propsData) => {
   const [modelPopup, setModelPopup] = useState(0);
   const [modelOverlay, setModelOverlay] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState(Object);
-  const { status, data: session } = useSession()
+  const { status, data: session } = useSession();
 
+  const [active, setActive] = useState(false);
+  const [show, setShow] = useState(false);
+  const [positionId, setPositionId] = useState('');
+
+  const closePositionOrder = async (id: string) => {
+    setPositionId(id);
+    setActive(true);
+    setShow(true);
+  }
+
+  const actionPerform = async () => {
+    let obj = { "id": positionId };
+
+    const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
+    let record = encodeURIComponent(ciphertext.toString());
+
+    let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeposition`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": session?.user?.access_token
+      },
+      body: JSON.stringify(record)
+    }).then(response => response.json());
+
+    if (closeReponse?.data?.status !== 200) {
+      toast.error(closeReponse?.data?.message);
+    }
+    else {
+      const websocket = new WebSocket('ws://localhost:3001/');
+      let position = {
+        ws_type: 'position'
+      }
+      websocket.onopen = () => {
+        websocket.send(JSON.stringify(position));
+      }
+      toast.success(closeReponse?.data?.message);
+      setActive(false);
+      setShow(false);
+      setPositionId('');
+    }
+  }
+
+  const closeAllPosition = async () => {
+
+    let obj = { "userid": session?.user?.user_id };
+
+    let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeallposition`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": session?.user?.access_token
+      },
+      body: JSON.stringify(obj)
+    }).then(response => response.json());
+
+    if (closeReponse?.data?.status === 200) {
+      const websocket = new WebSocket('ws://localhost:3001/');
+      let position = {
+        ws_type: 'position'
+      }
+      websocket.onopen = () => {
+        websocket.send(JSON.stringify(position));
+      }
+      toast.success('closed all position successfully!!.');
+      setActive(false);
+      setShow(false);
+      setPositionId('');
+    }
+  }
 
   return (
     <>
@@ -74,7 +148,7 @@ const PositionsTable = (props: propsData) => {
               </th>
               <th className=" py-[10px]">
                 <div className="flex">
-                  <p className="  top-label dark:!text-[#cccc56] !font-[600]">Close All Positions</p>
+                  <p className="  top-label dark:!text-[#cccc56] !font-[600]" onClick={closeAllPosition}>Close All Positions</p>
                   {/* <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" /> */}
                 </div>
               </th>
@@ -91,14 +165,16 @@ const PositionsTable = (props: propsData) => {
               props?.positions && props?.positions.length > 0 && props?.positions.map((item: any, index: number) => {
 
                 let tpsl = '--';
-                {item?.futureOpenOrders !==null && item?.futureOpenOrders.map((oo:any)=>{
-                  if(tpsl === '--' && oo?.type === 'take profit market'){
-                    tpsl = oo?.trigger;
-                  }
-                  else if(oo?.type === 'stop market'){
-                    tpsl = tpsl +'/'+ oo?.trigger;
-                  }
-                })}
+                {
+                  item?.futureOpenOrders !== null && item?.futureOpenOrders.map((oo: any) => {
+                    if (tpsl === '--' && oo?.type === 'take profit market') {
+                      tpsl = oo?.trigger;
+                    }
+                    else if (oo?.type === 'stop market') {
+                      tpsl = tpsl + '/' + oo?.trigger;
+                    }
+                  })
+                }
                 return (
                   <tr key={index}>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
@@ -140,14 +216,14 @@ const PositionsTable = (props: propsData) => {
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <div className='flex items-center'>
-                        <p className='top-label dark:!text-[#cccc56] !font-[600] pr-[20px]'>Market</p>
-                        <div className='flex items-center gap-[20px]'>
+                        <p className='top-label dark:!text-[#cccc56] !font-[600] pr-[20px]' onClick={() => closePositionOrder(item?.id)}>Close Position</p>
+                        {/* <div className='flex items-center gap-[20px]'>
                           <p className='top-label dark:!text-[#cccc56] !font-[600] pl-[20px] border-l border-grey-v-3 dark:border-opacity-[15%]'>Limit</p>
                           <div className='flex items-center gap-[5px]'>
                             <p className='top-label !font-[600] p-[4px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer'>{item.ClosePositions1}</p>
                             <p className='top-label !font-[600] p-[4px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer'>{item.ClosePositions2}</p>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
@@ -170,7 +246,10 @@ const PositionsTable = (props: propsData) => {
       </div>
       {/* overlay */}
       <div className={`sdsadsadd bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${modelOverlay && '!opacity-[70%] !visible'}`}></div>
-      <ProfitLossModal setModelOverlay={setModelOverlay} setModelPopup={setModelPopup} modelPopup={modelPopup} modelOverlay={modelOverlay} currentToken={props?.currentToken} entryPrice={selectedPosition?.entry_price} leverage={selectedPosition?.leverage} sizeValue={selectedPosition?.size} show={selectedPosition?.direction} actionType="position" positionId={selectedPosition?.id}/>
+      <ProfitLossModal setModelOverlay={setModelOverlay} setModelPopup={setModelPopup} modelPopup={modelPopup} modelOverlay={modelOverlay} currentToken={props?.currentToken} entryPrice={selectedPosition?.entry_price} leverage={selectedPosition?.leverage} sizeValue={selectedPosition?.size} show={selectedPosition?.direction} actionType="position" positionId={selectedPosition?.id} />
+      {active === true &&
+        <ConfirmationModel setActive={setActive} setShow={setShow} title='Notification' message='Please confirm to close this position.' actionPerform={actionPerform} show={show} />
+      }
 
     </>
   )

@@ -116,7 +116,9 @@ export async function deleteMethod(url = '', token = '') {
     redirect: 'follow',
     referrerPolicy: 'no-referrer',
   });
-  return response.json();
+
+  let responseData = await response.json();
+  return responseData;
 }
 
 

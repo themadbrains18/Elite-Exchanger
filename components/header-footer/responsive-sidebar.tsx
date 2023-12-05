@@ -16,6 +16,8 @@ interface defaultStates {
     user: any
   },
   userDetail?: any;
+  spotTrade?:any;
+  futureTrade?:any;
 }
 
 const ResponsiveSidebar = (props: defaultStates) => {
@@ -254,15 +256,15 @@ const ResponsiveSidebar = (props: defaultStates) => {
                       {elem?.dropdown && elem.name == 'Trades' &&
                             <div className="duration-300 w-full max-w-full mobileDropdown h-0 overflow-hidden rounded-[12px] dark:bg-omega bg-white px-[15px]">
                                 <ul>
-                                  {data?.map((item:any,nesIndex:any) => {
+                                  {props?.spotTrade?.map((item:any,nesIndex:any) => {
                                       return(
                                         <li key={nesIndex} className="mb-[10px]">
-                                          <Link href={item.link} className='block'>
+                                          <Link href={`/chart/${item?.tradePair?.symbolOne}`} className='block'>
                                             <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                              <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" />
+                                              <Image src={`${item.image}`} width={30} height={30} alt="coins" />
                                               <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                                <p className="info-14-18 dark:text-white">{item.name}</p>
-                                                <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
+                                                <p className="info-14-18 dark:text-white">{item?.tradePair?.symbolOne}/{item?.tradePair?.symbolTwo}</p>
+                                                <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.tradePair?.symbolOne}{item?.tradePair?.symbolTwo}</p>
                                               </div>
                                             </div>
                                           </Link>
@@ -276,15 +278,15 @@ const ResponsiveSidebar = (props: defaultStates) => {
                             {elem?.dropdown && elem.name == 'Derivatives' &&
                             <div className="duration-300 w-full max-w-full mobileDropdown h-[0px] overflow-hidden rounded-[12px] dark:bg-omega bg-white px-[15px]">
                                 <ul>
-                                  {DerivativesData?.map((item:any,nesIndex:any) => {
+                                  {props?.futureTrade?.map((item:any,nesIndex:any) => {
                                       return(
                                         <li key={nesIndex} className="mb-[10px]">
-                                          <Link href={item.link} className='block'>
+                                          <Link href={`/future/${item?.futureTradePair?.coin_symbol}${item?.futureTradePair?.usdt_symbol}`} className='block'>
                                             <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                              <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" />
+                                              <Image src={`${item.image}`} width={30} height={30} alt="coins" />
                                               <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                                <p className="info-14-18 dark:text-white">{item.name}</p>
-                                                <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
+                                                <p className="info-14-18 dark:text-white">{item?.futureTradePair?.coin_symbol}{item?.futureTradePair?.usdt_symbol}</p>
+                                                <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.futureTradePair?.coin_symbol}{item?.futureTradePair?.usdt_symbol}</p>
                                               </div>
                                             </div>
                                           </Link>

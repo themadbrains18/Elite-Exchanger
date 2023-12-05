@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createRouter, expressWrapper } from "next-connect";
 import { getMethod, postData } from "../../../libs/requestMethod";
+import AES from 'crypto-js/aes';
+import { enc } from 'crypto-js';
 
 const router = createRouter<NextApiRequest, NextApiResponse>();
 
@@ -28,11 +30,11 @@ router
 // ==========================================
 router.post(async (req, res) => {
     try {
-        // const decodedStr = decodeURIComponent(req.body);
-        // let formData = AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
+        const decodedStr = decodeURIComponent(req.body);
+        let formData = AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
 
         let token = req.headers.authorization;
-        let data = await postData(`${process.env.NEXT_PUBLIC_APIURL}/futureorder/create`, req.body, token);
+        let data = await postData(`${process.env.NEXT_PUBLIC_APIURL}/futureorder/create`, JSON.parse(formData), token);
         return res.status(data.status).send({ data });
 
     } catch (error: any) {

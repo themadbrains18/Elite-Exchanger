@@ -1,11 +1,15 @@
 import React, { useState } from 'react'
 import PositionsTable from './tabs-table/positions-table';
 import OpenOrderTable from './tabs-table/open-order-table';
+import PositionsHistoryTable from './tabs-table/position-history';
+import OpenOrderHistoryTable from './tabs-table/open-order-history';
 
 interface propsData {
     positions?: any;
     openOrders?:any;
     currentToken?:any;
+    positionHistoryData?:any;
+    openOrderHistoryData?:any;
 }
 
 const ChartTabsFuture = (props: propsData) => {
@@ -18,9 +22,9 @@ const ChartTabsFuture = (props: propsData) => {
                 <div className='flex items-center gap-[20px] mb-[10px] w-max'>
                     <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[50px] after:translate-x-[-50%] after:h-[2px] ${show === 1 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShow(1) }}>Current Position <span>({props?.positions.length})</span></button>
                     <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[50px] after:translate-x-[-50%] after:h-[2px] ${show === 2 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShow(2) }}>Open Orders <span>({props?.openOrders.length})</span></button>
-                    {/* <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[50px] after:translate-x-[-50%] after:h-[2px] ${show === 3 ? '!text-black after:block  dark:!text-white' : '!text-[#a3a8b7] after:hidden'}`} onClick={() => { setShow(3) }}>Order History</button>
-                    <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[50px] after:translate-x-[-50%] after:h-[2px] ${show === 4 ? '!text-black after:block  dark:!text-white' : '!text-[#a3a8b7] after:hidden'}`} onClick={() => { setShow(4) }}>Position History</button>
-                    <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[50px] after:translate-x-[-50%] after:h-[2px] ${show === 5 ? '!text-black after:block  dark:!text-white' : '!text-[#a3a8b7] after:hidden'}`} onClick={() => { setShow(5) }}>Trade History</button>
+                    <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[50px] after:translate-x-[-50%] after:h-[2px] ${show === 3 ? '!text-black after:block  dark:!text-white' : '!text-[#a3a8b7] after:hidden'}`} onClick={() => { setShow(3) }}>Position History</button>
+                    <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[50px] after:translate-x-[-50%] after:h-[2px] ${show === 4 ? '!text-black after:block  dark:!text-white' : '!text-[#a3a8b7] after:hidden'}`} onClick={() => { setShow(4) }}>Order History</button>
+                    {/* <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[50px] after:translate-x-[-50%] after:h-[2px] ${show === 5 ? '!text-black after:block  dark:!text-white' : '!text-[#a3a8b7] after:hidden'}`} onClick={() => { setShow(5) }}>Trade History</button>
                     <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[50px] after:translate-x-[-50%] after:h-[2px] ${show === 6 ? '!text-black after:block  dark:!text-white' : '!text-[#a3a8b7] after:hidden'}`} onClick={() => { setShow(6) }}>Transaction History</button> */}
                 </div>
             </div>
@@ -33,6 +37,14 @@ const ChartTabsFuture = (props: propsData) => {
             {
                 show == 2 &&
                 <OpenOrderTable openOrders={props?.openOrders}/>
+            }
+            {
+                show === 3 &&
+                <PositionsHistoryTable positions={props.positionHistoryData}/>
+            }
+            {
+                show === 4 && 
+                <OpenOrderHistoryTable openOrders={props.openOrderHistoryData}/>
             }
 
         </div>

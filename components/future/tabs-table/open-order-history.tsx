@@ -10,49 +10,7 @@ interface propsData {
     openOrders?: any;
 }
 
-const OpenOrderTable = (props: propsData) => {
-
-    const { status, data: session } = useSession();
-    const [active, setActive] = useState(false);
-    const [show, setShow] = useState(false);
-    const [positionId, setPositionId] = useState('');
-
-    const closeOpenOrder = async (id: string) => {
-        setPositionId(id);
-        setActive(true);
-        setShow(true);
-    }
-
-    const actionPerform = async () => {
-        let obj = { "id": positionId };
-        
-        let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeopenorder`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                "Authorization": session?.user?.access_token
-            },
-            body: JSON.stringify(obj)
-        }).then(response => response.json());
-
-        if (closeReponse?.data?.status !== 200) {
-            toast.error(closeReponse?.data?.message);
-        }
-        else {
-            const websocket = new WebSocket('ws://localhost:3001/');
-            let position = {
-                ws_type: 'position'
-            }
-            websocket.onopen = () => {
-                websocket.send(JSON.stringify(position));
-            }
-            toast.success(closeReponse?.data?.message);
-            setPositionId('');
-            setActive(false);
-            setShow(false);
-        }
-    }
-
+const OpenOrderHistoryTable = (props: propsData) => {
 
     return (
         <>
@@ -128,7 +86,7 @@ const OpenOrderTable = (props: propsData) => {
                             </th>
                             <th className="py-[10px]">
                                 <div className="flex ">
-                                    <p className="text-start top-label dark:text-gamma">Action</p>
+                                    <p className="text-start top-label dark:text-gamma">Status</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
@@ -176,9 +134,7 @@ const OpenOrderTable = (props: propsData) => {
                                             <p className="top-label !font-[600] dark:!text-white !text-black">--</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <div className='cursor-pointer' onClick={() => { closeOpenOrder(item?.id) }}>
-                                                <IconsComponent type='deleteIcon' />
-                                            </div>
+                                        <p className={`top-label !font-[600] ${item.isDeleted === true ? '!text-sell' : '!text-buy'}`}>{item.isDeleted === true ? 'Closed' : 'Open'}</p>
                                         </td>
                                     </tr>
                                 )
@@ -187,11 +143,9 @@ const OpenOrderTable = (props: propsData) => {
                     </tbody>
                 </table>
             </div>
-            {active === true &&
-                <ConfirmationModel setActive={setActive} setShow={setShow} title='Notification' message='Please confirm to close this open order.' actionPerform={actionPerform} show={show} />
-            }
+            
         </>
     )
 }
 
-export default OpenOrderTable;
+export default OpenOrderHistoryTable;
