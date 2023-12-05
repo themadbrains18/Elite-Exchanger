@@ -116,7 +116,7 @@ const PaymentMethod = (props: activeSection) => {
             <div className="">
               {list?.map((item: any, index: any) => {
                 return (
-                  <div key={index} className="flex gap-30 py-20 md:mt-30">
+                  <div key={index} className="flex gap-30 py-20 md:mt-30 items-center">
                     {props.page !== 'user-center' &&
                       <div>
                         <input type="checkbox" {...register('p_method')} name="p_method" id={`checkbox${item?.id}`} value={item?.id} className="hidden methods" />
@@ -247,8 +247,8 @@ const PaymentMethod = (props: activeSection) => {
               <div className="mt-30 md:p-40 p-[15px] border rounded-10 border-grey-v-1 dark:border-opacity-[15%]">
                 <p className="sec-title pb-20 border-b border-grey-v-2 dark:border-opacity-[15%]">Payment Time Limit</p>
                 <div className="md:mt-30 py-20 px-10 flex gap-10 items-center">
-                  <Image src={`/assets/payment-methods/gpay.png`} alt="payment image" width={32} height={32} />
-                  <p className="sec-text !text-h-primary dark:!text-white !font-medium">Google Pay</p>
+                  {/* <Image src={`/assets/payment-methods/gpay.png`} alt="payment image" width={32} height={32} />
+                  <p className="sec-text !text-h-primary dark:!text-white !font-medium">Google Pay</p> */}
                   <p className="sec-text !text-h-primary dark:!text-white">15 Min </p>
                 </div>
                 <div className="md:mt-50 mt-20 flex sm:gap-30 gap-10 sm:flex-row flex-col">

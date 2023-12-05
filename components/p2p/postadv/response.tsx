@@ -187,7 +187,7 @@ const Response = (props: activeSection) => {
                     before:bg-white
                     before:left-[5px]
                     before:md:top-[calc(50%-7px)]
-                    before:top-[calc(50%-4px)]
+                    before:top-[calc(50%-9px)]
                     before:w-[10px] 
                     before:h-[10px]
                     before:rounded-[50%] 
@@ -228,7 +228,7 @@ const Response = (props: activeSection) => {
                 before:bg-white
                 before:left-[5px]
                 before:md:top-[calc(50%-7px)]
-                before:top-[calc(50%-4px)]
+                before:top-[calc(50%-9px)]
                 before:w-[10px] 
                 before:h-[10px]
                 before:rounded-[50%] 

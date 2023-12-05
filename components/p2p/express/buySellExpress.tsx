@@ -394,7 +394,7 @@ const BuySellExpress = (props: propsData) => {
     <>
       <ToastContainer position="top-center" />
       <div className="flex items-center mt-[30px] justify-around">
-        <div className="max-w-full md:max-w-[554px] w-full">
+        <div className="max-w-full md:max-w-[554px] w-full hidden md:block">
           <Image src='/assets/refer/referSafe.png' width={487} height={529} alt="refr-safe-sction" />
         </div>
         <div className="p-20 md:p-20 rounded-10  bg-white dark:bg-d-bg-primary max-w-[500px] w-full border border-grey-v-1 dark:border-opacity-[15%] ">

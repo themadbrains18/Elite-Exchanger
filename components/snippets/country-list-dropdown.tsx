@@ -28,12 +28,13 @@ const CountrylistDropdown = (props:dataList) => {
     document.addEventListener('click', (evt: any) => {
       let dropdown = document.querySelector('.coin-dropdown-country');
       let targetEl = evt?.target?.parentNode?.parentElement; // clicked element
+      console.log(targetEl,"======")
       if (evt?.target.nodeName === 'svg') {
         targetEl = evt?.target?.parentNode.parentNode
       }
-      if (targetEl.classList.contains('coin-dropdown-country') === false) {
-        setShow(false);
-      }
+      // if (targetEl.classList.contains('coin-dropdown-country') === false) {
+      //   setShow(false);
+      // }
     })
   }, [])
 
@@ -43,8 +44,8 @@ const CountrylistDropdown = (props:dataList) => {
         {/* top dropdown input */}
         <div className='rounded-[5px] py-[13px] px-[15px] dark:bg-black-v-1  bg-bg-secondary '>
             <div className="coin-dropdown-country flex items-center gap-10 cursor-pointer justify-between" onClick={()=>{setShow(!show)}}>
-              <div>
-                <input type="text" id='paymentMethod' className="sm-text dark:!text-d-nav-secondary  !text-banner-text dark:bg-black-v-1  bg-bg-secondary  max-w-none placeholder:text-disable-clr pr-0 outline-none bg-transparent w-full  cursor-pointer "
+              <div onClick={(e)=>{e.stopPropagation}}>
+                <input  type="text" id='paymentMethod' className="sm-text dark:!text-d-nav-secondary  !text-banner-text dark:bg-black-v-1  bg-bg-secondary  max-w-none placeholder:text-disable-clr pr-0 outline-none bg-transparent w-full  cursor-pointer "
               placeholder={`${props.placeholder}`} readOnly value={text}/>
               </div>
               <div className='pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer'>

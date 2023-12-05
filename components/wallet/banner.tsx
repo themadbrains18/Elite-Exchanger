@@ -79,7 +79,7 @@ const Banner = (props: propsData):any => {
         </div>
 
         <div className="rounded-[5px] bg-primary-100 dark:bg-black-v-1 p-[15px] max-w-[443px] w-full">
-          <div className="flex items-center  justify-between gap-5 mb-[27px]">
+          <div className="flex items-center  justify-between gap-5 mb-[27px] flex-wrap">
             <div className="flex items-center gap-10">
               <IconsComponent type="totalDeposit" hover={false} active={false} />
               <p className="sm-text dark:!text-gamma">Total Deposited</p>
@@ -89,7 +89,7 @@ const Banner = (props: propsData):any => {
               <p className="sm-text dark:!text-white">$32,455.12</p>
             </div>
           </div>
-          <div className="flex items-center  justify-between gap-5">
+          <div className="flex items-center  justify-between gap-5 flex-wrap">
             <div className="flex items-center gap-10">
               <IconsComponent type="totalWithdraw" hover={false} active={false} />
               <p className="sm-text dark:!text-gamma">Total Withdrawals</p>
