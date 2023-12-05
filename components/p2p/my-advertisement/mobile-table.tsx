@@ -24,15 +24,15 @@ const MobileTable = (props: dataTypes) => {
                                 <div className='grid grid-cols-2 py-[15px] border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2'>
                                     <div className=''>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Assets</p>
-                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.assets}&nbsp;{item.currency}</p>
+                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity}&nbsp;{item?.token?.symbol}</p>
                                     </div>
                                     <div className='text-end'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Type</p>
-                                        <p className={`info-14-18  ${item.type === "BUY" ? "!text-buy" : "!text-cancel"}`}>{item.type}</p>
+                                        <p className={`info-14-18  !text-buy `}>BUY</p>
                                     </div>
                                     <div className='mt-[15px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Remaining</p>
-                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.exchangeRate}</p>
+                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity} {item?.token?.symbol}</p>
                                     </div>
                                     {/* <div  className='text-end mt-[15px]'>
                                 <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Payment</p>
@@ -48,13 +48,13 @@ const MobileTable = (props: dataTypes) => {
                                     }
                                 </div>
                             </div> */}
-                                    <div className='mt-[15px]'>
+                                    <div className='mt-[15px] text-end'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Create Time </p>
                                         <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.createdAt}</p>
                                     </div>
-                                    <div className='text-end mt-[15px]'>
+                                    <div className=' mt-[15px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Actions</p>
-                                        <div className='flex items-center gap-10 justify-end'>
+                                        <div className='flex items-center gap-10 '>
                                             <button>
                                                 <IconsComponent type='editIcon' hover={false} active={false} />
                                             </button>

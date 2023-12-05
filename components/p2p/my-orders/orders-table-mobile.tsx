@@ -20,7 +20,7 @@ const OrdersTableMobile = (props:dataTypes) => {
                                 </div>
                                 <div className='text-end'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Status</p>
-                                    <p className={`info-14-18   ${item.Ostatus === "Completed" && "!text-buy"}  ${item.Ostatus === "Pending" && "!text-body-primary"} ${item.Ostatus === "Canceled" && "!text-cancel"}`}>{item.Ostatus}</p>
+                                    <p className={`info-14-18  ${(item.status === "isCompleted" || item.status === "isReleased")   && "!text-buy"}  ${item.status === "isProcess" && "!text-body-primary"} ${item.status === "isCanceled" && "!text-cancel"}`}>{item.status==="isProcess"?"In Process":item.status==="isReleased"?"Released":item.status==="isCompleted"?"Completed":"Canceled"}</p>
                                 </div>
                                 <div className='mt-[15px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Amount</p>

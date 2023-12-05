@@ -52,21 +52,29 @@ const AddPayment = (props: activeSection) => {
 
   const onHandleSubmit = (data: any) => {
 
-    let pmid = data?.selectPayment?.id;
-    let pm_name = data?.selectPayment?.payment_method;
-    let master_method = data?.selectPayment;
 
-    delete data.selectPayment;
+    if(data?.phonenumber?.length<10){
+      setError("phonenumber",{ type: "custom", message: "Number contain 10 digits" })
+    }
+    else{
 
-    let obj = {
-      pmid: pmid,
-      pm_name: pm_name,
-      pmObject: data,
-      master_method: master_method
+      let pmid = data?.selectPayment?.id;
+      let pm_name = data?.selectPayment?.payment_method;
+      let master_method = data?.selectPayment;
+  
+      delete data.selectPayment;
+  
+      let obj = {
+        pmid: pmid,
+        pm_name: pm_name,
+        pmObject: data,
+        master_method: master_method
+      }
+  
+      props.setFormMethod(obj);
+      props.setActive(2);
     }
 
-    props.setFormMethod(obj);
-    props.setActive(2);
   }
 
   return (
