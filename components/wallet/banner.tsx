@@ -8,7 +8,8 @@ import { signOut } from 'next-auth/react'
 interface propsData {
   assets: any;
   coinList: any;
-  withdrawList: any
+  withdrawList: any;
+  depositList:any
 }
 
 const Banner = (props: propsData):any => {

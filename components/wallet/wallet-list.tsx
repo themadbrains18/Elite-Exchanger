@@ -16,7 +16,8 @@ interface propsData {
   withdrawList: any,
   assets: any,
   refreshData: any,
-  userConvertList?: any
+  userConvertList?: any,
+  depositList?:any
 }
 
 const WalletList = (props: propsData): any => {
@@ -48,41 +49,42 @@ const WalletList = (props: propsData): any => {
     return new Date(date).toLocaleDateString('en-US', options)
   }
 
-  let walletDepositHistory = [
-    {
-      name: "Deposited",
-      amount: "$10,000",
-      dateTime: "Feb 02, 2022",
-      status: "Successful"
-    },
-    {
-      name: "Deposited",
-      amount: "$10,000",
-      dateTime: "Feb 02, 2022",
-      status: "Successful"
-    },
-    {
-      name: "Deposited",
-      amount: "$10,000",
-      dateTime: "Feb 02, 2022",
-      status: "Successful"
-    },
-    {
-      name: "Deposited",
-      amount: "$10,000",
-      dateTime: "Feb 02, 2022",
-      status: "Successful"
-    },
-    {
-      name: "Deposited",
-      amount: "$10,000",
-      dateTime: "Feb 02, 2022",
-      status: "Successful"
-    }
+  // let walletDepositHistory = [
+  //   {
+  //     name: "Deposited",
+  //     amount: "$10,000",
+  //     dateTime: "Feb 02, 2022",
+  //     status: "Successful"
+  //   },
+  //   {
+  //     name: "Deposited",
+  //     amount: "$10,000",
+  //     dateTime: "Feb 02, 2022",
+  //     status: "Successful"
+  //   },
+  //   {
+  //     name: "Deposited",
+  //     amount: "$10,000",
+  //     dateTime: "Feb 02, 2022",
+  //     status: "Successful"
+  //   },
+  //   {
+  //     name: "Deposited",
+  //     amount: "$10,000",
+  //     dateTime: "Feb 02, 2022",
+  //     status: "Successful"
+  //   },
+  //   {
+  //     name: "Deposited",
+  //     amount: "$10,000",
+  //     dateTime: "Feb 02, 2022",
+  //     status: "Successful"
+  //   }
 
-  ];
+  // ];
 
   let dataWithdraw = props?.withdrawList;
+  let dataDeposit = props?.depositList;
   let dataCoinWallet = props.coinList;
   let itemsCoinsPerPage = 10;
 
@@ -129,11 +131,11 @@ const WalletList = (props: propsData): any => {
   //==========================================================
   let itemsPerPage = 10;
   const endOffset = itemOffset + itemsPerPage;
-  const currentItems = walletDepositHistory.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(walletDepositHistory.length / itemsPerPage);
+  const currentItems = dataDeposit.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(dataDeposit.length / itemsPerPage);
 
   const handlePageClick = async (event: any) => {
-    const newOffset = (event.selected * itemsPerPage) % walletDepositHistory.length;
+    const newOffset = (event.selected * itemsPerPage) % dataDeposit.length;
     setItemOffset(newOffset);
   };
 
@@ -405,7 +407,7 @@ const WalletList = (props: propsData): any => {
                             </div>
                           </div>
                           <div className={`fullWidthContent`}>
-                            <div className="flex items-center gap-[10px] justify-center pb-[10px]">
+                            <div className="flex items-center gap-[10px] justify-center pb-[10px] overflow-x-auto">
                               <button onClick={() => { setShow1(1) }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Deposit</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
@@ -496,7 +498,7 @@ const WalletList = (props: propsData): any => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentItems && currentItems.length > 0 && currentItems?.map((item, index) => {
+                    {currentItems && currentItems.length > 0 && currentItems?.map((item:any, index:number) => {
                       return (
                         <tr key={index} className="rounded-5 group dark:hover:bg-black-v-1 hover:bg-[#FEF2F2] cursor-pointer">
                           <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
@@ -504,8 +506,8 @@ const WalletList = (props: propsData): any => {
                               {/* <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" /> */}
                               <IconsComponent type="deposited" hover={false} active={false} />
                               <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                <p className="info-14-18 dark:text-white">{item?.name}</p>
-                                <p className="info-14-18 !text-[10px] lg:hidden">{item?.dateTime}</p>
+                                <p className="info-14-18 dark:text-white">Deposited</p>
+                                <p className="info-14-18 !text-[10px] lg:hidden">{item?.createdAt}</p>
                               </div>
                             </div>
                           </td>
@@ -513,10 +515,10 @@ const WalletList = (props: propsData): any => {
                             <p className="info-14-18 dark:text-white  lg:text-start text-end">{item?.amount}</p>
                           </td>
                           <td className="max-[1023px]:hidden">
-                            <p className="info-14-18 dark:text-white">{item?.dateTime}</p>
+                            <p className="info-14-18 dark:text-white">{item?.createdAt}</p>
                           </td>
                           <td className=" text-end">
-                            <p className={`info-14-18  ${item?.status == "Successful" ? "text-buy" : "text-cancel"}`}>{item?.status}</p>
+                            <p className={`info-14-18  ${item?.successful === "1" ? "text-buy" : "text-cancel"}`}>{item?.successful === "1"?'Successful':'Pending'}</p>
                           </td>
                         </tr>
                       );
@@ -797,7 +799,7 @@ const WalletList = (props: propsData): any => {
                             </div>
                           </div>
                           <div className={`fullWidthContent`}>
-                            <div className="flex items-center gap-[10px] justify-center pb-[10px]">
+                            <div className="flex items-center gap-[10px] justify-center pb-[10px] overflow-x-auto">
 
                               <button className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Transfer</span>

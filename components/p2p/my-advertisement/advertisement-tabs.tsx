@@ -252,11 +252,15 @@ const AdvertisementTabs = (props: propsData) => {
                     </button>
                 </div>
                 <div className='flex md:flex-nowrap flex-wrap items-center gap-10 w-full lg:w-auto md:p-0 pb-[15px] md:!border-none border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2'>
+                <div className='relative max-w-full md:max-w-[40%] w-full'>
                     <FilterSelectMenuWithCoin data={props.coinList} border={true} dropdown={1} setCurrencyName={setCurrencyName} />
+                    </div>
+                    <div className=' max-w-full md:max-w-[40%] w-full'>
                     <FiliterSelectMenu data={props.masterPayMethod}
                         placeholder="Choose Payment Method"
                         auto={false}
                         widthFull={false} type="pmethod" onPaymentMethodChange={onPaymentMethodChange} />
+                    </div>
                     <div className=' max-w-full md:max-w-[20%] w-full'>
                         <DatePicker
                             placeholderText="Select date"

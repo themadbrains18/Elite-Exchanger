@@ -59,15 +59,15 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
   return (
 
     <>
-      <div className='max-w-full  w-full'>
+      <div className='max-w-full  w-full' >
         {/* top dropdown input */}
 
         {props.dropdown === 1 &&
           <>
-            <div className={`${props.border == true && 'border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[8px] pl-[15px] pr-[5px]'} `}>
+            <div className={`${props.border == true && 'border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[8px] pl-[15px] pr-[5px]'} `}  onClick={() => { setShow(!show) }}>
               <div className=" cursor-pointer max-w-full w-full">
-                <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} onClick={() => { setShow(!show) }}>
-                  <li className='flex items-center gap-[5px] rounded-[5px] mr-[15px]'>
+                <div className={`${`coin-dropdown` + props?.dropdown} pl-10 cursor-pointer flex justify-between items-center`}  onClick={() => { setShow(!show) }}>
+                  <li className='flex items-center gap-[5px] rounded-[5px] mr-[15px] w-full'>
                     <Image src={`${(image === 'Coin.svg' && (props?.value === null || props?.value === undefined)) ? `/assets/history/Coin.svg` : drop1Image !== '' ? drop1Image : drop2Image !==''?drop2Image :image}`} alt="error" width={20} height={20} />
                     <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text ${props.dropdown === 1 ? ' one' : ' two'}`}>{text}</p>
                   </li>
@@ -103,7 +103,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
           <>
             <div className={`${props.border == true && 'border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[8px] pl-[15px] pr-[5px]'} `}>
               <div className=" cursor-pointer max-w-full w-full">
-                <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} onClick={() => { setShowSecond(!showSecond) }}>
+                <div className={`${`coin-dropdown` + props?.dropdown} pl-10  cursor-pointer flex justify-between items-center`} onClick={() => { setShowSecond(!showSecond) }}>
                   <li className='flex items-center gap-[5px] rounded-[5px] mr-[15px]'>
                     <Image src={`${(image === 'Coin.svg' && (props?.value === null || props?.value === undefined)) ? `/assets/history/Coin.svg` : drop1Image !== '' ? drop1Image : drop2Image !==''?drop2Image :image}`} alt="error" width={20} height={20} />
                     <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text ${props.dropdown === 2 ? ' one' : ' two'}`}>{text}</p>

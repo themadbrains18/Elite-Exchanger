@@ -5,12 +5,25 @@ interface dataTypes{
 }
 const OrdersTableMobile = (props:dataTypes) => {
 
+
+    function formatDate(date: Date) {
+        const options: {} = {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        };
+        return new Date(date).toLocaleDateString("en-US", options);
+      }
+
   return (
     <>
         
         <div>
             {
-                    props.data.map((item,ind)=>{
+                    props.data.map((item:any,ind:number)=>{
                     return(
                         <Fragment key={ind}>
                             <div className='grid grid-cols-2 py-[15px] border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2'>
@@ -24,7 +37,7 @@ const OrdersTableMobile = (props:dataTypes) => {
                                 </div>
                                 <div className='mt-[15px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Amount</p>
-                                    <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.amount}</p>
+                                    <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.spend_amount}</p>
                                 </div>
                                 <div  className='text-end mt-[15px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Price</p>
@@ -32,11 +45,11 @@ const OrdersTableMobile = (props:dataTypes) => {
                                 </div>
                                 <div className='mt-[15px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Qty</p>
-                                    <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.qty}</p>
+                                    <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity}</p>
                                 </div>
                                 <div  className='text-end mt-[15px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Date / Time </p>
-                                    <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.time}</p>
+                                    <p className='info-14-18 !text-nav-primary dark:!text-white'>{formatDate(item.createdAt)}</p>
                                 </div>
                             </div>
                         </Fragment>

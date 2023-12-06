@@ -3,7 +3,7 @@
 
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createRouter } from "next-connect";
-import { postData, getMethod } from "../../../libs/requestMethod";
+import { postData, getMethod, deleteMethod } from "../../../libs/requestMethod";
 const router = createRouter<NextApiRequest, NextApiResponse>();
 import AES from 'crypto-js/aes';
 import { enc } from 'crypto-js';
@@ -38,6 +38,21 @@ router.post(async (req: NextApiRequest, res: NextApiResponse) => {
         return res.status(200).send({ data });
     } catch (error: any) {
         throw new Error(error.message)
+    }
+});
+
+router.delete(async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+
+        // const decodedStr = decodeURIComponent(req.query.id);
+        // let formData = AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
+        let token = req.headers.authorization;
+
+        let data = await deleteMethod(`${process.env.NEXT_PUBLIC_APIURL}/payment/delete-method/${req.query.id}`,  token);
+
+        return res.status(200).send({ data });
+    } catch (error: any) {
+        throw new Error(error.message)  
     }
 });
 
