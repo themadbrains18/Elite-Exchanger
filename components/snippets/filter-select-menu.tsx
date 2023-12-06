@@ -38,9 +38,9 @@ const FiliterSelectMenu = (props: dataList) => {
     <>
       <div className={`relative max-w-full ${props.widthFull ? 'max-w-full' : 'lg:max-w-[300px]'} w-full ${props.auto && 'mx-auto'}`}>
         {/* top dropdown input */}
-        <div className={`border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[${props.type === 'express' ? '15px' : '8px'}] px-[15px]`}>
-          <div className="coin-dropdown flex items-center gap-10 cursor-pointer justify-between" onClick={() => { setShow(!show) }}>
-            <div>
+        <div className={`border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[${props.type === 'express' ? '15px' : '8px'}] px-[15px]`} onClick={() => { setShow(!show) }}>
+          <div className="coin-dropdown flex items-center gap-10 cursor-pointer justify-between" >
+            <div className='w-full'>
               <input type="text" id='paymentMethod' className="sm-text max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-[transparent] pr-0 outline-none bg-transparent w-full  cursor-pointer dark:text-white"
                 placeholder={`${props.placeholder}`} readOnly value={active} />
             </div>

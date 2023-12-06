@@ -4,11 +4,15 @@ import { getProviders, getSession } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from "./api/auth/[...nextauth]";
+import ReEnterpass from '@/components/login-register/re-enterpass'
+
 
 const Login = ({ providers }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <>
       <SignIn />
+      {/* <ReEnterpass /> */}
+      
     </>
   )
 }

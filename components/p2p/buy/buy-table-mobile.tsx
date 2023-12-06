@@ -1,111 +1,132 @@
+import Context from '@/components/contexts/context';
 import Image from 'next/image';
 import React, { Fragment, useContext, useState } from 'react';
+import ReactPaginate from 'react-paginate';
 
 interface activeSection {
     setShow1: any;
+    posts?: any;
   }
 
 const BuyTableMobile = (props:activeSection) => {
+    const [itemOffset, setItemOffset] = useState(0);
+    const { mode } = useContext(Context);
 
-    let data = [
-        {
-            name: "Jerry Smith",
-            image: "user1.png",
-            orders: "94.14% 144 Orders",
-            pricePerCoin: "₹ 82.00INR/USDT",
-            limit: "5,000 ~ 9,000 ",
-            Available: '9.000342',
-            PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-            sell: "Buy"
-        },
-        {
-            name: "Jerry Smith",
-            image: "user1.png",
-            orders: "94.14% 144 Orders",
-            pricePerCoin: "₹ 82.00INR/USDT",
-            limit: "5,000 ~ 9,000 ",
-            Available: '9.000342',
-            PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-            sell: "Buy"
-        },
-        {
-            name: "Jerry Smith",
-            image: "user1.png",
-            orders: "94.14% 144 Orders",
-            pricePerCoin: "₹ 82.00INR/USDT",
-            limit: "5,000 ~ 9,000 ",
-            Available: '9.000342',
-            PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-            sell: "Buy"
-        },
-        {
-            name: "Jerry Smith",
-            image: "user1.png",
-            orders: "94.14% 144 Orders",
-            pricePerCoin: "₹ 82.00INR/USDT",
-            limit: "5,000 ~ 9,000 ",
-            Available: '9.000342',
-            PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-            sell: "Buy"
-        },
-        {
-            name: "Jerry Smith",
-            image: "user1.png",
-            orders: "94.14% 144 Orders",
-            pricePerCoin: "₹ 82.00INR/USDT",
-            limit: "5,000 ~ 9,000 ",
-            Available: '9.000342',
-            PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-            sell: "Buy"
-        },
-        {
-            name: "Jerry Smith",
-            image: "user1.png",
-            orders: "94.14% 144 Orders",
-            pricePerCoin: "₹ 82.00INR/USDT",
-            limit: "5,000 ~ 9,000 ",
-            Available: '9.000342',
-            PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-            sell: "Buy"
-        },
-        {
-            name: "Jerry Smith",
-            image: "user1.png",
-            orders: "94.14% 144 Orders",
-            pricePerCoin: "₹ 82.00INR/USDT",
-            limit: "5,000 ~ 9,000 ",
-            Available: '9.000342',
-            PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-            sell: "Buy"
-        },
-        {
-            name: "Jerry Smith",
-            image: "user1.png",
-            orders: "94.14% 144 Orders",
-            pricePerCoin: "₹ 82.00INR/USDT",
-            limit: "5,000 ~ 9,000 ",
-            Available: '9.000342',
-            PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-            sell: "Buy"
-        },
-        {
-            name: "Jerry Smith",
-            image: "user1.png",
-            orders: "94.14% 144 Orders",
-            pricePerCoin: "₹ 82.00INR/USDT",
-            limit: "5,000 ~ 9,000 ",
-            Available: '9.000342',
-            PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-            sell: "Buy"
-        },
-    ];
+
+    let data = props.posts;
+
+    let itemsPerPage = 10;
+    const endOffset = itemOffset + itemsPerPage;
+    const currentItems = data?.slice(itemOffset, endOffset);
+    const pageCount = Math.ceil(data?.length / itemsPerPage);
+  
+    const handlePageClick = async (event: any) => {
+      const newOffset = (event.selected * itemsPerPage) % data.length;
+      setItemOffset(newOffset);
+  
+    };
+
+    // let data = [
+    //     {
+    //         name: "Jerry Smith",
+    //         image: "user1.png",
+    //         orders: "94.14% 144 Orders",
+    //         pricePerCoin: "₹ 82.00INR/USDT",
+    //         limit: "5,000 ~ 9,000 ",
+    //         Available: '9.000342',
+    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
+    //         sell: "Buy"
+    //     },
+    //     {
+    //         name: "Jerry Smith",
+    //         image: "user1.png",
+    //         orders: "94.14% 144 Orders",
+    //         pricePerCoin: "₹ 82.00INR/USDT",
+    //         limit: "5,000 ~ 9,000 ",
+    //         Available: '9.000342',
+    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
+    //         sell: "Buy"
+    //     },
+    //     {
+    //         name: "Jerry Smith",
+    //         image: "user1.png",
+    //         orders: "94.14% 144 Orders",
+    //         pricePerCoin: "₹ 82.00INR/USDT",
+    //         limit: "5,000 ~ 9,000 ",
+    //         Available: '9.000342',
+    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
+    //         sell: "Buy"
+    //     },
+    //     {
+    //         name: "Jerry Smith",
+    //         image: "user1.png",
+    //         orders: "94.14% 144 Orders",
+    //         pricePerCoin: "₹ 82.00INR/USDT",
+    //         limit: "5,000 ~ 9,000 ",
+    //         Available: '9.000342',
+    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
+    //         sell: "Buy"
+    //     },
+    //     {
+    //         name: "Jerry Smith",
+    //         image: "user1.png",
+    //         orders: "94.14% 144 Orders",
+    //         pricePerCoin: "₹ 82.00INR/USDT",
+    //         limit: "5,000 ~ 9,000 ",
+    //         Available: '9.000342',
+    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
+    //         sell: "Buy"
+    //     },
+    //     {
+    //         name: "Jerry Smith",
+    //         image: "user1.png",
+    //         orders: "94.14% 144 Orders",
+    //         pricePerCoin: "₹ 82.00INR/USDT",
+    //         limit: "5,000 ~ 9,000 ",
+    //         Available: '9.000342',
+    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
+    //         sell: "Buy"
+    //     },
+    //     {
+    //         name: "Jerry Smith",
+    //         image: "user1.png",
+    //         orders: "94.14% 144 Orders",
+    //         pricePerCoin: "₹ 82.00INR/USDT",
+    //         limit: "5,000 ~ 9,000 ",
+    //         Available: '9.000342',
+    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
+    //         sell: "Buy"
+    //     },
+    //     {
+    //         name: "Jerry Smith",
+    //         image: "user1.png",
+    //         orders: "94.14% 144 Orders",
+    //         pricePerCoin: "₹ 82.00INR/USDT",
+    //         limit: "5,000 ~ 9,000 ",
+    //         Available: '9.000342',
+    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
+    //         sell: "Buy"
+    //     },
+    //     {
+    //         name: "Jerry Smith",
+    //         image: "user1.png",
+    //         orders: "94.14% 144 Orders",
+    //         pricePerCoin: "₹ 82.00INR/USDT",
+    //         limit: "5,000 ~ 9,000 ",
+    //         Available: '9.000342',
+    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
+    //         sell: "Buy"
+    //     },
+    // ];
 
 
 
     return (
         <>
             {
-                data.map((elem, ind) => {
+                currentItems?.map((item:any, ind:number) => {
+                    const profileImg = item?.User.profile && item?.User?.profile?.image !== null ? process.env.NEXT_PUBLIC_APIURL + "/dp/" + item?.User?.profile?.image : `/assets/orders/user1.png`;
+                    const userName = item?.User?.profile && item?.User?.profile?.fName !== null ? item?.User?.profile?.fName : item?.User?.user_kyc?.fname;
                     return (
                         <Fragment key={ind}>
                             {/* row */}
@@ -113,43 +134,41 @@ const BuyTableMobile = (props:activeSection) => {
 
                                 <div>
                                     <div className="flex gap-2 md:py-[15px] items-center px-0 md:px-[5px] ">
-                                        <Image src={`/assets/orders/${elem.image}`} width={30} height={30} alt="coins" />
+                                        <Image src={profileImg} width={30} height={30} alt="coins" />
                                         <div>
-                                            <p className="info-14-18 !text-[14px] text-black dark:text-white">{elem.name}</p>
-                                            <p className="sm-text !text-[10px] dark:text-beta">{elem.orders}</p>
+                                            <p className="info-14-18 !text-[14px] text-black dark:text-white">{userName}</p>
+                                            <p className="sm-text !text-[10px] dark:text-beta">{item?.orders}</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* <div className='flex items-center justify-end'>
-                                    <button className="info-14-18 text-cancel px-[20px] py-[9px] rounded-[4px] bg-orange" onClick={()=>{props.setShow1(true)}}>{elem.sell}</button>
-                                </div> */}
+                               
                                 <div className=' flex items-center justify-end'>
-                                    <button className="info-14-18 text-buy px-[20px] py-[9px] rounded-[4px]   bg-green" onClick={()=>{props.setShow1(true)}}>{elem.sell}</button>
+                                    <button className="info-14-18 text-buy px-[20px] py-[9px] rounded-[4px]   bg-green" onClick={()=>{props.setShow1(true)}}>buy</button>
                                 </div>
                                 <div className='mt-[12px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Price:</p>
-                                    <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>₹ 82.00 <span className='sm-text !text-[10px] dark:!text-[#9295A6] !text-banner-text'>INR/USDT</span></p>
+                                    <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{item?.price} <span className='sm-text !text-[10px] dark:!text-[#9295A6] !text-banner-text'>INR/USDT</span></p>
                                 </div>
-                                <div className='mt-[12px]'>
+                               <div className='mt-[12px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Limit:</p>
-                                    <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{elem.limit}<span className='sm-text !text-[14px] !text-h-primary dark:!text-beta'>INR</span></p>
+                                    <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{item?.min_limit} ~ ${item?.max_limit}<span className='sm-text !text-[14px] !text-h-primary dark:!text-beta'>INR</span></p>
                                 </div>
                                 <div className='mt-[12px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Available:</p>
-                                    <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{elem.Available}</p>
+                                    <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{item?.quantity} {item?.token?.symbol}</p>
                                 </div>
                                 <div className='mt-[12px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Available:</p>
                                     <div className='flex items-center gap-10 mt-[5px]'>
                                         {
-                                        elem.PaymentMethod.map((elem,ind)=>{
-                                            return(
-                                                <Fragment key={ind}>
-                                                <Image src={`/assets/payment-methods/${elem}`} alt='error' width={16} height={16} />
-                                            </Fragment>
-                                            )
-                                        })
+                                            item?.user_p_method.map((elem: any, ind: any) => {
+                                                return(
+                                                    <Fragment key={ind}>
+                                                        <Image src={`${process.env.NEXT_PUBLIC_APIURL}/payment_icon/${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />
+                                                    </Fragment>
+                                                )
+                                            })
                                         }
                                     </div>
                                 </div>
@@ -158,6 +177,18 @@ const BuyTableMobile = (props:activeSection) => {
                     )
                 })
             }
+            <div className="flex pt-[25px] items-center justify-end">
+                <ReactPaginate
+                className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                breakLabel="..."
+                nextLabel=">"
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={5}
+                marginPagesDisplayed={2}
+                pageCount={pageCount}
+                previousLabel="<"
+                renderOnZeroPageCount={null} />
+            </div>
         </>
     )
 }
