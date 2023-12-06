@@ -5,11 +5,54 @@ import HeaderLogo from "../svg-snippets/headerLogo";
 import Verification from "./verification";
 import SecurityCode from "./securityCode";
 import { useRouter } from "next/router";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+
+const schema = yup.object().shape({
+  username: yup.string()
+    .required('Email / Phone is required')
+    .test('email_or_phone', 'Email / Phone is invalid', (value) => {
+      return validateEmail(value) || validatePhone(value);
+    }),
+})
+
+const validateEmail = (email: string | undefined) => {
+  return yup.string().email().isValidSync(email)
+};
+
+const validatePhone = (phone: string | undefined) => {
+  return yup.number().integer().positive().test(
+    (phone) => {
+      return (phone && phone.toString().length >= 10 && phone.toString().length <= 14) ? true : false;
+    }
+  ).isValidSync(phone);
+};
 
 const ResetPassword = () => {
   const { mode } = useContext(Context);
   const [step, setStep] = useState(0);
   const router=useRouter();
+  const [isEmail, setIsEmail] = useState(false);
+  const [formData, setFormData] = useState({ username: '' });
+  let { register, setValue, handleSubmit, watch, setError, formState: { errors } } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onHandleSubmit = async (data: any) => {
+    let wildcard= router
+    console.log(wildcard);
+    
+    try {
+      let isEmailExist = await validateEmail(data.username);
+   
+      setIsEmail(isEmailExist);
+        setStep(1);
+        setFormData(data);
+    } catch (error) {
+
+    }
+  }
 
   return (
     <>
@@ -32,14 +75,13 @@ const ResetPassword = () => {
             <h1 className="lg-heading mb-5">Password Recovery</h1>
             <p className="mb-5  lg:mb-[70px] md-text">Enter your email to recover your password</p>
              {/**Form Start  */}
-            <form>
+            <form onSubmit={handleSubmit(onHandleSubmit)}>
 
             <div className="flex flex-col gap-[15px] lg:gap-10">
-              <input type="email" placeholder="Enter Email " className="input-cta" />
+              <input type="email" placeholder="Enter Email "  {...register('username')} name="username" className="input-cta"  />
+              {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
             </div>
-            <button className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-600" onClick={()=>{
-                setStep(1)
-            }}>Reset Password</button>
+            <button type="submit" className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-600" >Reset Password</button>
             </form>
              {/**Form End  */}
           </div>
@@ -49,11 +91,11 @@ const ResetPassword = () => {
         }
         {
             step===1 &&
-            <Verification step={step} setStep={setStep} api='forget'/>
+            <Verification step={step} setStep={setStep} api='forget' isEmail={isEmail} formData={formData}/>
         }
         {
             step===2 &&
-            <SecurityCode />
+            <SecurityCode formData={formData} api='forget'/>
         }
     </>
   );

@@ -613,7 +613,7 @@ const Historytrade = (props: propsData) => {
                   </table>
                 </div>
                 <div className="flex pt-[25px] items-center justify-between">
-                  <p className="info-12 md:footer-text !text-gamma">52 assets</p>
+                  <p className="info-12 md:footer-text !text-gamma">{depositCurrentItems.length} assets</p>
 
                   <ReactPaginate
                     className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
