@@ -3,6 +3,7 @@ import Context from '../contexts/context';
 import Image from 'next/image';
 import IconsComponent from './icons';
 import { toast } from 'react-toastify';
+import Link from 'next/link';
 
 
 interface activeSection {
@@ -12,7 +13,33 @@ interface activeSection {
 
 const ReferPopup = (props:activeSection) => {
     const { mode } = useContext(Context);
-    let icons=['whatsapp','fb','twitter','download','telegram','instagram']
+    // let icons=['whatsapp','fb','twitter','download','telegram','instagram'];
+    let icons =[
+      {
+        iconName:"whatsapp",
+        iconLink:"https://web.whatsapp.com/"
+      },
+      {
+        iconName:"fb",
+        iconLink:"https://www.facebook.com/"
+      },
+      {
+        iconName:"twitter",
+        iconLink:"https://twitter.com/"
+      },
+      {
+        iconName:"download",
+        iconLink:"#"
+      },
+      {
+        iconName:"telegram",
+        iconLink:"https://web.telegram.org/a/"
+      },
+      {
+        iconName:"instagram",
+        iconLink:"https://www.instagram.com/"
+      },
+    ]
     return (
       <div className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[562px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
         <div className="flex items-center justify-between mb-40">
@@ -67,11 +94,13 @@ const ReferPopup = (props:activeSection) => {
         </div>
      <div className='pt-40 flex gap-[15px] items-center justify-center'>
             {
-                icons?.map((item,index)=>{
+                icons?.map((item:any,index:number)=>{
                     return(
                         <div key={index} className='bg-primary-100 dark:bg-black rounded-full min-w-[32px] md:min-w-[48px] min-h-[32px] md:min-h-[48px] flex'>
                           <div className='max-w-[14px] md:max-w-[24px] w-full m-auto'> 
-                            <IconsComponent type={item} hover={false} active={false}/>
+                          <Link href={item.iconLink} target='_blank'>
+                            <IconsComponent type={item.iconName} hover={false} active={false}/>
+                          </Link>
                           </div>
                         </div>
                     )

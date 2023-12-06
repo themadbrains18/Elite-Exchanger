@@ -67,7 +67,7 @@ const Referal = (props: fixSection) => {
 
         <div className="max-[1023px] dark:bg-omega bg-white  rounded-[10px]">
           <div className="lg:pb-[50px] border-b p-20 border-[transparent] lg:border-grey-v-2 lg:dark:border-[#e9eaf026]">
-            <p className="sec-title lg:px-0  pt-20 pb-[15px] lg:pb-[60px]  border-b-[0.5px]  border-grey-v-2 dark:border-[#e9eaf026] lg:border-[transparent]">
+            <p className="sec-title lg:px-0  py-20 mb-[20px] border-b-[0.5px]  border-grey-v-2 dark:border-[#e9eaf026] lg:border-[transparent]">
               Refer Friends
             </p>
             <div className="flex xl:flex-row flex-col gap-10 lg:gap-[30px] mb-30 lg:mt-0 mt-20">

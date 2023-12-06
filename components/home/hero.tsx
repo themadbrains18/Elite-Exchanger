@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const Hero = () => {
     return(
-        <div className="pb-[0] md:py-[91px]  w-full">
+        <div className="pb-[0] pt-[40px] md:py-[91px]  w-full">
             <div className="dark:bg-d-bg-primary bg-bg-primary rounded-20 xl:px-[92px] py-[20px] lg:py-[32px] ">
                 <div className="container">
                     <div className="heroGrid grid lg:grid-cols-2  gap-4 " >
