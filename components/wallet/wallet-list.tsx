@@ -544,7 +544,7 @@ const WalletList = (props: propsData): any => {
                 </table>
               </div>
               <div className="flex pt-[25px] items-center justify-between">
-                <p className="info-12 md:footer-text !text-gamma">52 assets</p>
+                <p className="info-12 md:footer-text !text-gamma">{currentItems?.length} assets</p>
                 <ReactPaginate className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`} breakLabel="..." nextLabel=">" onPageChange={handlePageClick} pageRangeDisplayed={5} marginPagesDisplayed={2} pageCount={pageCount} previousLabel="<" renderOnZeroPageCount={null} />
               </div>
             </>
