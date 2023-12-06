@@ -73,8 +73,8 @@ const BuyCoinsTabs = (props: activeSection) => {
 
   return (
     <>
-      <div className="flex flex-wrap gap-20 items-center justify-between mt-30 md:mt-40 mb-20">
-        <div className="flex gap-5 md:gap-30 w-full lg:w-auto">
+      <div className="flex flex-wrap gap-20 items-center justify-end mt-30 md:mt-40 mb-20">
+        {/* <div className="flex gap-5 md:gap-30 w-full lg:w-auto">
           <button
             className={`pb-20 md:pb-30 nav-text-sm md:nav-text-lg border-b-2 border-[transparent] whitespace-nowrap ${
               active === 1 && "border-primary !text-primary"
@@ -125,7 +125,7 @@ const BuyCoinsTabs = (props: activeSection) => {
           >
             USDC
           </button>
-        </div>
+        </div> */}
         <div className="flex md:flex-nowrap flex-wrap  items-center gap-10 w-full lg:w-auto ">
           <div className="relative max-w-full md:max-w-[50%] w-full">
             <FilterSelectMenuWithCoin
@@ -149,7 +149,7 @@ const BuyCoinsTabs = (props: activeSection) => {
       </div>
 
       {/* Table Data */}
-      {active === 1 && (
+
         <div>
           <div className="md:block hidden">
             <BuyTableDesktop
@@ -159,11 +159,11 @@ const BuyCoinsTabs = (props: activeSection) => {
             />
           </div>
           <div className="md:hidden">
-            <BuyTableMobile setShow1={props.setShow1} />
+            <BuyTableMobile setShow1={props.setShow1} posts={posts} />
           </div>
         </div>
-      )}
-      {active === 2 && (
+
+      {/* {active === 2 && (
         <div>
           <div className="md:block hidden">
             <BuyTableDesktop setShow1={props.setShow1} />
@@ -202,7 +202,7 @@ const BuyCoinsTabs = (props: activeSection) => {
             <BuyTableMobile setShow1={props.setShow1} />
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 };

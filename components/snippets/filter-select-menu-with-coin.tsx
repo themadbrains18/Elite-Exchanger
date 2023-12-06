@@ -60,7 +60,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
   return (
 
     <>
-      <div className='max-w-full  w-full'>
+      <div className='max-w-full  w-full' >
         {/* top dropdown input */}
 
         {props.dropdown === 1 &&
@@ -83,7 +83,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
                 <div className='border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-full w-full py-[8px] px-[10px] '>
                   <Image src="/assets/history/search.svg" alt='error' width={15} height={15} />
                   <input type="search" className='nav-text-sm !text-beta outline-none bg-[transparent] w-full' onChange={(e) => filterCoinsInList(e)} />
-                </div>
+                </div>  
               </div>
               <ul>
                 {filterCoin !== undefined && filterCoin.map((item: any, index: number) => {

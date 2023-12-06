@@ -32,6 +32,7 @@ const PositionsTable = (props: propsData) => {
 
   const actionPerform = async () => {
     let obj = { "id": positionId };
+console.log(positionId);
 
     const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
     let record = encodeURIComponent(ciphertext.toString());
@@ -101,6 +102,12 @@ const PositionsTable = (props: propsData) => {
               <th className="py-[10px]">
                 <div className="flex ">
                   <p className="text-start top-label dark:text-gamma">Symbol</p>
+                  <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                </div>
+              </th>
+              <th className="py-[10px]">
+                <div className="flex">
+                  <p className="  top-label dark:text-gamma">Qty</p>
                   <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
@@ -187,6 +194,9 @@ const PositionsTable = (props: propsData) => {
                       </div>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                      <p className="top-label !font-[600] !text-buy">{item?.qty>0 ?item?.qty?.toFixed(5): item?.qty?.toFixed(2)}</p>
+                    </td>
+                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <p className="top-label !font-[600] !text-buy">{item?.size}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
@@ -208,13 +218,13 @@ const PositionsTable = (props: propsData) => {
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <div className='flex items-center gap-[5px]'>
                         <div>
-                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{item?.pnl}</p>
+                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{item?.pnl?.toFixed(8)}</p>
                           <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{item.order_type === 'value' ? 'USDT' : 'BTC'}</p>
                         </div>
                         <IconsComponent type='sendIcon' />
                       </div>
                     </td>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%] cursor-pointer'>
                       <div className='flex items-center'>
                         <p className='top-label dark:!text-[#cccc56] !font-[600] pr-[20px]' onClick={() => closePositionOrder(item?.id)}>Close Position</p>
                         {/* <div className='flex items-center gap-[20px]'>

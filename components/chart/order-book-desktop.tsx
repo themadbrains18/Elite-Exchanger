@@ -15,46 +15,6 @@ const OrderBook = (props: propsData) => {
     const [show, setShow] = useState(1);
     const { mode } = useContext(Context);
 
-    // const [sellTrade, setSellTrade] = useState([]);
-    // const [BuyTrade, setBuyTrade] = useState([]);
-    // const [allTradeHistory, setAllTradeHistory] = useState([]);
-
-    // useEffect(() => {
-    //     // getAllMarketOrderByToken();
-    // }, [props.slug,props.token]);
-
-    // const filterBuySellRecords = (data:any) => {
-    //     if (data && data.length > 0) {
-    //         let sellRecord = data.filter((item: any) => {
-    //             return item.order_type === 'sell'
-    //         })
-
-    //         let buyRecord = data.filter((item: any) => {
-    //             return item.order_type === 'buy'
-    //         })
-    //         setSellTrade(sellRecord);
-    //         setBuyTrade(buyRecord);
-    //     }
-    //     else{
-    //         setSellTrade([]);
-    //         setBuyTrade([]);
-    //     }
-    // }
-
-    // const getAllMarketOrderByToken = async () => {
-        
-    //     let marketHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market/token_trade_history?token_id=${props?.token?.id}`, {
-    //         method: "GET",
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //     }).then(response => response.json());
-
-    //     setAllTradeHistory(marketHistory?.data);
-        
-    //     filterBuySellRecords(marketHistory?.data);
-    // }
-
     return (
         <div className='mt-30 px-30 py-40 rounded-10  bg-white dark:bg-d-bg-primary'>
             {/* ta cta */}
@@ -101,8 +61,8 @@ const OrderBook = (props: propsData) => {
                                         if (item.order_type === 'buy') {
                                             return <div className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-buy'>$ {item?.limit_usdt}</p>
-                                                <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount}</p>
-                                                <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt}</p>
+                                                <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount?.toFixed(5)}</p>
+                                                <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt?.toFixed(5)}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
                                             </div>
                                         }
@@ -150,8 +110,8 @@ const OrderBook = (props: propsData) => {
                                         if (item.order_type === 'sell') {
                                             return <div className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-sell'>$ {item?.limit_usdt}</p>
-                                                <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount}</p>
-                                                <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt}</p>
+                                                <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount?.toFixed(5)}</p>
+                                                <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt?.toFixed(5)}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
                                             </div>
                                         }
@@ -197,8 +157,8 @@ const OrderBook = (props: propsData) => {
                                         if (item.order_type === 'sell') {
                                             return <div className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-sell'>$ {item?.limit_usdt}</p>
-                                                <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount}</p>
-                                                <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt}</p>
+                                                <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount?.toFixed(5)}</p>
+                                                <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt?.toFixed(5)}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
                                             </div>
                                         }
@@ -246,8 +206,8 @@ const OrderBook = (props: propsData) => {
                                         if (item.order_type === 'buy') {
                                             return <div className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-buy'>$ {item?.limit_usdt}</p>
-                                                <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount}</p>
-                                                <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt}</p>
+                                                <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount?.toFixed(5)}</p>
+                                                <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt?.toFixed(5)}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
                                             </div>
                                         }
@@ -297,16 +257,16 @@ const OrderBook = (props: propsData) => {
                                 if (item.order_type === 'buy') {
                                     return <div className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                         <p className='info-12 !text-[14px] z-[2] !text-buy'>$ {item?.limit_usdt}</p>
-                                        <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount}</p>
-                                        <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt}</p>
+                                        <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount?.toFixed(5)}</p>
+                                        <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt?.toFixed(5)}</p>
                                         <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
                                     </div>
                                 }
                                 else {
                                     return <div className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                         <p className='info-12 !text-[14px] z-[2] !text-sell'>$ {item?.limit_usdt}</p>
-                                        <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount}</p>
-                                        <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt}</p>
+                                        <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount?.toFixed(5)}</p>
+                                        <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt?.toFixed(5)}</p>
                                         <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
                                     </div>
                                 }
