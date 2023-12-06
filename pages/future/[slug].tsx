@@ -47,6 +47,8 @@ const FutureTrading = (props: Session) => {
 
     const [positionHistoryData, setPositionHistoryData] = useState([]);
     const [openOrderHistoryData, setOpenOrderHistoryData] = useState([]);
+    const [topHLOCData, setTopHLOCData]= useState(Object);
+    const [positionRecord, setPositionRecord] = useState([]);
 
     const { slug } = router.query;
 
@@ -62,10 +64,6 @@ const FutureTrading = (props: Session) => {
             let eventDataType = JSON.parse(event.data).type;
             if (eventDataType === "price") {
                 refreshTokenList();
-                getUserFuturePositionData();
-                getUserOpenOrderData();
-                getUserFuturePositionHistoryData();
-                getUserFutureOpenOrderHistoryData();
             }
 
             if (eventDataType === 'position') {
@@ -73,6 +71,8 @@ const FutureTrading = (props: Session) => {
                 getUserOpenOrderData();
                 getUserFuturePositionHistoryData();
                 getUserFutureOpenOrderHistoryData();
+                getCoinHLOCData();
+                getPositionOrderBook
             }
         }
 
@@ -89,6 +89,8 @@ const FutureTrading = (props: Session) => {
         getUserOpenOrderData();
         getUserFuturePositionHistoryData();
         getUserFutureOpenOrderHistoryData();
+        getCoinHLOCData();
+        getPositionOrderBook();
 
     }, [slug]);
 
@@ -215,6 +217,47 @@ const FutureTrading = (props: Session) => {
         }
     }
 
+    // ================================================ //
+    // Get future Contract top bar HLOC data //
+    // ================================================ //
+    const getCoinHLOCData = async () => {
+        try {
+            let ccurrentToken = props.coinList.filter((item: any) => {
+                return item.coin_symbol + item.usdt_symbol === slug
+            })
+            
+            let hlocData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/topbarhloc?coinid=${ccurrentToken[0]?.coin_id}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": props?.session?.user?.access_token
+                },
+            }).then(response => response.json());
+
+            setTopHLOCData(hlocData?.data);
+        } catch (error) {
+
+        }
+    }
+
+    // ================================================ //
+    // Get future Contract order book data //
+    // ================================================ //
+    const getPositionOrderBook = async () => {
+        try {
+
+            let ccurrentToken = props.coinList.filter((item: any) => {
+                return item.coin_symbol + item.usdt_symbol === slug
+            })
+            let orderBookData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/orderbook?coinid=${ccurrentToken[0]?.coin_id}`, {
+                method: "GET",
+            }).then(response => response.json());
+
+            setPositionRecord(orderBookData?.data);
+        } catch (error) {
+
+        }
+    }
+
     return (
         <>
             <ToastContainer />
@@ -222,7 +265,7 @@ const FutureTrading = (props: Session) => {
             <div className='max-[991px]:hidden flex max-[1023px]:mt-[57px] mt-[69px]'>
                 <div className='w-full max-w-[calc(100%-300px)]'>
                     {/* future trade page top header */}
-                    <TopBar show={show1} setShow={setShow1} currentToken={currentToken[0]} />
+                    <TopBar show={show1} setShow={setShow1} currentToken={currentToken[0]} topHLOCData={topHLOCData} slug={slug}/>
                     <div className='flex'>
                         <div className='w-full max-w-full max-w-[calc(100%-300px)]'>
                             <div className='flex relative w-full max-w-full'>
@@ -238,13 +281,13 @@ const FutureTrading = (props: Session) => {
                         </div>
                         <div className='w-full max-w-[300px]'>
                             {/* order Book compoenent */}
-                            <OrderBookFuture setShow={setShow} show={show} currentToken={currentToken[0]} />
+                            <OrderBookFuture setShow={setShow} show={show} currentToken={currentToken[0]} positionRecord={positionRecord}/>
                             {/* Market trade listing component */}
-                            <MarketTrades setShow={setShow} show={show} widthFull={true} />
+                            <MarketTrades setShow={setShow} show={show} widthFull={true} currentToken={currentToken[0]} positionRecord={positionRecord}/>
                         </div>
                     </div>
                     {/* position,open order and trade history table */}
-                    <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} positionHistoryData={positionHistoryData} openOrderHistoryData={openOrderHistoryData}/>
+                    <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} positionHistoryData={positionHistoryData} openOrderHistoryData={openOrderHistoryData} />
                 </div>
                 <div>
                     {/* Buy/Sell open short traading component */}
@@ -256,7 +299,7 @@ const FutureTrading = (props: Session) => {
             {/* For mobile use */}
             <div className='max-[991px]:block hidden mt-[57px] '>
                 <div className='relative'>
-                    <TopBar show={show1} setShow={setShow1} currentToken={currentToken[0]} />
+                    <TopBar show={show1} setShow={setShow1} currentToken={currentToken[0]} topHLOCData={topHLOCData}/>
                     <div className={`w-full max-w-full absolute duration-300 z-[4] top-[76px] ${show1 ? 'left-0' : 'left-[-100%]'}`}>
                         <CoinTypes coins={props?.coinList} />
                     </div>
@@ -269,19 +312,20 @@ const FutureTrading = (props: Session) => {
                     </div>
                     {
                         showMob === 1 &&
-                        <FutureChart id={'tradingview_0d0de12'} />
+                        // <FutureChart id={'tradingview_0d0de12'} />
+                        <ChartSec slug={`${slug}`} />
                     }
                     {
                         showMob === 2 &&
-                        <OrderBookFuture setShow={setShow} show={show} widthFull={true} />
+                        <OrderBookFuture setShow={setShow} show={show} widthFull={true} positionRecord={positionRecord}/>
                     }
                     {
                         showMob === 3 &&
-                        <MarketTrades widthFull={true} setShow={setShow} show={show} />
+                        <MarketTrades widthFull={true} setShow={setShow} show={show} positionRecord={positionRecord}/>
                     }
                 </div>
-                <ChartTabsFuture positions={positions} openOrders={openOrders} />
-                <BuySell setOverlay={setOverlay} inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} setPopupMode={setPopupMode} popupMode={popupMode} />
+                <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} positionHistoryData={positionHistoryData} openOrderHistoryData={openOrderHistoryData}/>
+                <BuySell setOverlay={setOverlay} inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets}/>
                 <MarginRatio fullWidth={true} heightAuto={true} setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
             </div>
 

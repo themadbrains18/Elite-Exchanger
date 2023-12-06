@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmationModel from '@/components/snippets/confirmation';
+import moment from 'moment';
 
 interface propsData {
     openOrders?: any;
@@ -69,6 +70,12 @@ const OpenOrderTable = (props: propsData) => {
                             <th className="py-[10px]">
                                 <div className="flex ">
                                     <p className="text-start top-label dark:text-gamma">Symbol</p>
+                                    <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                                </div>
+                            </th>
+                            <th className="py-[10px]">
+                                <div className="flex ">
+                                    <p className="text-start top-label dark:text-gamma">Qty</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
@@ -140,13 +147,16 @@ const OpenOrderTable = (props: propsData) => {
                                 return (
                                     <tr key={index}>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.time}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{moment(item?.time).format("YYYY-MM-DD")}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <div>
                                                 <p className="info-14 !text-[12px] dark:text-white">{item?.symbol}</p>
                                                 <p className="top-label">Perpetual</p>
                                             </div>
+                                        </td>
+                                        <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.qty>0 ?item?.qty?.toFixed(5): item?.qty?.toFixed(2)}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item?.type}</p>
