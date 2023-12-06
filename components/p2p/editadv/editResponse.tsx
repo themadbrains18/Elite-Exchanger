@@ -164,7 +164,7 @@ const EditResponse = (props: activeSection) => {
             </div>
           </div>
           <div className="mt-30 p-40 border rounded-10 border-grey-v-2 dark:border-opacity-[15%]">
-            <p className="sec-title pb-30 border-b border-grey-v-2 dark:border-opacity-[15%]">Countercry Conditions</p>
+            <p className="sec-title pb-30 border-b border-grey-v-2  dark:border-opacity-[15%]">Countercry Conditions</p>
             <div className="mt-30 flex md:flex-row flex-col gap-30 md:gap-50 justify-between">
               <div className="w-full">
                 {condition?.map((item, index) => {

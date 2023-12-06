@@ -217,6 +217,8 @@ const BuySellCard = (props: DynamicId) => {
     if (prevSibling instanceof HTMLElement) {
       prevSibling.click();
     }
+    
+    
   }, []);
 
 
@@ -295,11 +297,11 @@ const BuySellCard = (props: DynamicId) => {
             </div>
           </div>
 
-          <div className="mt-5 flex gap-[18px]">
-            <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} />
+          <div className="mt-5 flex gap-[18px] items-center">
+            <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
             {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
             <p className="md-text w-full">{price}({firstCurrency})</p>
-            <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} />
+            <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className="min-w-[24px]" alt="wallet2" width={24} height={24} />
             {router.pathname.includes("/chart") && <p className="md-text">
               $
               {props?.token !== undefined && props?.token?.price !== undefined
@@ -335,13 +337,13 @@ const BuySellCard = (props: DynamicId) => {
             <div>
               {
                 router.pathname.includes('/chart') ?
-
-                  <div className='flex items-center gap-[5px] rounded-[5px] mr-[15px] pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d]'>
+              
+                  <div className='flex  items-center gap-[5px] rounded-[5px] mr-[15px] pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d]'>
                     <Image src={`${props?.token?.image !== undefined ? props?.token?.image : '/assets/home/coinLogo.png'}`} alt="error" width={20} height={20} />
                     <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text`}>{props?.token?.fullName}</p>
-                  </div>
-                  :
-                  <FilterSelectMenuWithCoin data={list} border={false} setCurrencyName={setCurrencyName} dropdown={1} />
+                  </div>:
+                   <FilterSelectMenuWithCoin data={list} border={false} setCurrencyName={setCurrencyName} dropdown={1} /> 
+                
 
               }
             </div>
@@ -359,7 +361,7 @@ const BuySellCard = (props: DynamicId) => {
               })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
             </div>
 
-            <div>
+            <div className="relative">
               <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} />
             </div>
           </div>

@@ -461,8 +461,8 @@ const ChartTabs = (props: propsData) => {
                   {currentTradeItems.length > 0 && currentTradeItems?.map((item: any, index: number) => {
                     return (
                       <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer">
-
-                        <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
+ 
+                        <td className="sticky left-0 bg-white dark:bg-d-bg-primary group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 ">
                           <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                             <Image src={`${item?.token !== null ? item?.token.image : item.global_token.image}`} width={30} height={30} alt="coins" />
                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">

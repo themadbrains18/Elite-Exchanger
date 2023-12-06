@@ -182,6 +182,7 @@ const EditAdverstisement = (props: propsData) => {
                                         onClick={() => {
                                             setShow(1);
                                         }}
+                                        type="button"
                                     >
                                         <div className="flex items-center mr-4 md:justify-unset justify-center">
                                             <input id="radio--btn-1" type="radio" value="" name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
@@ -221,6 +222,7 @@ const EditAdverstisement = (props: propsData) => {
                                         onClick={() => {
                                             setShow(2);
                                         }}
+                                        type="button"
                                     >
                                         <div className="flex items-center mr-4  md:justify-unset justify-center">
                                             <input id="radio-btn2" type="radio" value="" name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
