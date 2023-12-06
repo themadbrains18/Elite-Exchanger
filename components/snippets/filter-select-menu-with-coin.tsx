@@ -70,7 +70,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
                 <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} >
                   <li className='flex items-center gap-[5px] rounded-[5px] mr-[15px] w-full'>
                     <Image src={`${(image === 'Coin.svg' && (props?.value === null || props?.value === undefined)) ? `/assets/history/Coin.svg` : drop1Image !== '' ? drop1Image : drop2Image !==''?drop2Image :image}`} alt="error" width={20} height={20} />
-                    <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text ${props.dropdown === 1 ? ' one' : ' two'}`}>{text}</p>
+                    <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text ${props.dropdown == 1 ? ' one' : ' two'}`}>{text}</p>
                   </li>
                   <IconsComponent type="downArrow" hover={false} active={false} />
                 </div>
@@ -102,12 +102,12 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
 
         {props.dropdown === 2 &&
           <>
-            <div className={`${props.border == true && 'border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[8px] pl-[15px] pr-[5px]'} `}>
+            <div className={`${props.border == true && 'border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[8px] pl-[15px] pr-[5px]'} `} onClick={() => { setShowSecond(!showSecond) }}>
               <div className=" cursor-pointer max-w-full w-full">
-                <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} onClick={() => { setShowSecond(true) }}>
-                  <li className='flex items-center gap-[5px] rounded-[5px] mr-[15px] w-full'>
+                <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} >
+                  <li className='flex items-center gap-[5px] rounded-[5px] mr-[15px]'>
                     <Image src={`${(image === 'Coin.svg' && (props?.value === null || props?.value === undefined)) ? `/assets/history/Coin.svg` : drop1Image !== '' ? drop1Image : drop2Image !==''?drop2Image :image}`} alt="error" width={20} height={20} />
-                    <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text ${props.dropdown === 2 ? ' one' : ' two'}`}>{text}</p>
+                    <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text ${props.dropdown == 2 ? ' two' : ' one'}`}>{text}</p>
                   </li>
                   <IconsComponent type="downArrow" hover={false} active={false} />
                 </div>
