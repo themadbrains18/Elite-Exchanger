@@ -127,7 +127,7 @@ const BuyCoinsTabs = (props: activeSection) => {
           </button>
         </div>
         <div className="flex md:flex-nowrap flex-wrap  items-center gap-10 w-full lg:w-auto ">
-          <div className="relative max-w-[50%] w-full">
+          <div className="relative max-w-full md:max-w-[50%] w-full">
             <FilterSelectMenuWithCoin
               data={listWithCoin}
               border={true}
@@ -135,7 +135,7 @@ const BuyCoinsTabs = (props: activeSection) => {
               setCurrencyName={setCurrencyName}
             />
           </div>
-          <div className="max-w-[50%] w-full">
+          <div className="max-w-full  md:max-w-[50%] w-full">
             <FiliterSelectMenu
               data={list}
               placeholder="Choose Payment Method"
