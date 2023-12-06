@@ -97,7 +97,7 @@ const DesktopTable = (props: dataTypes) => {
                 let remainingPost = postList.filter((item: any) => {
                     return item.id !== putResponse?.data?.result?.id
                 })
-
+                toast.success(`Post ${putResponse?.data?.result?.status=== true?"Active":"Inactive"}  successfully`)
                 setPostList(remainingPost);
                 props.updatePublishedPsot(putResponse?.data?.result);
                 setActive(0);
@@ -206,7 +206,7 @@ const DesktopTable = (props: dataTypes) => {
                                                     }
                                                 </div>
                                             </td>
-                                            <td className="bg-white dark:bg-d-bg-primary py-5">
+                                            <td className="bg-white dark:bg-d-bg-primary py-5 cursor-pointer">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white' onClick={() => { (props.active === undefined || props.active !== 3) ? updateAdsStatus(item?.id) : '' }}>{item?.status === true ? 'Active' : 'InActive'}</p>
                                             </td>
                                             {(props.active === undefined || props.active !== 3) &&

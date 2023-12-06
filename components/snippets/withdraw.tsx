@@ -263,7 +263,7 @@ const Withdraw = (props: activeSection) => {
           user_id: props?.session?.user?.user_id,
           type: 'withdraw',
           message: {
-            message: `You've successfully withdrawn ${response?.data?.data?.amount} ${response?.data?.data?.symbol} from your Bybit account. 
+            message: `You've successfully withdrawn ${response?.data?.data?.amount} ${response?.data?.data?.symbol} from your account. 
           Your withdrawal address: ${response?.data?.data?.withdraw_wallet}  
           Token: ${response?.data?.data?.symbol}`
           },

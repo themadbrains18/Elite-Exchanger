@@ -32,6 +32,7 @@ const PositionsTable = (props: propsData) => {
 
   const actionPerform = async () => {
     let obj = { "id": positionId };
+console.log(positionId);
 
     const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
     let record = encodeURIComponent(ciphertext.toString());
@@ -223,7 +224,7 @@ const PositionsTable = (props: propsData) => {
                         <IconsComponent type='sendIcon' />
                       </div>
                     </td>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%] cursor-pointer'>
                       <div className='flex items-center'>
                         <p className='top-label dark:!text-[#cccc56] !font-[600] pr-[20px]' onClick={() => closePositionOrder(item?.id)}>Close Position</p>
                         {/* <div className='flex items-center gap-[20px]'>

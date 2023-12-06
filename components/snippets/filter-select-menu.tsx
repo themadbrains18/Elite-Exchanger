@@ -28,7 +28,7 @@ const FiliterSelectMenu = (props: dataList) => {
       if (evt?.target.nodeName === 'svg') {
         targetEl = evt?.target?.parentNode.parentNode
       }
-      if (targetEl.classList.contains('coin-dropdown') === false) {
+      if (targetEl?.classList.contains('coin-dropdown') === false) {
         setShow(false);
       }
     })

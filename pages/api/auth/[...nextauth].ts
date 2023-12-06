@@ -39,7 +39,6 @@ export const authOptions: NextAuthOptions = {
                     headers: { 'authorization': token?.access_token }
                 } as any).then(response => response.json());
 
-                // console.log(datauser,'=====jwt');
                 
                 if(datauser?.data?.message !==undefined){
                     session = null as any
@@ -47,7 +46,7 @@ export const authOptions: NextAuthOptions = {
                 else{
                     // console.log(token,'==============token==============');
                     
-                    session.user = { name: token?.own_code, email: session.user?.email, number: token?.number, user_id: token.id, access_token: token?.access_token, refer_code: token?.own_code, TwoFA:datauser?.data?.TwoFA === 1?true:false, secret:datauser?.data?.secret } as any;
+                    session.user = { name: token?.own_code,  kyc:datauser?.data?.kycstatus , email: session.user?.email, number: token?.number, user_id: token.id, access_token: token?.access_token, refer_code: token?.own_code, TwoFA:datauser?.data?.TwoFA === 1?true:false, secret:datauser?.data?.secret} as any;
                 }
             }
             

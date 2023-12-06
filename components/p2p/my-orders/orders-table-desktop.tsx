@@ -68,7 +68,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'><span className={`${item.type === "sell" ? "text-cancel" : "text-buy"}`}>{item.type}</span>&nbsp;{item.id}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className={`info-14-18   ${item.status === "Completed" && "!text-buy"}  ${item.status === "Pending" && "!text-body-primary"} ${item.status === "Canceled" && "!text-cancel"}`}>{item.status}</p>
+                                                <p className={`info-14-18   ${(item.status === "isCompleted" || item.status === "isReleased")   && "!text-buy"}  ${item.status === "isProcess" && "!text-body-primary"} ${item.status === "isCanceled" && "!text-cancel"}`}>{item.status==="isProcess"?"In Process":item.status==="isReleased"?"Released":item.status==="isCompleted"?"Completed":"Canceled"}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.spend_amount}</p>

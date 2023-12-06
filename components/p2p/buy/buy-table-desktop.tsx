@@ -20,8 +20,8 @@ const BuyTableDesktop = (props: activeSection) => {
 
   let itemsPerPage = 10;
   const endOffset = itemOffset + itemsPerPage;
-  const currentItems = data.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(data.length / itemsPerPage);
+  const currentItems = data?.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(data?.length / itemsPerPage);
 
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % data.length;

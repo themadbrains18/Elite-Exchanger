@@ -21,12 +21,14 @@ interface Session {
     networks: any,
     withdrawList: any,
     assets: any,
-    convertList: any
+    convertList: any,
+    depositList:any
 }
 
 const Wallet = (props: Session) => {
 
     const [userWithdrawList, setUserWithdrawList] = useState(props.withdrawList);
+    const [userDepositList, setUserDepositList] = useState(props.depositList);
     const [userAssetsList, setUserAssetsList] = useState(props.assets);
     const [userConvertList, setUserConvertList] = useState(props.convertList);
 
@@ -68,6 +70,14 @@ const Wallet = (props: Session) => {
             }).then(response => response.json());
 
             setUserWithdrawList(withdraws?.data);
+            let deposits = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${props.session?.user?.user_id}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": props.session?.user?.access_token
+                },
+            }).then(response => response.json());
+
+            setUserDepositList(deposits?.data);
 
             let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${props.session?.user?.user_id}`, {
                 method: "GET",
@@ -95,8 +105,8 @@ const Wallet = (props: Session) => {
             <div className=" bg-light-v-1 py-80 md:py-[120px]  dark:bg-black-v-1">
                 <div className="container flex gap-30 flex-wrap">
                     <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
-                        <Banner coinList={allCoins} assets={userAssetsList} withdrawList={userWithdrawList} />
-                        <WalletList coinList={allCoins} networks={props?.networks} session={props.session} withdrawList={userWithdrawList} assets={userAssetsList} refreshData={refreshData} userConvertList={userConvertList} />
+                        <Banner coinList={allCoins} assets={userAssetsList} withdrawList={userWithdrawList} depositList={userDepositList}/>
+                        <WalletList coinList={allCoins} networks={props?.networks} session={props.session} withdrawList={userWithdrawList} depositList={userDepositList} assets={userAssetsList} refreshData={refreshData} userConvertList={userConvertList} />
                     </div>
                     <div className="lg:max-w-[432px] w-full md:block hidden">
                         <div className="lg:block hidden ">
@@ -135,6 +145,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
                 "Authorization": session?.user?.access_token
             },
         }).then(response => response.json());
+        let deposits = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${session?.user?.user_id}`, {
+            method: "GET",
+            headers: {
+                "Authorization": session?.user?.access_token
+            },
+        }).then(response => response.json());
 
         let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${session?.user?.user_id}`, {
             method: "GET",
@@ -159,6 +175,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
                 coinList: tokenList?.data,
                 networks: networkList?.data,
                 withdrawList: withdraws?.data || [],
+                depositList: deposits?.data || [],
                 assets: userAssets || [],
                 convertList: userConvertList?.data || [],
             },

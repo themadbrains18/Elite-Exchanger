@@ -49,7 +49,8 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
           setShowSecond(false);
         }
       }
-
+      console.log(showSecond,"showSecond");
+      
     })
   }, [props?.dropdown])
 
@@ -59,15 +60,15 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
   return (
 
     <>
-      <div className='max-w-full  w-full'>
+      <div className='max-w-full  w-full' >
         {/* top dropdown input */}
 
         {props.dropdown === 1 &&
           <>
-            <div className={`${props.border == true && 'border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[8px] pl-[15px] pr-[5px]'} `}>
+            <div className={`${props.border == true && 'border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[8px] pl-[15px] pr-[5px]'} `}  onClick={() => { setShow(!show) }}>
               <div className=" cursor-pointer max-w-full w-full">
-                <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} onClick={() => { setShow(!show) }}>
-                  <li className='flex items-center gap-[5px] rounded-[5px] mr-[15px]'>
+                <div className={`${`coin-dropdown` + props?.dropdown} pl-10 cursor-pointer flex justify-between items-center`}  onClick={() => { setShow(!show) }}>
+                  <li className='flex items-center gap-[5px] rounded-[5px] mr-[15px] w-full'>
                     <Image src={`${(image === 'Coin.svg' && (props?.value === null || props?.value === undefined)) ? `/assets/history/Coin.svg` : drop1Image !== '' ? drop1Image : drop2Image !==''?drop2Image :image}`} alt="error" width={20} height={20} />
                     <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text ${props.dropdown === 1 ? ' one' : ' two'}`}>{text}</p>
                   </li>
@@ -103,7 +104,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
           <>
             <div className={`${props.border == true && 'border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[8px] pl-[15px] pr-[5px]'} `}>
               <div className=" cursor-pointer max-w-full w-full">
-                <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} onClick={() => { setShowSecond(!showSecond) }}>
+                <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} onClick={() => { setShowSecond(true) }}>
                   <li className='flex items-center gap-[5px] rounded-[5px] mr-[15px]'>
                     <Image src={`${(image === 'Coin.svg' && (props?.value === null || props?.value === undefined)) ? `/assets/history/Coin.svg` : drop1Image !== '' ? drop1Image : drop2Image !==''?drop2Image :image}`} alt="error" width={20} height={20} />
                     <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text ${props.dropdown === 2 ? ' one' : ' two'}`}>{text}</p>
@@ -114,7 +115,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
             </div>
 
             {/* dropdown */}
-            <div className={`absolute max-h-[250px] overflow-y-auto z-[1] shadow-lg shadow-[#0000000d] left-0 right-0 dark:bg-black-v-1 bg-white border border-grey-v-1 dark:border-[#ccced94d] rounded-10 p-[15px] duration-300 ${showSecond ? "top-[calc(100%+7px)] opacity-1 visible" : "top-[calc(100%+17px)] opacity-0 invisible"}`}>
+            <div className={`absolute max-h-[250px] overflow-y-auto z-[2] shadow-lg shadow-[#0000000d] left-0 right-0 dark:bg-black-v-1 bg-white border border-grey-v-1 dark:border-[#ccced94d] rounded-10 p-[15px] duration-300 ${showSecond == true ? "!top-[calc(100%+7px)] !opacity-1 !visible" : "top-[calc(100%+17px)] opacity-0 invisible"}`}>
               <div className='bg-white dark:bg-d-bg-primary rounded-[5px] sticky top-0'>
                 <div className='border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-full w-full py-[8px] px-[10px] '>
                   <Image src="/assets/history/search.svg" alt='error' width={15} height={15} />

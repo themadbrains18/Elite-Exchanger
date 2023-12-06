@@ -83,7 +83,7 @@ const Deposit = (props: activeSection) => {
             <SVG
               text={`${address!==''? address:'Test Qr Code'}`}
               options={{
-                width: 200,
+                width: 150,
                 color: {
                   dark: '#000000',
                   light: '#ffffff',
