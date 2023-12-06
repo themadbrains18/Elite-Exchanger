@@ -10,18 +10,17 @@ interface showPopup {
     setConfirmModelOverlay?: any;
     modelOverlay?: boolean;
     confirmOrder?: any;
+    confirmOrderData?:any;
 }
 
 const TradeConfirmPopupModal = (props: showPopup) => {
 
     let { mode } = useContext(Context);
-    const { status, data: session } = useSession()
-
 
     return (
         <div className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[520px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.modelPopup == 1 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
             <div className="flex items-center justify-between mb-[20px]">
-                <p className="sec-title !text-[20px]">Market Buy BTCUSDT </p>
+                <p className="sec-title !text-[20px]">Market Buy {props?.confirmOrderData?.symbol} </p>
                 <svg
                     onClick={() => {
                         props.setConfirmModelOverlay(false);
@@ -52,27 +51,27 @@ const TradeConfirmPopupModal = (props: showPopup) => {
             <div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Price</p>
-                    <p className='dark:text-white text-black'>Last Trade Price</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type !== undefined?props?.confirmOrderData?.price_usdt: props?.confirmOrderData?.market_price}</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Qty</p>
-                    <p className='dark:text-white text-black'>0.004 BTC</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.qty?.toFixed(5)} BTC</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Cost</p>
-                    <p className='dark:text-white text-black'>17.7367 USDT</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.margin} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Value</p>
-                    <p className='dark:text-white text-black'>166.6180 USDT</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type !== undefined?props?.confirmOrderData?.amount: props?.confirmOrderData?.size} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Estimated Liq. Price</p>
-                    <p className='dark:text-white text-black'>39,714.5 USDT</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.liq_price} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Leverage</p>
-                    <p className='dark:text-white text-black'>Isolated 10.00x</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.leverage_type} {props?.confirmOrderData?.leverage}x</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Time in Force</p>
