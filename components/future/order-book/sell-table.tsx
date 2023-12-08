@@ -28,7 +28,7 @@ const SelltableFuture = (props: setState) => {
                     return <>
                         <div className='grid grid-cols-3 gap-[10px] bg-[#fc47471c] rounded mb-[4px]'>
                             <p className={`top-label text-start ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.entry_price?.toFixed(6)}</p>
-                            <p className='top-label text-center !text-black dark:!text-white'>{item?.qty}</p>
+                            <p className='top-label text-center !text-black dark:!text-white'>{item?.qty?.toFixed(6)}</p>
                             <p className='top-label text-end !text-black dark:!text-white'>{item?.margin}</p>
                         </div>
                     </>

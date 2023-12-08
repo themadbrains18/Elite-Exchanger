@@ -64,6 +64,10 @@ const FutureTrading = (props: Session) => {
             let eventDataType = JSON.parse(event.data).type;
             if (eventDataType === "price") {
                 refreshTokenList();
+                getUserFuturePositionData();
+                getUserOpenOrderData();
+                getUserFuturePositionHistoryData();
+                getUserFutureOpenOrderHistoryData();
             }
 
             if (eventDataType === 'position') {
@@ -72,7 +76,7 @@ const FutureTrading = (props: Session) => {
                 getUserFuturePositionHistoryData();
                 getUserFutureOpenOrderHistoryData();
                 getCoinHLOCData();
-                getPositionOrderBook
+                getPositionOrderBook();
             }
         }
 
@@ -84,7 +88,6 @@ const FutureTrading = (props: Session) => {
             return item.coin_symbol + item.usdt_symbol === slug
         })
         setCurrentToken(ccurrentToken);
-
         getUserFuturePositionData();
         getUserOpenOrderData();
         getUserFuturePositionHistoryData();

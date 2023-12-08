@@ -59,7 +59,7 @@ const TopBar = (props: showSidebar) => {
     };
 
     const getDeadTime = () => {
-        let deadline = new Date('Dec 05 2023 08:00:00 GMT-0000');
+        let deadline = new Date('Dec 06 2023 08:00:00 GMT-0000');
         deadline.setHours(deadline.getHours() + 8);
         return deadline;
     };

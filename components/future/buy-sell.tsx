@@ -178,27 +178,34 @@ const BuySell = (props: fullWidth) => {
             if (show === 2) {
                 Liquidation_Price = marketPrice + Liquidation_Price;
             }
+
+            let qty: any = (sizeValue / marketPrice).toFixed(3);
+
+            let value: any = (qty * 0.055).toFixed(5);
+
+            let releazedPnl = (marketPrice * value) / 100;
+
             obj = {
                 "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
                 "user_id": session?.user?.user_id,
                 "coin_id": props?.currentToken?.coin_id,
                 "leverage": props?.marginMode?.leverage,
-                "size": sizeValue,
+                "size": qty * marketPrice,
                 "entry_price": marketPrice,
                 "market_price": marketPrice,
                 "liq_price": Liquidation_Price,
                 "margin": sizeValue / props?.marginMode?.leverage,
                 "margin_ratio": 0.01,
                 "pnl": 0,
-                "realized_pnl": 0,
+                "realized_pnl": releazedPnl.toFixed(5),
                 "tp_sl": "--",
                 "status": false,
                 "queue": false,
                 "direction": show === 1 ? "long" : 'short',
                 "order_type": "value",
                 "leverage_type": props?.marginMode?.margin,
-                "market_type": marketType,
-                "qty": sizeValue / marketPrice
+                "type": marketType,
+                "qty": qty
             }
         }
         else {
@@ -221,13 +228,15 @@ const BuySell = (props: fullWidth) => {
             if (show === 2) {
                 Liquidation_Price = entryPrice + Liquidation_Price;
             }
+
+            let qty: any = (sizeValue / marketPrice).toFixed(3);
             obj = {
                 "position_id": "--",
                 "user_id": session?.user?.user_id,
                 "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
                 "side": show === 1 ? "open long" : 'open short',
                 "type": marketType, //e.g limit, take profit market, stop market
-                "amount": sizeValue.toString(), // limit order amount, close position
+                "amount": (qty * entryPrice).toString(), // limit order amount, close position
                 "price_usdt": entryPrice, // limit order price
                 "trigger": "--", // TP/SL posiotion amount , limit order --
                 "reduce_only": "No", // TP/SL case Yes, limit order No
@@ -240,10 +249,11 @@ const BuySell = (props: fullWidth) => {
                 "order_type": "value",
                 "leverage_type": props?.marginMode?.margin,
                 "coin_id": props?.currentToken?.coin_id,
-                "qty": sizeValue / entryPrice
+                "qty": qty
             }
 
         }
+
         setConfirmOrderData(obj);
         setConfirmModelPopup(1);
         setConfirmModelOverlay(true);
@@ -267,19 +277,23 @@ const BuySell = (props: fullWidth) => {
                 if (show === 2) {
                     Liquidation_Price = marketPrice + Liquidation_Price;
                 }
+
+                let qty: any = (sizeValue / marketPrice).toFixed(3);
+                let value: any = (qty * 0.055).toFixed(5);
+                let releazedPnl = (marketPrice * value) / 100;
                 obj = {
                     "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
                     "user_id": session?.user?.user_id,
                     "coin_id": props?.currentToken?.coin_id,
                     "leverage": props?.marginMode?.leverage,
-                    "size": sizeValue,
+                    "size": qty * marketPrice,
                     "entry_price": marketPrice,
                     "market_price": marketPrice,
                     "liq_price": Liquidation_Price,
                     "margin": sizeValue / props?.marginMode?.leverage,
                     "margin_ratio": 0.01,
                     "pnl": 0,
-                    "realized_pnl": 0,
+                    "realized_pnl": releazedPnl,
                     "tp_sl": "--",
                     "status": false,
                     "queue": false,
@@ -287,7 +301,7 @@ const BuySell = (props: fullWidth) => {
                     "order_type": "value",
                     "leverage_type": props?.marginMode?.margin,
                     "market_type": marketType,
-                    "qty": sizeValue / marketPrice
+                    "qty": qty
                 }
             }
             else {
@@ -310,13 +324,15 @@ const BuySell = (props: fullWidth) => {
                 if (show === 2) {
                     Liquidation_Price = entryPrice + Liquidation_Price;
                 }
+
+                let qty: any = (sizeValue / marketPrice).toFixed(3);
                 obj = {
                     "position_id": "--",
                     "user_id": session?.user?.user_id,
                     "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
                     "side": show === 1 ? "open long" : 'open short',
                     "type": marketType, //e.g limit, take profit market, stop market
-                    "amount": sizeValue.toString(), // limit order amount, close position
+                    "amount": (qty * entryPrice).toString(), // limit order amount, close position
                     "price_usdt": entryPrice, // limit order price
                     "trigger": "--", // TP/SL posiotion amount , limit order --
                     "reduce_only": "No", // TP/SL case Yes, limit order No
@@ -329,12 +345,12 @@ const BuySell = (props: fullWidth) => {
                     "order_type": "value",
                     "leverage_type": props?.marginMode?.margin,
                     "coin_id": props?.currentToken?.coin_id,
-                    "qty": sizeValue / entryPrice
+                    "qty": qty
                 }
             }
 
             setButtonStyle(true);
-            // 
+
             const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
             let record = encodeURIComponent(ciphertext.toString());
 
@@ -430,6 +446,15 @@ const BuySell = (props: fullWidth) => {
             if (parseFloat(e.target.value) / props?.marginMode?.leverage > avaibalance) {
                 setButtonStyle(true);
             }
+
+            let openPositionFee = 1 * (parseFloat(e.target.value)) * (0.055) / 100;
+
+            let longclosePositionFee = 1 * (parseFloat(e.target.value)) * (props?.marginMode?.leverage - 1) / props?.marginMode?.leverage * (0.055) / 100;
+            let longcost = parseFloat(e.target.value) / props?.marginMode?.leverage + openPositionFee + longclosePositionFee;
+
+            let shortclosePositionFee = 1 * parseFloat(e.target.value) * ((props?.marginMode?.leverage + 1) / props?.marginMode?.leverage) * (0.055) / 100;
+            let shortcost = parseFloat(e.target.value) / props?.marginMode?.leverage + openPositionFee + shortclosePositionFee;
+
         }
 
     }
@@ -455,25 +480,36 @@ const BuySell = (props: fullWidth) => {
                 return;
             }
 
+            let Liquidation_Price = (entryPrice * (1 - 0.01)) / props?.marginMode?.leverage;
+
+            // Liquidation Price for long case
+            Liquidation_Price = entryPrice - Liquidation_Price;
+
+            // Liquidation Price for short case
+            if (show === 2) {
+                Liquidation_Price = entryPrice + Liquidation_Price;
+            }
+
             let obj = {
                 "position_id": "--",
                 "user_id": session?.user?.user_id,
                 "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
-                "side": type,
-                "type": 'Take Profit Limit', //e.g limit, take profit market, stop market
+                "side": type === 'Buy' ? 'open long' : 'open short',
+                "type": type.toLowerCase(), //e.g limit, take profit market, stop market
                 "amount": sizeValue.toString(), // limit order amount, close position
                 "price_usdt": entryPrice, // limit order price
                 "trigger": stopPrice, // TP/SL posiotion amount , limit order --
                 "reduce_only": "No", // TP/SL case Yes, limit order No
                 "post_only": "No", //No
                 "status": false,
-                "leverage": 0,
+                "leverage": props?.marginMode?.leverage,
                 "margin": sizeValue / props?.marginMode?.leverage,
-                "liq_price": 0,
+                "liq_price": Liquidation_Price,
                 "market_price": props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price,
                 "order_type": "value",
                 "leverage_type": props?.marginMode?.margin,
                 "coin_id": props?.currentToken?.coin_id,
+                "qty": sizeValue / entryPrice
             }
 
             const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
@@ -543,7 +579,7 @@ const BuySell = (props: fullWidth) => {
                     <div className='flex items-center gap-[10px]'>
                         <button className={`admin-body-text ${showNes === 1 ? '!text-black dark:!text-white' : '!text-[#a3a8b7]'}`} onClick={() => { setShowNes(1); setMarketType('limit'); setSizeValidate(''); setEntryPriceValidate(''); setSizeValue(0); setEntryPrice(0); setStopPrice('0') }}>Limit</button>
                         <button className={`admin-body-text ${showNes === 2 ? '!text-black dark:!text-white' : '!text-[#a3a8b7]'}`} onClick={() => { setShowNes(2); setMarketType('market'); setSizeValidate(''); setEntryPriceValidate(''); setSizeValue(0); setEntryPrice(0); setStopPrice('0') }}>Market</button>
-                        <button className={`admin-body-text ${showNes === 3 ? '!text-black dark:!text-white' : '!text-[#a3a8b7]'}`} onClick={() => { setShowNes(3); setMarketType('stop'); setButtonStyle(false); setSizeValidate(''); setEntryPriceValidate(''); setSizeValue(0); setEntryPrice(0); setStopPrice('0')}}>Stop Limit</button>
+                        <button className={`admin-body-text ${showNes === 3 ? '!text-black dark:!text-white' : '!text-[#a3a8b7]'}`} onClick={() => { setShowNes(3); setMarketType('stop'); setButtonStyle(false); setSizeValidate(''); setEntryPriceValidate(''); setSizeValue(0); setEntryPrice(0); setStopPrice('0') }}>Stop Limit</button>
                     </div>
                     <div className='cursor-pointer' onClick={() => { props.setOverlay(true); props.setPopupMode(2) }}>
                         <IconsComponent type='swap-calender' />
@@ -724,6 +760,10 @@ const BuySell = (props: fullWidth) => {
                 {
                     showNes === 3 && status !== 'unauthenticated' &&
                     <div className='mt-[20px]'>
+                        <div className='flex gap-5 items-center justify-between'>
+                            <p className="top-label">Qty</p>
+                            <p className="top-label !text-[#000] dark:!text-[#fff]">{showNes === 3 ? sizeValue === 0 ? 0.00 : (sizeValue / entryPrice).toFixed(5) : (sizeValue / marketPrice).toFixed(5)} {props?.currentToken?.coin_symbol}</p>
+                        </div>
                         {
                             show === 1 &&
                             <div className='mt-[5px]'>
