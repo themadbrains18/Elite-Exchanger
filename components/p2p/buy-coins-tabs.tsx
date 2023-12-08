@@ -135,7 +135,7 @@ const BuyCoinsTabs = (props: activeSection) => {
               setCurrencyName={setCurrencyName}
             />
           </div>
-          <div className="max-w-full md:max-w-[50%] w-full">
+          <div className="max-w-full  md:max-w-[50%] w-full">
             <FiliterSelectMenu
               data={list}
               placeholder="Choose Payment Method"
@@ -159,7 +159,7 @@ const BuyCoinsTabs = (props: activeSection) => {
             />
           </div>
           <div className="md:hidden">
-            <BuyTableMobile setShow1={props.setShow1} />
+            <BuyTableMobile setShow1={props.setShow1} posts={posts} />
           </div>
         </div>
 

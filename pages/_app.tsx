@@ -36,7 +36,7 @@ export default function App({ Component, pageProps: { sessions, ...pageProps } }
               <Preference />
             </>
           }
-          <div className={` ${router.pathname != '/register' && router.pathname != '/login' && router.pathname != '/forget' && !router.pathname.includes('/future/') && !router.pathname.includes('/admin') ? "mt-[105px] lg:mt-[129px]" : "" } `}>
+          <div className={` ${router.pathname != '/register' && router.pathname != '/login' && router.pathname != '/forget' && !router.pathname.includes('/future/') && !router.pathname.includes('/admin') ? "mt-[106px] lg:mt-[129px]" : "" } `}>
             <Component {...pageProps} />
           </div>
           {

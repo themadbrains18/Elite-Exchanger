@@ -613,7 +613,7 @@ const Historytrade = (props: propsData) => {
                   </table>
                 </div>
                 <div className="flex pt-[25px] items-center justify-between">
-                  <p className="info-12 md:footer-text !text-gamma">52 assets</p>
+                  <p className="info-12 md:footer-text !text-gamma">{depositCurrentItems.length} assets</p>
 
                   <ReactPaginate
                     className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
@@ -691,7 +691,7 @@ const Historytrade = (props: propsData) => {
                           <tr key={index}>
                             <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
                               <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                                <Image src={`${item?.token?.image}`} width={30} height={30} alt="coins" />
+                                <Image src={` ${item?.token != null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" />
                                 <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                   <p className="info-14-18 dark:text-white">{item?.token?.fullName}</p>
                                   <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.token?.symbol}</p>

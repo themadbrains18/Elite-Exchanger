@@ -15,7 +15,7 @@ export const config = {
 
 router
   // Use express middleware in next-connect with expressWrapper function
-  .put(async (req, res) => {
+  .post(async (req, res) => {
     try {
       const decodedStr = decodeURIComponent(req.body);
       let formData = AES.decrypt(
@@ -23,8 +23,10 @@ router
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
       ).toString(enc.Utf8);
       let token = req.headers.authorization;
+   
+    
       let data = await putData(
-        `${process.env.NEXT_PUBLIC_APIURL}/user/password`,
+        `${process.env.NEXT_PUBLIC_APIURL}/user/forget`,
         JSON.parse(formData),
         token
       );

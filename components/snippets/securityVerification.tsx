@@ -221,85 +221,87 @@ const SecurityVerification = (props: activeSection) => {
 
         <form onSubmit={handleSubmit(onHandleSubmit)}>
           <div className="py-30 md:py-40">
-            <div className="flex flex-col mb-[15px] md:mb-30 gap-20">
+            <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
               <label className="sm-text">Account Password</label>
               <input
                 type="password"
                 placeholder="Re-Enter password"
-                className="sm-text input-cta2 w-full"
+                className={`sm-text input-cta2 w-full ${errors.password && 'border-1 border-[#ff0000]'}`}
                 {...register("password")}
               />
               {errors.password && (
-                <p style={{ color: "red" }}>{errors.password.message}</p>
+                <p style={{ color: "red" }} className="absolute top-[100%] text-[10px] md:text-[12px]">{errors.password.message}</p>
               )}
             </div>
-            <div className="flex flex-col mb-[15px] md:mb-30 gap-20">
+
+            <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
               <label className="sm-text">GA Secret Key</label>
               <input
                 type="text"
                 placeholder="Enter text"
-                className="sm-text input-cta2 w-full"
+                className={`sm-text input-cta2 w-full ${errors.key && 'border-1 border-[#ff0000]'}`}
                 {...register("key")}
               />
-              {errors.key && <p style={{ color: "red" }}>{errors.key.message}</p>}
+              {errors.key && <p style={{ color: "red" }}  className="absolute top-[100%] text-[10px] md:text-[12px]">{errors.key.message}</p>}
             </div>
-            <div className="flex flex-col mb-[15px] md:mb-30 gap-20">
+
+            <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
               <label className="sm-text">Enter 6 Digit OTP</label>
-              <div className="flex gap-10 justify-center items-center input_wrapper2">
+              <div className="flex gap-[10px] justify-center items-center input_wrapper2 relative">
                 <input
                   type="text"
                   autoComplete="off"
-                  className="block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                  className={`block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none  ${errors.otp && '!border-[1px] !border-[#ff0000]'}`}
                   name="code1"
                 />
                 <input
                   type="text"
                   autoComplete="off"
-                  className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary ${errors.otp && '!border-[1px] !border-[#ff0000]'} `}
                   name="code2"
                 />
                 <input
                   type="text"
                   autoComplete="off"
-                  className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary ${errors.otp && '!border-[1px] !border-[#ff0000]'}`}
                   name="code3"
                 />
                 <input
                   type="text"
                   autoComplete="off"
-                  className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary ${errors.otp && '!border-[1px] !border-[#ff0000]'} `} 
                   name="code4"
                 />
                 <input
                   type="text"
                   autoComplete="off"
-                  className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary ${errors.otp && '!border-[1px] !border-[#ff0000]'}`}
                   name="code5"
                 />
                 <input
                   type="text"
                   autoComplete="off"
-                  className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary ${errors.otp && '!border-[1px] !border-[#ff0000]'}`}
                   name="code6"
                 />
+              {errors.otp && <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.otp.message}</p>}
               </div>
-              {errors.otp && <p style={{ color: "red" }}>{errors.otp.message}</p>}
               <p className="info-14-18 !text-primary-700 text-end">Resend SMS</p>
             </div>
-            <div className="flex flex-col mb-[15px] md:mb-30 gap-20">
+            <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
               <label className="sm-text">GA 6 Digit Security Code</label>
               <input
                 type="text"
                 placeholder="Enter text"
-                className="sm-text input-cta2 w-full"
+                className={`sm-text input-cta2 w-full  ${errors.code && 'border-1 border-[#ff0000]'}`}
                 {...register("code")}
               />
               {errors.code && (
-                <p style={{ color: "red" }}>{errors.code.message}</p>
+                <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.code.message}</p>
               )}
             </div>
           </div>
-          <div className="flex gap-[20px]">
+          <div className="flex flex-col md:flex-row gap-[10px] md:gap-[20px]">
             <button
               className="solid-button2 w-full "
               onClick={() => {

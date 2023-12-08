@@ -76,6 +76,10 @@ const SecurityCode = (props: propsData) => {
           toast.success('Otp Matched');
           router.push('/login');
         }
+        else if (props.api === 'forget') {
+          toast.success(response?.data?.message);
+          router.push('/login');
+        }
       }
       else {
         toast.error(response.data.data);
