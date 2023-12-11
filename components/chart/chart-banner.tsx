@@ -84,52 +84,6 @@ const ChartBanner = () => {
     }
   }
 
-  // const cardsData = [
-  //   {
-  //     "cardTitle": "Market Cap",
-  //     "titleIcon": "marketCap",
-  //     "cardPrice": "$" + `${currentToken?.totalSupply && props?.token?.totalSupply.toLocaleString('en-US')}`,
-  //     "cardLowHigh": "+2%",
-  //     "bg": "blue",
-  //   },
-  //   {
-  //     "cardTitle": "Full Diluted",
-  //     "titleIcon": "infoIcon",
-  //     "cardPrice": "$" + props?.token?.totalSupply.toLocaleString('en-US'),
-  //     "cardLowHigh": "+2%",
-  //     "bg": "red",
-  //   },
-  //   {
-  //     "cardTitle": "24 Volume",
-  //     "titleIcon": "watchIcon",
-  //     "cardPrice": "$" + props?.token?.circulatingSupply.toLocaleString('en-US'),
-  //     "cardLowHigh": "+2%",
-  //     "bg": "green",
-  //   },
-  //   {
-  //     "cardTitle": "Circulating Supply",
-  //     "titleIcon": "infoIcon",
-  //     "cardPrice": props?.token?.circulatingSupply.toLocaleString('en-US'),
-  //     "cardLowHigh": "+2%",
-  //     "bg": "lightblue",
-  //   }
-  // ]
-
-
-  // useEffect(() => {
-  //   let favItems = localStorage.getItem('favToken');
-  //   if (favItems) {
-  //     favItems = JSON.parse(favItems);
-  //   }
-  //   if (favItems && favItems.indexOf(props?.token?.id) !== -1) {
-  //     setFillFav(true);
-  //   }
-  // }, []);
-
-
-  // let favItem: any = localStorage.getItem('favToken');
-
-
   return (
     <div className='p-20 rounded-10  bg-white dark:bg-d-bg-primary'>
       {/* head */}

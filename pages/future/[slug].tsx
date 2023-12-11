@@ -50,8 +50,6 @@ const FutureTrading = (props: Session) => {
     const [topHLOCData, setTopHLOCData] = useState(Object);
     const [positionRecord, setPositionRecord] = useState([]);
 
-
-
     useEffect(() => {
         socket();
         let ccurrentToken = props.coinList.filter((item: any) => {
@@ -64,7 +62,6 @@ const FutureTrading = (props: Session) => {
         getUserFutureOpenOrderHistoryData();
         getCoinHLOCData();
         getPositionOrderBook();
-        console.log('load once time......')
 
     }, [props?.serverSlug]);
 
@@ -106,8 +103,6 @@ const FutureTrading = (props: Session) => {
     // ===================================== //
     const refreshTokenList = async () => {
 
-        
-
         let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future`, {
             method: "GET"
         }).then(response => response.json());
@@ -116,13 +111,8 @@ const FutureTrading = (props: Session) => {
             return (item.coin_symbol + item.usdt_symbol) === props?.serverSlug
         })
 
-        console.log('=======================================')
-        console.log(props?.serverSlug)
-        console.log('=======================================')
-
         setCurrentToken(ccurrentToken);
         setAllCoins(tokenList?.data);
-
 
     }
 
@@ -372,8 +362,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const providers = await getProviders();
 
     const { slug } = context.query;
-
-    console.log(slug)
 
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future`, {
         method: "GET"
