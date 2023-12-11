@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import ConfirmationModel from '../snippets/confirmation';
 import { useSession } from 'next-auth/react';
 import AES from 'crypto-js/aes';
+import moment from 'moment';
 
 interface propsData {
   coinsList: any,
@@ -192,7 +193,7 @@ const ChartTabs = (props: propsData) => {
                 <tbody>
                   {currentItems?.map((item: any, index: number) => {
                     return (
-                      <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => { router.push(`/chart/${item.symbol}`); props.getUserOpenOrder(item?.symbol); props.getUserTradeHistory(item?.symbol); }}>
+                      <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => { (item?.tradePair !== null ? router.push(`/chart/${item.symbol}`) : ''); props.getUserOpenOrder(item?.symbol); props.getUserTradeHistory(item?.symbol); }}>
 
                         <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                           <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
@@ -335,7 +336,7 @@ const ChartTabs = (props: propsData) => {
                         </td>
                         <td className="max-[1023px]:hidden">
                           <div className={` items-center gap-[10px] flex`}>
-                            <p className={`info-14-18 dark:text-white`}>{item?.token_amount}</p>
+                            <p className={`info-14-18 dark:text-white`}>{item?.token_amount?.toFixed(5)}</p>
                           </div>
                         </td>
 
@@ -460,8 +461,8 @@ const ChartTabs = (props: propsData) => {
                 <tbody>
                   {currentTradeItems.length > 0 && currentTradeItems?.map((item: any, index: number) => {
                     return (
-                      <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer">
- 
+                      <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2]">
+
                         <td className="sticky left-0 bg-white dark:bg-d-bg-primary group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 ">
                           <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                             <Image src={`${item?.token !== null ? item?.token.image : item.global_token.image}`} width={30} height={30} alt="coins" />
@@ -496,7 +497,7 @@ const ChartTabs = (props: propsData) => {
                             </div>
                             <div className="hidden md:block">
                               <p className="info-14-18 dark:text-white">{item.order_type}</p>
-                              <p className="info-10">18 Feb,2022</p>
+                              <p className="info-10">{moment(item?.createdAt).format("YYYY-MM-DD")}</p>
                             </div>
                             <div className="block md:hidden">
                               <p className="info-14-18 dark:text-white">{item.market_type}</p>
@@ -508,16 +509,16 @@ const ChartTabs = (props: propsData) => {
                           <p className="info-14-18 dark:text-white  md:block hidden">{item.market_type}</p>
                         </td>
                         <td>
-                          <p className="info-14-18 dark:text-white md:block hidden">${item?.token !== null ? item?.token?.price.toFixed(4) : item?.global_token?.price.toFixed(4)}</p>
+                          <p className="info-14-18 dark:text-white md:block hidden">${item?.token !== null ? item?.token?.price?.toFixed(4) : item?.global_token?.price?.toFixed(4)}</p>
                         </td>
                         <td>
-                          <p className="info-14-18 dark:text-white md:block hidden">{item.limit_usdt}%</p>
+                          <p className="info-14-18 dark:text-white md:block hidden">{item.limit_usdt}</p>
                         </td>
                         <td>
-                          <p className="info-14-18 dark:text-white md:block hidden">${item.volume_usdt.toFixed(2)}</p>
+                          <p className="info-14-18 dark:text-white md:block hidden">${item.volume_usdt?.toFixed(2)}</p>
                         </td>
                         <td>
-                          <p className="info-14-18 dark:text-white md:block hidden">${item.token_amount}</p>
+                          <p className="info-14-18 dark:text-white md:block hidden">${item.token_amount?.toFixed(5)}</p>
                         </td>
                         <td>
                           <p className={`info-14-18  ${item.status === true ? "text-buy" : item.isCanceled === true ? "text-cancel" : "text-gamma"}`}>{item?.status === false ? item?.isCanceled === true ? 'Canceled' : 'Pending' : 'Success'}</p>

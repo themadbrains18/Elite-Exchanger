@@ -4,7 +4,7 @@ import React from 'react'
 const Login = () => {
   return (
     <>
-    <SignIn />
+      <SignIn loginType='admin' />
     </>
   )
 }
