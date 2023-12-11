@@ -38,8 +38,6 @@ const Chart = (props: Session) => {
     const [BuyTrade, setBuyTrade] = useState([]);
 
     const { slug } = router.query;
-
-    console.log(slug,'=======page slug');
     
 
     // let currentToken = props.coinList.filter((item: any) => {

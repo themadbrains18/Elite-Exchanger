@@ -14,8 +14,6 @@ const ChartBanner = () => {
   const router = useRouter();
   const { slug } = router.query;
 
-  console.log(slug,'=======chart banner');
-
   useEffect(() => {
     const websocket = new WebSocket('ws://localhost:3001/');
 

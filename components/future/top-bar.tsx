@@ -7,7 +7,6 @@ interface showSidebar {
     setShow?: Function;
     currentToken?: any;
     topHLOCData?: any;
-    slug?:any;
 }
 const TopBar = (props: showSidebar) => {
 
@@ -59,7 +58,7 @@ const TopBar = (props: showSidebar) => {
     };
 
     const getDeadTime = () => {
-        let deadline = new Date('Dec 06 2023 08:00:00 GMT-0000');
+        let deadline = new Date('Dec 11 2023 08:00:00 GMT-0000');
         deadline.setHours(deadline.getHours() + 8);
         return deadline;
     };
@@ -70,9 +69,9 @@ const TopBar = (props: showSidebar) => {
 
     let marketPrice = props?.currentToken?.token !== null ? props?.currentToken?.token?.price.toFixed(5) : props?.currentToken?.global_token?.price.toFixed(5);
 
-    let change = ((marketPrice - props?.topHLOCData?.open)/props?.topHLOCData?.open)*100;
+    let change = ((marketPrice - props?.topHLOCData?.open) / props?.topHLOCData?.open) * 100;
 
-    if(props?.topHLOCData?.open === 0){
+    if (props?.topHLOCData?.open === 0) {
         change = 0.00;
     }
 
@@ -114,7 +113,7 @@ const TopBar = (props: showSidebar) => {
                     {/* 24h Change*/}
                     <div>
                         <p className='top-label'>24h Change</p>
-                        <p className={`top-label ${change < 0 ? '!text-sell':'!text-buy'}`}>{change.toFixed(4)}%</p>
+                        <p className={`top-label ${change < 0 ? '!text-sell' : '!text-buy'}`}>{change.toFixed(4)}%</p>
                     </div>
                     {/* 24h High */}
                     <div>

@@ -193,7 +193,7 @@ const ChartTabs = (props: propsData) => {
                 <tbody>
                   {currentItems?.map((item: any, index: number) => {
                     return (
-                      <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => { (item?.tradePair !== null ? router.push(`/chart/${item.symbol}`) : ''); props.getUserOpenOrder(item?.symbol); props.getUserTradeHistory(item?.symbol); }}>
+                      <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => { (item?.tradePair !== null ? window.location.href=`/chart/${item.symbol}` : ''); props.getUserOpenOrder(item?.symbol); props.getUserTradeHistory(item?.symbol); }}>
 
                         <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                           <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
