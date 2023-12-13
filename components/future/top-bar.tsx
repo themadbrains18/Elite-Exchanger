@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import IconsComponent from '../snippets/icons';
 import TimerCountDown from './timer-countdown';
+import moment from 'moment';
 
 interface showSidebar {
     show?: boolean;
@@ -12,6 +13,8 @@ const TopBar = (props: showSidebar) => {
 
     const Ref: any = useRef(null);
     const [timer, setTimer] = useState("00:00:00");
+
+    const [sessionTimePeriod, setSessionTimePeriod] = useState(1);
 
     const getTimeRemaining = (e: any) => {
         let deadline: any = new Date();
@@ -45,6 +48,9 @@ const TopBar = (props: showSidebar) => {
                 (seconds > 9 ? seconds : "0" + seconds)
             );
         }
+        else {
+            clearTimer(getDeadTime());
+        }
     };
 
     const clearTimer = (e: any) => {
@@ -58,7 +64,65 @@ const TopBar = (props: showSidebar) => {
     };
 
     const getDeadTime = () => {
-        let deadline = new Date('Dec 11 2023 08:00:00 GMT-0000');
+
+        let date = new Date();
+
+        let month = (date.getMonth() + 1).toString();
+        let year = date.getFullYear();
+        let day = date.getDate();
+        let hour = date.getHours();
+        let minute = date.getMinutes();
+
+        if (month === "1") {
+            month = 'Jan'
+        } else if (month === "2") {
+            month = 'Feb'
+        } else if (month === "3") {
+            month = 'Mar'
+        } else if (month === "4") {
+            month = 'Apr'
+        } else if (month === "5") {
+            month = 'May'
+        } else if (month === "6") {
+            month = 'Jun'
+        } else if (month === "7") {
+            month = 'Jul'
+        } else if (month === "8") {
+            month = 'Aug'
+        } else if (month === "9") {
+            month = 'Sep'
+        } else if (month === "10") {
+            month = 'Oct'
+        } else if (month === "11") {
+            month = 'Nov'
+        } else if (month === "12") {
+            month = 'Dec'
+        }
+
+        let time = ' 00:00:00 GMT-0000';
+        // first session
+        if(hour === 0 && minute <=59){
+            time = ' 16:00:00 GMT-0000';
+            day = day - 1;
+        }
+        if (hour <= 5 && minute <= 30) {
+            time = ' 16:00:00 GMT-0000';
+            day = day - 1;
+        }
+
+        // second session
+        if (hour >= 13 && minute <= 30) {
+            time = ' 08:00:00 GMT-0000';
+        }
+
+        // third session
+        if (hour >= 21 && minute <= 30) {
+            time = ' 16:00:00 GMT-0000';
+        }
+
+        let newDate = month + " " + day + " " + year + time;
+
+        let deadline = new Date(newDate);
         deadline.setHours(deadline.getHours() + 8);
         return deadline;
     };

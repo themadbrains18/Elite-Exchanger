@@ -57,6 +57,8 @@ const BuySell = (props: fullWidth) => {
 
     const [confirmOrderData, setConfirmOrderData] = useState(Object);
 
+    const [orderType, setOrderType] = useState('value');
+
     let openOrderObj = {
         "position_id": "--",
         "user_id": session?.user?.user_id,
@@ -122,6 +124,12 @@ const BuySell = (props: fullWidth) => {
     // ===================================================================//
     const onCoinDropDownChange = (token: any) => {
 
+        if (token !== 'USDT') {
+            setOrderType('qty')
+        }
+        else {
+            setOrderType('value');
+        }
         let futureAssets = props?.assets?.filter((item: any) => {
             return item.walletTtype === 'future_wallet'
         });
@@ -180,6 +188,9 @@ const BuySell = (props: fullWidth) => {
             }
 
             let qty: any = (sizeValue / marketPrice).toFixed(3);
+            if (orderType === 'qty') {
+                qty = sizeValue;
+            }
 
             let value: any = (qty * 0.055).toFixed(5);
 
@@ -202,7 +213,7 @@ const BuySell = (props: fullWidth) => {
                 "status": false,
                 "queue": false,
                 "direction": show === 1 ? "long" : 'short',
-                "order_type": "value",
+                "order_type": orderType,
                 "leverage_type": props?.marginMode?.margin,
                 "type": marketType,
                 "qty": qty
@@ -230,6 +241,9 @@ const BuySell = (props: fullWidth) => {
             }
 
             let qty: any = (sizeValue / marketPrice).toFixed(3);
+            if (orderType === 'qty') {
+                qty = sizeValue;
+            }
             obj = {
                 "position_id": "--",
                 "user_id": session?.user?.user_id,
@@ -246,7 +260,7 @@ const BuySell = (props: fullWidth) => {
                 "margin": sizeValue / props?.marginMode?.leverage,
                 "liq_price": Liquidation_Price,
                 "market_price": props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price,
-                "order_type": "value",
+                "order_type": orderType,
                 "leverage_type": props?.marginMode?.margin,
                 "coin_id": props?.currentToken?.coin_id,
                 "qty": qty
@@ -279,6 +293,9 @@ const BuySell = (props: fullWidth) => {
                 }
 
                 let qty: any = (sizeValue / marketPrice).toFixed(3);
+                if (orderType === 'qty') {
+                    qty = sizeValue;
+                }
                 let value: any = (qty * 0.055).toFixed(5);
                 let releazedPnl = (marketPrice * value) / 100;
                 obj = {
@@ -298,7 +315,7 @@ const BuySell = (props: fullWidth) => {
                     "status": false,
                     "queue": false,
                     "direction": show === 1 ? "long" : 'short',
-                    "order_type": "value",
+                    "order_type": orderType,
                     "leverage_type": props?.marginMode?.margin,
                     "market_type": marketType,
                     "qty": qty
@@ -326,6 +343,9 @@ const BuySell = (props: fullWidth) => {
                 }
 
                 let qty: any = (sizeValue / marketPrice).toFixed(3);
+                if (orderType === 'qty') {
+                    qty = sizeValue;
+                }
                 obj = {
                     "position_id": "--",
                     "user_id": session?.user?.user_id,
@@ -342,7 +362,7 @@ const BuySell = (props: fullWidth) => {
                     "margin": sizeValue / props?.marginMode?.leverage,
                     "liq_price": Liquidation_Price,
                     "market_price": props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price,
-                    "order_type": "value",
+                    "order_type": orderType,
                     "leverage_type": props?.marginMode?.margin,
                     "coin_id": props?.currentToken?.coin_id,
                     "qty": qty
@@ -710,10 +730,19 @@ const BuySell = (props: fullWidth) => {
                         {
                             status !== 'unauthenticated' &&
                             <div className='mt-[20px]'>
-                                <div className='flex gap-5 items-center justify-between'>
-                                    <p className="top-label">Qty</p>
-                                    <p className="top-label !text-[#000] dark:!text-[#fff]">{showNes === 1 ? sizeValue === 0 ? 0.00 : (sizeValue / entryPrice).toFixed(5) : (sizeValue / marketPrice).toFixed(5)} {props?.currentToken?.coin_symbol}</p>
-                                </div>
+                                {orderType === 'value' &&
+                                    <div className='flex gap-5 items-center justify-between'>
+                                        <p className="top-label">Qty</p>
+                                        <p className="top-label !text-[#000] dark:!text-[#fff]">{showNes === 1 ? sizeValue === 0 ? 0.00 : (sizeValue / entryPrice).toFixed(5) : (sizeValue / marketPrice).toFixed(5)} {props?.currentToken?.coin_symbol}</p>
+                                    </div>
+                                }
+                                {orderType === 'qty' &&
+                                    <div className='flex gap-5 items-center justify-between'>
+                                        <p className="top-label">Value</p>
+                                        <p className="top-label !text-[#000] dark:!text-[#fff]">{showNes === 1 ? sizeValue === 0 ? 0.00 : (sizeValue * entryPrice).toFixed(5) : (sizeValue * marketPrice).toFixed(5)} USDT</p>
+                                    </div>
+                                }
+
                                 {
                                     show === 1 &&
                                     <div className='mt-[5px]'>

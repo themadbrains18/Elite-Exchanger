@@ -30,7 +30,7 @@ const CoinTypes = (props: propsData) => {
         })
         setfavCoin(coinsItem);
 
-    }, [mode]);
+    }, [mode, props?.coins]);
 
     function fillSvg(e: any, item: any) {
         if (mode == "dark") {
@@ -130,7 +130,7 @@ const CoinTypes = (props: propsData) => {
                             {props?.coins && props?.coins.length > 0 && props?.coins.map((item: any) => {
 
                                 let color = 'transparent';
-                                let existItem: any = localStorage.getItem('futurefavToken');
+                                let existItem: any = localStorage !==undefined && localStorage.getItem('futurefavToken');
 
                                 if (existItem) {
                                     existItem = JSON.parse(existItem);

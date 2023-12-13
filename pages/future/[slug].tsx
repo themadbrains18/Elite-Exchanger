@@ -87,6 +87,7 @@ const FutureTrading = (props: Session) => {
             }
 
             if (eventDataType === 'position') {
+                refreshWalletAssets();
                 getUserFuturePositionData();
                 getUserOpenOrderData();
                 getUserFuturePositionHistoryData();
@@ -278,7 +279,7 @@ const FutureTrading = (props: Session) => {
                             <div className='flex relative w-full max-w-full'>
                                 {/* Future trade coin list */}
                                 <div className={`w-full max-w-[380px] max-[1500px]:absolute duration-300 z-[4] max-[1500px]:top-0 ${show1 ? 'max-[1500px]:left-0' : 'max-[1500px]:left-[-100%]'}`}>
-                                    <CoinTypes coins={props?.coinList} />
+                                    <CoinTypes coins={allCoins} />
                                 </div>
                                 {/* Future chart */}
                                 <div className='max-[1499px]:pl-[20px] w-full max-w-full min-[1500px]:max-w-[calc(100%-380px)] bg-[#fafafa] dark:bg-[#1a1b1f] '>
