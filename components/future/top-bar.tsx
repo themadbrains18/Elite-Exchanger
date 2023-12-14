@@ -111,12 +111,12 @@ const TopBar = (props: showSidebar) => {
         }
 
         // second session
-        if (hour >= 13 && minute <= 30) {
+        if (hour >= 13 && (minute <= 30 || minute >= 30)) {
             time = ' 08:00:00 GMT-0000';
         }
 
         // third session
-        if (hour >= 21 && minute <= 30) {
+        if (hour >= 21 && (minute <= 30 || minute >= 30 )) {
             time = ' 16:00:00 GMT-0000';
         }
 

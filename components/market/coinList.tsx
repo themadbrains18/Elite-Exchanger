@@ -4,7 +4,7 @@ import Favorites from "../snippets/market/favorites";
 import AllCrypto from "../snippets/market/allCrypto";
 import Spot from "../snippets/market/spot";
 import Future from "../snippets/market/future";
-import TopGainers from "../snippets/market/topGainers";
+// import TopGainers from "../snippets/market/topGainers";
 import NewListing from "../snippets/market/newListing";
 
 interface propsData {
@@ -14,7 +14,7 @@ interface propsData {
 const CoinList = (props: propsData) => {
 
   const [active1, setActive1] = useState(2);
-  const [topgainer, setTopGainers] = useState([]);
+  // const [topgainer, setTopGainers] = useState([]);
   const [favouriteToken, setFavouriteToken] = useState([]);
 
   const [spotTrade, SetSpotTrade] = useState([]);
@@ -48,7 +48,6 @@ const CoinList = (props: propsData) => {
   })
 
   useEffect(() => {
-
     // get favorite tokens
     let favItems = localStorage.getItem('favToken');
     if (favItems) {
@@ -62,28 +61,38 @@ const CoinList = (props: propsData) => {
       setFavouriteToken(array);
     }
 
-    let spot = props.coins.filter((item:any)=>{
+    // spot trade token
+    let spot = props.coins.filter((item: any) => {
       return item.tradePair !== null
     });
-
     SetSpotTrade(spot);
 
-    let future = props.coins.filter((item:any)=>{
-      return item.futureTradePair !== null
-    });
-    SetFutureTrade(future);
+    //Get future trade token list
+    getFutureTardeList();
 
     // Get top gainer token list
-    getTopGainersList();
-  }, []);
+    // getTopGainersList();
+  }, [props?.coins]);
 
-  const getTopGainersList = async () => {
+  // const getTopGainersList = async () => {
+  //   try {
+  //     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token/topgainer`, {
+  //       method: "GET"
+  //     }).then(response => response.json());
+
+  //     setTopGainers(tokenList);
+  //   } catch (error) {
+
+  //   }
+  // }
+
+  const getFutureTardeList = async () => {
     try {
-      let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token/topgainer`, {
+      let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future`, {
         method: "GET"
       }).then(response => response.json());
 
-      setTopGainers(tokenList);
+      SetFutureTrade(tokenList?.data);
     } catch (error) {
 
     }

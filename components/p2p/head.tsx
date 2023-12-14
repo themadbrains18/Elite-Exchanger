@@ -69,9 +69,6 @@ const Head = () => {
                 ? "bg-primary !text-white"
                 : "dark:text-beta bg-bg-secondary !text-body-primary dark:bg-black-v-1"
             } !text-[14px] md:!text-[18px] px-[15px] md:px-[20px] py-[5px] md:py-[14px] rounded-[5px]`}
-            // onClick={() => {
-            //   setActive(1);
-            // }}
           >
             P2P Process
           </Link>
@@ -81,35 +78,13 @@ const Head = () => {
                 ? "bg-primary !text-white"
                 : "dark:text-beta bg-bg-secondary !text-body-primary dark:bg-black-v-1"
             } !text-[14px] md:!text-[18px] px-[15px] md:px-[20px] py-[5px] md:py-[14px] rounded-[5px]`}
-            // onClick={() => {
-            //   setActive(2);
-            // }}
           >
             {" "}
             Express
           </Link>
 
-          <p className="sm-text mt-[15px]">
-            Lorem Ipsum is simply dummy text of the printing.
-          </p>
         </div>
-        {/* <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[370px] w-full py-[13px] px-[10px] ">
-          <Image
-            alt="search"
-            loading="lazy"
-            width={24}
-            height={24}
-            decoding="async"
-            data-nimg={1}
-            style={{ color: "transparent" }}
-            src="/assets/history/search.svg"
-          />
-          <input
-            type="search"
-            placeholder="Search"
-            className="nav-text-sm !text-beta outline-none bg-[transparent] w-full"
-          />
-        </div> */}
+        
       </div>
 
       {/* Tabs */}

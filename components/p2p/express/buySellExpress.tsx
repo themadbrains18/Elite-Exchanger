@@ -321,7 +321,7 @@ const BuySellExpress = (props: propsData) => {
     }
 
     let seller = props.posts.filter((item: any) => {
-      return item.token_id === token?.id
+      return item?.token_id === token?.id && session?.user?.user_id !== item?.user_id
     })
 
     if (seller.length > 0) {

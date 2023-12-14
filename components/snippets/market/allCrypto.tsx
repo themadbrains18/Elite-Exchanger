@@ -84,7 +84,7 @@ const AllCrypto = (props:propsData) => {
                                         </div>
                                     </td>
                                     <td>
-                                        <p className="info-14-18 dark:text-white  ">${item.price.toFixed(8)}</p>
+                                        <p className="info-14-18 dark:text-white  ">${item.price.toFixed(5)}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <div className={` items-center gap-[10px] flex`}>
