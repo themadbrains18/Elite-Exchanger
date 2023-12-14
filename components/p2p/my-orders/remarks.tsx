@@ -297,7 +297,7 @@ const Remarks = (props: propsData) => {
                     </p>
 
                 }
-                <div className='flex items-center sm:gap-30 gap-[15px] md:mt-50 mt-30 sm:flex-row flex-col'>
+                <div className='flex items-center sm:gap-30 gap-[15px] md:mt-50 mt-30 md:flex-row flex-col'>
 
                     {
                         (props.userOrder?.status === 'isProcess' || props.userOrder?.status === 'isCompleted') && props.userOrder?.buy_user_id === session?.user?.user_id &&
