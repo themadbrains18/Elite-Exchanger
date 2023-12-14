@@ -280,7 +280,7 @@ const TradingPassword = (props: activeSection) => {
           </div>
 
           <form onSubmit={handleSubmit(onHandleSubmit)}>
-            <div className="py-[30px] md:py-[50px] lg:px-0 px-20">
+            <div className="py-[30px] md:py-[50px] px-0 lg:px-20">
               <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
                 Trading Password
               </p>

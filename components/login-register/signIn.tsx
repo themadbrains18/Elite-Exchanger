@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useContext, useState,useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import Context from "../contexts/context";
 import HeaderLogo from "../svg-snippets/headerLogo";
 import Link from "next/link";
@@ -37,14 +37,18 @@ const validatePhone = (phone: string | undefined) => {
   ).isValidSync(phone);
 };
 
-const SignIn = () => {
+interface loginType {
+  loginType: "user" | "admin"
+}
+
+const SignIn = (Props: loginType) => {
   const { mode } = useContext(Context);
   const [show, setShow] = useState(false);
   const [step, setStep] = useState(0);
   const [isEmail, setIsEmail] = useState(false);
   const [formData, setFormData] = useState({ username: '', password: '' });
   const router = useRouter();
-  const [btnDisabled,setBtnDisabled] = useState(false);
+  const [btnDisabled, setBtnDisabled] = useState(false);
 
   let { register, setValue, handleSubmit, watch, setError, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
@@ -53,7 +57,7 @@ const SignIn = () => {
 
   useEffect(() => {
     let agent = window.navigator.userAgent;
-    console.log(agent,"==agent");
+    console.log(agent, "==agent");
     fetch('http://ip-api.com/json')
       .then(response => response.json())
       .then(data => {
@@ -62,26 +66,32 @@ const SignIn = () => {
   }, []);
 
   const onHandleSubmit = async (data: any) => {
-    let wildcard= router
+    let wildcard = router
     // console.log(wildcard);
-    
+
     try {
       let isEmailExist = await validateEmail(data.username);
       data.otp = "string";
       data.step = 1;
       setIsEmail(isEmailExist);
-      if(isEmailExist){
+      if (isEmailExist) {
         data.email = data.username;
         data.number = "string"
       }
-      else{
+      else {
         data.email = "string";
         data.number = data.username
       }
 
+      if (Props.loginType === "admin") {
+        data.loginType = 'admin';
+      } else {
+        data.loginType = 'user';
+      }
+
       setBtnDisabled(true);
       const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-      let record =  encodeURIComponent(ciphertext.toString());
+      let record = encodeURIComponent(ciphertext.toString());
 
       let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/login`, {
         method: "POST",
@@ -89,10 +99,10 @@ const SignIn = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(record) 
+        body: JSON.stringify(record)
       })
 
-      let res =  await responseData.json();
+      let res = await responseData.json();
 
       if (res.data.status === 200) {
         setBtnDisabled(false);
@@ -136,7 +146,7 @@ const SignIn = () => {
                     {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
                     <div className="relative">
                       <input type={`${show === true ? "text" : "password"}`} placeholder="Password" {...register('password')} name="password" className="input-cta w-full" />
-                      
+
                       <Image
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
                         alt="eyeicon"
@@ -205,11 +215,11 @@ const SignIn = () => {
       }
       {
         step === 1 &&
-        <Verification step={step} setStep={setStep} isEmail={isEmail} formData={formData} api='login'/>
+        <Verification step={step} setStep={setStep} isEmail={isEmail} formData={formData} api='login' />
       }
       {
         step === 2 &&
-        <SecurityCode formData={formData} api='login'/>
+        <SecurityCode formData={formData} api='login' />
       }
     </>
   );

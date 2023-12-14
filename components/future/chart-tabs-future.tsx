@@ -44,7 +44,8 @@ const ChartTabsFuture = (props: propsData) => {
             }
             {
                 show === 4 && 
-                <OpenOrderHistoryTable openOrders={props.openOrderHistoryData}/>
+                // <OpenOrderHistoryTable openOrders={props.openOrderHistoryData}/>
+                <PositionsHistoryTable positions={props.positionHistoryData}/>
             }
 
         </div>

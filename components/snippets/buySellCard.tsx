@@ -56,6 +56,25 @@ const BuySellCard = (props: DynamicId) => {
     }
   }, [props.slug, userAssets])
 
+  useEffect(() => {
+    const websocket = new WebSocket('ws://localhost:3001/');
+
+    websocket.onopen = () => {
+      console.log('connected');
+    }
+
+    websocket.onmessage = (event) => {
+      const data = JSON.parse(event.data).data;
+      let eventDataType = JSON.parse(event.data).type;
+
+      if (eventDataType === "market") {
+        if (props.session) {
+          getAssets();
+        }
+      }
+    }
+  }, []);
+
   const setCurrencyName = (symbol: string, dropdown: number) => {
     if (dropdown === 1) {
       setFirstCurrency(symbol);
@@ -118,10 +137,7 @@ const BuySellCard = (props: DynamicId) => {
       toast.success(reponse.data?.data?.message);
       setFirstCurrency('BLC');
       setSecondCurrency('USDT');
-      // if (router.pathname.includes("/chart")) {
-      //   await props.getUserOpenOrder(props.slug);
-      //   await props.getUserTradeHistory(props.slug);
-      // }
+
       const websocket = new WebSocket('ws://localhost:3001/');
       let withdraw = {
         ws_type: 'market',
@@ -152,10 +168,6 @@ const BuySellCard = (props: DynamicId) => {
       }).then(response => response.json());
 
       if (executionReponse?.data?.message === undefined) {
-        // if (router.pathname.includes("/chart")) {
-        //   await props.getUserOpenOrder(props.slug);
-        //   await props.getUserTradeHistory(props.slug);
-        // }
         const websocket = new WebSocket('ws://localhost:3001/');
         let withdraw = {
           ws_type: 'market',
@@ -165,17 +177,7 @@ const BuySellCard = (props: DynamicId) => {
         }
       }
 
-      /**
-       * Get user assets data after order create
-       */
-      let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${props.session?.user?.user_id}`, {
-        method: "GET",
-        headers: {
-          "Authorization": props.session?.user?.access_token
-        },
-      }).then(response => response.json());
 
-      setUserAssets(userAssets);
       reset({
         limit_usdt: 0.00,
         token_amount: 0.00,
@@ -211,14 +213,27 @@ const BuySellCard = (props: DynamicId) => {
     }
   }
 
+  const getAssets = async () => {
+    /**
+    * Get user assets data after order create
+    */
+    let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${props.session?.user?.user_id}`, {
+      method: "GET",
+      headers: {
+        "Authorization": props.session?.user?.access_token
+      },
+    }).then(response => response.json());
+
+    setUserAssets(userAssets);
+  }
+
   useEffect(() => {
     let radioCta = document.querySelector(".custom-radio") as HTMLInputElement | null;
     let prevSibling: ChildNode | null | undefined = radioCta?.previousSibling;
     if (prevSibling instanceof HTMLElement) {
       prevSibling.click();
     }
-    
-    
+
   }, []);
 
 
@@ -337,13 +352,13 @@ const BuySellCard = (props: DynamicId) => {
             <div>
               {
                 router.pathname.includes('/chart') ?
-              
+
                   <div className='flex  items-center gap-[5px] rounded-[5px] mr-[15px] pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d]'>
                     <Image src={`${props?.token?.image !== undefined ? props?.token?.image : '/assets/home/coinLogo.png'}`} alt="error" width={20} height={20} />
                     <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text`}>{props?.token?.fullName}</p>
-                  </div>:
-                   <FilterSelectMenuWithCoin data={list} border={false} setCurrencyName={setCurrencyName} dropdown={1} /> 
-                
+                  </div> :
+                  <FilterSelectMenuWithCoin data={list} border={false} setCurrencyName={setCurrencyName} dropdown={1} />
+
 
               }
             </div>

@@ -32,7 +32,7 @@ const PositionsTable = (props: propsData) => {
 
   const actionPerform = async () => {
     let obj = { "id": positionId };
-console.log(positionId);
+    console.log(positionId);
 
     const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
     let record = encodeURIComponent(ciphertext.toString());
@@ -137,7 +137,7 @@ console.log(positionId);
               </th>
               <th className=" py-[10px]">
                 <div className="flex">
-                  <p className="text-start  top-label dark:text-gamma">Margin Ratio </p>
+                  <p className="text-start  top-label dark:text-gamma">Direction</p>
                   <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
@@ -149,13 +149,19 @@ console.log(positionId);
               </th>
               <th className=" py-[10px]">
                 <div className="flex">
-                  <p className="  top-label dark:text-gamma">PNL(ROE %)</p>
+                  <p className="  top-label dark:text-gamma">Unrealized PnL</p>
                   <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
               <th className=" py-[10px]">
                 <div className="flex">
-                  <p className="  top-label dark:!text-[#cccc56] !font-[600]" onClick={closeAllPosition}>Close All Positions</p>
+                  <p className="  top-label dark:text-gamma">Realized PnL</p>
+                  <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                </div>
+              </th>
+              <th className=" py-[10px]">
+                <div className="flex">
+                  <p className="  top-label dark:!text-[#cccc56] !font-[600]" onClick={() => { props?.positions && props?.positions.length > 0 ? closeAllPosition : '' }}>Close All Positions</p>
                   {/* <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" /> */}
                 </div>
               </th>
@@ -194,22 +200,22 @@ console.log(positionId);
                       </div>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] !text-buy">{item?.qty>0 ?item?.qty?.toFixed(5): item?.qty?.toFixed(2)}</p>
+                      <p className="top-label !font-[600] !text-buy">{item?.qty > 0 ? item?.qty?.toFixed(5) : item?.qty?.toFixed(2)}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <p className="top-label !font-[600] !text-buy">{item?.size}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.entry_price}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.entry_price?.toFixed(5)}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.token !== null ? item?.token?.price : item?.global_token?.price}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.token !== null ? item?.token?.price?.toFixed(5) : item?.global_token?.price?.toFixed(5)}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.liq_price}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.liq_price?.toFixed(5)}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.margin}</p>
+                      <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <p className="top-label !font-[600] dark:!text-white !text-black">{item?.margin}</p>
@@ -219,9 +225,18 @@ console.log(positionId);
                       <div className='flex items-center gap-[5px]'>
                         <div>
                           <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{item?.pnl?.toFixed(8)}</p>
-                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{item.order_type === 'value' ? 'USDT' : 'BTC'}</p>
+                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>USDT</p>
                         </div>
-                        <IconsComponent type='sendIcon' />
+                        {/* <IconsComponent type='sendIcon' /> */}
+                      </div>
+                    </td>
+                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                      <div className='flex items-center gap-[5px]'>
+                        <div>
+                          <p className={`top-label !font-[600] !text-sell`}>-{item?.realized_pnl?.toFixed(8)}</p>
+                          <p className={`top-label !font-[600] !text-sell`}>USDT</p>
+                        </div>
+                        {/* <IconsComponent type='sendIcon' /> */}
                       </div>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%] cursor-pointer'>

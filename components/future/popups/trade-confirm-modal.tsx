@@ -10,7 +10,7 @@ interface showPopup {
     setConfirmModelOverlay?: any;
     modelOverlay?: boolean;
     confirmOrder?: any;
-    confirmOrderData?:any;
+    confirmOrderData?: any;
 }
 
 const TradeConfirmPopupModal = (props: showPopup) => {
@@ -51,11 +51,11 @@ const TradeConfirmPopupModal = (props: showPopup) => {
             <div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Price</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type !== undefined?props?.confirmOrderData?.price_usdt: props?.confirmOrderData?.market_price}</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type === 'limit' ? props?.confirmOrderData?.price_usdt : props?.confirmOrderData?.market_price}</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Qty</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.qty?.toFixed(5)} BTC</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.qty} BTC</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Cost</p>
@@ -63,11 +63,11 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Value</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type !== undefined?props?.confirmOrderData?.amount: props?.confirmOrderData?.size} USDT</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type === 'limit' ? parseFloat(props?.confirmOrderData?.amount)?.toFixed(5) : props?.confirmOrderData?.size?.toFixed(5)} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Estimated Liq. Price</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.liq_price} USDT</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.liq_price?.toFixed(5)} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Leverage</p>
@@ -82,7 +82,7 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                         <button className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px]`} onClick={props.confirmOrder} >Confirm</button>
                     </div>
                     <div className='mt-[5px] w-full'>
-                        <button className={` solid-button w-full !bg-[#808080] !rounded-[8px] py-[10px] px-[15px] !text-[14px]`} onClick={()=>{
+                        <button className={` solid-button w-full !bg-[#808080] !rounded-[8px] py-[10px] px-[15px] !text-[14px]`} onClick={() => {
                             props.setConfirmModelOverlay(false);
                             props.setConfirmModelPopup(0);
                         }}>Cancel</button>

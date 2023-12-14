@@ -38,6 +38,7 @@ const Chart = (props: Session) => {
     const [BuyTrade, setBuyTrade] = useState([]);
 
     const { slug } = router.query;
+    
 
     // let currentToken = props.coinList.filter((item: any) => {
     //     return item.symbol === slug
@@ -54,7 +55,7 @@ const Chart = (props: Session) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
             if (eventDataType === "price") {
-                refreshTokenList()
+                // refreshTokenList()
             }
             if (eventDataType === "market") {
                 if (props.session) {
@@ -169,7 +170,7 @@ const Chart = (props: Session) => {
                 <ToastContainer />
                 <div className=" bg-light-v-1 py-20 dark:bg-black-v-1">
                     <div className="container p-[15px] lg:p-20 gap-30">
-                        <ChartBanner token={currentToken[0]} />
+                        <ChartBanner />
                     </div>
                     <div className="container p-[15px] lg:p-20 flex gap-30 flex-wrap">
                         <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">

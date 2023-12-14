@@ -10,7 +10,7 @@ import ReEnterpass from '@/components/login-register/re-enterpass'
 const Login = ({ providers }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <>
-      <SignIn />
+      <SignIn loginType='user'/>
       {/* <ReEnterpass /> */}
       
     </>

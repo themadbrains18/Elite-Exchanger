@@ -24,7 +24,7 @@ interface fixSection {
   userDetail?: any;
 }
 
-const Dashboard = (props: fixSection) => {
+const   Dashboard = (props: fixSection) => {
   const [editable, setEditable] = useState(false);
 
   let { register, setValue, handleSubmit, watch, setError, formState: { errors } } = useForm({
@@ -112,36 +112,40 @@ const Dashboard = (props: fixSection) => {
             </div>
           </div>
           <div className="py-[30px] md:py-[50px]">
-            <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
+            {/* <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
               Personal Information
             </p>
             <p className="sm-text ">
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry.
-            </p>
+            </p> */}
             <form onSubmit={handleSubmit(onHandleSubmit)}>
               <div className="mt-[30px] ">
                 <div className="flex md:flex-row flex-col gap-[30px]">
                   <div className=" w-full">
                     <p className="sm-text mb-[10px]">First Name</p>
-                    <input
-                      type="text"
-                      {...register('fName')} name="fName"
-                      readOnly={editable ? false : true}
-                      placeholder={editable ? "Enter first name" : "Allie"}
-                      className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}
-                    />
+                    <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}>
+                      <input
+                        type="text"
+                        {...register('fName')} name="fName"
+                        readOnly={editable ? false : true}
+                        placeholder={editable ? "Enter first name" : "Allie"}
+                        className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
+                      />
+                    </div>
                     {errors.fName && <p style={{ color: 'red' }}>{errors.fName.message}</p>}
                   </div>
                   <div className=" w-full">
                     <p className="sm-text mb-[10px]">Last Name</p>
-                    <input
-                      type="text"
-                      {...register('lName')} name="lName"
-                      readOnly={editable ? false : true}
-                      placeholder={editable ? "Enter Last name" : "Joe"}
-                      className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}
-                    />
+                    <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}>
+                      <input
+                        type="text"
+                        {...register('lName')} name="lName"
+                        readOnly={editable ? false : true}
+                        placeholder={editable ? "Enter Last name" : "Joe"}
+                        className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
+                      />
+                    </div>
                     {errors.lName && <p style={{ color: 'red' }}>{errors.lName.message}</p>}
                   </div>
                 </div>
@@ -149,14 +153,16 @@ const Dashboard = (props: fixSection) => {
                   <div className=" w-full">
                     <p className="sm-text mb-[10px]">Display Name</p>
                     <div className="relative">
-                      <input
-                        type="text"
-                        {...register('dName')} name="dName"
-                        readOnly={editable ? false : true}
-                        placeholder={editable ? "Enter display name" : "Allie Joe"}
-                        className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}
-
-                      />
+                      <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}>
+                        <input
+                          type="text"
+                          {...register('dName')} name="dName"
+                          readOnly={editable ? false : true}
+                          placeholder={editable ? "Enter display name" : "Allie Joe"}
+                          className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
+                          
+                          />
+                      </div>
                       {/* <Image
                         src="/assets/profile/edit.svg"
                         alt="editicon"
@@ -169,13 +175,15 @@ const Dashboard = (props: fixSection) => {
                   </div>
                   <div className=" w-full">
                     <p className="sm-text mb-[10px]">User Name</p>
-                    <input
-                      type="text"
-                      {...register('uName')} name="uName"
-                      readOnly={editable ? false : true}
-                      placeholder={editable ? "Enter user name" : "AllieJoe"}
-                      className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}
-                    />
+                    <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}>
+                      <input
+                        type="text"
+                        {...register('uName')} name="uName"
+                        readOnly={editable ? false : true}
+                        placeholder={editable ? "Enter user name" : "AllieJoe"}
+                        className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
+                      />
+                      </div>
                     {errors.uName && <p style={{ color: 'red' }}>{errors.uName.message}</p>}
                   </div>
                 </div>
@@ -209,76 +217,85 @@ const Dashboard = (props: fixSection) => {
               <div className="flex md:flex-row flex-col gap-[30px]">
                 <div className=" w-full">
                   <p className="sm-text mb-[10px]">Email</p>
-                  <div className="relative">
-                    <input
-                      type="email"
-                      value={props.session?.user?.email}
-                      placeholder="AllieGrater12345644@gmail.com"
-                      className={`sm-text input-cta2 w-full cursor-not-allowed`}
-                    />
-                    <Image
-                      src="/assets/profile/mail.svg"
-                      alt="mail"
-                      width={22}
-                      height={22}
-                      className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                    />
+                  <div className="cursor-not-allowed"> 
+                    <div className="relative pointer-events-none">
+                      <input
+                        type="email"
+                        value={props.session?.user?.email}
+                        placeholder="AllieGrater12345644@gmail.com"
+                        className={`sm-text input-cta2 w-full cursor-not-allowed focus:outline-none focus:border-none`}
+                      />
+                      <Image
+                        src="/assets/profile/mail.svg"
+                        alt="mail"
+                        width={22}
+                        height={22}
+                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className=" w-full">
                   <p className="sm-text mb-[10px]">Phone Number</p>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      value={props.session?.user?.number}
-                      placeholder="Enter phone number"
-                      className={`sm-text input-cta2 w-full cursor-not-allowed`}
-                    />
-                    <Image
-                      src="/assets/profile/phone.svg"
-                      alt="phone"
-                      width={22}
-                      height={22}
-                      className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                    />
+                  <div className="cursor-not-allowed"> 
+                    <div className="relative pointer-events-none">
+                      <input
+                        type="number"
+                        value={props.session?.user?.number}
+                        placeholder="Enter phone number"
+                        className={`sm-text input-cta2 w-full cursor-not-allowed`}
+                        readOnly
+                      />
+                      <Image
+                        src="/assets/profile/phone.svg"
+                        alt="phone"
+                        width={22}
+                        height={22}
+                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
               <div className="mt-5 flex gap-[30px] md:flex-row flex-col">
                 <div className=" w-full">
                   <p className="sm-text mb-[10px]">Location</p>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value="abc"
-                      placeholder="Enter location"
-                      className={`sm-text input-cta2 w-full cursor-not-allowed`}
-                    />
-                    <Image
-                      src="/assets/profile/downarrow.svg"
-                      alt="editicon"
-                      width={24}
-                      height={24}
-                      className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                    />
+                  <div className="cursor-not-allowed"> 
+                    <div className="relative  pointer-events-none">
+                      <input
+                        type="text"
+                        value="abc"
+                        placeholder="Enter location"
+                        className={`sm-text input-cta2 w-full cursor-not-allowed`}
+                      />
+                      <Image
+                        src="/assets/profile/downarrow.svg"
+                        alt="editicon"
+                        width={24}
+                        height={24}
+                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className=" w-full">
                   <p className="sm-text mb-[10px]">Currency</p>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value="US Dollar"
-                      placeholder="Enter currency"
-                      className={`sm-text input-cta2 w-full cursor-not-allowed`}
-                    />
-                    <Image
-                      src="/assets/profile/downarrow.svg"
-                      alt="editicon"
-                      width={24}
-                      height={24}
-                      className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                    />
+                  <div className="cursor-not-allowed"> 
+                    <div className="relative pointer-events-none">
+                      <input
+                        type="text"
+                        value="US Dollar"
+                        placeholder="Enter currency"
+                        className={`sm-text input-cta2 w-full cursor-not-allowed`}
+                      />
+                      <Image
+                        src="/assets/profile/downarrow.svg"
+                        alt="editicon"
+                        width={24}
+                        height={24}
+                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>

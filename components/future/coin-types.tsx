@@ -1,27 +1,68 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Context from "../contexts/context";
 import { useRouter } from "next/router";
+import Link from 'next/link';
 
 interface propsData {
     coins?: any;
+    // setNewSlug?:any;
 }
 
 const CoinTypes = (props: propsData) => {
     const [show, setShow] = useState(1);
     const [fill, setFill] = useState(false);
+    const [favCoin, setfavCoin] = useState([]);
 
     let { mode } = useContext(Context);
 
     const router = useRouter();
 
-    function fillSvg(e: any) {
-        console.log(e.currentTarget);
-        // if(mode == "dark"){
-        //     e.currentTarget.classList.add("dark:fill-[#fff]")
-        // }else{
-        //     e.currentTarget.classList.add("fill-[#000]")
-        // }
-        // setFill(!fill)
+    useEffect(() => {
+        let existItem: any = localStorage.getItem('futurefavToken');
+        if (existItem) {
+            existItem = JSON.parse(existItem);
+        }
+
+        let coinsItem = props?.coins.filter((item: any) => {
+            if (existItem.includes(item?.id)) {
+                return item;
+            }
+        })
+        setfavCoin(coinsItem);
+
+    }, [mode, props?.coins]);
+
+    function fillSvg(e: any, item: any) {
+        if (mode == "dark") {
+            e.currentTarget.classList.add("dark:fill-[#fff]")
+        } else {
+            e.currentTarget.classList.add("fill-[#000]")
+        }
+        setFill(!fill)
+
+        let existItem: any = localStorage.getItem('futurefavToken');
+        if (existItem) {
+            existItem = JSON.parse(existItem);
+        }
+        if (existItem && existItem.indexOf(item?.id) !== -1) {
+            existItem = existItem.filter((j: any) => {
+                return j !== item?.id
+            })
+        }
+        else if (existItem) {
+            existItem.push(`${item?.id}`)
+        }
+        else {
+            existItem = [`${item?.id}`];
+        }
+
+        let coinsItem = props?.coins.filter((item: any) => {
+            if (existItem.includes(item?.id)) {
+                return item;
+            }
+        })
+        setfavCoin(coinsItem);
+        localStorage.setItem('futurefavToken', JSON.stringify(existItem));
     }
 
     return (
@@ -40,48 +81,97 @@ const CoinTypes = (props: propsData) => {
                 </div>
                 <div>
                     {/* head */}
-                    <div className='grid grid-cols-4 gap-[10px] sticky top-0 '>
-                        <p className='top-label text-start py-[5px]'>Symbol</p>
-                        <p className='top-label text-center py-[5px]'>Latest Price</p>
-                        <p className='top-label text-end  py-[5px]'>24h%</p>
-                        <p className='top-label text-end  py-[5px]'>24h Vol</p>
+                    <div className='flex gap-[20px]'>
+                        {show === 2 &&
+                            <div className=' item-center mt-[5px] mb-[4px]'>
+                                <svg
+                                    width={11}
+                                    height={10}
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className={`dark:stroke-white stroke-black`}
+                                    stroke-width="0.4"
+
+                                    fill='transparent'
+                                >
+                                    <path d="M4.503.431a.7.7 0 0 1 1.293 0l1.073 2.58 2.785.223a.7.7 0 0 1 .399 1.23L7.931 6.28 8.58 9a.7.7 0 0 1-1.045.76L5.149 8.302 2.765 9.76a.7.7 0 0 1-1.046-.76l.648-2.718L.246 4.464a.7.7 0 0 1 .4-1.23l2.784-.223L4.503.43Z" />
+                                </svg>
+                            </div>
+                        }
+
+                        <div className='grid grid-cols-4 gap-[10px] sticky top-0 w-full'>
+                            <p className='top-label text-start py-[5px]'>Symbol</p>
+                            <p className='top-label text-center py-[5px]'>Latest Price</p>
+                            <p className='top-label text-end  py-[5px]'>24h%</p>
+                            <p className='top-label text-end  py-[5px]'>24h Vol</p>
+                        </div>
                     </div>
 
+
                     {show == 1 &&
-                        <div className='grid grid-cols-4 gap-[10px]rounded mb-[4px]'>
-                            <p className='top-label text-start !text-black dark:!text-white flex items-center gap-[5px]'>
-                                KASUSDT
-                            </p>
-                            <p className='top-label text-center !text-black dark:!text-white'>0.12920</p>
-                            <p className='top-label text-end !text-black dark:!text-white'>0.32%</p>
-                            <p className='top-label text-end !text-black dark:!text-white'>33.2M<span>USDT</span></p>
-                        </div>
+                        <>
+                            {favCoin && favCoin.length > 0 && favCoin.map((item: any) => {
+                                return <a href={`/future/${item.coin_symbol}${item.usdt_symbol}`}><div className='flex gap-[20px]'>
+                                    
+                                    <div  className='grid grid-cols-4 gap-[10px]rounded mb-[4px] cursor-pointer w-full'>
+                                        <p className='top-label text-start !text-black dark:!text-white flex items-center gap-[5px]'>
+                                            <span>{item?.coin_symbol}{item?.usdt_symbol}</span>
+                                        </p>
+                                        <p className='top-label text-center !text-black dark:!text-white'>{item?.token !== null ? item?.token?.price?.toFixed(5) : item?.global_token?.price?.toFixed(5)}</p>
+                                        <p className='top-label text-end !text-black dark:!text-white'>0.32%</p>
+                                        <p className='top-label text-end !text-black dark:!text-white'>33.2M<span>USDT</span></p>
+                                    </div>
+                                </div></a>
+
+                            })}
+                        </>
                     }
                     {show == 2 &&
                         <>
                             {props?.coins && props?.coins.length > 0 && props?.coins.map((item: any) => {
-                                return <div onClick={()=> router.push(`/future/${item.coin_symbol}${item.usdt_symbol}`)} className='grid grid-cols-4 gap-[10px]rounded mb-[4px] cursor-pointer'>
-                                    <p className='top-label text-start !text-black dark:!text-white flex items-center gap-[5px]'>
-                                        <div className='cursor-pointer'>
-                                            <svg
-                                                onClick={(e) => { fillSvg(e) }}
-                                                width={11}
-                                                height={10}
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                className={`dark:stroke-white stroke-black`}
-                                                stroke-width="0.4"
 
-                                                fill='transparent'
-                                            >
-                                                <path d="M4.503.431a.7.7 0 0 1 1.293 0l1.073 2.58 2.785.223a.7.7 0 0 1 .399 1.23L7.931 6.28 8.58 9a.7.7 0 0 1-1.045.76L5.149 8.302 2.765 9.76a.7.7 0 0 1-1.046-.76l.648-2.718L.246 4.464a.7.7 0 0 1 .4-1.23l2.784-.223L4.503.43Z" />
-                                            </svg>
-                                        </div>
-                                        <span>{item?.coin_symbol}{item?.usdt_symbol}</span>
-                                    </p>
-                                    <p className='top-label text-center !text-black dark:!text-white'>{item?.token !== null ? item?.token?.price : item?.global_token?.price}</p>
-                                    <p className='top-label text-end !text-black dark:!text-white'>0.32%</p>
-                                    <p className='top-label text-end !text-black dark:!text-white'>33.2M<span>USDT</span></p>
-                                </div>
+                                let color = 'transparent';
+                                let existItem: any = localStorage !==undefined && localStorage.getItem('futurefavToken');
+
+                                if (existItem) {
+                                    existItem = JSON.parse(existItem);
+                                }
+
+                                if (existItem.includes(item?.id)) {
+                                    if (mode == "dark") {
+                                        color = "fill-[#fff]";
+                                    } else {
+                                        color = "fill-[#000]"
+                                    }
+                                }
+
+                                return <a href={`/future/${item.coin_symbol}${item.usdt_symbol}`}>
+                                
+                                <div className='flex gap-[20px]'>
+                                    <div className='cursor-pointer item-center mt-[5px] mb-[4px]'>
+                                        <svg
+                                            onClick={(e) => { fillSvg(e, item) }}
+                                            width={11}
+                                            height={10}
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className={`dark:stroke-white stroke-black ${color}`}
+                                            stroke-width="0.4"
+
+                                            fill={color}
+                                        >
+                                            <path d="M4.503.431a.7.7 0 0 1 1.293 0l1.073 2.58 2.785.223a.7.7 0 0 1 .399 1.23L7.931 6.28 8.58 9a.7.7 0 0 1-1.045.76L5.149 8.302 2.765 9.76a.7.7 0 0 1-1.046-.76l.648-2.718L.246 4.464a.7.7 0 0 1 .4-1.23l2.784-.223L4.503.43Z" />
+                                        </svg>
+                                    </div>
+                                    <div className='grid grid-cols-4 gap-[10px]rounded mb-[4px] cursor-pointer w-full'>
+                                        <p className='top-label text-start !text-black dark:!text-white flex items-center gap-[5px]'>
+                                            <span>{item?.coin_symbol}{item?.usdt_symbol}</span>
+                                        </p>
+                                        <p className='top-label text-center !text-black dark:!text-white'>{item?.token !== null ? item?.token?.price?.toFixed(5) : item?.global_token?.price?.toFixed(5)}</p>
+                                        <p className='top-label text-end !text-black dark:!text-white'>0.32%</p>
+                                        <p className='top-label text-end !text-black dark:!text-white'>33.2M<span>USDT</span></p>
+                                    </div>
+                                    
+                                </div></a>
+
                             })}
                         </>
                     }
