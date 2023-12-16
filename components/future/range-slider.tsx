@@ -6,7 +6,7 @@ interface uniqueIds {
     lineId?: any;
     onChangeSizeInPercentage?: any;
     rangetype?: string;
-
+    step?:any;
 }
 
 const RangeSlider = (props: uniqueIds) => {
@@ -38,7 +38,7 @@ const RangeSlider = (props: uniqueIds) => {
 
             value = slider_input.value / (slider_input.max / 100);
 
-            // props.onChangeSizeInPercentage(value);
+            props.onChangeSizeInPercentage(value);
         }
 
     }
@@ -57,7 +57,7 @@ const RangeSlider = (props: uniqueIds) => {
                 <div className="range-slider_line">
                     <div id={props.lineId} className="range-slider_line-fill"></div>
                 </div>
-                <input id={props.inputId} className="range-slider_input" type="range" value="20" min="0" max="100" onChange={() => showSliderValue()} />
+                <input id={props.inputId} className="range-slider_input" type="range" min="0" max="100" step={props.step} onChange={() => showSliderValue()} />
             </div>
             <div className='flex items-center justify-between mt-[7px] relative z-[4]'>
                 <p className='text-[12px] dark:text-white text-black'>0{props.rangetype}</p>

@@ -160,7 +160,7 @@ const BuySell = (props: fullWidth) => {
     const onChangeSizeInPercentage = (value: any) => {
 
         let actualValue = (avaibalance * value) / 100;
-        setSizeValue(actualValue);
+        setSizeValue(actualValue * props?.marginMode?.leverage);
     }
 
     // ===================================================================//
@@ -639,7 +639,7 @@ const BuySell = (props: fullWidth) => {
                         <div className='mt-10 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]'>
                             <div>
                                 <p className='top-label'>Amount  </p>
-                                <input type="number" placeholder={props?.currentToken?.coin_symbol === symbol ? props?.currentToken?.coin_min_trade : props?.currentToken?.usdt_min_trade} onChange={(e) => { onChangeSizeValue(e); setSizeValidate('') }} step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
+                                <input type="number" value={sizeValue} placeholder={props?.currentToken?.coin_symbol === symbol ? props?.currentToken?.coin_min_trade : props?.currentToken?.usdt_min_trade} onChange={(e) => { onChangeSizeValue(e); setSizeValidate('') }} step="any" name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text " />
                             </div>
                             <div>
                                 {/* <p className='admin-body-text !text-[12px] dark:!text-white'> USDT</p> */}
@@ -692,7 +692,7 @@ const BuySell = (props: fullWidth) => {
                 }
 
                 {/* range slider */}
-                <RangeSlider inputId={props.inputId} thumbId={props.thumbId} lineId={props.lineId} onChangeSizeInPercentage={onChangeSizeInPercentage} rangetype={'%'} />
+                <RangeSlider inputId={props.inputId} thumbId={props.thumbId} lineId={props.lineId} onChangeSizeInPercentage={onChangeSizeInPercentage} rangetype={'%'} step={25} />
 
                 {/* ================================= */}
                 {/* Future trading in limit case and market case */}
