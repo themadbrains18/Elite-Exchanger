@@ -58,7 +58,7 @@ const SecurityCode = (props: propsData) => {
       const ciphertext = AES.encrypt(JSON.stringify(props.formData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record =  encodeURIComponent(ciphertext.toString());
 
-      let response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/${props.api}`, {
+      let response = await fetch(`/api/user/${props.api}`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'

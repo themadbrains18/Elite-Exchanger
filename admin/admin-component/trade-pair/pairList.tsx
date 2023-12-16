@@ -6,11 +6,13 @@ import { ToastContainer } from "react-toastify";
 import EditPair from "./editPair";
 import ReactPaginate from "react-paginate";
 import Context from "@/components/contexts/context";
+import { AES } from "crypto-js";
 
 interface Session {
   list?: any;
   pairs?: any;
   refreshPairList?: any;
+  session?:any
 }
 
 function formatDate(date: Date) {
@@ -52,15 +54,19 @@ const PairList = (props: Session) => {
       itemOffset = 0;
     }
 
+
     let pairList = await fetch(
-      `${process.env.NEXT_PUBLIC_APIURL}/pair/${itemOffset}/${itemsPerPage}`,
+      `/api/pair?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
       {
         method: "GET",
+        headers: {
+          "Authorization": props?.session?.user?.access_token
+      },
       }
     ).then((response) => response.json());
     // setFreshPairList(pairList?.data)
-    setList(pairList?.data);
-    setTotal(pairList?.total);
+    setList(pairList?.data?.data);
+    setTotal(pairList?.data?.total);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 
@@ -70,16 +76,18 @@ const PairList = (props: Session) => {
   };
 
   const updateStatus = async (data: any) => {
-    console.log(data, "===data");
+    const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+    let record =  encodeURIComponent(ciphertext.toString());
 
     let responseStatus = await fetch(
-      `${process.env.NEXT_PUBLIC_APIURL}/pair/change/status`,
+      `/api/pair`,
       {
         headers: {
           "content-type": "application/json",
+          "Authorization": props?.session?.user?.access_token
         },
         method: "PUT",
-        body: JSON.stringify(data),
+        body: JSON.stringify(record),
       }
     ).then((response) => response.json());
 
@@ -301,13 +309,14 @@ const PairList = (props: Session) => {
         </div>
       </div>
 
-      {show && <AddPair data={props?.list} show={show} setShow={setShow} refreshPairList={refreshPairList} />}
+      {show && <AddPair data={props?.list} show={show} setShow={setShow} refreshPairList={refreshPairList} session={props?.session}/>}
       {editShow && (
         <EditPair
           setEditShow={setEditShow}
           editPair={editPair}
           data={props?.list}
           refreshPairList={refreshPairList}
+          session={props?.session}
         />
       )}
     </>

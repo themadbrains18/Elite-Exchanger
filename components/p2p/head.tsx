@@ -57,6 +57,7 @@ const Head = () => {
 
   if (status === "authenticated") {
   }
+  
 
   return (
     <>
@@ -65,7 +66,7 @@ const Head = () => {
         <div>
           <Link href='/p2p/buy'
             className={`${
-              router.pathname !=='/p2p/express'
+              !router.pathname.includes('/p2p/express')
                 ? "bg-primary !text-white"
                 : "dark:text-beta bg-bg-secondary !text-body-primary dark:bg-black-v-1"
             } !text-[14px] md:!text-[18px] px-[15px] md:px-[20px] py-[5px] md:py-[14px] rounded-[5px]`}
@@ -74,7 +75,7 @@ const Head = () => {
           </Link>
           <Link href='/p2p/express'
             className={`${
-              router.pathname ==='/p2p/express'
+              router.pathname.includes('/p2p/express')
                 ? "bg-primary !text-white"
                 : "dark:text-beta bg-bg-secondary !text-body-primary dark:bg-black-v-1"
             } !text-[14px] md:!text-[18px] px-[15px] md:px-[20px] py-[5px] md:py-[14px] rounded-[5px]`}
@@ -90,7 +91,7 @@ const Head = () => {
       {/* Tabs */}
       <div className="overflow-x-auto links_wrapper">
       {
-        router?.pathname !=='/p2p/express' &&
+       !router.pathname.includes('/p2p/express') &&
       
           <div className="flex items-center gap-[10px] md:gap-30 mt-20 md:mt-30 w-max">
             {status === "authenticated" &&
@@ -100,7 +101,7 @@ const Head = () => {
                     <Link
                       href={`${elem.linkUrl}`}
                       className={`${
-                        router.pathname === elem.linkUrl
+                        router.pathname.includes(elem.linkUrl) 
                           ? "bg-primary !text-white"
                           : "dark:text-beta bg-bg-secondary !text-body-primary dark:bg-black-v-1"
                       } !text-[14px] md:!text-[18px] px-[15px] md:px-[20px] py-[5px] md:py-[14px] rounded-[5px]`}
@@ -117,7 +118,7 @@ const Head = () => {
                     <Link
                       href={`${elem.linkUrl}`}
                       className={`${
-                        router.pathname === elem.linkUrl
+                        router.pathname.includes(elem.linkUrl) 
                           ? "bg-primary !text-white"
                           : "dark:text-beta bg-bg-secondary !text-body-primary dark:bg-black-v-1"
                       } !text-[14px] md:!text-[18px] px-[15px] md:px-[20px] py-[5px] md:py-[14px] rounded-[5px]`}

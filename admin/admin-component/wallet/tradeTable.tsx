@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 interface propData{
     type:string | undefined
@@ -26,6 +27,7 @@ const TradeTable = (props:propData) => {
   const [itemOffset, setItemOffset] = useState(0);
   const { mode } = useContext(Context);
   const [total, setTotal] = useState(0);
+  const {data:session} = useSession()
 const router=useRouter()
   let itemsPerPage = 10;
 
@@ -39,22 +41,28 @@ const router=useRouter()
     }
 let market=[]
     if(props?.type==="details"){
-         market = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/market/order/list/${router?.query?.id}/${itemOffset}/${itemsPerPage}`, {
+      
+         market = await fetch(`/api/market/list?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
           method: "GET",
+          headers: {
+            "Authorization": session?.user?.access_token || ""
+        },
         
         }).then(response => response.json());
 
     }
     else{
 
-         market = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/market/admin/all/${itemOffset}/${itemsPerPage}`, {
+         market = await fetch(`/api/market/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
           method: "GET",
-        
+          headers: {
+            "Authorization": session?.user?.access_token || ""
+        },
         }).then(response => response.json());
     }
 
-    setList(market?.data);
-    setTotal(market?.total);
+    setList(market?.data?.data);
+    setTotal(market?.data?.total);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 

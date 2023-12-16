@@ -93,7 +93,7 @@ const SignIn = (Props: loginType) => {
       const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
       let record = encodeURIComponent(ciphertext.toString());
 
-      let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/login`, {
+      let responseData = await fetch(`/api/user/login`, {
         method: "POST",
         mode: "cors",
         headers: {

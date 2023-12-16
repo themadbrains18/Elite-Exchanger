@@ -64,7 +64,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
                                     <Fragment key={ind}>
                                         <tr onClick={() => {
                                             props?.setOrderId(item?.id);
-                                            route.push(`?buy=${item?.id}`);
+                                            route.push(`/p2p/my-orders?buy=${item?.id}`);
                                         }} className='cursor-pointer'>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'><span className={`${item?.type === "sell" ? "text-cancel" : "text-buy"}`}>{item?.type}</span>&nbsp;{item?.id}</p>

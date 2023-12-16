@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 interface propData{
   type?:any
@@ -28,6 +29,7 @@ const DepositTable = (props:propData) => {
   const { mode } = useContext(Context);
   const [total, setTotal] = useState(0);
   const router = useRouter();
+  const {data:session} = useSession()
 
   let itemsPerPage = 10;
 
@@ -40,22 +42,28 @@ const DepositTable = (props:propData) => {
       itemOffset = 0;
     }
     let deposit=[]
+    
     if(props?.type==="details"){
-      deposit = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/deposit/history/${router?.query?.id}/${itemOffset}/${itemsPerPage}`, {
+      deposit = await fetch(`/api/deposit/history?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
         method: "GET",
-      
+        headers: {
+          "Authorization": session?.user?.access_token || ""
+      },
       }).then(response => response.json());
     }
     else{
-       deposit = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/deposit/admin/depositList/${itemOffset}/${itemsPerPage}`, {
+       deposit = await fetch(`/api/deposit/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
         method: "GET",
+        headers: {
+          "Authorization": session?.user?.access_token || ""
+      },          
       
       }).then(response => response.json());
 
     }
 
-    setList(deposit?.data);
-    setTotal(deposit?.total);
+    setList(deposit?.data?.data);
+    setTotal(deposit?.data?.total);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 

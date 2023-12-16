@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 
 interface propData{
@@ -29,6 +30,7 @@ const WithdrawTable = (props:propData) => {
   const [itemOffset, setItemOffset] = useState(0);
   const { mode } = useContext(Context);
   const [total, setTotal] = useState(0);
+  const {data:session} = useSession()
 
   let itemsPerPage = 10;
 
@@ -41,22 +43,29 @@ const WithdrawTable = (props:propData) => {
       itemOffset = 0;
     }
      let withdraw=[];
+     
     if(props?.type==="details"){
-       withdraw = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/withdraw/history/${router?.query?.id}/${itemOffset}/${itemsPerPage}`, {
+       withdraw = await fetch(`/api/withdraw/allList?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
         method: "GET",
+        headers: {
+          "Authorization": session?.user?.access_token || ""
+      },
       
       }).then(response => response.json());
     }
     else{
-       withdraw = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/withdraw/admin/withdrawListByLimit/${itemOffset}/${itemsPerPage}`, {
+       withdraw = await fetch(`/api/withdraw/allList?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
         method: "GET",
+        headers: {
+          "Authorization": session?.user?.access_token || ""
+      },
       
       }).then(response => response.json());
 
     }
-    setFilterList(withdraw?.data)
-    setList(withdraw?.data);
-    setTotal(withdraw?.total);
+    setFilterList(withdraw?.data?.data)
+    setList(withdraw?.data?.data);
+    setTotal(withdraw?.data?.total);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 

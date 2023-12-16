@@ -4,7 +4,7 @@ import IconsComponent from "../snippets/icons";
 import GoogleAuth from "../snippets/googleAuth";
 import Verification from "../snippets/verification";
 import AdNumber from "./adNumber";
-import ConfirmPopup from "@/pages/profile/confirm-popup";
+import ConfirmPopup from "@/admin/admin-snippet/confirm-popup";
 import Activity from "./activity/activity";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

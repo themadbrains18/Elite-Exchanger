@@ -6,6 +6,7 @@ import EditToken from "./editToken";
 import ReactPaginate from "react-paginate";
 import Context from "@/components/contexts/context";
 import AddNetwork from "./addNetwork";
+import { useSession } from "next-auth/react";
 
 interface Session {
   coinList?: any,
@@ -22,6 +23,7 @@ const AllCoins = (props: Session) => {
   const { mode } = useContext(Context)
   const [total, setTotal] = useState(0)
   const [list, setList] = useState([])
+  const {data:session} = useSession()
 
   let itemsPerPage = 10;
 
@@ -29,15 +31,19 @@ const AllCoins = (props: Session) => {
     getToken(itemOffset)
   }, [itemOffset])
 
+
   const getToken = async (itemOffset: number) => {
     if (itemOffset === undefined) {
       itemOffset = 0;
     }
-    let tokenList = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/all/${itemOffset}/${itemsPerPage}`, {
-      method: "GET"
+    let tokenList = await fetch(`/api/token/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+      method: "GET",
+      headers: {
+        "Authorization": session?.user?.access_token || ''
+      },
     }).then(response => response.json());
-    setList(tokenList?.data)
-    setTotal(tokenList?.total);
+    setList(tokenList?.data?.data)
+    setTotal(tokenList?.data?.total);
   }
   const pageCount = Math.ceil(total / itemsPerPage);
 
@@ -47,24 +53,46 @@ const AllCoins = (props: Session) => {
   };
 
   const updateStatus = async (data: any) => {
-    let responseStatus = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/change/status`, {
+    let responseStatus = await fetch(`api/token/list`, {
       headers: {
-        "content-type": "application/json"
+        "content-type": "application/json",
+        "Authorization": session?.user?.access_token || ''
       },
       method: "PUT",
       body: JSON.stringify(data),
     }).then((response) => response.json());
 
     if (responseStatus) {
+      getToken(itemOffset)
       props.refreshTokenList(responseStatus);
     }
 
+  }
+  function selectAll(){
+    let allInputs = document?.querySelectorAll('.admin-table-data > input');
+    let mainInput = document?.querySelector('.admin-table-heading > input');
+    if(mainInput){
+      mainInput.addEventListener("click",()=>{
+          for(let i of allInputs){
+            if (i instanceof HTMLInputElement) {
+            console.log(i.value);
+            }
+            
+            // i.click();
+          // if(i === true){
+          //   i.checked = false
+          // }else{
+          //   i.checked = true
+          // }
+          }
+      })
+    }
   }
 
   return (
     <>
       <div
-        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${(show || editShow) ? "opacity-80 visible" : "opacity-0 invisible"
+        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${(show || editShow || networkShow) ? "opacity-80 visible" : "opacity-0 invisible"
           }`}
       ></div>
       <div className=" mt-[24px] py-6 px-5  rounded-10 bg-white dark:bg-grey-v-4">
@@ -92,13 +120,14 @@ const AllCoins = (props: Session) => {
             </button>
           </div>
         </div>
-        <div className="max-h-[600px] h-full overflow-y-auto all-user-table overscroll-auto	">
+        <div className="max-h-[600px]  h-full overflow-y-auto all-user-table overscroll-auto	">
           <table width="100%">
             <thead className="sticky top-0 dark:bg-grey-v-4 bg-white mb-[10px] z-[1]">
               <tr>
                 <th className="p-[10px]  text-start dark:!text-[#ffffffb3] admin-table-heading">
                   <input id="mainCheckbox" type="checkbox" className="hidden" />
                   <label
+                    onClick={()=>{selectAll()}}
                     htmlFor="mainCheckbox"
                     className="
                           relative
@@ -262,18 +291,18 @@ const AllCoins = (props: Session) => {
                     <td className="admin-table-data">
                       <div className="flex gap-[5px] items-center">
                         <div
-                          className={`w-[7px] h-[7px] mr-[5px] rounded-full ${item?.status === 1
+                          className={`w-[7px] h-[7px] mr-[5px] rounded-full ${item?.status === true
                             ? "dark:bg-[#66BB6A] bg-[#0BB783]"
                             : "dark:bg-[#F44336] bg-[#F64E60]"
                             }`}
                         ></div>
                         <p
-                          className={`text-[13px] font-public-sans font-normal leading-5 ${item?.status === 1
+                          className={`text-[13px] font-public-sans font-normal leading-5 ${item?.status === true
                             ? "dark:text-[#66BB6A] text-[#0BB783]"
                             : "dark:text-[#F44336] text-[#F64E60]"
                             }`}
                         >
-                          {item?.status == 0 ? "Inactive" : "Active"}
+                          {item?.status == false ? "Inactive" : "Active"}
                         </p>
                       </div>
                       {/* <span className={`border ${item?.status==="Active"?'border-[#0bb78380] dark:border-[#66bb6a1f] ':'border-[#f64e6080] dark:border-[#f443361f] '}   py-[3px] px-1 rounded-[6px] flex w-max`}>
@@ -286,12 +315,12 @@ const AllCoins = (props: Session) => {
                     <td className="">
                       <div className="inline-flex items-center gap-10">
                         <button onClick={() => updateStatus(item)}
-                          className={`admin-outline-button ${item?.status == 0
+                          className={`admin-outline-button ${item?.status == false
                             ? "dark:text-[#66BB6A] text-[#0BB783] !border-[#0bb78380] dark:!border-[#66bb6a1f]"
                             : "dark:text-[#F44336] text-[#F64E60] !border-[#f64e6080] dark:!border-[#f443361f]"
                             } !px-[10px] !py-[4px] whitespace-nowrap	`}
                         >
-                          {item?.status == 0 ? "Activate " : "Inactivate"}
+                          {item?.status == false ? "Activate " : "Inactivate"}
                         </button>
                         {item?.tokenType === 'mannual' &&
                           <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap" onClick={(e) => { setEditShow(true); setEditToken(item) }}>

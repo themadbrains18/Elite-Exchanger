@@ -2,13 +2,25 @@ import Cards from "../../admin-snippet/cards";
 
 import React from "react";
 
-const DashboardCards = () => {
+interface list{
+  userList:any;
+  tradeList:any;
+}
+
+const DashboardCards = (props:list) => {
+
+  const inactiveUser= props?.userList?.data.filter((x:any)=>{
+    return x.statusType === false
+  })
+  
+  console.log(inactiveUser,"==dhjhdj");
+  
   let data = [
     {
       img: "users.svg",
       imgbg: "bg-[#3699FF]",
       title: "All Users",
-      total: "2,19,51200",
+      total: props.userList?.total,
       percent: "5%",
       bg: "bg-[#42A5F5]",
     },
@@ -16,7 +28,7 @@ const DashboardCards = () => {
       img: "inactive.svg",
       imgbg: "bg-[#F64E60]",
       title: "Inactive Users",
-      total: "23232004",
+      total: inactiveUser?.length,
       percent: "5%",
       bg: "bg-[#ED5868]",
     },
@@ -24,7 +36,7 @@ const DashboardCards = () => {
       img: "trade.svg",
       imgbg: "bg-[#131C2E]",
       title: "Total Trades",
-      total: "12532232",
+      total: props.tradeList?.total,
       percent: "5%",
       bg: "bg-[#1B283F]",
     },

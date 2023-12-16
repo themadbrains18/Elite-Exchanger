@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext } from 'next'
-import WalletTable from '../../admin/admin-component/wallet/walletTable'
+import WalletTable from '@/admin/admin-component/wallet/walletTable';
 import DasboardLayout from '../../components/layout/dasboard-layout'
 import React from 'react'
 import { authOptions } from '../api/auth/[...nextauth]'

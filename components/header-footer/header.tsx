@@ -89,7 +89,7 @@ const Header = (props: propsData) => {
     let profileDashboard = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/notification?userid=${session?.user?.user_id}`, {
       method: "GET",
       headers: {
-        "Authorization": session?.user?.access_token
+        "Authorization": session?.user?.access_token || ""
       },
     }).then(response => response.json());
 
@@ -107,7 +107,7 @@ const Header = (props: propsData) => {
       {
         method: "GET",
         headers: {
-          Authorization: session?.user?.access_token,
+          Authorization: session?.user?.access_token || "",
         },
       }
     ).then((response) => response.json());
@@ -121,6 +121,7 @@ const Header = (props: propsData) => {
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
       method: "GET"
     }).then(response => response.json());
+console.log(tokenList,"==hfjdhjfhdjfj");
 
     let spot = tokenList?.data.filter((item: any) => {
       return item.tradePair !== null
@@ -131,6 +132,8 @@ const Header = (props: propsData) => {
     let future = tokenList?.data.filter((item: any) => {
       return item.futureTradePair !== null
     });
+    console.log(future,"===dshkjhd");
+    
     SetFutureTrade(future);
   }
 

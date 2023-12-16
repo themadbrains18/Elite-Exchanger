@@ -75,10 +75,10 @@ const DashboardHeader = () => {
         </div>
         <div className='flex items-center gap-30'>
           <div>
-            <div className="border rounded-[8px] hidden md:flex gap-[10px] border-[#D6D6E0] dark:border-[#ffffff3b]  min-w-[300px] w-full py-[13px] px-[12px] ">
+            {/* <div className="border rounded-[8px] hidden md:flex gap-[10px] border-[#D6D6E0] dark:border-[#ffffff3b]  min-w-[300px] w-full py-[13px] px-[12px] ">
               <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" />
               <Image src="/assets/history/search.svg" alt="search" width={24} height={24} />
-            </div>
+            </div> */}
           </div>
           <div className='cursor-pointer'>
             <AdminIcons type='bell' hover={false} active={false} />

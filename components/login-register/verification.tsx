@@ -31,7 +31,7 @@ const Verification = (props: propsData) => {
       let record = encodeURIComponent(ciphertext.toString());
 
       let userExist = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/user/${props.api}`,
+        `/api/user/${props.api}`,
         {
           method: "POST",
           headers: {

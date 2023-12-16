@@ -1,6 +1,6 @@
-import NewList from "../../admin/admin-component/token/newList";
+import NewList from "@/admin/admin-component/token/newList";
 import CoinCards from "../../admin/admin-component/token/coinCards";
-import HighRevenue from "../../admin/admin-component/token/highRevenue";
+import HighRevenue from "@/admin/admin-component/token/highRevenue";
 import DasboardLayout from "../../components/layout/dasboard-layout";
 import React, { useEffect, useState } from "react";
 import AddedTokens from "../../admin/admin-component/token/addedTokens";
@@ -12,7 +12,7 @@ import { getProviders } from "next-auth/react";
 interface Session {
   coinList?: any,
   topgainer: any,
-  networkList: any
+  networkList: any,
 }
 const Token = (props: Session) => {
   
@@ -41,7 +41,8 @@ const Token = (props: Session) => {
 
   const refreshPriceTokenList = async () => {
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token/admin`, {
-      method: "GET"
+      method: "GET",
+      
     }).then(response => response.json());
 
     setFreshTokenList(tokenList?.data);
@@ -77,16 +78,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const providers = await getProviders();
 
   let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token/admin`, {
-    method: "GET"
+    method: "GET",
+  
   }).then(response => response.json());
 
 
   let tokenList2 = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token/topgainer`, {
-    method: "GET"
+    method: "GET",
+
   }).then(response => response.json());
 
   let networkList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/network`, {
-    method: "GET"
+    method: "GET",
+
   }).then(response => response.json());
 
 

@@ -1,12 +1,45 @@
+import { useSession } from 'next-auth/react';
 import AdminIcons from '../../admin-snippet/admin-icons';
 import Image from 'next/image';
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import ReactPaginate from 'react-paginate';
+import Context from '@/components/contexts/context';
 interface list {
-  coinList:any
+  // coinList:any
 }
 const MarketOverview = (props:list) => {
-  
-    function formatDate(date: any) {
+  const [itemOffset, setItemOffset] = useState(0);
+  const [total, setTotal] = useState(0)
+  const [list, setList] = useState([])
+  const {data:session} = useSession()
+  const { mode } = useContext(Context)
+  let itemsPerPage = 10;
+
+  useEffect(() => {
+    getToken(itemOffset)
+  }, [itemOffset])
+
+  const getToken = async (itemOffset: number) => {
+    if (itemOffset === undefined) {
+      itemOffset = 0;
+    }
+    let tokenList = await fetch(`/api/token/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+      method: "GET",
+      headers: {
+        "Authorization": session?.user?.access_token || ""
+    },
+    }).then(response => response.json());
+    setList(tokenList?.data?.data)
+    setTotal(tokenList?.data?.total);
+  }
+  const pageCount = Math.ceil(total / itemsPerPage);
+
+  const handlePageClick = async (event: any) => {
+    const newOffset = (event.selected * itemsPerPage) % total;
+    setItemOffset(newOffset);
+  };
+
+  function formatDate(date: any) {
       const options: {} = { year: 'numeric', month: 'short', day: '2-digit' };
       return new Date(date).toLocaleDateString('en-US', options)
     }
@@ -31,7 +64,7 @@ const MarketOverview = (props:list) => {
               </thead>
               <tbody >
                 {
-                  props.coinList?.map((item:any,index:number)=>{
+                  list && list.length > 0 && list?.map((item:any,index:number)=>{
                     return(
                 <tr key={index} className=" border-b-[0.5px] border-[#ECF0F3] dark:border-[#ffffff1a]  hover:bg-[#3699ff14] dark:hover:bg-[#90caf929]">
                   <td className="px-1 py-[10px] flex gap-[10px] items-center admin-table-data">
@@ -87,6 +120,19 @@ const MarketOverview = (props:list) => {
               </tbody>
             </table>
           </div>
+          <div className="flex pt-[25px] items-center justify-end">
+
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null} />
+        </div>
         </section>
       );
 }

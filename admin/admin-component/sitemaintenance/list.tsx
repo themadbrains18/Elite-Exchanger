@@ -4,6 +4,8 @@ import AddList from "./add";
 import EditModel from "./editModel";
 import { ToastContainer } from "react-toastify";
 import Context from "@/components/contexts/context";
+import { useSession } from "next-auth/react";
+import { AES } from "crypto-js";
 
 interface Session {
     list?: any;
@@ -16,6 +18,7 @@ const MaintenanceList = (props: Session) => {
     const [itemList, setItemList] = useState([]);
     const [editItem, setEditItem] = useState(Object);
     const { mode } = useContext(Context);
+    const {data:session}= useSession()
 
     useEffect(() => {
         getToken();
@@ -30,27 +33,31 @@ const MaintenanceList = (props: Session) => {
     const getToken = async () => {
 
         let pairList = await fetch(
-            `${process.env.NEXT_PUBLIC_APIURL}/site`,
+            `/api/sitemaintenance`,
             {
                 method: "GET",
-            }
+                headers:{
+                    "Authorization": session?.user?.access_token || ''
+                }
+            } 
         ).then((response) => response.json());
 
-        setItemList(pairList);
+        setItemList(pairList?.data);
     };
 
 
     const updateStatus = async (data: any) => {
-        console.log(data, "===data");
-
+        const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+        let record =  encodeURIComponent(ciphertext.toString());
         let responseStatus = await fetch(
-            `${process.env.NEXT_PUBLIC_APIURL}/site/change/status`,
+            `/api/sitemaintenance`,
             {
                 headers: {
                     "content-type": "application/json",
+                    "Authorization": session?.user?.access_token || ''
                 },
                 method: "PUT",
-                body: JSON.stringify(data),
+                body: JSON.stringify(record),
             }
         ).then((response) => response.json());
 
@@ -71,7 +78,7 @@ const MaintenanceList = (props: Session) => {
             <div className=" mt-[24px] py-6 px-5  rounded-10 bg-white dark:bg-grey-v-4">
                 <div className="flex items-center justify-between  mb-[26px]">
                     <div className="flex items-center gap-[15px]">
-                        <p className="admin-component-heading">All Pairs</p>
+                        <p className="admin-component-heading">Site Maintenance</p>
                     </div>
                     <div className="flex items-center gap-10">
                         <p className="admin-table-data">
@@ -95,7 +102,7 @@ const MaintenanceList = (props: Session) => {
                             }}
                         >
                             <AdminIcons type="dollar" hover={false} active={false} />
-                            <span>Add Pair</span>
+                            <span>Add Site Maintenance Message </span>
                         </button>
 
                     </div>
@@ -244,12 +251,13 @@ const MaintenanceList = (props: Session) => {
                 </div>
             </div>
 
-            {show && <AddList data={props?.list} show={show} setShow={setShow} refreshPairList={refreshPairList} />}
+            {show && <AddList data={props?.list} show={show} setShow={setShow} refreshPairList={refreshPairList} session={session}/>}
             {editShow && (
                 <EditModel
                     setEditShow={setEditShow}
                     editPair={editItem}
                     refreshPairList={refreshPairList}
+                    session={session}
                 />
             )}
         </>

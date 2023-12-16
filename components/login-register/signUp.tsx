@@ -68,7 +68,7 @@ const SignUp = () => {
       const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record = encodeURIComponent(ciphertext.toString());
 
-      let userExist = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/register`, {
+      let userExist = await fetch(`/api/user/register`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json'
