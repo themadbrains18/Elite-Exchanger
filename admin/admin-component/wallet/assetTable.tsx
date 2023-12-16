@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 
 interface propData{
@@ -27,6 +28,7 @@ const AssetTable = (props:propData) => {
   const { mode } = useContext(Context);
   const [total, setTotal] = useState(0);
   const router = useRouter();
+  const {data:session}= useSession()
   let itemsPerPage = 10;
 
   useEffect(() => {
@@ -38,21 +40,26 @@ const AssetTable = (props:propData) => {
       itemOffset = 0;
     }
     let assets=[]
+    
     if(props?.type==="details"){
-        assets = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/assets/overview/${router?.query?.id}/${itemOffset}/${itemsPerPage}`, {
+        assets = await fetch(`/api/assets?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
             method: "GET",
-          
+            headers: {
+              "Authorization": session?.user?.access_token || ""
+          },          
           }).then(response => response.json());
 }
     else{
-        assets = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/assets/${itemOffset}/${itemsPerPage}`, {
+        assets = await fetch(`/api/assets/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
             method: "GET",
-          
+            headers: {
+              "Authorization": session?.user?.access_token || ""
+          },          
           }).then(response => response.json());
     }
    
-    setList(assets?.data);
-    setTotal(assets?.total);
+    setList(assets?.data?.data);
+    setTotal(assets?.data?.total);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 

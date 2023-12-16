@@ -4,7 +4,7 @@ import IconsComponent from "../../../components/snippets/icons";
 import GoogleAuth from "../../../components/snippets/googleAuth";
 // import Verification from "../snippets/verification";
 // import AdNumber from "./adNumber";
-import ConfirmPopup from "@/pages/profile/confirm-popup";
+import ConfirmPopup from "@/pages/customer/profile/confirm-popup";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AES from "crypto-js/aes";
@@ -14,6 +14,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { signOut, useSession } from "next-auth/react";
 import PinLock from "./pinLock";
+import Verification from "@/admin/admin-snippet/verification";
+import AdNumber from "@/admin/admin-snippet/adNumber";
 
 const schema = yup.object().shape({
   old_password: yup.string().required("Old password is required"),
@@ -63,9 +65,9 @@ const AdminSettings = (props: fixSection) => {
       CtaText: "Enable",
     },
     {
-      image: "pin.svg",
+      image: "phone.svg",
       bg: "green",
-      title: "Change PIN",
+      title: "SMS Authentication",
       desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
       Add: true,
       CtaText: "Enable",
@@ -96,9 +98,9 @@ const AdminSettings = (props: fixSection) => {
   const onHandleSubmit = async (data: UserSubmitForm) => {
     try {
       let username =
-        props.session?.user.email !== "null"
-          ? props.session?.user.email
-          : props.session?.user?.number;
+       session?.user.email !== "null"
+          ? session?.user.email
+          : session?.user?.number;
 
       let obj = {
         username: username,
@@ -106,6 +108,8 @@ const AdminSettings = (props: fixSection) => {
         new_password: data?.new_password,
         otp: "string",
       };
+      console.log(obj,"==jahkjha");
+      
       if (status === "authenticated") {
         const ciphertext = AES.encrypt(
           JSON.stringify(obj),
@@ -114,12 +118,12 @@ const AdminSettings = (props: fixSection) => {
         let record = encodeURIComponent(ciphertext.toString());
 
         let userExist = await fetch(
-          `${process.env.NEXT_PUBLIC_BASEURL}/user/changePassword`,
+          `/api/user/changePassword`,
           {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
-              Authorization: props?.session?.user?.access_token,
+              "Authorization": session?.user?.access_token,
             },
             body: JSON.stringify(record),
           }
@@ -146,7 +150,7 @@ const AdminSettings = (props: fixSection) => {
 
   const snedOtpToUser = async () => {
     try {
-      let username = props.session?.user.email !== 'null' ? props.session?.user.email : props.session?.user?.number
+      let username = session?.user.email !== 'null' ? session?.user.email : session?.user?.number
 
       let obj = {
         username: username,
@@ -159,11 +163,11 @@ const AdminSettings = (props: fixSection) => {
         const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
         let record = encodeURIComponent(ciphertext.toString());
 
-        let userExist = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/changePassword`, {
+        let userExist = await fetch(`/api/user/changePassword`, {
           method: "PUT",
           headers: {
             'Content-Type': 'application/json',
-            "Authorization": props?.session?.user?.access_token
+            "Authorization": session?.user?.access_token
           },
           body: JSON.stringify(record)
         })
@@ -193,9 +197,9 @@ const AdminSettings = (props: fixSection) => {
   const finalOtpVerification = async (otp: any) => {
     try {
       let username =
-        props.session?.user.email !== "null"
-          ? props.session?.user.email
-          : props.session?.user?.number;
+       session?.user.email !== "null"
+          ? session?.user.email
+          : session?.user?.number;
 
       let request = {
         username: username,
@@ -210,12 +214,12 @@ const AdminSettings = (props: fixSection) => {
 
       let record = encodeURIComponent(ciphertext.toString());
       let response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/user/changePassword`,
+        `/api/user/changePassword`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: props?.session?.user?.access_token,
+            Authorization: session?.user?.access_token || "",
           },
           body: JSON.stringify(record),
         }
@@ -441,16 +445,16 @@ const AdminSettings = (props: fixSection) => {
       </section>
 
 
-      {/* {enable === 1 && (
+      {enable === 1 && (
         <Verification
           setShow={setShow}
           setEnable={setEnable}
           type="email"
           data={formData}
-          session={props?.session}
+          session={session}
           finalOtpVerification={finalOtpVerification}
         />
-      )}*/}
+      )}
       {enable === 2  && (
         <PinLock
           setShow={setShow}
@@ -462,26 +466,26 @@ const AdminSettings = (props: fixSection) => {
         <GoogleAuth
           setShow={setShow}
           setEnable={setEnable}
-          session={props?.session}
+          session={session}
           setGoogleAuth={setGoogleAuth}
         />
       )}
-   {/*   {enable === 4 && (
+   {enable === 4 && (
         <ConfirmPopup
           setEnable={setEnable}
           setShow={setShow}
-          type="number"
+          type="email"
           data={formData}
-          session={props?.session}
+          session={session}
           snedOtpToUser={snedOtpToUser}
         />
       )}
-      {active === 1 && (
+       {active === 1 && (
         <AdNumber
           setShow={setShow}
           setActive={setActive}
           type="email"
-          session={props?.session}
+          session={session}
         />
       )}
       {active === 2 && (
@@ -489,9 +493,10 @@ const AdminSettings = (props: fixSection) => {
           setShow={setShow}
           setActive={setActive}
           type="number"
-          session={props?.session}
+          session={session}
         />
-      )} */}
+      )}
+      
     </>
   );
 };

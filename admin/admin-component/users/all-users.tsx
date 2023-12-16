@@ -7,10 +7,12 @@ import { useRouter } from "next/router";
 import FiliterSelectMenu from "@/components/snippets/filter-select-menu";
 import ReactPaginate from "react-paginate";
 import Context from "@/components/contexts/context";
+import { AES } from "crypto-js";
 
 interface usersList {
   users:any | [];
   networks: any;
+  session: any;
 }
 
 const AllUsers = (props: usersList) => {
@@ -35,15 +37,18 @@ const AllUsers = (props: usersList) => {
       itemOffset = 0;
     }
     let users = await fetch(
-      `${process.env.NEXT_PUBLIC_APIURL}/user/admin/userListByLimit/${itemOffset}/${itemsPerPage}`,
+      `/api/user/all?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
       {
         method: "GET",
+        headers: {
+          "Authorization": props?.session?.user?.access_token
+      },
       }
     ).then((response) => response.json());
 
 
-    setList(users?.data);
-    setTotal(users?.total);
+    setList(users?.data?.data);
+    setTotal(users?.data?.total);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 
@@ -58,17 +63,20 @@ const AllUsers = (props: usersList) => {
 
   const updateStatus = async (data: any) => {
     data.statusType = data.statusType === true ? false : true;
+    const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+    let record =  encodeURIComponent(ciphertext.toString());
     let updated = await fetch(
-      `${process.env.NEXT_PUBLIC_APIURL}/user/admin/user`,
+      `/api/user/status`,
       {
         headers: {
           "content-type": "application/json",
+          "Authorization": props?.session?.user?.access_token
         },
         method: "PUT",
-        body: JSON.stringify(data),
+        body: JSON.stringify(record),
       }
     ).then((response) => response.json());
-    setList(updated?.result);
+    setList(updated?.data?.result);
   };
 
   const filterData = (e: any) => {

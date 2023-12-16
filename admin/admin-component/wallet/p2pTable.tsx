@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 
 interface propData{
@@ -28,6 +29,7 @@ const P2PTable = (props:propData) => {
   const { mode } = useContext(Context);
   const [total, setTotal] = useState(0);
   const router = useRouter();
+  const {data:session} = useSession()
 
   let itemsPerPage = 10;
 
@@ -40,16 +42,21 @@ const P2PTable = (props:propData) => {
       itemOffset = 0;
     }
     let order=[]
+    
     if(props?.type==="details"){
-      order = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/p2p/all/${router?.query?.id}/${itemOffset}/${itemsPerPage}`, {
+      order = await fetch(`/api/p2p?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
         method: "GET",
-      
+        headers: {
+          "Authorization": session?.user?.access_token || ""
+      },
       }).then(response => response.json());
     }
     else{
-      order = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/p2p/admin/all/${itemOffset}/${itemsPerPage}`, {
+      order = await fetch(`/api/p2p/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
         method: "GET",
-      
+        headers: {
+          "Authorization": session?.user?.access_token || ""
+      },
       }).then(response => response.json());
     }
      

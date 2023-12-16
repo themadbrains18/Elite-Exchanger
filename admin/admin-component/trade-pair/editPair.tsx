@@ -5,12 +5,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import Context from '@/components/contexts/context';
+import { AES } from 'crypto-js';
 
 interface ActiveSession {
   editPair: any;
   data: any;
   setEditShow: Function;
-  refreshPairList: any
+  refreshPairList: any;
+  session?:any
 }
 
 type PairSubmitForm = {
@@ -86,17 +88,23 @@ const EditPair = (props: ActiveSession) => {
     else {
       data.id = props?.editPair?.id
       data.status = props?.editPair?.status == 0 ? false : true;
-      let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/pair/edit`, {
+      const ciphertext = AES.encrypt(
+        JSON.stringify(data),
+        `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+      );
+      let record = encodeURIComponent(ciphertext.toString());
+      let res = await fetch(`/api/pair/edit`, {
         headers: {
           "Content-type": "application/json",
+          "Authorization": props?.session?.user?.access_token
         },
         method: "POST",
-        body: JSON.stringify(data),
+        body: JSON.stringify(record),
       });
       let result = await res.json();
       console.log(result);
-      if (result?.status === 200) {
-        toast.success("token update successfully");
+      if (result?.data?.status === 200) {
+        toast.success("Pair update successfully");
         setTimeout(() => {
           props?.setEditShow(false);
           props.refreshPairList();

@@ -169,6 +169,7 @@ const AddToken = (props: activeSection) => {
       formData.append("networks", JSON.stringify(networks));
       formData.append("type", "admin");
 
+      
       let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/create`, {
         method: "POST",
         body: formData,
@@ -176,8 +177,9 @@ const AddToken = (props: activeSection) => {
 
       let result = await res.json();
 
-      if (result?.data?.status === 200) {
+      if (result?.result) {
         toast.success("token add Successfully");
+        props?.setShow(false);
         reset();
         setTokenImage("");
         setValue("tokenType", "");

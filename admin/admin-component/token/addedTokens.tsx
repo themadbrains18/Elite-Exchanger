@@ -104,18 +104,18 @@ const AddedTokens = (props: propsData) => {
                   <td className="admin-table-data">
                     <div className="flex gap-[5px] items-center">
                       <div
-                        className={`w-[7px] h-[7px] mr-[5px] rounded-full ${item?.status === 1
+                        className={`w-[7px] h-[7px] mr-[5px] rounded-full ${item?.status === true
                           ? "dark:bg-[#66BB6A] bg-[#0BB783]"
                           : "dark:bg-[#F44336] bg-[#F64E60]"
                           }`}
                       ></div>
                       <p
-                        className={`text-[13px] font-public-sans font-normal leading-5 ${item?.status === 1
+                        className={`text-[13px] font-public-sans font-normal leading-5 ${item?.status === true
                           ? "dark:text-[#66BB6A] text-[#0BB783]"
                           : "dark:text-[#F44336] text-[#F64E60]"
                           }`}
                       >
-                        {item?.status == 0 ? "Inactive" : "Active"}
+                        {item?.status == false ? "Inactive" : "Active"}
                       </p>
                     </div>
 
@@ -124,12 +124,12 @@ const AddedTokens = (props: propsData) => {
                   <td className="">
                     <div className="inline-flex items-center gap-10">
                       <button onClick={() => updateStatus(item)}
-                        className={`admin-outline-button ${item?.status == 0
+                        className={`admin-outline-button ${item?.status == false
                           ? "dark:text-[#66BB6A] text-[#0BB783] !border-[#0bb78380] dark:!border-[#66bb6a1f]"
                           : "dark:text-[#F44336] text-[#F64E60] !border-[#f64e6080] dark:!border-[#f443361f]"
                           } !px-[10px] !py-[4px] whitespace-nowrap	`}
                       >
-                        {item?.status == 0 ? "Activate " : "Inactivate"}
+                        {item?.status == false  ? "Activate " : "Inactivate"}
                       </button>
                     </div>
                   </td>

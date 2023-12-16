@@ -4,6 +4,7 @@ import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 interface propData{
   type?:any
@@ -28,6 +29,7 @@ const ReferalHistory = (props:propData) => {
   const { mode } = useContext(Context);
   const [total, setTotal] = useState(0);
   const router = useRouter();
+  const {data:session}= useSession()
 
   let itemsPerPage = 10;
 
@@ -40,19 +42,23 @@ const ReferalHistory = (props:propData) => {
       itemOffset = 0;
     }
     let referalDetail=[]
+    
     if(props?.type==="details"){
         referalDetail = await fetch(
-            `${process.env.NEXT_PUBLIC_APIURL}/refer/getbyuser/${router?.query?.id}/${itemOffset}/${itemsPerPage}`,
+            `/api/referal?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
             {
               method: "GET",
+              headers: {
+                "Authorization": session?.user?.access_token || ""
+            },
             }
           ).then((response) => response.json());
      
     }
 
 
-    setList(referalDetail?.data);
-    setTotal(referalDetail?.total);
+    setList(referalDetail?.data?.data);
+    setTotal(referalDetail?.data?.total);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 

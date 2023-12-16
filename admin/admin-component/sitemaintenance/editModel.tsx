@@ -5,11 +5,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import Context from '@/components/contexts/context';
+import { AES } from 'crypto-js';
 
 interface ActiveSession {
     setEditShow: Function;
     editPair?: any;
     refreshPairList?: any
+    session?: any
 }
 
 const schema = yup.object().shape({
@@ -39,16 +41,25 @@ const EditModel = (props: ActiveSession) => {
 
     const onHandleSubmit = async (data: any) => {
         data.id = props?.editPair?.id
-        let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/site/edit`, {
+
+        const ciphertext = AES.encrypt(
+            JSON.stringify(data),
+            `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+          );
+          let record = encodeURIComponent(ciphertext.toString());
+
+        let res = await fetch(`/api/sitemaintenance/edit`, {
             headers: {
                 "Content-type": "application/json",
+                "Authorization": props?.session?.user?.access_token
             },
             method: "PUT",
-            body: JSON.stringify(data),
+            body: JSON.stringify(record),
         });
         let result = await res.json();
+        
         if (result) {
-            toast.success("token update successfully");
+            toast.success("Message update successfully");
             setTimeout(() => {
                 props.setEditShow(false);
                 props.refreshPairList();

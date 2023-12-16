@@ -1,5 +1,5 @@
 import { getProviders } from "next-auth/react";
-import WithdrawTable from "../../admin/admin-component/withdraw/withdrawTable";
+import WithdrawTable from "@/admin/admin-component/withdraw/withdrawTable";
 import DasboardLayout from "../../components/layout/dasboard-layout";
 import React from "react";
 import { getServerSession } from "next-auth";

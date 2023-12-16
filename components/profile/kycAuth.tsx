@@ -174,6 +174,7 @@ const KycAuth = (props: fixSection) => {
       formData.append("doctype", data?.doctype);
       formData.append("docnumber", data?.docnumber);
       formData.append("user_id", session?.user?.user_id);
+      formData.append("username", session?.user?.email);
       formData.append("dob", data?.dob.toString());
 
       if (status === 'authenticated') {

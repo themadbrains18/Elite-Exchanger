@@ -14,7 +14,7 @@ const OrderInfo = (props: propsData) => {
             <div className='max-w-[783px] w-full'>
                 <div className='grid grid-cols-2 gap-20  mb-[42px]'>
                     <p className='info-14-18 !text-banner-heading !text-[#232530] dark:!text-white'>Buy Order</p>
-                    <p className='info-16-18 md:!text-[16px] !text-[14px]  dark:!text-white !text-[#232530]'>{props?.userOrder?.quantity.toFixed(4)} {props?.userOrder?.receive_currency}</p>
+                    <p className='info-16-18 md:!text-[16px] !text-[14px]  dark:!text-white !text-[#232530]'>{props?.userOrder?.quantity?.toFixed(4)} {props?.userOrder?.receive_currency}</p>
                 </div>
                 <div className='grid grid-cols-2 gap-20  mb-[42px]'>
                     <p className='info-14-18 !text-banner-heading  !text-[#232530] dark:!text-white'>Order Value</p>
@@ -26,7 +26,7 @@ const OrderInfo = (props: propsData) => {
                 </div>
                 <div className='grid grid-cols-2 gap-20  mb-[42px]'>
                     <p className='info-14-18 !text-banner-heading dark:!text-white'>Qty.</p>
-                    <p className='info-16-18 md:!text-[16px] !text-[14px]  dark:!text-white !text-body-primary'>{props.userOrder?.receive_amount.toFixed(4)} {props?.userOrder?.receive_currency}</p>
+                    <p className='info-16-18 md:!text-[16px] !text-[14px]  dark:!text-white !text-body-primary'>{props.userOrder?.receive_amount?.toFixed(4)} {props?.userOrder?.receive_currency}</p>
                 </div>
                 <div className='grid grid-cols-2 gap-20'>
                     <p className='info-14-18 !text-banner-heading dark:!text-white'>Provider</p>

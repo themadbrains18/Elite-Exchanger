@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { AES } from 'crypto-js';
 import { toast } from 'react-toastify';
-import ConfirmPopup from '@/pages/profile/confirm-popup';
+import ConfirmPopup from '@/admin/admin-snippet/confirm-popup';
 import { signOut, useSession } from 'next-auth/react';
 import Verification from '../snippets/verification';
 

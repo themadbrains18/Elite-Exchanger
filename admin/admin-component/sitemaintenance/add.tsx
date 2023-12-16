@@ -4,12 +4,14 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
+import { AES } from "crypto-js";
 
 interface ActiveSession {
     data: any;
     show: boolean;
     setShow: Function;
     refreshPairList?: any;
+    session?:any;
 }
 
 
@@ -35,23 +37,30 @@ const AddList = (props: ActiveSession) => {
 
     const onHandleSubmit = async (data: any) => {
 
-        let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/site/create`, {
+        const ciphertext = AES.encrypt(
+            JSON.stringify(data),
+            `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+          );
+          let record = encodeURIComponent(ciphertext.toString());
+
+        let res = await fetch(`/api/sitemaintenance/create`, {
             headers: {
                 "Content-type": "application/json",
+                "Authorization": props?.session?.user?.access_token || ""
             },
             method: "POST",
-            body: JSON.stringify(data),
+            body: JSON.stringify(record),
         });
         let result = await res.json();
         if (result) {
-            toast.success(result.message);
+            toast.success(result?.data?.message);
             props.refreshPairList();
             setTimeout(() => {
                 props?.setShow(false);
             }, 1000);
         }
-        if (result?.status === 409) {
-            toast.warning(result.message);
+        if (result?.data?.status === 409) {
+            toast.warning(result?.data?.message);
             setTimeout(() => {
                 props?.setShow(false);
             }, 1000);
@@ -61,7 +70,7 @@ const AddList = (props: ActiveSession) => {
     return (
         <div className="max-w-[calc(100%-30px)] md:max-w-[500px] max-h-[400px] h-full overflow-y-auto  w-full p-5 md:px-30 md:py-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
             <div className="flex items-center justify-between ">
-                <p className="sec-title">Add Pair Form</p>
+                <p className="sec-title">Add Site Maintenance Form</p>
                 <svg
                     onClick={() => {
                         props?.setShow(false);

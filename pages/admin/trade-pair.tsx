@@ -1,4 +1,4 @@
-import PairList from "@/admin/admin-component/trade-pair/pairList";
+import PairList from "@/admin/admin-component/trade-pair/pairList"; 
 import DasboardLayout from "@/components/layout/dasboard-layout";
 import { GetServerSidePropsContext } from "next";
 import React, { useState } from "react";

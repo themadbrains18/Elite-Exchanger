@@ -7,6 +7,8 @@ import { Controller, useForm } from "react-hook-form";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import { json } from "stream/consumers";
+import { AES } from "crypto-js";
+import { useSession } from "next-auth/react";
 
 interface activeSection {
     setNetworkShow: Function;
@@ -57,6 +59,7 @@ const schema = yup.object().shape({
 
 const AddNetwork = (props: activeSection) => {
     const { mode } = useContext(Context);
+    const {data:session} = useSession()
 
     let {
         register,
@@ -84,6 +87,8 @@ const AddNetwork = (props: activeSection) => {
 
         let index = 0;
         for (const net of props.networkList) {
+
+            
 
             let previous = props?.editToken?.networks !== null && props?.editToken?.networks?.filter((e: any) => {
                 return e?.id === net?.id
@@ -129,17 +134,25 @@ const AddNetwork = (props: activeSection) => {
                 "type": "admin"
             }
 
-            let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/update/network`, {
+            const ciphertext = AES.encrypt(
+                JSON.stringify(obj),
+                `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+              );
+              let record = encodeURIComponent(ciphertext.toString());
+        
+
+            let res = await fetch(`/api/token/network`, {
                 method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    "Authorization": session?.user?.access_token || ""
                 },
-                body: JSON.stringify(obj),
+                body: JSON.stringify(record),
             });
 
             let result = await res.json();
 
-            if (result.networks !== null) {
+            if (result.data.networks !== null) {
                 toast.success("token add Successfully");
                 props.getToken(props?.itemOffset);
                 reset();

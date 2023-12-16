@@ -29,6 +29,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     `${process.env.NEXT_PUBLIC_BASEURL}/sitemaintenance`,
     {
       method: "GET",
+      headers:{
+        "Authorization": session?.user?.access_token || ''
+    }
     }
   ).then((response) => response.json());
 

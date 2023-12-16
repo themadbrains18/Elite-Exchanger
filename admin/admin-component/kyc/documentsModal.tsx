@@ -25,7 +25,8 @@ const DocumentsModal = (props: Details) => {
             : " translate-y-[-55%] opacity-0 invisible"
         }`}
       >
-        <div className="flex items-center justify-end  md:px-20 md:py-10">
+        <div className="flex items-center justify-between  md:px-20 md:py-10">
+          <p className="admin-component-heading">Documents</p>
           <svg
             onClick={() => {
               props?.setShow(false);

@@ -1,20 +1,25 @@
 import React from 'react';
 import Image from 'next/image';
+import RoundedDoughnutChart from '@/admin/admin-snippet/dougnutChart';
+import RadialChart from '@/admin/admin-snippet/radialChart';
+import RevenueDougnut from '@/admin/admin-snippet/revenueDougnut';
+import DonutChartWithText from '@/admin/admin-snippet/revenueDougnut';
 
 const RevenueRsources = () => {
   return (
     <>
-        <div className='w-full'>
-            <Image src="/assets/admin/graph-one.svg" alt="img-description" width={327} height={397} className=' w-full dark:block hidden' />
-            <Image src="/assets/admin/graph-one-light.svg" alt="img-description" width={327} height={397} className=' w-full dark:hidden block' />
-
-            <Image src="/assets/admin/Distribution.svg" alt="img-description"  width={327} height={397}  className=' w-full mt-[24px] dark:block hidden'/>
-            <Image src="/assets/admin/Distribution-light.svg" alt="img-description"  width={327} height={397}  className=' w-full mt-[24px] dark:hidden block'/>
-
-
-            <Image src="/assets/admin/Suported.svg" alt="img-description"  width={327} height={397}  className=' w-full mt-[24px]  dark:block hidden'/>
-            <Image src="/assets/admin/Suported-light.svg" alt="img-description"  width={327} height={397}  className=' w-full mt-[24px] dark:hidden block'/>
+      <div className='w-full'>
+        <div className=' w-full mt-[24px] '>
+          {/* <RevenueDougnut /> */}
+          <DonutChartWithText />
         </div>
+        <div className=' w-full mt-[24px] '>
+          <RoundedDoughnutChart />
+        </div>
+        <div className='mt-6'>
+          <RadialChart />
+        </div>
+      </div>
     </>
   )
 }

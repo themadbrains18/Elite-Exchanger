@@ -4,6 +4,8 @@ import React, { useContext, useEffect, useState } from "react";
 import DocumentsModal from "./documentsModal";
 import ReactPaginate from "react-paginate";
 import Context from "@/components/contexts/context";
+import { useSession } from "next-auth/react";
+import { AES } from "crypto-js";
 
 
 function formatDate(date: Date) {
@@ -22,10 +24,11 @@ const AllKycUsers = () => {
   const [list, setList] = useState([]);
   const [active, setActive] = useState(1);
   const [show, setShow] = useState(false);
-  const [data, setData] = useState();
+  const [allUsers, setAllUsers] = useState();
   const [itemOffset, setItemOffset] = useState(0);
   const { mode } = useContext(Context);
  const [total, setTotal] = useState(0);
+ const {data: session} = useSession()
 
   let itemsPerPage = 10;
 
@@ -39,15 +42,18 @@ const AllKycUsers = () => {
     }
     
     let users = await fetch(
-      `${process.env.NEXT_PUBLIC_APIURL}/kyc/allByLimit/All/${itemOffset}/${itemsPerPage}`,
+      `/api/kyc/allUsers?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
       {
         method: "GET",
+        headers: {
+          "Authorization": session?.user?.access_token || ''
+      },
       }
     ).then((response) => response.json());
 
 
-    setList(users?.data);
-    setTotal(users?.total?.length);
+    setList(users?.data?.data);
+    setTotal(users?.data?.total?.length);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 
@@ -65,19 +71,22 @@ const AllKycUsers = () => {
       isVerified: actionKyc === "Approve" && true,
       isReject: actionKyc === "Reject" && true,
     };
-
+    const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+    let record =  encodeURIComponent(ciphertext.toString());
     let updated = await fetch(
-      `${process.env.NEXT_PUBLIC_APIURL}/kyc/kycstatus`,
+      `/api/kyc/status`,
       {
         headers: {
-          "content-type": "application/json",
+          "Content-type": "application/json",
+          "Authorization": session?.user?.access_token || ''
         },
+        mode: "cors",
         method: "PUT",
-        body: JSON.stringify(obj),
+        body: JSON.stringify(record),
       }
     ).then((response) => response.json());
 
-    setList(updated?.result);
+    setList(updated?.data?.result);
   };
 
   return (
@@ -306,7 +315,7 @@ const AllKycUsers = () => {
                         <button
                           onClick={() => {
                             setShow(true);
-                            setData(item);
+                            setAllUsers(item);
                           }}
                           className="dark:text-admin-primary-100 text-admin-primary"
                         >
@@ -413,7 +422,7 @@ const AllKycUsers = () => {
           />
         </div>
       </div>
-      {show && <DocumentsModal show={show} setShow={setShow} data={data} />}
+      {show && <DocumentsModal show={show} setShow={setShow} data={allUsers} />}
     </>
   );
 };

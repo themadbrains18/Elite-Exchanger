@@ -22,6 +22,7 @@ router
                 "Content-Type": req.headers["content-type"],
                 'authorization': `${req.headers.authorization}`,
             }
+            
             let data = await postForm(`${process.env.NEXT_PUBLIC_APIURL}/kyc/create`, req, headers);
             return res.status(data.status).send({ data });
         } catch (error: any) {
