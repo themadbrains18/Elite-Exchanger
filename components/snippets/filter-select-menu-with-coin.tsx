@@ -49,7 +49,6 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
           setShowSecond(false);
         }
       }
-      console.log(showSecond,"showSecond");
       
     })
   }, [props?.dropdown])

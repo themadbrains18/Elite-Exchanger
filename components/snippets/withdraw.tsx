@@ -10,7 +10,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
-import ConfirmPopup from "@/pages/profile/confirm-popup";
+import ConfirmPopup from "@/pages/customer/profile/confirm-popup";
 import Verification from "./verification";
 
 const schema = yup.object().shape({

@@ -187,7 +187,9 @@ const BuySell = (props: fullWidth) => {
                 Liquidation_Price = marketPrice + Liquidation_Price;
             }
 
-            let qty: any = (sizeValue / marketPrice).toFixed(3);
+            let qty: any = (sizeValue / marketPrice);
+            qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
+            
             if (orderType === 'qty') {
                 qty = sizeValue;
             }

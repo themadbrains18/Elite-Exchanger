@@ -39,7 +39,6 @@ const Chart = (props: Session) => {
 
     const { slug } = router.query;
     
-
     // let currentToken = props.coinList.filter((item: any) => {
     //     return item.symbol === slug
     // })
@@ -55,7 +54,7 @@ const Chart = (props: Session) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
             if (eventDataType === "price") {
-                // refreshTokenList()
+                refreshTokenList()
             }
             if (eventDataType === "market") {
                 if (props.session) {

@@ -227,12 +227,12 @@ const WalletList = (props: propsData): any => {
                           <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                         </div>
                       </th>
-                      <th className="py-5 max-[1023px]:hidden ">
+                      {/* <th className="py-5 max-[1023px]:hidden ">
                         <div className="flex">
                           <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Amount</p>
                           <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                         </div>
-                      </th>
+                      </th> */}
                       <th className="py-5 max-[1023px]:hidden ">
                         <div className=" ">
                           <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Action</p>
@@ -274,14 +274,14 @@ const WalletList = (props: propsData): any => {
                             </div>
                           </td>
                           <td>
-                            <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance.toFixed(5)}</p>
+                            <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance.toFixed(8)}</p>
                           </td>
                           <td className="lg:text-start text-end">
-                            <p className="info-14-18 dark:text-white">${item.token !== null ? item?.token?.price.toFixed(5) : item?.global_token?.price.toFixed(5)}</p>
+                            <p className="info-14-18 dark:text-white">${item.token !== null ? item?.token?.price.toFixed(8) : item?.global_token?.price.toFixed(8)}</p>
                           </td>
-                          <td className="max-[1023px]:hidden">
+                          {/* <td className="max-[1023px]:hidden">
                             <p className="info-14-18 dark:text-white">${(item.token !== null ? item?.token?.price * item?.balance : item?.global_token?.price * item?.balance).toFixed(2)}</p>
-                          </td>
+                          </td> */}
                           <td className="max-[1023px]:hidden ">
                             <div className="flex items-center gap-[10px]">
                               <button onClick={() => { setShow1(1) }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">

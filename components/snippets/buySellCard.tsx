@@ -31,13 +31,13 @@ interface DynamicId {
 const BuySellCard = (props: DynamicId) => {
   const [active1, setActive1] = useState(1);
   const [firstCurrency, setFirstCurrency] = useState('');
-  const [secondCurrency, setSecondCurrency] = useState('');
+  const [secondCurrency, setSecondCurrency] = useState('USDT');
   const [totalAmount, setTotalAmount] = useState(0.0);
   const [selectedToken, setSelectedToken] = useState(Object);
   const [price, setPrice] = useState(0.00);
   const [userAssets, setUserAssets] = useState(props.assets);
   const [show, setShow] = useState(1);
-
+  const [estimateFee, setEstimateFee] = useState(0);
   const router = useRouter()
 
   const list = props.coins;
@@ -53,10 +53,13 @@ const BuySellCard = (props: DynamicId) => {
   useEffect(() => {
     if (props.slug) {
       setCurrencyName(props.slug, 1);
+      setPriceOnChangeType('buy', '');
     }
+
+    Socket();
   }, [props.slug, userAssets])
 
-  useEffect(() => {
+  const Socket = () => {
     const websocket = new WebSocket('ws://localhost:3001/');
 
     websocket.onopen = () => {
@@ -73,30 +76,24 @@ const BuySellCard = (props: DynamicId) => {
         }
       }
     }
-  }, []);
+  };
 
   const setCurrencyName = (symbol: string, dropdown: number) => {
     if (dropdown === 1) {
       setFirstCurrency(symbol);
+
       let token = list.filter((item: any) => {
-        return item.symbol === symbol
+        return item.symbol === symbol && item?.tradePair !== null
       });
 
-      setSelectedToken(token[0]);
+      if (token.length > 0) {
+        setSelectedToken(token[0]);
+        setPriceOnChangeType(active1 === 1 ? 'buy' : 'sell', symbol);
+      }
 
       if (userAssets.message !== undefined) {
         signOut();
         return;
-      }
-      // get assets balance
-      let selectAssets = userAssets.filter((item: any) => {
-        return item.token_id === token[0].id
-      });
-      if (selectAssets.length > 0) {
-        setPrice(selectAssets[0].balance);
-      }
-      else {
-        setPrice(0.00);
       }
     }
     else {
@@ -104,9 +101,37 @@ const BuySellCard = (props: DynamicId) => {
     }
   }
 
+  const setPriceOnChangeType = (type: string, symbol: string) => {
+
+    setPrice(0.00);
+    let token = list.filter((item: any) => {
+      return item.symbol === (type === 'buy' ? 'USDT' : symbol === '' ? firstCurrency : symbol)
+    });
+
+    if (token.length > 0) {
+      // get assets balance
+      let selectAssets = userAssets.filter((item: any) => {
+        return item.token_id === token[0].id
+      });
+
+      if (selectAssets.length > 0) {
+        setPrice(selectAssets[0].balance);
+      }
+    }
+  }
+
   const onHandleSubmit = async (data: any) => {
 
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
+
+    if(active1 ===1 && totalAmount > price){
+      toast.error('Insufficiant balance');
+      return;
+    }
+    else if(active1 === 2 && data.token_amount > price){
+      toast.error('Insufficiant balance');
+      return;
+    }
 
     let obj = {
       "user_id": props.session.user.user_id,
@@ -116,6 +141,8 @@ const BuySellCard = (props: DynamicId) => {
       "limit_usdt": data.limit_usdt,
       "volume_usdt": totalAmount,
       "token_amount": data.token_amount,
+      "fee": active1 === 1 ? data.token_amount * 0.00075 : data.token_amount * data.limit_usdt * 0.00075,
+      "is_fee": false,
       "status": false,
       "isCanceled": false,
       "queue": false
@@ -206,6 +233,9 @@ const BuySellCard = (props: DynamicId) => {
       let amount: any = getValues('limit_usdt');
 
       let totalAmount = qty * amount;
+      let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(8) : (amount * qty * 0.00075).toFixed(8);
+
+      setEstimateFee(fee);
       setTotalAmount(totalAmount);
     }
     else {
@@ -240,10 +270,18 @@ const BuySellCard = (props: DynamicId) => {
   return (
     <div className="p-20 md:p-20 rounded-10  bg-white dark:bg-d-bg-primary">
       <div className="flex border-b border-grey-v-1">
-        <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 1 && "!text-primary border-primary"}`} onClick={() => setActive1(1)}>
+        <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 1 && "!text-primary border-primary"}`} onClick={() => { setActive1(1); setPriceOnChangeType('buy', ''); reset({
+        limit_usdt: 0.00,
+        token_amount: 0.00,
+      })
+      setTotalAmount(0.0); setEstimateFee(0.00) }}>
           Buy
         </button>
-        <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 2 && "!text-primary border-primary"}`} onClick={() => setActive1(2)}>
+        <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 2 && "!text-primary border-primary"}`} onClick={() => { setActive1(2); setPriceOnChangeType('sell', ''); reset({
+        limit_usdt: 0.00,
+        token_amount: 0.00,
+      })
+      setTotalAmount(0.0); setEstimateFee(0.00) }}>
           Sell
         </button>
       </div>
@@ -315,7 +353,8 @@ const BuySellCard = (props: DynamicId) => {
           <div className="mt-5 flex gap-[18px] items-center">
             <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
             {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
-            <p className="md-text w-full">{price}({firstCurrency})</p>
+            <p className="md-text w-full">{price.toFixed(8)}({active1 === 1 ? 'USDT' : firstCurrency})</p>
+
             <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className="min-w-[24px]" alt="wallet2" width={24} height={24} />
             {router.pathname.includes("/chart") && <p className="md-text">
               $
@@ -323,12 +362,6 @@ const BuySellCard = (props: DynamicId) => {
                 ? props?.token?.price?.toFixed(5)
                 : "0.00"}
             </p>
-              // <p className="md-text">
-              //   $
-              //   {selectedToken !== undefined && selectedToken?.price !== undefined
-              //     ? selectedToken?.price?.toFixed(5)
-              //     : "0.00"}
-              // </p>
 
             }
 
@@ -339,12 +372,28 @@ const BuySellCard = (props: DynamicId) => {
             })}
           </div>
 
-          {/* First Currency Inputs */}
+          {/* Price Inputs for limit order case */}
+          <div className="mt-30 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
+
+            <div className="">
+              <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
+              <input type="number" placeholder="$0" step="any" {...register('limit_usdt', {
+                onChange: () => { convertTotalAmount() }
+              })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
+            </div>
+
+            <div className="relative">
+              <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} />
+            </div>
+          </div>
+          {errors.limit_usdt && <p style={{ color: 'red' }}>{errors.limit_usdt.message}</p>}
+
+          {/* coin quantity Inputs */}
           <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
 
             <div className="">
               <p className="sm-text dark:text-white">Quantity({firstCurrency})</p>
-              <input type="number" placeholder="$0" step="any" {...register('token_amount', {
+              <input type="number" placeholder="0" min={0} step=".00001" {...register('token_amount', {
                 onChange: () => { convertTotalAmount() }
               })} name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text " />
             </div>
@@ -358,34 +407,21 @@ const BuySellCard = (props: DynamicId) => {
                     <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text`}>{props?.token?.fullName}</p>
                   </div> :
                   <FilterSelectMenuWithCoin data={list} border={false} setCurrencyName={setCurrencyName} dropdown={1} />
-
-
               }
             </div>
 
           </div>
           {errors.token_amount && <p style={{ color: 'red' }}>{errors?.token_amount?.message}</p>}
 
-          {/* Second Currency Inputs */}
-          <div className="mt-30 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
-
-            <div className="">
-              <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
-              <input type="number" placeholder="$0" step="any" {...register('limit_usdt', {
-                onChange: () => { convertTotalAmount() }
-              })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
-            </div>
-
-            <div className="relative">
-              <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} />
-            </div>
-          </div>
-          {errors.limit_usdt && <p style={{ color: 'red' }}>{errors.limit_usdt.message}</p>}
-
           <div className="mt-5 flex gap-2">
             <p className="sm-text dark:text-white">Total:</p>
             {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
             <p className="sm-text dark:text-white">{totalAmount}</p>
+
+          </div>
+          <div className="mt-5 flex gap-2">
+            <p className="sm-text dark:text-white">Est. Fee:</p>
+            <p className="sm-text dark:text-white">{estimateFee}</p>
 
           </div>
         </div>
