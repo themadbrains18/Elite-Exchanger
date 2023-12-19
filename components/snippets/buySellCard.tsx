@@ -97,7 +97,7 @@ const BuySellCard = (props: DynamicId) => {
       }
     }
     else {
-      setSecondCurrency(symbol)
+      setSecondCurrency(symbol);
     }
   }
 
@@ -124,11 +124,11 @@ const BuySellCard = (props: DynamicId) => {
 
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
 
-    if(active1 ===1 && totalAmount > price){
+    if (active1 === 1 && totalAmount > price) {
       toast.error('Insufficiant balance');
       return;
     }
-    else if(active1 === 2 && data.token_amount > price){
+    else if (active1 === 2 && data.token_amount > price) {
       toast.error('Insufficiant balance');
       return;
     }
@@ -239,7 +239,12 @@ const BuySellCard = (props: DynamicId) => {
       setTotalAmount(totalAmount);
     }
     else {
+      let qty: any = getValues('token_amount');
+      let totalAmount = qty * selectedToken?.price;
+      let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(8) : (selectedToken?.price * qty * 0.00075).toFixed(8);
 
+      setEstimateFee(fee);
+      setTotalAmount(totalAmount);
     }
   }
 
@@ -270,25 +275,35 @@ const BuySellCard = (props: DynamicId) => {
   return (
     <div className="p-20 md:p-20 rounded-10  bg-white dark:bg-d-bg-primary">
       <div className="flex border-b border-grey-v-1">
-        <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 1 && "!text-primary border-primary"}`} onClick={() => { setActive1(1); setPriceOnChangeType('buy', ''); reset({
-        limit_usdt: 0.00,
-        token_amount: 0.00,
-      })
-      setTotalAmount(0.0); setEstimateFee(0.00) }}>
+        <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 1 && "!text-primary border-primary"}`} onClick={() => {
+          setActive1(1); setPriceOnChangeType('buy', ''); reset({
+            limit_usdt: 0.00,
+            token_amount: 0.00,
+          })
+          setTotalAmount(0.0); setEstimateFee(0.00)
+        }}>
           Buy
         </button>
-        <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 2 && "!text-primary border-primary"}`} onClick={() => { setActive1(2); setPriceOnChangeType('sell', ''); reset({
-        limit_usdt: 0.00,
-        token_amount: 0.00,
-      })
-      setTotalAmount(0.0); setEstimateFee(0.00) }}>
+        <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 2 && "!text-primary border-primary"}`} onClick={() => {
+          setActive1(2); setPriceOnChangeType('sell', ''); reset({
+            limit_usdt: 0.00,
+            token_amount: 0.00,
+          })
+          setTotalAmount(0.0); setEstimateFee(0.00)
+        }}>
           Sell
         </button>
       </div>
       <form onSubmit={handleSubmit(onHandleSubmit)}>
         <div className="py-20">
           <div className="flex lg:gap-30 gap-10">
-            <div className={`flex  gap-5 justify-center items-center  w-full cursor-pointer border rounded-5 border-grey-v-1 dark:border-opacity-[15%] bg-[transparent] ${show === 1 && 'bg-primary-100 dark:bg-black-v-1 border-primary'}`} onClick={() => { setShow(1) }}>
+            <div className={`flex  gap-5 justify-center items-center  w-full cursor-pointer border rounded-5 border-grey-v-1 dark:border-opacity-[15%] bg-[transparent] ${show === 1 && 'bg-primary-100 dark:bg-black-v-1 border-primary'}`} onClick={() => {
+              setShow(1); reset({
+                limit_usdt: 0.00,
+                token_amount: 0.00,
+              })
+              setTotalAmount(0.0); setEstimateFee(0.00)
+            }}>
               <input id={`custom-radio${props.id}`} type="radio" value="limit" name="market_type" className="hidden w-5 h-5 max-w-full  bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
               <label htmlFor={`custom-radio${props.id}`}
                 className="custom-radio cursor-pointer py-5 px-[17px]  relative 
@@ -318,7 +333,14 @@ const BuySellCard = (props: DynamicId) => {
                 <p className={`info-16-18 !text-gamma ${show === 1 && '!text-primary'}`}>Limit</p>
               </label>
             </div>
-            <div className={`flex gap-5  justify-center items-center   w-full cursor-pointer border rounded-5 border-grey-v-1 dark:border-opacity-[15%] bg-[transparent] ${show === 2 && 'bg-primary-100 dark:bg-black-v-1 border-primary'}`} onClick={() => { setShow(2) }}>
+            <div className={`flex gap-5  justify-center items-center   w-full cursor-pointer border rounded-5 border-grey-v-1 dark:border-opacity-[15%] bg-[transparent] ${show === 2 && 'bg-primary-100 dark:bg-black-v-1 border-primary'}`} onClick={() => {
+              setShow(2);
+              reset({
+                limit_usdt: 0.00,
+                token_amount: 0.00,
+              })
+              setTotalAmount(0.0); setEstimateFee(0.00)
+            }}>
               <input id={`custom-radio2${props.id}`} type="radio" value="market" name="market_type" className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
               <label htmlFor={`custom-radio2${props.id}`} className="
               custom-radio relative py-5 px-[17px]  flex gap-2 items-center pl-[60px]
@@ -373,20 +395,25 @@ const BuySellCard = (props: DynamicId) => {
           </div>
 
           {/* Price Inputs for limit order case */}
-          <div className="mt-30 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
+          {show === 1 &&
+            <div className="mt-30 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
 
-            <div className="">
-              <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
-              <input type="number" placeholder="$0" step="any" {...register('limit_usdt', {
-                onChange: () => { convertTotalAmount() }
-              })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
+              <div className="">
+                <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
+                <input type="number" placeholder="$0" step="any" {...register('limit_usdt', {
+                  onChange: () => { convertTotalAmount() }
+                })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
+              </div>
+
+              <div className="relative">
+                <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} />
+              </div>
             </div>
 
-            <div className="relative">
-              <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} />
-            </div>
-          </div>
+          }
           {errors.limit_usdt && <p style={{ color: 'red' }}>{errors.limit_usdt.message}</p>}
+
+
 
           {/* coin quantity Inputs */}
           <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
