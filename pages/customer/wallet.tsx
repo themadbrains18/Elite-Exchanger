@@ -105,7 +105,7 @@ const Wallet = (props: Session) => {
             <div className=" bg-light-v-1 py-80 md:py-[120px]  dark:bg-black-v-1">
                 <div className="container flex gap-30 flex-wrap">
                     <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
-                        <Banner coinList={allCoins} assets={userAssetsList} withdrawList={userWithdrawList} depositList={userDepositList}/>
+                        <Banner coinList={allCoins} networks={props?.networks} session={props.session} assets={userAssetsList} withdrawList={userWithdrawList} depositList={userDepositList}/>
                         <WalletList coinList={allCoins} networks={props?.networks} session={props.session} withdrawList={userWithdrawList} depositList={userDepositList} assets={userAssetsList} refreshData={refreshData} userConvertList={userConvertList} />
                     </div>
                     <div className="lg:max-w-[432px] w-full md:block hidden">

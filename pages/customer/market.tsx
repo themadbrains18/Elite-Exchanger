@@ -14,9 +14,10 @@ interface Session {
   provider: any,
   coinList: any,
   assets :any
+  networks :any
 }
 
-const Market = ({ session, coinList,assets }: Session) => {
+const Market = ({ session, coinList,assets,networks }: Session) => {
 
   const [userAssetsList, setUserAssetsList] = useState(assets);
   const [allCoins, setAllCoins] = useState(coinList);
@@ -50,7 +51,7 @@ const Market = ({ session, coinList,assets }: Session) => {
   return (
     <>
       <ToastContainer />
-      <Marketpage coinList={allCoins} session={session} assets={userAssetsList}/>
+      <Marketpage coinList={allCoins} session={session} assets={userAssetsList} networks={networks}/>
     </>
   )
 }
@@ -65,6 +66,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
     method: "GET"
   }).then(response => response.json());
+  let networkList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/network`, {
+    method: "GET"
+}).then(response => response.json());
 
   let userAssets:any = [];
   if (session) {
@@ -82,6 +86,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       sessions: session,
       provider: providers,
       coinList: tokenList?.data,
+      networks: networkList?.data,
       assets : userAssets
     },
   };

@@ -11,6 +11,7 @@ import AES from 'crypto-js/aes';
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
+import ConfirmBuy from "./confirmBuy";
 
 const schema = yup.object().shape({
   token_amount: yup.number().positive().required('Please enter quantity').typeError('Please enter quantity').default(0),
@@ -30,6 +31,7 @@ interface DynamicId {
 }
 const BuySellCard = (props: DynamicId) => {
   const [active1, setActive1] = useState(1);
+  const [active, setActive] = useState(false);
   const [firstCurrency, setFirstCurrency] = useState('');
   const [secondCurrency, setSecondCurrency] = useState('USDT');
   const [totalAmount, setTotalAmount] = useState(0.0);
@@ -38,6 +40,7 @@ const BuySellCard = (props: DynamicId) => {
   const [userAssets, setUserAssets] = useState(props.assets);
   const [show, setShow] = useState(1);
   const [estimateFee, setEstimateFee] = useState(0);
+  const [objData, setObjData]= useState(Object);
   const router = useRouter()
 
   const list = props.coins;
@@ -122,6 +125,7 @@ const BuySellCard = (props: DynamicId) => {
 
   const onHandleSubmit = async (data: any) => {
 
+
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
 
     if(active1 ===1 && totalAmount > price){
@@ -147,8 +151,13 @@ const BuySellCard = (props: DynamicId) => {
       "isCanceled": false,
       "queue": false
     }
+    setObjData(obj)
+    setActive(true)
+  }
+  const actionPerform = async () => {
 
-    const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
+
+    const ciphertext = AES.encrypt(JSON.stringify(objData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
     let record = encodeURIComponent(ciphertext.toString());
 
     let reponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
@@ -164,6 +173,7 @@ const BuySellCard = (props: DynamicId) => {
       toast.success(reponse.data?.data?.message);
       setFirstCurrency('BLC');
       setSecondCurrency('USDT');
+    setActive(false);
 
       const websocket = new WebSocket('ws://localhost:3001/');
       let withdraw = {
@@ -268,6 +278,7 @@ const BuySellCard = (props: DynamicId) => {
 
 
   return (
+    <>
     <div className="p-20 md:p-20 rounded-10  bg-white dark:bg-d-bg-primary">
       <div className="flex border-b border-grey-v-1">
         <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 1 && "!text-primary border-primary"}`} onClick={() => { setActive1(1); setPriceOnChangeType('buy', ''); reset({
@@ -426,13 +437,18 @@ const BuySellCard = (props: DynamicId) => {
           </div>
         </div>
         {props?.session ?
-          <button type="submit" className=" solid-button w-full">{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
+          <button type="submit" className=" solid-button w-full" >{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
           :
           <Link href="/login" className="solid-button w-full block text-center">Login</Link>
         }
 
       </form>
     </div>
+    {
+      active &&
+      <ConfirmBuy setActive={setActive} setShow={setShow} price={props?.token?.price} active1={active1} secondCurrency={secondCurrency} selectedToken={selectedToken?.symbol} actionPerform={actionPerform} objData={objData}/>
+    }
+    </>
   )
 };
 

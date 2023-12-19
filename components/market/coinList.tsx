@@ -8,7 +8,10 @@ import Future from "../snippets/market/future";
 import NewListing from "../snippets/market/newListing";
 
 interface propsData {
-  coins: any
+  coins: any,
+  networks:any,  
+  session:any,  
+
 }
 
 const CoinList = (props: propsData) => {
@@ -125,19 +128,19 @@ const CoinList = (props: propsData) => {
           </div>
         </div>
         {active1 === 1 &&
-          <Favorites coins={favouriteToken} />
+          <Favorites coins={favouriteToken} networks={props?.networks} session={props?.session}/>
         }
         {active1 === 2 &&
-          <AllCrypto coins={props.coins} />
+          <AllCrypto coins={props.coins} networks={props?.networks} session={props?.session}/>
         }
         {active1 === 3 &&
-          <Spot coins={spotTrade} />
+          <Spot coins={spotTrade}  networks={props?.networks} session={props?.session}/>
         }
         {active1 === 4 &&
-          <Future coins={futureTrade} />
+          <Future coins={futureTrade}  networks={props?.networks} session={props?.session}/>
         }
         {active1 === 6 &&
-          <NewListing coins={newCoins} />
+          <NewListing coins={newCoins}  networks={props?.networks} session={props?.session}/>
         }
 
       </div>

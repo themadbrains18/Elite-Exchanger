@@ -9,11 +9,11 @@ interface list{
 
 const DashboardCards = (props:list) => {
 
-  const inactiveUser= props?.userList?.data.filter((x:any)=>{
+  const inactiveUser= props?.userList?.data?.filter((x:any)=>{
     return x.statusType === false
   })
   
-  console.log(inactiveUser,"==dhjhdj");
+  console.log(props.tradeList,"==dhjhdj");
   
   let data = [
     {

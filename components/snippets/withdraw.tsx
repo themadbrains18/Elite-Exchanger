@@ -320,7 +320,7 @@ const Withdraw = (props: activeSection) => {
           <form onSubmit={handleSubmit(onHandleSubmit)}>
             <div className="py-30 md:py-10">
               <div className="mb-[15px] md:mb-5">
-                <label className="sm-text ">Number</label>
+                <label className="sm-text ">Select Coin</label>
                 <div className="border border-grey-v-1 dark:border-opacity-[15%] mt-[10px]  gap-[15px] items-center flex justify-between rounded-5 p-[11px] md:p-[15px]">
                   <div className="flex gap-2 ">
                     <Image

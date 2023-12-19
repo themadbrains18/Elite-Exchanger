@@ -30,17 +30,17 @@ export default function App({ Component, pageProps: { sessions, ...pageProps } }
           refetchOnWindowFocus={false}>
         <Context.Provider value={{ mode, setMode }}>
           {
-            router.pathname != '/register' && router.pathname != '/login' && router.pathname != '/forget' && !router.pathname.includes('/admin') &&
+            !router.pathname.includes('/register') && !router.pathname.includes('/login') && !router.pathname.includes('/forget') && !router.pathname.includes('/admin') &&
             <>
               <Header session={sessions} />
               <Preference />
             </>
           }
-          <div className={` ${router.pathname != '/register' && router.pathname != '/login' && router.pathname != '/forget' && !router.pathname.includes('/future/') && !router.pathname.includes('/admin') ? "mt-[106px] lg:mt-[129px]" : "" } `}>
+          <div className={` ${!router.pathname.includes('/register') && !router.pathname.includes('/login') && !router.pathname.includes('/forget') && !router.pathname.includes('/future/') && !router.pathname.includes('/admin') ? "mt-[106px] lg:mt-[129px]" : "" } `}>
             <Component {...pageProps} />
           </div>
           {
-            router.pathname != '/register' && router.pathname != '/login' && router.pathname != '/forget' && !router.pathname.includes('/admin') && !router.pathname.includes('/future') && <Footer />
+            !router.pathname.includes('/register') && !router.pathname.includes('/login') && !router.pathname.includes('/forget') && !router.pathname.includes('/admin') && !router.pathname.includes('/future') && <Footer />
           }
         </Context.Provider>
       </SessionProvider>
