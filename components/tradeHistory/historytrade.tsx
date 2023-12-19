@@ -8,7 +8,7 @@ import { AES } from "crypto-js";
 import { signOut, useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ConfirmPopup from "@/pages/profile/confirm-popup";
+import ConfirmPopup from "@/pages/customer/profile/confirm-popup";
 import Verification from "../snippets/verification";
 
 import ConfirmationModel from "../snippets/confirmation";
@@ -37,6 +37,7 @@ const Historytrade = (props: propsData) => {
   const [selectedStake, setSelectedStake] = useState(Object);
 
   let itemsPerPage = 10;
+  
 
   // =================================
   // Trade History Data
@@ -641,7 +642,7 @@ const Historytrade = (props: propsData) => {
                           </div>
                         </th>
                         <th className=" py-5">
-                          <div className="hidden flex">
+                          <div className="hidden md:flex">
                             <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Side</p>
                             <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                           </div>
@@ -691,7 +692,7 @@ const Historytrade = (props: propsData) => {
                           <tr key={index}>
                             <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
                               <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                                <Image src={` ${item?.token != null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" />
+                                <Image src={`${item?.token != null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" />
                                 <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                   <p className="info-14-18 dark:text-white">{item?.token?.fullName}</p>
                                   <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.token?.symbol}</p>
@@ -699,7 +700,7 @@ const Historytrade = (props: propsData) => {
                               </div>
                             </td>
                             <td>
-                              <div className="flex items-center gap-5 py-[10px] md:py-[15px] px-0 md:px-[5px] md:block hidden">
+                              <div className=" items-center gap-5 py-[10px] md:py-[15px] px-0 md:px-[5px] md:flex hidden">
                                 <div className={`p-0 md:p-[5px] rounded-5 bg-[transparent] md:bg-buy `}>
                                   <svg xmlns="http://www.w3.org/2000/svg" width={20} height={21} viewBox="0 0 20 21" fill="none">
                                     <path
@@ -712,7 +713,7 @@ const Historytrade = (props: propsData) => {
                                 </div>
                                 <div className="hidden md:block">
                                   <p className="info-14-18 dark:text-white">Withdraw</p>
-                                  <p className="info-10">{moment(item?.createdAt).format('DD-MM-YYYY')}</p>
+                                  <p className="info-10">{moment(item?.createdAt).format('DD-MM-YYYY HH:mm:ss A')}</p>
                                 </div>
                               </div>
                             </td>

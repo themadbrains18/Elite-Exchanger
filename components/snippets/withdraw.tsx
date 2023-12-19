@@ -18,7 +18,6 @@ const schema = yup.object().shape({
   withdraw_wallet: yup.string().required("This field is required"),
   amount: yup
     .number()
-    .integer()
     .positive()
     .required("This field is required")
     .typeError("Enter value must be number and positive value"),
@@ -64,6 +63,7 @@ const Withdraw = (props: activeSection) => {
     clearErrors,
     setError,
     reset,
+    getValues,
     formState: { errors },
   } = useForm<UserSubmitForm>({
     resolver: yupResolver(schema),
@@ -108,7 +108,7 @@ const Withdraw = (props: activeSection) => {
       data.tokenID = props.token?.id;
       data.tokenName = props.token?.fullName;
       data.symbol = props.token?.symbol;
-      data.fee = "0.05";
+      data.fee = props?.token?.withdraw_fee.toString();
       data.status = "pending";
       data.type = "global";
       data.otp = "string";
@@ -395,8 +395,14 @@ const Withdraw = (props: activeSection) => {
                   <p style={{ color: "red" }}>{errors.amount.message}</p>
                 )}
                 <p className="mt-[10px] text-end sm-text">
-                  TTransaction Fee 0.0005 BTC
+                  Transaction Fee {props?.token?.withdraw_fee} {props?.token?.symbol}
                 </p>
+                {/* {getValues('amount') > 0 &&
+                  <p className="mt-[10px] text-end sm-text">
+                    You received {getValues('amount') - props?.token?.withdraw_fee} {props?.token?.symbol}
+                  </p>
+                } */}
+
               </div>
             </div>
             <button type="submit" className="solid-button w-full">
