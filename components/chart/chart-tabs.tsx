@@ -69,8 +69,6 @@ const ChartTabs = (props: propsData) => {
     setTradeItemOffset(newOffset);
   };
 
-  console.log(currentTradeItems,"==currentTradeItems");
-  
 
   /**
    * Cancel order
