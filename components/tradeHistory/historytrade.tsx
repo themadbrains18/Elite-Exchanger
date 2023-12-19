@@ -8,7 +8,11 @@ import { AES } from "crypto-js";
 import { signOut, useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+<<<<<<< HEAD
+import ConfirmPopup from "@/admin/admin-snippet/confirm-popup";
+=======
 import ConfirmPopup from "@/pages/customer/profile/confirm-popup";
+>>>>>>> 41c938affdeddf96f9371e826baede0e421468ef
 import Verification from "../snippets/verification";
 
 import ConfirmationModel from "../snippets/confirmation";

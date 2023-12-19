@@ -3,11 +3,13 @@ import React, { useContext, useState } from "react";
 import Context from "../contexts/context";
 import FiliterSelectMenu from "./filter-select-menu";
 import { useQRCode } from 'next-qrcode';
+import FilterSelectMenuWithCoin from "./filter-select-menu-with-coin";
 
 interface activeSection {
   setShow1: Function;
   networks: any;
-  session: any
+  session: any;
+  coinList?: any;
 }
 
 const Deposit = (props: activeSection) => {
@@ -70,7 +72,18 @@ const Deposit = (props: activeSection) => {
                             C61.42,57.647,61.42,54.687,59.595,52.861z"
           />
         </svg>
-      </div>  
+      </div> 
+      {
+        props?.coinList &&
+      <div className="relative max-w-full  w-full mt-20">
+            <FilterSelectMenuWithCoin
+              data={props?.coinList}
+              border={true}
+              dropdown={1}
+      
+            />
+          </div>
+      } 
       <div className="mt-20">
         <FiliterSelectMenu data={list} placeholder="Select Network type" auto={true} widthFull={true} onNetworkChange={getAddress} />
       </div>

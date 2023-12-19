@@ -116,8 +116,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       sessions: session,
       provider: providers,
       // coinList: tokenList?.data,
-      userList:users?.data,
-      tradeList:trades?.data,
+      userList:users?.data || [],
+      tradeList:trades?.data  || [],
       assets: userAssets,
       topgainer: tokenList2,
       // allUsers:allUsers

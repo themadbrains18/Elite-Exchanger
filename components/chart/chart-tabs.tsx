@@ -69,6 +69,8 @@ const ChartTabs = (props: propsData) => {
     setTradeItemOffset(newOffset);
   };
 
+  console.log(currentTradeItems,"==currentTradeItems");
+  
 
   /**
    * Cancel order
@@ -434,6 +436,12 @@ const ChartTabs = (props: propsData) => {
                     </th>
                     <th className=" py-5">
                       <div className="hidden md:flex">
+                        <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Fee</p>
+                        <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                      </div>
+                    </th>
+                    <th className=" py-5">
+                      <div className="hidden md:flex">
                         <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Bid</p>
                         <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                       </div>
@@ -510,6 +518,9 @@ const ChartTabs = (props: propsData) => {
                         </td>
                         <td>
                           <p className="info-14-18 dark:text-white md:block hidden">${item?.token !== null ? item?.token?.price?.toFixed(4) : item?.global_token?.price?.toFixed(4)}</p>
+                        </td>
+                        <td>
+                          <p className="info-14-18 dark:text-white md:block hidden">{item.fee}</p>
                         </td>
                         <td>
                           <p className="info-14-18 dark:text-white md:block hidden">{item.limit_usdt}</p>

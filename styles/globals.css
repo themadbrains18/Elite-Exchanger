@@ -527,3 +527,40 @@ input[name="colored-radio"].contactform:checked + .custom-radio{
   height: 30px;
   z-index: 1;
 }
+.apexcharts-svg path {
+  stroke-width: 2px;
+}
+.radial .apexcharts-svg path {
+  stroke-width: 8px;
+}
+ .dounut_chart .apexcharts-legend-text, .revenue_dounut_chart .apexcharts-legend-text{
+  @apply !text-[14px] dark:!text-white !text-black
+ }
+ .worldmap__figure-caption{
+  @apply text-[20px] font-medium leading-8 tracking-[0.15px] dark:text-white text-[#212121]
+ }
+ .dounut_chart .apexcharts-legend-series{
+  @apply !flex gap-4 py-[7.5px] overflow-visible
+ }
+
+ .radial text{
+  @apply dark:!fill-[#fff];
+ } 
+
+ .revenue_dounut_chart foreignObject .apexcharts-legend {
+  @apply flex-col gap-4 text-left;
+ }
+
+ .revenue_dounut_chart .apexcharts-legend-text{
+  @apply ml-0;
+ }
+
+ .dark .worldmap__figure-container {
+  background-color: transparent !important;
+}
+.dark .worldmap__figure-container path {
+  stroke: #ccc !important;
+}
+.worldmap__figure-container path {
+  fill: #90caf9 !important;
+}
