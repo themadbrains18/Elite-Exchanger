@@ -16,6 +16,7 @@ const RevenueRsources = (props:propData) => {
 
   let [fee,setFee] = useState(0.00);
   let [profit,setProfit] = useState(0.00)
+  let [listingFee,setListingFee] = useState(0.00)
   const [cities,setCities] = useState([])
 
   useEffect(()=>{
@@ -26,20 +27,22 @@ calculateFeeorProfit()
     try {
       const { adminProfit } = props;
 
-      const { totalFees, totalProfit } = adminProfit.reduce(
+      const { totalFees, totalProfit,totalListingFee } = adminProfit.reduce(
         (acc:any, transaction:any) => {
 
           acc.totalFees += transaction.fees || 0;
 
           acc.totalProfit += transaction.profit || 0;
+          acc.totalListingFee += transaction.listing_fee || 0;
 
           return acc;
         },
-        { totalFees: 0, totalProfit: 0 } // Initial accumulator values
+        { totalFees: 0, totalProfit: 0,totalListingFee:0 } // Initial accumulator values
       );
 
       setFee(totalFees);
       setProfit(totalProfit);
+      setListingFee(totalListingFee);
       const groupCount = props?.activity.reduce((countMap:any, item:any) => {
         const { region } = item;
         countMap[region] = (countMap[region] || 0) + 1;
@@ -57,7 +60,7 @@ calculateFeeorProfit()
       <div className='w-full'>
         <div className=' w-full mt-[24px] '>
           {/* <RevenueDougnut /> */}
-          <DonutChartWithText  fee={fee} profit={profit}/>
+          <DonutChartWithText  fee={fee} profit={profit} listingFee={listingFee}/>
         </div>
         <div className=' w-full mt-[24px] '>
           <RoundedDoughnutChart cities={cities}/>

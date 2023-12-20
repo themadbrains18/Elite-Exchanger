@@ -7,7 +7,8 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 interface propData{
     fee:any;
-    profit:any
+    profit:any;
+    listingFee:any;
 }
 
 
@@ -49,7 +50,7 @@ const RevenueDougnut = (props:propData) => {
             },
         },
         colors: ['#3699FF', '#4AB58E', '#FFA800'],
-        series: [props?.profit, props?.fee, 45],
+        series: [props?.profit, props?.fee, props?.listingFee],
         labels: ['Trading Commission', 'Gas Fee', 'Token Listing'],
         dataLabels: {
             enabled: false,
