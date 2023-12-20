@@ -8,11 +8,7 @@ import { AES } from "crypto-js";
 import { signOut, useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-<<<<<<< HEAD
-import ConfirmPopup from "@/admin/admin-snippet/confirm-popup";
-=======
 import ConfirmPopup from "@/pages/customer/profile/confirm-popup";
->>>>>>> 41c938affdeddf96f9371e826baede0e421468ef
 import Verification from "../snippets/verification";
 
 import ConfirmationModel from "../snippets/confirmation";
@@ -930,6 +926,12 @@ const Historytrade = (props: propsData) => {
                         </th>
                         <th className=" py-5">
                           <div className="hidden md:flex">
+                            <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Created Time</p>
+                            <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                          </div>
+                        </th>
+                        <th className=" py-5">
+                          <div className="hidden md:flex">
                             <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Status</p>
                             <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                           </div>
@@ -966,6 +968,9 @@ const Historytrade = (props: propsData) => {
                             </td>
                             <td>
                               <p className="info-14-18 dark:text-white md:block hidden">{item.time_format}</p>
+                            </td>
+                            <td>
+                              <p className={`info-14-18 ${item?.status === false ? '!text-red-dark' : '!text-dark-green'} md:block hidden`}>{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss A')}</p>
                             </td>
                             <td>
                               <p className={`info-14-18 ${item?.status === false ? '!text-red-dark' : '!text-dark-green'} md:block hidden`}>{item?.status === false ? 'Pending' : 'Success'}</p>
