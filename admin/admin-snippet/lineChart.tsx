@@ -15,7 +15,7 @@ interface ChartData {
 const LineChart = () => {
     const {mode} = useContext(Context)
 
-    console.log(mode,"==mode");
+    // console.log(mode,"==mode");
     
 
   const [chartData, setChartData] = useState<ChartData>({
