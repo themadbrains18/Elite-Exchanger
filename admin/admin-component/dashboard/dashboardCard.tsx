@@ -13,7 +13,7 @@ const DashboardCards = (props:list) => {
     return x.statusType === false
   })
   
-  console.log(props.tradeList,"==dhjhdj");
+  // console.log(props.tradeList,"==dhjhdj");
   
   let data = [
     {

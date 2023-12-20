@@ -7,6 +7,7 @@ import ReactPaginate from "react-paginate";
 import Context from "@/components/contexts/context";
 import AddNetwork from "./addNetwork";
 import { useSession } from "next-auth/react";
+import { ToastContainer, toast } from "react-toastify";
 
 interface Session {
   coinList?: any,
@@ -23,7 +24,7 @@ const AllCoins = (props: Session) => {
   const { mode } = useContext(Context)
   const [total, setTotal] = useState(0)
   const [list, setList] = useState([])
-  const {data:session} = useSession()
+  const { data: session } = useSession()
 
   let itemsPerPage = 10;
 
@@ -36,6 +37,10 @@ const AllCoins = (props: Session) => {
     if (itemOffset === undefined) {
       itemOffset = 0;
     }
+    if (total > 0 && total - itemOffset < 10) {
+      itemsPerPage = total - itemOffset
+    }
+
     let tokenList = await fetch(`/api/token/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
       method: "GET",
       headers: {
@@ -68,29 +73,30 @@ const AllCoins = (props: Session) => {
     }
 
   }
-  function selectAll(){
+  function selectAll() {
     let allInputs = document?.querySelectorAll('.admin-table-data > input');
     let mainInput = document?.querySelector('.admin-table-heading > input');
-    if(mainInput){
-      mainInput.addEventListener("click",()=>{
-          for(let i of allInputs){
-            if (i instanceof HTMLInputElement) {
+    if (mainInput) {
+      mainInput.addEventListener("click", () => {
+        for (let i of allInputs) {
+          if (i instanceof HTMLInputElement) {
             console.log(i.value);
-            }
-            
-            // i.click();
+          }
+
+          // i.click();
           // if(i === true){
           //   i.checked = false
           // }else{
           //   i.checked = true
           // }
-          }
+        }
       })
     }
   }
 
   return (
     <>
+      <ToastContainer />
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${(show || editShow || networkShow) ? "opacity-80 visible" : "opacity-0 invisible"
           }`}
@@ -127,7 +133,7 @@ const AllCoins = (props: Session) => {
                 <th className="p-[10px]  text-start dark:!text-[#ffffffb3] admin-table-heading">
                   <input id="mainCheckbox" type="checkbox" className="hidden" />
                   <label
-                    onClick={()=>{selectAll()}}
+                    onClick={() => { selectAll() }}
                     htmlFor="mainCheckbox"
                     className="
                           relative

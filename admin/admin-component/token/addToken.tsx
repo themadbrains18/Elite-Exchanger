@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
+import { useSession } from "next-auth/react";
 
 interface activeSection {
   setShow: Function;
@@ -79,7 +80,7 @@ const AddToken = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [tokenImage, setTokenImage] = useState("");
   const [tokenImg, setTokenImg] = useState("");
-
+  const {data:session} = useSession()
   let {
     register,
     setValue,
@@ -168,17 +169,21 @@ const AddToken = (props: activeSection) => {
       formData.append("max_price", data?.max_price?.toString() || "");
       formData.append("networks", JSON.stringify(networks));
       formData.append("type", "admin");
+      formData.append('fees',"500");
 
       
       let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/create`, {
         method: "POST",
+        headers: {
+          "Authorization": session?.user?.access_token || ''
+        },
         body: formData,
       });
 
       let result = await res.json();
 
       if (result?.result) {
-        toast.success("token add Successfully");
+        toast.success(result?.message);
         props?.setShow(false);
         reset();
         setTokenImage("");

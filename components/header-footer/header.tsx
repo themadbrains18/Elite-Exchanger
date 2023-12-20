@@ -121,7 +121,7 @@ const Header = (props: propsData) => {
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
       method: "GET"
     }).then(response => response.json());
-// console.log(tokenList,"==hfjdhjfhdjfj");
+    // console.log(tokenList,"==hfjdhjfhdjfj");
 
     let spot = tokenList?.data.filter((item: any) => {
       return item.tradePair !== null
