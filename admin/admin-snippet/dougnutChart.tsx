@@ -6,8 +6,18 @@ import Context from '@/components/contexts/context';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
+interface propData{
+  cities:any
+}
 
-const RoundedDoughnutChart = () => {
+const RoundedDoughnutChart = (props:propData) => {
+  // console.log(props?.cities,"==sjdhjs");
+  
+  const seriesValues:any = Object.values(props?.cities) || [];
+
+ 
+
+
   const { mode } = useContext(Context)
 
   const chartOptions:ApexCharts.ApexOptions = {
@@ -52,8 +62,8 @@ const RoundedDoughnutChart = () => {
     },
     colors: ['#42A5F5', '#4AB58E', '#5F5CF1', '#FCC419', '#723F65'],
 
-    series: [28, 20, 19, 11, 20],
-    labels: ['India', 'United States', 'Germany', 'Bolivia', 'Australia'],
+    series: seriesValues || [],
+    labels: Object.keys(props?.cities),
     dataLabels: {
       enabled: false, // Disable data labels by default
     },
@@ -69,7 +79,7 @@ const RoundedDoughnutChart = () => {
       },
       formatter: function (seriesName:string, opts:any) {
         // Customize legend text and add values
-        return `${seriesName}: ${opts.w.globals.series[opts.seriesIndex]}%`;
+        return `${seriesName}: ${opts.w.globals.series[opts.seriesIndex]}`;
       },
        
       // formatter: function (val:any, opts:any) {

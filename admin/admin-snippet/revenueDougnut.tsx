@@ -5,7 +5,13 @@ import ReactApexChart from 'react-apexcharts';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const RevenueDougnut = () => {
+interface propData{
+    fee:any;
+    profit:any
+}
+
+
+const RevenueDougnut = (props:propData) => {
     const { mode } = useContext(Context);
 
     const chartOptions: ApexCharts.ApexOptions = {
@@ -43,7 +49,7 @@ const RevenueDougnut = () => {
             },
         },
         colors: ['#3699FF', '#4AB58E', '#FFA800'],
-        series: [10.5, 17.5, 42],
+        series: [props?.profit, props?.fee, 45],
         labels: ['Trading Commission', 'Gas Fee', 'Token Listing'],
         dataLabels: {
             enabled: false,
@@ -65,7 +71,7 @@ const RevenueDougnut = () => {
             },
             formatter: function (seriesName: any, opts: any) {
                 const percentage = opts.w.globals.series[opts.seriesIndex];
-                return `${seriesName}:\n${percentage}B USD`;
+                return `${seriesName}:\n${percentage} USD`;
             },
         },
     };

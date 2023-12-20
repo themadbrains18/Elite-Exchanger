@@ -16,6 +16,8 @@ interface propsData {
   topgainer: any;
   userList:any;
   tradeList:any;
+  adminProfit:any;
+  activity:any;
 
   session: {
     user: any;
@@ -53,7 +55,7 @@ const Index = (props: propsData) => {
           <MarketOverview />
         </div>
         <div className="max-w-[30%] w-full">
-          <RevenueRsources />
+          <RevenueRsources  adminProfit={props?.adminProfit} activity={props?.activity}/>
         </div>
       </div>
     </DasboardLayout>
@@ -79,8 +81,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   let userAssets: any = [];
   let users: any = [];
   let trades: any = [];
+  let profit: any = [];
+  let activityList:any=[]
   if (session) {
-    console.log(session)
+    // console.log(session)
 
     userAssets = await fetch(
       `${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${session?.user?.user_id}`,
@@ -101,6 +105,27 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         },
       }
     ).then((response) => response.json());
+
+    profit = await fetch(
+      `${process.env.NEXT_PUBLIC_BASEURL}/user/adminProfit`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: session?.user?.access_token,
+        },
+      }
+    ).then((response) => response.json());
+    activityList = await fetch(
+      `${process.env.NEXT_PUBLIC_BASEURL}/activity/list`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: session?.user?.access_token,
+        },
+      }
+    ).then((response) => response.json());
+
+    
  
     trades = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market/list?itemOffset=0&itemsPerPage=10`, {
       method: "GET",
@@ -118,8 +143,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       // coinList: tokenList?.data,
       userList:users?.data || [],
       tradeList:trades?.data  || [],
+      adminProfit:profit?.data || [],
       assets: userAssets,
       topgainer: tokenList2,
+      activity:activityList.data
       // allUsers:allUsers
     },
   };

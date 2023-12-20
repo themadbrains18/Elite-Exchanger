@@ -5,7 +5,7 @@ import TopHolders from "@/admin/admin-component/users/topHolders";
 import UserCard from "@/admin/admin-component/users/userCard";
 import DasboardLayout from "../../../components/layout/dasboard-layout";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { getProviders } from "next-auth/react";
@@ -16,10 +16,13 @@ import TraficResources from "@/admin/admin-component/users/trafic-resources";
 interface Session {
   users:any,
   networks:any,
-  session:any
+  session:any,
+  activity:any
 }
 
 const User = (props:Session) => {
+  const [cities,setCities] = useState([])
+
   const data = [
     { country: "cn", value: '1389618778' }, 
     { country: "in", value: '1311559204' },
@@ -33,6 +36,16 @@ const User = (props:Session) => {
     { country: "mx", value: '127318112' }, 
   ];
   
+
+  useEffect(()=>{
+    const groupCount = props?.activity.reduce((countMap:any, item:any) => {
+      const { region } = item;
+      countMap[region] = (countMap[region] || 0) + 1;
+      return countMap;
+    }, {});
+    setCities(groupCount)
+  },[])
+
   return (
     <DasboardLayout>
       <UserCard />
@@ -57,7 +70,7 @@ const User = (props:Session) => {
             />
         </div>
         {/* rounded Doughnut Chart */}
-        <RoundedDoughnutChart />
+        <RoundedDoughnutChart cities={cities}/>
         <TraficResources /> 
        
       </div>
@@ -80,6 +93,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     }).then(response => response.json());
     
+  let  activityList = await fetch(
+      `${process.env.NEXT_PUBLIC_BASEURL}/activity/list`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: session?.user?.access_token,
+        },
+      }
+    ).then((response) => response.json());
 
    let networks = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/network`, {
       method: "GET",
@@ -89,7 +111,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     
     }).then(response => response.json());
 
-    console.log(networks,"==hjhkjh");
+    // console.log(networks,"==hjhkjh");
 
   return {
     props: {
@@ -97,7 +119,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       sessions: session,
       provider: providers,
       users : users?.data?.data,
-      networks: networks?.data
+      networks: networks?.data,
+      activity:activityList?.data
     },
   };
   // if (session) {
