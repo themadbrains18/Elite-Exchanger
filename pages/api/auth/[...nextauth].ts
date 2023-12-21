@@ -47,7 +47,7 @@ export const authOptions: NextAuthOptions = {
                 else{
                     // console.log(token,'==============token==============');
                     
-                    session.user = { name: token?.own_code, email: session.user?.email, number: token?.number, user_id: token.id, access_token: token?.access_token, refer_code: token?.own_code, TwoFA:datauser?.data?.TwoFA === 1?true:false, secret:datauser?.data?.secret } as any;
+                    session.user = { name: token?.own_code, email: session.user?.email, number: token?.number, user_id: token.id, access_token: token?.access_token, refer_code: token?.own_code, TwoFA:datauser?.data?.TwoFA === 1?true:false, secret:datauser?.data?.secret, role : token?.role } as any;
                 }
             }
             

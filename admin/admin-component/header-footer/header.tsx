@@ -1,10 +1,11 @@
+import { useSession } from 'next-auth/react'
 import AdminIcons from '../../admin-snippet/admin-icons'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import React, { Fragment } from 'react'
 
 const DashboardHeader = () => {
-
+  const { data: session, status } = useSession();
 
   let Headingsdata = [
     {
@@ -86,7 +87,7 @@ const DashboardHeader = () => {
           <div className='flex items-center gap-10'>
             <Image src="/assets/admin/Avatar.png" alt="search" width={40} height={40} />
             <div>
-              <p className='admin-body-text'>Allie Grater</p>
+              <p className='admin-body-text'>{session?.user?.email}</p>
               <p className='admin-body-text !text-table-heading'>Admin</p>
             </div>
           </div>
