@@ -120,7 +120,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       provider: providers,
       users : users?.data?.data,
       networks: networks?.data,
-      activity:activityList?.data
+      activity:activityList?.data || []
     },
   };
   // if (session) {

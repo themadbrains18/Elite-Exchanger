@@ -146,7 +146,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       adminProfit:profit?.data || [],
       assets: userAssets,
       topgainer: tokenList2,
-      activity:activityList.data
+      activity:activityList.data || []
       // allUsers:allUsers
     },
   };

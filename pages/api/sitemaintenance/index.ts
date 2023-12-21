@@ -13,7 +13,8 @@ export const config = {
 router
     .get(async (req, res) => {
         try {
-            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/site`);     
+            let token = req.headers.authorization;
+            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/site`,token);     
             return res.status(200).send({ data });
 
         } catch (error: any) {
