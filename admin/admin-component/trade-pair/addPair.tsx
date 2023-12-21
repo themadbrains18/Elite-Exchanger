@@ -6,6 +6,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import { AES } from "crypto-js";
+import { useSession } from "next-auth/react";
 
 interface ActiveSession {
   data: any;
@@ -38,6 +39,7 @@ const schema = yup.object().shape({
 
 const AddPair = (props: ActiveSession) => {
   const { mode } = useContext(Context);
+  const {data:session} =useSession()
 
   let {
     register,
@@ -72,6 +74,8 @@ const AddPair = (props: ActiveSession) => {
 
   const onHandleSubmit = async (data: any) => {
     try {
+      console.log("=hii",data);
+      
       if (getValues("tokenOne") === getValues("tokenTwo")) {
         setError("tokenTwo", { message: "Same tokens are not allowed" })
       }
@@ -86,7 +90,7 @@ const AddPair = (props: ActiveSession) => {
         let res = await fetch(`/api/pair/create`, {
           headers: {
             "Content-type": "application/json",
-            Authorization: props?.session?.user?.access_token,
+            Authorization: session?.user?.access_token || "",
           },
           method: "POST",
           mode: "cors",

@@ -5,6 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import { AES } from "crypto-js";
+import { useSession } from "next-auth/react";
 
 interface ActiveSession {
   data: any;
@@ -21,6 +22,7 @@ const schema = yup.object().shape({
 
 const AddList = (props: ActiveSession) => {
   const { mode } = useContext(Context);
+  const {data:session} = useSession()
 
   let {
     register,
@@ -42,7 +44,7 @@ const AddList = (props: ActiveSession) => {
       let res = await fetch(`/api/sitemaintenance/create`, {
         headers: {
           "Content-type": "application/json",
-          Authorization: props?.session?.user?.access_token || "",
+          Authorization: session?.user?.access_token || "",
         },
         method: "POST",
         body: JSON.stringify(record),

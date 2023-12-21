@@ -225,7 +225,7 @@ const router=useRouter()
                       </td>
                       <td className=" py-[14px] flex gap-[10px] items-center admin-table-data">
                         <Image
-                          src={`${item?.token !== null ? item?.token?.image : item?.global_token?.image}`}
+                          src={`${item?.token !== null || item?.token !==undefined ? item?.token?.image : item?.global_token?.image}`}
                           width={32}
                           height={32}
                           alt="avtar"

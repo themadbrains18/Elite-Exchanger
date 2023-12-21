@@ -57,7 +57,7 @@ const CoinTypes = (props: propsData) => {
         }
 
         let coinsItem = props?.coins.filter((item: any) => {
-            if (existItem.includes(item?.id)) {
+            if (existItem?.includes(item?.id)) {
                 return item;
             }
         })
@@ -136,7 +136,7 @@ const CoinTypes = (props: propsData) => {
                                     existItem = JSON.parse(existItem);
                                 }
 
-                                if (existItem.includes(item?.id)) {
+                                if (existItem?.includes(item?.id)) {
                                     if (mode == "dark") {
                                         color = "fill-[#fff]";
                                     } else {

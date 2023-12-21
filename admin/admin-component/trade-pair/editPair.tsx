@@ -6,6 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import Context from '@/components/contexts/context';
 import { AES } from 'crypto-js';
+import { useSession } from 'next-auth/react';
 
 interface ActiveSession {
   editPair: any;
@@ -38,6 +39,7 @@ const schema = yup.object().shape({
 
 const EditPair = (props: ActiveSession) => {
   const { mode } = useContext(Context);
+  const {data:session} = useSession()
   let {
     register,
     setValue,
@@ -96,7 +98,7 @@ const EditPair = (props: ActiveSession) => {
         let res = await fetch(`/api/pair/edit`, {
           headers: {
             "Content-type": "application/json",
-            "Authorization": props?.session?.user?.access_token
+            "Authorization": session?.user?.access_token
           },
           method: "POST",
           body: JSON.stringify(record),

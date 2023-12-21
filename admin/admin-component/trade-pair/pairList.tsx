@@ -7,6 +7,7 @@ import EditPair from "./editPair";
 import ReactPaginate from "react-paginate";
 import Context from "@/components/contexts/context";
 import { AES } from "crypto-js";
+import { useSession } from "next-auth/react";
 
 interface Session {
   list?: any;
@@ -34,6 +35,7 @@ const PairList = (props: Session) => {
   const [list, setList] = useState([]);
   const [itemOffset, setItemOffset] = useState(0);
   const { mode } = useContext(Context);
+  const {data:session} = useSession()
 
   const [total, setTotal] = useState(0);
 
@@ -61,7 +63,7 @@ const PairList = (props: Session) => {
         {
           method: "GET",
           headers: {
-            "Authorization": props?.session?.user?.access_token
+            "Authorization": session?.user?.access_token
         },
         }
       ).then((response) => response.json());
@@ -91,7 +93,7 @@ const PairList = (props: Session) => {
         {
           headers: {
             "content-type": "application/json",
-            "Authorization": props?.session?.user?.access_token
+            "Authorization": session?.user?.access_token
           },
           method: "PUT",
           body: JSON.stringify(record),

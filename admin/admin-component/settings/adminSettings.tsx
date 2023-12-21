@@ -122,7 +122,7 @@ const AdminSettings = (props: fixSection) => {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
-              "Authorization": session?.user?.access_token,
+              "Authorization": session?.user?.access_token || " ",
             },
             body: JSON.stringify(record),
           }
@@ -166,7 +166,7 @@ const AdminSettings = (props: fixSection) => {
           method: "PUT",
           headers: {
             'Content-Type': 'application/json',
-            "Authorization": session?.user?.access_token
+            "Authorization": session?.user?.access_token || ""
           },
           body: JSON.stringify(record)
         })

@@ -6,6 +6,7 @@ import { Controller, useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import Context from "@/components/contexts/context";
 import { AES } from "crypto-js";
+import { useSession } from "next-auth/react";
 
 interface ActiveSession {
   setEditShow: Function;
@@ -21,6 +22,7 @@ const schema = yup.object().shape({
 
 const EditModel = (props: ActiveSession) => {
   const { mode } = useContext(Context);
+  const {data:session} = useSession()
   let {
     register,
     setValue,
@@ -49,7 +51,7 @@ const EditModel = (props: ActiveSession) => {
       let res = await fetch(`/api/sitemaintenance/edit`, {
         headers: {
           "Content-type": "application/json",
-          Authorization: props?.session?.user?.access_token,
+          Authorization: session?.user?.access_token || "",
         },
         method: "PUT",
         body: JSON.stringify(record),
