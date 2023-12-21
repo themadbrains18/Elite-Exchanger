@@ -11,23 +11,28 @@ const Notification = (props: propsData) => {
   const { status, data: session } = useSession();
 
   const updateNotificationStatus = async (id: string, user_id: string) => {
+try {
+  let obj = {
+    userid: user_id,
+    id: id,
+  };
 
-    let obj = {
-      userid: user_id,
-      id: id,
-    };
+  let profileDashboard = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/notification`, {
+    method: "PUT",
+    headers: {
+      "Authorization": session?.user?.access_token
+    },
+    body: JSON.stringify(obj),
+  }).then(response => response.json());
 
-    let profileDashboard = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/notification`, {
-      method: "PUT",
-      headers: {
-        "Authorization": session?.user?.access_token
-      },
-      body: JSON.stringify(obj),
-    }).then(response => response.json());
-
-    if (profileDashboard) {
-      props.getUserNotification();
-    }
+  if (profileDashboard) {
+    props.getUserNotification();
+  }
+  
+} catch (error) {
+  console.log("error in notification",error);
+  
+}
   }
 
   return (

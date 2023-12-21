@@ -48,19 +48,25 @@ const FuturePairList = (props: Session) => {
     }
 
     const getToken = async (itemOffset: number) => {
-        if (itemOffset === undefined) {
-            itemOffset = 0;
-        }
-
-        let pairList = await fetch(
-            `${process.env.NEXT_PUBLIC_APIURL}/future/${itemOffset}/${itemsPerPage}`,
-            {
-                method: "GET",
+        try {
+            if (itemOffset === undefined) {
+                itemOffset = 0;
             }
-        ).then((response) => response.json());
-        // setFreshPairList(pairList?.data)
-        setList(pairList?.data);
-        setTotal(pairList?.total);
+    
+            let pairList = await fetch(
+                `${process.env.NEXT_PUBLIC_APIURL}/future/${itemOffset}/${itemsPerPage}`,
+                {
+                    method: "GET",
+                }
+            ).then((response) => response.json());
+            // setFreshPairList(pairList?.data)
+            setList(pairList?.data);
+            setTotal(pairList?.total);
+        } catch (error) {
+            console.log("error in get list of future trade pair",error);
+            
+        }
+      
     };
     const pageCount = Math.ceil(total / itemsPerPage);
 
@@ -70,22 +76,28 @@ const FuturePairList = (props: Session) => {
     };
 
     const updateStatus = async (data: any) => {
-        console.log(data, "===data");
-
-        let responseStatus = await fetch(
-            `${process.env.NEXT_PUBLIC_APIURL}/future/change/status`,
-            {
-                headers: {
-                    "content-type": "application/json",
-                },
-                method: "PUT",
-                body: JSON.stringify(data),
+        // console.log(data, "===data");
+        try {
+            let responseStatus = await fetch(
+                `${process.env.NEXT_PUBLIC_APIURL}/future/change/status`,
+                {
+                    headers: {
+                        "content-type": "application/json",
+                    },
+                    method: "PUT",
+                    body: JSON.stringify(data),
+                }
+            ).then((response) => response.json());
+    
+            if (responseStatus) {
+                refreshPairList();
             }
-        ).then((response) => response.json());
-
-        if (responseStatus) {
-            refreshPairList();
+        } catch (error) {
+            console.log("error in update ststua of future pair list",error);
+            
         }
+
+        
     };
 
     return (

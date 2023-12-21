@@ -32,33 +32,39 @@ const ActivityLogsTable = (props:propData) => {
   let itemsPerPage = 10;
 
   useEffect(() => {
-    getToken(itemOffset);
+    getActivity(itemOffset);
   }, [itemOffset]);
 
-  const getToken = async (itemOffset: number) => {
-    if (itemOffset === undefined) {
-      itemOffset = 0;
+  const getActivity = async (itemOffset: number) => {
+    try {
+      if (itemOffset === undefined) {
+        itemOffset = 0;
+      }
+      let activity=[]
+      if(props?.type==="details"){
+       activity = await fetch(`/api/activity?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+        method: "GET",
+        headers: {
+          "Authorization": session?.user?.access_token || ''
+      },
+      
+      }).then(response => response.json());
+  }
+      else{
+           activity = await fetch(`/api/activity/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+              method: "GET",
+              headers: {
+                "Authorization": session?.user?.access_token || ''
+            },
+            }).then(response => response.json());
+      }
+      setList(activity?.data?.data);
+      setTotal(activity?.data?.total);
+      
+    } catch (error) {
+      console.log("error in get activity details",error);
+      
     }
-    let activity=[]
-    if(props?.type==="details"){
-     activity = await fetch(`/api/activity?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-      method: "GET",
-      headers: {
-        "Authorization": session?.user?.access_token || ''
-    },
-    
-    }).then(response => response.json());
-}
-    else{
-         activity = await fetch(`/api/activity/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-            method: "GET",
-            headers: {
-              "Authorization": session?.user?.access_token || ''
-          },
-          }).then(response => response.json());
-    }
-    setList(activity?.data?.data);
-    setTotal(activity?.data?.total);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 

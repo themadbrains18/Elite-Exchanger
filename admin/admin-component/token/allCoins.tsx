@@ -34,21 +34,27 @@ const AllCoins = (props: Session) => {
 
 
   const getToken = async (itemOffset: number) => {
-    if (itemOffset === undefined) {
-      itemOffset = 0;
+    try {
+      if (itemOffset === undefined) {
+        itemOffset = 0;
+      }
+      if (total > 0 && total - itemOffset < 10) {
+        itemsPerPage = total - itemOffset
+      }
+  
+      let tokenList = await fetch(`/api/token/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+        method: "GET",
+        headers: {
+          "Authorization": session?.user?.access_token || ''
+        },
+      }).then(response => response.json());
+      setList(tokenList?.data?.data)
+      setTotal(tokenList?.data?.total);
+      
+    } catch (error) {
+      console.log("get all token list error in admin",error);
+      
     }
-    if (total > 0 && total - itemOffset < 10) {
-      itemsPerPage = total - itemOffset
-    }
-
-    let tokenList = await fetch(`/api/token/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-      method: "GET",
-      headers: {
-        "Authorization": session?.user?.access_token || ''
-      },
-    }).then(response => response.json());
-    setList(tokenList?.data?.data)
-    setTotal(tokenList?.data?.total);
   }
   const pageCount = Math.ceil(total / itemsPerPage);
 
@@ -58,18 +64,24 @@ const AllCoins = (props: Session) => {
   };
 
   const updateStatus = async (data: any) => {
-    let responseStatus = await fetch(`api/token/list`, {
-      headers: {
-        "content-type": "application/json",
-        "Authorization": session?.user?.access_token || ''
-      },
-      method: "PUT",
-      body: JSON.stringify(data),
-    }).then((response) => response.json());
+    try {
+      let responseStatus = await fetch(`api/token/list`, {
+        headers: {
+          "content-type": "application/json",
+          "Authorization": session?.user?.access_token || ''
+        },
+        method: "PUT",
+        body: JSON.stringify(data),
+      }).then((response) => response.json());
+  
+      if (responseStatus) {
+        getToken(itemOffset)
+        props.refreshTokenList(responseStatus);
+      }
+      
+    } catch (error) {
+      console.log("error in token status update",error);
 
-    if (responseStatus) {
-      getToken(itemOffset)
-      props.refreshTokenList(responseStatus);
     }
 
   }
@@ -335,7 +347,7 @@ const AllCoins = (props: Session) => {
                         }
                         {item?.tokenType === 'global' &&
                           <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap" onClick={(e) => {
-                            setNetworkShow(true); console.log(item, '======item');
+                            setNetworkShow(true);
                             setEditToken(item)
                           }}>
                             Add Network

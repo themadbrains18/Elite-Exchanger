@@ -50,23 +50,29 @@ const PairList = (props: Session) => {
   }
 
   const getToken = async (itemOffset: number) => {
-    if (itemOffset === undefined) {
-      itemOffset = 0;
-    }
-
-
-    let pairList = await fetch(
-      `/api/pair?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
-      {
-        method: "GET",
-        headers: {
-          "Authorization": props?.session?.user?.access_token
-      },
+    try {
+      if (itemOffset === undefined) {
+        itemOffset = 0;
       }
-    ).then((response) => response.json());
-    // setFreshPairList(pairList?.data)
-    setList(pairList?.data?.data);
-    setTotal(pairList?.data?.total);
+  
+  
+      let pairList = await fetch(
+        `/api/pair?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
+        {
+          method: "GET",
+          headers: {
+            "Authorization": props?.session?.user?.access_token
+        },
+        }
+      ).then((response) => response.json());
+      // setFreshPairList(pairList?.data)
+      setList(pairList?.data?.data);
+      setTotal(pairList?.data?.total);
+      
+    } catch (error) {
+      console.log(error,"error");
+      
+    }
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 
@@ -76,25 +82,31 @@ const PairList = (props: Session) => {
   };
 
   const updateStatus = async (data: any) => {
-    const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-    let record =  encodeURIComponent(ciphertext.toString());
-
-    let responseStatus = await fetch(
-      `/api/pair`,
-      {
-        headers: {
-          "content-type": "application/json",
-          "Authorization": props?.session?.user?.access_token
-        },
-        method: "PUT",
-        body: JSON.stringify(record),
+    try {
+      const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+      let record =  encodeURIComponent(ciphertext.toString());
+  
+      let responseStatus = await fetch(
+        `/api/pair`,
+        {
+          headers: {
+            "content-type": "application/json",
+            "Authorization": props?.session?.user?.access_token
+          },
+          method: "PUT",
+          body: JSON.stringify(record),
+        }
+      ).then((response) => response.json());
+  
+      // console.log(responseStatus, "==responseStatus");
+  
+      if (responseStatus) {
+        refreshPairList();
       }
-    ).then((response) => response.json());
-
-    console.log(responseStatus, "==responseStatus");
-
-    if (responseStatus) {
-      refreshPairList();
+      
+    } catch (error) {
+      console.log(error,"error in pair update");
+      
     }
   };
 

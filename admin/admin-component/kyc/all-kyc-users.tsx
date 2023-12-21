@@ -37,23 +37,29 @@ const AllKycUsers = () => {
   }, [itemOffset]);
 
   const getToken = async (itemOffset: number) => {
-    if (itemOffset === undefined) {
-      itemOffset = 0;
-    }
-    
-    let users = await fetch(
-      `/api/kyc/allUsers?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
-      {
-        method: "GET",
-        headers: {
-          "Authorization": session?.user?.access_token || ''
-      },
+    try {
+      if (itemOffset === undefined) {
+        itemOffset = 0;
       }
-    ).then((response) => response.json());
-
-
-    setList(users?.data?.data);
-    setTotal(users?.data?.total?.length);
+      
+      let users = await fetch(
+        `/api/kyc/allUsers?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
+        {
+          method: "GET",
+          headers: {
+            "Authorization": session?.user?.access_token || ''
+        },
+        }
+      ).then((response) => response.json());
+  
+  
+      setList(users?.data?.data);
+      setTotal(users?.data?.total?.length);
+    } catch (error) {
+      console.log("error in fetch list of kyc ",error);
+      
+    }
+  
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 
@@ -64,29 +70,35 @@ const AllKycUsers = () => {
 
 
   const handleUpdate = async (item: string, e: any) => {
-    let actionKyc = e.currentTarget.innerHTML;
+    try {
+      let actionKyc = e.currentTarget.innerHTML;
 
-    let obj = {
-      user_id: item,
-      isVerified: actionKyc === "Approve" && true,
-      isReject: actionKyc === "Reject" && true,
-    };
-    const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-    let record =  encodeURIComponent(ciphertext.toString());
-    let updated = await fetch(
-      `/api/kyc/status`,
-      {
-        headers: {
-          "Content-type": "application/json",
-          "Authorization": session?.user?.access_token || ''
-        },
-        mode: "cors",
-        method: "PUT",
-        body: JSON.stringify(record),
-      }
-    ).then((response) => response.json());
-
-    setList(updated?.data?.result);
+      let obj = {
+        user_id: item,
+        isVerified: actionKyc === "Approve" && true,
+        isReject: actionKyc === "Reject" && true,
+      };
+      const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+      let record =  encodeURIComponent(ciphertext.toString());
+      let updated = await fetch(
+        `/api/kyc/status`,
+        {
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": session?.user?.access_token || ''
+          },
+          mode: "cors",
+          method: "PUT",
+          body: JSON.stringify(record),
+        }
+      ).then((response) => response.json());
+  
+      setList(updated?.data?.result);
+    } catch (error) {
+      console.log("error in update status of kyc user ",error);
+      
+    }
+   
   };
 
   return (

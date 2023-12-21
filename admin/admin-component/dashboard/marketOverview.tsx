@@ -20,17 +20,23 @@ const MarketOverview = (props:list) => {
   }, [itemOffset])
 
   const getToken = async (itemOffset: number) => {
-    if (itemOffset === undefined) {
-      itemOffset = 0;
+    try {
+      if (itemOffset === undefined) {
+        itemOffset = 0;
+      }
+      let tokenList = await fetch(`/api/token/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+        method: "GET",
+        headers: {
+          "Authorization": session?.user?.access_token || ""
+      },
+      }).then(response => response.json());
+      setList(tokenList?.data?.data)
+      setTotal(tokenList?.data?.total);
+    } catch (error) {
+      console.log(error,"==error in market overview");
+      
     }
-    let tokenList = await fetch(`/api/token/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-      method: "GET",
-      headers: {
-        "Authorization": session?.user?.access_token || ""
-    },
-    }).then(response => response.json());
-    setList(tokenList?.data?.data)
-    setTotal(tokenList?.data?.total);
+   
   }
   const pageCount = Math.ceil(total / itemsPerPage);
 

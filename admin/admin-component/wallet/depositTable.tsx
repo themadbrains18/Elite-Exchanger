@@ -34,36 +34,42 @@ const DepositTable = (props:propData) => {
   let itemsPerPage = 10;
 
   useEffect(() => {
-    getToken(itemOffset);
+    getDeposit(itemOffset);
   }, [itemOffset]);
 
-  const getToken = async (itemOffset: number) => {
-    if (itemOffset === undefined) {
-      itemOffset = 0;
-    }
-    let deposit=[]
-    
-    if(props?.type==="details"){
-      deposit = await fetch(`/api/deposit/history?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-        method: "GET",
-        headers: {
-          "Authorization": session?.user?.access_token || ""
-      },
-      }).then(response => response.json());
-    }
-    else{
-       deposit = await fetch(`/api/deposit/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-        method: "GET",
-        headers: {
-          "Authorization": session?.user?.access_token || ""
-      },          
+  const getDeposit = async (itemOffset: number) => {
+    try {
+      if (itemOffset === undefined) {
+        itemOffset = 0;
+      }
+      let deposit=[]
       
-      }).then(response => response.json());
+      if(props?.type==="details"){
+        deposit = await fetch(`/api/deposit/history?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+          method: "GET",
+          headers: {
+            "Authorization": session?.user?.access_token || ""
+        },
+        }).then(response => response.json());
+      }
+      else{
+         deposit = await fetch(`/api/deposit/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+          method: "GET",
+          headers: {
+            "Authorization": session?.user?.access_token || ""
+        },          
+        
+        }).then(response => response.json());
+  
+      }
+  
+      setList(deposit?.data?.data);
+      setTotal(deposit?.data?.total);
+      
+    } catch (error) {
+      console.log("error in details history",error);
 
     }
-
-    setList(deposit?.data?.data);
-    setTotal(deposit?.data?.total);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 

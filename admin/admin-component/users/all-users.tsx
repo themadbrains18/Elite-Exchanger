@@ -33,22 +33,28 @@ const AllUsers = (props: usersList) => {
   }, [itemOffset]);
 
   const getToken = async (itemOffset: number) => {
-    if (itemOffset === undefined) {
-      itemOffset = 0;
-    }
-    let users = await fetch(
-      `/api/user/all?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
-      {
-        method: "GET",
-        headers: {
-          "Authorization": props?.session?.user?.access_token
-      },
+    try {
+      if (itemOffset === undefined) {
+        itemOffset = 0;
       }
-    ).then((response) => response.json());
-
-
-    setList(users?.data?.data);
-    setTotal(users?.data?.total);
+      let users = await fetch(
+        `/api/user/all?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
+        {
+          method: "GET",
+          headers: {
+            "Authorization": props?.session?.user?.access_token
+        },
+        }
+      ).then((response) => response.json());
+  
+  
+      setList(users?.data?.data);
+      setTotal(users?.data?.total);
+      
+    } catch (error) {
+      console.log("error in get token list",error);
+      
+    }
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 
@@ -62,21 +68,27 @@ const AllUsers = (props: usersList) => {
   }
 
   const updateStatus = async (data: any) => {
-    data.statusType = data.statusType === true ? false : true;
-    const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-    let record =  encodeURIComponent(ciphertext.toString());
-    let updated = await fetch(
-      `/api/user/status`,
-      {
-        headers: {
-          "content-type": "application/json",
-          "Authorization": props?.session?.user?.access_token
-        },
-        method: "PUT",
-        body: JSON.stringify(record),
-      }
-    ).then((response) => response.json());
-    setList(updated?.data?.result);
+    try {
+      data.statusType = data.statusType === true ? false : true;
+      const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+      let record =  encodeURIComponent(ciphertext.toString());
+      let updated = await fetch(
+        `/api/user/status`,
+        {
+          headers: {
+            "content-type": "application/json",
+            "Authorization": props?.session?.user?.access_token
+          },
+          method: "PUT",
+          body: JSON.stringify(record),
+        }
+      ).then((response) => response.json());
+      setList(updated?.data?.result);
+      
+    } catch (error) {
+      console.log("error in update user status",error);
+      
+    }
   };
 
   const filterData = (e: any) => {
@@ -92,26 +104,32 @@ const AllUsers = (props: usersList) => {
   };
 
   const refreshTransaction = async (network: any) => {
-    let address = "";
-    Object.keys(wallets?.wallets[0]?.wallets).filter((e) => {
-      console.log(wallets, "===wallets");
-
-      if (e === network?.walletSupport) {
-        address = wallets.wallets[0]?.wallets[e]?.address;
-      }
-    });
-    let response = await fetch(
-      `${process.env.NEXT_PUBLIC_APIURL}/user/scan/${address}/${network?.chainId}/${wallets?.id}`,
-      {
-        headers: {
-          "content-type": "application/json",
-        },
-        method: "GET",
-      }
-    );
-
-    let data = await response.json();
-    console.log(data);
+    try {
+      let address = "";
+      Object.keys(wallets?.wallets[0]?.wallets).filter((e) => {
+        console.log(wallets, "===wallets");
+  
+        if (e === network?.walletSupport) {
+          address = wallets.wallets[0]?.wallets[e]?.address;
+        }
+      });
+      let response = await fetch(
+        `${process.env.NEXT_PUBLIC_APIURL}/user/scan/${address}/${network?.chainId}/${wallets?.id}`,
+        {
+          headers: {
+            "content-type": "application/json",
+          },
+          method: "GET",
+        }
+      );
+  
+      let data = await response.json();
+      // console.log(data);
+      
+    } catch (error) {
+      console.log("error in refresh transaction",error);
+      
+    }
   };
 
   return (

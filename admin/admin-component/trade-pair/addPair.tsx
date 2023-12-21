@@ -57,7 +57,7 @@ const AddPair = (props: ActiveSession) => {
   });
 
   const setCurrency = (symbol: any, dropdown: number) => {
-    console.log(symbol, dropdown, "==hdkfjh");
+    // console.log(symbol, dropdown, "==hdkfjh");
     if (dropdown === 1) {
       setValue("tokenOne", symbol?.id);
       setValue("symbolOne", symbol?.symbol);
@@ -71,42 +71,48 @@ const AddPair = (props: ActiveSession) => {
   };
 
   const onHandleSubmit = async (data: any) => {
-    if (getValues("tokenOne") === getValues("tokenTwo")) {
-      setError("tokenTwo", { message: "Same tokens are not allowed" })
-    }
-    else {
-      data.status = true;
-      const ciphertext = AES.encrypt(
-        JSON.stringify(data),
-        `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
-      );
-      let record = encodeURIComponent(ciphertext.toString());
+    try {
+      if (getValues("tokenOne") === getValues("tokenTwo")) {
+        setError("tokenTwo", { message: "Same tokens are not allowed" })
+      }
+      else {
+        data.status = true;
+        const ciphertext = AES.encrypt(
+          JSON.stringify(data),
+          `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+        );
+        let record = encodeURIComponent(ciphertext.toString());
+  
+        let res = await fetch(`/api/pair/create`, {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: props?.session?.user?.access_token,
+          },
+          method: "POST",
+          mode: "cors",
+          body: JSON.stringify(record),
+        });
+        let result = await res.json();
+        // console.log(result);
+        if (result?.data?.status === 200) {
+          toast.success(result?.data?.data?.message);
+          props.refreshPairList();
+          setTimeout(() => {
+            props?.setShow(false);
+          }, 1000);
+        }
+        if (result?.data?.status === 409) {
+          toast.warning(result?.data?.data?.message);
+          setTimeout(() => {
+            props?.setShow(false);
+          }, 1000);
+        }
+      }
+    } catch (error) {
+      console.log("error in create trade pair",error);
 
-      let res = await fetch(`/api/pair/create`, {
-        headers: {
-          "Content-type": "application/json",
-          Authorization: props?.session?.user?.access_token,
-        },
-        method: "POST",
-        mode: "cors",
-        body: JSON.stringify(record),
-      });
-      let result = await res.json();
-      console.log(result);
-      if (result?.data?.status === 200) {
-        toast.success(result?.data?.data?.message);
-        props.refreshPairList();
-        setTimeout(() => {
-          props?.setShow(false);
-        }, 1000);
-      }
-      if (result?.data?.status === 409) {
-        toast.warning(result?.data?.data?.message);
-        setTimeout(() => {
-          props?.setShow(false);
-        }, 1000);
-      }
     }
+  
   };
 
   return (

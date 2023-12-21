@@ -77,37 +77,43 @@ const Historytrade = (props: propsData) => {
 
   const redeemReleased = async (item: any) => {
 
-    let username = session?.user.email !== 'null' ? session?.user.email : session?.user?.number;
-    let obj = {
-      id: item?.id,
-      step: 1,
-      username: username,
-      otp: 'string'
-    }
-
-    setStakeId(item?.id);
-
-    const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-    let record = encodeURIComponent(ciphertext.toString());
-
-    let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/staking/history`, {
-      method: "PUT",
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": session?.user?.access_token
-      },
-      body: JSON.stringify(record)
-    })
-
-    let res = await responseData.json();
-    if (res.data.result) {
-      // toast.success(res.data.result);
-      setEnable(1);
-      setShow(true);
-
-    }
-    else {
-      toast.error(res?.data?.message);
+    try {
+      
+      let username = session?.user.email !== 'null' ? session?.user.email : session?.user?.number;
+      let obj = {
+        id: item?.id,
+        step: 1,
+        username: username,
+        otp: 'string'
+      }
+  
+      setStakeId(item?.id);
+  
+      const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+      let record = encodeURIComponent(ciphertext.toString());
+  
+      let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/staking/history`, {
+        method: "PUT",
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": session?.user?.access_token
+        },
+        body: JSON.stringify(record)
+      })
+  
+      let res = await responseData.json();
+      if (res.data.result) {
+        // toast.success(res.data.result);
+        setEnable(1);
+        setShow(true);
+  
+      }
+      else {
+        toast.error(res?.data?.message);
+      }
+    } catch (error) {
+      console.log("error in trade history",error);
+      
     }
   }
 

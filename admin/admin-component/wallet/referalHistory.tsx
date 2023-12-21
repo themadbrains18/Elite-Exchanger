@@ -34,31 +34,37 @@ const ReferalHistory = (props:propData) => {
   let itemsPerPage = 10;
 
   useEffect(() => {
-    getToken(itemOffset);
+    getReferal(itemOffset);
   }, [itemOffset]);
 
-  const getToken = async (itemOffset: number) => {
-    if (itemOffset === undefined) {
-      itemOffset = 0;
-    }
-    let referalDetail=[]
-    
-    if(props?.type==="details"){
-        referalDetail = await fetch(
-            `/api/referal?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
-            {
-              method: "GET",
-              headers: {
-                "Authorization": session?.user?.access_token || ""
-            },
-            }
-          ).then((response) => response.json());
-     
-    }
+  const getReferal = async (itemOffset: number) => {
+    try {
+      
+      if (itemOffset === undefined) {
+        itemOffset = 0;
+      }
+      let referalDetail=[]
+      
+      if(props?.type==="details"){
+          referalDetail = await fetch(
+              `/api/referal?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
+              {
+                method: "GET",
+                headers: {
+                  "Authorization": session?.user?.access_token || ""
+              },
+              }
+            ).then((response) => response.json());
+       
+      }
+  
+  
+      setList(referalDetail?.data?.data);
+      setTotal(referalDetail?.data?.total);
+    } catch (error) {
+      console.log("error in fetching referal details",error);
 
-
-    setList(referalDetail?.data?.data);
-    setTotal(referalDetail?.data?.total);
+    }
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 

@@ -32,34 +32,40 @@ const AssetTable = (props:propData) => {
   let itemsPerPage = 10;
 
   useEffect(() => {
-    getToken(itemOffset);
+    getAssets(itemOffset);
   }, [itemOffset]);
 
-  const getToken = async (itemOffset: number) => {
-    if (itemOffset === undefined) {
-      itemOffset = 0;
+  const getAssets = async (itemOffset: number) => {
+    try {
+      if (itemOffset === undefined) {
+        itemOffset = 0;
+      }
+      let assets=[]
+      
+      if(props?.type==="details"){
+          assets = await fetch(`/api/assets?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+              method: "GET",
+              headers: {
+                "Authorization": session?.user?.access_token || ""
+            },          
+            }).then(response => response.json());
+  }
+      else{
+          assets = await fetch(`/api/assets/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+              method: "GET",
+              headers: {
+                "Authorization": session?.user?.access_token || ""
+            },          
+            }).then(response => response.json());
+      }
+     
+      setList(assets?.data?.data);
+      setTotal(assets?.data?.total);
+      
+    } catch (error) {
+      console.log("error in get assets details",error);
+
     }
-    let assets=[]
-    
-    if(props?.type==="details"){
-        assets = await fetch(`/api/assets?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-            method: "GET",
-            headers: {
-              "Authorization": session?.user?.access_token || ""
-          },          
-          }).then(response => response.json());
-}
-    else{
-        assets = await fetch(`/api/assets/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-            method: "GET",
-            headers: {
-              "Authorization": session?.user?.access_token || ""
-          },          
-          }).then(response => response.json());
-    }
-   
-    setList(assets?.data?.data);
-    setTotal(assets?.data?.total);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 

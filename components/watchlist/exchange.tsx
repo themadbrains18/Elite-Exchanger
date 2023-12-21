@@ -170,50 +170,53 @@ const Exchange = (props: DynamicId): any => {
   }
 
   const sendConvertRequest = async () => {
-
-    if (status === 'authenticated') {
-      const ciphertext = AES.encrypt(JSON.stringify(requestBody), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-      let record = encodeURIComponent(ciphertext.toString());
-
-      let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price`, {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": session?.user?.access_token
-        },
-        body: JSON.stringify(record)
-      })
-
-      let res = await responseData.json();
-
-      if (res.data.status === 200) {
-        toast.success('Your request successfully!!.');
-        props.refreshData();
-        setIsConvert(false);
-        setFirstCurrency('');
-        setSecondCurrency('');
-        setAmount(0);
-        setReceivedAmount(0);
+    try {
+      if (status === 'authenticated') {
+        const ciphertext = AES.encrypt(JSON.stringify(requestBody), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+        let record = encodeURIComponent(ciphertext.toString());
+  
+        let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price`, {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": session?.user?.access_token
+          },
+          body: JSON.stringify(record)
+        })
+  
+        let res = await responseData.json();
+  
+        if (res.data.status === 200) {
+          toast.success('Your request successfully!!.');
+          props.refreshData();
+          setIsConvert(false);
+          setFirstCurrency('');
+          setSecondCurrency('');
+          setAmount(0);
+          setReceivedAmount(0);
+        }
+        else {
+          toast.error(res.data.data);
+          setIsConvert(false)
+          setFirstCurrency('');
+          setSecondCurrency('');
+          setAmount(0);
+          setReceivedAmount(0);
+        }
       }
+  
       else {
-        toast.error(res.data.data);
-        setIsConvert(false)
-        setFirstCurrency('');
-        setSecondCurrency('');
-        setAmount(0);
-        setReceivedAmount(0);
+        toast.error('Your session is expired!!. You are auto redirect to login page!!');
+        setTimeout(() => {
+          signOut();
+        }, 3000);
       }
+      
+    } catch (error) {
+      console.log("error in sent convert request",error);
+      
     }
-
-    else {
-      toast.error('Your session is expired!!. You are auto redirect to login page!!');
-      setTimeout(() => {
-        signOut();
-      }, 3000);
-    }
-
-
   }
 
   return (

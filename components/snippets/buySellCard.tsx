@@ -159,12 +159,47 @@ const BuySellCard = (props: DynamicId) => {
   }
   const actionPerform = async () => {
 
+try {
+  const ciphertext = AES.encrypt(JSON.stringify(objData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
+  let record = encodeURIComponent(ciphertext.toString());
 
-    const ciphertext = AES.encrypt(JSON.stringify(objData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
+  let reponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+      "Authorization": props?.session?.user?.access_token
+    },
+    body: JSON.stringify(record)
+  }).then(response => response.json());
+
+  if (reponse.data.status === 200) {
+    toast.success(reponse.data?.data?.message);
+    setFirstCurrency('BLC');
+    setSecondCurrency('USDT');
+    setActive(false);
+
+    const websocket = new WebSocket('ws://localhost:3001/');
+    let withdraw = {
+      ws_type: 'market',
+    }
+    websocket.onopen = () => {
+      websocket.send(JSON.stringify(withdraw));
+    }
+
+    /**
+     * After order create here is partial execution request send to auto execute
+     */
+    let partialObj = {
+      "user_id": props.session.user.user_id,
+      "token_id": selectedToken?.id,
+      "order_type": active1 === 1 ? 'buy' : 'sell',
+    }
+
+    const ciphertext = AES.encrypt(JSON.stringify(partialObj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
     let record = encodeURIComponent(ciphertext.toString());
 
-    let reponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
-      method: "POST",
+    let executionReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
+      method: "PUT",
       headers: {
         'Content-Type': 'application/json',
         "Authorization": props?.session?.user?.access_token
@@ -172,12 +207,7 @@ const BuySellCard = (props: DynamicId) => {
       body: JSON.stringify(record)
     }).then(response => response.json());
 
-    if (reponse.data.status === 200) {
-      toast.success(reponse.data?.data?.message);
-      setFirstCurrency('BLC');
-      setSecondCurrency('USDT');
-      setActive(false);
-
+    if (executionReponse?.data?.message === undefined) {
       const websocket = new WebSocket('ws://localhost:3001/');
       let withdraw = {
         ws_type: 'market',
@@ -185,49 +215,24 @@ const BuySellCard = (props: DynamicId) => {
       websocket.onopen = () => {
         websocket.send(JSON.stringify(withdraw));
       }
-
-      /**
-       * After order create here is partial execution request send to auto execute
-       */
-      let partialObj = {
-        "user_id": props.session.user.user_id,
-        "token_id": selectedToken?.id,
-        "order_type": active1 === 1 ? 'buy' : 'sell',
-      }
-
-      const ciphertext = AES.encrypt(JSON.stringify(partialObj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
-      let record = encodeURIComponent(ciphertext.toString());
-
-      let executionReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
-        method: "PUT",
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": props?.session?.user?.access_token
-        },
-        body: JSON.stringify(record)
-      }).then(response => response.json());
-
-      if (executionReponse?.data?.message === undefined) {
-        const websocket = new WebSocket('ws://localhost:3001/');
-        let withdraw = {
-          ws_type: 'market',
-        }
-        websocket.onopen = () => {
-          websocket.send(JSON.stringify(withdraw));
-        }
-      }
-
-
-      reset({
-        limit_usdt: 0.00,
-        token_amount: 0.00,
-      })
-      setTotalAmount(0.0)
-
     }
-    else {
-      toast.error(reponse.data?.data);
-    }
+
+
+    reset({
+      limit_usdt: 0.00,
+      token_amount: 0.00,
+    })
+    setTotalAmount(0.0)
+
+  }
+  else {
+    toast.error(reponse.data?.data);
+  }
+  
+} catch (error) {
+  console.log("error while create market order",error);
+  
+}
   }
 
   const convertTotalAmount = () => {
@@ -262,17 +267,23 @@ const BuySellCard = (props: DynamicId) => {
   }
 
   const getAssets = async () => {
-    /**
-    * Get user assets data after order create
-    */
-    let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${props.session?.user?.user_id}`, {
-      method: "GET",
-      headers: {
-        "Authorization": props.session?.user?.access_token
-      },
-    }).then(response => response.json());
-
-    setUserAssets(userAssets);
+    try {
+      /**
+      * Get user assets data after order create
+      */
+      let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${props.session?.user?.user_id}`, {
+        method: "GET",
+        headers: {
+          "Authorization": props.session?.user?.access_token
+        },
+      }).then(response => response.json());
+  
+      setUserAssets(userAssets);
+      
+    } catch (error) {
+      console.log("error while fetching assets",error);
+      
+    }
   }
 
   useEffect(() => {

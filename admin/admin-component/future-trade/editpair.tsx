@@ -57,7 +57,6 @@ const FutureEditPair = (props: ActiveSession) => {
 
 
   const setCurrency = (symbol: any, dropdown: number) => {
-    console.log(symbol, dropdown, "==hdkfjh");
     if (dropdown === 1) {
       setValue("coin_id", symbol?.id);
       setValue("coin_symbol", symbol?.symbol);
@@ -70,31 +69,37 @@ const FutureEditPair = (props: ActiveSession) => {
   };
 
   const onHandleSubmit = async (data: any) => {
-    console.log(data);
-
-    if (getValues("coin_id") === getValues("usdt_id")) {
-      setError("usdt_id", { message: "Same tokens are not allowed" })
-    }
-    else {
-      data.id = props?.editPair?.id
-      data.status = props?.editPair?.status == 0 ? false : true;
-      let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/pair/edit`, {
-        headers: {
-          "Content-type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-      let result = await res.json();
-      console.log(result);
-      if (result?.status === 200) {
-        toast.success("token update successfully");
-        setTimeout(() => {
-          props?.setEditShow(false);
-          props.refreshPairList();
-        }, 1000);
+    // console.log(data);
+    try {
+      if (getValues("coin_id") === getValues("usdt_id")) {
+        setError("usdt_id", { message: "Same tokens are not allowed" })
       }
+      else {
+        data.id = props?.editPair?.id
+        data.status = props?.editPair?.status == 0 ? false : true;
+        let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/pair/edit`, {
+          headers: {
+            "Content-type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        });
+        let result = await res.json();
+        // console.log(result);
+        if (result?.status === 200) {
+          toast.success("token update successfully");
+          setTimeout(() => {
+            props?.setEditShow(false);
+            props.refreshPairList();
+          }, 1000);
+        }
+      }
+    } catch (error) {
+      console.log("error in edit pair in future pair",error);
+      
     }
+
+   
 
   }
 

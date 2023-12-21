@@ -64,33 +64,39 @@ const FutureAddPair = (props: ActiveSession) => {
   };
 
   const onHandleSubmit = async (data: any) => {
-    if (getValues("coin_id") === getValues("usdt_id")) {
-      setError("usdt_id", { message: "Same tokens are not allowed" })
-    }
-    else {
-      data.status = true;
-      let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/future/create`, {
-        headers: {
-          "Content-type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(data),
-      });
-      let result = await res.json();
-      if (result?.status === 200) {
-        toast.success(result.message);
-        props.refreshPairList();
-        setTimeout(() => {
-          props?.setShow(false);
-        }, 1000);
+    try {
+      if (getValues("coin_id") === getValues("usdt_id")) {
+        setError("usdt_id", { message: "Same tokens are not allowed" })
       }
-      if (result?.status === 409) {
-        toast.warning(result.message);
-        setTimeout(() => {
-          props?.setShow(false);
-        }, 1000);
+      else {
+        data.status = true;
+        let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/future/create`, {
+          headers: {
+            "Content-type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify(data),
+        });
+        let result = await res.json();
+        if (result?.status === 200) {
+          toast.success(result.message);
+          props.refreshPairList();
+          setTimeout(() => {
+            props?.setShow(false);
+          }, 1000);
+        }
+        if (result?.status === 409) {
+          toast.warning(result.message);
+          setTimeout(() => {
+            props?.setShow(false);
+          }, 1000);
+        }
       }
+    } catch (error) {
+      console.log("error in add future pair",error);
+      
     }
+   
   };
 
   return (

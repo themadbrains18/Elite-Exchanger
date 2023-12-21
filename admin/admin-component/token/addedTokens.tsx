@@ -19,17 +19,23 @@ const AddedTokens = (props: propsData) => {
   }
 
   const updateStatus = async (data: any) => {
-    let responseStatus = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/change/status`, {
-      headers: {
-        "content-type": "application/json"
-      },
-      method: "PUT",
-      body: JSON.stringify(data),
-    }).then((response) => response.json());
+    try {
+      let responseStatus = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/change/status`, {
+        headers: {
+          "content-type": "application/json"
+        },
+        method: "PUT",
+        body: JSON.stringify(data),
+      }).then((response) => response.json());
+  
+      if (responseStatus) {
+        props.refreshTokenList(responseStatus);
+      }
+    } catch (error) {
+      console.log("error update token status ",error);
 
-    if (responseStatus) {
-      props.refreshTokenList(responseStatus);
     }
+   
 
   }
 

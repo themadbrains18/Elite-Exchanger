@@ -89,55 +89,60 @@ const TradingPassword = (props: activeSection) => {
   }, []);
 
   const savePaymentMethod = async (e: any) => {
-    e.preventDefault();
-    if (fillOtp === '') {
-      toast.error('Please enter otp which send to your email address');
-      return;
-    }
-    if (passCode === '') {
-      toast.error('Please enter your trading password for security purpose');
-      return;
-    }
-
-    let pmid = props?.formMethod?.pmid;
-    let pm_name = props?.formMethod?.pm_name;
-
-    let pmObject: any = props?.formMethod?.pmObject;
-    pmObject['passcode'] = passCode;
-
-    delete pmObject.qr_code;
-
-    let obj = {
-      "user_id": session?.user?.user_id,
-      "pmid": pmid,
-      "status": "active",
-      "pm_name": pm_name,
-      "pmObject": pmObject
-    }
-
-    const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-    let record = encodeURIComponent(ciphertext.toString());
-
-    let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": session?.user?.access_token
-      },
-      body: JSON.stringify(record)
-    })
-
-    let res = await responseData.json();
-
-    if (res.data.status === 200) {
-      toast.success(res?.data?.data?.message);
-      let userPaymentMethod = res?.data?.data?.result;
-      userPaymentMethod.master_payment_method = props?.formMethod?.master_method;
-      props.setList((prev:any) => [...prev, userPaymentMethod]);
-      props.setActive(3);
-    }
-    else {
-      toast.error(res?.data?.data);
+    try {
+      e.preventDefault();
+      if (fillOtp === '') {
+        toast.error('Please enter otp which send to your email address');
+        return;
+      }
+      if (passCode === '') {
+        toast.error('Please enter your trading password for security purpose');
+        return;
+      }
+  
+      let pmid = props?.formMethod?.pmid;
+      let pm_name = props?.formMethod?.pm_name;
+  
+      let pmObject: any = props?.formMethod?.pmObject;
+      pmObject['passcode'] = passCode;
+  
+      delete pmObject.qr_code;
+  
+      let obj = {
+        "user_id": session?.user?.user_id,
+        "pmid": pmid,
+        "status": "active",
+        "pm_name": pm_name,
+        "pmObject": pmObject
+      }
+  
+      const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+      let record = encodeURIComponent(ciphertext.toString());
+  
+      let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": session?.user?.access_token
+        },
+        body: JSON.stringify(record)
+      })
+  
+      let res = await responseData.json();
+  
+      if (res.data.status === 200) {
+        toast.success(res?.data?.data?.message);
+        let userPaymentMethod = res?.data?.data?.result;
+        userPaymentMethod.master_payment_method = props?.formMethod?.master_method;
+        props.setList((prev:any) => [...prev, userPaymentMethod]);
+        props.setActive(3);
+      }
+      else {
+        toast.error(res?.data?.data);
+      }
+    } catch (error) {
+      console.log("error in add payment method", error);
+      
     }
 
   }

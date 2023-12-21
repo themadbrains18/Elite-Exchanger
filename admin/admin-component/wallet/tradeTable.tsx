@@ -32,37 +32,43 @@ const router=useRouter()
   let itemsPerPage = 10;
 
   useEffect(() => {
-    getToken(itemOffset);
+    getMarketDetails(itemOffset);
   }, [itemOffset]);
 
-  const getToken = async (itemOffset: number) => {
-    if (itemOffset === undefined) {
-      itemOffset = 0;
-    }
-let market=[]
-    if(props?.type==="details"){
-      
-         market = await fetch(`/api/market/list?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-          method: "GET",
-          headers: {
-            "Authorization": session?.user?.access_token || ""
-        },
+  const getMarketDetails = async (itemOffset: number) => {
+    try {
+      if (itemOffset === undefined) {
+        itemOffset = 0;
+      }
+  let market=[]
+      if(props?.type==="details"){
         
-        }).then(response => response.json());
+           market = await fetch(`/api/market/list?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+            method: "GET",
+            headers: {
+              "Authorization": session?.user?.access_token || ""
+          },
+          
+          }).then(response => response.json());
+  
+      }
+      else{
+  
+           market = await fetch(`/api/market/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+            method: "GET",
+            headers: {
+              "Authorization": session?.user?.access_token || ""
+          },
+          }).then(response => response.json());
+      }
+  
+      setList(market?.data?.data);
+      setTotal(market?.data?.total);
+      
+    } catch (error) {
+      console.log("error in fetching market details",error);
 
     }
-    else{
-
-         market = await fetch(`/api/market/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-          method: "GET",
-          headers: {
-            "Authorization": session?.user?.access_token || ""
-        },
-        }).then(response => response.json());
-    }
-
-    setList(market?.data?.data);
-    setTotal(market?.data?.total);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 

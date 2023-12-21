@@ -67,7 +67,7 @@ const EditPair = (props: ActiveSession) => {
 
 
   const setCurrency = (symbol: any, dropdown: number) => {
-    console.log(symbol, dropdown, "==hdkfjh");
+    // console.log(symbol, dropdown, "==hdkfjh");
     if (dropdown === 1) {
       setValue("tokenOne", symbol?.id);
       setValue("symbolOne", symbol?.symbol);
@@ -80,37 +80,43 @@ const EditPair = (props: ActiveSession) => {
   };
 
   const onHandleSubmit = async (data: any) => {
-    console.log(data);
-
-    if (getValues("tokenOne") === getValues("tokenTwo")) {
-      setError("tokenTwo", { message: "Same tokens are not allowed" })
-    }
-    else {
-      data.id = props?.editPair?.id
-      data.status = props?.editPair?.status == 0 ? false : true;
-      const ciphertext = AES.encrypt(
-        JSON.stringify(data),
-        `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
-      );
-      let record = encodeURIComponent(ciphertext.toString());
-      let res = await fetch(`/api/pair/edit`, {
-        headers: {
-          "Content-type": "application/json",
-          "Authorization": props?.session?.user?.access_token
-        },
-        method: "POST",
-        body: JSON.stringify(record),
-      });
-      let result = await res.json();
-      console.log(result);
-      if (result?.data?.status === 200) {
-        toast.success("Pair update successfully");
-        setTimeout(() => {
-          props?.setEditShow(false);
-          props.refreshPairList();
-        }, 1000);
+    // console.log(data);
+    try {
+      if (getValues("tokenOne") === getValues("tokenTwo")) {
+        setError("tokenTwo", { message: "Same tokens are not allowed" })
       }
+      else {
+        data.id = props?.editPair?.id
+        data.status = props?.editPair?.status == 0 ? false : true;
+        const ciphertext = AES.encrypt(
+          JSON.stringify(data),
+          `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+        );
+        let record = encodeURIComponent(ciphertext.toString());
+        let res = await fetch(`/api/pair/edit`, {
+          headers: {
+            "Content-type": "application/json",
+            "Authorization": props?.session?.user?.access_token
+          },
+          method: "POST",
+          body: JSON.stringify(record),
+        });
+        let result = await res.json();
+        // console.log(result);
+        if (result?.data?.status === 200) {
+          toast.success("Pair update successfully");
+          setTimeout(() => {
+            props?.setEditShow(false);
+            props.refreshPairList();
+          }, 1000);
+        }
+      }
+    } catch (error) {
+      console.log(error,"error in edit pair");
+      
     }
+
+   
 
   }
 

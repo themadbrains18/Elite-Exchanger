@@ -39,33 +39,39 @@ const WithdrawTable = (props:propData) => {
   }, [itemOffset]);
 
   const getToken = async (itemOffset: number) => {
-    if (itemOffset === undefined) {
-      itemOffset = 0;
-    }
-     let withdraw=[];
-     
-    if(props?.type==="details"){
-       withdraw = await fetch(`/api/withdraw/allList?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-        method: "GET",
-        headers: {
-          "Authorization": session?.user?.access_token || ""
-      },
+    try {
+      if (itemOffset === undefined) {
+        itemOffset = 0;
+      }
+       let withdraw=[];
+       
+      if(props?.type==="details"){
+         withdraw = await fetch(`/api/withdraw/allList?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+          method: "GET",
+          headers: {
+            "Authorization": session?.user?.access_token || ""
+        },
+        
+        }).then(response => response.json());
+      }
+      else{
+         withdraw = await fetch(`/api/withdraw/allList?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+          method: "GET",
+          headers: {
+            "Authorization": session?.user?.access_token || ""
+        },
+        
+        }).then(response => response.json());
+  
+      }
+      setFilterList(withdraw?.data?.data)
+      setList(withdraw?.data?.data);
+      setTotal(withdraw?.data?.total);
       
-      }).then(response => response.json());
-    }
-    else{
-       withdraw = await fetch(`/api/withdraw/allList?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-        method: "GET",
-        headers: {
-          "Authorization": session?.user?.access_token || ""
-      },
-      
-      }).then(response => response.json());
+    } catch (error) {
+      console.log("error in fetching withdraw details",error);
 
     }
-    setFilterList(withdraw?.data?.data)
-    setList(withdraw?.data?.data);
-    setTotal(withdraw?.data?.total);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 

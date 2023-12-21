@@ -108,7 +108,6 @@ const AdminSettings = (props: fixSection) => {
         new_password: data?.new_password,
         otp: "string",
       };
-      console.log(obj,"==jahkjha");
       
       if (status === "authenticated") {
         const ciphertext = AES.encrypt(
@@ -190,6 +189,7 @@ const AdminSettings = (props: fixSection) => {
 
       }
     } catch (error) {
+console.log("request for change password",error);
 
     }
   }
@@ -235,6 +235,7 @@ const AdminSettings = (props: fixSection) => {
         toast.error(response.data.message);
       }
     } catch (error) {
+      console.log("request for change password2",error);
 
     }
   }

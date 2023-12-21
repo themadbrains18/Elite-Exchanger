@@ -98,48 +98,55 @@ const ChartTabs = (props: propsData) => {
     setTradeItemOffset(newOffset);
   };
 
-  console.log(currentTradeItems, "==currentTradeItems");
+  // console.log(currentTradeItems, "==currentTradeItems");
 
   /**
    * Cancel order
    */
 
   const actionPerform = async () => {
-    let cancelObj = {
-      user_id: session?.user?.user_id,
-      order_id: orderId,
-    };
-
-    const ciphertext = AES.encrypt(
-      JSON.stringify(cancelObj),
-      `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
-    );
-    let record = encodeURIComponent(ciphertext.toString());
-
-    let cancelReponse = await fetch(
-      `${process.env.NEXT_PUBLIC_BASEURL}/market/order`,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: session?.user?.access_token,
-        },
-        body: JSON.stringify(record),
+    try {
+      let cancelObj = {
+        user_id: session?.user?.user_id,
+        order_id: orderId,
+      };
+  
+      const ciphertext = AES.encrypt(
+        JSON.stringify(cancelObj),
+        `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+      );
+      let record = encodeURIComponent(ciphertext.toString());
+  
+      let cancelReponse = await fetch(
+        `${process.env.NEXT_PUBLIC_BASEURL}/market/order`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: session?.user?.access_token,
+          },
+          body: JSON.stringify(record),
+        }
+      ).then((response) => response.json());
+  
+      if (cancelReponse?.data?.result) {
+        setActive(false);
+        setShow(false);
+        setOrderId("");
+        const websocket = new WebSocket("ws://localhost:3001/");
+        let withdraw = {
+          ws_type: "market",
+        };
+        websocket.onopen = () => {
+          websocket.send(JSON.stringify(withdraw));
+        };
+      } else {
       }
-    ).then((response) => response.json());
-
-    if (cancelReponse?.data?.result) {
-      setActive(false);
-      setShow(false);
-      setOrderId("");
-      const websocket = new WebSocket("ws://localhost:3001/");
-      let withdraw = {
-        ws_type: "market",
-      };
-      websocket.onopen = () => {
-        websocket.send(JSON.stringify(withdraw));
-      };
-    } else {
+      
+    } catch (error) {
+     
+      console.log("error in chart page trade history",error);
+      
     }
   };
 

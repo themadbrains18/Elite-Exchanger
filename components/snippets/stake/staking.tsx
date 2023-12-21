@@ -41,16 +41,22 @@ const StakingModel = (props: activeSection) => {
     }, [props.token]);
 
     const getUserStakedByToken = async () => {
-        let tokenid = props?.token?.id;
-
-        let staked = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/staking?userid=${session?.user?.user_id}&tokenid=${tokenid}`, {
-            method: "GET",
-            headers: {
-                "Authorization": session?.user?.access_token
-            },
-        }).then(response => response.json());
-
-        setTotalStaked(staked.data[0].total === null ? 0 : staked.data[0].total);
+        try {
+            let tokenid = props?.token?.id;
+    
+            let staked = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/staking?userid=${session?.user?.user_id}&tokenid=${tokenid}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": session?.user?.access_token
+                },
+            }).then(response => response.json());
+    
+            setTotalStaked(staked.data[0].total === null ? 0 : staked.data[0].total);
+            
+        } catch (error) {
+            console.log("error in token stake",error);
+            
+        }
     }
 
     let {

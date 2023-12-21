@@ -34,34 +34,40 @@ const P2PTable = (props:propData) => {
   let itemsPerPage = 10;
 
   useEffect(() => {
-    getToken(itemOffset);
+    getp2pDetail(itemOffset);
   }, [itemOffset]);
 
-  const getToken = async (itemOffset: number) => {
-    if (itemOffset === undefined) {
-      itemOffset = 0;
+  const getp2pDetail = async (itemOffset: number) => {
+    try {
+      if (itemOffset === undefined) {
+        itemOffset = 0;
+      }
+      let order=[]
+      
+      if(props?.type==="details"){
+        order = await fetch(`/api/p2p?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+          method: "GET",
+          headers: {
+            "Authorization": session?.user?.access_token || ""
+        },
+        }).then(response => response.json());
+      }
+      else{
+        order = await fetch(`/api/p2p/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+          method: "GET",
+          headers: {
+            "Authorization": session?.user?.access_token || ""
+        },
+        }).then(response => response.json());
+      }
+       
+      setList(order?.data);
+      setTotal(order?.total);
+      
+    } catch (error) {
+      console.log("error in getting p2p detail",error);
+
     }
-    let order=[]
-    
-    if(props?.type==="details"){
-      order = await fetch(`/api/p2p?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-        method: "GET",
-        headers: {
-          "Authorization": session?.user?.access_token || ""
-      },
-      }).then(response => response.json());
-    }
-    else{
-      order = await fetch(`/api/p2p/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
-        method: "GET",
-        headers: {
-          "Authorization": session?.user?.access_token || ""
-      },
-      }).then(response => response.json());
-    }
-     
-    setList(order?.data);
-    setTotal(order?.total);
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 
