@@ -340,6 +340,10 @@ input[name="token_id" ]:checked + .custom-radio p
 {
   @apply !text-primary
 }
+
+.prefrence input[name="colored-radio" ]:checked+ .custom-radio p { 
+  @apply !text-black dark:!text-white
+}
 input[name="colored-radio-dd"]:checked + .custom-radio:after,
 input[name="market_type" ]:checked + .custom-radio:after,
 input[name="colored-radio2" ]:checked + .custom-radio:after,
