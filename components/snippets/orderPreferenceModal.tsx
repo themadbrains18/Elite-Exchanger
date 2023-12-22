@@ -5,18 +5,24 @@ interface propsData {
   setPreference: Function;
   currentToken: any;
   setPreferenceSymbol: Function;
+  prefernceSymbol: string;
 }
 const OrderPreferenceModal = (props: propsData) => {
   const { mode } = useContext(Context);
-  const [value,setValue] = useState('')
+  const [value,setValue] = useState(props?.prefernceSymbol)
+  
   useEffect(() => {
     let radioCta = document.querySelector("#custom-radio1") as HTMLInputElement | null;
+    let radioCta2 = document.querySelector("#custom-radio2") as HTMLInputElement | null;
      
-    if (radioCta instanceof HTMLElement) {
-      radioCta.click();
+    if ( value==="Qty") {
+      radioCta?.click();
+    }
+    else{
+radioCta2?.click()
     }
 
-  }, []);
+  }, [value]);
   return (
     <>
       <div

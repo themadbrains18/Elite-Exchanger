@@ -63,6 +63,7 @@ const BuySell = (props: fullWidth) => {
   const [isShow, setIsShow] = useState(false);
   const [prefernce, setPreference] = useState(false);
   const [prefernceSymbol,setPreferenceSymbol] = useState('Qty')
+  const [positionMode,setPositionMode] = useState('oneWay')
 
   let openOrderObj = {
     position_id: "--",
@@ -643,6 +644,13 @@ const BuySell = (props: fullWidth) => {
               <p className="bg-[#13c2c21f] px-[5px] text-[#13c2c2] text-[12px]">
                 {props?.marginMode?.leverage}X
               </p>
+              <p className="top-label dark:!text-white !text-[#000]">
+                {positionMode === "oneWay" ? (
+                  <span>One Way Mode</span>
+                ) : (
+                  <span>Hedge Mode </span>
+                )}
+              </p>
             </div>
             <IconsComponent type="rightArrowWithoutBg" />
           </div>
@@ -1174,9 +1182,9 @@ const BuySell = (props: fullWidth) => {
       />
       {
                 prefernce &&
-                <OrderPreferenceModal setPreference={setPreference} currentToken={props?.currentToken} setPreferenceSymbol={setPreferenceSymbol}/>
+                <OrderPreferenceModal setPreference={setPreference} currentToken={props?.currentToken} setPreferenceSymbol={setPreferenceSymbol} prefernceSymbol={prefernceSymbol}/>
             }
-      {isShow && <PositionModal setIsShow={setIsShow} />}
+      {isShow && <PositionModal setIsShow={setIsShow} positionMode={positionMode} setPositionMode={setPositionMode}/>}
     </>
   );
 };

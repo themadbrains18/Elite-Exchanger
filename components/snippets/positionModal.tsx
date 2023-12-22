@@ -1,18 +1,29 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Context from "../contexts/context";
 
 interface propsData {
   setIsShow: Function;
+  setPositionMode: Function;
+  positionMode: string;
 }
 const PositionModal = (props: propsData) => {
   const { mode } = useContext(Context);
-  useEffect(() => {
-    let radioCta = document.querySelector("#custom-radio1") as HTMLInputElement | null;
-     
-    if (radioCta instanceof HTMLElement) {
-      radioCta.click();
-    }
+  
+  const [value, setValue] = useState(props?.positionMode);
 
+  useEffect(() => {
+    let radioCta = document.querySelector(
+      "#custom-radio1"
+    ) as HTMLInputElement | null;
+    let radioCta2 = document.querySelector(
+      "#custom-radio2"
+    ) as HTMLInputElement | null;
+
+    if (value === "oneWay") {
+      radioCta?.click();
+    } else {
+      radioCta2?.click();
+    }
   }, []);
   return (
     <>
@@ -48,10 +59,9 @@ const PositionModal = (props: propsData) => {
           </svg>
         </div>
         <div className="mt-40">
-        
-            <div className="flex justify-between mt-20">
-                <div className="w-full">
-              <div className="flex justify-between items-center w-full mb-[5px]">
+          <div className="flex justify-between mt-20">
+            <div className="w-full">
+              <div className="flex justify-between items-center w-full mb-[5px]" onClick={()=>{setValue("oneWay")}}>
                 <div
                   className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`}
                 >
@@ -90,20 +100,23 @@ const PositionModal = (props: propsData) => {
                   >
                     <p className="md-text dark:!text-g-secondary">
                       {" "}
-                   One Way Mode
+                      One Way Mode
                     </p>
                   </label>
                 </div>
               </div>
-                  <p className="info-12 pl-[25px]">Under one-way mode, you can hold either a long or a short position of a contract.  </p>
-
-                </div>
+              <p className="info-12 pl-[25px]">
+                Under one-way mode, you can hold either a long or a short
+                position of a contract.{" "}
+              </p>
             </div>
-            <div className="flex justify-between mt-20">
-                <div>
+          </div>
+          <div className="flex justify-between mt-20">
+            <div>
               <div className="flex justify-between items-center w-full mb-[5px]">
                 <div
                   className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`}
+                  onClick={()=>setValue("Hedge")}
                 >
                   <input
                     id={`custom-radio2`}
@@ -145,24 +158,34 @@ const PositionModal = (props: propsData) => {
                   </label>
                 </div>
               </div>
-                  <p className="info-12 pl-[25px]">Under hedge mode, you can hold both long and short positions simultaneously of a contract.  </p>
-
-                </div>
+              <p className="info-12 pl-[25px]">
+                Under hedge mode, you can hold both long and short positions
+                simultaneously of a contract.{" "}
+              </p>
             </div>
-           
-        
-       
+          </div>
+
           <div className=" mt-20">
-           
-              <p className="info-12 mb-[10px]">
-              It is not allowed to switch between one-way mode and hedge mode while holding position(s) or active order(s). The setting applies to the current Derivatives pair only.  
-              </p>
-              <p className="info-12">
-              This switch will take effect on both the website and the app at the same time. Please upgrade the app to the latest version.    
-              </p>
-              <div className="flex mt-[30px] gap-5">
-              <input id={`custom-radio-12`} type="checkbox" value="" name="colored-radio" className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
-                <label htmlFor={`custom-radio-12`} className="
+            <p className="info-12 mb-[10px]">
+              It is not allowed to switch between one-way mode and hedge mode
+              while holding position(s) or active order(s). The setting applies
+              to the current Derivatives pair only.
+            </p>
+            <p className="info-12">
+              This switch will take effect on both the website and the app at
+              the same time. Please upgrade the app to the latest version.
+            </p>
+            <div className="flex mt-[30px] gap-5">
+              <input
+                id={`custom-radio-12`}
+                type="checkbox"
+                value=""
+                name="colored-radio"
+                className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]"
+              />
+              <label
+                htmlFor={`custom-radio-12`}
+                className="
                     custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
                     cursor-pointer
                     after:dark:bg-omega
@@ -182,17 +205,19 @@ const PositionModal = (props: propsData) => {
                     before:absolute
                     before:z-[1]
                     
-                    ">
-                    <p className="ml-2 info-12">Apply to all USDT pairs</p>
-                </label>
-                  
-                  </div>
+                    "
+              >
+                <p className="ml-2 info-12">Apply to all USDT pairs</p>
+              </label>
+            </div>
           </div>
           <div className="flex items-center gap-10 mt-[30px]">
             <button
               className="solid-button w-full px-[20px] py-[15px]"
               onClick={(e) => {
+                props?.setPositionMode(value)
                 props?.setIsShow(false);
+
                 // props.actionPerform();
               }}
             >
