@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Context from "../contexts/context";
 
 interface propsData {
@@ -8,6 +8,15 @@ interface propsData {
 }
 const OrderPreferenceModal = (props: propsData) => {
   const { mode } = useContext(Context);
+  const [value,setValue] = useState('')
+  useEffect(() => {
+    let radioCta = document.querySelector("#custom-radio1") as HTMLInputElement | null;
+     
+    if (radioCta instanceof HTMLElement) {
+      radioCta.click();
+    }
+
+  }, []);
   return (
     <>
       <div
@@ -47,14 +56,14 @@ const OrderPreferenceModal = (props: propsData) => {
               <div
                 className="flex justify-between items-center w-full mb-[5px]"
                 onClick={() => {
-                  props?.setPreferenceSymbol(props?.currentToken?.coin_symbol);
+                  setValue("Qty")
                 }}
               >
                 <div
                   className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`}
                 >
                   <input
-                    id={`custom-radio`}
+                    id={`custom-radio1`}
                     type="radio"
                     value=""
                     name="colored-radio"
@@ -103,7 +112,7 @@ const OrderPreferenceModal = (props: propsData) => {
           </div>
           <div className="flex justify-between mt-20">
             <div>
-              <div className="flex justify-between items-center w-full mb-[5px]" onClick={()=>{props?.setPreferenceSymbol(props?.currentToken?.usdt_symbol)}}>
+              <div className="flex justify-between items-center w-full mb-[5px]" onClick={()=>{setValue("Value")}}>
                 <div
                   className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`}
                 >
@@ -173,6 +182,7 @@ const OrderPreferenceModal = (props: propsData) => {
             <button
               className="solid-button w-full px-[20px] py-[15px]"
               onClick={() => {
+                props?.setPreferenceSymbol(value)
                 props?.setPreference(false);
                 // props.actionPerform();
               }}

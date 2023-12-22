@@ -62,7 +62,7 @@ const BuySell = (props: fullWidth) => {
   const [orderType, setOrderType] = useState("value");
   const [isShow, setIsShow] = useState(false);
   const [prefernce, setPreference] = useState(false);
-  const [prefernceSymbol,setPreferenceSymbol] = useState('USDT')
+  const [prefernceSymbol,setPreferenceSymbol] = useState('Qty')
 
   let openOrderObj = {
     position_id: "--",
@@ -804,7 +804,11 @@ const BuySell = (props: fullWidth) => {
         )}
         {(showNes === 1 || showNes === 2) && (
           <>
-            <div className="mt-10 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]">
+          <div className="flex gap-1 mt-10 items-center" onClick={()=>{setPreference(true)}} >
+            <p className="top-label ">{prefernceSymbol==="Qty"?"Order by Qty":"Order by Value"}</p>
+            <IconsComponent type="swap-calender-with-circle" />
+          </div>
+            <div className="mt-2 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]">
               <div>
                 <p className="top-label">Amount </p>
                 <input
@@ -824,8 +828,8 @@ const BuySell = (props: fullWidth) => {
                   className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "
                 />
               </div>
-              <div className="cursor-pointer" onClick={()=>setPreference(true)}>
-                <p className='admin-body-text !text-[12px] dark:!text-white'>{prefernceSymbol}</p>
+              <div className="cursor-default">
+                <p className='admin-body-text !text-[12px] dark:!text-white'>{prefernceSymbol==="Qty"?props?.currentToken?.coin_symbol:props?.currentToken?.usdt_symbol}</p>
                 {/* <SelectDropdown
                   list={list}
                   showNes={showNes}

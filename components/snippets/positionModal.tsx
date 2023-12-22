@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Context from "../contexts/context";
 
 interface propsData {
@@ -6,6 +6,14 @@ interface propsData {
 }
 const PositionModal = (props: propsData) => {
   const { mode } = useContext(Context);
+  useEffect(() => {
+    let radioCta = document.querySelector("#custom-radio1") as HTMLInputElement | null;
+     
+    if (radioCta instanceof HTMLElement) {
+      radioCta.click();
+    }
+
+  }, []);
   return (
     <>
       <div
@@ -48,14 +56,14 @@ const PositionModal = (props: propsData) => {
                   className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`}
                 >
                   <input
-                    id={`custom-radio`}
+                    id={`custom-radio1`}
                     type="radio"
                     value=""
                     name="colored-radio"
                     className="hidden w-4 h-4 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]"
                   />
                   <label
-                    htmlFor={`custom-radio`}
+                    htmlFor={`custom-radio1`}
                     className="
                 custom-radio relative  px-[17px]  flex gap-3 items-center pl-[25px]
                 cursor-pointer
