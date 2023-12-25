@@ -27,6 +27,8 @@ interface fullWidth {
   currentToken?: any;
   marginMode?: any;
   refreshWalletAssets?: any;
+  positions?: any;
+  openOrders?: any;
 }
 
 const BuySell = (props: fullWidth) => {
@@ -89,6 +91,7 @@ const BuySell = (props: fullWidth) => {
     profit: openOrderObj,
     stopls: openOrderObj,
   });
+  
 
   let marketPrice =
     props?.currentToken?.token !== null
@@ -112,12 +115,14 @@ const BuySell = (props: fullWidth) => {
       }
     });
 
+
     if (asset?.length > 0) {
       if (asset[0].balance === 0) {
         setButtonStyle(true);
       } else {
         setButtonStyle(false);
       }
+      
       setAvailBalance(asset[0].balance);
     } else {
       setAvailBalance(0);
@@ -170,7 +175,10 @@ const BuySell = (props: fullWidth) => {
   // ===================================================================//
   const submitForm = async () => {
     let obj;
-    if (marketType === "market") {
+    if (marketType === "market" ) {
+        // if(positionMode==="oneWay"){
+
+        // }
       if (sizeValue === 0 || sizeValue < 0) {
         setSizeValidate("Amount must be positive number!");
         return;
@@ -270,6 +278,7 @@ const BuySell = (props: fullWidth) => {
         leverage_type: props?.marginMode?.margin,
         coin_id: props?.currentToken?.coin_id,
         qty: qty,
+        position_mode:positionMode
       };
     }
 
@@ -765,7 +774,7 @@ const BuySell = (props: fullWidth) => {
           <p className="admin-body-text !text-[12px] !text-[#a3a8b7]">
             Available: {avaibalance}
           </p>
-          <p className="admin-body-text !text-[12px] !text-white"> {symbol}</p>
+          <p className="admin-body-text !text-[12px] dark:!text-white"> {symbol}</p>
           <div
             onClick={() => {
               props.setOverlay(true);
