@@ -1209,17 +1209,17 @@ const ChartTabs = (props: propsData) => {
                   })
                 ) : (
                   <div className="xl:grid xl:place-content-center w-full p-4">
-                    <div className="inline-grid">
+                    <div className={`inline-grid ${mode === "dark"
+                            ? "text-[#ffffff]"
+                            : "text-[#000000]"
+                            }`}>
                       <Image
-                        src={"/assets/icons/noData.svg"}
-                        alt="No Data"
-                        className=""
-                        height={60}
-                        width={60}
+                        src="/assets/refer/empty.svg"
+                        alt="emplty table"
+                        width={107}
+                        height={104}
                       />
-                      <h4 className="info-14  md:p-0 text-disable-clr dark:text-white text-center">
-                        No Data
-                      </h4>
+                      <p> No Record Found </p>
                     </div>
                   </div>
                 )}

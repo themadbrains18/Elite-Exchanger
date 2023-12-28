@@ -15,29 +15,26 @@ export const config = {
 router
     .get(async (req, res) => {
         try {
-
-            var requestOptions: any = {
-                method: 'GET',
-                redirect: 'follow'
-            };
-            let responseData = await fetch(`https://min-api.cryptocompare.com/data/price?fsym=${req.query.fsym}&tsyms=${req.query.tsyms}`, requestOptions);
-
-            // let responseData = await fetch("https://api.livecoinwatch.com/coins/list", {
-            //     method: "POST",
-            //     headers: new Headers({
-            //         "content-type": "application/json",
-            //         "x-api-key": "543bc2be-caf7-4e9c-b83d-1eb9c6d08c20",
-            //     }),
-            //     body: JSON.stringify({
-            //         currency: "USD",
-            //         sort: "rank",
-            //         order: "ascending",
-            //         offset: 0,
-            //         limit: 100,
-            //         meta: true,
-            //     }),
-            // });
             
+            // var requestOptions: any = {
+            //     method: 'GET',
+            //     redirect: 'follow'
+            // };
+            // let responseData = await fetch(`https://min-api.cryptocompare.com/data/price?fsym=${req.query.fsym}&tsyms=${req.query.tsyms}`, requestOptions);
+
+            let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+                method: "POST",
+                headers: new Headers({
+                    "content-type": "application/json",
+                    "x-api-key": "18ce228e-b0ff-4571-b468-062bc4762734",
+                }),
+                body: JSON.stringify({
+                    currency: "INR",
+                    code: req.query.fsym,
+	                meta: false
+                }),
+            });
+
             let data = await responseData.json();
 
             return res.status(200).send({ data });

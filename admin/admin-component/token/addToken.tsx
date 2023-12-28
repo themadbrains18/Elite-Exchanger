@@ -80,7 +80,7 @@ const AddToken = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [tokenImage, setTokenImage] = useState("");
   const [tokenImg, setTokenImg] = useState("");
-  const {data:session} = useSession()
+  const { data: session } = useSession()
   let {
     register,
     setValue,
@@ -124,11 +124,14 @@ const AddToken = (props: activeSection) => {
     setValue("image", files);
     setTokenImg(files);
     clearErrors("image");
-    var reader = new FileReader();
-    reader.readAsDataURL(files);
-    reader.onloadend = function (e: any) {
-      setTokenImage(reader?.result as string);
-    }.bind(this);
+    if (files) {
+      var reader = new FileReader();
+      reader.readAsDataURL(files);
+      reader.onloadend = function (e: any) {
+        setTokenImage(reader?.result as string);
+      }.bind(this);
+    }
+
   };
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
@@ -169,9 +172,9 @@ const AddToken = (props: activeSection) => {
       formData.append("max_price", data?.max_price?.toString() || "");
       formData.append("networks", JSON.stringify(networks));
       formData.append("type", "admin");
-      formData.append('fees',"500");
+      formData.append('fees', "500");
 
-      
+
       let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/create`, {
         method: "POST",
         headers: {
@@ -273,9 +276,8 @@ const AddToken = (props: activeSection) => {
             <label className="sm-text ">Image</label>
 
             <div
-              className={`border border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px] ${
-                tokenImage !== "" && "border-none"
-              } `}
+              className={`border border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px] ${tokenImage !== "" && "border-none"
+                } `}
             >
               <label htmlFor="tokenimage">
                 <Image
@@ -290,9 +292,8 @@ const AddToken = (props: activeSection) => {
                 id="tokenimage"
                 type="file"
                 placeholder="Enter Amount"
-                className={`outline-none sm-text w-full bg-[transparent] ${
-                  tokenImage === "" ? "opacity-100" : "opacity-0 h-0"
-                }`}
+                className={`outline-none sm-text w-full bg-[transparent] ${tokenImage === "" ? "opacity-100" : "opacity-0 h-0"
+                  }`}
                 onChange={(e) => handleFileChange(e)}
               />
             </div>

@@ -7,6 +7,7 @@ import Context from "../contexts/context";
 import Deposit from "../snippets/deposit";
 import Withdraw from "../snippets/withdraw";
 import StakingModel from "../snippets/stake/staking";
+import TransferModal from "../future/popups/transfer-modal";
 import moment from 'moment';
 
 interface propsData {
@@ -29,9 +30,13 @@ const WalletList = (props: propsData): any => {
   const [show1, setShow1] = useState(0);
   const [selectedCoin, setSelectedCoin] = useState(Object);
   const [selectedCoinBalance, setSelectedCoinBalance] = useState(0.00);
+  
+  const [overlay, setOverlay] = useState(false);
+  const [popupMode, setPopupMode] = useState(0);
   // const [height, setHeight] = useState(false);+
   const router = useRouter();
   const height = useRef(0);
+
 
   const setHeight = (e: any) => {
     let parent = e.currentTarget.closest(".iconParent");
@@ -49,39 +54,6 @@ const WalletList = (props: propsData): any => {
     return new Date(date).toLocaleDateString('en-US', options)
   }
 
-  // let walletDepositHistory = [
-  //   {
-  //     name: "Deposited",
-  //     amount: "$10,000",
-  //     dateTime: "Feb 02, 2022",
-  //     status: "Successful"
-  //   },
-  //   {
-  //     name: "Deposited",
-  //     amount: "$10,000",
-  //     dateTime: "Feb 02, 2022",
-  //     status: "Successful"
-  //   },
-  //   {
-  //     name: "Deposited",
-  //     amount: "$10,000",
-  //     dateTime: "Feb 02, 2022",
-  //     status: "Successful"
-  //   },
-  //   {
-  //     name: "Deposited",
-  //     amount: "$10,000",
-  //     dateTime: "Feb 02, 2022",
-  //     status: "Successful"
-  //   },
-  //   {
-  //     name: "Deposited",
-  //     amount: "$10,000",
-  //     dateTime: "Feb 02, 2022",
-  //     status: "Successful"
-  //   }
-
-  // ];
 
   let dataWithdraw = props?.withdrawList;
   let dataDeposit = props?.depositList;
@@ -297,7 +269,12 @@ const WalletList = (props: propsData): any => {
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
 
-                              <button className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                              <button onClick={() => {
+                                setSelectedCoinBalance(item?.balance);
+                                setPopupMode(3);
+                                setShow1(4);
+                                setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                              }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Transfer</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
@@ -1019,6 +996,12 @@ const WalletList = (props: propsData): any => {
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
           <StakingModel setShow1={setShow1} refreshData={props.refreshData} session={props.session} token={selectedCoin} selectedCoinBalance={selectedCoinBalance} />
+        </>
+      }
+      {
+        show1 === 4 && 
+        <>
+          <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={props.assets} refreshWalletAssets={props.refreshData} />
         </>
       }
     </>

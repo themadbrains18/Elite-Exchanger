@@ -55,6 +55,7 @@ const SecuritySettings = (props: fixSection) => {
   const { status, data: session } = useSession()
   const [tradePassword,setTradePassword] = useState(false);
 
+
   let data = [
     {
       image: "mail.svg",
@@ -393,13 +394,13 @@ const SecuritySettings = (props: fixSection) => {
                         </button>
                       ) : index === 4 && (
                         <button
-                          className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null) ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
+                          className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null || props?.session?.user?.tradingPassword === undefined) ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
                           onClick={() => {
                             setEnable(index + 1);
                             setShow(true);
                           }}
                         >
-                          {(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null)
+                          {(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === undefined || props?.session?.user?.tradingPassword === null)
                             ? "Add"
                             : "Edit"}
                         </button>

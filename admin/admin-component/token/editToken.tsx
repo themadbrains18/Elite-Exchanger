@@ -154,11 +154,14 @@ const EditToken = (props: activeSection) => {
         setValue("image", files);
         setTokenImg(files);
         clearErrors("image");
-        var reader = new FileReader();
-        reader.readAsDataURL(files);
-        reader.onloadend = function (e: any) {
-            setTokenImage(reader?.result as string);
-        }.bind(this);
+        if(files){
+            var reader = new FileReader();
+            reader.readAsDataURL(files);
+            reader.onloadend = function (e: any) {
+                setTokenImage(reader?.result as string);
+            }.bind(this);
+        }
+        
     };
 
     const onHandleSubmit = async (data: UserSubmitForm) => {

@@ -64,6 +64,9 @@ const GoogleAuth = (props:activeSection) => {
         let res = await userExist.json();
           
         if (res.data.data !== undefined) {
+
+          console.log(res.data.data);
+          
           toast.success(res.data.data);
           props?.setGoogleAuth(true)
           setTimeout(()=>{

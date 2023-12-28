@@ -29,17 +29,17 @@ const Deposit = (props: activeSection) => {
   const { mode } = useContext(Context);
 
   const getAddress = async (network: any) => {
-    try {      
+    try {
       let wallet = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/wallet?user_id=${props.session.user.user_id}&network=${network?.walletSupport}`, {
         method: "GET",
         headers: {
-          "Authorization":props?.session?.user?.access_token
+          "Authorization": props?.session?.user?.access_token
         },
       }).then(response => response.json());
 
       setWalletAddress(wallet.address);
 
-    } catch (error:any) {
+    } catch (error: any) {
       console.log(error.message);
     }
   }
@@ -47,7 +47,7 @@ const Deposit = (props: activeSection) => {
   return (
     <div className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
       <div className="flex items-center justify-between">
-        <p className="sec-title">Bitcoin Deposit Address</p>
+        <p className="sec-title"> Deposit Address</p>
         <svg
           onClick={() => {
             props.setShow1(0);
@@ -72,18 +72,18 @@ const Deposit = (props: activeSection) => {
                             C61.42,57.647,61.42,54.687,59.595,52.861z"
           />
         </svg>
-      </div> 
+      </div>
       {
         props?.coinList &&
-      <div className="relative max-w-full  w-full mt-20">
-            <FilterSelectMenuWithCoin
-              data={props?.coinList}
-              border={true}
-              dropdown={1}
-      
-            />
-          </div>
-      } 
+        <div className="relative max-w-full  w-full mt-20">
+          <FilterSelectMenuWithCoin
+            data={props?.coinList}
+            border={true}
+            dropdown={1}
+
+          />
+        </div>
+      }
       <div className="mt-20">
         <FiliterSelectMenu data={list} placeholder="Select Network type" auto={true} widthFull={true} onNetworkChange={getAddress} />
       </div>
@@ -94,7 +94,7 @@ const Deposit = (props: activeSection) => {
           <div className="mt-[15px] max-w-[154px] rounded-5 shadow-card mx-auto">
             {/* <Image src="/assets/images/QR.svg" width={154} height={154} alt="QR" /> */}
             <SVG
-              text={`${address!==''? address:'Test Qr Code'}`}
+              text={`${address !== '' ? address : 'Test Qr Code'}`}
               options={{
                 width: 150,
                 color: {
@@ -108,12 +108,12 @@ const Deposit = (props: activeSection) => {
         <div className="pt-5 md:pt-30 ">
           <p className="nav-text-sm text-black dark:text-white pb-[15px] text-center">Disclaimer</p>
           <div className="h-[1px] w-full bg-grey-v-2 mb-[10px]"></div>
-          <p className="info-12 text-center">Please deposit only BTC to this address. If you deposit any other coins, it will be lost forever.</p>
+          <p className="info-12 text-center">Please deposit only assets to this address. If you deposit any other coins, it will be lost forever.</p>
         </div>
-        <div className="pt-5 md:pt-30">
+        {/* <div className="pt-5 md:pt-30">
           <p className="info-14-18 text-center dark:text-white text-black">Past Deposits in Bitcoin BTC</p>
           <p className="pt-[5px] md:pt-[10px] text-center info-14-18 text-[12px] md:text-[18px]">You have no past transactions in BTC</p>
-        </div>
+        </div> */}
         <div className="pt-5 md:pt-30">
           <p className="sm-text text-start md:text-center ">Destination</p>
           <div className="mt-[5px] md:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">

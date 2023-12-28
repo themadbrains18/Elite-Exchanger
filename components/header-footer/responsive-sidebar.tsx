@@ -79,26 +79,29 @@ const ResponsiveSidebar = (props: defaultStates) => {
     }
 
     let files = e.target.files[0];
-    var reader = new FileReader();
-    reader.readAsDataURL(files);
-    reader.onloadend = async function (e: any) {
-      setProfileImg(reader.result as string);
-
-      var formData = new FormData();
-      formData.append("image", files);
-
-      let response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/profile/dp`,
-        {
-          method: "POST",
-          headers: {
-            "Authorization": session?.user?.access_token
-          },
-          body: formData,
-        }
-      ).then((response) => response.json());
-
-    }.bind(this);
+    if(files){
+      var reader = new FileReader();
+      reader.readAsDataURL(files);
+      reader.onloadend = async function (e: any) {
+        setProfileImg(reader.result as string);
+  
+        var formData = new FormData();
+        formData.append("image", files);
+  
+        let response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASEURL}/profile/dp`,
+          {
+            method: "POST",
+            headers: {
+              "Authorization": session?.user?.access_token
+            },
+            body: formData,
+          }
+        ).then((response) => response.json());
+  
+      }.bind(this);
+    }
+    
   };
 
   let data = [

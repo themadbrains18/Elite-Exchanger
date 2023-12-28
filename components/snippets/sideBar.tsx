@@ -65,36 +65,39 @@ const SideBar = (props: profileSec) => {
 
         let files = e.target.files[0];
         var reader = new FileReader();
-        reader.readAsDataURL(files);
-        reader.onloadend = async function (e: any) {
-            setProfileImg(reader.result as string);
+        if (files) {
+            reader.readAsDataURL(files);
+            reader.onloadend = async function (e: any) {
+                setProfileImg(reader.result as string);
 
-            var formData = new FormData();
-            formData.append("image", files);
+                var formData = new FormData();
+                formData.append("image", files);
 
-            let response = await fetch(
-                `${process.env.NEXT_PUBLIC_BASEURL}/profile/dp`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Authorization": session?.user?.access_token
-                    },
-                    body: formData,
+                let response = await fetch(
+                    `${process.env.NEXT_PUBLIC_BASEURL}/profile/dp`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Authorization": session?.user?.access_token
+                        },
+                        body: formData,
+                    }
+                ).then((response) => response.json());
+
+                if (response?.data?.status === 200) {
+                    const websocket = new WebSocket('ws://localhost:3001/');
+                    let profile = {
+                        ws_type: 'profile',
+                        user_id: session?.user?.user_id,
+                    }
+                    websocket.onopen = () => {
+                        websocket.send(JSON.stringify(profile));
+                    }
                 }
-            ).then((response) => response.json());
 
-            if (response?.data?.status === 200) {
-                const websocket = new WebSocket('ws://localhost:3001/');
-                let profile = {
-                    ws_type: 'profile',
-                    user_id: session?.user?.user_id,
-                }
-                websocket.onopen = () => {
-                    websocket.send(JSON.stringify(profile));
-                }
-            }
+            }.bind(this);
+        }
 
-        }.bind(this);
     };
     return (
         <>
