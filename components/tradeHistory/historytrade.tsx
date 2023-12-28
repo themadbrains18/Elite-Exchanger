@@ -185,7 +185,9 @@ const Historytrade = (props: propsData) => {
       let res = await responseData.json();
 
       if (res.data.result) {
-        toast.success(res?.data?.message);
+        toast.success(res?.data?.message, {
+          position: toast.POSITION.TOP_CENTER
+        });
         setTimeout(() => {
           setFinalBtnenable(false);
           props.refreshStakingData();
@@ -230,7 +232,9 @@ const Historytrade = (props: propsData) => {
       let res = await responseData.json();
 
       if (res.data.result) {
-        toast.success(res?.data?.message);
+        toast.success(res?.data?.message, {
+          position: toast.POSITION.TOP_CENTER
+        });
         setEnable(0);
         setTimeout(() => {
           props.refreshStakingData();
@@ -238,7 +242,9 @@ const Historytrade = (props: propsData) => {
 
       }
       else {
-        toast.error(res?.data?.message);
+        toast.error(res?.data?.message, {
+          position: toast.POSITION.TOP_CENTER
+        });
         setFinalBtnenable(false);
       }
     } catch (error) {
@@ -427,7 +433,7 @@ const Historytrade = (props: propsData) => {
                               <p className="info-14-18 dark:text-white md:block hidden">${item?.token !== null ? item?.token?.price.toFixed(4) : item?.global_token?.price.toFixed(4)}</p>
                             </td>
                             <td>
-                              <p className="info-14-18 dark:text-white md:block hidden">{item.limit_usdt}%</p>
+                              <p className="info-14-18 dark:text-white md:block hidden">{item.limit_usdt}</p>
                             </td>
                             <td>
                               <p className="info-14-18 dark:text-white md:block hidden">${item.volume_usdt.toFixed(2)}</p>
@@ -586,7 +592,7 @@ const Historytrade = (props: propsData) => {
                               <p className="info-14-18 dark:text-white md:block hidden">${item.price}</p>
                             </td>
                             <td>
-                              <p className="info-14-18 dark:text-white md:block hidden">{item.filled}%</p>
+                              <p className="info-14-18 dark:text-white md:block hidden">{item.filled}</p>
                             </td>
                             <td>
                               <p className="info-14-18 dark:text-white md:block hidden">${item.amount}</p>

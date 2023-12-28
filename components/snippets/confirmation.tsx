@@ -12,6 +12,13 @@ interface activeSection {
 
 const ConfirmationModel = (props: activeSection) => {
     const { mode } = useContext(Context);
+
+    const text:any = props.message;
+    const newText = text.split('\n');
+
+    console.log(newText,'======newText');
+    
+
     return (
         <>
             <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show ? "opacity-80 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow(false) }}></div>
@@ -43,7 +50,11 @@ const ConfirmationModel = (props: activeSection) => {
                         />
                     </svg>
                 </div>
-                <p className="py-40 info-14-18">{props?.message}</p>
+                <p className={`py-20 info-14-18`}></p>
+                {newText.map((item:any)=>{
+                    return <p className={`py-1 info-14-18`}>{item}</p>
+                })}
+                <p className={`py-20 info-14-18`}></p>
                 <div className="flex items-center gap-10">
                     <button
                         className="solid-button w-full"

@@ -50,7 +50,7 @@ const ChartTabs = (props: propsData) => {
     setItemOffset(newOffset);
   };
 
-  const setHeight = (e:any) => {
+  const setHeight = (e: any) => {
     let nexElm = e.currentTarget.nextElementSibling;
     let nexElmHeight = nexElm.scrollHeight;
 
@@ -110,13 +110,13 @@ const ChartTabs = (props: propsData) => {
         user_id: session?.user?.user_id,
         order_id: orderId,
       };
-  
+
       const ciphertext = AES.encrypt(
         JSON.stringify(cancelObj),
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
       );
       let record = encodeURIComponent(ciphertext.toString());
-  
+
       let cancelReponse = await fetch(
         `${process.env.NEXT_PUBLIC_BASEURL}/market/order`,
         {
@@ -128,7 +128,7 @@ const ChartTabs = (props: propsData) => {
           body: JSON.stringify(record),
         }
       ).then((response) => response.json());
-  
+
       if (cancelReponse?.data?.result) {
         setActive(false);
         setShow(false);
@@ -142,11 +142,11 @@ const ChartTabs = (props: propsData) => {
         };
       } else {
       }
-      
+
     } catch (error) {
-     
-      console.log("error in chart page trade history",error);
-      
+
+      console.log("error in chart page trade history", error);
+
     }
   };
 
@@ -158,9 +158,8 @@ const ChartTabs = (props: propsData) => {
           {/* Coin List */}
           <div>
             <button
-              className={`w-full max-w-full sec-text text-center text-gamma border-b-2 border-[transparent] pb-[32px]  ${
-                activeTab === 1 && "!text-primary border-primary"
-              }`}
+              className={`w-full max-w-full sec-text text-center text-gamma border-b-2 border-[transparent] pb-[32px]  ${activeTab === 1 && "!text-primary border-primary"
+                }`}
               onClick={() => setActiveTab(1)}
             >
               Open Position
@@ -169,9 +168,8 @@ const ChartTabs = (props: propsData) => {
           {/* User Open Order */}
           <div>
             <button
-              className={`w-full max-w-full sec-text text-center text-gamma border-b-2 border-[transparent] pb-[32px]  ${
-                activeTab === 2 && "!text-primary border-primary"
-              }`}
+              className={`w-full max-w-full sec-text text-center text-gamma border-b-2 border-[transparent] pb-[32px]  ${activeTab === 2 && "!text-primary border-primary"
+                }`}
               onClick={() => setActiveTab(2)}
             >
               Open Order
@@ -180,9 +178,8 @@ const ChartTabs = (props: propsData) => {
           {/* User trade history ask/bids list */}
           <div>
             <button
-              className={`w-full max-w-full sec-text text-center text-gamma border-b-2 border-[transparent] pb-[32px]  ${
-                activeTab === 3 && "!text-primary border-primary"
-              }`}
+              className={`w-full max-w-full sec-text text-center text-gamma border-b-2 border-[transparent] pb-[32px]  ${activeTab === 3 && "!text-primary border-primary"
+                }`}
               onClick={() => setActiveTab(3)}
             >
               Trade History
@@ -341,11 +338,10 @@ const ChartTabs = (props: propsData) => {
                         <td className="max-[1023px]:hidden">
                           <div className={` items-center gap-[10px] flex`}>
                             <p
-                              className={`footer-text-secondary  ${
-                                item.status == "high"
-                                  ? "!text-[#03A66D]"
-                                  : "!text-[#DC2626]"
-                              }`}
+                              className={`footer-text-secondary  ${item.status == "high"
+                                ? "!text-[#03A66D]"
+                                : "!text-[#DC2626]"
+                                }`}
                             >
                               {item.circulatingSupply && item.circulatingSupply}
                             </p>
@@ -387,9 +383,8 @@ const ChartTabs = (props: propsData) => {
               <p className="info-12 md:footer-text !text-gamma">52 assets</p>
 
               <ReactPaginate
-                className={`history_pagination ${
-                  mode === "dark" ? "paginate_dark" : ""
-                }`}
+                className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+                  }`}
                 breakLabel="..."
                 nextLabel=">"
                 onPageChange={handlePageClick}
@@ -525,11 +520,10 @@ const ChartTabs = (props: propsData) => {
                           <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                             <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                               <Image
-                                src={`${
-                                  item?.token
-                                    ? item?.token.image
-                                    : item?.global_token.image
-                                }`}
+                                src={`${item?.token
+                                  ? item?.token.image
+                                  : item?.global_token.image
+                                  }`}
                                 width={30}
                                 height={30}
                                 alt="coins"
@@ -556,11 +550,10 @@ const ChartTabs = (props: propsData) => {
                           </td>
                           <td>
                             <p
-                              className={`info-14-18 ${
-                                item.order_type === "sell"
-                                  ? "text-[#ff0000]"
-                                  : "text-[#008000]"
-                              }`}
+                              className={`info-14-18 ${item.order_type === "sell"
+                                ? "text-[#ff0000]"
+                                : "text-[#008000]"
+                                }`}
                             >
                               {item.order_type.toUpperCase()}
                             </p>
@@ -607,11 +600,10 @@ const ChartTabs = (props: propsData) => {
                     <tr>
                       <td colSpan={8}>
                         <div
-                          className={` py-[50px] flex flex-col items-center justify-center ${
-                            mode === "dark"
-                              ? "text-[#ffffff]"
-                              : "text-[#000000]"
-                          }`}
+                          className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark"
+                            ? "text-[#ffffff]"
+                            : "text-[#000000]"
+                            }`}
                         >
                           <Image
                             src="/assets/refer/empty.svg"
@@ -629,9 +621,8 @@ const ChartTabs = (props: propsData) => {
             </div>
             <div className="flex pt-[25px] items-center justify-end">
               <ReactPaginate
-                className={`history_pagination ${
-                  mode === "dark" ? "paginate_dark" : ""
-                }`}
+                className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+                  }`}
                 breakLabel="..."
                 nextLabel=">"
                 onPageChange={handleOpenPageClick}
@@ -805,7 +796,7 @@ const ChartTabs = (props: propsData) => {
               </table> */}
               <div className="table lg:min-w-[1018px] w-full ">
                 <div
-                  className={`head_row border-b border-t border-grey-v-3 dark:border-opacity-[15%] grid grid-cols-10  justify-between`}
+                  className={`head_row border-b border-t border-grey-v-3 dark:border-opacity-[15%] grid grid-cols-9  justify-between`}
                 >
                   <div className="flex py-5 col-span-2 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma  ">
@@ -840,7 +831,7 @@ const ChartTabs = (props: propsData) => {
                       alt="uparrow"
                     />
                   </div>
-                  <div className="hidden md:flex py-5 items-center">
+                  {/* <div className="hidden md:flex py-5 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
                       Price
                     </p>
@@ -850,7 +841,7 @@ const ChartTabs = (props: propsData) => {
                       height={15}
                       alt="uparrow"
                     />
-                  </div>
+                  </div> */}
                   <div className="hidden md:flex py-5 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
                       Fee
@@ -917,15 +908,14 @@ const ChartTabs = (props: propsData) => {
                         className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] relative"
                       >
                         <div
-                          className={`grid grid-cols-10 items-center  justify-between `}
+                          className={`grid grid-cols-9 items-center  justify-between `}
                         >
                           <div className="flex gap-2 col-span-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                             <Image
-                              src={`${
-                                item?.token !== null
-                                  ? item?.token?.image
-                                  : item?.global_token?.image
-                              }`}
+                              src={`${item?.token !== null
+                                ? item?.token?.image
+                                : item?.global_token?.image
+                                }`}
                               width={30}
                               height={30}
                               alt="coins"
@@ -945,11 +935,10 @@ const ChartTabs = (props: propsData) => {
                           </div>
                           <div className="flex items-center py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                             <div
-                              className={`p-0 md:p-[5px] rounded-5 bg-[transparent] ${
-                                item.order_type === "sell"
-                                  ? "md:bg-sell"
-                                  : "md:bg-buy"
-                              } `}
+                              className={`p-0 md:p-[5px] rounded-5 bg-[transparent] ${item.order_type === "sell"
+                                ? "md:bg-sell"
+                                : "md:bg-buy"
+                                } `}
                             >
                               {item.order_type === "buy" ? (
                                 <svg
@@ -1003,22 +992,22 @@ const ChartTabs = (props: propsData) => {
                               {item.market_type}
                             </p>
                           </div>
-                          <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
+                          {/* <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
                               $
                               {item?.token !== null
                                 ? item?.token?.price?.toFixed(4)
                                 : item?.global_token?.price?.toFixed(4)}
                             </p>
-                          </div>
+                          </div> */}
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                              {item.fee}
+                              {item?.fee?.toFixed(8)}
                             </p>
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                              {item.limit_usdt}
+                              {item?.limit_usdt?.toFixed(2)}
                             </p>
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
@@ -1034,13 +1023,12 @@ const ChartTabs = (props: propsData) => {
 
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                             <p
-                              className={`info-14-18  ${
-                                item.status === true
-                                  ? "text-buy"
-                                  : item.isCanceled === true
+                              className={`info-14-18  ${item.status === true
+                                ? "text-buy"
+                                : item.isCanceled === true
                                   ? "text-cancel"
                                   : "text-gamma"
-                              }`}
+                                }`}
                             >
                               {item?.status === false
                                 ? item?.isCanceled === true
@@ -1051,27 +1039,27 @@ const ChartTabs = (props: propsData) => {
                           </div>
                         </div>
                         {item?.market_order_histroys &&
-                        <div
-                          className="absolute top-[44px] right-[10px]  max-w-[10px] w-full cursor-pointer"
-                          onClick={setHeight}
-                        >
-                          <svg
-                            className="duration-300"
-                            version="1.1"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 129 129"
-                            xmlnsXlink="http://www.w3.org/1999/xlink"
-                            enableBackground="new 0 0 129 129"
+                          <div
+                            className="absolute top-[44px] right-[10px]  max-w-[10px] w-full cursor-pointer"
+                            onClick={setHeight}
                           >
-                            <g>
-                              <path
-                                fill={mode === "dark" ? "white" : "#000"}
-                                d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
-                              />
-                            </g>
-                          </svg>
-                        </div>
-                  }
+                            <svg
+                              className="duration-300"
+                              version="1.1"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 129 129"
+                              xmlnsXlink="http://www.w3.org/1999/xlink"
+                              enableBackground="new 0 0 129 129"
+                            >
+                              <g>
+                                <path
+                                  fill={mode === "dark" ? "white" : "#000"}
+                                  d="m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z"
+                                />
+                              </g>
+                            </svg>
+                          </div>
+                        }
                         <div
                           className={`h-0 overflow-hidden duration-300 flex flex-col-reverse`}
                         >
@@ -1081,10 +1069,10 @@ const ChartTabs = (props: propsData) => {
                               (elm: any, ind: number) => {
                                 return (
                                   <div
-                                  className={`grid grid-cols-10 items-center  justify-between `}
-                                >
-                                  <div className="flex gap-2 col-span-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                                    {/* <Image
+                                    className={`grid grid-cols-9 items-center  justify-between `}
+                                  >
+                                    <div className="flex gap-2 col-span-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
+                                      {/* <Image
                                       src={`${
                                         item?.token !== null
                                           ? item?.token?.image
@@ -1094,7 +1082,7 @@ const ChartTabs = (props: propsData) => {
                                       height={30}
                                       alt="coins"
                                     /> */}
-                                    {/* <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
+                                      {/* <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                       <p className="info-14-18 dark:text-white">
                                         {item?.token !== null
                                           ? item?.token?.fullName
@@ -1106,114 +1094,112 @@ const ChartTabs = (props: propsData) => {
                                           : item?.global_token?.symbol}
                                       </p>
                                     </div> */}
-                                  </div>
-                                  <div className="flex items-center py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                                    <div
-                                      className={`p-0 md:p-[5px] rounded-5 bg-[transparent] ${
-                                        item.order_type === "sell"
+                                    </div>
+                                    <div className="flex items-center py-[10px] md:py-[15px] px-0 md:px-[5px] ">
+                                      <div
+                                        className={`p-0 md:p-[5px] rounded-5 bg-[transparent] ${item.order_type === "sell"
                                           ? "md:bg-sell"
                                           : "md:bg-buy"
-                                      } `}
-                                    >
-                                      {item.order_type === "buy" ? (
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          width={20}
-                                          height={21}
-                                          viewBox="0 0 20 21"
-                                          fill="none"
-                                        >
-                                          <path
-                                            fillRule="evenodd"
-                                            clipRule="evenodd"
-                                            d="M14.9944 6.18667C14.9944 5.72917 14.6244 5.35667 14.166 5.35417L7.50521 5.3125H7.50021C7.04188 5.3125 6.67021 5.6825 6.66688 6.14083C6.66354 6.60083 7.03438 6.97667 7.49521 6.97917L12.1269 7.00833L5.24438 13.89C4.91854 14.2158 4.91854 14.7433 5.24438 15.0683C5.40688 15.2317 5.62021 15.3125 5.83354 15.3125C6.04688 15.3125 6.26021 15.2317 6.42271 15.0683L13.3294 8.16167L13.3335 12.8133C13.3335 13.2733 13.7069 13.6458 14.1669 13.6458H14.1677C14.6277 13.6458 15.0002 13.2717 15.0002 12.8117L14.9944 6.18667Z"
-                                            className="fill-buy md:fill-white"
-                                          />
-                                        </svg>
-                                      ) : (
-                                        <svg
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          width={20}
-                                          height={21}
-                                          viewBox="0 0 20 21"
-                                          fill="none"
-                                        >
-                                          <path
-                                            fillRule="evenodd"
-                                            clipRule="evenodd"
-                                            d="M14.7558 5.55687C14.43 5.23104 13.9033 5.23104 13.5775 5.55687L6.66667 12.4677V7.81271C6.66667 7.35271 6.29417 6.97938 5.83333 6.97938C5.3725 6.97938 5 7.35271 5 7.81271V14.4794C5 14.9394 5.3725 15.3127 5.83333 15.3127H12.5C12.9608 15.3127 13.3333 14.9394 13.3333 14.4794C13.3333 14.0194 12.9608 13.646 12.5 13.646H7.845L14.7558 6.73521C15.0817 6.40937 15.0817 5.88271 14.7558 5.55687"
-                                            className="fill-sell md:fill-white"
-                                          />
-                                        </svg>
-                                      )}
+                                          } `}
+                                      >
+                                        {item.order_type === "buy" ? (
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width={20}
+                                            height={21}
+                                            viewBox="0 0 20 21"
+                                            fill="none"
+                                          >
+                                            <path
+                                              fillRule="evenodd"
+                                              clipRule="evenodd"
+                                              d="M14.9944 6.18667C14.9944 5.72917 14.6244 5.35667 14.166 5.35417L7.50521 5.3125H7.50021C7.04188 5.3125 6.67021 5.6825 6.66688 6.14083C6.66354 6.60083 7.03438 6.97667 7.49521 6.97917L12.1269 7.00833L5.24438 13.89C4.91854 14.2158 4.91854 14.7433 5.24438 15.0683C5.40688 15.2317 5.62021 15.3125 5.83354 15.3125C6.04688 15.3125 6.26021 15.2317 6.42271 15.0683L13.3294 8.16167L13.3335 12.8133C13.3335 13.2733 13.7069 13.6458 14.1669 13.6458H14.1677C14.6277 13.6458 15.0002 13.2717 15.0002 12.8117L14.9944 6.18667Z"
+                                              className="fill-buy md:fill-white"
+                                            />
+                                          </svg>
+                                        ) : (
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            width={20}
+                                            height={21}
+                                            viewBox="0 0 20 21"
+                                            fill="none"
+                                          >
+                                            <path
+                                              fillRule="evenodd"
+                                              clipRule="evenodd"
+                                              d="M14.7558 5.55687C14.43 5.23104 13.9033 5.23104 13.5775 5.55687L6.66667 12.4677V7.81271C6.66667 7.35271 6.29417 6.97938 5.83333 6.97938C5.3725 6.97938 5 7.35271 5 7.81271V14.4794C5 14.9394 5.3725 15.3127 5.83333 15.3127H12.5C12.9608 15.3127 13.3333 14.9394 13.3333 14.4794C13.3333 14.0194 12.9608 13.646 12.5 13.646H7.845L14.7558 6.73521C15.0817 6.40937 15.0817 5.88271 14.7558 5.55687"
+                                              className="fill-sell md:fill-white"
+                                            />
+                                          </svg>
+                                        )}
+                                      </div>
+                                      <div className="hidden md:block py-[10px] md:py-[15px] px-0 md:px-[5px]">
+                                        <p className="info-14-18 dark:text-white">
+                                          {item.order_type}
+                                        </p>
+                                        <p className="info-10">
+                                          {moment(item?.createdAt).format("YYYY-MM-DD")}
+                                        </p>
+                                      </div>
+                                      <div className="block md:hidden py-[10px] md:py-[15px] px-0 md:px-[5px]">
+                                        <p className="info-14-18 dark:text-white">
+                                          {item.market_type}
+                                        </p>
+                                        <p className="info-10">{item.token_amount}</p>
+                                      </div>
                                     </div>
-                                    <div className="hidden md:block py-[10px] md:py-[15px] px-0 md:px-[5px]">
-                                      <p className="info-14-18 dark:text-white">
-                                        {item.order_type}
-                                      </p>
-                                      <p className="info-10">
-                                        {moment(item?.createdAt).format("YYYY-MM-DD")}
-                                      </p>
-                                    </div>
-                                    <div className="block md:hidden py-[10px] md:py-[15px] px-0 md:px-[5px]">
-                                      <p className="info-14-18 dark:text-white">
+                                    <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
+                                      <p className="info-14-18 dark:text-white  ">
                                         {item.market_type}
                                       </p>
-                                      <p className="info-10">{item.token_amount}</p>
                                     </div>
-                                  </div>
-                                  <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
-                                    <p className="info-14-18 dark:text-white  ">
-                                      {item.market_type}
-                                    </p>
-                                  </div>
-                                  <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
+                                    {/* <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                                     <p className="info-14-18 dark:text-white">
                                       $
                                       {item?.token !== null
                                         ? item?.token?.price?.toFixed(4)
                                         : item?.global_token?.price?.toFixed(4)}
                                     </p>
-                                  </div>
-                                  <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
-                                    <p className="info-14-18 dark:text-white ">
-                                      {item.fee}
-                                    </p>
-                                  </div>
-                                  <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
-                                    <p className="info-14-18 dark:text-white">
-                                      {item.limit_usdt}
-                                    </p>
-                                  </div>
-                                  <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
-                                    <p className="info-14-18 dark:text-white ">
-                                      ${item.volume_usdt?.toFixed(2)}
-                                    </p>
-                                  </div>
-                                  <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
-                                    <p className="info-14-18 dark:text-white ">
-                                      ${item.token_amount?.toFixed(5)}
-                                    </p>
-                                  </div>
-        
-                                  <div className="py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                                    <p
-                                      className={`info-14-18  ${
-                                        item.status === true
-                                          ? "text-buy"
+                                  </div> */}
+                                    <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
+                                      <p className="info-14-18 dark:text-white ">
+                                        {item?.fee?.toFixed(8)}
+                                      </p>
+                                    </div>
+                                    <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
+                                      <p className="info-14-18 dark:text-white">
+                                        {item?.limit_usdt?.toFixed(2)}
+                                      </p>
+                                    </div>
+                                    <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
+                                      <p className="info-14-18 dark:text-white ">
+                                        ${item?.volume_usdt?.toFixed(2)}
+                                      </p>
+                                    </div>
+                                    <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
+                                      <p className="info-14-18 dark:text-white ">
+                                        ${item.token_amount?.toFixed(5)}
+                                      </p>
+                                    </div>
+
+                                    <div className="py-[10px] md:py-[15px] px-0 md:px-[5px] ">
+                                      <p
+                                        className={`info-14-18  ${item.status === true
+                                          ? item?.market_order_histroys.length === (ind + 1) ? 'text-gamma' : "text-buy"
                                           : item.isCanceled === true
-                                          ? "text-cancel"
-                                          : "text-gamma"
-                                      }`}
-                                    >
-                                      {item?.status === false
-                                        ? item?.isCanceled === true
-                                          ? "Canceled"
-                                          : "Pending"
-                                        : "Success"}
-                                    </p>
+                                            ? "text-cancel"
+                                            : "text-gamma"
+                                          }`}
+                                      >
+                                        {item?.status === false
+                                          ? item?.isCanceled === true
+                                            ? "Canceled"
+                                            : "Pending"
+                                          : item?.market_order_histroys.length === (ind + 1) ? 'Initial' : "Success"}
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
                                 );
                               }
                             )}
@@ -1241,9 +1227,8 @@ const ChartTabs = (props: propsData) => {
             </div>
             <div className="flex pt-[25px] items-center justify-end">
               <ReactPaginate
-                className={`history_pagination ${
-                  mode === "dark" ? "paginate_dark" : ""
-                }`}
+                className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+                  }`}
                 breakLabel="..."
                 nextLabel=">"
                 onPageChange={handleTradePageClick}

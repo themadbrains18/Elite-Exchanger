@@ -4,13 +4,14 @@ import RangeSlider from "./range-slider";
 import SelectDropdown from "./snippet/select-dropdown";
 import { useSession } from "next-auth/react";
 import AES from "crypto-js/aes";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProfitLossModal from "./popups/profit-loss-model";
 import Link from "next/link";
 import TradeConfirmPopupModal from "./popups/trade-confirm-modal";
 import OrderPreferenceModal from "../snippets/orderPreferenceModal";
 import PositionModal from "../snippets/positionModal";
+import ConfirmationModel from "../snippets/confirmation";
 
 interface fullWidth {
   fullWidth?: boolean;
@@ -32,7 +33,7 @@ interface fullWidth {
 }
 
 const BuySell = (props: fullWidth) => {
-    
+
   // main tabs
   const [show, setShow] = useState(1);
   const { status, data: session } = useSession();
@@ -64,8 +65,11 @@ const BuySell = (props: fullWidth) => {
   const [orderType, setOrderType] = useState("value");
   const [isShow, setIsShow] = useState(false);
   const [prefernce, setPreference] = useState(false);
-  const [prefernceSymbol,setPreferenceSymbol] = useState('Qty')
-  const [positionMode,setPositionMode] = useState('oneWay')
+  const [prefernceSymbol, setPreferenceSymbol] = useState('Qty')
+  const [positionMode, setPositionMode] = useState('oneWay');
+
+  const [shortConfirm, setShortConfirm] = useState(false);
+  const [active, setActive] = useState(false);
 
   let openOrderObj = {
     position_id: "--",
@@ -91,7 +95,7 @@ const BuySell = (props: fullWidth) => {
     profit: openOrderObj,
     stopls: openOrderObj,
   });
-  
+
 
   let marketPrice =
     props?.currentToken?.token !== null
@@ -122,7 +126,7 @@ const BuySell = (props: fullWidth) => {
       } else {
         setButtonStyle(false);
       }
-      
+
       setAvailBalance(asset[0].balance);
     } else {
       setAvailBalance(0);
@@ -175,10 +179,10 @@ const BuySell = (props: fullWidth) => {
   // ===================================================================//
   const submitForm = async () => {
     let obj;
-    if (marketType === "market" ) {
-        // if(positionMode==="oneWay"){
+    if (marketType === "market" || (show === 2 && marketType === 'limit')) {
+      // if(positionMode==="oneWay"){
 
-        // }
+      // }
       if (sizeValue === 0 || sizeValue < 0) {
         setSizeValidate("Amount must be positive number!");
         return;
@@ -199,7 +203,7 @@ const BuySell = (props: fullWidth) => {
       qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
 
       if (orderType === "qty") {
-        qty = sizeValue;
+        qty = sizeValue.toString();
       }
       let value: any = (qty * 0.055).toFixed(5);
       let releazedPnl = (marketPrice * value) / 100;
@@ -224,10 +228,12 @@ const BuySell = (props: fullWidth) => {
         direction: show === 1 ? "long" : "short",
         order_type: orderType,
         leverage_type: props?.marginMode?.margin,
-        type: marketType,
-        qty: qty,
+        type: (show === 2 && marketType === 'limit')?'market': marketType,
+        qty: parseFloat(qty),
+        position_mode: positionMode
       };
-    } else {
+    } 
+    else {
       if (entryPrice === 0 || entryPrice < 0) {
         setEntryPriceValidate("Price must be positive number!");
         return;
@@ -252,7 +258,7 @@ const BuySell = (props: fullWidth) => {
       qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
 
       if (orderType === "qty") {
-        qty = sizeValue;
+        qty = sizeValue.toString();
       }
       obj = {
         position_id: "--",
@@ -277,20 +283,21 @@ const BuySell = (props: fullWidth) => {
         order_type: orderType,
         leverage_type: props?.marginMode?.margin,
         coin_id: props?.currentToken?.coin_id,
-        qty: qty,
-        position_mode:positionMode
+        qty: parseFloat(qty),
+        position_mode: positionMode
       };
     }
 
     setConfirmOrderData(obj);
     setConfirmModelPopup(1);
     setConfirmModelOverlay(true);
+
   };
 
   const confirmOrder = async () => {
     try {
       let obj;
-      if (marketType === "market") {
+      if (marketType === "market" || (show === 2 && marketType === 'limit')) {
         if (sizeValue === 0 || sizeValue < 0) {
           setSizeValidate("Amount must be positive number!");
           return;
@@ -307,9 +314,10 @@ const BuySell = (props: fullWidth) => {
           Liquidation_Price = marketPrice + Liquidation_Price;
         }
 
-        let qty: any = (sizeValue / marketPrice).toFixed(3);
+        let qty: any = sizeValue / marketPrice;
+        qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
         if (orderType === "qty") {
-          qty = sizeValue;
+          qty = sizeValue.toString();
         }
         let value: any = (qty * 0.055).toFixed(5);
         let releazedPnl = (marketPrice * value) / 100;
@@ -333,8 +341,9 @@ const BuySell = (props: fullWidth) => {
           direction: show === 1 ? "long" : "short",
           order_type: orderType,
           leverage_type: props?.marginMode?.margin,
-          market_type: marketType,
-          qty: qty,
+          market_type: (show === 2 && marketType === 'limit')?'market': marketType,
+          qty: parseFloat(qty),
+          position_mode: positionMode
         };
       } else {
         if (entryPrice === 0 || entryPrice < 0) {
@@ -357,9 +366,10 @@ const BuySell = (props: fullWidth) => {
           Liquidation_Price = entryPrice + Liquidation_Price;
         }
 
-        let qty: any = (sizeValue / marketPrice).toFixed(3);
+        let qty: any = sizeValue / marketPrice;
+        qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
         if (orderType === "qty") {
-          qty = sizeValue;
+          qty = sizeValue.toString();
         }
         obj = {
           position_id: "--",
@@ -384,7 +394,8 @@ const BuySell = (props: fullWidth) => {
           order_type: orderType,
           leverage_type: props?.marginMode?.margin,
           coin_id: props?.currentToken?.coin_id,
-          qty: qty,
+          qty: parseFloat(qty),
+          position_mode: positionMode
         };
       }
 
@@ -397,8 +408,7 @@ const BuySell = (props: fullWidth) => {
       let record = encodeURIComponent(ciphertext.toString());
 
       let reponse = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/future/${
-          marketType === "market" ? "position" : "openorder"
+        `${process.env.NEXT_PUBLIC_BASEURL}/future/${(marketType === "market" || (show === 2 && marketType === 'limit')) ? "position" : "openorder"
         }`,
         {
           method: "POST",
@@ -414,7 +424,9 @@ const BuySell = (props: fullWidth) => {
         toast.error(
           reponse?.data?.data?.message !== undefined
             ? reponse?.data?.data?.message
-            : reponse?.data?.data
+            : reponse?.data?.data, {
+          position: toast.POSITION.TOP_CENTER
+        }
         );
         setButtonStyle(false);
       } else {
@@ -458,7 +470,9 @@ const BuySell = (props: fullWidth) => {
         websocket.onopen = () => {
           websocket.send(JSON.stringify(position));
         };
-        toast.success(reponse?.data?.data?.message);
+        toast.success(reponse?.data?.data?.message, {
+          position: toast.POSITION.TOP_CENTER
+        });
         setButtonStyle(false);
         setEntryPrice(0);
         setSizeValue(0);
@@ -466,7 +480,7 @@ const BuySell = (props: fullWidth) => {
         setConfirmModelOverlay(false);
         setConfirmModelPopup(0);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // ===================================================================//
@@ -609,7 +623,9 @@ const BuySell = (props: fullWidth) => {
         toast.error(
           reponse?.data?.data?.message !== undefined
             ? reponse?.data?.data?.message
-            : reponse?.data?.data
+            : reponse?.data?.data, {
+          position: toast.POSITION.TOP_CENTER
+        }
         );
         setButtonStyle(false);
       } else {
@@ -620,19 +636,27 @@ const BuySell = (props: fullWidth) => {
         websocket.onopen = () => {
           websocket.send(JSON.stringify(position));
         };
-        toast.success(reponse?.data?.data?.message);
+        toast.success(reponse?.data?.data?.message, {
+          position: toast.POSITION.TOP_CENTER
+        });
         setButtonStyle(false);
         props?.refreshWalletAssets();
       }
-    } catch (error) {}
+    } catch (error) { }
   };
+
+  const actionPerform = async () => {
+    setShortConfirm(false);
+    setActive(false);
+    submitForm();
+  }
 
   return (
     <>
+      {/* <ToastContainer /> */}
       <div
-        className={`p-[16px] dark:bg-[#1f2127] bg-[#fff] ${
-          props.fullWidth ? "max-w-full h-auto" : "max-w-[300px] h-[677px]"
-        } w-full border-l border-b dark:border-[#25262a] border-[#e5e7eb]`}
+        className={`p-[16px] dark:bg-[#1f2127] bg-[#fff] ${props.fullWidth ? "max-w-full h-auto" : "max-w-[300px] h-[677px]"
+          } w-full border-l border-b dark:border-[#25262a] border-[#e5e7eb]`}
       >
         <div className="flex  gap-2 w-full items-center">
           <div
@@ -663,18 +687,17 @@ const BuySell = (props: fullWidth) => {
             </div>
             <IconsComponent type="rightArrowWithoutBg" />
           </div>
-          <div className="cursor-pointer" onClick={()=>{setIsShow(true)}}>
-           <IconsComponent type="settingIcon" />
+          <div className="cursor-pointer" onClick={() => { setIsShow(true) }}>
+            <IconsComponent type="settingIcon" />
           </div>
         </div>
         {/* main tabs */}
         <div className="flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[2px] mt-10">
           <button
-            className={`w-full p-[5px] rounded-[4px] border ${
-              show === 1
-                ? "text-buy border-buy"
-                : "text-[#a3a8b7] border-[#f0f8ff00]"
-            }`}
+            className={`w-full p-[5px] rounded-[4px] border ${show === 1
+              ? "text-buy border-buy"
+              : "text-[#a3a8b7] border-[#f0f8ff00]"
+              }`}
             onClick={() => {
               setShow(1);
               if (showNes === 3) {
@@ -685,11 +708,10 @@ const BuySell = (props: fullWidth) => {
             Buy
           </button>
           <button
-            className={`w-full p-[5px] rounded-[4px] border ${
-              show === 2
-                ? "text-sell border-sell "
-                : "text-[#a3a8b7] border-[#f0f8ff00]"
-            }`}
+            className={`w-full p-[5px] rounded-[4px] border ${show === 2
+              ? "text-sell border-sell "
+              : "text-[#a3a8b7] border-[#f0f8ff00]"
+              }`}
             onClick={() => {
               setShow(2);
               if (showNes === 3) {
@@ -704,11 +726,10 @@ const BuySell = (props: fullWidth) => {
         <div className="flex items-center justify-between  mt-10">
           <div className="flex items-center gap-[10px]">
             <button
-              className={`admin-body-text ${
-                showNes === 1
-                  ? "!text-black dark:!text-white"
-                  : "!text-[#a3a8b7]"
-              }`}
+              className={`admin-body-text ${showNes === 1
+                ? "!text-black dark:!text-white"
+                : "!text-[#a3a8b7]"
+                }`}
               onClick={() => {
                 setShowNes(1);
                 setMarketType("limit");
@@ -722,11 +743,10 @@ const BuySell = (props: fullWidth) => {
               Limit
             </button>
             <button
-              className={`admin-body-text ${
-                showNes === 2
-                  ? "!text-black dark:!text-white"
-                  : "!text-[#a3a8b7]"
-              }`}
+              className={`admin-body-text ${showNes === 2
+                ? "!text-black dark:!text-white"
+                : "!text-[#a3a8b7]"
+                }`}
               onClick={() => {
                 setShowNes(2);
                 setMarketType("market");
@@ -740,11 +760,10 @@ const BuySell = (props: fullWidth) => {
               Market
             </button>
             <button
-              className={`admin-body-text ${
-                showNes === 3
-                  ? "!text-black dark:!text-white"
-                  : "!text-[#a3a8b7]"
-              }`}
+              className={`admin-body-text ${showNes === 3
+                ? "!text-black dark:!text-white"
+                : "!text-[#a3a8b7]"
+                }`}
               onClick={() => {
                 setShowNes(3);
                 setMarketType("stop");
@@ -821,10 +840,10 @@ const BuySell = (props: fullWidth) => {
         )}
         {(showNes === 1 || showNes === 2) && (
           <>
-          <div className="flex gap-1 mt-10 items-center" onClick={()=>{setPreference(true)}} >
-            <p className="top-label ">{prefernceSymbol==="Qty"?"Order by Qty":"Order by Value"}</p>
-            <IconsComponent type="swap-calender-with-circle" />
-          </div>
+            <div className="flex gap-1 mt-10 items-center" onClick={() => { setPreference(true) }} >
+              <p className="top-label ">{prefernceSymbol === "Qty" ? "Order by Qty" : "Order by Value"}</p>
+              <IconsComponent type="swap-calender-with-circle" />
+            </div>
             <div className="mt-2 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]">
               <div>
                 <p className="top-label">Amount </p>
@@ -846,7 +865,7 @@ const BuySell = (props: fullWidth) => {
                 />
               </div>
               <div className="cursor-default">
-                <p className='admin-body-text !text-[12px] dark:!text-white'>{prefernceSymbol==="Qty"?props?.currentToken?.coin_symbol:props?.currentToken?.usdt_symbol}</p>
+                <p className='admin-body-text !text-[12px] dark:!text-white'>{prefernceSymbol === "Qty" ? props?.currentToken?.coin_symbol : props?.currentToken?.usdt_symbol}</p>
                 {/* <SelectDropdown
                   list={list}
                   showNes={showNes}
@@ -1032,11 +1051,10 @@ const BuySell = (props: fullWidth) => {
                   <div className="mt-[5px]">
                     <button
                       disabled={buttonStyle}
-                      className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${
-                        buttonStyle === true
-                          ? "cursor-not-allowed opacity-50"
-                          : ""
-                      }`}
+                      className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true
+                        ? "cursor-not-allowed opacity-50"
+                        : ""
+                        }`}
                       onClick={submitForm}
                     >
                       Open Long
@@ -1047,12 +1065,19 @@ const BuySell = (props: fullWidth) => {
                   <div className="mt-[5px]">
                     <button
                       disabled={buttonStyle}
-                      className={`solid-button w-full !bg-sell !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${
-                        buttonStyle === true
-                          ? "cursor-not-allowed opacity-50"
-                          : ""
-                      }`}
-                      onClick={submitForm}
+                      className={`solid-button w-full !bg-sell !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true
+                        ? "cursor-not-allowed opacity-50"
+                        : ""
+                        }`}
+                      onClick={() => {
+                        if (marketType === 'limit') {
+                          setActive(true);
+                          setShortConfirm(true);
+                        }else{
+                          submitForm()
+                        }
+                        // submitForm
+                      }}
                     >
                       Open Short
                     </button>
@@ -1121,9 +1146,8 @@ const BuySell = (props: fullWidth) => {
               <div className="mt-[5px]">
                 <button
                   disabled={buttonStyle}
-                  className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${
-                    buttonStyle === true ? "cursor-not-allowed opacity-50" : ""
-                  }`}
+                  className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true ? "cursor-not-allowed opacity-50" : ""
+                    }`}
                   onClick={() => {
                     setIsShow(true);
                     submitStopLimitForm("Buy");
@@ -1137,9 +1161,8 @@ const BuySell = (props: fullWidth) => {
               <div className="mt-[5px]">
                 <button
                   disabled={buttonStyle}
-                  className={`solid-button w-full !bg-sell !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${
-                    buttonStyle === true ? "cursor-not-allowed opacity-50" : ""
-                  }`}
+                  className={`solid-button w-full !bg-sell !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true ? "cursor-not-allowed opacity-50" : ""
+                    }`}
                   onClick={() => submitStopLimitForm("Sell")}
                 >
                   Sell Short
@@ -1162,9 +1185,8 @@ const BuySell = (props: fullWidth) => {
 
       {/* overlay */}
       <div
-        className={`sdsadsadd bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${
-          (modelOverlay || confirmModelOverlay) && "!opacity-[70%] !visible"
-        }`}
+        className={`sdsadsadd bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${(modelOverlay || confirmModelOverlay || active) && "!opacity-[70%] !visible"
+          }`}
       ></div>
       <ProfitLossModal
         setModelOverlay={setModelOverlay}
@@ -1190,10 +1212,13 @@ const BuySell = (props: fullWidth) => {
         confirmOrderData={confirmOrderData}
       />
       {
-                prefernce &&
-                <OrderPreferenceModal setPreference={setPreference} currentToken={props?.currentToken} setPreferenceSymbol={setPreferenceSymbol} prefernceSymbol={prefernceSymbol}/>
-            }
-      {isShow && <PositionModal setIsShow={setIsShow} positionMode={positionMode} setPositionMode={setPositionMode}/>}
+        prefernce &&
+        <OrderPreferenceModal setPreference={setPreference} currentToken={props?.currentToken} setPreferenceSymbol={setPreferenceSymbol} prefernceSymbol={prefernceSymbol} />
+      }
+      {isShow && <PositionModal setIsShow={setIsShow} positionMode={positionMode} setPositionMode={setPositionMode} positions={props.positions} openOrders={props.openOrders} />}
+
+      {shortConfirm && <ConfirmationModel setActive={setActive} setShow={setShortConfirm} title="Risk Alert" 
+      message={'The current order may encounter the following circumstances.\nPlease confirm before you proceed.\n1. The current order may be executed immediately  as a market order.'} actionPerform={actionPerform} />}
     </>
   );
 };

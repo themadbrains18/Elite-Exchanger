@@ -38,12 +38,12 @@ const Chart = (props: Session) => {
     const [BuyTrade, setBuyTrade] = useState([]);
 
     const { slug } = router.query;
-    
+
     // let currentToken = props.coinList.filter((item: any) => {
     //     return item.symbol === slug
     // })
 
-    useEffect(() => {
+    const socket = () => {
         const websocket = new WebSocket('ws://localhost:3001/');
 
         websocket.onopen = () => {
@@ -65,7 +65,7 @@ const Chart = (props: Session) => {
             }
         }
 
-    }, [slug])
+    };
 
     const refreshTokenList = async () => {
         let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
@@ -90,6 +90,8 @@ const Chart = (props: Session) => {
 
         setCurrentToken(ccurrentToken);
         getAllMarketOrderByToken(slug);
+
+        socket()
 
     }, [slug]);
 
@@ -127,8 +129,8 @@ const Chart = (props: Session) => {
         }
     }
 
-    const getAllMarketOrderByToken = async (symbol:any) => {
-        
+    const getAllMarketOrderByToken = async (symbol: any) => {
+
         let currentToken = allCoins.filter((item: any) => {
             return item.symbol === symbol
         })
@@ -144,7 +146,7 @@ const Chart = (props: Session) => {
 
     }
 
-    const filterBuySellRecords = (data:any) => {
+    const filterBuySellRecords = (data: any) => {
         if (data && data.length > 0) {
             let sellRecord = data.filter((item: any) => {
                 return item.order_type === 'sell'
@@ -156,13 +158,13 @@ const Chart = (props: Session) => {
             setSellTrade(sellRecord);
             setBuyTrade(buyRecord);
         }
-        else{
+        else {
             setSellTrade([]);
             setBuyTrade([]);
         }
     }
 
-    
+
     return (
         <>
             <div>
@@ -184,13 +186,13 @@ const Chart = (props: Session) => {
                                 <BuySellCard id={1} coins={allCoins} session={props.session} token={currentToken[0]} slug={slug} assets={props.assets} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
                                 {/* hidden on mobile */}
                                 <div className='lg:block hidden'>
-                                    <OrderBook slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade}/>
+                                    <OrderBook slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} />
                                 </div>
                             </div>
                             {/* hidden on desktop */}
                             <div className='lg:hidden'>
-                                <OrderBookMobile slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade}/>
-                                <ChartTabs coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory}/>
+                                <OrderBookMobile slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} />
+                                <ChartTabs coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
                             </div>
                         </div>
                     </div>

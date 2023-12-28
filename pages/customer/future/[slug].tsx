@@ -31,7 +31,7 @@ interface Session {
 }
 
 const FutureTrading = (props: Session) => {
-    const  slug  = props?.serverSlug// router.query;
+    const slug = props?.serverSlug// router.query;
 
     const [show, setShow] = useState(1);
     const [marginMode, setMarginMode] = useState({ margin: 'Isolated', leverage: 10 });
@@ -67,7 +67,7 @@ const FutureTrading = (props: Session) => {
 
 
     const socket = () => {
-       
+
         const websocket = new WebSocket('ws://localhost:3001/');
 
         websocket.onopen = () => {
@@ -79,7 +79,7 @@ const FutureTrading = (props: Session) => {
             let eventDataType = JSON.parse(event.data).type;
 
             if (eventDataType === "price") {
-               await refreshTokenList();
+                await refreshTokenList();
                 getUserFuturePositionData();
                 getUserOpenOrderData();
                 getUserFuturePositionHistoryData();
