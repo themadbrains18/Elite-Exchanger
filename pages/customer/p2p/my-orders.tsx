@@ -38,7 +38,11 @@ const MyOrders = (props: propsData) => {
       const data = JSON.parse(event.data).data;
       let eventDataType = JSON.parse(event.data).type;
       if (eventDataType === "order") {
-        setOrderDetail(data)
+
+        console.log(data,'==========socket order data=============');
+        
+        getOrderByOrderId(data?.id);
+        // setOrderDetail(data)
       }
 
       if (eventDataType === "buy") {

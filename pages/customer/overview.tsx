@@ -18,7 +18,7 @@ const Overview = ({ sessions }: InferGetServerSidePropsType<typeof getServerSide
       </div>
       <div className="py-[30px] md:py-[50px]">
         <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">Personal Information</p>
-        <p className="sm-text ">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry.</p>
+        <p className="sm-text "></p>
         <div className="mt-[30px] ">
           <div className="flex md:flex-row flex-col gap-[30px]">
             <div className=" w-full">
@@ -49,7 +49,7 @@ const Overview = ({ sessions }: InferGetServerSidePropsType<typeof getServerSide
 
       <div className="py-[30px] md:py-[50px]">
         <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">Contact Information</p>
-        <p className="sm-text ">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry.</p>
+        <p className="sm-text "></p>
         <div className="mt-[30px] ">
           <div className="flex md:flex-row flex-col gap-[30px]">
             <div className=" w-full">

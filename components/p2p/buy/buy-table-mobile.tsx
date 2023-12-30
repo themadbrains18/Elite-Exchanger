@@ -26,101 +26,6 @@ const BuyTableMobile = (props:activeSection) => {
   
     };
 
-    // let data = [
-    //     {
-    //         name: "Jerry Smith",
-    //         image: "user1.png",
-    //         orders: "94.14% 144 Orders",
-    //         pricePerCoin: "₹ 82.00INR/USDT",
-    //         limit: "5,000 ~ 9,000 ",
-    //         Available: '9.000342',
-    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-    //         sell: "Buy"
-    //     },
-    //     {
-    //         name: "Jerry Smith",
-    //         image: "user1.png",
-    //         orders: "94.14% 144 Orders",
-    //         pricePerCoin: "₹ 82.00INR/USDT",
-    //         limit: "5,000 ~ 9,000 ",
-    //         Available: '9.000342',
-    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-    //         sell: "Buy"
-    //     },
-    //     {
-    //         name: "Jerry Smith",
-    //         image: "user1.png",
-    //         orders: "94.14% 144 Orders",
-    //         pricePerCoin: "₹ 82.00INR/USDT",
-    //         limit: "5,000 ~ 9,000 ",
-    //         Available: '9.000342',
-    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-    //         sell: "Buy"
-    //     },
-    //     {
-    //         name: "Jerry Smith",
-    //         image: "user1.png",
-    //         orders: "94.14% 144 Orders",
-    //         pricePerCoin: "₹ 82.00INR/USDT",
-    //         limit: "5,000 ~ 9,000 ",
-    //         Available: '9.000342',
-    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-    //         sell: "Buy"
-    //     },
-    //     {
-    //         name: "Jerry Smith",
-    //         image: "user1.png",
-    //         orders: "94.14% 144 Orders",
-    //         pricePerCoin: "₹ 82.00INR/USDT",
-    //         limit: "5,000 ~ 9,000 ",
-    //         Available: '9.000342',
-    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-    //         sell: "Buy"
-    //     },
-    //     {
-    //         name: "Jerry Smith",
-    //         image: "user1.png",
-    //         orders: "94.14% 144 Orders",
-    //         pricePerCoin: "₹ 82.00INR/USDT",
-    //         limit: "5,000 ~ 9,000 ",
-    //         Available: '9.000342',
-    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-    //         sell: "Buy"
-    //     },
-    //     {
-    //         name: "Jerry Smith",
-    //         image: "user1.png",
-    //         orders: "94.14% 144 Orders",
-    //         pricePerCoin: "₹ 82.00INR/USDT",
-    //         limit: "5,000 ~ 9,000 ",
-    //         Available: '9.000342',
-    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-    //         sell: "Buy"
-    //     },
-    //     {
-    //         name: "Jerry Smith",
-    //         image: "user1.png",
-    //         orders: "94.14% 144 Orders",
-    //         pricePerCoin: "₹ 82.00INR/USDT",
-    //         limit: "5,000 ~ 9,000 ",
-    //         Available: '9.000342',
-    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-    //         sell: "Buy"
-    //     },
-    //     {
-    //         name: "Jerry Smith",
-    //         image: "user1.png",
-    //         orders: "94.14% 144 Orders",
-    //         pricePerCoin: "₹ 82.00INR/USDT",
-    //         limit: "5,000 ~ 9,000 ",
-    //         Available: '9.000342',
-    //         PaymentMethod: ['phonepay.png','paytm.png','gpay.png'],
-    //         sell: "Buy"
-    //     },
-    // ];
-
-
-
     return (
         <>
             {
@@ -156,7 +61,7 @@ const BuyTableMobile = (props:activeSection) => {
                                 </div>
                                 <div className='mt-[12px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Available:</p>
-                                    <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{item?.quantity} {item?.token?.symbol}</p>
+                                    <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{item?.quantity} {item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
                                 </div>
                                 <div className='mt-[12px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Available:</p>

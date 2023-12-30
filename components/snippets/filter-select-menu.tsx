@@ -26,7 +26,7 @@ const FiliterSelectMenu = (props: dataList) => {
       let dropdown = document.querySelector('.coin-dropdown');
       let targetEl = evt?.target?.parentNode?.parentElement; // clicked element
       if (evt?.target.nodeName === 'svg') {
-        targetEl = evt?.target?.parentNode.parentNode
+        targetEl = evt?.target?.parentNode?.parentNode
       }
       if (targetEl?.classList.contains('coin-dropdown') === false) {
         setShow(false);

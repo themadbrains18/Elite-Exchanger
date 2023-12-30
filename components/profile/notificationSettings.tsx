@@ -14,37 +14,37 @@ const NotificationSettings = (props:fixSection) => {
       image: "price.svg",
       bg: "red",
       title: "Price Alerts",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
     },
     {
       image: "referal.svg",
       bg: "green",
       title: "Referral Commission Alerts",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
     },
     {
       image: "device.svg",
       bg: "blue",
       title: "Device Login Alerts",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
     },
     {
       image: "mail.svg",
       bg: "blue",
       title: "Email Notification",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
     },
     {
       image: "device.svg",
       bg: "blue",
       title: "Device Login Alerts",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
     },
     {
       image: "device.svg",
       bg: "blue",
       title: "Device Login Alerts",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
     },
   ];
   return (

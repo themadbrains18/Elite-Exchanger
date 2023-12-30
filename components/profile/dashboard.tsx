@@ -209,10 +209,10 @@ const   Dashboard = (props: fixSection) => {
             <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
               Contact Information
             </p>
-            <p className="sm-text ">
+            {/* <p className="sm-text ">
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry.
-            </p>
+            </p> */}
             <div className="mt-[30px] ">
               <div className="flex md:flex-row flex-col gap-[30px]">
                 <div className=" w-full">

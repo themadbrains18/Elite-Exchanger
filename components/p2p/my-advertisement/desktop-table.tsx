@@ -179,7 +179,7 @@ const DesktopTable = (props: dataTypes) => {
                                     <Fragment key={ind}>
                                         <tr>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity}&nbsp;{item?.token?.symbol}</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className={`info-14-18 !text-buy`}>BUY</p>
@@ -188,7 +188,7 @@ const DesktopTable = (props: dataTypes) => {
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.price} INR</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity} {item?.token?.symbol}</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity} {item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>

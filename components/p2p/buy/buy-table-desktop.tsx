@@ -118,7 +118,7 @@ const BuyTableDesktop = (props: activeSection) => {
                     </td>
 
                     <td>
-                      <p className="info-14-18 dark:text-white  ">{item?.quantity} {item?.token?.symbol}</p>
+                      <p className="info-14-18 dark:text-white  ">{item?.quantity} {item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
                     </td>
 
                     <td>

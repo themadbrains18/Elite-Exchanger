@@ -83,15 +83,15 @@ const Adverstisement = (props: propsData) => {
 
     setSelectedAssets(item);
     let balances = props?.assets?.filter((e: any) => {
-      return e.token_id === item?.id
+      return e.token_id === item?.id && e.walletTtype ==='main_wallet'
     })
-    if(balances[0]!==undefined){
+    if (balances[0] !== undefined) {
       setAssetsBalance(balances[0]?.balance);
     }
-    else{
+    else {
       setAssetsBalance(0);
     }
-    
+
   }
 
   const setPaymentMethod = (data: any) => {
@@ -103,18 +103,15 @@ const Adverstisement = (props: propsData) => {
       setStep1Data(data);
       setStep(2);
     }
-    else{
+    else {
       toast.error('Insufficiant Balance')
     }
 
   }
 
-  console.log(assetsBalance,'================assetsBalance');
-  
-
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       {step == 1 && (
         <div className="mt-30 md:mt-40">
           <p className="sec-title">Set Type And Price</p>
@@ -305,7 +302,7 @@ const Adverstisement = (props: propsData) => {
                   )}
                   <p className="py-2 info-10-14 text-right">Bal. {assetsBalance}</p>
                 </div>
-                
+
                 <button
                   className="solid-button w-full text-center"
                 >

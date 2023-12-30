@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
 import { useRouter } from "next/router";
+import TradingPasswordAds from "./tradingPasswordAds";
 
 const schema = yup.object().shape({
   condition: yup.string().optional().default(''),
@@ -27,11 +28,28 @@ const Response = (props: activeSection) => {
   const condition = ["Complete KYC", "Registered 0 day(s) ago", "Holding More The 0.01 BTC"];
   const status = ["Online Right Now", "Online, Manually later"]
 
+  const [show, setShow] = useState(false);
+  const [active, setActive] = useState(false);
+
+  const [finalFormData, setFinalFormData] = useState({
+    "user_id": "",
+    "token_id": "",
+    "price": 0.00,
+    "quantity": 0.00,
+    "min_limit": 0.00,
+    "max_limit": 0.00,
+    "p_method": {},
+    "payment_time": "",
+    "condition": "",
+    "status": false,
+    "notes": "",
+    "auto_reply": "",
+    "fundcode": ''
+  });
+
   const { data: session } = useSession();
   const route = useRouter();
 
-  console.log(props.step2Data,'=======payment method form');
-  
   let {
     register,
     setValue,
@@ -70,38 +88,12 @@ const Response = (props: activeSection) => {
       "status": false,
       "notes": data?.notes,
       "auto_reply": data?.auto_reply,
-      "fundcode": '123456'
+      "fundcode": ''
     }
 
-    const ciphertext = AES.encrypt(JSON.stringify(formData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-    let record = encodeURIComponent(ciphertext.toString());
-
-    let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/postad`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": session?.user?.access_token
-      },
-      body: JSON.stringify(record)
-    })
-
-    let res = await responseData.json();
-
-    if (res.data.status === 200) {
-      const websocket = new WebSocket('ws://localhost:3001/');
-      let post = {
-        ws_type: 'post'
-      }
-      websocket.onopen = () => {
-        websocket.send(JSON.stringify(post));
-      }
-      toast.success(res.data.data.message);
-      route.push('/p2p/my-advertisement');
-    }
-    else {
-      toast.error(res.data.data);
-    }
+    setFinalFormData(formData);
+    setActive(true);
+    setShow(true);
 
     // var formData = new FormData();
     // formData.append("user_id", session?.user?.user_id);
@@ -128,6 +120,47 @@ const Response = (props: activeSection) => {
 
   const selectStatus = (item: any) => {
     setValue('status', item)
+  }
+
+  const finalSubmitAds = async (pass: string) => {
+    try {
+
+      finalFormData.fundcode = pass;
+
+      const ciphertext = AES.encrypt(JSON.stringify(finalFormData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+      let record = encodeURIComponent(ciphertext.toString());
+
+      let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/postad`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": session?.user?.access_token
+        },
+        body: JSON.stringify(record)
+      })
+
+      let res = await responseData.json();
+
+      if (res.data.status === 200) {
+        const websocket = new WebSocket('ws://localhost:3001/');
+        let post = {
+          ws_type: 'post'
+        }
+        websocket.onopen = () => {
+          websocket.send(JSON.stringify(post));
+        }
+        toast.success(res.data.data.message);
+        setActive(false);
+        setShow(false);
+        route.push('/p2p/my-advertisement');
+      }
+      else {
+        toast.error(res.data.data);
+      }
+    } catch (error) {
+
+    }
   }
 
 
@@ -170,29 +203,29 @@ const Response = (props: activeSection) => {
                       <label
                         htmlFor={`radio${item}`}
                         className="
-                    cursor-pointer
-                    ml-2 md-text dark:!text-g-secondary relative custom-radio 
+                          cursor-pointer
+                          ml-2 md-text dark:!text-g-secondary relative custom-radio 
 
-                    pl-[30px] 
-                    after:dark:bg-omega
-                    after:bg-white
-                    after:left-[0px]
-                    after:w-[20px] 
-                    after:h-[20px]
-                    after:rounded-[50%] 
-                    after:border after:border-beta
-                    after:absolute
+                          pl-[30px] 
+                          after:dark:bg-omega
+                          after:bg-white
+                          after:left-[0px]
+                          after:w-[20px] 
+                          after:h-[20px]
+                          after:rounded-[50%] 
+                          after:border after:border-beta
+                          after:absolute
 
-                    before:dark:bg-[transparent]
-                    before:bg-white
-                    before:left-[5px]
-                    before:md:top-[calc(50%-7px)]
-                    before:top-[calc(50%-9px)]
-                    before:w-[10px] 
-                    before:h-[10px]
-                    before:rounded-[50%] 
-                    before:absolute
-                    before:z-[1]"
+                          before:dark:bg-[transparent]
+                          before:bg-white
+                          before:left-[5px]
+                          before:md:top-[calc(50%-7px)]
+                          before:top-[calc(50%-9px)]
+                          before:w-[10px] 
+                          before:h-[10px]
+                          before:rounded-[50%] 
+                          before:absolute
+                          before:z-[1]"
                       >
                         {item}
                       </label>
@@ -211,31 +244,31 @@ const Response = (props: activeSection) => {
                         <label
                           htmlFor={`radio1${item}`}
                           className="
-                cursor-pointer
-                ml-2 md-text dark:!text-g-secondary relative custom-radio 
+                            cursor-pointer
+                            ml-2 md-text dark:!text-g-secondary relative custom-radio 
 
-                pl-[30px] 
-                after:dark:bg-omega
-                after:bg-white
-                after:left-[0px]
-                after:w-[20px] 
-                after:h-[20px]
-                after:rounded-[50%] 
-                after:border after:border-beta
-                after:absolute
+                            pl-[30px] 
+                            after:dark:bg-omega
+                            after:bg-white
+                            after:left-[0px]
+                            after:w-[20px] 
+                            after:h-[20px]
+                            after:rounded-[50%] 
+                            after:border after:border-beta
+                            after:absolute
 
-                before:dark:bg-[transparent]
-                before:bg-white
-                before:left-[5px]
-                before:md:top-[calc(50%-7px)]
-                before:top-[calc(50%-9px)]
-                before:w-[10px] 
-                before:h-[10px]
-                before:rounded-[50%] 
-                before:absolute
-                before:z-[1]
-                
-                "
+                            before:dark:bg-[transparent]
+                            before:bg-white
+                            before:left-[5px]
+                            before:md:top-[calc(50%-7px)]
+                            before:top-[calc(50%-9px)]
+                            before:w-[10px] 
+                            before:h-[10px]
+                            before:rounded-[50%] 
+                            before:absolute
+                            before:z-[1]
+                            
+                            "
                         >
                           {item}
                         </label>
@@ -265,7 +298,12 @@ const Response = (props: activeSection) => {
             <button className="solid-button max-w-[220px] w-full">Post</button>
           </div>
         </div>
+
       </form>
+      {active &&
+        <TradingPasswordAds setActive={setActive} setShow={setShow} show={show} finalSubmitAds={finalSubmitAds} />
+      }
+
     </>
 
   );

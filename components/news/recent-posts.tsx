@@ -10,7 +10,7 @@ const RecentPosts = () => {
         <div className="container">
             <div className='mb-[30px] max-w-[721px] w-full'>
                 <h1 className='sec-title !text-[19px] md:!text-[28px] md:mb-[15px] mb-[10px]'>Recent Posts</h1>
-                <p className='info-16-18 dark:!text-beta !text-[12px] md:!text-[16px] !leading-[18px] md:!leading-[24px] '>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy</p>
+                <p className='info-16-18 dark:!text-beta !text-[12px] md:!text-[16px] !leading-[18px] md:!leading-[24px] '></p>
             </div>
             <div className='grid lg:grid-cols-3 xl:grid-cols-4 md:grid-cols-2  grid-cols-1 gap-[30px]'>
                 {
@@ -27,7 +27,7 @@ const RecentPosts = () => {
                                             <p className='sec-title !text-beta md:!text-[16px] !text-[14px]'>Sep 12, 2023</p>
                                         </div>
                                         <h3 className='sec-title md:mb-20 mb-[15px]'>Learn about UI8 coin and earn an All-Access Pass</h3>
-                                        <p className='info-14-18 !text-[14px] md:!text-[16px]'>Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet.</p>
+                                        <p className='info-14-18 !text-[14px] md:!text-[16px]'></p>
                                         <Link href="/detail" className='sec-Brief flex  items-center gap-[10px] !text-primary md:mt-[30px] mt-[20px]'>
                                             <span className='block relative after:absolute after:w-full after:h-[2px] after:bg-primary after:top-[100%] after:left-0'>Read More</span>
                                         </Link>

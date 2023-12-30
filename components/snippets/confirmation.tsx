@@ -16,9 +16,6 @@ const ConfirmationModel = (props: activeSection) => {
     const text:any = props.message;
     const newText = text.split('\n');
 
-    console.log(newText,'======newText');
-    
-
     return (
         <>
             <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show ? "opacity-80 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow(false) }}></div>

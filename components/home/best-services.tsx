@@ -6,7 +6,7 @@ const BestServices = () => {
     const headData = {
         title: 'Benefits',
         subTitle: 'Our Best Service',
-        brief: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industris standard dummy text ever since the 1500s, when an unknown',
+        brief: '',
         spacing:false,
         Cta:false,
         hidden:false
@@ -15,42 +15,42 @@ const cardsData = [
     {
         "svgType":"safetyLogo",
         "cardHeading":"Windows",
-        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
+        "cardInfo":""
     },
     {
         "svgType":"easyDeposit",
         "cardHeading":"Easy Deposit & Withdrawls",
-        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
+        "cardInfo":""
     },
     {
         "svgType":"lowCharges",
         "cardHeading":"Low Charges",
-        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
+        "cardInfo":""
     },
     {
         "svgType":"BonusRefferal",
         "cardHeading":"Bonus & Refferal",
-        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
+        "cardInfo":""
     },
     {
         "svgType":"FastTransactions",
         "cardHeading":"Fast Transactions",
-        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
+        "cardInfo":""
     },
     {
         "svgType":"DeepEncryption",
         "cardHeading":"Deep Encryption ",
-        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
+        "cardInfo":""
     },
     {
         "svgType":"FastKYC",
         "cardHeading":"Fast KYC",
-        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
+        "cardInfo":""
     },
     {
         "svgType":"Support",
         "cardHeading":"24/7 Support",
-        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
+        "cardInfo":""
     },
 ]
   return (
