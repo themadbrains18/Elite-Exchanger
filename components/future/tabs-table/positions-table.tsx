@@ -32,7 +32,7 @@ const PositionsTable = (props: propsData) => {
 
   const actionPerform = async () => {
     let obj = { "id": positionId };
-    console.log(positionId);
+    // console.log(positionId);
 
     const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
     let record = encodeURIComponent(ciphertext.toString());

@@ -65,7 +65,7 @@ const GoogleAuth = (props:activeSection) => {
           
         if (res.data.data !== undefined) {
 
-          console.log(res.data.data);
+          // console.log(res.data.data);
           
           toast.success(res.data.data);
           props?.setGoogleAuth(true)

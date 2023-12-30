@@ -431,7 +431,7 @@ const BuySell = (props: fullWidth) => {
         setButtonStyle(false);
       } else {
         if (istpslchecked === true) {
-          console.log(tpsl?.profit?.position_id);
+          // console.log(tpsl?.profit?.position_id);
           if (tpsl.profit) {
             tpsl.profit.position_id = reponse?.data?.data?.result?.id;
           }

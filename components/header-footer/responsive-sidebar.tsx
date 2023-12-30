@@ -180,7 +180,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
   // },[])
 
   function setDropdownHeight(e:any){
-    console.log(e.currentTarget);
+    // console.log(e.currentTarget);
     // set false to nav menu when click on nested items in dropdown
         let nextSibling = e.currentTarget?.nextElementSibling;
         if(nextSibling){

@@ -97,7 +97,7 @@ export async function getMethod(url = '', token = '') {
   if (typeof res == "object") {
     return res;
   } else {
-    console.log(res, "in error  side")
+    // console.log(res, "in error  side")
     return res;
   }
 }

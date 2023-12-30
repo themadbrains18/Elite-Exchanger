@@ -66,7 +66,7 @@ const SecurityCode = (props: propsData) => {
         body: JSON.stringify(record)
       }).then(response => response.json());
 
-      console.log(response?.data);
+      // console.log(response?.data);
       if (response.data.status === 200) {
         
         if (props.api === 'login') {

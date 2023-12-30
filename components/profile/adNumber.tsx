@@ -158,7 +158,7 @@ const AdNumber = (props: activeSection) => {
             }
           );
           let res = await userExist.json();
-          console.log(res);
+          // console.log(res);
 
           if (res.data.data !== undefined) {
             setDisabled(false);
@@ -226,7 +226,7 @@ const AdNumber = (props: activeSection) => {
           }
         );
         let res = await userExist.json();
-        console.log(res);
+        // console.log(res);
 
         if (res.data.message !== undefined) {
           toast.error(res.data.message);

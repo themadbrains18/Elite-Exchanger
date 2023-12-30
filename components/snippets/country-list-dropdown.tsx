@@ -28,7 +28,7 @@ const CountrylistDropdown = (props:dataList) => {
     document.addEventListener('click', (evt: any) => {
       let dropdown = document.querySelector('.coin-dropdown-country');
       let targetEl = evt?.target?.parentNode?.parentElement; // clicked element
-      console.log(targetEl,"======")
+      // console.log(targetEl,"======")
       if (evt?.target.nodeName === 'svg') {
         targetEl = evt?.target?.parentNode.parentNode
       }

@@ -32,7 +32,7 @@ export default async function handler(
     res: NextApiResponse
 ) {
 
-    console.log('======here cors handler====');
+    // console.log('======here cors handler====');
 
     // Run the middleware
     await runMiddleware(req, res, cors)

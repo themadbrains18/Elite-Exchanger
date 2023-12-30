@@ -74,7 +74,7 @@ const AddPair = (props: ActiveSession) => {
 
   const onHandleSubmit = async (data: any) => {
     try {
-      console.log("=hii",data);
+      // console.log("=hii",data);
       
       if (getValues("tokenOne") === getValues("tokenTwo")) {
         setError("tokenTwo", { message: "Same tokens are not allowed" })
