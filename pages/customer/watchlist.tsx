@@ -5,10 +5,14 @@ import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 
-const Watchlist = ({ sessions }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+interface propsData{
+  Watchlist?:any;
+} 
+
+const Watchlist = (props: propsData) => {
   return (
     <>
-      <WatchListPage />
+      <WatchListPage watchList={props.Watchlist}/>
     </>
   )
 }
@@ -20,10 +24,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders()
   if (session) {
+      let userWatchList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/watchlist?userid=${session?.user?.user_id}`, {
+        method: "GET",
+        headers: {
+          "Authorization": session?.user?.access_token
+        },
+      }).then(response => response.json());
+      
       return {
           props: {
               providers: providers,
-              sessions: session
+              sessions: session,
+              Watchlist: userWatchList?.data || []
           },
       };
   }

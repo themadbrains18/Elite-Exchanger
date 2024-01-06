@@ -55,14 +55,15 @@ const Overview = ({ sessions }: InferGetServerSidePropsType<typeof getServerSide
             <div className=" w-full">
               <p className="sm-text mb-[10px]">Email</p>
               <div className="relative">
-                <input type="email" value="Allie" placeholder="AllieGrater12345644@gmail.com" className="sm-text input-cta2 w-full" />
+                <input type="email" id='contactEmail' name='contactEmail' value="Allie" placeholder="AllieGrater12345644@gmail.com" className="sm-text input-cta2 w-full" />
                 <Image src="/assets/profile/mail.svg" alt="mail" width={22} height={22} className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]" />
               </div>
             </div>
             <div className=" w-full">
               <p className="sm-text mb-[10px]">Phone Number</p>
               <div className="relative">
-                <input type="number" value="+91 7777777777" placeholder="Enter phone number" className="sm-text input-cta2 w-full" />
+                <input type="number" value="+91 7777777777" id="contactNumber"
+                      name="contactNumber" placeholder="Enter phone number" className="sm-text input-cta2 w-full" />
                 <Image src="/assets/profile/phone.svg" alt="phone" width={22} height={22} className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]" />
               </div>
             </div>
@@ -71,14 +72,15 @@ const Overview = ({ sessions }: InferGetServerSidePropsType<typeof getServerSide
             <div className=" w-full">
               <p className="sm-text mb-[10px]">Location</p>
               <div className="relative">
-                <input type="text" value="abc" placeholder="Enter location" className="sm-text input-cta2 w-full" />
+                <input type="text" value="abc" id='overviewLocation' name='overviewLocation' placeholder="Enter location" className="sm-text input-cta2 w-full" />
                 <Image src="/assets/profile/downarrow.svg" alt="editicon" width={24} height={24} className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]" />
               </div>
             </div>
             <div className=" w-full">
               <p className="sm-text mb-[10px]">User Name</p>
               <div className="relative">
-                <input type="text" value="US Dollar" placeholder="Enter currency" className="sm-text input-cta2 w-full" />
+                <input type="text" value="US Dollar" id="overviewcurrency"
+                      name="overviewcurrency" placeholder="Enter currency" className="sm-text input-cta2 w-full" />
                 <Image src="/assets/profile/downarrow.svg" alt="editicon" width={24} height={24} className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]" />
               </div>
             </div>

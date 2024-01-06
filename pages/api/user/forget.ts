@@ -24,7 +24,6 @@ router
       ).toString(enc.Utf8);
       let token = req.headers.authorization;
    
-    
       let data = await putData(
         `${process.env.NEXT_PUBLIC_APIURL}/user/forget`,
         JSON.parse(formData),

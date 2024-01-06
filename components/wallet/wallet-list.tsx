@@ -450,7 +450,7 @@ const WalletList = (props: propsData): any => {
                     <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">
                       <th className="lg:sticky left-0 bg-white dark:bg-d-bg-primary py-5">
                         <div className="flex ">
-                          <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">Action</p>
+                          <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">Coin</p>
                           <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                         </div>
                       </th>
@@ -476,15 +476,16 @@ const WalletList = (props: propsData): any => {
                   </thead>
                   <tbody>
                     {currentItems && currentItems.length > 0 && currentItems?.map((item:any, index:number) => {
+                      
                       return (
                         <tr key={index} className="rounded-5 group dark:hover:bg-black-v-1 hover:bg-[#FEF2F2] cursor-pointer">
                           <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                             <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px]  w-full">
                               {/* <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" /> */}
-                              <IconsComponent type="deposited" hover={false} active={false} />
+                              {/* <IconsComponent type="deposited" hover={false} active={false} /> */}
                               <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                <p className="info-14-18 dark:text-white">Deposited</p>
-                                <p className="info-14-18 !text-[10px] lg:hidden">{item?.createdAt}</p>
+                                <p className="info-14-18 dark:text-white">{item.coinName.split('/')[1]}</p>
+                                <p className="info-14-18 !text-[10px] lg:hidden">{moment(item?.createdAt).format('YYYY-MM-DD')}</p>
                               </div>
                             </div>
                           </td>
@@ -492,7 +493,7 @@ const WalletList = (props: propsData): any => {
                             <p className="info-14-18 dark:text-white  lg:text-start text-end">{item?.amount}</p>
                           </td>
                           <td className="max-[1023px]:hidden">
-                            <p className="info-14-18 dark:text-white">{item?.createdAt}</p>
+                            <p className="info-14-18 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
                           </td>
                           <td className=" text-end">
                             <p className={`info-14-18  ${item?.successful === "1" ? "text-buy" : "text-cancel"}`}>{item?.successful === "1"?'Successful':'Pending'}</p>

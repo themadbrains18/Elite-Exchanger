@@ -4,7 +4,7 @@
 import React, { useContext, useEffect } from "react";
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import Context from "@/components/contexts/context";
-import DemoChart from "@/pages/demochart";
+// import DemoChart from "@/pages/demochart";
 
 interface propsData {
   slug: string

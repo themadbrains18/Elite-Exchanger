@@ -65,18 +65,22 @@ const AllCoins = (props: Session) => {
 
   const updateStatus = async (data: any) => {
     try {
+
+      let obj = {
+        id : data?.id,
+        status : data?.status
+      }
       let responseStatus = await fetch(`api/token/list`, {
         headers: {
-          "content-type": "application/json",
           "Authorization": session?.user?.access_token || ''
         },
         method: "PUT",
-        body: JSON.stringify(data),
+        body: JSON.stringify(obj),
       }).then((response) => response.json());
   
       if (responseStatus) {
         getToken(itemOffset)
-        props.refreshTokenList(responseStatus);
+        props.refreshTokenList(responseStatus?.data);
       }
       
     } catch (error) {

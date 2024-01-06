@@ -115,7 +115,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       provider: providers,
       coinList: tokenList?.data,
       assets: userAssets,
-      topgainer: tokenList2,
+      topgainer: [],
       networkList: networkList?.data
     }
   };

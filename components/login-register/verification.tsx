@@ -147,6 +147,8 @@ const Verification = (props: propsData) => {
                 </label>
               </div>
               <input
+                id="securityNumber"
+                name="securityNumber"
                 type="number"
                 placeholder="Enter Phone Number "
                 className="input-cta"

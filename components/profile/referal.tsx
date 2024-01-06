@@ -81,7 +81,7 @@ const Referal = (props: fixSection) => {
                 </div>
               </div>
               <div className=" w-full">
-                <label className="sm-text mb-[10px]">Lite Referral Link</label>
+                <label  className="sm-text mb-[10px]">Lite Referral Link</label>
                 <div className="mt-[5px] lg:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
                   <p className="sec-text text-gamma">{`http://...?r=${props?.session?.user?.refer_code}`}</p>
                   <button className="solid-button py-2 sec-text font-normal" onClick={() => { navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}`); toast.success('copy to clipboard') }}>
