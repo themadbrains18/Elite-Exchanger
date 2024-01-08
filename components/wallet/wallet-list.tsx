@@ -38,7 +38,7 @@ const WalletList = (props: propsData): any => {
     let parentHeight = parent.nextElementSibling.scrollHeight;
     parent.classList.toggle("show");
     if (parent.classList.contains("show")) {
-      parent.nextElementSibling.setAttribute("style", `height:${parentHeight}px`);
+      parent.nextElementSibling.setAttribute("style", `height:${parentHeight}px; overflow-x:auto`);
     } else {
       parent.nextElementSibling.removeAttribute("style");
     }
@@ -406,8 +406,8 @@ const WalletList = (props: propsData): any => {
                               <IconsComponent type="downArrow" hover={false} active={false} />
                             </div>
                           </div>
-                          <div className={`fullWidthContent`}>
-                            <div className="flex items-center gap-[10px] justify-center pb-[10px] overflow-x-auto">
+                          <div className={`fullWidthContent overflow-x-auto`}>
+                            <div className="flex items-center gap-[10px] justify-center pb-[10px] w-max overflow-x-auto">
                               <button onClick={() => { setShow1(1) }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Deposit</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />

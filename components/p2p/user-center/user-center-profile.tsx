@@ -49,7 +49,7 @@ const UserCenterProfile = (props: propsData) => {
                     </div>
                     <div className='flex items-center gap-[15px] border dark:border-opacity-[15%] border-grey-v-1 p-10 md:px-[20px] md:py-[14px] rounded-[5px]'>
                         <IconsComponent type={( props?.userDetail && props?.userDetail?.User?.tradingPassword!== "" && props?.userDetail?.User?.tradingPassword!== null)?'verified':'infoIconRed'} hover={false} active={false} />
-                        <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text'>Trade Password</p>
+                        <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text whitespace-nowrap'>Trade Password</p>
                     </div>
                     <div className='flex items-center gap-[15px] border dark:border-opacity-[15%] border-grey-v-1 p-10 md:px-[20px] md:py-[14px] rounded-[5px]'>
                         <IconsComponent type={(props?.userDetail && props?.userDetail?.User?.user_kyc!== "" && props?.userDetail?.User?.user_kyc!== null)?'verified':'infoIconRed'} hover={false} active={false} />

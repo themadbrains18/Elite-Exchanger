@@ -106,13 +106,13 @@ const CoinList = (props: propsData) => {
     <section className="mt-30">
       <div className="p-20 md:p-40 rounded-10  bg-white dark:bg-d-bg-primary">
         <div className="flex justify-between max-[1350px]:gap-20 max-[1350px]:flex-wrap mb-[20px]">
-          <div className="hidden md:flex gap-30 max-[1200px]:flex-wrap ">
+          <div className="overflow-auto flex gap-30 max-[1200px]:flex-wrap ">
 
             <div className="flex  gap-[25px]  w-max">
               {tabsData.map((item, ind) => {
                 return (
                   <Fragment key={ind}>
-                    <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px]  ${active1 === item.id && "!text-primary border-primary"}`} onClick={() => setActive1(item.id)}>
+                    <button className={`sec-text text-center whitespace-nowrap text-gamma border-b-2 border-[transparent] pb-[25px]  ${active1 === item.id && "!text-primary border-primary"}`} onClick={() => setActive1(item.id)}>
                       {item.name}
                     </button>
                   </Fragment>
@@ -120,12 +120,12 @@ const CoinList = (props: propsData) => {
               })}
             </div>
           </div>
-          <div className="flex items-center gap-5">
+          {/* <div className="flex items-center gap-5">
             <div className="p-[5px] flex gap-[10px] items-center">
               <p className="nav-text-sm">Show 10</p>
               <Image src="/assets/profile/downarrow.svg" width={24} height={24} alt="arrow" />
             </div>
-          </div>
+          </div> */}
         </div>
         {active1 === 1 &&
           <Favorites coins={favouriteToken} networks={props?.networks} session={props?.session}/>

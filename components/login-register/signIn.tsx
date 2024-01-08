@@ -161,7 +161,7 @@ const SignIn = (Props: loginType) => {
                     {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
                   </div>
                   <div className="flex mt-[30px] justify-between gap-5">
-                    <p className="sec-text">Scan to Login</p>
+                    {/* <p className="sec-text">Scan to Login</p> */}
                     <Link href="/forget" className="sec-text !text-primary">
                       Forgot Password?
                     </Link>
