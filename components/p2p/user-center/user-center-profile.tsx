@@ -12,7 +12,7 @@ const UserCenterProfile = (props: propsData) => {
 
     const { status, data: session } = useSession();
 
-    console.log(props?.userDetail?.User,'============userDetail User================');
+    // console.log(props?.userDetail?.User,'============userDetail User================');
     
 
     return (

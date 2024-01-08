@@ -119,7 +119,7 @@ const Deposit = (props: activeSection) => {
           <p className="sm-text text-start md:text-center ">Destination</p>
           <div className="mt-[5px] md:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
             <p className="sec-text text-ellipsis overflow-hidden">{address}</p>
-            <button className="solid-button py-2 sec-text font-normal" onClick={()=>{navigator.clipboard.writeText(address); toast.success('copy to clipboard')}}>Copy</button>
+            <button className={`solid-button py-2 sec-text font-normal ${address===''?'cursor-not-allowed':'cursor-pointer'} `} disabled={address===''?true:false} onClick={()=>{navigator.clipboard.writeText(address); toast.success('copy to clipboard')}}>Copy</button>
           </div>
         </div>
       </div>

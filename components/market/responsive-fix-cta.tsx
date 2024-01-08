@@ -39,12 +39,12 @@ const ResponsiveFixCta = (props:propsData) => {
                     Buy & Sell
                 </button>
             }
-            {
+            {/* {
                 router.pathname.includes('/wallet') &&
                 <button className='fixed bottom-30 left-[50%] translate-x-[-50%] w-[calc(100%-70px)] solid-button' onClick={()=>{setShow(true)}}>
                     Add money
                 </button>
-            }
+            } */}
 
         
             <div className={`fixed top-[50%] w-[calc(100%-30px)] left-[50%] max-h-[610px] overflow-y-scroll translate-y-[-50%] translate-x-[-50%] z-[9] bg-white dark:bg-d-bg-primary duration-300 ${show ? "opacity-1 visible":"opacity-0 invisible"}`}>

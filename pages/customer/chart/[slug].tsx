@@ -34,6 +34,7 @@ const Chart = (props: Session) => {
     const [currentToken, setCurrentToken] = useState([]);
     const [allCoins, setAllCoins] = useState(props.coinList);
     const [allTradeHistory, setAllTradeHistory] = useState([]);
+    const [view,setView] = useState("desktop")
 
     const [sellTrade, setSellTrade] = useState([]);
     const [BuyTrade, setBuyTrade] = useState([]);
@@ -84,6 +85,13 @@ const Chart = (props: Session) => {
         let ccurrentToken = props.coinList.filter((item: any) => {
             return item.symbol === slug
         })
+
+        if(window.innerWidth<768){
+            setView("mobile")
+        }
+        else{
+            setView("desktop")
+        }
 
         setCurrentToken(ccurrentToken);
         getAllMarketOrderByToken(slug);
@@ -204,7 +212,7 @@ const Chart = (props: Session) => {
                     </div>
                     <div className="container p-[15px] lg:p-20 flex gap-30 flex-wrap">
                         <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
-                            <ChartSec slug={`${slug === 'BTCB' ? 'BTC' : slug === 'BNBT'? 'BNB':slug}USDT`} view='desktop'/>
+                            <ChartSec slug={`${slug === 'BTCB' ? 'BTC' : slug === 'BNBT'? 'BNB':slug}USDT`} view={view}/>
                             {/* hidden on mobile */}
                             <div className='lg:block hidden'>
                                 <ChartTabs coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />

@@ -22,6 +22,7 @@ interface fixSection {
   session?: {
     user: any;
   };
+  setVerified?: Function | any;
 }
 
 type UserSubmitForm = {
@@ -208,7 +209,16 @@ const KycAuth = (props: fixSection) => {
           setFrontImg('')
           setValue("doctype", '')
           setValue("country", '')
-          router.reload()
+          if(window.innerWidth<768){
+            props?.setVerified(false)
+            setTimeout(()=>{
+              props.setShow(4)
+            },1000)
+          }
+          else{
+            router.reload()
+
+          }
         }
         else {
           toast.error(result.data.data + " you auto redirect to login page");
