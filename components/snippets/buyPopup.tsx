@@ -60,6 +60,14 @@ const BuyPopup = (props: activeSection) => {
       return;
     }
 
+    // if (data.receive_amount > props?.selectedPost?.quantity) {
+    //   setError("receive_amount", {
+    //     type: "custom",
+    //     message: `Please enter quantity less or equal to available balance ${props?.selectedPost?.quantity}`,
+    //   });
+    //   return;
+    // }
+
     if (status === 'authenticated') {
       let obj = {
         post_id: props?.selectedPost?.id,
@@ -182,10 +190,10 @@ const BuyPopup = (props: activeSection) => {
               </div>
             </div>
             <div className="max-w-full md:max-w-[50%] w-full">
-              <p className="sm-heading dark:!text-white">Remarks</p>
-              <p className="mt-10 md:mt-[15px] info-10-14 !text-[14px]">Please Submit Your Payment</p>
-              <div className="mt-50 mb-20 md:mb-0">
-                <p className="info-12 ">Buy (Remaining Limit Today: 100,000 INR)</p>
+              {/* <p className="sm-heading dark:!text-white">Remarks</p>
+              <p className="mt-10 md:mt-[15px] info-10-14 !text-[14px]">Please Submit Your Payment</p> */}
+              <div className="mt-20 mb-20 md:mb-0">
+                <p className="info-12 ">Buy </p>
                 <div className="border mt-[10px] border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px] ">
                   <div className="flex items-center ">
                     <div className="max-w-full md:max-w-[315px] w-full">
@@ -213,7 +221,7 @@ const BuyPopup = (props: activeSection) => {
                       <input type="number" step={0.000001} id="receiveamount" value={receiveAmount} {...register('receive_amount')} name="receive_amount" onChange={(e: any) => {
                         setSpendAmount(props?.selectedPost?.price * e.target.value);
                         setReceiveAmount(e.target.value);
-                        setValue('spend_amount', e?.target?.value / props?.selectedPost?.price);
+                        setValue('spend_amount', e?.target?.value * props?.selectedPost?.price);
                         clearErrors('spend_amount')
                         clearErrors('receive_amount')
                       }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full dark:text-white" placeholder="Your ammount in USDT" />

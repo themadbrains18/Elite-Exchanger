@@ -74,7 +74,7 @@ const BuySellExpress = (props: propsData) => {
       method: "GET"
     }).then(response => response.json());
 
-    setUsdtToInr(priceData?.data?.INR);
+    setUsdtToInr(priceData?.data?.rate);
   }
 
   /**
@@ -130,7 +130,7 @@ const BuySellExpress = (props: propsData) => {
           method: "GET"
         }).then(response => response.json());
 
-        setUsdtToInr(priceData?.data?.INR);
+        setUsdtToInr(priceData?.data?.rate);
 
       }
       else {
@@ -141,7 +141,7 @@ const BuySellExpress = (props: propsData) => {
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
-        currentPrice = token[0]?.price * priceData?.data?.INR;
+        currentPrice = token[0]?.price * priceData?.data?.rate;
         setUsdtToInr(currentPrice);
       }
     }
@@ -190,7 +190,7 @@ const BuySellExpress = (props: propsData) => {
           method: "GET"
         }).then(response => response.json());
 
-        setUsdtToInr(priceData?.data?.INR);
+        setUsdtToInr(priceData?.data?.rate);
 
       }
       else {
@@ -201,7 +201,7 @@ const BuySellExpress = (props: propsData) => {
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
-        currentPrice = token[0]?.price * priceData?.data?.INR;
+        currentPrice = token[0]?.price * priceData?.data?.rate;
         setUsdtToInr(currentPrice);
       }
     }
@@ -522,7 +522,7 @@ const BuySellExpress = (props: propsData) => {
 
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">
-                    Estimated price: 1{secondCurrency} = {usdtToInr} INR
+                    Estimated price: 1 {secondCurrency} = {usdtToInr} INR
                   </p>
                 </div>
                 <div className="mt-5 flex gap-2">
@@ -641,7 +641,7 @@ const BuySellExpress = (props: propsData) => {
 
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">
-                    Estimated price: 1{secondCurrency} = {usdtToInr} INR
+                    Estimated price: 1 {secondCurrency} = {usdtToInr} INR
                   </p>
                 </div>
 

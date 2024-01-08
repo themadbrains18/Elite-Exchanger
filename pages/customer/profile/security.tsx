@@ -17,6 +17,9 @@ interface Session {
 }
 
 const Security = (props: Session) => {
+
+  console.log('------here secutiry-----');
+  
   return (
     <SideBarLayout userDetail={props.userDetail} activity={props?.activity}>
       <SecuritySettings session={props?.session} activity={props?.activity}/>
@@ -40,15 +43,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     }).then(response => response.json());
 
+    console.log('-------------here activity api call on server side----------------');
+    
+
     let activity = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/activity?userid=${session?.user?.user_id}`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token
       },
     }).then(response => response.json());
-
-    console.log(activity,'-------user activity----------');
-    
 
     return {
       props: {

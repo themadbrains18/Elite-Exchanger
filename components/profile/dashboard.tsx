@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 
 import AES from 'crypto-js/aes';
+import moment from "moment";
 
 const schema = yup.object().shape({
   fName: yup.string().required('this field is required'),
@@ -112,13 +113,7 @@ const Dashboard = (props: fixSection) => {
             </div>
           </div>
           <div className="py-[30px] md:py-[50px]">
-            {/* <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
-              Personal Information
-            </p>
-            <p className="sm-text ">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry.
-            </p> */}
+            
             <form onSubmit={handleSubmit(onHandleSubmit)}>
               <div className="mt-[30px] ">
                 <div className="flex md:flex-row flex-col gap-[30px]">
@@ -163,13 +158,6 @@ const Dashboard = (props: fixSection) => {
 
                         />
                       </div>
-                      {/* <Image
-                        src="/assets/profile/edit.svg"
-                        alt="editicon"
-                        width={22}
-                        height={22}
-                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                      /> */}
                       {errors.dName && <p style={{ color: 'red' }}>{errors.dName.message}</p>}
                     </div>
                   </div>
@@ -191,7 +179,7 @@ const Dashboard = (props: fixSection) => {
               {editable && (
                 <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-between pt-5 md:pt-[30px]">
                   <p className="sm-text">
-                    This account was created on January 10, 2022, 02:12 PM
+                    This account was created on {moment(props?.userDetail?.User?.createdAt).format("YYYY-MM-DD HH:mm:ss  A")}
                   </p>
                   <div className="flex gap-[30px]">
                     <button type="button" className="solid-button2 " onClick={() => { setEditable(false) }}>Cancel</button>
@@ -311,19 +299,6 @@ const Dashboard = (props: fixSection) => {
           </div>
           <div className="h-[1px] w-full bg-grey-v-2 dark:bg-opacity-[15%]"></div>
 
-          {/* {editable && (
-            <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-between pt-5 md:pt-[30px]">
-              <p className="sm-text">
-                This account was created on January 10, 2022, 02:12 PM
-              </p>
-              <div className="flex gap-[30px]">
-                <button type="button" className="solid-button2 " onClick={() => { setEditable(false) }}>Cancel</button>
-                <button type="submit" className="solid-button px-[23px] md:px-[51px]">
-                  Save Changes
-                </button>
-              </div>
-            </div>
-          )} */}
         </div>
       </section>
     </>
