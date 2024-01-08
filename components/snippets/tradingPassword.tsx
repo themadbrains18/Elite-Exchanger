@@ -9,8 +9,8 @@ interface activeSection {
   setActive: Function,
   setShow: Function;
   formMethod?: any;
-  setList?:any;
-  list?:any;
+  setList?: any;
+  list?: any;
 }
 
 const TradingPassword = (props: activeSection) => {
@@ -88,6 +88,44 @@ const TradingPassword = (props: activeSection) => {
     });
   }, []);
 
+
+  const sendOtp = async () => {
+    try {
+      let pmid = props?.formMethod?.pmid;
+      let pm_name = props?.formMethod?.pm_name;
+
+      let pmObject: any = props?.formMethod?.pmObject;
+      pmObject['passcode'] = passCode;
+
+      delete pmObject.qr_code;
+
+      let obj = {
+        "user_id": session?.user?.user_id,
+        "pmid": pmid,
+        "status": "active",
+        "pm_name": pm_name,
+        "otp": "",
+        "pmObject": pmObject
+      }
+
+      const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+      let record = encodeURIComponent(ciphertext.toString());
+
+      let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": session?.user?.access_token
+        },
+        body: JSON.stringify(record)
+      })
+
+      let res = await responseData.json();
+    } catch (error) {
+
+    }
+  }
+
   const savePaymentMethod = async (e: any) => {
     try {
       e.preventDefault();
@@ -99,26 +137,27 @@ const TradingPassword = (props: activeSection) => {
         toast.error('Please enter your trading password for security purpose');
         return;
       }
-  
+
       let pmid = props?.formMethod?.pmid;
       let pm_name = props?.formMethod?.pm_name;
-  
+
       let pmObject: any = props?.formMethod?.pmObject;
       pmObject['passcode'] = passCode;
-  
+
       delete pmObject.qr_code;
-  
+
       let obj = {
         "user_id": session?.user?.user_id,
         "pmid": pmid,
         "status": "active",
         "pm_name": pm_name,
+        "otp": fillOtp,
         "pmObject": pmObject
       }
-  
+
       const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
       let record = encodeURIComponent(ciphertext.toString());
-  
+
       let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod`, {
         method: "POST",
         headers: {
@@ -127,14 +166,14 @@ const TradingPassword = (props: activeSection) => {
         },
         body: JSON.stringify(record)
       })
-  
+
       let res = await responseData.json();
-  
+
       if (res.data.status === 200) {
         toast.success(res?.data?.data?.message);
         let userPaymentMethod = res?.data?.data?.result;
         userPaymentMethod.master_payment_method = props?.formMethod?.master_method;
-        props.setList((prev:any) => [...prev, userPaymentMethod]);
+        props.setList((prev: any) => [...prev, userPaymentMethod]);
         props.setActive(3);
       }
       else {
@@ -142,7 +181,7 @@ const TradingPassword = (props: activeSection) => {
       }
     } catch (error) {
       console.log("error in add payment method", error);
-      
+
     }
 
   }
@@ -195,7 +234,7 @@ const TradingPassword = (props: activeSection) => {
               </div>
             </div>
             <div className="flex flex-col mb-[15px] md:mb-30 gap-20">
-              <label className="sm-text">Enter SMS Verification Code</label>
+              <label className="sm-text">Enter Code Verification Code</label>
               <div className="flex gap-10 justify-center items-center input_wrapper2">
                 <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
                 <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
@@ -204,10 +243,8 @@ const TradingPassword = (props: activeSection) => {
                 <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code5" />
                 <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code6" />
               </div>
-              <p className="info-10-14 text-end">Send SMS</p>
+              <p className="info-10-14 text-end" onClick={sendOtp}>Send Code</p>
             </div>
-
-
 
           </div>
           <button className="solid-button w-full" onClick={(e: any) => { savePaymentMethod(e) }}>Submit</button>

@@ -6,6 +6,7 @@ import ReactPaginate from "react-paginate";
 import Context from "@/components/contexts/context";
 import FutureAddPair from "./addpair";
 import FutureEditPair from "./editpair";
+import { useSession } from "next-auth/react";
 
 interface Session {
     list?: any;
@@ -34,6 +35,7 @@ const FuturePairList = (props: Session) => {
     const { mode } = useContext(Context);
 
     const [total, setTotal] = useState(0);
+    const {data:session} = useSession()
 
     let itemsPerPage = 10;
 
@@ -57,6 +59,9 @@ const FuturePairList = (props: Session) => {
                 `${process.env.NEXT_PUBLIC_APIURL}/future/${itemOffset}/${itemsPerPage}`,
                 {
                     method: "GET",
+                    headers: {
+                        "Authorization": session?.user?.access_token
+                    },
                 }
             ).then((response) => response.json());
             // setFreshPairList(pairList?.data)

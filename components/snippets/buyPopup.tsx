@@ -71,7 +71,7 @@ const BuyPopup = (props: activeSection) => {
         spend_amount: data?.spend_amount,
         receive_amount: data?.receive_amount,
         spend_currency: 'INR',
-        receive_currency: props?.selectedPost?.token?.symbol,
+        receive_currency: props?.selectedPost?.token!==null? props?.selectedPost?.token?.symbol: props?.selectedPost?.global_token?.symbol,
         p_method: '',
         type: 'buy',
         status: 'isProcess'
@@ -107,7 +107,7 @@ const BuyPopup = (props: activeSection) => {
 
       }
       else {
-        toast.error(res?.data?.data);
+        toast.error(res?.data?.data?.message!==undefined?res?.data?.data?.message : res?.data?.data);
       }
     }
     else {
@@ -154,7 +154,7 @@ const BuyPopup = (props: activeSection) => {
               <div className="mt-30 md:mt-50 grid md:grid-cols-1 grid-cols-2">
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Available</p>
-                  <p className="sm-text w-full">{props?.selectedPost?.quantity} {props?.selectedPost?.token?.symbol}</p>
+                  <p className="sm-text w-full">{props?.selectedPost?.quantity} {props?.selectedPost?.token!==null? props?.selectedPost?.token?.symbol:props?.selectedPost?.global_token?.symbol}</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Limit</p>
@@ -219,8 +219,8 @@ const BuyPopup = (props: activeSection) => {
                       }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full dark:text-white" placeholder="Your ammount in USDT" />
                     </div>
                     <div className="pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] flex gap-[5px] items-center">
-                      <Image src={props?.selectedPost?.token?.image} alt="error" width={20} height={20} />
-                      <p className={`sm-text rounded-[5px]   !text-banner-text`}>{props?.selectedPost?.token?.symbol}</p>
+                      <Image src={props?.selectedPost?.token!==null ?props?.selectedPost?.token?.image : props?.selectedPost?.global_token?.image} alt="error" width={20} height={20} />
+                      <p className={`sm-text rounded-[5px]   !text-banner-text`}>{props?.selectedPost?.token!==null? props?.selectedPost?.token?.symbol: props?.selectedPost?.global_token?.symbol}</p>
                     </div>
                   </div>
 

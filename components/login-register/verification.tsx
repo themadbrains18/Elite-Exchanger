@@ -94,10 +94,10 @@ const Verification = (props: propsData) => {
 
           <div className="mt-0 lg:mt-[140px] lg:p-0 p-5  max-w-[calc(100%-30px)] md:mx-0 mx-auto md:mb-0 mb-[10px]  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
             <h1 className="lg-heading mb-5">Let’s Confirm it’s really you</h1>
-            <p className="mb-5 text-center  lg:mb-[70px] md-text">
+            {/* <p className="mb-5 text-center  lg:mb-[70px] md-text">
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry.
-            </p>
+            </p> */}
             <div className="flex flex-col gap-[15px] lg:gap-5 mb-[30px]">
               {/* <div className="flex items-center mr-4">
                 <input id="custom-radio" type="radio" value="" name="colored-radio" className="w-5 h-5  bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
@@ -147,6 +147,8 @@ const Verification = (props: propsData) => {
                 </label>
               </div>
               <input
+                id="securityNumber"
+                name="securityNumber"
                 type="number"
                 placeholder="Enter Phone Number "
                 className="input-cta"

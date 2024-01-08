@@ -167,7 +167,7 @@ const FooterNav = () => {
                     <h4 className='footer-heading !text-white mb-[21px] md:mb-[51px]'>Company</h4>
                     <form>
                         <div className='flex gap-[5px]'>
-                            <input type="email" placeholder='Enter your email' className='sm-text !text-white px-10 py-[13px] md:py-[15px] max-w-[321px] w-full block bg-[transparent] border border-[#8AC8FF] rounded-5 focus:outline-none' />
+                            <input id='newslatter' name='newslatter' type="email" placeholder='Enter your email' className='sm-text !text-white px-10 py-[13px] md:py-[15px] max-w-[321px] w-full block bg-[transparent] border border-[#8AC8FF] rounded-5 focus:outline-none' />
                             <button className='solid-button p-[13px] md:p-[15px]'>Submit</button>
                         </div>
                     </form>

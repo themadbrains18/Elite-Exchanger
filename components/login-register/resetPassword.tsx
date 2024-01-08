@@ -72,7 +72,7 @@ const ResetPassword = () => {
       setIsEmail(isEmailExist);
       data.otp = "";
       data.type = "forget";
-      console.log(data, "==ahjhaj");
+      // console.log(data, "==ahjhaj");
       setBtnDisabled(true);
       const ciphertext = AES.encrypt(
         JSON.stringify(data),

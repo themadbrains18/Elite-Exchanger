@@ -38,7 +38,6 @@ const Historytrade = (props: propsData) => {
 
   let itemsPerPage = 10;
   
-
   // =================================
   // Trade History Data
   // =================================
@@ -67,7 +66,7 @@ const Historytrade = (props: propsData) => {
   // Deposit History Data
   // =================================
   const depositendOffset = deposititemOffset + itemsPerPage;
-  const depositCurrentItems = (props.deposits && props.deposits.length > 0) ? props.deposits.slice(depositendOffset, depositendOffset) : [];
+  const depositCurrentItems = (props?.deposits && props?.deposits?.length > 0) ? props.deposits.slice(deposititemOffset, depositendOffset) : [];
   const depositPageCount = Math.ceil((props.deposits && props.deposits.length > 0 && props.deposits.length) / itemsPerPage);
 
   const handleDepositPageClick = async (event: any) => {
@@ -185,7 +184,9 @@ const Historytrade = (props: propsData) => {
       let res = await responseData.json();
 
       if (res.data.result) {
-        toast.success(res?.data?.message);
+        toast.success(res?.data?.message, {
+          position: toast.POSITION.TOP_CENTER
+        });
         setTimeout(() => {
           setFinalBtnenable(false);
           props.refreshStakingData();
@@ -230,7 +231,9 @@ const Historytrade = (props: propsData) => {
       let res = await responseData.json();
 
       if (res.data.result) {
-        toast.success(res?.data?.message);
+        toast.success(res?.data?.message, {
+          position: toast.POSITION.TOP_CENTER
+        });
         setEnable(0);
         setTimeout(() => {
           props.refreshStakingData();
@@ -238,7 +241,9 @@ const Historytrade = (props: propsData) => {
 
       }
       else {
-        toast.error(res?.data?.message);
+        toast.error(res?.data?.message, {
+          position: toast.POSITION.TOP_CENTER
+        });
         setFinalBtnenable(false);
       }
     } catch (error) {
@@ -412,7 +417,7 @@ const Historytrade = (props: propsData) => {
                                 </div>
                                 <div className="hidden md:block">
                                   <p className="info-14-18 dark:text-white">{item.order_type}</p>
-                                  <p className="info-10">18 Feb,2022</p>
+                                  <p className="info-10">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
                                 </div>
                                 <div className="block md:hidden">
                                   <p className="info-14-18 dark:text-white">{item.market_type}</p>
@@ -427,13 +432,13 @@ const Historytrade = (props: propsData) => {
                               <p className="info-14-18 dark:text-white md:block hidden">${item?.token !== null ? item?.token?.price.toFixed(4) : item?.global_token?.price.toFixed(4)}</p>
                             </td>
                             <td>
-                              <p className="info-14-18 dark:text-white md:block hidden">{item.limit_usdt}%</p>
+                              <p className="info-14-18 dark:text-white md:block hidden">{item.limit_usdt}</p>
                             </td>
                             <td>
                               <p className="info-14-18 dark:text-white md:block hidden">${item.volume_usdt.toFixed(2)}</p>
                             </td>
                             <td>
-                              <p className="info-14-18 dark:text-white md:block hidden">${item.token_amount}</p>
+                              <p className="info-14-18 dark:text-white md:block hidden">{item.token_amount}</p>
                             </td>
                             <td>
                               <p className={`info-14-18  ${item.status === true ? "text-buy" : item.isCanceled === true ? "text-cancel" : "text-gamma"}`}>{item?.status === false ? item?.isCanceled === true ? 'Canceled' : 'Pending' : 'Success'}</p>
@@ -495,7 +500,7 @@ const Historytrade = (props: propsData) => {
                             <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                           </div>
                         </th>
-                        <th className=" py-5">
+                        {/* <th className=" py-5">
                           <div className="hidden md:flex">
                             <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Type</p>
                             <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
@@ -506,7 +511,7 @@ const Historytrade = (props: propsData) => {
                             <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Price</p>
                             <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                           </div>
-                        </th>
+                        </th> */}
                         <th className=" py-5">
                           <div className="hidden md:flex">
                             <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Filled</p>
@@ -539,9 +544,9 @@ const Historytrade = (props: propsData) => {
                           <tr key={index} >
                             <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
                               <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                                <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" />
+                                {/* <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" /> */}
                                 <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                  <p className="info-14-18 dark:text-white">{item.name}</p>
+                                  <p className="info-14-18 dark:text-white">{item.coinName.split('/')[1]}</p>
                                   <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
                                 </div>
                               </div>
@@ -571,7 +576,7 @@ const Historytrade = (props: propsData) => {
                                 </div>
                                 <div className="hidden md:block">
                                   <p className="info-14-18 dark:text-white">{item.side}</p>
-                                  <p className="info-10">18 Feb,2022</p>
+                                  <p className="info-10">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
                                 </div>
                                 <div className="block md:hidden">
                                   <p className="info-14-18 dark:text-white">{item.type}</p>
@@ -579,23 +584,23 @@ const Historytrade = (props: propsData) => {
                                 </div>
                               </div>
                             </td>
-                            <td>
+                            {/* <td>
                               <p className="info-14-18 dark:text-white  md:block hidden">{item.type}</p>
                             </td>
                             <td>
                               <p className="info-14-18 dark:text-white md:block hidden">${item.price}</p>
+                            </td> */}
+                            <td>
+                              <p className="info-14-18 dark:text-white md:block hidden">Filled</p>
                             </td>
                             <td>
-                              <p className="info-14-18 dark:text-white md:block hidden">{item.filled}%</p>
+                              <p className="info-14-18 dark:text-white md:block hidden">{item.amount}</p>
                             </td>
                             <td>
-                              <p className="info-14-18 dark:text-white md:block hidden">${item.amount}</p>
+                              <p className="info-14-18 dark:text-white md:block hidden">{item.amount}</p>
                             </td>
                             <td>
-                              <p className="info-14-18 dark:text-white md:block hidden">${item.quantity}</p>
-                            </td>
-                            <td>
-                              <p className={`info-14-18  ${item.status === "Completed" ? "text-buy" : item.status === "Canceled" ? "text-cancel" : "text-gamma"}`}>{item.status}</p>
+                              <p className={`info-14-18  text-buy`}>Approved</p>
                             </td>
                           </tr>
                         );

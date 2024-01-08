@@ -47,6 +47,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     }).then(response => response.json());
 
+    console.log(activity,'-------user activity----------');
     
 
     return {

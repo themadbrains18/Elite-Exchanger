@@ -24,10 +24,10 @@ interface fixSection {
   userDetail?: any;
 }
 
-const   Dashboard = (props: fixSection) => {
+const Dashboard = (props: fixSection) => {
   const [editable, setEditable] = useState(false);
 
-  let { register, setValue, handleSubmit, watch, setError, formState: { errors } } = useForm({
+  let { register, setValue,getValues, handleSubmit, watch, setError, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -128,8 +128,8 @@ const   Dashboard = (props: fixSection) => {
                       <input
                         type="text"
                         {...register('fName')} name="fName"
-                        readOnly={editable ? false : true}
                         placeholder={editable ? "Enter first name" : "Allie"}
+                        defaultValue={getValues('fName')}
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />
                     </div>
@@ -141,8 +141,8 @@ const   Dashboard = (props: fixSection) => {
                       <input
                         type="text"
                         {...register('lName')} name="lName"
-                        readOnly={editable ? false : true}
                         placeholder={editable ? "Enter Last name" : "Joe"}
+                        defaultValue={getValues('lName')}
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />
                     </div>
@@ -157,11 +157,11 @@ const   Dashboard = (props: fixSection) => {
                         <input
                           type="text"
                           {...register('dName')} name="dName"
-                          readOnly={editable ? false : true}
                           placeholder={editable ? "Enter display name" : "Allie Joe"}
+                          defaultValue={getValues('dName')}
                           className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
-                          
-                          />
+
+                        />
                       </div>
                       {/* <Image
                         src="/assets/profile/edit.svg"
@@ -179,11 +179,11 @@ const   Dashboard = (props: fixSection) => {
                       <input
                         type="text"
                         {...register('uName')} name="uName"
-                        readOnly={editable ? false : true}
                         placeholder={editable ? "Enter user name" : "AllieJoe"}
+                        defaultValue={getValues('uName')}
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />
-                      </div>
+                    </div>
                     {errors.uName && <p style={{ color: 'red' }}>{errors.uName.message}</p>}
                   </div>
                 </div>
@@ -209,17 +209,19 @@ const   Dashboard = (props: fixSection) => {
             <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
               Contact Information
             </p>
-            <p className="sm-text ">
+            {/* <p className="sm-text ">
               Lorem Ipsum is simply dummy text of the printing and typesetting
               industry. Lorem Ipsum has been the industry.
-            </p>
+            </p> */}
             <div className="mt-[30px] ">
               <div className="flex md:flex-row flex-col gap-[30px]">
                 <div className=" w-full">
                   <p className="sm-text mb-[10px]">Email</p>
-                  <div className="cursor-not-allowed"> 
+                  <div className="cursor-not-allowed">
                     <div className="relative pointer-events-none">
                       <input
+                        id="dashEmail"
+                        name="dashEmail"
                         type="email"
                         value={props.session?.user?.email}
                         placeholder="AllieGrater12345644@gmail.com"
@@ -237,9 +239,11 @@ const   Dashboard = (props: fixSection) => {
                 </div>
                 <div className=" w-full">
                   <p className="sm-text mb-[10px]">Phone Number</p>
-                  <div className="cursor-not-allowed"> 
+                  <div className="cursor-not-allowed">
                     <div className="relative pointer-events-none">
                       <input
+                        id="dashNumber"
+                        name="dashNumber"
                         type="number"
                         value={props.session?.user?.number}
                         placeholder="Enter phone number"
@@ -260,9 +264,11 @@ const   Dashboard = (props: fixSection) => {
               <div className="mt-5 flex gap-[30px] md:flex-row flex-col">
                 <div className=" w-full">
                   <p className="sm-text mb-[10px]">Location</p>
-                  <div className="cursor-not-allowed"> 
+                  <div className="cursor-not-allowed">
                     <div className="relative  pointer-events-none">
                       <input
+                        id="dashLocation"
+                        name="dashLocation"
                         type="text"
                         value="abc"
                         placeholder="Enter location"
@@ -280,9 +286,11 @@ const   Dashboard = (props: fixSection) => {
                 </div>
                 <div className=" w-full">
                   <p className="sm-text mb-[10px]">Currency</p>
-                  <div className="cursor-not-allowed"> 
+                  <div className="cursor-not-allowed">
                     <div className="relative pointer-events-none">
                       <input
+                        id="dashcurrency"
+                        name="dashcurrency"
                         type="text"
                         value="US Dollar"
                         placeholder="Enter currency"

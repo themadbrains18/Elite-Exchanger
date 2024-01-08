@@ -35,12 +35,12 @@ export default function Home({ session, coinList }: Session) {
 
   useEffect(() => {
 
-    console.log(detectBrowser());
+    // console.log(detectBrowser());
 
     fetch('http://ip-api.com/json')
       .then(response => response.json())
       .then(data => {
-        console.log(data, '=====api all data')
+        // console.log(data, '=====api all data')
       });
   }, []);
 

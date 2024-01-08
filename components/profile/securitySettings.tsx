@@ -55,12 +55,15 @@ const SecuritySettings = (props: fixSection) => {
   const { status, data: session } = useSession()
   const [tradePassword,setTradePassword] = useState(false);
 
+  console.log(props.activity,'-------tab page activity-------');
+  
+
   let data = [
     {
       image: "mail.svg",
       bg: "blue",
       title: "Email Authentication",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
       Add: true,
       CtaText: "Enable",
     },
@@ -68,7 +71,7 @@ const SecuritySettings = (props: fixSection) => {
       image: "phone.svg",
       bg: "green",
       title: "SMS Authentication",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
       Add: true,
       CtaText: "Enable",
     },
@@ -76,7 +79,7 @@ const SecuritySettings = (props: fixSection) => {
       image: "google.svg",
       bg: "red",
       title: "Google Authentication",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
       Add: false,
       CtaText: "Enable",
     },
@@ -84,7 +87,7 @@ const SecuritySettings = (props: fixSection) => {
       image: "activity.svg",
       bg: "green",
       title: "Activity log",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum",
+      desc: "",
       Add: false,
       ctaLink: "/activity",
       CtaText: "Activity log",
@@ -93,7 +96,7 @@ const SecuritySettings = (props: fixSection) => {
       image: "activity.svg",
       bg: "green",
       title: "Trading Password",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum",
+      desc: "",
       Add: false,
       CtaText: "Enable",
     },
@@ -393,13 +396,13 @@ const SecuritySettings = (props: fixSection) => {
                         </button>
                       ) : index === 4 && (
                         <button
-                          className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null) ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
+                          className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null || props?.session?.user?.tradingPassword === undefined) ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
                           onClick={() => {
                             setEnable(index + 1);
                             setShow(true);
                           }}
                         >
-                          {(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null)
+                          {(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === undefined || props?.session?.user?.tradingPassword === null)
                             ? "Add"
                             : "Edit"}
                         </button>

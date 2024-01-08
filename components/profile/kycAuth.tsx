@@ -22,6 +22,7 @@ interface fixSection {
   session?: {
     user: any;
   };
+  setVerified?: Function | any;
 }
 
 type UserSubmitForm = {
@@ -128,37 +129,46 @@ const KycAuth = (props: fixSection) => {
     setValue("idfront", files);
     setFromFrontImg(files)
     clearErrors("idfront");
-    var reader = new FileReader();
-    reader.readAsDataURL(files);
-    reader.onloadend = function (e: any) {
-      setFrontImg(reader?.result as string);
-    }.bind(this);
+    if (files) {
+      var reader = new FileReader();
+      reader.readAsDataURL(files);
+      reader.onloadend = function (e: any) {
+        setFrontImg(reader?.result as string);
+      }.bind(this);
+    }
+
   };
+
   const handleBackChange = async (e: any) => {
     let files = e.target.files[0];
     setFromBackImg(files);
     setValue("idback", files as string);
 
     clearErrors("idback");
+    if (files) {
+      var reader = new FileReader();
+      reader.readAsDataURL(files);
+      reader.onloadend = function (e: any) {
+        setBackImg(reader?.result as string);
+      }.bind(this);
+    }
 
-    var reader = new FileReader();
-    reader.readAsDataURL(files);
-    reader.onloadend = function (e: any) {
-      setBackImg(reader?.result as string);
-    }.bind(this);
   };
+
   const handleSelfieChange = async (e: any) => {
     let files = e.target.files[0];
 
     setFormSelfieImg(files);
     setValue("statement", files as string);
     clearErrors("statement");
+    if (files) {
+      var reader = new FileReader();
+      reader.readAsDataURL(files);
+      reader.onloadend = function (e: any) {
+        setSelfieImg(reader.result as string);
+      }.bind(this);
+    }
 
-    var reader = new FileReader();
-    reader.readAsDataURL(files);
-    reader.onloadend = function (e: any) {
-      setSelfieImg(reader.result as string);
-    }.bind(this);
   };
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
@@ -199,7 +209,16 @@ const KycAuth = (props: fixSection) => {
           setFrontImg('')
           setValue("doctype", '')
           setValue("country", '')
-          router.reload()
+          if(window.innerWidth<768){
+            props?.setVerified(false)
+            setTimeout(()=>{
+              props.setShow(4)
+            },1000)
+          }
+          else{
+            router.reload()
+
+          }
         }
         else {
           toast.error(result.data.data + " you auto redirect to login page");
@@ -466,8 +485,8 @@ const KycAuth = (props: fixSection) => {
       <ToastContainer />
       <section
         className={`${props.show == 4 && "!left-[50%]"} ${props.fixed
-            ? "overflow-y-scroll duration-300 p-5 md:p-40 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary "
-            : "p-5 md:p-40  block"
+          ? "overflow-y-scroll duration-300 p-5 md:p-40 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary "
+          : "p-5 md:p-40  block"
           }}`}
       >
         {/* only for mobile view */}
@@ -626,8 +645,8 @@ const KycAuth = (props: fixSection) => {
 
                     <div
                       className={`${frontImg !== ""
-                          ? "flex items-center h-full justufy-center"
-                          : "hidden"
+                        ? "flex items-center h-full justufy-center"
+                        : "hidden"
                         }`}
                     >
                       {frontImg && (
@@ -678,8 +697,8 @@ const KycAuth = (props: fixSection) => {
                     </div>
                     <div
                       className={`${backImg !== ""
-                          ? "flex items-center h-full justufy-center"
-                          : "hidden"
+                        ? "flex items-center h-full justufy-center"
+                        : "hidden"
                         }`}
                     >
                       {backImg && (
@@ -736,8 +755,8 @@ const KycAuth = (props: fixSection) => {
                     </div>
                     <div
                       className={`${selfieImg !== ""
-                          ? "flex items-center  justufy-center"
-                          : "hidden"
+                        ? "flex items-center  justufy-center"
+                        : "hidden"
                         }`}
                     >
                       {selfieImg && (

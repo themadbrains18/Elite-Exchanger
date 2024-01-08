@@ -1,10 +1,10 @@
 import IconsComponent from '@/components/snippets/icons';
 import Image from 'next/image';
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 
 interface propsData {
     userOrder?: any;
-    setPaymentMethod?:any;
+    setPaymentMethod?: any;
 }
 
 const SlectPaymentMethod = (props: propsData) => {
@@ -21,21 +21,25 @@ const SlectPaymentMethod = (props: propsData) => {
         }
     }
 
-    let orderPost = props?.userOrder?.user_post;
     let sellerUser = props?.userOrder?.user_post?.User;
-    
-    let payment_method: any = [];
 
-    // if(orderPost!==null  ){
-    //     for (const upid of orderPost?.p_method) {
-    //         orderPost?.User?.user_payment_methods.filter((item: any) => {
-    //             if (item?.id === upid?.upm_id) {
-    //                 payment_method.push(item);
-    //             }
-    //         })
-    //     }
-    // }
-    
+    const [payment_method, setPaymentMethod] = useState([]);
+
+    useEffect(() => {
+        let orderPost = props?.userOrder?.user_post;
+        let payment_method: any = [];
+        if(orderPost!==null  ){
+            for (const upid of orderPost?.p_method) {
+                orderPost?.User?.user_payment_methods.filter((item: any) => {
+                    if (item?.id === upid?.upm_id) {
+                        payment_method.push(item);
+                    }
+                })
+            }
+        }
+
+        setPaymentMethod(payment_method);
+    }, []);
 
     return (
         <div className='p-[15px] md:p-[40px] md:pb-20 border dark:border-opacity-[15%] border-grey-v-1 rounded-10 mt-30'>
@@ -50,11 +54,11 @@ const SlectPaymentMethod = (props: propsData) => {
                         <div>
                             <div className='parent flex items-center gap-10 justify-between py-20 '>
                                 <div className="flex items-center mr-4 ">
-                                    {props.userOrder.p_method!=='' &&
-                                     <input id={`radio-${elem?.id}`} type="radio" checked={(props.userOrder.p_method!=='' && props.userOrder.p_method === elem?.id)?true:false} disabled={(props.userOrder.p_method!=='' && props.userOrder.p_method !== elem?.id)?true:false} value="" onChange={()=>props.setPaymentMethod(elem?.id)} name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                                    {props.userOrder.p_method !== '' &&
+                                        <input id={`radio-${elem?.id}`} type="radio" checked={(props.userOrder.p_method !== '' && props.userOrder.p_method === elem?.id) ? true : false} disabled={(props.userOrder.p_method !== '' && props.userOrder.p_method !== elem?.id) ? true : false} value="" onChange={() => props.setPaymentMethod(elem?.id)} name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                                     }
-                                    {props.userOrder.p_method==='' &&
-                                     <input id={`radio-${elem?.id}`} type="radio"  value="" onChange={()=>props.setPaymentMethod(elem?.id)} name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                                    {props.userOrder.p_method === '' &&
+                                        <input id={`radio-${elem?.id}`} type="radio" value="" onChange={() => props.setPaymentMethod(elem?.id)} name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                                     }
                                     <label htmlFor={`radio-${elem?.id}`} className="
                                         md-text  px-[18px] relative custom-radio  cursor-pointer

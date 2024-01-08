@@ -19,6 +19,7 @@ interface showTabContent {
 const MainResponsivePage = (props: showTabContent) => {
 
   const { data: session } = useSession();
+  const [verified, setVerified] = useState(props.kycInfo? props.kycInfo?.isVerified:undefined)
 
   return (
     <>
@@ -29,17 +30,19 @@ const MainResponsivePage = (props: showTabContent) => {
       <SecuritySettings fixed={true} show={props.show} setShow={props.setShow} session={session} activity={props?.activity}/>
 
       <NotificationSettings fixed={true} show={props.show} setShow={props.setShow} />
+      {console.log(verified)}
       {
-        props.kycInfo && props.kycInfo.length === 0 &&
-        <KycAuth fixed={true} show={props.show} setShow={props.setShow} num={2}/>
+        
+        props.kycInfo && props.kycInfo.length === 0 && verified==undefined &&
+        <KycAuth fixed={true} show={props.show} setShow={props.setShow} num={2} setVerified={setVerified}/>
       }
 
       {
-        props.kycInfo?.isVerified == false &&
+       !verified &&verified!=undefined &&
         <KycPending fixed={true} show={props.show} setShow={props.setShow} session={session} />
       }
       {
-        props.kycInfo?.isVerified == true &&
+       verified &&
         <KycDone fixed={true} show={props.show} setShow={props.setShow} session={session} />
       }
 

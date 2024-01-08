@@ -6,16 +6,16 @@ const router = createRouter<NextApiRequest, NextApiResponse>();
 
 export const config = {
     api: {
-      bodyParser: true,
+        bodyParser: true,
     },
 }
 
 router
     .get(async (req, res) => {
         try {
-            let {itemOffset,itemsPerPage}= req.query;
+            let { itemOffset, itemsPerPage } = req.query;
             let token = req.headers.authorization;
-            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/token/all/${itemOffset}/${itemsPerPage}`,token);     
+            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/token/all/${itemOffset}/${itemsPerPage}`, token);
             return res.status(200).send({ data });
 
         } catch (error: any) {
@@ -23,12 +23,13 @@ router
         }
     });
 
-router.put(async(req,res)=>{
+router.put(async (req, res) => {
     try {
         let token = req.headers.authorization;
-        let data = await putData(`${process.env.NEXT_PUBLIC_APIURL}/token/change/status`, JSON.parse(req.body),token);
-             return res.status(200).send({ data});
-    } catch (error:any) {
+        let bodyObj = JSON.parse(req.body);
+        let data = await putData(`${process.env.NEXT_PUBLIC_APIURL}/token/change/status`, bodyObj, token);
+        return res.status(200).send({ data });
+    } catch (error: any) {
         throw new Error(error.message);
     }
 })

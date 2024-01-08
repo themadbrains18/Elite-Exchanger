@@ -8,7 +8,7 @@ const TradeAnyWhere = () => {
     const headData = {
         title: 'Download the app',
         subTitle: 'Trade Anywhere, Anytime',
-        brief: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown',
+        brief: '',
         spacing:true,
         Cta:false,
         hidden:false

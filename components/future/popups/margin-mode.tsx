@@ -23,8 +23,8 @@ const MarginMode = (props: fullWidth) => {
         let InputValue = inputPercent?.value;
         if (inputPercent) {
             Number(InputValue)
-            console.log(typeof (InputValue))
-            console.log(InputValue++);
+            // console.log(typeof (InputValue))
+            // console.log(InputValue++);
 
         }
     }

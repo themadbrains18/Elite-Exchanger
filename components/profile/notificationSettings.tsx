@@ -14,37 +14,37 @@ const NotificationSettings = (props:fixSection) => {
       image: "price.svg",
       bg: "red",
       title: "Price Alerts",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
     },
     {
       image: "referal.svg",
       bg: "green",
       title: "Referral Commission Alerts",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
     },
     {
       image: "device.svg",
       bg: "blue",
       title: "Device Login Alerts",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
     },
     {
       image: "mail.svg",
       bg: "blue",
       title: "Email Notification",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
     },
     {
       image: "device.svg",
       bg: "blue",
       title: "Device Login Alerts",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
     },
     {
       image: "device.svg",
       bg: "blue",
       title: "Device Login Alerts",
-      desc: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+      desc: "",
     },
   ];
   return (
@@ -87,7 +87,7 @@ const NotificationSettings = (props:fixSection) => {
               </div>
 
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" value="" className="sr-only peer" />
+                <input id={`settingCheckbox${index}`} name={`settingCheckbox${index}`} type="checkbox" value="" className="sr-only peer" />
                 <div className="w-[50px] h-6 bg-grey-v-1 rounded-full  peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[50%] after:translate-y-[-50%] after:left-[2px] after:bg-white after:border-grey-v-1 after:border after:rounded-full after:h-[19px] after:w-[19px] after:transition-all dark:border-gray-600 peer-checked:after:right-[21px] peer-checked:after:left-auto peer-checked:bg-primary"></div>
               </label>
             </div>

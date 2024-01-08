@@ -16,7 +16,7 @@ export const config = {
 router
     .post(async (req, res) => {
         try {
-            console.log('==========here=============');
+            // console.log('==========here=============');
             return;
             const decodedStr = decodeURIComponent(req.body);
             let formData =  AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);

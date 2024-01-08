@@ -285,7 +285,7 @@ const AdvertisementTabs = (props: propsData) => {
                         <DesktopTable data={publishedData} updatePublishedPsot={updatePublishedPsot} />
                     </div>
                     <div className='md:hidden'>
-                        <MobileTable data={publishedData} />
+                        <MobileTable data={publishedData} updatePublishedPsot={updatePublishedPsot}/>
                     </div>
                 </div>
 
@@ -299,7 +299,7 @@ const AdvertisementTabs = (props: propsData) => {
                         <DesktopTable data={unpublishedData} updatePublishedPsot={updatePublishedPsot} />
                     </div>
                     <div className='md:hidden'>
-                        <MobileTable data={unpublishedData} />
+                        <MobileTable data={unpublishedData} updatePublishedPsot={updatePublishedPsot}/>
                     </div>
                 </div>
 
@@ -312,7 +312,7 @@ const AdvertisementTabs = (props: propsData) => {
                         <DesktopTable data={adsHistory} updatePublishedPsot={updatePublishedPsot} active={active} />
                     </div>
                     <div className='md:hidden'>
-                        <MobileTable data={adsHistory} />
+                        <MobileTable data={adsHistory} updatePublishedPsot={updatePublishedPsot} active={active} />
                     </div>
                 </div>
 

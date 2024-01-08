@@ -9,6 +9,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 interface dataTypes {
     data: any;
+    updatePublishedPsot?: any;
+    active?: any;
 }
 const MobileTable = (props: dataTypes) => {
     const route = useRouter();
@@ -78,7 +80,7 @@ const MobileTable = (props: dataTypes) => {
                                 <div className='grid grid-cols-2 py-[15px] border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2'>
                                     <div className=''>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Assets</p>
-                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity}&nbsp;{item?.token?.symbol}</p>
+                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
                                     </div>
                                     <div className='text-end'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Type</p>
@@ -86,7 +88,7 @@ const MobileTable = (props: dataTypes) => {
                                     </div>
                                     <div className='mt-[15px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Remaining</p>
-                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity} {item?.token?.symbol}</p>
+                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity} {item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
                                     </div>
                                     {/* <div  className='text-end mt-[15px]'>
                                 <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Payment</p>

@@ -6,7 +6,7 @@ const NewsHero = () => {
     const headData = {
         title: 'NEWS',
         subTitle: 'Stay informed about our news',
-        brief: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown',
+        brief: '',
         spacing:true,
         Cta:false,
         hidden:false

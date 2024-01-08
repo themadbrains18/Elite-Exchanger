@@ -14,6 +14,7 @@ import { authOptions } from '../../api/auth/[...nextauth]';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
+import AES from 'crypto-js/aes';
 
 interface Session {
     session: {
@@ -33,17 +34,14 @@ const Chart = (props: Session) => {
     const [currentToken, setCurrentToken] = useState([]);
     const [allCoins, setAllCoins] = useState(props.coinList);
     const [allTradeHistory, setAllTradeHistory] = useState([]);
+    const [view,setView] = useState("desktop")
 
     const [sellTrade, setSellTrade] = useState([]);
     const [BuyTrade, setBuyTrade] = useState([]);
 
-    const { slug } = router.query;
-    
-    // let currentToken = props.coinList.filter((item: any) => {
-    //     return item.symbol === slug
-    // })
+    let { slug } = router.query;
 
-    useEffect(() => {
+    const socket = () => {
         const websocket = new WebSocket('ws://localhost:3001/');
 
         websocket.onopen = () => {
@@ -65,7 +63,7 @@ const Chart = (props: Session) => {
             }
         }
 
-    }, [slug])
+    };
 
     const refreshTokenList = async () => {
         let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
@@ -88,10 +86,50 @@ const Chart = (props: Session) => {
             return item.symbol === slug
         })
 
+        if(window.innerWidth<768){
+            setView("mobile")
+        }
+        else{
+            setView("desktop")
+        }
+
         setCurrentToken(ccurrentToken);
         getAllMarketOrderByToken(slug);
+        socket();
+        addToWatchList(ccurrentToken[0]?.id);
 
     }, [slug]);
+
+    const addToWatchList = async (tokenid: string) => {
+        try {
+            if (props?.session) {
+                let user_id = props.session.user.user_id;
+                let token_id = tokenid;
+
+                let obj = {
+                    user_id,
+                    token_id
+                }
+
+                const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+                let record = encodeURIComponent(ciphertext.toString());
+                let result = await fetch(
+                    `/api/watchlist`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": props?.session?.user?.access_token
+                        },
+                        body: JSON.stringify(record),
+                    }
+                ).then((response) => response.json());
+            }
+
+        } catch (error: any) {
+            toast.error(error.message)
+        }
+    }
 
     const getUserOpenOrder = async (symbol: any) => {
 
@@ -127,8 +165,8 @@ const Chart = (props: Session) => {
         }
     }
 
-    const getAllMarketOrderByToken = async (symbol:any) => {
-        
+    const getAllMarketOrderByToken = async (symbol: any) => {
+
         let currentToken = allCoins.filter((item: any) => {
             return item.symbol === symbol
         })
@@ -144,7 +182,7 @@ const Chart = (props: Session) => {
 
     }
 
-    const filterBuySellRecords = (data:any) => {
+    const filterBuySellRecords = (data: any) => {
         if (data && data.length > 0) {
             let sellRecord = data.filter((item: any) => {
                 return item.order_type === 'sell'
@@ -156,13 +194,14 @@ const Chart = (props: Session) => {
             setSellTrade(sellRecord);
             setBuyTrade(buyRecord);
         }
-        else{
+        else {
             setSellTrade([]);
             setBuyTrade([]);
         }
     }
 
-    
+
+    slug = slug
     return (
         <>
             <div>
@@ -173,7 +212,7 @@ const Chart = (props: Session) => {
                     </div>
                     <div className="container p-[15px] lg:p-20 flex gap-30 flex-wrap">
                         <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
-                            <ChartSec slug={`${slug}USDT`} />
+                            <ChartSec slug={`${slug === 'BTCB' ? 'BTC' : slug === 'BNBT'? 'BNB':slug}USDT`} view={view}/>
                             {/* hidden on mobile */}
                             <div className='lg:block hidden'>
                                 <ChartTabs coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
@@ -184,13 +223,13 @@ const Chart = (props: Session) => {
                                 <BuySellCard id={1} coins={allCoins} session={props.session} token={currentToken[0]} slug={slug} assets={props.assets} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
                                 {/* hidden on mobile */}
                                 <div className='lg:block hidden'>
-                                    <OrderBook slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade}/>
+                                    <OrderBook slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} />
                                 </div>
                             </div>
                             {/* hidden on desktop */}
                             <div className='lg:hidden'>
-                                <OrderBookMobile slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade}/>
-                                <ChartTabs coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory}/>
+                                <OrderBookMobile slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} />
+                                <ChartTabs coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
                             </div>
                         </div>
                     </div>

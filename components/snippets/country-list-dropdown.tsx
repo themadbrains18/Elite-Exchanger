@@ -28,7 +28,7 @@ const CountrylistDropdown = (props:dataList) => {
     document.addEventListener('click', (evt: any) => {
       let dropdown = document.querySelector('.coin-dropdown-country');
       let targetEl = evt?.target?.parentNode?.parentElement; // clicked element
-      console.log(targetEl,"======")
+      // console.log(targetEl,"======")
       if (evt?.target.nodeName === 'svg') {
         targetEl = evt?.target?.parentNode.parentNode
       }
@@ -57,7 +57,7 @@ const CountrylistDropdown = (props:dataList) => {
         {/* dropdown */}
         <div className={`absolute z-[1] shadow-lg max-h-[250px] overflow-y-auto shadow-[#0000000d] left-0 right-0 dark:bg-black-v-1 bg-white border border-grey-v-1 dark:border-[#ccced94d] rounded-10 p-[15px] duration-300 ${show ? "top-[calc(100%+7px)] opacity-1 visible":"top-[calc(100%+17px)] opacity-0 invisible"}`}>
         <div className='bg-white dark:bg-d-bg-primary rounded-[5px] sticky top-0'>
-          <div className='border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-full w-full py-[8px] px-[10px] '>
+          <div className='border rounded-5 flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-full w-full py-[8px] px-[10px] '>
             <Image src="/assets/history/search.svg" alt='error' width={15} height={15} />
             <input type="search" className='nav-text-sm  !text-beta outline-none bg-[transparent] w-full'  onChange={(e)=>{filterCoinsInList(e)}}/>
           </div>

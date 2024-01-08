@@ -134,6 +134,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     },
     }).then(response => response.json());
   }
+  
 
   return {
     props: {
@@ -145,7 +146,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       tradeList:trades?.data  || [],
       adminProfit:profit?.data || [],
       assets: userAssets,
-      topgainer: tokenList2,
+      topgainer: [],
       activity:activityList.data || []
       // allUsers:allUsers
     },

@@ -141,7 +141,7 @@ const Verification = (props: activeSection) => {
                 className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                 name="code6"
                 onChange={(e) => {
-                  console.log(e);
+                  // console.log(e);
                 }}
               />
             </div>

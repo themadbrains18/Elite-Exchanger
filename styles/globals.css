@@ -427,7 +427,12 @@ input[name="colored-radio"].contactform:checked + .custom-radio{
 
 .tradingview-widget-copyright{display: none;}
 
-#tradingview_46b68 div{
+#tradingview_46b68destop div{
+  margin: 0px !important;
+  width: 100% !important;
+}
+
+#tradingview_46b68mobile div{
   margin: 0px !important;
   width: 100% !important;
 }

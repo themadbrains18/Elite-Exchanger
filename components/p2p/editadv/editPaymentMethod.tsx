@@ -42,7 +42,7 @@ const EditPaymentMethod = (props: activeSection) => {
 
     let method:any = [];
     props.editPost.p_method.map((item:any)=>{
-        console.log(item);
+        // console.log(item);
         method.push(item?.upm_id);
     })
 

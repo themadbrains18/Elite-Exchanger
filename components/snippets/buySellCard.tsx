@@ -62,6 +62,10 @@ const BuySellCard = (props: DynamicId) => {
     Socket();
   }, [props.slug, userAssets])
 
+  useEffect(()=>{
+    convertTotalAmount();
+  },[props.token]);
+
   const Socket = () => {
     const websocket = new WebSocket('ws://localhost:3001/');
 
@@ -73,9 +77,6 @@ const BuySellCard = (props: DynamicId) => {
       const data = JSON.parse(event.data).data;
       let eventDataType = JSON.parse(event.data).type;
 
-      if (eventDataType === "price") {
-        convertTotalAmount()
-      }
       if (eventDataType === "market") {
         if (props.session) {
           getAssets();
@@ -117,7 +118,7 @@ const BuySellCard = (props: DynamicId) => {
     if (token.length > 0) {
       // get assets balance
       let selectAssets = userAssets.filter((item: any) => {
-        return item.token_id === token[0].id
+        return item.token_id === token[0].id && item?.walletTtype === "main_wallet"
       });
 
       if (selectAssets.length > 0) {

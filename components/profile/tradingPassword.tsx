@@ -59,7 +59,7 @@ const TradingPassword = (props: activeSection) => {
     setError,
     formState: { errors },
   } = useForm<UserSubmitForm>({
-    resolver: yupResolver((props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null) ? schema : schema2),
+    resolver: yupResolver((props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null || props?.session?.user?.tradingPassword === undefined) ? schema : schema2),
   });
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
@@ -131,7 +131,7 @@ const TradingPassword = (props: activeSection) => {
       let obj;
 
 
-      if ((props?.session?.user?.tradingPassword !== '' || props?.session?.user?.tradingPassword !== null)) {
+      if ((props?.session?.user?.tradingPassword !== '' || props?.session?.user?.tradingPassword !== null || props?.session?.user?.tradingPassword !== undefined)) {
         obj = {
           username: username,
           old_password: formData?.old_password,
@@ -190,7 +190,7 @@ const TradingPassword = (props: activeSection) => {
           : props.session?.user?.number;
       let request;
 
-      if ((props?.session?.user?.tradingPassword !== '' || props?.session?.user?.tradingPassword !== null)) {
+      if ((props?.session?.user?.tradingPassword !== '' || props?.session?.user?.tradingPassword !== null || props?.session?.user?.tradingPassword !== undefined)) {
         request = {
           username: username,
           old_password: formData?.old_password,
@@ -248,7 +248,7 @@ const TradingPassword = (props: activeSection) => {
         <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <div className="flex items-center justify-between ">
             <p className="sec-title">
-              {(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null) ? "Add" : "Edit"} Trading Password
+              {(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null || props?.session?.user?.tradingPassword === undefined) ? "Add" : "Edit"} Trading Password
             </p>
             <svg
               onClick={() => {
@@ -288,7 +288,7 @@ const TradingPassword = (props: activeSection) => {
                 Set a unique password to protect your trading.
               </p>
               <div className="mt-[30px] ">
-                <div className={` md:flex-row flex-col gap-[30px] ${(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null) ? 'hidden' : "flex"}`}>
+                <div className={` md:flex-row flex-col gap-[30px] ${(props?.session?.user?.tradingPassword === '' || props?.session?.user?.tradingPassword === null || props?.session?.user?.tradingPassword === undefined) ? 'hidden' : "flex"}`}>
                   <div className=" w-full">
                     <p className="sm-text mb-[10px]">Old Trading Password</p>
                     <input
@@ -299,7 +299,7 @@ const TradingPassword = (props: activeSection) => {
                     />
                   </div>
                 </div>
-                {(props?.session?.user?.tradingPassword !== '' || props?.session?.user?.tradingPassword !== null) && errors.old_password && (
+                {(props?.session?.user?.tradingPassword !== '' || props?.session?.user?.tradingPassword !== null || props?.session?.user?.tradingPassword !== undefined) && errors.old_password && (
                   <p style={{ color: "#ff0000d1" }}>
                     {errors.old_password.message}
                   </p>

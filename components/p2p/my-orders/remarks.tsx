@@ -20,6 +20,9 @@ const Remarks = (props: propsData) => {
 
     const Ref: any = useRef(null);
 
+    // console.log(props.userOrder,'=========user order==========');
+    
+
     useEffect(() => {
 
         const websocket = new WebSocket('ws://localhost:3001/');
@@ -124,6 +127,7 @@ const Remarks = (props: propsData) => {
                 websocket.onopen = () => {
                     websocket.send(JSON.stringify(orderData));
                 }
+                if (Ref.current) clearInterval(Ref.current);
                 toast.success('Thanks for payment. Receiver release assets in short time.');
             }
             else {
@@ -228,6 +232,7 @@ const Remarks = (props: propsData) => {
                     websocket.send(JSON.stringify(orderData));
                 }
                 toast.success(res?.data?.data?.message);
+                if (Ref.current) clearInterval(Ref.current);
             }
             else {
                 toast.error(res?.data?.data);

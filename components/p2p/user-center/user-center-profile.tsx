@@ -12,6 +12,9 @@ const UserCenterProfile = (props: propsData) => {
 
     const { status, data: session } = useSession();
 
+    // console.log(props?.userDetail?.User,'============userDetail User================');
+    
+
     return (
         <div>
             <div className='mt-40 mb-30'>
@@ -48,15 +51,15 @@ const UserCenterProfile = (props: propsData) => {
                         <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text whitespace-nowrap'>E-mail</p>
                     </div>
                     <div className='flex items-center gap-[15px] border dark:border-opacity-[15%] border-grey-v-1 p-10 md:px-[20px] md:py-[14px] rounded-[5px]'>
-                        <IconsComponent type={( props?.userDetail && props?.userDetail?.User?.tradingPassword!== "" && props?.userDetail?.User?.tradingPassword!== null)?'verified':'infoIconRed'} hover={false} active={false} />
-                        <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text whitespace-nowrap'>Trade Password</p>
+                        <IconsComponent type={( props?.userDetail && props?.userDetail?.User !==undefined && (props?.userDetail?.User?.tradingPassword!== "" || props?.userDetail?.User?.tradingPassword!== null ||  props?.userDetail?.User?.tradingPassword!== undefined) )?'verified':'infoIconRed'} hover={false} active={false} />
+                        <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text'>Trade Password</p>
                     </div>
                     <div className='flex items-center gap-[15px] border dark:border-opacity-[15%] border-grey-v-1 p-10 md:px-[20px] md:py-[14px] rounded-[5px]'>
-                        <IconsComponent type={(props?.userDetail && props?.userDetail?.User?.user_kyc!== "" && props?.userDetail?.User?.user_kyc!== null)?'verified':'infoIconRed'} hover={false} active={false} />
+                        <IconsComponent type={(props?.userDetail && props?.userDetail?.User !==undefined && props?.userDetail?.User?.user_kyc!== "" && props?.userDetail?.User?.user_kyc!== null)?'verified':'infoIconRed'} hover={false} active={false} />
                         <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text'>KYC</p>
                     </div>
                     <div className='flex items-center gap-[15px] border dark:border-opacity-[15%] border-grey-v-1 p-10 md:px-[20px] md:py-[14px] rounded-[5px]'>
-                        <IconsComponent type={( props?.userDetail &&props?.userDetail?.User?.number!== "" && props?.userDetail?.User?.number!== null)?'verified':'infoIconRed'} hover={false} active={false} />
+                        <IconsComponent type={( props?.userDetail && props?.userDetail?.User !==undefined &&props?.userDetail?.User?.number!== "" && props?.userDetail?.User?.number!== null)?'verified':'infoIconRed'} hover={false} active={false} />
                         <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text'>SMS</p>
                     </div>
                 </div>

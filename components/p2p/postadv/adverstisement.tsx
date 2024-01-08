@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
+import { toast, ToastContainer } from "react-toastify";
 
 interface propsData {
   masterPayMethod?: any;
@@ -27,24 +28,24 @@ const Adverstisement = (props: propsData) => {
   const [inrPrice, setInrPrice] = useState(0);
   const [step1Data, setStep1Data] = useState(Object);
   const [step2Data, setStep2Data] = useState(Object);
-  const [assetsBalance, setAssetsBalance] = useState(0);
+  const [assetsBalance, setAssetsBalance] = useState(0.00);
 
   const assets = props.tokenList;
   const cash = ["INR"];
 
   const router = useRouter()
-  
-  useEffect(()=>{
-    if(Object.keys(router?.query).length>0 ){
-      let token = props.tokenList.filter((item:any)=>{
+
+  useEffect(() => {
+    if (Object.keys(router?.query).length > 0) {
+      let token = props.tokenList.filter((item: any) => {
         return item?.id === router?.query?.token_id
       })
       selectToken(token[0]);
-      let price:any = router?.query?.price;
-      setValue('price',price);
+      let price: any = router?.query?.price;
+      setValue('price', price);
     }
-    
-  },[router.query]);
+
+  }, [router.query]);
 
   let {
     register,
@@ -71,20 +72,26 @@ const Adverstisement = (props: propsData) => {
         method: "GET",
       }).then(response => response.json());
 
-      setInrPrice(usdtToINR?.data?.INR);
+      setInrPrice(usdtToINR?.data?.rate);
     }
     else {
       let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
         method: "GET",
       }).then(response => response.json());
-      setInrPrice(item?.price * usdtToINR?.data?.INR);
+      setInrPrice(item?.price * usdtToINR?.data?.rate);
     }
 
     setSelectedAssets(item);
     let balances = props?.assets?.filter((e: any) => {
-      return e.token_id === item?.id
+      return e.token_id === item?.id && e.walletTtype ==='main_wallet'
     })
-    setAssetsBalance(balances[0]?.balance);
+    if (balances[0] !== undefined) {
+      setAssetsBalance(balances[0]?.balance);
+    }
+    else {
+      setAssetsBalance(0);
+    }
+
   }
 
   const setPaymentMethod = (data: any) => {
@@ -92,12 +99,19 @@ const Adverstisement = (props: propsData) => {
   }
 
   const onHandleSubmit = (data: any) => {
-    setStep1Data(data);
-    setStep(2);
+    if (assetsBalance > getValues('price')) {
+      setStep1Data(data);
+      setStep(2);
+    }
+    else {
+      toast.error('Insufficiant Balance')
+    }
+
   }
 
   return (
     <>
+      <ToastContainer />
       {step == 1 && (
         <div className="mt-30 md:mt-40">
           <p className="sec-title">Set Type And Price</p>
@@ -201,29 +215,29 @@ const Adverstisement = (props: propsData) => {
                       <label
                         htmlFor="radio--btn-1"
                         className="
-                 md-text py-[24px] px-[18px]  relative custom-radio  cursor-pointer
-                pl-[60px] 
-                after:dark:bg-omega
-                after:bg-white
-                after:lg:left-[29px]
-                after:left-[16px]
-                after:w-[20px] 
-                after:h-[20px]
-                after:rounded-[50%] 
-                after:border after:border-beta
-                after:absolute
-                before:dark:bg-[transparent]
-                before:bg-white
-                before:lg:left-[34px]
-                before:left-[21px]
-                before:md:top-[calc(50%-7px)]
-                before:top-[calc(50%-4px)]
-                before:w-[10px] 
-                before:h-[10px]
-                before:rounded-[50%] 
-                before:absolute
-                before:z-[1]
-                "
+                          md-text py-[24px] px-[18px]  relative custom-radio  cursor-pointer
+                          pl-[60px] 
+                          after:dark:bg-omega
+                          after:bg-white
+                          after:lg:left-[29px]
+                          after:left-[16px]
+                          after:w-[20px] 
+                          after:h-[20px]
+                          after:rounded-[50%] 
+                          after:border after:border-beta
+                          after:absolute
+                          before:dark:bg-[transparent]
+                          before:bg-white
+                          before:lg:left-[34px]
+                          before:left-[21px]
+                          before:md:top-[calc(50%-7px)]
+                          before:top-[calc(50%-4px)]
+                          before:w-[10px] 
+                          before:h-[10px]
+                          before:rounded-[50%] 
+                          before:absolute
+                          before:z-[1]
+                          "
                       >
                         Fixed
                       </label>
@@ -241,29 +255,29 @@ const Adverstisement = (props: propsData) => {
                       <label
                         htmlFor="radio-btn2"
                         className="
-                 md-text py-[24px] px-[18px] relative  custom-radio  cursor-pointer
-                pl-[60px] 
-                after:dark:bg-omega
-                after:bg-white
-                after:lg:left-[29px]
-                after:left-[16px]
-                after:w-[20px] 
-                after:h-[20px]
-                after:rounded-[50%] 
-                after:border after:border-beta
-                after:absolute
-                before:dark:bg-[transparent]
-                before:bg-white
-                before:lg:left-[34px]
-                before:left-[21px]
-                before:md:top-[calc(50%-7px)]
-                before:top-[calc(50%-4px)]
-                before:w-[10px] 
-                before:h-[10px]
-                before:rounded-[50%] 
-                before:absolute
-                before:z-[1]
-                "
+                        md-text py-[24px] px-[18px] relative  custom-radio  cursor-pointer
+                        pl-[60px] 
+                        after:dark:bg-omega
+                        after:bg-white
+                        after:lg:left-[29px]
+                        after:left-[16px]
+                        after:w-[20px] 
+                        after:h-[20px]
+                        after:rounded-[50%] 
+                        after:border after:border-beta
+                        after:absolute
+                        before:dark:bg-[transparent]
+                        before:bg-white
+                        before:lg:left-[34px]
+                        before:left-[21px]
+                        before:md:top-[calc(50%-7px)]
+                        before:top-[calc(50%-4px)]
+                        before:w-[10px] 
+                        before:h-[10px]
+                        before:rounded-[50%] 
+                        before:absolute
+                        before:z-[1]
+                        "
                       >
                         Floating
                       </label>
@@ -273,7 +287,7 @@ const Adverstisement = (props: propsData) => {
                 <div className="md:py-50 py-20">
                   <div className="flex items-center justify-between gap-2 pb-[15px] border-b border-grey-v-1 dark:border-opacity-20">
                     <p className="info-14-18 dark:!text-white">Your Price</p>
-                    <p className="sec-title md:!text-[18px] !text-[14px]">₹ {(inrPrice).toFixed(2)}</p>
+                    <p className="sec-title md:!text-[18px] !text-[14px]">₹ {(inrPrice)?.toFixed(2)}</p>
                   </div>
                   {/* <div className="flex items-center justify-between gap-2 pt-[15px] ">
                     <p className="info-14-18 dark:!text-white">Highest Order Price</p>
@@ -286,7 +300,9 @@ const Adverstisement = (props: propsData) => {
                   {errors?.price && (
                     <p style={{ color: "#ff0000d1" }}>{errors?.price?.message}</p>
                   )}
+                  <p className="py-2 info-10-14 text-right">Bal. {assetsBalance}</p>
                 </div>
+
                 <button
                   className="solid-button w-full text-center"
                 >

@@ -57,11 +57,11 @@ const SignIn = (Props: loginType) => {
 
   useEffect(() => {
     let agent = window.navigator.userAgent;
-    console.log(agent, "==agent");
+    // console.log(agent, "==agent");
     fetch('http://ip-api.com/json')
       .then(response => response.json())
       .then(data => {
-        console.log(data, '=====api all data')
+        // console.log(data, '=====api all data')
       });
   }, []);
 

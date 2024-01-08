@@ -117,7 +117,7 @@ const TransferModal = (props: showPopup) => {
   return (
     <div
       className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[550px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${
-        props.popupMode == 3
+        props.popupMode === 3
           ? "top-[50%] opacity-1 visible"
           : "top-[52%] opacity-0 invisible"
       } left-[50%] translate-x-[-50%] translate-y-[-50%]`}

@@ -154,7 +154,7 @@ const PaymentMethod = (props: activeSection) => {
           },
         }
       ).then((res) => res.json());
-      console.log(responseData, "==responseData");
+      // console.log(responseData, "==responseData");
       if (responseData?.data) {
         getAllPayments()
         toast.success("Payment method delete successfully");

@@ -7,7 +7,7 @@ interface propsData {
 }
 const NewList = (props:propsData) => {
 
-  let newCoins = props.coins.filter((item: any) => {
+  let newCoins = props?.coins?.filter((item: any) => {
     return item.tokenType === 'mannual'
   })
   function formatDate(date: any) {

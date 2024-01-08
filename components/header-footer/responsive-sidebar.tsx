@@ -24,12 +24,17 @@ const ResponsiveSidebar = (props: defaultStates) => {
 
   const { status, data: session } = useSession();
   const router = useRouter();
-const [userDetail,setUserDetail] = useState({})
 
   const [profileImg, setProfileImg] = useState('');
 
   const ResponsivelinkList = [
 
+    {
+      "name": "Buy Crypto",
+      "url": "/p2p/buy",
+      "svgType": "marketIcon",
+
+    },
     {
       "name": "Market",
       "url": "/market",
@@ -53,10 +58,6 @@ const [userDetail,setUserDetail] = useState({})
 
   ]
   const showLists = useRef<HTMLDivElement>(null);
-
-
-  console.log(props?.userDetail,"==userdetail");
-  
 
   function showList() {
     if (showLists.current) {
@@ -83,26 +84,29 @@ const [userDetail,setUserDetail] = useState({})
     }
 
     let files = e.target.files[0];
-    var reader = new FileReader();
-    reader.readAsDataURL(files);
-    reader.onloadend = async function (e: any) {
-      setProfileImg(reader.result as string);
-
-      var formData = new FormData();
-      formData.append("image", files);
-
-      let response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/profile/dp`,
-        {
-          method: "POST",
-          headers: {
-            "Authorization": session?.user?.access_token
-          },
-          body: formData,
-        }
-      ).then((response) => response.json());
-
-    }.bind(this);
+    if(files){
+      var reader = new FileReader();
+      reader.readAsDataURL(files);
+      reader.onloadend = async function (e: any) {
+        setProfileImg(reader.result as string);
+  
+        var formData = new FormData();
+        formData.append("image", files);
+  
+        let response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASEURL}/profile/dp`,
+          {
+            method: "POST",
+            headers: {
+              "Authorization": session?.user?.access_token
+            },
+            body: formData,
+          }
+        ).then((response) => response.json());
+  
+      }.bind(this);
+    }
+    
   };
 
 
@@ -112,7 +116,7 @@ const [userDetail,setUserDetail] = useState({})
   // },[])
 
   function setDropdownHeight(e:any){
-    console.log(e.currentTarget);
+    // console.log(e.currentTarget);
     // set false to nav menu when click on nested items in dropdown
         let nextSibling = e.currentTarget?.nextElementSibling;
         if(nextSibling){
@@ -280,6 +284,9 @@ const [userDetail,setUserDetail] = useState({})
                 </>
 
               }
+              <button className=' bg-primary text-white py-[15px] px-[5px]  w-full rounded-[12px]' onClick={()=>{signOut()}}>
+            Sign Out
+        </button>
             </ul>
           </nav>
         </div>

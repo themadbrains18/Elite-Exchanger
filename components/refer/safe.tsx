@@ -9,7 +9,7 @@ const Safe = () => {
         <div className='max-w-[584px] w-full'>
             <p className='text-lg leading-6 font-normal text-primary  mb-[10px] md:mb-[15px]'>Friends</p>
             <p className='sec-subTitle dark:!text-white !text-black pb-[15px] md:pb-[30px]'>Your Friends Are Safe with us</p>
-            <p className='info-14-18 pb-30 md:pb-12'>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown</p>
+            <p className='info-14-18 pb-30 md:pb-12'></p>
             <p className='underline text-primary text-lg leading-6 font-normal'>Learn More</p>
         </div>
     </div>

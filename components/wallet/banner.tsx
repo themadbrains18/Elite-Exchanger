@@ -47,7 +47,7 @@ const Banner = (props: propsData):any => {
       <div className="flex justify-between flex-wrap gap-[20px]">
         <div>
           <p className="text-[23px] leading-7 font-medium mb-2 md:mb-[10px] dark:text-white">Wallet</p>
-          <p className="nav-text-sm  md:leading-17 leading-20 banner-text dark:text-beta">Update 16/02/2022 at 02:30 PM  </p>
+          {/* <p className="nav-text-sm  md:leading-17 leading-20 banner-text dark:text-beta">Update 16/02/2022 at 02:30 PM  </p> */}
         </div>
         <div>
         <button onClick={() => { setShow1(1) }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">

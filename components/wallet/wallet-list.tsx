@@ -7,6 +7,7 @@ import Context from "../contexts/context";
 import Deposit from "../snippets/deposit";
 import Withdraw from "../snippets/withdraw";
 import StakingModel from "../snippets/stake/staking";
+import TransferModal from "../future/popups/transfer-modal";
 import moment from 'moment';
 
 interface propsData {
@@ -29,9 +30,13 @@ const WalletList = (props: propsData): any => {
   const [show1, setShow1] = useState(0);
   const [selectedCoin, setSelectedCoin] = useState(Object);
   const [selectedCoinBalance, setSelectedCoinBalance] = useState(0.00);
+  
+  const [overlay, setOverlay] = useState(false);
+  const [popupMode, setPopupMode] = useState(0);
   // const [height, setHeight] = useState(false);+
   const router = useRouter();
   const height = useRef(0);
+
 
   const setHeight = (e: any) => {
     let parent = e.currentTarget.closest(".iconParent");
@@ -49,39 +54,6 @@ const WalletList = (props: propsData): any => {
     return new Date(date).toLocaleDateString('en-US', options)
   }
 
-  // let walletDepositHistory = [
-  //   {
-  //     name: "Deposited",
-  //     amount: "$10,000",
-  //     dateTime: "Feb 02, 2022",
-  //     status: "Successful"
-  //   },
-  //   {
-  //     name: "Deposited",
-  //     amount: "$10,000",
-  //     dateTime: "Feb 02, 2022",
-  //     status: "Successful"
-  //   },
-  //   {
-  //     name: "Deposited",
-  //     amount: "$10,000",
-  //     dateTime: "Feb 02, 2022",
-  //     status: "Successful"
-  //   },
-  //   {
-  //     name: "Deposited",
-  //     amount: "$10,000",
-  //     dateTime: "Feb 02, 2022",
-  //     status: "Successful"
-  //   },
-  //   {
-  //     name: "Deposited",
-  //     amount: "$10,000",
-  //     dateTime: "Feb 02, 2022",
-  //     status: "Successful"
-  //   }
-
-  // ];
 
   let dataWithdraw = props?.withdrawList;
   let dataDeposit = props?.depositList;
@@ -297,7 +269,12 @@ const WalletList = (props: propsData): any => {
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
 
-                              <button className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                              <button onClick={() => {
+                                setSelectedCoinBalance(item?.balance);
+                                setPopupMode(3);
+                                setShow1(4);
+                                setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                              }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Transfer</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
@@ -473,7 +450,7 @@ const WalletList = (props: propsData): any => {
                     <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">
                       <th className="lg:sticky left-0 bg-white dark:bg-d-bg-primary py-5">
                         <div className="flex ">
-                          <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">Action</p>
+                          <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">Coin</p>
                           <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                         </div>
                       </th>
@@ -499,15 +476,16 @@ const WalletList = (props: propsData): any => {
                   </thead>
                   <tbody>
                     {currentItems && currentItems.length > 0 && currentItems?.map((item:any, index:number) => {
+                      
                       return (
                         <tr key={index} className="rounded-5 group dark:hover:bg-black-v-1 hover:bg-[#FEF2F2] cursor-pointer">
                           <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                             <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px]  w-full">
                               {/* <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" /> */}
-                              <IconsComponent type="deposited" hover={false} active={false} />
+                              {/* <IconsComponent type="deposited" hover={false} active={false} /> */}
                               <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                <p className="info-14-18 dark:text-white">Deposited</p>
-                                <p className="info-14-18 !text-[10px] lg:hidden">{item?.createdAt}</p>
+                                <p className="info-14-18 dark:text-white">{item.coinName.split('/')[1]}</p>
+                                <p className="info-14-18 !text-[10px] lg:hidden">{moment(item?.createdAt).format('YYYY-MM-DD')}</p>
                               </div>
                             </div>
                           </td>
@@ -515,7 +493,7 @@ const WalletList = (props: propsData): any => {
                             <p className="info-14-18 dark:text-white  lg:text-start text-end">{item?.amount}</p>
                           </td>
                           <td className="max-[1023px]:hidden">
-                            <p className="info-14-18 dark:text-white">{item?.createdAt}</p>
+                            <p className="info-14-18 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
                           </td>
                           <td className=" text-end">
                             <p className={`info-14-18  ${item?.successful === "1" ? "text-buy" : "text-cancel"}`}>{item?.successful === "1"?'Successful':'Pending'}</p>
@@ -1019,6 +997,12 @@ const WalletList = (props: propsData): any => {
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
           <StakingModel setShow1={setShow1} refreshData={props.refreshData} session={props.session} token={selectedCoin} selectedCoinBalance={selectedCoinBalance} />
+        </>
+      }
+      {
+        show1 === 4 && 
+        <>
+          <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={props.assets} refreshWalletAssets={props.refreshData} />
         </>
       }
     </>
