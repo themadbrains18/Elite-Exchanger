@@ -204,7 +204,7 @@ const Chart = (props: Session) => {
                     </div>
                     <div className="container p-[15px] lg:p-20 flex gap-30 flex-wrap">
                         <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
-                            <ChartSec slug={`${slug === 'BTCB' ? 'BTC' : slug}USDT`} />
+                            <ChartSec slug={`${slug === 'BTCB' ? 'BTC' : slug === 'BNBT'? 'BNB':slug}USDT`} />
                             {/* hidden on mobile */}
                             <div className='lg:block hidden'>
                                 <ChartTabs coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />

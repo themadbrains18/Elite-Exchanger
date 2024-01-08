@@ -7,11 +7,14 @@ import Context from "@/components/contexts/context";
 // import DemoChart from "@/pages/demochart";
 
 interface propsData {
-  slug: string
+  slug: string,
+  view :string
 }
 const ChartSec = (props: propsData) => {
   let { mode } = useContext(Context);
 
+  console.log(props.slug,'===========props slug');
+  
 
   useEffect(() => {
   }, [mode])
@@ -26,7 +29,7 @@ const ChartSec = (props: propsData) => {
         interval="D"
         theme={mode === "dark" ? "dark" : "light"}
         height={630}
-        container_id="tradingview_46b68"
+        container_id={`tradingview_46b68${props.view}`}
       ></AdvancedRealTimeChart>
       {/* <DemoChart /> */}
     </div>

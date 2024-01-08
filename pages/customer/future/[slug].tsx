@@ -282,8 +282,8 @@ const FutureTrading = (props: Session) => {
                                     <CoinTypes coins={allCoins} />
                                 </div>
                                 {/* Future chart */}
-                                <div className='max-[1499px]:pl-[20px] w-full max-w-full min-[1500px]:max-w-[calc(100%-380px)] bg-[#fafafa] dark:bg-[#1a1b1f] '>
-                                    <ChartSec slug={`${props?.serverSlug}`} />
+                                <div className='max-[1499px]:pl-[20px] w-full max-w-full min-[1500px]:max-w-[calc(100%-300px)] bg-[#fafafa] dark:bg-[#1a1b1f] '>
+                                    <ChartSec slug={`${props?.serverSlug}`} view="desktop"/>
                                 </div>
                             </div>
                         </div>
@@ -312,6 +312,7 @@ const FutureTrading = (props: Session) => {
                         <CoinTypes coins={props?.coinList} />
                     </div>
                 </div>
+                
                 <div className='overflow-x-auto hide-scroller dark:bg-[#1a1b1f] bg-[#fafafa]'>
                     <div className='flex items-center gap-[20px] w-max p-[16px] '>
                         <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[30px] after:translate-x-[-50%] after:h-[2px] ${showMob === 1 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(1) }}>Chart</button>
@@ -321,7 +322,7 @@ const FutureTrading = (props: Session) => {
                     {
                         showMob === 1 &&
                         // <FutureChart id={'tradingview_0d0de12'} />
-                        <ChartSec slug={`${props?.serverSlug}`} />
+                        <ChartSec slug={`${props?.serverSlug}`} view="mobile"/>
                     }
                     {
                         showMob === 2 &&
@@ -332,6 +333,7 @@ const FutureTrading = (props: Session) => {
                         <MarketTrades widthFull={true} setShow={setShow} show={show} positionRecord={positionRecord} />
                     }
                 </div>
+                
                 <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} positionHistoryData={positionHistoryData} openOrderHistoryData={openOrderHistoryData} />
                 <BuySell setOverlay={setOverlay} inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} />
                 <MarginRatio fullWidth={true} heightAuto={true} setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />

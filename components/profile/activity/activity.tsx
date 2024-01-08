@@ -18,6 +18,9 @@ const Activity = (props: fixSection) => {
   const {data:session} = useSession()
   const [data,setData] =useState(props?.activity)
 
+  console.log(props?.activity,'--------activity page activity----------');
+  
+
   const clearActivity = async() => {
     
     let obj={
