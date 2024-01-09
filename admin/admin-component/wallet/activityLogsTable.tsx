@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import Loader from "@/components/snippets/loader";
 
 
 interface propData{
@@ -29,6 +30,7 @@ const ActivityLogsTable = (props:propData) => {
   const [total, setTotal] = useState(0);
   const router = useRouter();
   const {data:session} = useSession()
+  const [isLoading,setIsLoading] = useState(false)
   let itemsPerPage = 10;
 
   useEffect(() => {
@@ -37,6 +39,7 @@ const ActivityLogsTable = (props:propData) => {
 
   const getActivity = async (itemOffset: number) => {
     try {
+      setIsLoading(true)
       if (itemOffset === undefined) {
         itemOffset = 0;
       }
@@ -60,7 +63,7 @@ const ActivityLogsTable = (props:propData) => {
       }
       setList(activity?.data?.data);
       setTotal(activity?.data?.total);
-      
+      setIsLoading(false)
     } catch (error) {
       console.log("error in get activity details",error);
       
@@ -74,6 +77,11 @@ const ActivityLogsTable = (props:propData) => {
   };
 
   return (
+    <>
+    {
+      isLoading ?
+      <Loader />
+      :
     <div className=" mt-[24px] py-6 px-5  rounded-10 bg-white dark:bg-grey-v-4">
    
    <div className="max-h-[600px] h-full overflow-y-auto all-user-table overscroll-auto	">
@@ -308,6 +316,8 @@ const ActivityLogsTable = (props:propData) => {
         />
       </div>
     </div>
+    }
+    </>
   );
 };
 

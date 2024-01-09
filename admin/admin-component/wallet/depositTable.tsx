@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import Loader from "@/components/snippets/loader";
 
 interface propData{
   type?:any
@@ -30,6 +31,7 @@ const DepositTable = (props:propData) => {
   const [total, setTotal] = useState(0);
   const router = useRouter();
   const {data:session} = useSession()
+  const [isLoading,setIsLoading] = useState(false)
 
   let itemsPerPage = 10;
 
@@ -39,6 +41,7 @@ const DepositTable = (props:propData) => {
 
   const getDeposit = async (itemOffset: number) => {
     try {
+      setIsLoading(true)
       if (itemOffset === undefined) {
         itemOffset = 0;
       }
@@ -65,6 +68,10 @@ const DepositTable = (props:propData) => {
   
       setList(deposit?.data?.data);
       setTotal(deposit?.data?.total);
+      // setTimeout(()=>{
+        setIsLoading(false)
+
+      // },2000)
       
     } catch (error) {
       console.log("error in details history",error);
@@ -79,6 +86,11 @@ const DepositTable = (props:propData) => {
   };
 
   return (
+    <>
+    {
+      isLoading?
+      <Loader />
+ :
     <div className=" mt-[24px] py-6 px-5  rounded-10 bg-white dark:bg-grey-v-4">
    
    <div className="max-h-[600px] h-full overflow-y-auto all-user-table overscroll-auto	">
@@ -308,6 +320,8 @@ const DepositTable = (props:propData) => {
         />
       </div>
     </div>
+       }
+    </>
   );
 };
 

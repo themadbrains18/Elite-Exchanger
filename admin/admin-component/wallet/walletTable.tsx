@@ -72,7 +72,7 @@ const WalletTable = (props: data) => {
           >
             Assets
           </button>
-          <button
+          {/* <button
             className={`${
               active === 6 ? "admin-solid-button" : "admin-outline-button"
             }`}
@@ -81,7 +81,7 @@ const WalletTable = (props: data) => {
             }}
           >
             Activity logs
-          </button>
+          </button> */}
 {
   props?.type==="details" &&
           <button
@@ -124,7 +124,7 @@ const WalletTable = (props: data) => {
       {active === 3 && <TradeTable type={props?.type} />}
       {active === 4 && <P2PTable type={props?.type} />}
       {active === 5 && <AssetTable type={props?.type} />}
-      {active === 6 && <ActivityLogsTable type={props?.type} />}
+      {/* {active === 6 && <ActivityLogsTable type={props?.type} />} */}
       {active === 7 && <ReferalHistory type={props?.type} />}
     </div>
   );

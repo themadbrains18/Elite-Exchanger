@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import Loader from "@/components/snippets/loader";
 
 interface propData{
   type?:any
@@ -31,6 +32,8 @@ const ReferalHistory = (props:propData) => {
   const router = useRouter();
   const {data:session}= useSession()
 
+  const [isLoading,setIsLoading] = useState(false)
+
   let itemsPerPage = 10;
 
   useEffect(() => {
@@ -39,7 +42,7 @@ const ReferalHistory = (props:propData) => {
 
   const getReferal = async (itemOffset: number) => {
     try {
-      
+      setIsLoading(true)
       if (itemOffset === undefined) {
         itemOffset = 0;
       }
@@ -61,6 +64,7 @@ const ReferalHistory = (props:propData) => {
   
       setList(referalDetail?.data?.data);
       setTotal(referalDetail?.data?.total);
+      setIsLoading(false)
     } catch (error) {
       console.log("error in fetching referal details",error);
 
@@ -74,6 +78,12 @@ const ReferalHistory = (props:propData) => {
   };
 
   return (
+    <>
+    {
+      isLoading
+      ?
+      <Loader />
+      :
     <div className=" mt-[24px] py-6 px-5  rounded-10 bg-white dark:bg-grey-v-4">
    
    <div className="max-h-[600px] h-full overflow-y-auto all-user-table overscroll-auto	">
@@ -253,6 +263,9 @@ const ReferalHistory = (props:propData) => {
         />
       </div>
     </div>
+
+    }
+    </>
   );
 };
 
