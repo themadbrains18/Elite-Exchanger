@@ -28,7 +28,7 @@ const InvestorSec = () => {
         <section className="investor-sec py-40 md:py-100 bg-bg-secondary dark:bg-d-bg-primary">
             <div className="container">
                 <div className='capitalize text-center sec-title'>Backed By Investors</div>
-                <div className='flex py-40 md:pt-50 gap-5 justify-between align-middle flex-wrap'>
+                <div className='flex pt-50 gap-[30px] justify-between align-middle flex-wrap'>
                 {
                     investorData.map((elem,ind)=>{
                         return(

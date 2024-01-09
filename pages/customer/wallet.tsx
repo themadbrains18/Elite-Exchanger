@@ -102,7 +102,7 @@ const Wallet = (props: Session) => {
     return (
         <div>
             <ToastContainer />
-            <div className=" bg-light-v-1 py-80 md:py-[120px]  dark:bg-black-v-1">
+            <div className=" bg-light-v-1 py-[20px] md:py-[80px] dark:bg-black-v-1">
                 <div className="container flex gap-30 flex-wrap">
                     <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
                         <Banner coinList={allCoins} networks={props?.networks} session={props.session} assets={userAssetsList} withdrawList={userWithdrawList} depositList={userDepositList}/>
@@ -172,8 +172,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
                 providers: providers,
                 session: session,
                 sessions: session,
-                coinList: tokenList?.data,
-                networks: networkList?.data,
+                coinList: tokenList?.data || [],
+                networks: networkList?.data || [],
                 withdrawList: withdraws?.data || [],
                 depositList: deposits?.data || [],
                 assets: userAssets || [],

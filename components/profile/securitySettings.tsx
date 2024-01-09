@@ -55,7 +55,7 @@ const SecuritySettings = (props: fixSection) => {
   const { status, data: session } = useSession()
   const [tradePassword,setTradePassword] = useState(false);
 
-  console.log(props.activity,'-------tab page activity-------');
+  // console.log(props.activity,'-------tab page activity-------');
   
 
   let data = [

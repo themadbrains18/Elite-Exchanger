@@ -111,7 +111,6 @@ const Header = (props: propsData) => {
         },
       }
     ).then((response) => response.json());
-console.log(profileDashboard,"==profileDashboard");
 
     if (profileDashboard) {
       setUserDetail(profileDashboard?.data);

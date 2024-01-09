@@ -36,7 +36,7 @@ const TradeAnyWhere = () => {
         }
     ]
   return (
-    <section className='py-[60px] md:py-[100px] dark:bg-black-v-1'>
+    <section className='py-[40px] md:py-[100px] dark:bg-black-v-1'>
         <div className="container">
             <div className='flex items-center flex-col lg:flex-row gap-[50px] md:gap-[70px]'>
                 <div className='max-w-full md:max-w-[554px] w-full'>

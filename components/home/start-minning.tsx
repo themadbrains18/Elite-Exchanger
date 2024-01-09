@@ -4,7 +4,7 @@ import ETH from '../../public/assets/home/etherium-bg.png';
 import BitCoin from '../../public/assets/home/bitcoin-bg.png';
 const StartMinning = () => {
   return (
-    <section className='py-60 md:py-100 dark:bg-black-v-1'>
+    <section className='py-[30px] md:py-100 dark:bg-black-v-1'>
         <div className="container max-w-[1272px] px-20 py-60 lg:p-50 bg-primary lg:rounded-16 relative">
             <Image src={ETH} width={170} height={185} alt='error' className='absolute top-0 left-0' />
             <Image src={BitCoin} width={170} height={185} alt='error'  className='absolute bottom-0 right-0' />

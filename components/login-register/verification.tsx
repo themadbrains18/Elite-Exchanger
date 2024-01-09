@@ -73,7 +73,7 @@ const Verification = (props: propsData) => {
             className="object-cover h-full block"
           />
         </div>
-        <div className="max-w-[902px] w-full ">
+        <div className="max-w-[902px] w-full h-screen">
           <div
             className="py-[30px] lg:py-[40px]  max-w-[710px] w-full my-0 mx-auto pr-5 flex justify-end items-center cursor-pointer"
             onClick={() => {

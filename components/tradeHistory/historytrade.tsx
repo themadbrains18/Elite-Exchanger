@@ -255,7 +255,7 @@ const Historytrade = (props: propsData) => {
     <>
       <ToastContainer />
       <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show && active!==5 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-      <section className=" bg-light-v-1 py-80 md:py-[120px]  dark:bg-black-v-1">
+      <section className=" bg-light-v-1 py-[20px] md:py-[80px] dark:bg-black-v-1">
         <div className="container ">
           <div className="p-5 md:p-40 rounded-10  bg-white dark:bg-d-bg-primary">
             <div className="flex justify-between gap-5 mb-[26px] md:mb-40">

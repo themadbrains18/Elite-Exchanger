@@ -14,7 +14,7 @@ interface propsData{
 const WatchListPage = (props:propsData) => {
   
   return (
-    <section className="bg-light-v-1 py-80 md:py-[120px]  dark:bg-black-v-1">
+    <section className="bg-light-v-1 py-[20px] md:py-[80px]  dark:bg-black-v-1">
       <div className="container flex lg:flex-row flex-col gap-30">
         <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
           <CoinList watchList={props?.watchList}/>

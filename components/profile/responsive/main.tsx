@@ -30,7 +30,6 @@ const MainResponsivePage = (props: showTabContent) => {
       <SecuritySettings fixed={true} show={props.show} setShow={props.setShow} session={session} activity={props?.activity}/>
 
       <NotificationSettings fixed={true} show={props.show} setShow={props.setShow} />
-      {console.log(verified)}
       {
         
         props.kycInfo && props.kycInfo.length === 0 && verified==undefined &&
