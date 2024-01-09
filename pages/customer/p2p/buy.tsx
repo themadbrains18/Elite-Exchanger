@@ -14,7 +14,7 @@ interface propsData {
   networks: any,
   assets: any,
   posts?: any,
-  masterPayMethod?:any;
+  masterPayMethod?: any;
 }
 
 const P2pBuy = (props: propsData) => {
@@ -58,7 +58,7 @@ const P2pBuy = (props: propsData) => {
           }
           post.user_p_method = payment_method;
         }
-        
+
         setNewPosts(data);
       }
     }
@@ -68,7 +68,7 @@ const P2pBuy = (props: propsData) => {
 
   return (
     <P2pLayout>
-      <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} posts={newPosts.length>0? newPosts : props.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod}/>
+      <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} posts={newPosts.length > 0 ? newPosts : props.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} />
       <BuyPopup show1={show1} setShow1={setShow1} selectedPost={selectedPost} />
     </P2pLayout>
   )

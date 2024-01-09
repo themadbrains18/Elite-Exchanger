@@ -13,13 +13,14 @@ interface propsData {
     user: any
   },
   provider: any,
-  userDetail :any,
-  kycInfo :any,
-  referalList : any,
+  userDetail: any,
+  kycInfo: any,
+  referalList: any,
+  activity:any,
 }
 
 const Profile = (props: propsData) => {
-  
+
   const [userProfile, setUserProfile] = useState(props.userDetail);
 
   useEffect(() => {
@@ -32,21 +33,21 @@ const Profile = (props: propsData) => {
     websocket.onmessage = (event) => {
       const data = JSON.parse(event.data).data;
       let eventDataType = JSON.parse(event.data).type;
-      
+
       if (eventDataType === "profile") {
-        if(data?.user_id === props?.session?.user?.user_id){
+        if (data?.user_id === props?.session?.user?.user_id) {
           setUserProfile(data);
         }
       }
     };
 
   }, []);
-  
+
   return (
     <>
       <ToastContainer />
-      <SideBarLayout userDetail={userProfile} kycInfo={props.kycInfo} referalList={props.referalList}>
-        <Dashboard fixed={false} session={props.session} userDetail={props.userDetail}/>
+      <SideBarLayout userDetail={userProfile} kycInfo={props.kycInfo} referalList={props.referalList} activity={props?.activity}>
+        <Dashboard fixed={false} session={props.session} userDetail={props.userDetail} />
       </SideBarLayout>
     </>
   )
@@ -81,7 +82,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     }).then(response => response.json());
 
-    
+    let activity = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/activity?userid=${session?.user?.user_id}`, {
+      method: "GET",
+      headers: {
+        "Authorization": session?.user?.access_token
+      },
+    }).then(response => response.json());
+
+
     return {
       props: {
         sessions: session,
@@ -89,8 +97,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         provider: providers,
         userDetail: profileDashboard?.data || null,
         kycInfo: kycInfo?.data?.result || [],
-        referalList : referalList?.data || [],
-
+        referalList: referalList?.data || [],
+        activity:activity?.data || []
       },
     };
   }

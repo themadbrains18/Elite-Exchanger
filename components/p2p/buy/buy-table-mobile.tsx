@@ -6,9 +6,10 @@ import ReactPaginate from 'react-paginate';
 interface activeSection {
     setShow1: any;
     posts?: any;
-  }
+    setSelectedPost?: any;
+}
 
-const BuyTableMobile = (props:activeSection) => {
+const BuyTableMobile = (props: activeSection) => {
     const [itemOffset, setItemOffset] = useState(0);
     const { mode } = useContext(Context);
 
@@ -19,17 +20,17 @@ const BuyTableMobile = (props:activeSection) => {
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = data?.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(data?.length / itemsPerPage);
-  
+
     const handlePageClick = async (event: any) => {
-      const newOffset = (event.selected * itemsPerPage) % data.length;
-      setItemOffset(newOffset);
-  
+        const newOffset = (event.selected * itemsPerPage) % data.length;
+        setItemOffset(newOffset);
+
     };
 
     return (
         <>
             {
-                currentItems?.map((item:any, ind:number) => {
+                currentItems?.map((item: any, ind: number) => {
                     const profileImg = item?.User.profile && item?.User?.profile?.image !== null ? process.env.NEXT_PUBLIC_APIURL + "/dp/" + item?.User?.profile?.image : `/assets/orders/user1.png`;
                     const userName = item?.User?.profile && item?.User?.profile?.fName !== null ? item?.User?.profile?.fName : item?.User?.user_kyc?.fname;
                     return (
@@ -47,28 +48,28 @@ const BuyTableMobile = (props:activeSection) => {
                                     </div>
                                 </div>
 
-                               
+
                                 <div className=' flex items-center justify-end'>
-                                    <button className="info-14-18 text-buy px-[20px] py-[9px] rounded-[4px]   bg-green" onClick={()=>{props.setShow1(true)}}>buy</button>
+                                    <button className="info-14-18 text-buy px-[20px] py-[9px] rounded-[4px]   bg-green" onClick={() => { props.setShow1(true); props.setSelectedPost(item); }}>buy</button>
                                 </div>
                                 <div className='mt-[12px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Price:</p>
                                     <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{item?.price} <span className='sm-text !text-[10px] dark:!text-[#9295A6] !text-banner-text'>INR/USDT</span></p>
                                 </div>
-                               <div className='mt-[12px]'>
+                                <div className='mt-[12px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Limit:</p>
                                     <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{item?.min_limit} ~ ${item?.max_limit}<span className='sm-text !text-[14px] !text-h-primary dark:!text-beta'>INR</span></p>
                                 </div>
                                 <div className='mt-[12px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Available:</p>
-                                    <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{item?.quantity} {item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
+                                    <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{item?.quantity} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                 </div>
                                 <div className='mt-[12px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Available:</p>
                                     <div className='flex items-center gap-10 mt-[5px]'>
                                         {
                                             item?.user_p_method.map((elem: any, ind: any) => {
-                                                return(
+                                                return (
                                                     <Fragment key={ind}>
                                                         <Image src={`${process.env.NEXT_PUBLIC_APIURL}/payment_icon/${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />
                                                     </Fragment>
@@ -84,15 +85,15 @@ const BuyTableMobile = (props:activeSection) => {
             }
             <div className="flex pt-[25px] items-center justify-end">
                 <ReactPaginate
-                className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-                breakLabel="..."
-                nextLabel=">"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
-                marginPagesDisplayed={2}
-                pageCount={pageCount}
-                previousLabel="<"
-                renderOnZeroPageCount={null} />
+                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                    breakLabel="..."
+                    nextLabel=">"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={5}
+                    marginPagesDisplayed={2}
+                    pageCount={pageCount}
+                    previousLabel="<"
+                    renderOnZeroPageCount={null} />
             </div>
         </>
     )

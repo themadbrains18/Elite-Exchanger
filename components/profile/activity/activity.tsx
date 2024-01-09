@@ -1,9 +1,10 @@
 import Context from "@/components/contexts/context";
 import IconsComponent from "@/components/snippets/icons";
 import { AES } from "crypto-js";
+import moment from "moment";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 interface fixSection {
@@ -16,10 +17,7 @@ const Activity = (props: fixSection) => {
   const { mode } = useContext(Context);
   const [itemOffset, setItemOffset] = useState(0);
   const {data:session} = useSession()
-  const [data,setData] =useState(props?.activity)
-
-  console.log(props?.activity,'--------activity page activity----------');
-  
+  const [data,setData] =useState([]);
 
   const clearActivity = async() => {
     
@@ -50,6 +48,10 @@ const Activity = (props: fixSection) => {
     }
 
   };
+
+  useEffect(()=>{
+    setData(props?.activity);
+  },[]);
 
   return (
     <>
@@ -184,7 +186,7 @@ const Activity = (props: fixSection) => {
                     </td>
                     <td className="">
                       <p className="info-14-18 dark:text-white">
-                        {item.lastLogin}
+                      {moment(item.lastLogin).format("YYYY-MM-DD HH:mm:ss A")} 
                       </p>
                     </td>
                     <td className=" !text-end">

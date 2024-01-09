@@ -8,20 +8,17 @@ import Context from "@/components/contexts/context";
 
 interface propsData {
   slug: string,
-  view :string
+  view?: string
 }
 const ChartSec = (props: propsData) => {
   let { mode } = useContext(Context);
-
-  console.log(props.slug,'===========props slug');
-  
 
   useEffect(() => {
   }, [mode])
 
   return (
     <div className=' rounded-10  bg-white dark:bg-d-bg-primary'>
-     
+
 
       {/* <CandleStickChart hloc_data={priceData} /> */}
       <AdvancedRealTimeChart

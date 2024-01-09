@@ -30,7 +30,7 @@ router
                 }),
                 body: JSON.stringify({
                     currency: "INR",
-                    code: req.query.fsym,
+                    code: req.query.fsym === 'BTCB' ? 'BTC' : req.query.fsym === 'BNBT'? 'BNB':req.query.fsym ,
 	                meta: false
                 }),
             });

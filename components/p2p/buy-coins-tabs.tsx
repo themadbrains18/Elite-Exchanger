@@ -108,7 +108,7 @@ const BuyCoinsTabs = (props: activeSection) => {
           />
         </div>
         <div className="md:hidden">
-          <BuyTableMobile setShow1={props.setShow1} posts={posts} />
+          <BuyTableMobile setShow1={props.setShow1} posts={posts} setSelectedPost={props.setSelectedPost}/>
         </div>
       </div>
 
