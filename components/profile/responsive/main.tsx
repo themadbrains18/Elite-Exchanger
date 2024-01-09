@@ -21,6 +21,7 @@ const MainResponsivePage = (props: showTabContent) => {
   const { data: session } = useSession();
   const [verified, setVerified] = useState(props.kycInfo? props.kycInfo?.isVerified:undefined)
 
+
   return (
     <>
 
@@ -37,11 +38,11 @@ const MainResponsivePage = (props: showTabContent) => {
       }
 
       {
-       !verified &&verified!=undefined &&
+       verified ==0  &&verified!=undefined &&
         <KycPending fixed={true} show={props.show} setShow={props.setShow} session={session} />
       }
       {
-       verified &&
+       verified ==1  &&
         <KycDone fixed={true} show={props.show} setShow={props.setShow} session={session} />
       }
 

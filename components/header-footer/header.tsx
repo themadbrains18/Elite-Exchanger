@@ -274,7 +274,7 @@ const Header = (props: propsData) => {
                           alt="error"
                           width={32}
                           height={32}
-                          className="rouned-full"
+                          className="rounded-full w-[40px] h-[40px] object-cover object-top"
                         />
                       </div>
                       <p className="nav-text-lg !text-gamma hidden xl:block">
