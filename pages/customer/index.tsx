@@ -83,7 +83,7 @@ export default function Home({ session, coinList }: Session) {
 
   return (
     <>
-      <section className='container'>
+      <section className='container max-w-[1818px] w-full'>
         <Hero />
       </section>
       <CryptoCoin coinList={allCoins} />
@@ -110,7 +110,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       sessions: session,
       session: session,
       provider: providers,
-      coinList: tokenList?.data
+      coinList: tokenList?.data || []
     },
   };
 }

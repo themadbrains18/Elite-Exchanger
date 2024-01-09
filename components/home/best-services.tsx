@@ -14,52 +14,52 @@ const BestServices = () => {
 const cardsData = [
     {
         "svgType":"safetyLogo",
-        "cardHeading":"Windows",
-        "cardInfo":""
+        "cardHeading":"Safty Comes First",
+        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
     },
     {
         "svgType":"easyDeposit",
         "cardHeading":"Easy Deposit & Withdrawls",
-        "cardInfo":""
+        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
     },
     {
         "svgType":"lowCharges",
         "cardHeading":"Low Charges",
-        "cardInfo":""
+        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
     },
     {
         "svgType":"BonusRefferal",
         "cardHeading":"Bonus & Refferal",
-        "cardInfo":""
+        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
     },
     {
         "svgType":"FastTransactions",
         "cardHeading":"Fast Transactions",
-        "cardInfo":""
+        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
     },
     {
         "svgType":"DeepEncryption",
         "cardHeading":"Deep Encryption ",
-        "cardInfo":""
+        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
     },
     {
         "svgType":"FastKYC",
         "cardHeading":"Fast KYC",
-        "cardInfo":""
+        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
     },
     {
         "svgType":"Support",
         "cardHeading":"24/7 Support",
-        "cardInfo":""
+        "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
     },
 ]
   return (
     <section className='py-60 md:py-100'>
-        <div className="container">
+        <div className="container max-w-[1410px] w-full">
             <div className='max-w-[954px] w-full mx-auto text-center'>
                 <SectionHead headData={headData}  center={true} />
             </div>
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-[33px] mt-[50px] md:mt-[63px]'>
+            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-[20px] md:gap-[33px] mt-[50px] md:mt-[63px]'>
                 {
                     cardsData.map((elem,ind)=>{
                         return(
@@ -69,8 +69,8 @@ const cardsData = [
                                         <IconsComponent type={elem.svgType} hover={false} active={false}/> 
                                     </div>
                                     <div>
-                                        <h4 className='sm-heading text-[14px] font-[700] md:text-[19px] dark:text-white sm:mt-[15px] mb-[10px]'>{ elem.cardHeading}</h4>
-                                        <p className='sec-text text-[12px] dark:text-beta md:text-[16px]'>{elem.cardInfo}</p>
+                                        <h4 className='sm-heading text-[14px] md:text-[19px] dark:text-white mb-[10px]'>{ elem.cardHeading}</h4>
+                                        <p className='sec-text text-[12px] text-body-primary md:leading-[22px] leading-[18px] dark:text-beta md:text-[16px]'>{elem.cardInfo}</p>
                                     </div>
                                 </div>
                             </Fragment>

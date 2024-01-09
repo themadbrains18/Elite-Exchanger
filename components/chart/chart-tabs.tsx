@@ -154,7 +154,7 @@ const ChartTabs = (props: propsData) => {
     <div className="mt-30 p-20 lg:px-30 lg:py-40 rounded-10  bg-white dark:bg-d-bg-primary">
       {/* ta cta */}
       <div className="overflow-x-auto">
-        <div className="flex border-b border-[#e9eaf026] gap-30 justify-start  min-w-[1000px]">
+        <div className="flex border-b border-[#e9eaf026] gap-30 justify-start min-w-max md:min-w-[1000px]">
           {/* Coin List */}
           <div>
             <button
@@ -796,7 +796,7 @@ const ChartTabs = (props: propsData) => {
               </table> */}
               <div className="table lg:min-w-[1018px] w-full ">
                 <div
-                  className={`head_row border-b border-t border-grey-v-3 dark:border-opacity-[15%] grid grid-cols-9  justify-between`}
+                  className={`head_row border-b border-t border-grey-v-3 dark:border-opacity-[15%] grid grid-cols-4 md:grid-cols-9  justify-between`}
                 >
                   <div className="flex py-5 col-span-2 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma  ">

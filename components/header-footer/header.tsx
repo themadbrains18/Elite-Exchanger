@@ -111,7 +111,6 @@ const Header = (props: propsData) => {
         },
       }
     ).then((response) => response.json());
-console.log(profileDashboard,"==profileDashboard");
 
     if (profileDashboard) {
       setUserDetail(profileDashboard?.data);
@@ -275,7 +274,7 @@ console.log(profileDashboard,"==profileDashboard");
                           alt="error"
                           width={32}
                           height={32}
-                          className="rouned-full"
+                          className="rounded-full w-[40px] h-[40px] object-cover object-top"
                         />
                       </div>
                       <p className="nav-text-lg !text-gamma hidden xl:block">

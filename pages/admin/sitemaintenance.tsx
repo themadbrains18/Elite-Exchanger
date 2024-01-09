@@ -41,7 +41,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       session: session,
       sessions: session,
       provider: providers,
-      list: list?.data,
+      list: list?.data || [],
     },
   };
 

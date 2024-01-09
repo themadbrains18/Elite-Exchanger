@@ -37,7 +37,7 @@ const cardsData = [
     },
 ]
     return (
-        <section className='md:py-[100px] py-[60px] dark:bg-omega bg-bg-secondary'>
+        <section className='md:py-[100px] py-[40px] dark:bg-omega bg-bg-secondary'>
             <div className='container'>
                 <div className='flex items-center justify-between gap-[0px] lg:gap-[60px] flex-col lg:flex-row'>
                     <div className='max-w-full lg:max-w-[50%] w-full'>

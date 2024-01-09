@@ -13,7 +13,7 @@ const NotificationsList = (props: propsData) => {
     `${inputString.charAt(0).toUpperCase()}${inputString.slice(1)}`;
 
   return (
-    <section className=" bg-light-v-1 py-80 md:py-[120px]  dark:bg-black-v-1">
+    <section className=" bg-light-v-1 py-[20px] md:py-[80px]  dark:bg-black-v-1">
       <div className="container ">
         <div className="p-5 md:p-40 rounded-10  bg-white dark:bg-d-bg-primary">
           <div className="flex justify-between gap-5 mb-[26px] md:mb-40">

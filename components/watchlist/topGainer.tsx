@@ -50,7 +50,7 @@ const TopGainer = () => {
       ];
     
       return (
-        <div className="p-20 md:p-40 rounded-10 mt-30 bg-white dark:bg-d-bg-primary">
+        <div className="p-20 md:p-40 rounded-10 bg-white dark:bg-d-bg-primary">
           <div className="flex gap-30 border-b  justify-between border-grey-v-1 dark:border-opacity-[15%]">
           <button
                 className={` nav-text-sm md:nav-text-lg  whitespace-nowrap after:block after:top-full after:mt-[15px] after:h-[2px] after:w-[0%] after:bg-primary after:transition-all after:ease-linear after:duration-500 ${show === 1 && "border-primary after:w-[100%] after:bottom !text-primary"}`}

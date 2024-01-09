@@ -4,9 +4,9 @@ import Link from "next/link";
 
 const Hero = () => {
     return(
-        <div className="pb-[0] pt-[40px] md:py-[91px]  w-full">
-            <div className="dark:bg-d-bg-primary bg-bg-primary rounded-20 xl:px-[92px] py-[20px] lg:py-[32px] ">
-                <div className="container">
+        <div className="pb-[0] pt-[20px]   w-full">
+            <div className="dark:bg-d-bg-primary bg-bg-primary rounded-20 xl:px-[114px] py-[20px] lg:py-[32px] ">
+                <div className="container ">
                     <div className="heroGrid grid lg:grid-cols-2  gap-4 " >
                         <div className="hero_left self-center max-w-[760px] w-full lg:order-1 order-2">
                             <div className="hero_Header ">
@@ -15,9 +15,10 @@ const Hero = () => {
                             </div>
 
                             <div className="hero_body mt-5 md:mt-30 mb-[60px] md:mb-80 ">
-                                <p className="text-banner-text dark:text-d-banner-text mb-[20px] md:mb-50">Join world’s biggest & tursted Exchange.Trade inBitcoin, Ethereum, Ripple and many more currencies.</p>
-                                <Link className="solid-button max-w-full sm:max-w-[244px] w-full" href="/chart/BTC">Start Trading</Link>
+                                <p className="text-banner-text dark:text-d-banner-text mb-[40px] md:mb-50">Join world’s biggest & tursted Exchange.Trade inBitcoin, Ethereum, Ripple and many more currencies.</p>
+                                <Link className="solid-button max-w-full sm:max-w-[244px] w-full inline-block text-center" href="/chart/BTC">Start Trading</Link>
                             </div>
+                        
 
                             <div className="hero_footer">
                                 {/* <div className="block md:hidden">

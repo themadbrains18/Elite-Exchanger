@@ -386,7 +386,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
             session: session,
             sessions: session,
             provider: providers,
-            coinList: tokenList?.data,
+            coinList: tokenList?.data || [],
             assets: userAssets,
             serverSlug: slug
         },

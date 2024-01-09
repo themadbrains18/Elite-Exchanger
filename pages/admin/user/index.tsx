@@ -118,8 +118,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       session: session,
       sessions: session,
       provider: providers,
-      users : users?.data?.data,
-      networks: networks?.data,
+      users : users?.data?.data || [],
+      networks: networks?.data || [],
       activity:activityList?.data || []
     },
   };

@@ -122,7 +122,7 @@ const SideBar = (props: profileSec) => {
                                                 width={125}
                                                 height={125}
                                                 alt="selfie Image"
-                                                className="w-[133px] object-cover h-[133px]"
+                                                className="w-[133px] object-cover h-[133px] object-top"
                                             />
                                         )}
                                     </div>
@@ -149,8 +149,8 @@ const SideBar = (props: profileSec) => {
                                     </label>
                                 </div>
                             </div>
-                            <p className='sec-title text-center'>{props.profileInfo && props?.profileInfo?.messgae === undefined ? props.profileInfo?.fName + ' ' + props.profileInfo?.lName : session?.user?.name}</p>
-                            <p className='info-14-18 text-center mt-[5px]'>{props.profileInfo && props?.profileInfo?.messgae === undefined ? props.profileInfo?.uName : session?.user?.email}</p>
+                            <p className='sec-title text-center'>{props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.fName !== null ? props.profileInfo?.fName + ' ' + props.profileInfo?.lName : session?.user?.name}</p>
+                            <p className='info-14-18 text-center mt-[5px]'>{props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.uName !== null? props.profileInfo?.uName : session?.user?.email}</p>
 
                         </div>
                     }

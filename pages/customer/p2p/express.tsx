@@ -62,7 +62,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       session: session,
       sessions: session,
       provider: providers,
-      coinList: tokenList?.data,
+      coinList: tokenList?.data || [],
       posts: allPosts?.data || [],
       masterPayMethod: masterPaymentMethod?.data || [],
       assets: userAssets

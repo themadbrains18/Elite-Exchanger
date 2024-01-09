@@ -154,11 +154,11 @@ const ResponsiveSidebar = (props: defaultStates) => {
       <div className='bg-white dark:bg-d-bg-primary p-[20px] rounded-[10px]'>
         <div className='flex items-center gap-[15px] cursor-pointer pb-[23px] border-b border-[#E9EAF0] dark:border-[#e9eaf00f] mb-[30px] relative' onClick={() => { props.setShowMenu(false) }}>
           <div className='relative inline-block clip-bg'>
-            <Image src={props.userDetail !== null && props.userDetail?.messgae === undefined ? process.env.NEXT_PUBLIC_APIURL + "/dp/" + props.userDetail?.image : Avtar} alt='error' width={64} height={64} className='rouned-full' />
+            <Image src={props.userDetail !== null && props.userDetail?.messgae === undefined ? process.env.NEXT_PUBLIC_APIURL + "/dp/" + props.userDetail?.image : Avtar} alt='error' width={64} height={64} className='rounded-full object-cover object-top w-[50px] h-[50px]' />
           </div>
           <div>
-            <p className='nav-text-lg'>{props.userDetail !== null && props.userDetail?.messgae === undefined ? (props.userDetail?.dName + ' ' + props.userDetail?.lName) : props?.session?.user?.name}</p>
-            <p className='nav-text-lg !text-gamma '>{props.userDetail !== null && props.userDetail?.messgae === undefined ? (props?.userDetail?.dName) : props?.session?.user?.email}</p>
+            <p className='nav-text-lg'>{props.userDetail !== null && props.userDetail?.messgae === undefined && props.userDetail?.fName !== null ? (props.userDetail?.fName + ' ' + props.userDetail?.lName) : props?.session?.user?.name}</p>
+            <p className='nav-text-lg !text-gamma '>{props.userDetail !== null && props.userDetail?.messgae === undefined && props.userDetail?.dName !== null ? (props?.userDetail?.dName) : props?.session?.user?.email}</p>
           </div>
           <Link href="/profile" className='absolute top-0 left-0 right-0 h-full'></Link>
         </div>
@@ -281,10 +281,28 @@ const ResponsiveSidebar = (props: defaultStates) => {
                     </svg>
                     <Link href="/wallet" className='absolute top-0 left-0 right-0 h-full'></Link>
                   </li>
+                  <li key="WatchList" className='flex items-center justify-between mb-[36px] last:mb-0 relative' onClick={() => { props.setShowMenu(false) }}>
+                    <div className='flex items-center gap-[15px]'>
+                      <IconsComponent type='TradeHistory' hover={false} active={false} />
+                      <Link href="/watchlist" className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>WatchList</Link>
+                    </div>
+                    <svg
+                      width={7}
+                      height={12}
+                      viewBox="0 0 7 12"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M0.303884 9.73692C0.000451519 10.1004 0.0501666 10.6404 0.4136 10.9438C0.777033 11.2472 1.3179 11.1975 1.62047 10.8341L5.90624 6.54831C5.94053 6.50802 5.95681 6.46002 5.98253 6.41545C6.0031 6.38031 6.0271 6.34945 6.04253 6.31088C6.08196 6.21059 6.1051 6.10602 6.1051 5.99973C6.1051 5.89345 6.08196 5.78887 6.04253 5.68858C6.0271 5.65001 6.0031 5.61916 5.98253 5.58401C5.95681 5.53944 5.94053 5.49144 5.90624 5.45115L1.62047 1.16538C1.3179 0.801093 0.777033 0.752236 0.4136 1.05567C0.0501662 1.35824 0.000451161 1.89825 0.303884 2.26254L3.41792 5.14258L4.275 5.99965L3.41585 6.85881L0.303884 9.73692Z"
+                        fill="#9295A6"
+                      />
+                    </svg>
+                    <Link href="/watchlist" className='absolute top-0 left-0 right-0 h-full'></Link>
+                  </li>
                 </>
 
               }
-
             </ul>
           </nav>
         </div>
@@ -330,19 +348,25 @@ const ResponsiveSidebar = (props: defaultStates) => {
             </div>
           </div>
         </div>
-        {props.session === null &&
+        {props.session === null ?
           <div className='flex items-center gap-[15px] pt-[20px] mt-[30px] border-t border-[#E9EAF0] dark:border-[#e9eaf00f]'>
             <Link className='solid-button w-full text-center !text-primary dark:!bg-white !bg-grey' href="/login">Sign In</Link>
             <Link className='solid-button w-full text-center' href="/register">Register</Link>
           </div>
+          :
+          <div className='flex items-center gap-[15px] pt-[20px] mt-[30px] border-t border-[#E9EAF0] dark:border-[#e9eaf00f]'>
+          <button className=' bg-primary text-white py-[15px] px-[5px]  w-full rounded-[12px]' onClick={()=>{signOut()}}>
+          Sign Out
+      </button>
+      </div>
         }
-        {props?.session &&
+        {/* {props?.session &&
          <div className='flex items-center gap-[15px] pt-[20px] mt-[30px] border-t border-[#E9EAF0] dark:border-[#e9eaf00f]'>
           <button className=' bg-primary text-white py-[15px] px-[5px]  w-full rounded-[12px]' onClick={() => { signOut() }}>
             Sign Out
           </button>
           </div>
-        }
+        } */}
       </div>
       <div className='mt-[40px]'>
         <p className='text-center sec-text text-gamma'>© 2023 dynamic. All rights reserved</p>
