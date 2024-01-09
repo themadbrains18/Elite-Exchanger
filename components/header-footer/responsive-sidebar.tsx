@@ -360,13 +360,13 @@ const ResponsiveSidebar = (props: defaultStates) => {
       </button>
       </div>
         }
-        {props?.session &&
+        {/* {props?.session &&
          <div className='flex items-center gap-[15px] pt-[20px] mt-[30px] border-t border-[#E9EAF0] dark:border-[#e9eaf00f]'>
           <button className=' bg-primary text-white py-[15px] px-[5px]  w-full rounded-[12px]' onClick={() => { signOut() }}>
             Sign Out
           </button>
           </div>
-        }
+        } */}
       </div>
       <div className='mt-[40px]'>
         <p className='text-center sec-text text-gamma'>© 2023 dynamic. All rights reserved</p>
