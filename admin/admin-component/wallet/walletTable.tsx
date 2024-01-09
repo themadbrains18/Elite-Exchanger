@@ -23,9 +23,8 @@ const WalletTable = (props: data) => {
       <div className="flex items-center justify-between  mb-[26px]">
         <div className="flex items-center gap-[15px]">
           <button
-            className={`${
-              active === 1 ? "admin-solid-button" : "admin-outline-button"
-            }`}
+            className={`${active === 1 ? "admin-solid-button" : "admin-outline-button"
+              }`}
             onClick={(e) => {
               setActive(1);
             }}
@@ -33,9 +32,8 @@ const WalletTable = (props: data) => {
             Deposit
           </button>
           <button
-            className={`${
-              active === 2 ? "admin-solid-button" : "admin-outline-button"
-            }`}
+            className={`${active === 2 ? "admin-solid-button" : "admin-outline-button"
+              }`}
             onClick={(e) => {
               setActive(2);
             }}
@@ -43,9 +41,8 @@ const WalletTable = (props: data) => {
             Withdraw
           </button>
           <button
-            className={`${
-              active === 3 ? "admin-solid-button" : "admin-outline-button"
-            }`}
+            className={`${active === 3 ? "admin-solid-button" : "admin-outline-button"
+              }`}
             onClick={(e) => {
               setActive(3);
             }}
@@ -53,9 +50,8 @@ const WalletTable = (props: data) => {
             Trading
           </button>
           <button
-            className={`${
-              active === 4 ? "admin-solid-button" : "admin-outline-button"
-            }`}
+            className={`${active === 4 ? "admin-solid-button" : "admin-outline-button"
+              }`}
             onClick={(e) => {
               setActive(4);
             }}
@@ -63,9 +59,8 @@ const WalletTable = (props: data) => {
             P2P
           </button>
           <button
-            className={`${
-              active === 5 ? "admin-solid-button" : "admin-outline-button"
-            }`}
+            className={`${active === 5 ? "admin-solid-button" : "admin-outline-button"
+              }`}
             onClick={(e) => {
               setActive(5);
             }}
@@ -95,7 +90,7 @@ const WalletTable = (props: data) => {
             Referal History
           </button>
 
-}
+          }
         </div>
         <div className="flex items-center gap-10">
           <p className="admin-table-data">
@@ -118,7 +113,7 @@ const WalletTable = (props: data) => {
       {active === 1 && <DepositTable type={props?.type} />}
       {active === 2 && (
         <>
-          <WithdrawTable type={props?.type} name="wallet"/>
+          <WithdrawTable type={props?.type} name="wallet" />
         </>
       )}
       {active === 3 && <TradeTable type={props?.type} />}

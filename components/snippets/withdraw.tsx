@@ -259,7 +259,7 @@ const Withdraw = (props: activeSection) => {
         toast.success("Withdraw request sent successfully");
         const websocket = new WebSocket('ws://localhost:3001/');
         let withdraw = {
-          ws_type: 'user_notify',
+          ws_type: 'user_withdraw',
           user_id: props?.session?.user?.user_id,
           type: 'withdraw',
           message: {
@@ -267,6 +267,7 @@ const Withdraw = (props: activeSection) => {
           Your withdrawal address: ${response?.data?.data?.withdraw_wallet}  
           Token: ${response?.data?.data?.symbol}`
           },
+          data: response?.data?.data
         }
         websocket.onopen = () => {
           websocket.send(JSON.stringify(withdraw));
