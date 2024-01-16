@@ -17,15 +17,15 @@ interface propsData {
   trades: any,
   withdraws: any,
   deposits: any,
-  convertHistory : any,
-  stakingHistory : any
+  convertHistory: any,
+  stakingHistory: any
 }
 
 const TradeHistory = (props: propsData) => {
 
   const [stakingList, setStakingList] = useState(props.stakingHistory);
 
-  const refreshStakingData = async()=>{
+  const refreshStakingData = async () => {
     let userStakingHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/staking/history`, {
       method: "GET",
       headers: {
@@ -37,8 +37,8 @@ const TradeHistory = (props: propsData) => {
   }
 
   return (
-    
-    <Historytrade tradeHistory={props.trades} withdraws={props.withdraws} deposits={props.deposits} convertHistory={props.convertHistory} stakingHistory={stakingList} refreshStakingData={refreshStakingData}/>
+
+    <Historytrade tradeHistory={props.trades} withdraws={props.withdraws} deposits={props.deposits} convertHistory={props.convertHistory} stakingHistory={stakingList} refreshStakingData={refreshStakingData} />
   )
 }
 
@@ -107,8 +107,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         trades: tradeHistory || [],
         withdraws: withdraws?.data || [],
         deposits: deposits?.data || [],
-        convertHistory : userConvertHistory?.data || [],
-        stakingHistory : userStakingHistory?.data || []
+        convertHistory: userConvertHistory?.data || [],
+        stakingHistory: userStakingHistory?.data || []
       },
     };
   }

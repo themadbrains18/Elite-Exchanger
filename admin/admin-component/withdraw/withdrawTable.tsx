@@ -323,7 +323,7 @@ const WithdrawTable = (props:propData) => {
                       {item?.network?.fullname}
                     </td>
 
-                    <td className="admin-table-data">${item?.amount}</td>
+                    <td className="admin-table-data">{item?.amount}</td>
                     <td className="admin-table-data ">
                       <div className="max-w-[94px] w-full overflow-hidden text-ellipsis">
                         {item?.withdraw_wallet}

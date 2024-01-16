@@ -1,31 +1,49 @@
 import Image from "next/image";
-import React, { useContext, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import Context from "../contexts/context";
 import FiliterSelectMenu from "./filter-select-menu";
 import { useQRCode } from 'next-qrcode';
 import FilterSelectMenuWithCoin from "./filter-select-menu-with-coin";
-import { toast,ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 interface activeSection {
   setShow1: Function;
   networks: any;
   session: any;
   coinList?: any;
+  token?: any;
 }
 
 const Deposit = (props: activeSection) => {
 
-  const [address, setWalletAddress] = useState('')
+  const [address, setWalletAddress] = useState('');
+  const [list, setNetworkList] = useState([]);
+  const [depositToken, setDepositToken] = useState(props?.token);
   const { SVG } = useQRCode();
 
-  const list = props?.networks.filter((item: any) => {
-    if (process.env.NEXT_PUBLIC_APPLICATION_MODE === 'dev') {
-      return item.network === 'testnet'
+  useLayoutEffect(() => {
+    filterNetworkListByCoin(props.token);
+  }, []);
+
+  const filterNetworkListByCoin = async (token: any) => {
+    let networks: any = [];
+    if (token) {
+      for await (const nw of token?.networks) {
+        for (const l of props?.networks) {
+          if (nw.id === l.id) {
+            if (process.env.NEXT_PUBLIC_APPLICATION_MODE === 'dev') {
+              networks.push(l);
+            }
+            else {
+              networks.push(l);
+            }
+          }
+        }
+      }
     }
-    else {
-      return item.network === 'mainnet'
-    }
-  });
+    setDepositToken(token);
+    setNetworkList(networks);
+  }
 
   const { mode } = useContext(Context);
 
@@ -48,7 +66,7 @@ const Deposit = (props: activeSection) => {
   return (
     <div className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
       <div className="flex items-center justify-between">
-        <p className="sec-title"> Deposit Address</p>
+        <p className="sec-title">{depositToken?.symbol} Deposit Address</p>
         <svg
           onClick={() => {
             props.setShow1(0);
@@ -81,7 +99,7 @@ const Deposit = (props: activeSection) => {
             data={props?.coinList}
             border={true}
             dropdown={1}
-
+            filterNetworkListByCoin={filterNetworkListByCoin}
           />
         </div>
       }
@@ -93,7 +111,6 @@ const Deposit = (props: activeSection) => {
         <div className="py-[10px]">
           <p className="info-14-18 text-center dark:text-white text-black">Scan QR code to Deposit</p>
           <div className="mt-[15px] max-w-[154px] rounded-5 shadow-card mx-auto">
-            {/* <Image src="/assets/images/QR.svg" width={154} height={154} alt="QR" /> */}
             <SVG
               text={`${address !== '' ? address : 'Test Qr Code'}`}
               options={{
@@ -109,18 +126,19 @@ const Deposit = (props: activeSection) => {
         <div className="pt-5 md:pt-30 ">
           <p className="nav-text-sm text-black dark:text-white pb-[15px] text-center">Disclaimer</p>
           <div className="h-[1px] w-full bg-grey-v-2 mb-[10px]"></div>
-          <p className="info-12 text-center">Please deposit only assets to this address. If you deposit any other coins, it will be lost forever.</p>
+          <p className="info-12 text-center">Please deposit only {depositToken?.symbol} assets to this address. If you deposit any other coins, it will be lost forever.</p>
         </div>
-        {/* <div className="pt-5 md:pt-30">
-          <p className="info-14-18 text-center dark:text-white text-black">Past Deposits in Bitcoin BTC</p>
-          <p className="pt-[5px] md:pt-[10px] text-center info-14-18 text-[12px] md:text-[18px]">You have no past transactions in BTC</p>
-        </div> */}
+
         <div className="pt-5 md:pt-30">
           <p className="sm-text text-start md:text-center ">Destination</p>
           <div className="mt-[5px] md:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
             <p className="sec-text text-ellipsis overflow-hidden">{address}</p>
-            <button className={`solid-button py-2 sec-text font-normal ${address===''?'cursor-not-allowed':'cursor-pointer'} `} disabled={address===''?true:false} onClick={()=>{navigator.clipboard.writeText(address); toast.success('copy to clipboard')}}>Copy</button>
+            <button className={`solid-button py-2 sec-text font-normal ${address === '' ? 'cursor-not-allowed' : 'cursor-pointer'} `} disabled={address === '' ? true : false} onClick={() => { navigator.clipboard.writeText(address); toast.success('copy to clipboard') }}>Copy</button>
           </div>
+        </div>
+        <div className="flex items-center justify-between pt-5 md:pt-30">
+          <p className="nav-text-sm"> Minimum Deposit Amount</p>
+          <p className="nav-text-sm"> {depositToken?.minimum_deposit}</p>
         </div>
       </div>
     </div>

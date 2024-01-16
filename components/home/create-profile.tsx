@@ -67,7 +67,7 @@ const cardsData = [
                         </div>
                     </div>
                 </div>
-                <Link href="/chart/BTC" className='sec-Brief flex lg:hidden items-center gap-[10px] !text-primary mt-[50px] mx-auto'>
+                <Link href="/chart/BTC" className='sec-Brief flex lg:hidden items-center gap-[10px] !text-primary mt-[50px] mx-auto text-center md:text-start justify-center'>
                     <span className='block relative after:absolute after:w-full after:h-[2px] after:bg-primary after:top-[100%] after:left-0'>Start Trading</span>
                     <IconsComponent type='rightArrow' hover={false} active={false}/>
                 </Link>

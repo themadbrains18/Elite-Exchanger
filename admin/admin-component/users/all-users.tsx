@@ -19,7 +19,7 @@ const AllUsers = (props: usersList) => {
   const session = useSession();
   const [list, setList] = useState([]);
   const [active, setActive] = useState(1);
-  const [netwoks, setNetworks] = useState(props?.networks);
+  // const [netwoks, setNetworks] = useState(props?.networks);
   const [wallets, setWallet] = useState<any>();
   const router = useRouter();
   const [itemOffset, setItemOffset] = useState(0);
@@ -31,6 +31,15 @@ const AllUsers = (props: usersList) => {
   useEffect(() => {
     getToken(itemOffset);
   }, [itemOffset]);
+
+  const netwoks = props?.networks.filter((item: any) => {
+    if (process.env.NEXT_PUBLIC_APPLICATION_MODE === 'dev') {
+      return item.network === 'testnet'
+    }
+    else {
+      return item.network === 'mainnet'
+    }
+  });
 
   const getToken = async (itemOffset: number) => {
     try {

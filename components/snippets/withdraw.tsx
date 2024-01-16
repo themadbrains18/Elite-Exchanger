@@ -101,6 +101,15 @@ const Withdraw = (props: activeSection) => {
         });
         return;
       }
+
+      if(data?.amount <= props?.token?.withdraw_fee){
+        setError("amount", {
+          type: "custom",
+          message: "Please enter amount more than your transaction fee.",
+        });
+        return;
+      }
+
       let username = props.session?.user.email !== 'null' ? props.session?.user.email : props.session?.user?.number;
 
       data.username = username;

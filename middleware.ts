@@ -74,7 +74,7 @@ export default async function middleware(req: NextRequest, res : NextResponse) {
       "https://vercel.com/blog/platforms-starter-kit",
     );
   }
-  console.log(path,"==path");
+  // console.log(path,"==path");
   // rewrite root application to `/home` folder
   if (
     hostname === "localhost:7000" ||

@@ -13,11 +13,11 @@ interface Session {
   },
   provider: any,
   coinList: any,
-  assets :any
-  networks :any
+  assets: any
+  networks: any
 }
 
-const Market = ({ session, coinList,assets,networks }: Session) => {
+const Market = ({ session, coinList, assets, networks }: Session) => {
 
   const [userAssetsList, setUserAssetsList] = useState(assets);
   const [allCoins, setAllCoins] = useState(coinList);
@@ -51,7 +51,7 @@ const Market = ({ session, coinList,assets,networks }: Session) => {
   return (
     <>
       <ToastContainer />
-      <Marketpage coinList={allCoins} session={session} assets={userAssetsList} networks={networks}/>
+      <Marketpage coinList={allCoins} session={session} assets={userAssetsList} networks={networks} />
     </>
   )
 }
@@ -68,9 +68,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   }).then(response => response.json());
   let networkList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/network`, {
     method: "GET"
-}).then(response => response.json());
+  }).then(response => response.json());
 
-  let userAssets:any = [];
+  let userAssets: any = [];
   if (session) {
     userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${session?.user?.user_id}`, {
       method: "GET",
@@ -87,7 +87,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       provider: providers,
       coinList: tokenList?.data || [],
       networks: networkList?.data || [],
-      assets : userAssets
+      assets: userAssets
     },
   };
   // if (session) {

@@ -9,7 +9,7 @@ interface DynamicId {
   id: number;
   coinList?: any;
   assets?: any;
-  refreshData?:any;
+  refreshData?: any;
 }
 
 const Exchange = (props: DynamicId): any => {
@@ -31,17 +31,17 @@ const Exchange = (props: DynamicId): any => {
   const list = props?.coinList;
 
   let newCoinListWithBalance = [];
-  if(props?.coinList !== undefined  && props?.assets !== undefined){
-  for (const ls of props?.coinList) {
-    ls.avail_bal = 0.00;
-    for (const as of props?.assets) {
-      if (as.token_id === ls.id && as.balance > 0) {
-        ls.avail_bal = as.balance;
-        newCoinListWithBalance.push(ls)
+  if (props?.coinList !== undefined && props?.assets !== undefined) {
+    for (const ls of props?.coinList) {
+      ls.avail_bal = 0.00;
+      for (const as of props?.assets) {
+        if (as.token_id === ls.id && as.balance > 0) {
+          ls.avail_bal = as.balance;
+          newCoinListWithBalance.push(ls)
+        }
       }
     }
   }
-}
 
   const setCurrencyName = (symbol: string, dropdown: number) => {
     if (dropdown === 1) {
@@ -100,16 +100,16 @@ const Exchange = (props: DynamicId): any => {
     let receivedBalance = 0;
 
     if (firstMannual === false || secondMannual === false) {
-      let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${firstMannual === true ? 'USDT' : firstCurrency}&tsyms=${secondMannual === true ? 'USDT' : secondCurrency}`, {
+      let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/exchange?fsym=${firstMannual === true ? 'USDT' : firstCurrency}&tsyms=${secondMannual === true ? 'USDT' : secondCurrency}`, {
         method: "GET"
       }).then(response => response.json());
 
-      if (firstMannual === true && priceData?.data.USDT === undefined) {
-        currentPrice = selectedToken?.price * priceData?.data[secondCurrency];
+      if (firstMannual === true && priceData?.data?.rate === undefined) {
+        currentPrice = selectedToken?.price * priceData?.data?.rate;
         conversionPrice = amount * currentPrice;
       }
       else if (secondMannual === true) {
-        currentPrice = priceData?.data['USDT'] / selectedSecondToken?.price;
+        currentPrice = priceData?.data?.rate / selectedSecondToken?.price;
 
         // console.log(`1 ${firstCurrency} of ${priceData?.data['USDT']} USDT`);
 
@@ -122,8 +122,8 @@ const Exchange = (props: DynamicId): any => {
         conversionPrice = amount * currentPrice;
       }
       else if (firstMannual === false && secondMannual === false) {
-        currentPrice = priceData?.data[secondCurrency];
-        conversionPrice = amount * priceData?.data[secondCurrency];
+        currentPrice = priceData?.data?.rate;
+        conversionPrice = amount * priceData?.data?.rate;
       }
     }
     else {
@@ -144,10 +144,10 @@ const Exchange = (props: DynamicId): any => {
           receivedBalance = as.balance + conversionPrice;
         }
         else {
-          if(receivedBalance === 0){
+          if (receivedBalance === 0) {
             receivedBalance = conversionPrice;
           }
-          
+
         }
       }
     }
@@ -180,7 +180,7 @@ const Exchange = (props: DynamicId): any => {
       if (status === 'authenticated') {
         const ciphertext = AES.encrypt(JSON.stringify(requestBody), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
         let record = encodeURIComponent(ciphertext.toString());
-  
+
         let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price`, {
           method: "POST",
           mode: "cors",
@@ -190,9 +190,9 @@ const Exchange = (props: DynamicId): any => {
           },
           body: JSON.stringify(record)
         })
-  
+
         let res = await responseData.json();
-  
+
         if (res.data.status === 200) {
           toast.success('Your request successfully!!.', {
             position: toast.POSITION.TOP_CENTER
@@ -215,17 +215,17 @@ const Exchange = (props: DynamicId): any => {
           setReceivedAmount(0);
         }
       }
-  
+
       else {
         toast.error('Your session is expired!!. You are auto redirect to login page!!');
         setTimeout(() => {
           signOut();
         }, 3000);
       }
-      
+
     } catch (error) {
-      console.log("error in sent convert request",error);
-      
+      console.log("error in sent convert request", error);
+
     }
   }
 
@@ -243,8 +243,8 @@ const Exchange = (props: DynamicId): any => {
             <Image src="/assets/market/walletpayment.svg" alt="wallet2" width={24} height={24} />
             <p className="md-text w-full">${selectedToken?.avail_bal}</p>
             <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} />
-            {props.coinList && props.coinList.map((item:any)=>{
-              if(item.symbol === selectedToken?.symbol){
+            {props.coinList && props.coinList.map((item: any) => {
+              if (item.symbol === selectedToken?.symbol) {
                 return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? item?.price?.toFixed(5) : '0.00'}</p>
               }
             })}

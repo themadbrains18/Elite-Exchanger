@@ -29,7 +29,7 @@ router
                     "x-api-key": "18ce228e-b0ff-4571-b468-062bc4762734",
                 }),
                 body: JSON.stringify({
-                    currency: "INR",
+                    currency: req.query.tsyms === 'BTCB' ? 'BTC' : req.query.tsyms === 'BNBT' ? 'BNB' : req.query.tsyms,
                     code: req.query.fsym === 'BTCB' ? 'BTC' : req.query.fsym === 'BNBT' ? 'BNB' : req.query.fsym,
                     meta: false
                 }),
@@ -42,20 +42,6 @@ router
             throw new Error(error.message)
         }
     });
-router.post(async (req, res) => {
-    try {
-        let token = req.headers.authorization;
-
-        const decodedStr = decodeURIComponent(req.body);
-        let formData = AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
-
-        let data = await postData(`${process.env.NEXT_PUBLIC_APIURL}/convert/create`, JSON.parse(formData), token);
-        return res.status(200).send({ data });
-
-    } catch (error: any) {
-        throw new Error(error.message);
-    }
-})
 
 export default router.handler({
     onError: (err: any, req, res) => {

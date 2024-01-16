@@ -1,8 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import IconsComponent from "../snippets/icons";
 import Image from "next/image";
 import ReactPaginate from "react-paginate";
 import Context from "../contexts/context";
+import moment from "moment";
 
 interface propsData {
   watchList?: any;
@@ -12,33 +13,57 @@ const CoinList = (props: propsData) => {
 
   const { mode } = useContext(Context)
   const [itemOffset, setItemOffset] = useState(0);
+  const [currentItems, setCurrentItems] = useState([]);
 
   let data = props?.watchList;
 
   let itemsPerPage = 10;
-  const endOffset = itemOffset + itemsPerPage;
-  const currentItems = data?.slice(itemOffset, endOffset);
+
+  useLayoutEffect(() => {
+    const endOffset = itemOffset + itemsPerPage;
+    const currentItems = data?.slice(itemOffset, endOffset);
+    setCurrentItems(currentItems);
+  }, [])
+
+
   const pageCount = Math.ceil(data?.length / itemsPerPage);
 
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % data?.length;
     setItemOffset(newOffset);
-
   };
+
+  const filterData = async (e: any) => {
+    let search = e.target.value;
+    const endOffset = itemOffset + itemsPerPage;
+    let currentItems;
+    if (search !== "") {
+      let data = props?.watchList.filter((item: any) => {
+        return item?.token !== null ? item?.token?.symbol.toLowerCase().includes(e.target.value.toLowerCase()) : item?.global_token?.symbol.toLowerCase().includes(e.target.value.toLowerCase());
+      })
+      currentItems = (data && data?.length > 0) ? data.slice(itemOffset, endOffset) : [];
+    }
+    else {
+      currentItems = (props?.watchList && props?.watchList?.length > 0) ? props?.watchList.slice(itemOffset, endOffset) : [];
+    }
+    setCurrentItems(currentItems);
+
+  }
+  
   return (
     <section className="">
       <div className="p-20 md:p-40 rounded-10  bg-white dark:bg-d-bg-primary">
-        <div className="flex gap-5 justify-between">
+        <div className="flex gap-5 justify-between mb-[20px]">
           <div>
             <p className="sec-title">Watchlist</p>
-            <p className="mt-[10px] nav-text-sm leading-20 md:leading-17">Update 16/02/2022 at 02:30 PM</p>
           </div>
-          <div className="py-[13px] cursor-pointer px-[15px] hidden md:flex gap-[10px] items-center border rounded-5 border-grey-v-1 dark:border-opacity-[15%]">
-            <Image src='/assets/market/add.svg' width={24} height={24} alt="add" />
-            <p className="nav-text-sm text-beta">Add Coin</p>
+          <div className="border w-full rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[331px]  py-[13px] px-[10px] ">
+            <Image src="/assets/history/search.svg" alt="search" width={24} height={24} />
+            <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" onChange={(e) => filterData(e)} />
           </div>
+
         </div>
-        <div className="flex mt-40 justify-between gap-[20px] flex-wrap xl:flex-nowrap mb-[20px]">
+        {/* <div className="flex mt-40 justify-between gap-[20px] flex-wrap xl:flex-nowrap mb-[20px]">
           <div className="hidden md:flex gap-30 ">
             <div className="flex items-center cursor-pointer gap-30 group py-[15px] bg-primary px-5 rounded-5">
               <p className="nav-text-lg text-white">WatchList</p>
@@ -61,7 +86,7 @@ const CoinList = (props: propsData) => {
               <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" />
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="overflow-x-auto">
 
           <table width="100%" className="lg:min-w-[1018px] w-full">
@@ -80,13 +105,13 @@ const CoinList = (props: propsData) => {
                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                   </div>
                 </th>
-                {/* <th className="max-[1023px]:hidden py-5">
+                 <th className="max-[1023px]:hidden py-5">
                   <div className="flex lg:justify-start justify-end">
-                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">24%</p>
+                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Created At</p>
                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                   </div>
                 </th>
-                <th className="max-[1023px]:hidden py-5">
+                {/*<th className="max-[1023px]:hidden py-5">
                   <div className="flex">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">24h High </p>
                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
@@ -109,10 +134,10 @@ const CoinList = (props: propsData) => {
             <tbody>
               {currentItems?.map((item: any, index: number) => {
                 return (
-                  <tr key={index} className="rounded-5 group hover:bg-[#FEF2F2] dark:hover:bg-black-v-1 cursor-pointer" 
-                  onClick={() => {
-                    window.location.href = `/chart/${item.token!==null? item?.token?.symbol: item?.global_token?.symbol}`
-                  }}>
+                  <tr key={index} className="rounded-5 group hover:bg-[#FEF2F2] dark:hover:bg-black-v-1 cursor-pointer"
+                    onClick={() => {
+                      window.location.href = `/chart/${item.token !== null ? item?.token?.symbol : item?.global_token?.symbol}`
+                    }}>
                     <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                       <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
                         <Image src={item?.token !== null ? item?.token?.image : item?.global_token?.image} width={30} height={30} alt="coins" />
@@ -125,14 +150,14 @@ const CoinList = (props: propsData) => {
                     <td className=" lg:text-start text-end">
                       <p className="info-14-18 dark:text-white">${item?.token !== null ? item?.token?.price : item?.global_token?.price}</p>
                     </td>
-                    {/* <td className="max-[1023px]:hidden">
+                     <td className="max-[1023px]:hidden">
                       <div className={` items-center gap-[10px] flex`}>
-                        <p className={`footer-text-secondary  ${item.status == "high" ? "!text-[#03A66D]" : "!text-[#DC2626]"}`}>{item.change24h}</p>
+                        <p className={`info-14-18 dark:text-white `}>{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
                         <IconsComponent type={item.status} active={false} hover={false} />
                       </div>
                     </td>
 
-                    <td className="max-[1023px]:hidden">
+                    {/*<td className="max-[1023px]:hidden">
                       <p className="info-14-18 dark:text-white block">${item.high}</p>
                     </td>
                     <td className="max-[1023px]:hidden">
@@ -147,6 +172,23 @@ const CoinList = (props: propsData) => {
                   </tr>
                 );
               })}
+
+              {currentItems && currentItems.length === 0 &&
+                <tr>
+                  <td colSpan={3}>
+                    <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
+                      <Image
+                        src="/assets/refer/empty.svg"
+                        alt="emplty table"
+                        width={107}
+                        height={104}
+                      />
+                      <p > No Record Found </p>
+                    </div>
+
+                  </td>
+                </tr>
+              }
             </tbody>
 
           </table>

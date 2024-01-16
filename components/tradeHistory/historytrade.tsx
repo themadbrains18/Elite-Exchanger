@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useContext, useState } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
 import Context from "../contexts/context";
 import moment from 'moment';
@@ -34,17 +34,39 @@ const Historytrade = (props: propsData) => {
   const [stakeId, setStakeId] = useState('');
   const [finalBtnenable, setFinalBtnenable] = useState(false);
 
+  const [depositCurrentItems, setDepositCurrentItems] = useState([]);
+  const [withdrawCurrentItems, setwithdrawCurrentItems] = useState([]);
+  const [currentItems, setCurrentItems] = useState([]);
+
   const [selectedStake, setSelectedStake] = useState(Object);
 
   let itemsPerPage = 10;
   
+  useLayoutEffect(() => {
+    // =================================
+    // Trade History Data
+    // =================================
+    const endOffset = itemOffset + itemsPerPage;
+    const currentItems = (props.tradeHistory && props.tradeHistory.length > 0) ? props.tradeHistory.slice(itemOffset, endOffset) : [];
+    setCurrentItems(currentItems);
+    // =================================
+    // Withdraw History Data
+    // =================================
+    const withdrawendOffset = withdrawitemOffset + itemsPerPage;
+    const withdrawCurrentItems = (props.withdraws && props.withdraws.length > 0) ? props.withdraws.slice(withdrawitemOffset, withdrawendOffset) : [];
+    setwithdrawCurrentItems(withdrawCurrentItems)
+    // =================================
+    // Deposit History Data
+    // =================================
+    const depositendOffset = deposititemOffset + itemsPerPage;
+    let depositCurrentItems = (props?.deposits && props?.deposits?.length > 0) ? props.deposits.slice(deposititemOffset, depositendOffset) : [];
+    setDepositCurrentItems(depositCurrentItems);
+  }, []);
+
   // =================================
   // Trade History Data
   // =================================
-  const endOffset = itemOffset + itemsPerPage;
-  const currentItems = (props.tradeHistory && props.tradeHistory.length > 0) ? props.tradeHistory.slice(itemOffset, endOffset) : [];
   const pageCount = Math.ceil((props.tradeHistory && props.tradeHistory.length > 0 && props.tradeHistory.length) / itemsPerPage);
-
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % (props.tradeHistory && props.tradeHistory.length > 0 ? props.tradeHistory.length : 0);
     setItemOffset(newOffset);
@@ -53,10 +75,7 @@ const Historytrade = (props: propsData) => {
   // =================================
   // Withdraw History Data
   // =================================
-  const withdrawendOffset = withdrawitemOffset + itemsPerPage;
-  const withdrawCurrentItems = (props.withdraws && props.withdraws.length > 0) ? props.withdraws.slice(withdrawitemOffset, withdrawendOffset) : [];
   const withdrawPageCount = Math.ceil((props.withdraws && props.withdraws.length > 0 && props.withdraws.length) / itemsPerPage);
-
   const handleWithdraePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % (props.withdraws && props.withdraws.length > 0 ? props.withdraws.length : 0);
     setWithdrawItemOffset(newOffset);
@@ -65,10 +84,7 @@ const Historytrade = (props: propsData) => {
   // =================================
   // Deposit History Data
   // =================================
-  const depositendOffset = deposititemOffset + itemsPerPage;
-  const depositCurrentItems = (props?.deposits && props?.deposits?.length > 0) ? props.deposits.slice(deposititemOffset, depositendOffset) : [];
   const depositPageCount = Math.ceil((props.deposits && props.deposits.length > 0 && props.deposits.length) / itemsPerPage);
-
   const handleDepositPageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % (props.deposits && props.deposits.length > 0 ? props.deposits.length : 0);
     setDepositItemOffset(newOffset);
@@ -77,7 +93,7 @@ const Historytrade = (props: propsData) => {
   const redeemReleased = async (item: any) => {
 
     try {
-      
+
       let username = session?.user.email !== 'null' ? session?.user.email : session?.user?.number;
       let obj = {
         id: item?.id,
@@ -85,12 +101,12 @@ const Historytrade = (props: propsData) => {
         username: username,
         otp: 'string'
       }
-  
+
       setStakeId(item?.id);
-  
+
       const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
       let record = encodeURIComponent(ciphertext.toString());
-  
+
       let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/staking/history`, {
         method: "PUT",
         headers: {
@@ -99,20 +115,20 @@ const Historytrade = (props: propsData) => {
         },
         body: JSON.stringify(record)
       })
-  
+
       let res = await responseData.json();
       if (res.data.result) {
         // toast.success(res.data.result);
         setEnable(1);
         setShow(true);
-  
+
       }
       else {
         toast.error(res?.data?.message);
       }
     } catch (error) {
-      console.log("error in trade history",error);
-      
+      console.log("error in trade history", error);
+
     }
   }
 
@@ -251,10 +267,60 @@ const Historytrade = (props: propsData) => {
     }
   }
 
+  const filterData = async (e: any) => {
+    let search = e.target.value;
+
+    if (active === 1) {
+      const endOffset = itemOffset + itemsPerPage;
+      let currentItems;
+      if (search !== "") {
+        let data = props.tradeHistory.filter((item: any) => {
+          return item.token!==null ? item.token?.symbol.toLowerCase().includes(e.target.value.toLowerCase()) : item.global_token?.symbol.toLowerCase().includes(e.target.value.toLowerCase());
+        })
+        currentItems = (data && data?.length > 0) ? data.slice(itemOffset, endOffset) : [];
+      }
+      else {
+        currentItems = (props.tradeHistory && props.tradeHistory?.length > 0) ? props.tradeHistory.slice(itemOffset, endOffset) : [];
+      }
+      setCurrentItems(currentItems);
+    }
+
+    if (active === 2) {
+      const depositendOffset = deposititemOffset + itemsPerPage;
+      let currentItems;
+      if (search !== "") {
+        let data = props.deposits.filter((item: any) => {
+          return item.coinName.split('/')[1].toLowerCase().includes(e.target.value.toLowerCase());
+        })
+        currentItems = (data && data?.length > 0) ? data.slice(deposititemOffset, depositendOffset) : [];
+      }
+      else {
+        currentItems = (props.deposits && props.deposits?.length > 0) ? props.deposits.slice(deposititemOffset, depositendOffset) : [];
+      }
+      setDepositCurrentItems(currentItems);
+    }
+
+    if (active === 3) {
+      const withdrawendOffset = withdrawitemOffset + itemsPerPage;
+      let currentItems;
+      if (search !== "") {
+        let data = props.withdraws.filter((item: any) => {
+          return item.symbol.toLowerCase().includes(e.target.value.toLowerCase());
+        })
+        currentItems = (data && data?.length > 0) ? data.slice(withdrawitemOffset, withdrawendOffset) : [];
+      }
+      else {
+        currentItems = (props.withdraws && props.withdraws?.length > 0) ? props.withdraws.slice(withdrawitemOffset, withdrawendOffset) : [];
+      }
+      setwithdrawCurrentItems(currentItems);
+    }
+
+  }
+
   return (
     <>
       <ToastContainer />
-      <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show && active!==5 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
+      <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show && active !== 5 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
       <section className=" bg-light-v-1 py-[20px] md:py-[80px] dark:bg-black-v-1">
         <div className="container ">
           <div className="p-5 md:p-40 rounded-10  bg-white dark:bg-d-bg-primary">
@@ -263,7 +329,7 @@ const Historytrade = (props: propsData) => {
               <Image src="/assets/history/dots.svg" width={24} height={24} alt="dots" className="cursor-pointer md:hidden block" />
               <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] py-[13px] px-[10px] ">
                 <Image src="/assets/history/search.svg" alt="search" width={24} height={24} />
-                <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent]" />
+                <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent]" onChange={(e) => filterData(e)} />
               </div>
             </div>
             <div className="flex justify-between border-b border-grey-v-3 dark:border-opacity-[15%]">
@@ -683,7 +749,7 @@ const Historytrade = (props: propsData) => {
                           </div>
                         </th>
                         <th className=" py-5">
-                          <div className="hidden md:flex">
+                          <div className="flex">
                             <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Tx_Hash</p>
                             <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                           </div>
@@ -699,6 +765,7 @@ const Historytrade = (props: propsData) => {
                     </thead>
                     <tbody>
                       {withdrawCurrentItems && withdrawCurrentItems.length > 0 && withdrawCurrentItems?.map((item: any, index: any) => {
+
                         return (
                           <tr key={index}>
                             <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
@@ -741,7 +808,7 @@ const Historytrade = (props: propsData) => {
                               <p className="info-14-18 dark:text-white md:block hidden">{item?.network?.fullname}</p>
                             </td>
                             <td>
-                              <p className="info-14-18 dark:text-white md:block hidden">
+                              <p className="info-14-18 dark:text-white ">
                                 {item.tx_hash !== null &&
                                   <Link target="_blank" href={`${item?.network?.BlockExplorerURL}/tx/${item?.tx_hash}`}>{item.tx_hash && item.tx_hash !== null && item.tx_hash.substring(0, 7) + '..'}</Link>
                                 }

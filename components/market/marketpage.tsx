@@ -23,7 +23,7 @@ const Marketpage = (props: propsData) => {
       <div className="container flex flex-wrap gap-30">
         <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
           <MarketCoin bannerCoinList={marketCoinList} setCoins={setCoins} allCoins={props.coinList}/>
-          <CoinList coins={props.coinList} networks={props?.networks} session={props.session}/>
+          <CoinList coins={coins} networks={props?.networks} session={props.session}/>
         </div>
         <div className="lg:max-w-[432px] w-full md:block hidden">
           <div className="lg:block hidden ">

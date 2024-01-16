@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useLayoutEffect, useRef, useState } from "react";
 import IconsComponent from "../snippets/icons";
 import Image from "next/image";
 import { useRouter } from 'next/navigation'
@@ -18,7 +18,7 @@ interface propsData {
   assets: any,
   refreshData: any,
   userConvertList?: any,
-  depositList?:any
+  depositList?: any
 }
 
 const WalletList = (props: propsData): any => {
@@ -26,17 +26,21 @@ const WalletList = (props: propsData): any => {
   const [coinItemOffset, setCoinItemOffset] = useState(0);
   const [futureItemOffset, setFutureItemOffset] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
+  const [withdrawitemOffset, setWithdrawItemOffset] = useState(0);
   const [active1, setActive1] = useState(1);
   const [show1, setShow1] = useState(0);
   const [selectedCoin, setSelectedCoin] = useState(Object);
   const [selectedCoinBalance, setSelectedCoinBalance] = useState(0.00);
-  
+
+  const [currentItems, setcurrentItems] = useState([]);
+  const [currentWithdrawItems, setCurrentWithdrawItems] = useState([]);
+  const [spotWalletItems, setSpotWalletItems] = useState([]);
+  const [futureWalletItems, setFutureWalletItems] = useState([]);
+
   const [overlay, setOverlay] = useState(false);
   const [popupMode, setPopupMode] = useState(0);
-  // const [height, setHeight] = useState(false);+
   const router = useRouter();
-  const height = useRef(0);
-
+  let itemsPerPage = 10;
 
   const setHeight = (e: any) => {
     let parent = e.currentTarget.closest(".iconParent");
@@ -74,13 +78,28 @@ const WalletList = (props: propsData): any => {
     return item.walletTtype === 'future_wallet'
   });
 
+  useLayoutEffect(() => {
+    const endOffset = itemOffset + itemsPerPage;
+    const currentItems = dataDeposit.slice(itemOffset, endOffset);
+    setcurrentItems(currentItems);
+
+    const withdrawendOffset = withdrawitemOffset + itemsPerPage;
+    const withdrawCurrentItems = (dataWithdraw && dataWithdraw.length > 0) ? dataWithdraw.slice(withdrawitemOffset, withdrawendOffset) : [];
+    setCurrentWithdrawItems(withdrawCurrentItems)
+
+    const coinendOffset = coinItemOffset + itemsCoinsPerPage;
+    const spotWalletItems = spotAssets.slice(coinItemOffset, coinendOffset);
+    setSpotWalletItems(spotWalletItems);
+
+    const futureOffset = futureItemOffset + itemsCoinsPerPage;
+    const futureWalletItems = futureAssets.slice(futureItemOffset, futureOffset);
+    setFutureWalletItems(futureWalletItems)
+  }, []);
+
   //==========================================================
   //=============Spot wallet pagging start==================
   //==========================================================
-  const coinendOffset = coinItemOffset + itemsCoinsPerPage;
-  const spotWalletItems = spotAssets.slice(coinItemOffset, coinendOffset);
   const coinpageCount = Math.ceil(spotAssets.length / itemsCoinsPerPage);
-
   const handleCoinsPageClick = async (event: any) => {
     const newOffset = (event.selected * itemsCoinsPerPage) % spotAssets.length;
     setCoinItemOffset(newOffset);
@@ -89,10 +108,7 @@ const WalletList = (props: propsData): any => {
   //==========================================================
   //=============Future wallet pagging start==================
   //==========================================================
-  const futureOffset = futureItemOffset + itemsCoinsPerPage;
-  const futureWalletItems = futureAssets.slice(futureItemOffset, futureOffset);
   const futurepageCount = Math.ceil(futureAssets.length / itemsCoinsPerPage);
-
   const handleFuturePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsCoinsPerPage) % futureAssets.length;
     setFutureItemOffset(newOffset);
@@ -101,11 +117,7 @@ const WalletList = (props: propsData): any => {
   //==========================================================
   //============ Deposit List item pagging ===============
   //==========================================================
-  let itemsPerPage = 10;
-  const endOffset = itemOffset + itemsPerPage;
-  const currentItems = dataDeposit.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(dataDeposit.length / itemsPerPage);
-
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % dataDeposit.length;
     setItemOffset(newOffset);
@@ -114,14 +126,76 @@ const WalletList = (props: propsData): any => {
   //==========================================================
   //=========== Withdraw List item pagging ================
   //==========================================================
-  let itemsWithdrawPerPage = 10;
-  const withdrawendOffset = itemOffset + itemsPerPage;
-  const currentWithdrawItems = dataWithdraw && dataWithdraw.length > 0 ? dataWithdraw.slice(itemOffset, withdrawendOffset) : [];
   const pageWithdrawCount = Math.ceil(dataWithdraw.length / itemsPerPage);
-
   const handleWithDrawPageClick = async (event: any) => {
-    const newOffset = (event.selected * itemsWithdrawPerPage) % dataWithdraw && dataWithdraw.length > 0 ? dataWithdraw.length : 0;
-    setItemOffset(newOffset);
+    const newOffset = (event.selected * itemsPerPage) % dataWithdraw && dataWithdraw.length > 0 ? dataWithdraw.length : 0;
+    setWithdrawItemOffset(newOffset);
+  }
+
+  const filterData = async (e: any) => {
+    let search = e.target.value;
+
+    if (active1 === 1) {
+      const coinendOffset = coinItemOffset + itemsCoinsPerPage;
+      let currentItems;
+      if (search !== "") {
+        let data = spotAssets.filter((item: any) => {
+          return item?.token !== null ? item?.token?.symbol.toLowerCase().includes(e.target.value.toLowerCase()) : item?.global_token?.symbol.toLowerCase().includes(e.target.value.toLowerCase());
+        })
+        currentItems = (data && data?.length > 0) ? data.slice(coinItemOffset, coinendOffset) : [];
+      }
+      else {
+        currentItems = (spotAssets && spotAssets?.length > 0) ? spotAssets.slice(coinItemOffset, coinendOffset) : [];
+      }
+      setSpotWalletItems(currentItems);
+    }
+
+    if (active1 === 2) {
+      const depositendOffset = itemOffset + itemsPerPage;
+      let currentItems;
+      if (search !== "") {
+        let data = dataDeposit.filter((item: any) => {
+          return item.coinName.split('/')[1].toLowerCase().includes(e.target.value.toLowerCase());
+        })
+        currentItems = (data && data?.length > 0) ? data.slice(itemOffset, depositendOffset) : [];
+      }
+      else {
+        currentItems = (dataDeposit && dataDeposit?.length > 0) ? dataDeposit.slice(itemOffset, depositendOffset) : [];
+      }
+      setcurrentItems(currentItems);
+    }
+
+    if (active1 === 3) {
+      const withdrawendOffset = withdrawitemOffset + itemsPerPage;
+      let currentItems;
+      if (search !== "") {
+        let data = dataWithdraw.filter((item: any) => {
+          return item.symbol.toLowerCase().includes(e.target.value.toLowerCase());
+        })
+        currentItems = (data && data?.length > 0) ? data.slice(withdrawitemOffset, withdrawendOffset) : [];
+      }
+      else {
+        currentItems = (dataWithdraw && dataWithdraw?.length > 0) ? dataWithdraw.slice(withdrawitemOffset, withdrawendOffset) : [];
+      }
+      setCurrentWithdrawItems(currentItems);
+    }
+
+    if (active1 === 4) {
+      const coinendOffset = futureItemOffset + itemsCoinsPerPage;
+      let currentItems;
+      if (search !== "") {
+        let data = futureAssets.filter((item: any) => {
+          return item?.token !== null ? item?.token?.symbol.toLowerCase().includes(e.target.value.toLowerCase()) : item?.global_token?.symbol.toLowerCase().includes(e.target.value.toLowerCase());
+        })
+        currentItems = (data && data?.length > 0) ? data.slice(futureItemOffset, coinendOffset) : [];
+      }
+      else {
+        currentItems = (futureAssets && futureAssets?.length > 0) ? futureAssets.slice(futureItemOffset, coinendOffset) : [];
+      }
+      setFutureWalletItems(currentItems);
+    }
+
+
   }
 
 
@@ -138,7 +212,7 @@ const WalletList = (props: propsData): any => {
             </div>
             <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[331px] w-full py-[13px] px-[10px] ">
               <Image src="/assets/history/search.svg" alt="search" width={24} height={24} />
-              <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" />
+              <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" onChange={(e) => filterData(e)} />
             </div>
           </div>
 
@@ -256,7 +330,7 @@ const WalletList = (props: propsData): any => {
                           </td> */}
                           <td className="max-[1023px]:hidden ">
                             <div className="flex items-center gap-[10px]">
-                              <button onClick={() => { setShow1(1) }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                              <button onClick={() => { setShow1(1); setSelectedCoin(item.token !== null ? item?.token : item?.global_token); }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Deposit</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
@@ -475,8 +549,8 @@ const WalletList = (props: propsData): any => {
                     </tr>
                   </thead>
                   <tbody>
-                    {currentItems && currentItems.length > 0 && currentItems?.map((item:any, index:number) => {
-                      
+                    {currentItems && currentItems.length > 0 && currentItems?.map((item: any, index: number) => {
+
                       return (
                         <tr key={index} className="rounded-5 group dark:hover:bg-black-v-1 hover:bg-[#FEF2F2] cursor-pointer">
                           <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
@@ -496,7 +570,7 @@ const WalletList = (props: propsData): any => {
                             <p className="info-14-18 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
                           </td>
                           <td className=" text-end">
-                            <p className={`info-14-18  ${item?.successful === "1" ? "text-buy" : "text-cancel"}`}>{item?.successful === "1"?'Successful':'Pending'}</p>
+                            <p className={`info-14-18  ${item?.successful === "1" ? "text-buy" : "text-cancel"}`}>{item?.successful === "1" ? 'Successful' : 'Pending'}</p>
                           </td>
                         </tr>
                       );
@@ -787,7 +861,7 @@ const WalletList = (props: propsData): any => {
                                 <span className="text-primary block">Trade</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
-                              
+
                             </div>
                           </div>
                         </div>
@@ -982,7 +1056,7 @@ const WalletList = (props: propsData): any => {
         show1 === 1 &&
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-          <Deposit setShow1={setShow1} networks={props.networks} session={props.session} />
+          <Deposit setShow1={setShow1} networks={props.networks} session={props.session} token={selectedCoin}/>
         </>
       }
       {
@@ -1000,7 +1074,7 @@ const WalletList = (props: propsData): any => {
         </>
       }
       {
-        show1 === 4 && 
+        show1 === 4 &&
         <>
           <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={props.assets} refreshWalletAssets={props.refreshData} />
         </>
