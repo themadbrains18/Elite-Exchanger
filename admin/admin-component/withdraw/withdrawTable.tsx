@@ -46,7 +46,7 @@ const WithdrawTable = (props:propData) => {
        let withdraw=[];
        
       if(props?.type==="details"){
-         withdraw = await fetch(`/api/withdraw/allList?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+         withdraw = await fetch(`/api/withdraw/listById?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
           method: "GET",
           headers: {
             "Authorization": session?.user?.access_token || ""

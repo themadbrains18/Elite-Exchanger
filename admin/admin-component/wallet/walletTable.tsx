@@ -14,7 +14,6 @@ interface data {
   type?: string;
 }
 
-
 const WalletTable = (props: data) => {
   const [active, setActive] = useState(1);
 
@@ -23,8 +22,9 @@ const WalletTable = (props: data) => {
       <div className="flex items-center justify-between  mb-[26px]">
         <div className="flex items-center gap-[15px]">
           <button
-            className={`${active === 1 ? "admin-solid-button" : "admin-outline-button"
-              }`}
+            className={`${
+              active === 1 ? "admin-solid-button" : "admin-outline-button"
+            }`}
             onClick={(e) => {
               setActive(1);
             }}
@@ -32,8 +32,9 @@ const WalletTable = (props: data) => {
             Deposit
           </button>
           <button
-            className={`${active === 2 ? "admin-solid-button" : "admin-outline-button"
-              }`}
+            className={`${
+              active === 2 ? "admin-solid-button" : "admin-outline-button"
+            }`}
             onClick={(e) => {
               setActive(2);
             }}
@@ -41,8 +42,9 @@ const WalletTable = (props: data) => {
             Withdraw
           </button>
           <button
-            className={`${active === 3 ? "admin-solid-button" : "admin-outline-button"
-              }`}
+            className={`${
+              active === 3 ? "admin-solid-button" : "admin-outline-button"
+            }`}
             onClick={(e) => {
               setActive(3);
             }}
@@ -50,8 +52,9 @@ const WalletTable = (props: data) => {
             Trading
           </button>
           <button
-            className={`${active === 4 ? "admin-solid-button" : "admin-outline-button"
-              }`}
+            className={`${
+              active === 4 ? "admin-solid-button" : "admin-outline-button"
+            }`}
             onClick={(e) => {
               setActive(4);
             }}
@@ -59,36 +62,40 @@ const WalletTable = (props: data) => {
             P2P
           </button>
           <button
-            className={`${active === 5 ? "admin-solid-button" : "admin-outline-button"
-              }`}
+            className={`${
+              active === 5 ? "admin-solid-button" : "admin-outline-button"
+            }`}
             onClick={(e) => {
               setActive(5);
             }}
           >
             Assets
           </button>
-          <button
-            className={`${active === 6 ? "admin-solid-button" : "admin-outline-button"
-              }`}
-            onClick={(e) => {
-              setActive(6);
-            }}
-          >
-            Activity logs
-          </button>
-          {
-            props?.type === "details" &&
-            <button
-              className={`${active === 7 ? "admin-solid-button" : "admin-outline-button"
-                }`}
-              onClick={(e) => {
-                setActive(7);
-              }}
-            >
-              Referal History
-            </button>
 
-          }
+          {props?.type === "details" && (
+            <>
+              <button
+                className={`${
+                  active === 6 ? "admin-solid-button" : "admin-outline-button"
+                }`}
+                onClick={(e) => {
+                  setActive(6);
+                }}
+              >
+                Activity logs
+              </button>
+              <button
+                className={`${
+                  active === 7 ? "admin-solid-button" : "admin-outline-button"
+                }`}
+                onClick={(e) => {
+                  setActive(7);
+                }}
+              >
+                Referal History
+              </button>
+            </>
+          )}
         </div>
         <div className="flex items-center gap-10">
           <p className="admin-table-data">
