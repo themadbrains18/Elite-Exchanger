@@ -60,11 +60,17 @@ const BuySellCard = (props: DynamicId) => {
     }
 
     Socket();
-  }, [props.slug, userAssets])
-
-  useEffect(()=>{
     convertTotalAmount();
-  },[props.token]);
+    let radioCta = document.querySelector(".custom-radio") as HTMLInputElement | null;
+    let prevSibling: ChildNode | null | undefined = radioCta?.previousSibling;
+    if (prevSibling instanceof HTMLElement) {
+      prevSibling.click();
+    }
+  }, [])
+
+  // useEffect(() => {
+  //   convertTotalAmount();
+  // }, [props.token]);
 
   const Socket = () => {
     const websocket = new WebSocket('ws://localhost:3001/');
@@ -160,91 +166,91 @@ const BuySellCard = (props: DynamicId) => {
   }
   const actionPerform = async () => {
 
-try {
-  const ciphertext = AES.encrypt(JSON.stringify(objData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
-  let record = encodeURIComponent(ciphertext.toString());
+    try {
+      const ciphertext = AES.encrypt(JSON.stringify(objData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
+      let record = encodeURIComponent(ciphertext.toString());
 
-  let reponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
-    method: "POST",
-    headers: {
-      'Content-Type': 'application/json',
-      "Authorization": props?.session?.user?.access_token
-    },
-    body: JSON.stringify(record)
-  }).then(response => response.json());
+      let reponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": props?.session?.user?.access_token
+        },
+        body: JSON.stringify(record)
+      }).then(response => response.json());
 
-  if (reponse.data.status === 200) {
-    toast.success(reponse.data?.data?.message);
-    setFirstCurrency('BLC');
-    setSecondCurrency('USDT');
-    setActive(false);
+      if (reponse.data.status === 200) {
+        toast.success(reponse.data?.data?.message);
+        setFirstCurrency('BLC');
+        setSecondCurrency('USDT');
+        setActive(false);
 
-    const websocket = new WebSocket('ws://localhost:3001/');
-    let withdraw = {
-      ws_type: 'market',
-    }
-    websocket.onopen = () => {
-      websocket.send(JSON.stringify(withdraw));
-    }
+        const websocket = new WebSocket('ws://localhost:3001/');
+        let withdraw = {
+          ws_type: 'market',
+        }
+        websocket.onopen = () => {
+          websocket.send(JSON.stringify(withdraw));
+        }
 
-    /**
-     * After order create here is partial execution request send to auto execute
-     */
-    let partialObj = {
-      "user_id": props.session.user.user_id,
-      "token_id": selectedToken?.id,
-      "order_type": active1 === 1 ? 'buy' : 'sell',
-    }
+        /**
+         * After order create here is partial execution request send to auto execute
+         */
+        let partialObj = {
+          "user_id": props.session.user.user_id,
+          "token_id": selectedToken?.id,
+          "order_type": active1 === 1 ? 'buy' : 'sell',
+        }
 
-    const ciphertext = AES.encrypt(JSON.stringify(partialObj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
-    let record = encodeURIComponent(ciphertext.toString());
+        const ciphertext = AES.encrypt(JSON.stringify(partialObj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
+        let record = encodeURIComponent(ciphertext.toString());
 
-    let executionReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
-      method: "PUT",
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": props?.session?.user?.access_token
-      },
-      body: JSON.stringify(record)
-    }).then(response => response.json());
+        let executionReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
+          method: "PUT",
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": props?.session?.user?.access_token
+          },
+          body: JSON.stringify(record)
+        }).then(response => response.json());
 
-    if (executionReponse?.data?.message === undefined) {
-      const websocket = new WebSocket('ws://localhost:3001/');
-      let withdraw = {
-        ws_type: 'market',
+        if (executionReponse?.data?.message === undefined) {
+          const websocket = new WebSocket('ws://localhost:3001/');
+          let withdraw = {
+            ws_type: 'market',
+          }
+          websocket.onopen = () => {
+            websocket.send(JSON.stringify(withdraw));
+          }
+        }
+
+
+        reset({
+          limit_usdt: 0.00,
+          token_amount: 0.00,
+        })
+        setTotalAmount(0.0)
+
       }
-      websocket.onopen = () => {
-        websocket.send(JSON.stringify(withdraw));
+      else {
+        toast.error(reponse.data?.data);
       }
+
+    } catch (error) {
+      console.log("error while create market order", error);
+
     }
-
-
-    reset({
-      limit_usdt: 0.00,
-      token_amount: 0.00,
-    })
-    setTotalAmount(0.0)
-
-  }
-  else {
-    toast.error(reponse.data?.data);
-  }
-  
-} catch (error) {
-  console.log("error while create market order",error);
-  
-}
   }
 
   const convertTotalAmount = () => {
-    if (getValues('token_amount').toString() === '') {
+    if (getValues('token_amount')?.toString() === '') {
       setTotalAmount(0.00);
       return;
     }
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
 
     if (type?.value === 'limit') {
-      if (getValues('limit_usdt').toString() === '') {
+      if (getValues('limit_usdt')?.toString() === '') {
         setTotalAmount(0.00);
         return;
       }
@@ -278,23 +284,23 @@ try {
           "Authorization": props.session?.user?.access_token
         },
       }).then(response => response.json());
-  
+
       setUserAssets(userAssets);
-      
+
     } catch (error) {
-      console.log("error while fetching assets",error);
-      
+      console.log("error while fetching assets", error);
+
     }
   }
 
-  useEffect(() => {
-    let radioCta = document.querySelector(".custom-radio") as HTMLInputElement | null;
-    let prevSibling: ChildNode | null | undefined = radioCta?.previousSibling;
-    if (prevSibling instanceof HTMLElement) {
-      prevSibling.click();
-    }
+  // useEffect(() => {
+  //   let radioCta = document.querySelector(".custom-radio") as HTMLInputElement | null;
+  //   let prevSibling: ChildNode | null | undefined = radioCta?.previousSibling;
+  //   if (prevSibling instanceof HTMLElement) {
+  //     prevSibling.click();
+  //   }
 
-  }, []);
+  // }, []);
 
 
   return (
@@ -370,120 +376,135 @@ try {
               }}>
                 <input id={`custom-radio2${props.id}`} type="radio" value="market" name="market_type" className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                 <label htmlFor={`custom-radio2${props.id}`} className="
-              custom-radio relative py-5 px-[17px]  flex gap-2 items-center pl-[60px]
-              cursor-pointer
-              after:dark:bg-omega
-              after:bg-white
-              after:lg:left-[29px]
-              after:left-[16px]
-              after:w-[20px] 
-              after:h-[20px]
-              after:rounded-[50%] 
-              after:border after:border-beta
-              after:absolute
+                    custom-radio relative py-5 px-[17px]  flex gap-2 items-center pl-[60px]
+                    cursor-pointer
+                    after:dark:bg-omega
+                    after:bg-white
+                    after:lg:left-[29px]
+                    after:left-[16px]
+                    after:w-[20px] 
+                    after:h-[20px]
+                    after:rounded-[50%] 
+                    after:border after:border-beta
+                    after:absolute
 
-              before:dark:bg-[transparent]
-              before:bg-white
-              before:lg:left-[34px]
-              before:left-[21px]
-              before:w-[10px] 
-              before:h-[10px]
-              before:rounded-[50%] 
-              before:absolute
-              before:z-[1]
-              
-              ">
+                    before:dark:bg-[transparent]
+                    before:bg-white
+                    before:lg:left-[34px]
+                    before:left-[21px]
+                    before:w-[10px] 
+                    before:h-[10px]
+                    before:rounded-[50%] 
+                    before:absolute
+                    before:z-[1]
+                    
+                    ">
                   <IconsComponent type="light" hover={true} active={show === 2 ? true : false} />
                   <p className={`info-16-18 !text-gamma ${show === 2 && '!text-primary'}`}>Market</p>
                 </label>
               </div>
             </div>
 
-            <div className="mt-5 flex gap-[18px] items-center">
-              <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
-              {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
-              <p className="md-text w-full">{price.toFixed(8)}({active1 === 1 ? 'USDT' : firstCurrency})</p>
-
-              <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className="min-w-[24px]" alt="wallet2" width={24} height={24} />
-              {router.pathname.includes("/chart") && <p className="md-text">
-                $
-                {props?.token !== undefined && props?.token?.price !== undefined
-                  ? props?.token?.price?.toFixed(5)
-                  : "0.00"}
-              </p>
-
-              }
-
-              {router.pathname.includes("/market") && props.coins && props.coins.map((item: any) => {
-                if (item.symbol === selectedToken?.symbol) {
-                  return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? item?.price?.toFixed(5) : '0.00'}</p>
-                }
-              })}
-            </div>
-
-            {/* Price Inputs for limit order case */}
-            {show === 1 &&
-              <div className="mt-30 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
-
-                <div className="">
-                  <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
-                  <input type="number" placeholder="$0" step="any" {...register('limit_usdt', {
-                    onChange: () => { convertTotalAmount() }
-                  })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
-                </div>
-
-                <div className="relative">
-                  <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} />
-                </div>
-              </div>
+            {show === 1 && props.token?.tradePair?.limit_trade === false &&
+              <>
+                <p className={`mt-[60px] info-16-18 text-center`}>
+                  Limit orders are unavailable for {props?.slug} at the moment
+                </p>
+                <p className={`mt-[20px] info-16-18 text-center`}>
+                  Please check back latter
+                </p>
+              </>
 
             }
-            {errors.limit_usdt && <p style={{ color: 'red' }}>{errors.limit_usdt.message}</p>}
+            {((show === 1 && props.token?.tradePair?.limit_trade === true) || show === 2) &&
+              <>
+                <div className="mt-5 flex gap-[18px] items-center">
+                  <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
+                  {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
+                  <p className="md-text w-full">{price.toFixed(8)}({active1 === 1 ? 'USDT' : firstCurrency})</p>
 
+                  <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className="min-w-[24px]" alt="wallet2" width={24} height={24} />
+                  {router.pathname.includes("/chart") && <p className="md-text">
+                    $
+                    {props?.token !== undefined && props?.token?.price !== undefined
+                      ? props?.token?.price?.toFixed(5)
+                      : "0.00"}
+                  </p>
 
+                  }
 
-            {/* coin quantity Inputs */}
-            <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
+                  {router.pathname.includes("/market") && props.coins && props.coins.map((item: any) => {
+                    if (item.symbol === selectedToken?.symbol) {
+                      return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? item?.price?.toFixed(5) : '0.00'}</p>
+                    }
+                  })}
+                </div>
 
-              <div className="">
-                <p className="sm-text dark:text-white">Quantity({firstCurrency})</p>
-                <input type="number" placeholder="0" min={0} step=".00001" {...register('token_amount', {
-                  onChange: () => { convertTotalAmount() }
-                })} name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text " />
-              </div>
+                {/* Price Inputs for limit order case */}
+                {show === 1 &&
+                  <div className="mt-30 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
 
-              <div>
-                {
-                  router.pathname.includes('/chart') ?
+                    <div className="">
+                      <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
+                      <input type="number" placeholder="$0" step="any" {...register('limit_usdt', {
+                        onChange: () => { convertTotalAmount() }
+                      })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
+                    </div>
 
-                    <div className='flex  items-center gap-[5px] rounded-[5px] mr-[15px] pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d]'>
-                      <Image src={`${props?.token?.image !== undefined ? props?.token?.image : '/assets/home/coinLogo.png'}`} alt="error" width={20} height={20} />
-                      <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text`}>{props?.token?.fullName}</p>
-                    </div> :
-                    <FilterSelectMenuWithCoin data={list} border={false} setCurrencyName={setCurrencyName} dropdown={1} />
+                    <div className="relative">
+                      <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} />
+                    </div>
+                  </div>
                 }
-              </div>
+                {errors.limit_usdt && <p style={{ color: 'red' }}>{errors.limit_usdt.message}</p>}
 
-            </div>
-            {errors.token_amount && <p style={{ color: 'red' }}>{errors?.token_amount?.message}</p>}
+                {/* coin quantity Inputs */}
+                <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
+                  <div className="">
+                    <p className="sm-text dark:text-white">Quantity({firstCurrency})</p>
+                    <input type="number" placeholder="0" min={0} step=".00001" {...register('token_amount', {
+                      onChange: () => { convertTotalAmount() }
+                    })} name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text " />
+                  </div>
+                  <div>
+                    {
+                      router.pathname.includes('/chart') ?
 
-            <div className="mt-5 flex gap-2">
-              <p className="sm-text dark:text-white">Total:</p>
-              {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
-              <p className="sm-text dark:text-white">{totalAmount}</p>
+                        <div className='flex  items-center gap-[5px] rounded-[5px] mr-[15px] pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d]'>
+                          <Image src={`${props?.token?.image !== undefined ? props?.token?.image : '/assets/home/coinLogo.png'}`} alt="error" width={20} height={20} />
+                          <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text`}>{props?.token?.fullName}</p>
+                        </div> :
+                        <FilterSelectMenuWithCoin data={list} border={false} setCurrencyName={setCurrencyName} dropdown={1} />
+                    }
+                  </div>
+                </div>
+                {errors.token_amount && <p style={{ color: 'red' }}>{errors?.token_amount?.message}</p>}
 
-            </div>
-            <div className="mt-5 flex gap-2">
-              <p className="sm-text dark:text-white">Est. Fee:</p>
-              <p className="sm-text dark:text-white">{estimateFee}</p>
+                <div className="mt-5 flex gap-2">
+                  <p className="sm-text dark:text-white">Total:</p>
+                  {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
+                  <p className="sm-text dark:text-white">{totalAmount}</p>
 
-            </div>
+                </div>
+                <div className="mt-5 flex gap-2">
+                  <p className="sm-text dark:text-white">Est. Fee:</p>
+                  <p className="sm-text dark:text-white">{estimateFee}</p>
+
+                </div>
+              </>
+            }
           </div>
-          {props?.session ?
-            <button type="submit" className=" solid-button w-full" >{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
-            :
-            <Link href="/login" className="solid-button w-full block text-center">Login</Link>
+
+          {((show === 1 && props.token?.tradePair?.limit_trade === true) || show === 2) &&
+            <>
+              {props?.session ?
+                <button type="submit" className=" solid-button w-full" >{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
+                :
+                <Link href="/login" className="solid-button w-full block text-center">Login</Link>
+              }
+            </>
           }
+
 
         </form>
       </div>

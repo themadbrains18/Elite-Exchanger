@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../contexts/context";
 import { AES } from "crypto-js";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,7 +13,9 @@ interface activeSection {
   setShow: Function;
   setEnable: Function;
   session: any;
-  setGoogleAuth?: Function | any
+  setGoogleAuth?: Function | any;
+  sendOtp?: any;
+  sendOtpRes?:any;
 }
 
 type UserSubmitForm = {
@@ -38,6 +40,10 @@ const SecurityVerification = (props: activeSection) => {
   const [fillOtp, setOtp] = useState("");
   const { status, data: session } = useSession()
 
+  const Ref: any = useRef(null);
+  const [timeLeft, setTimer] = useState('');
+  const [enable, setEnable] = useState(false);
+
   let {
     register,
     setValue,
@@ -52,6 +58,7 @@ const SecurityVerification = (props: activeSection) => {
   });
 
   useEffect(() => {
+    orderTimeCalculation();
     const inputElements = document.querySelectorAll(".input_wrapper2 input");
     // console.log(inputElements.length);
 
@@ -97,11 +104,11 @@ const SecurityVerification = (props: activeSection) => {
             "" +
             (inputElements[5] as HTMLInputElement).value)
 
-            clearErrors("otp");
+          clearErrors("otp");
         }
       });
     });
-  }, []);
+  }, [props?.sendOtpRes]);
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
     try {
@@ -168,9 +175,55 @@ const SecurityVerification = (props: activeSection) => {
     }
   };
 
+  const orderTimeCalculation = async () => {
+    setEnable(true);
+    let deadline = new Date(props?.sendOtpRes?.expire);
+
+    deadline.setMinutes(deadline.getMinutes());
+    deadline.setSeconds(deadline.getSeconds() + 1);
+    let currentTime = new Date();
+
+    if (currentTime < deadline) {
+      if (Ref.current) clearInterval(Ref.current);
+      const timer = setInterval(() => {
+        calculateTimeLeft(deadline);
+      }, 1000);
+      Ref.current = timer;
+    }
+    else if (currentTime > deadline) {
+      setEnable(false);
+    }
+  }
+
+  const calculateTimeLeft = (e: any) => {
+    let { total, minutes, seconds }
+      = getTimeRemaining(e);
+
+    if (total >= 0) {
+      setTimer(
+        (minutes > 9 ? minutes : '0' + minutes) + ':'
+        + (seconds > 9 ? seconds : '0' + seconds)
+      )
+    }
+    else {
+      if (Ref.current) clearInterval(Ref.current);
+      setEnable(false);
+    }
+  }
+
+  const getTimeRemaining = (e: any) => {
+    let current: any = new Date();
+    const total = Date.parse(e) - Date.parse(current);
+    const seconds = Math.floor((total / 1000) % 60);
+    const minutes = Math.floor((total / 1000 / 60) % 60);
+    return {
+      total, minutes, seconds
+    };
+  }
+
   return (
     <>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex items-center justify-between gap-[10px]">
           <svg
@@ -242,7 +295,7 @@ const SecurityVerification = (props: activeSection) => {
                 className={`sm-text input-cta2 w-full ${errors.key && 'border-1 border-[#ff0000]'}`}
                 {...register("key")}
               />
-              {errors.key && <p style={{ color: "red" }}  className="absolute top-[100%] text-[10px] md:text-[12px]">{errors.key.message}</p>}
+              {errors.key && <p style={{ color: "red" }} className="absolute top-[100%] text-[10px] md:text-[12px]">{errors.key.message}</p>}
             </div>
 
             <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
@@ -269,7 +322,7 @@ const SecurityVerification = (props: activeSection) => {
                 <input
                   type="text"
                   autoComplete="off"
-                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary ${errors.otp && '!border-[1px] !border-[#ff0000]'} `} 
+                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary ${errors.otp && '!border-[1px] !border-[#ff0000]'} `}
                   name="code4"
                 />
                 <input
@@ -284,9 +337,13 @@ const SecurityVerification = (props: activeSection) => {
                   className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary ${errors.otp && '!border-[1px] !border-[#ff0000]'}`}
                   name="code6"
                 />
-              {errors.otp && <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.otp.message}</p>}
+                {errors.otp && <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.otp.message}</p>}
               </div>
-              <p className="info-14-18 !text-primary-700 text-end">Resend SMS</p>
+              <div className={`flex  ${enable === true ? '' : 'hidden'}`}>
+                <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>
+                <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
+              </div>
+              <p className={`info-14-18 !text-primary-700 text-end cursor-pointer ${enable === true ? 'hidden' : ''}` } onClick={() => props.sendOtp()}>Resend SMS</p>
             </div>
             <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
               <label className="sm-text">GA 6 Digit Security Code</label>

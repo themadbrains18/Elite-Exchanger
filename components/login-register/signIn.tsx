@@ -49,6 +49,7 @@ const SignIn = (Props: loginType) => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const router = useRouter();
   const [btnDisabled, setBtnDisabled] = useState(false);
+  const [sendOtpRes, setSendOtpRes] = useState<any>();
 
   let { register, setValue, handleSubmit, watch, setError, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
@@ -57,18 +58,13 @@ const SignIn = (Props: loginType) => {
 
   useEffect(() => {
     let agent = window.navigator.userAgent;
-    // console.log(agent, "==agent");
     fetch('http://ip-api.com/json')
       .then(response => response.json())
       .then(data => {
-        // console.log(data, '=====api all data')
       });
   }, []);
 
   const onHandleSubmit = async (data: any) => {
-    let wildcard = router
-    // console.log(wildcard);
-
     try {
       let isEmailExist = await validateEmail(data.username);
       data.otp = "string";
@@ -215,11 +211,11 @@ const SignIn = (Props: loginType) => {
       }
       {
         step === 1 &&
-        <Verification step={step} setStep={setStep} isEmail={isEmail} formData={formData} api='login' />
+        <Verification step={step} setStep={setStep} isEmail={isEmail} formData={formData} api='login' setSendOtpRes={setSendOtpRes}/>
       }
       {
         step === 2 &&
-        <SecurityCode formData={formData} api='login' />
+        <SecurityCode formData={formData} api='login' sendOtpRes={sendOtpRes}/>
       }
     </>
   );

@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import React, { Fragment, useEffect, useState } from 'react'
 import IconsComponent from '../snippets/icons';
-import { cookies } from 'next/headers'
 import { useRouter } from 'next/router';
 
 
@@ -30,7 +29,6 @@ const ChartBanner = () => {
     }
 
     refreshTokenList();
-
   }, [slug])
 
   const refreshTokenList = async () => {

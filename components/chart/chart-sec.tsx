@@ -18,8 +18,6 @@ const ChartSec = (props: propsData) => {
 
   return (
     <div className=' rounded-10  bg-white dark:bg-d-bg-primary'>
-
-
       {/* <CandleStickChart hloc_data={priceData} /> */}
       <AdvancedRealTimeChart
         symbol={`${props.slug}`}

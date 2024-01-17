@@ -38,10 +38,12 @@ const Historytrade = (props: propsData) => {
   const [withdrawCurrentItems, setwithdrawCurrentItems] = useState([]);
   const [currentItems, setCurrentItems] = useState([]);
 
+  const [sendOtpRes, setSendOtpRes] = useState<any>();
+
   const [selectedStake, setSelectedStake] = useState(Object);
 
   let itemsPerPage = 10;
-  
+
   useLayoutEffect(() => {
     // =================================
     // Trade History Data
@@ -119,6 +121,8 @@ const Historytrade = (props: propsData) => {
       let res = await responseData.json();
       if (res.data.result) {
         // toast.success(res.data.result);
+        toast.success(res?.data?.result);
+        setSendOtpRes(res?.data?.otp);
         setEnable(1);
         setShow(true);
 
@@ -275,7 +279,7 @@ const Historytrade = (props: propsData) => {
       let currentItems;
       if (search !== "") {
         let data = props.tradeHistory.filter((item: any) => {
-          return item.token!==null ? item.token?.symbol.toLowerCase().includes(e.target.value.toLowerCase()) : item.global_token?.symbol.toLowerCase().includes(e.target.value.toLowerCase());
+          return item.token !== null ? item.token?.symbol.toLowerCase().includes(e.target.value.toLowerCase()) : item.global_token?.symbol.toLowerCase().includes(e.target.value.toLowerCase());
         })
         currentItems = (data && data?.length > 0) ? data.slice(itemOffset, endOffset) : [];
       }
@@ -1145,6 +1149,8 @@ const Historytrade = (props: propsData) => {
             session={session}
             finalOtpVerification={finalOtpVerification}
             finalBtnenable={finalBtnenable}
+            snedOtpToUser={snedOtpToUser}
+            sendOtpRes={sendOtpRes}
           />
         )}
 

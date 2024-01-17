@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../contexts/context";
 import { AES } from "crypto-js";
 import { ToastContainer, toast } from "react-toastify";
@@ -13,13 +13,19 @@ interface activeSection {
   session: any;
   finalOtpVerification?: any;
   finalBtnenable?: any;
+  snedOtpToUser?: any;
+  sendOtpRes?: any;
 }
 
 const Verification = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [fillOtp, setOtp] = useState("");
+  const Ref: any = useRef(null);
+  const [timeLeft, setTimer] = useState('');
+  const [enable, setEnable] = useState(false);
 
   useEffect(() => {
+    orderTimeCalculation();
     const inputElements = document.querySelectorAll(".input_wrapper input");
 
     inputElements?.forEach((ele, index) => {
@@ -34,7 +40,6 @@ const Verification = (props: activeSection) => {
         const lastInputBox = index === inputElements.length - 1;
         const didInsertContent = first !== undefined;
         if (didInsertContent && !lastInputBox) {
-          // continue to input the rest of the string
           (inputElements[index + 1] as HTMLElement).focus();
           (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
           inputElements[index + 1].dispatchEvent(new Event("input"));
@@ -55,7 +60,55 @@ const Verification = (props: activeSection) => {
         }
       });
     });
-  }, []);
+
+    
+  }, [props?.sendOtpRes]);
+
+  const orderTimeCalculation = async () => {
+    setEnable(true);
+    let deadline = new Date(props?.sendOtpRes?.expire);
+
+    deadline.setMinutes(deadline.getMinutes());
+    deadline.setSeconds(deadline.getSeconds() + 1);
+    let currentTime = new Date();
+
+    if (currentTime < deadline) {
+      if (Ref.current) clearInterval(Ref.current);
+      const timer = setInterval(() => {
+        calculateTimeLeft(deadline);
+      }, 1000);
+      Ref.current = timer;
+    }
+    else if (currentTime > deadline) {
+      setEnable(false);
+    }
+  }
+
+  const calculateTimeLeft = (e: any) => {
+    let { total, minutes, seconds }
+      = getTimeRemaining(e);
+
+    if (total >= 0) {
+      setTimer(
+        (minutes > 9 ? minutes : '0' + minutes) + ':'
+        + (seconds > 9 ? seconds : '0' + seconds)
+      )
+    }
+    else {
+      if (Ref.current) clearInterval(Ref.current);
+      setEnable(false);
+    }
+  }
+
+  const getTimeRemaining = (e: any) => {
+    let current: any = new Date();
+    const total = Date.parse(e) - Date.parse(current);
+    const seconds = Math.floor((total / 1000) % 60);
+    const minutes = Math.floor((total / 1000 / 60) % 60);
+    return {
+      total, minutes, seconds
+    };
+  }
 
   const matchUserOtp = async () => {
     try {
@@ -68,7 +121,7 @@ const Verification = (props: activeSection) => {
 
   return (
     <>
-      <ToastContainer position="top-right" />
+      {/* <ToastContainer position="top-right" /> */}
       <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex items-center justify-between ">
           <p className="sec-title">Enter Otp</p>
@@ -142,12 +195,15 @@ const Verification = (props: activeSection) => {
                 autoComplete="off"
                 className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                 name="code6"
-                onChange={(e) => {
-                  console.log(e);
-                }}
+                
               />
             </div>
-            <p className="info-10-14 text-end cursor-pointer !text-primary-700">
+            <div className={`flex  ${enable === true ? '' : 'hidden'}`}>
+              <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>
+              <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
+            </div>
+
+            <p className={`info-10-14 text-end cursor-pointer !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => props?.snedOtpToUser()}>
               Resend Code
             </p>
           </div>

@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { AES } from 'crypto-js';
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import ConfirmPopup from '@/admin/admin-snippet/confirm-popup';
 import { signOut, useSession } from 'next-auth/react';
 import Verification from '../snippets/verification';
@@ -50,6 +50,7 @@ const TradingPassword = (props: activeSection) => {
   const [enable, setEnable] = useState(0)
   const [formData, setFormData] = useState<UserSubmitForm | null>();
   const { status } = useSession()
+  const [sendOtpRes, setSendOtpRes] = useState<any>();
   let {
     register,
     setValue,
@@ -76,6 +77,7 @@ const TradingPassword = (props: activeSection) => {
           old_password: data?.old_password,
           new_password: data?.new_password,
           otp: "string",
+          step : 1
         }
       }
       else {
@@ -83,10 +85,9 @@ const TradingPassword = (props: activeSection) => {
           username: username,
           new_password: data?.new_password,
           otp: "string",
+          step : 1
         }
       }
-
-
 
       if (status === "authenticated") {
         const ciphertext = AES.encrypt(
@@ -138,6 +139,7 @@ const TradingPassword = (props: activeSection) => {
           old_password: formData?.old_password,
           new_password: formData?.new_password,
           otp: "string",
+          step : 2
         }
       }
       else {
@@ -145,6 +147,7 @@ const TradingPassword = (props: activeSection) => {
           username: username,
           new_password: formData?.new_password,
           otp: "string",
+          step : 2
         }
       }
 
@@ -163,9 +166,11 @@ const TradingPassword = (props: activeSection) => {
         let res = await userExist.json();
 
         if (res.status === 200) {
-          toast.success(res.data)
+          toast.success(res?.data?.message);
+          
           setTimeout(() => {
             setEnable(1);
+            setSendOtpRes(res?.data?.otp);
             props?.setShow(true)
           }, 1000)
 
@@ -175,7 +180,7 @@ const TradingPassword = (props: activeSection) => {
         toast.error('Your session is expired. Its auto redirect to login page');
         setTimeout(() => {
           signOut();
-        }, 4000);
+        }, 1000);
 
       }
     } catch (error) {
@@ -197,6 +202,7 @@ const TradingPassword = (props: activeSection) => {
           old_password: formData?.old_password,
           new_password: formData?.new_password,
           otp: otp,
+          step : 3
         }
       }
       else {
@@ -204,6 +210,7 @@ const TradingPassword = (props: activeSection) => {
           username: username,
           new_password: formData?.new_password,
           otp: otp,
+          step : 3
         }
       }
 
@@ -244,6 +251,7 @@ const TradingPassword = (props: activeSection) => {
 
   return (
     <>
+      <ToastContainer position="top-right" />
       {
         enable === 0 &&
         <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
@@ -360,6 +368,8 @@ const TradingPassword = (props: activeSection) => {
           data={formData}
           session={props?.session}
           finalOtpVerification={finalOtpVerification}
+          snedOtpToUser={snedOtpToUser}
+          sendOtpRes={sendOtpRes}
         />
       )}
       {enable === 4 && (

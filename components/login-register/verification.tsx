@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Context from "../contexts/context";
 import Image from "next/image";
 import HeaderLogo from "../svg-snippets/headerLogo";
@@ -14,11 +14,13 @@ interface propsData {
   isEmail?: boolean;
   formData?: any;
   api: string;
+  setSendOtpRes?:any;
 }
 
 const Verification = (props: propsData) => {
   const { mode } = useContext(Context);
   const router = useRouter();
+  
 
   const sendOtp = async () => {
     try {
@@ -43,14 +45,16 @@ const Verification = (props: propsData) => {
 
       if (props?.api === "forget") {
         if (userExist.status === 200) {
-          toast.success(userExist.data);
+          toast.success(userExist?.data?.message);
+          props.setSendOtpRes(userExist?.data?.otp);
           props.setStep(2);
         } else {
           toast.error(userExist.data);
         }
       } else {
         if (userExist.data.status === 200) {
-          toast.success(userExist.data.data);
+          toast.success(userExist?.data?.data?.message);
+          props.setSendOtpRes(userExist?.data?.data?.otp);
           props.setStep(2);
         } else {
           toast.error(userExist.data.data);
@@ -94,10 +98,6 @@ const Verification = (props: propsData) => {
 
           <div className="mt-0 lg:mt-[140px] lg:p-0 p-5  max-w-[calc(100%-30px)] md:mx-0 mx-auto md:mb-0 mb-[10px]  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
             <h1 className="lg-heading mb-5">Let’s Confirm it’s really you</h1>
-            {/* <p className="mb-5 text-center  lg:mb-[70px] md-text">
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry.
-            </p> */}
             <div className="flex flex-col gap-[15px] lg:gap-5 mb-[30px]">
               {/* <div className="flex items-center mr-4">
                 <input id="custom-radio" type="radio" value="" name="colored-radio" className="w-5 h-5  bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
@@ -120,28 +120,28 @@ const Verification = (props: propsData) => {
                 <label
                   htmlFor={`custom-radio`}
                   className="
-              custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
-              cursor-pointer
-              after:dark:bg-omega
-              after:bg-white
-              after:left-[0px]
-              after:w-[20px] 
-              after:h-[20px]
-              after:rounded-[50%] 
-              after:border after:border-beta
-              after:absolute
+                        custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
+                        cursor-pointer
+                        after:dark:bg-omega
+                        after:bg-white
+                        after:left-[0px]
+                        after:w-[20px] 
+                        after:h-[20px]
+                        after:rounded-[50%] 
+                        after:border after:border-beta
+                        after:absolute
 
-              before:dark:bg-[transparent]
-              before:bg-white
-              before:left-[5px]
-  
-              before:w-[10px] 
-              before:h-[10px]
-              before:rounded-[50%] 
-              before:absolute
-              before:z-[1]
-              
-              "
+                        before:dark:bg-[transparent]
+                        before:bg-white
+                        before:left-[5px]
+            
+                        before:w-[10px] 
+                        before:h-[10px]
+                        before:rounded-[50%] 
+                        before:absolute
+                        before:z-[1]
+                        
+                        "
                 >
                   <p className="ml-2 md-text"> Get the code by text message</p>
                 </label>
@@ -178,28 +178,28 @@ const Verification = (props: propsData) => {
                 <label
                   htmlFor={`custom-radio2`}
                   className="
-              custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
-              cursor-pointer
-              after:dark:bg-omega
-              after:bg-white
-              after:left-[0px]
-              after:w-[20px] 
-              after:h-[20px]
-              after:rounded-[50%] 
-              after:border after:border-beta
-              after:absolute
+                      custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
+                      cursor-pointer
+                      after:dark:bg-omega
+                      after:bg-white
+                      after:left-[0px]
+                      after:w-[20px] 
+                      after:h-[20px]
+                      after:rounded-[50%] 
+                      after:border after:border-beta
+                      after:absolute
 
-              before:dark:bg-[transparent]
-              before:bg-white
-              before:left-[5px]
-  
-              before:w-[10px] 
-              before:h-[10px]
-              before:rounded-[50%] 
-              before:absolute
-              before:z-[1]
-              
-              "
+                      before:dark:bg-[transparent]
+                      before:bg-white
+                      before:left-[5px]
+          
+                      before:w-[10px] 
+                      before:h-[10px]
+                      before:rounded-[50%] 
+                      before:absolute
+                      before:z-[1]
+                      
+                      "
                 >
                   <p className="ml-2 md-text"> Get the code by email at</p>
                 </label>

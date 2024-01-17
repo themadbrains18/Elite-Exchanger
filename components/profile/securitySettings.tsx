@@ -53,7 +53,8 @@ const SecuritySettings = (props: fixSection) => {
   const [googleAuth, setGoogleAuth] = useState(props.session?.user?.TwoFA)
   const [formData, setFormData] = useState<UserSubmitForm | null>();
   const { status, data: session } = useSession()
-  const [tradePassword,setTradePassword] = useState(false);
+  const [tradePassword, setTradePassword] = useState(false);
+  const [sendOtpRes, setSendOtpRes] = useState<any>();
 
   let data = [
     {
@@ -123,6 +124,7 @@ const SecuritySettings = (props: fixSection) => {
         old_password: data?.old_password,
         new_password: data?.new_password,
         otp: "string",
+        step: 1
       };
       if (status === "authenticated") {
         const ciphertext = AES.encrypt(
@@ -170,7 +172,8 @@ const SecuritySettings = (props: fixSection) => {
         username: username,
         old_password: formData?.old_password,
         new_password: formData?.new_password,
-        otp: "string"
+        otp: "string",
+        step: 2
       }
 
       if (status === 'authenticated') {
@@ -188,7 +191,8 @@ const SecuritySettings = (props: fixSection) => {
         let res = await userExist.json();
 
         if (res.status === 200) {
-          toast.success(res.data)
+          toast.success(res.data.message)
+          setSendOtpRes(res?.data?.otp);
           setTimeout(() => {
             setEnable(1);
             setShow(true)
@@ -220,6 +224,7 @@ const SecuritySettings = (props: fixSection) => {
         old_password: formData?.old_password,
         new_password: formData?.new_password,
         otp: otp,
+        step: 3
       };
       const ciphertext = AES.encrypt(
         JSON.stringify(request),
@@ -255,7 +260,7 @@ const SecuritySettings = (props: fixSection) => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer position="top-right"/>
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"
           }`}
@@ -399,7 +404,7 @@ const SecuritySettings = (props: fixSection) => {
                             setShow(true);
                           }}
                         >
-                          {( props?.session?.user?.tradingPassword === null && tradePassword === false)
+                          {(props?.session?.user?.tradingPassword === null && tradePassword === false)
                             ? "Add"
                             : "Edit"}
                         </button>
@@ -504,6 +509,8 @@ const SecuritySettings = (props: fixSection) => {
           data={formData}
           session={props?.session}
           finalOtpVerification={finalOtpVerification}
+          snedOtpToUser={snedOtpToUser}
+          sendOtpRes={sendOtpRes}
         />
       )}
       {enable === 2 && (
@@ -513,6 +520,8 @@ const SecuritySettings = (props: fixSection) => {
           type="number"
           data={formData}
           session={props?.session}
+          snedOtpToUser={snedOtpToUser}
+          sendOtpRes={sendOtpRes}
         />
       )}
       {enable === 3 && (

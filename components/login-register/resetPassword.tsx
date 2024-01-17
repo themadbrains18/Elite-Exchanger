@@ -18,9 +18,9 @@ const schema = yup.object().shape({
     .test("email_or_phone", "Email / Phone is invalid", (value) => {
       return validateEmail(value) || validatePhone(value);
     }),
-    new_password: yup.string().min(8).max(32).required(),
-    confirmPassword: yup.string()
-      .oneOf([yup.ref('new_password')], 'Passwords must match'),
+  new_password: yup.string().min(8).max(32).required(),
+  confirmPassword: yup.string()
+    .oneOf([yup.ref('new_password')], 'Passwords must match'),
 });
 
 const validateEmail = (email: string | undefined) => {
@@ -40,7 +40,7 @@ const validatePhone = (phone: string | undefined) => {
         : false;
     })
     .isValidSync(phone);
-    
+
 };
 
 const ResetPassword = () => {
@@ -52,6 +52,8 @@ const ResetPassword = () => {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
+  const [sendOtpRes, setSendOtpRes] = useState<any>();
+
   let {
     register,
     setValue,
@@ -64,14 +66,13 @@ const ResetPassword = () => {
   });
 
   const onHandleSubmit = async (data: any) => {
-    let wildcard = router;
-
     try {
       let isEmailExist = await validateEmail(data.username);
 
       setIsEmail(isEmailExist);
       data.otp = "";
       data.type = "forget";
+      data.step = 1;
       // console.log(data, "==ahjhaj");
       setBtnDisabled(true);
       const ciphertext = AES.encrypt(
@@ -98,7 +99,7 @@ const ResetPassword = () => {
         toast.error(res.data.data);
         setBtnDisabled(false);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
@@ -152,7 +153,7 @@ const ResetPassword = () => {
                     {errors.username && (
                       <p style={{ color: "red" }}>{errors.username.message}</p>
                     )}
-                     <div
+                    <div
                       className="relative"
                     >
                       <input type={`${show === true ? "text" : "password"}`} {...register('new_password')} name="new_password" placeholder="Password" className="input-cta w-full" />
@@ -203,9 +204,10 @@ const ResetPassword = () => {
           api="forget"
           isEmail={isEmail}
           formData={formData}
+          setSendOtpRes={setSendOtpRes}
         />
       )}
-      {step === 2 && <SecurityCode formData={formData} api="forget" />}
+      {step === 2 && <SecurityCode formData={formData} api="forget" sendOtpRes={sendOtpRes} />}
     </>
   );
 };

@@ -49,6 +49,7 @@ const SignUp = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [sendOtpRes, setSendOtpRes] = useState<any>();
 
   const queryParams = searchParams.get('r');
 
@@ -207,11 +208,11 @@ const SignUp = () => {
       }
       {
         step === 1 &&
-        <Verification step={step} setStep={setStep} isEmail={isEmail} formData={formData} api='register' />
+        <Verification step={step} setStep={setStep} isEmail={isEmail} formData={formData} api='register' setSendOtpRes={setSendOtpRes}/>
       }
       {
         step === 2 &&
-        <SecurityCode formData={formData} api='register' />
+        <SecurityCode formData={formData} api='register' sendOtpRes={sendOtpRes}/>
       }
     </>
   );

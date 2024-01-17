@@ -98,12 +98,9 @@ const ChartTabs = (props: propsData) => {
     setTradeItemOffset(newOffset);
   };
 
-  // console.log(currentTradeItems, "==currentTradeItems");
-
   /**
    * Cancel order
    */
-
   const actionPerform = async () => {
     try {
       let cancelObj = {
@@ -1210,9 +1207,9 @@ const ChartTabs = (props: propsData) => {
                 ) : (
                   <div className="xl:grid xl:place-content-center w-full p-4">
                     <div className={`inline-grid ${mode === "dark"
-                            ? "text-[#ffffff]"
-                            : "text-[#000000]"
-                            }`}>
+                      ? "text-[#ffffff]"
+                      : "text-[#000000]"
+                      }`}>
                       <Image
                         src="/assets/refer/empty.svg"
                         alt="emplty table"
