@@ -26,6 +26,7 @@ function formatDate(date: Date) {
 const AssetTable = (props:propData) => {
   const [list, setList] = useState([]);
   const [itemOffset, setItemOffset] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const { mode } = useContext(Context);
   const [total, setTotal] = useState(0);
   const router = useRouter();
@@ -76,6 +77,7 @@ const AssetTable = (props:propData) => {
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % total;
     setItemOffset(newOffset);
+    setCurrentPage(event.selected);
   };
 
   return (
@@ -285,6 +287,7 @@ const AssetTable = (props:propData) => {
           pageCount={pageCount}
           previousLabel="<"
           renderOnZeroPageCount={null}
+          forcePage={currentPage}
         />
       </div>
     </div>

@@ -32,6 +32,7 @@ const FuturePairList = (props: Session) => {
     const [editPair, setEditPair] = useState(Object);
     const [list, setList] = useState([]);
     const [itemOffset, setItemOffset] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
     const { mode } = useContext(Context);
 
     const [total, setTotal] = useState(0);
@@ -78,6 +79,7 @@ const FuturePairList = (props: Session) => {
     const handlePageClick = async (event: any) => {
         const newOffset = (event.selected * itemsPerPage) % total;
         setItemOffset(newOffset);
+        setCurrentPage(event.selected);
     };
 
     const updateStatus = async (data: any) => {
@@ -324,6 +326,7 @@ const FuturePairList = (props: Session) => {
                         pageCount={pageCount}
                         previousLabel="<"
                         renderOnZeroPageCount={null}
+                        forcePage={currentPage}
                     />
                 </div>
             </div>

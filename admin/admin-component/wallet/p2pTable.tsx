@@ -27,6 +27,7 @@ function formatDate(date: Date) {
 const P2PTable = (props:propData) => {
   const [list, setList] = useState([]);
   const [itemOffset, setItemOffset] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const { mode } = useContext(Context);
   const [total, setTotal] = useState(0);
   const router = useRouter();
@@ -78,6 +79,7 @@ const P2PTable = (props:propData) => {
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % total;
     setItemOffset(newOffset);
+    setCurrentPage(event.selected);
   };
 
   return (
@@ -342,6 +344,7 @@ const P2PTable = (props:propData) => {
           pageCount={pageCount}
           previousLabel="<"
           renderOnZeroPageCount={null}
+          forcePage={currentPage}
         />
       </div>
     </div>

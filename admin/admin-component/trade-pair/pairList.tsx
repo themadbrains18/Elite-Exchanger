@@ -13,7 +13,7 @@ interface Session {
   list?: any;
   pairs?: any;
   refreshPairList?: any;
-  session?:any
+  session?: any
 }
 
 function formatDate(date: Date) {
@@ -34,8 +34,9 @@ const PairList = (props: Session) => {
   const [editPair, setEditPair] = useState(Object);
   const [list, setList] = useState([]);
   const [itemOffset, setItemOffset] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const { mode } = useContext(Context);
-  const {data:session} = useSession()
+  const { data: session } = useSession()
 
   const [total, setTotal] = useState(0);
 
@@ -56,24 +57,24 @@ const PairList = (props: Session) => {
       if (itemOffset === undefined) {
         itemOffset = 0;
       }
-  
-  
+
+
       let pairList = await fetch(
         `/api/pair?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
         {
           method: "GET",
           headers: {
             "Authorization": session?.user?.access_token
-        },
+          },
         }
       ).then((response) => response.json());
       // setFreshPairList(pairList?.data)
       setList(pairList?.data?.data);
       setTotal(pairList?.data?.total);
-      
+
     } catch (error) {
-      console.log(error,"error");
-      
+      console.log(error, "error");
+
     }
   };
   const pageCount = Math.ceil(total / itemsPerPage);
@@ -81,13 +82,14 @@ const PairList = (props: Session) => {
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % total;
     setItemOffset(newOffset);
+    setCurrentPage(event.selected);
   };
 
   const updateStatus = async (data: any) => {
     try {
       const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-      let record =  encodeURIComponent(ciphertext.toString());
-  
+      let record = encodeURIComponent(ciphertext.toString());
+
       let responseStatus = await fetch(
         `/api/pair`,
         {
@@ -99,16 +101,16 @@ const PairList = (props: Session) => {
           body: JSON.stringify(record),
         }
       ).then((response) => response.json());
-  
+
       // console.log(responseStatus, "==responseStatus");
-  
+
       if (responseStatus) {
         refreshPairList();
       }
-      
+
     } catch (error) {
-      console.log(error,"error in pair update");
-      
+      console.log(error, "error in pair update");
+
     }
   };
 
@@ -319,11 +321,12 @@ const PairList = (props: Session) => {
             pageCount={pageCount}
             previousLabel="<"
             renderOnZeroPageCount={null}
+            forcePage={currentPage}
           />
         </div>
       </div>
 
-      {show && <AddPair data={props?.list} show={show} setShow={setShow} refreshPairList={refreshPairList} session={props?.session}/>}
+      {show && <AddPair data={props?.list} show={show} setShow={setShow} refreshPairList={refreshPairList} session={props?.session} />}
       {editShow && (
         <EditPair
           setEditShow={setEditShow}

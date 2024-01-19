@@ -63,7 +63,7 @@ const Historytrade = (props: propsData) => {
     const depositendOffset = deposititemOffset + itemsPerPage;
     let depositCurrentItems = (props?.deposits && props?.deposits?.length > 0) ? props.deposits.slice(deposititemOffset, depositendOffset) : [];
     setDepositCurrentItems(depositCurrentItems);
-  }, []);
+  }, [itemOffset,withdrawitemOffset, deposititemOffset]);
 
   // =================================
   // Trade History Data
@@ -342,6 +342,7 @@ const Historytrade = (props: propsData) => {
                   className={`pb-[15px] md:pb-30 nav-text-sm md:nav-text-lg border-b-2 border-[transparent] whitespace-nowrap ${active === 1 && "border-primary !text-primary"}`}
                   onClick={() => {
                     setActive(1);
+                    setItemOffset(0);
                   }}
                 >
                   Order History
@@ -350,6 +351,7 @@ const Historytrade = (props: propsData) => {
                   className={`pb-[15px] md:pb-30 nav-text-sm md:nav-text-lg border-b-2 border-[transparent] whitespace-nowrap ${active === 2 && "border-primary !text-primary"}`}
                   onClick={() => {
                     setActive(2);
+                    setDepositItemOffset(0);
                   }}
                 >
                   Wallet Deposit History
@@ -358,6 +360,7 @@ const Historytrade = (props: propsData) => {
                   className={`pb-[15px] md:pb-30 nav-text-sm md:nav-text-lg border-b-2 border-[transparent] whitespace-nowrap ${active === 3 && "border-primary !text-primary"}`}
                   onClick={() => {
                     setActive(3);
+                    setWithdrawItemOffset(0);
                   }}
                 >
                   Wallet Withdraw History

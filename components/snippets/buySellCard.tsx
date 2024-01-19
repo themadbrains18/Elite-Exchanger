@@ -42,6 +42,7 @@ const BuySellCard = (props: DynamicId) => {
   const [estimateFee, setEstimateFee] = useState(0);
   const [objData, setObjData] = useState(Object);
   const router = useRouter()
+  const [spotType, setSpotType] = useState('buy');
 
   const list = props.coins;
 
@@ -56,7 +57,7 @@ const BuySellCard = (props: DynamicId) => {
   useEffect(() => {
     if (props.slug) {
       setCurrencyName(props.slug, 1);
-      setPriceOnChangeType('buy', '');
+      setPriceOnChangeType(spotType, '');
     }
 
     Socket();
@@ -66,7 +67,7 @@ const BuySellCard = (props: DynamicId) => {
     if (prevSibling instanceof HTMLElement) {
       prevSibling.click();
     }
-  }, [])
+  }, [userAssets])
 
   // useEffect(() => {
   //   convertTotalAmount();
@@ -134,8 +135,6 @@ const BuySellCard = (props: DynamicId) => {
   }
 
   const onHandleSubmit = async (data: any) => {
-
-
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
 
     if (active1 === 1 && totalAmount > price) {
@@ -165,7 +164,6 @@ const BuySellCard = (props: DynamicId) => {
     setActive(true)
   }
   const actionPerform = async () => {
-
     try {
       const ciphertext = AES.encrypt(JSON.stringify(objData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record = encodeURIComponent(ciphertext.toString());
@@ -312,6 +310,7 @@ const BuySellCard = (props: DynamicId) => {
               limit_usdt: 0.00,
               token_amount: 0.00,
             })
+            setSpotType('buy');
             setTotalAmount(0.0); setEstimateFee(0.00)
           }}>
             Buy
@@ -321,6 +320,7 @@ const BuySellCard = (props: DynamicId) => {
               limit_usdt: 0.00,
               token_amount: 0.00,
             })
+            setSpotType('sell');
             setTotalAmount(0.0); setEstimateFee(0.00)
           }}>
             Sell

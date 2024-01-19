@@ -41,7 +41,7 @@ const AllCoins = (props: Session) => {
       if (total > 0 && total - itemOffset < 10) {
         itemsPerPage = total - itemOffset
       }
-  
+
       let tokenList = await fetch(`/api/token/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
         method: "GET",
         headers: {
@@ -50,10 +50,10 @@ const AllCoins = (props: Session) => {
       }).then(response => response.json());
       setList(tokenList?.data?.data)
       setTotal(tokenList?.data?.total);
-      
+
     } catch (error) {
-      console.log("get all token list error in admin",error);
-      
+      console.log("get all token list error in admin", error);
+
     }
   }
   const pageCount = Math.ceil(total / itemsPerPage);
@@ -67,8 +67,8 @@ const AllCoins = (props: Session) => {
     try {
 
       let obj = {
-        id : data?.id,
-        status : data?.status
+        id: data?.id,
+        status: data?.status
       }
       let responseStatus = await fetch(`api/token/list`, {
         headers: {
@@ -77,14 +77,14 @@ const AllCoins = (props: Session) => {
         method: "PUT",
         body: JSON.stringify(obj),
       }).then((response) => response.json());
-  
+
       if (responseStatus) {
         getToken(itemOffset)
         props.refreshTokenList(responseStatus?.data);
       }
-      
+
     } catch (error) {
-      console.log("error in token status update",error);
+      console.log("error in token status update", error);
 
     }
 

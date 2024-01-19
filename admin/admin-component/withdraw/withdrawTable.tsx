@@ -28,6 +28,7 @@ const WithdrawTable = (props:propData) => {
   const [active, setActive] = useState(1);
 
   const [itemOffset, setItemOffset] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const { mode } = useContext(Context);
   const [total, setTotal] = useState(0);
   const {data:session} = useSession()
@@ -78,6 +79,7 @@ const WithdrawTable = (props:propData) => {
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % total;
     setItemOffset(newOffset);
+    setCurrentPage(event.selected);
   };
 
 
@@ -395,6 +397,7 @@ const WithdrawTable = (props:propData) => {
           pageCount={pageCount}
           previousLabel="<"
           renderOnZeroPageCount={null}
+          forcePage={currentPage}
         />
       </div>
     </div>

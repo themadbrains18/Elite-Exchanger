@@ -29,7 +29,7 @@ const AllUsers = (props: usersList) => {
   let itemsPerPage = 10;
 
   useEffect(() => {
-    getToken(itemOffset);
+    getUser(itemOffset);
   }, [itemOffset]);
 
   const netwoks = props?.networks.filter((item: any) => {
@@ -41,7 +41,7 @@ const AllUsers = (props: usersList) => {
     }
   });
 
-  const getToken = async (itemOffset: number) => {
+  const getUser = async (itemOffset: number) => {
     try {
       if (itemOffset === undefined) {
         itemOffset = 0;

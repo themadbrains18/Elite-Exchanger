@@ -26,6 +26,7 @@ const AllKycUsers = () => {
   const [show, setShow] = useState(false);
   const [allUsers, setAllUsers] = useState();
   const [itemOffset, setItemOffset] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const { mode } = useContext(Context);
  const [total, setTotal] = useState(0);
  const {data: session} = useSession()
@@ -33,10 +34,10 @@ const AllKycUsers = () => {
   let itemsPerPage = 10;
 
   useEffect(() => {
-    getToken(itemOffset);
+    getAllKyc(itemOffset);
   }, [itemOffset]);
 
-  const getToken = async (itemOffset: number) => {
+  const getAllKyc = async (itemOffset: number) => {
     try {
       if (itemOffset === undefined) {
         itemOffset = 0;
@@ -66,6 +67,7 @@ const AllKycUsers = () => {
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % total;
     setItemOffset(newOffset);
+    setCurrentPage(event.selected);
   };
 
 
@@ -73,8 +75,10 @@ const AllKycUsers = () => {
     try {
       let actionKyc = e.currentTarget.innerHTML;
 
+      console.log(item,'--------kyc item');
+      
       let obj = {
-        user_id: item,
+        userid: item,
         isVerified: actionKyc === "Approve" && true,
         isReject: actionKyc === "Reject" && true,
       };
@@ -313,7 +317,7 @@ const AllKycUsers = () => {
                         <p>{item?.fname}</p>
                       </td>
                       <td className="admin-table-data">
-                        #{item?.user_id.split("").splice(0, 5)}
+                        #{item?.userid.split("").splice(0, 5)}
                       </td>
 
                       <td className="dark:!text-[#ffffffb3] admin-table-heading ">
@@ -368,7 +372,7 @@ const AllKycUsers = () => {
                             <button
                               className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap	"
                               onClick={(e) => {
-                                handleUpdate(item?.user_id, e);
+                                handleUpdate(item?.userid, e);
                               }}
                             >
                               Approve
@@ -376,7 +380,7 @@ const AllKycUsers = () => {
                             <button
                               className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap"
                               onClick={(e) => {
-                                handleUpdate(item?.user_id, e);
+                                handleUpdate(item?.userid, e);
                               }}
                             >
                               Reject
@@ -390,7 +394,7 @@ const AllKycUsers = () => {
                             <button
                               className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap"
                               onClick={(e) => {
-                                handleUpdate(item?.user_id, e);
+                                handleUpdate(item?.userid, e);
                               }}
                             >
                               Reject
@@ -404,7 +408,7 @@ const AllKycUsers = () => {
                             <button
                               className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap	"
                               onClick={(e) => {
-                                handleUpdate(item?.user_id, e);
+                                handleUpdate(item?.userid, e);
                               }}
                             >
                               Approve
@@ -431,6 +435,7 @@ const AllKycUsers = () => {
             pageCount={pageCount}
             previousLabel="<"
             renderOnZeroPageCount={null}
+            forcePage={currentPage}
           />
         </div>
       </div>
