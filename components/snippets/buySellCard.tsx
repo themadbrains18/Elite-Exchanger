@@ -194,40 +194,42 @@ const BuySellCard = (props: DynamicId) => {
         /**
          * After order create here is partial execution request send to auto execute
          */
-        let partialObj = {
-          "user_id": props.session.user.user_id,
-          "token_id": selectedToken?.id,
-          "order_type": active1 === 1 ? 'buy' : 'sell',
-        }
-
-        const ciphertext = AES.encrypt(JSON.stringify(partialObj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
-        let record = encodeURIComponent(ciphertext.toString());
-
-        let executionReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
-          method: "PUT",
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": props?.session?.user?.access_token
-          },
-          body: JSON.stringify(record)
-        }).then(response => response.json());
-
-        if (executionReponse?.data?.message === undefined) {
-          const websocket = new WebSocket('ws://localhost:3001/');
-          let withdraw = {
-            ws_type: 'market',
+        setTimeout(async () => {
+          let partialObj = {
+            "user_id": props.session.user.user_id,
+            "token_id": selectedToken?.id,
+            "order_type": active1 === 1 ? 'buy' : 'sell',
           }
-          websocket.onopen = () => {
-            websocket.send(JSON.stringify(withdraw));
+
+          const ciphertext = AES.encrypt(JSON.stringify(partialObj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
+          let record = encodeURIComponent(ciphertext.toString());
+
+          let executionReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
+            method: "PUT",
+            headers: {
+              'Content-Type': 'application/json',
+              "Authorization": props?.session?.user?.access_token
+            },
+            body: JSON.stringify(record)
+          }).then(response => response.json());
+
+          if (executionReponse?.data?.message === undefined) {
+            const websocket = new WebSocket('ws://localhost:3001/');
+            let withdraw = {
+              ws_type: 'market',
+            }
+            websocket.onopen = () => {
+              websocket.send(JSON.stringify(withdraw));
+            }
           }
-        }
 
+          reset({
+            limit_usdt: 0.00,
+            token_amount: 0.00,
+          })
+          setTotalAmount(0.0)
+        }, 2000);
 
-        reset({
-          limit_usdt: 0.00,
-          token_amount: 0.00,
-        })
-        setTotalAmount(0.0)
 
       }
       else {

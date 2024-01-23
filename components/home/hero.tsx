@@ -16,7 +16,7 @@ const Hero = () => {
 
                             <div className="hero_body mt-5 md:mt-30 mb-[60px] md:mb-80 ">
                                 <p className="text-banner-text dark:text-d-banner-text mb-[40px] md:mb-50">Join world’s biggest & tursted Exchange.Trade inBitcoin, Ethereum, Ripple and many more currencies.</p>
-                                <Link className="solid-button max-w-full sm:max-w-[244px] w-full inline-block text-center" href="/chart/BTC">Start Trading</Link>
+                                <Link className="solid-button max-w-full sm:max-w-[244px] w-full inline-block text-center" href="/chart/BTCB">Start Trading</Link>
                             </div>
                         
 

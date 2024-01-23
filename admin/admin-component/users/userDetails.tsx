@@ -18,9 +18,7 @@ const UserDetails = (props: Details) => {
   }, [router?.query?.id]);
 
   const getDetailsData = async () => {
-    setIsLoading(true);
-
-    
+    setIsLoading(true);    
     setIsLoading(false);
   };
 

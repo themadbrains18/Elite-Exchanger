@@ -26,6 +26,7 @@ function formatDate(date: Date) {
 const TradeTable = (props: propData) => {
   const [list, setList] = useState([]);
   const [itemOffset, setItemOffset] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
   const { mode } = useContext(Context);
   const [total, setTotal] = useState(0);
   const { data: session } = useSession()
@@ -79,6 +80,7 @@ const TradeTable = (props: propData) => {
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % total;
     setItemOffset(newOffset);
+    setCurrentPage(event.selected);
   };
 
   return (
@@ -254,7 +256,7 @@ const TradeTable = (props: propData) => {
                             {formatDate(item?.createdAt)}
                           </td>
                           <td className="admin-table-data">{item?.market_type}</td>
-                          <td className="admin-table-data">{item?.order_type}</td>
+                          <td className={` ${item?.order_type === 'buy'?'text-buy':'text-sell'}`}>{item?.order_type}</td>
                           <td className="admin-table-data">
                             {item?.token_amount}
                           </td>
@@ -268,7 +270,7 @@ const TradeTable = (props: propData) => {
                                     : "dark:bg-[#F44336] bg-[#F64E60]"
                                   }`}
                               ></div>
-                              <p
+                              {/* <p
                                 className={`text-[13px] font-public-sans font-normal leading-5 ${item?.status === true
                                   ? "dark:text-[#66BB6A] text-[#0BB783]"
                                   : item?.status === false
@@ -277,7 +279,8 @@ const TradeTable = (props: propData) => {
                                   }`}
                               >
                                 {item?.status === true ? 'Success' : 'Pending'}
-                              </p>
+                              </p> */}
+                              <p className={`info-14-18  ${item.status === true ? "text-buy" : item.isCanceled === true ? "text-cancel" : "text-gamma"}`}>{item?.status === false ? item?.isCanceled === true ? 'Canceled' : 'Pending' : 'Success'}</p>
                             </div>
                           </td>
                         </tr>
@@ -315,6 +318,7 @@ const TradeTable = (props: propData) => {
                 pageCount={pageCount}
                 previousLabel="<"
                 renderOnZeroPageCount={null}
+                forcePage={currentPage}
               />
             </div>
           </div>

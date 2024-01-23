@@ -10,7 +10,7 @@ import Context from "@/components/contexts/context";
 import { AES } from "crypto-js";
 
 interface usersList {
-  users:any | [];
+  users: any | [];
   networks: any;
   session: any;
 }
@@ -52,17 +52,17 @@ const AllUsers = (props: usersList) => {
           method: "GET",
           headers: {
             "Authorization": props?.session?.user?.access_token
-        },
+          },
         }
       ).then((response) => response.json());
-  
-  
+
+
       setList(users?.data?.data);
       setTotal(users?.data?.total);
-      
+
     } catch (error) {
-      console.log("error in get token list",error);
-      
+      console.log("error in get token list", error);
+
     }
   };
   const pageCount = Math.ceil(total / itemsPerPage);
@@ -80,7 +80,7 @@ const AllUsers = (props: usersList) => {
     try {
       data.statusType = data.statusType === true ? false : true;
       const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-      let record =  encodeURIComponent(ciphertext.toString());
+      let record = encodeURIComponent(ciphertext.toString());
       let updated = await fetch(
         `/api/user/status`,
         {
@@ -93,10 +93,10 @@ const AllUsers = (props: usersList) => {
         }
       ).then((response) => response.json());
       setList(updated?.data?.result);
-      
+
     } catch (error) {
-      console.log("error in update user status",error);
-      
+      console.log("error in update user status", error);
+
     }
   };
 
@@ -116,8 +116,6 @@ const AllUsers = (props: usersList) => {
     try {
       let address = "";
       Object.keys(wallets?.wallets[0]?.wallets).filter((e) => {
-        // console.log(wallets, "===wallets");
-  
         if (e === network?.walletSupport) {
           address = wallets.wallets[0]?.wallets[e]?.address;
         }
@@ -131,13 +129,10 @@ const AllUsers = (props: usersList) => {
           method: "GET",
         }
       );
-  
       let data = await response.json();
-      // console.log(data);
-      
     } catch (error) {
-      console.log("error in refresh transaction",error);
-      
+      console.log("error in refresh transaction", error);
+
     }
   };
 
@@ -146,9 +141,8 @@ const AllUsers = (props: usersList) => {
       <div className="flex items-center justify-between  mb-[26px]">
         <div className="flex items-center gap-[15px]">
           <button
-            className={`${
-              active === 1 ? "admin-solid-button" : "admin-outline-button"
-            }`}
+            className={`${active === 1 ? "admin-solid-button" : "admin-outline-button"
+              }`}
             onClick={(e) => {
               setActive(1);
               filterData(e);
@@ -157,9 +151,8 @@ const AllUsers = (props: usersList) => {
             All Users
           </button>
           <button
-            className={`${
-              active === 2 ? "admin-solid-button" : "admin-outline-button"
-            }`}
+            className={`${active === 2 ? "admin-solid-button" : "admin-outline-button"
+              }`}
             onClick={(e) => {
               setActive(2);
               filterData(e);
@@ -168,9 +161,8 @@ const AllUsers = (props: usersList) => {
             Active
           </button>
           <button
-            className={`${
-              active === 3 ? "admin-solid-button" : "admin-outline-button"
-            }`}
+            className={`${active === 3 ? "admin-solid-button" : "admin-outline-button"
+              }`}
             onClick={(e) => {
               setActive(3);
               filterData(e);
@@ -280,25 +272,7 @@ const AllUsers = (props: usersList) => {
                   />
                 </div>
               </th>
-              {/* <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading ">
-                      <div className='flex items-center gap-[5px]'>
-                        <p>token</p>
-                        <Image src="/assets/history/uparrow.svg" className='rotate-[180deg] ' width={15} height={15} alt="uparrow" />
-                      </div>
-                    </th> */}
-              <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading flex items-center gap-[5px]">
-                <div className="flex items-center gap-[5px]">
-                  <p>In BTC</p>
-                  <Image
-                    src="/assets/history/uparrow.svg"
-                    className="rotate-[180deg] "
-                    width={15}
-                    height={15}
-                    alt="uparrow"
-                  />
-                </div>
-              </th>
-              {/* <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading">Holdings</th> */}
+              
               <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading">
                 Status
               </th>
@@ -357,34 +331,23 @@ const AllUsers = (props: usersList) => {
                       />
                       <p>{item?.email}</p>
                     </td>
-                    <td className="admin-table-data">
-                      #{item?.id.split("").splice(0, 5)}
-                    </td>
-
-                    <td className="admin-table-data">
-                      {formatDate(item?.createdAt)}
-                    </td>
+                    <td className="admin-table-data">#{item?.id.split("").splice(0, 5)}</td>
+                    <td className="admin-table-data">{formatDate(item?.createdAt)}</td>
                     <td className="admin-table-data">{item?.own_code}</td>
                     <td className="admin-table-data">{item?.refeer_code}</td>
-                    <td className="admin-table-data">$15,300</td>
-                    {/* <td className="admin-table-data">
-                    ${item?.holdings}
-                  </td> */}
                     <td className="admin-table-data">
                       <div className="flex gap-[5px] items-center">
                         <div
-                          className={`w-[7px] h-[7px] mr-[5px] rounded-full ${
-                            item?.statusType === true
-                              ? "dark:bg-[#66BB6A] bg-[#0BB783]"
-                              : "dark:bg-[#F44336] bg-[#F64E60]"
-                          }`}
+                          className={`w-[7px] h-[7px] mr-[5px] rounded-full ${item?.statusType === true
+                            ? "dark:bg-[#66BB6A] bg-[#0BB783]"
+                            : "dark:bg-[#F44336] bg-[#F64E60]"
+                            }`}
                         ></div>
                         <p
-                          className={`text-[13px] font-public-sans font-normal leading-5 ${
-                            item?.statusType === true
-                              ? "dark:text-[#66BB6A] text-[#0BB783]"
-                              : "dark:text-[#F44336] text-[#F64E60]"
-                          }`}
+                          className={`text-[13px] font-public-sans font-normal leading-5 ${item?.statusType === true
+                            ? "dark:text-[#66BB6A] text-[#0BB783]"
+                            : "dark:text-[#F44336] text-[#F64E60]"
+                            }`}
                         >
                           {item?.statusType === true ? "Active" : "Blocked"}
                         </p>
@@ -394,11 +357,10 @@ const AllUsers = (props: usersList) => {
                       <div className="inline-flex items-center gap-10">
                         {/* <button className='admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap	'>On Hold</button> */}
                         <button
-                          className={`admin-outline-button ${
-                            item?.statusType === false
-                              ? "dark:text-[#66BB6A] text-[#0BB783] !border-[#0bb78380] dark:!border-[#66bb6a1f]"
-                              : "!text-[#F44336] !border-[#f443361f]"
-                          }  !px-[10px] !py-[4px] whitespace-nowrap	`}
+                          className={`admin-outline-button ${item?.statusType === false
+                            ? "dark:text-[#66BB6A] text-[#0BB783] !border-[#0bb78380] dark:!border-[#66bb6a1f]"
+                            : "!text-[#F44336] !border-[#f443361f]"
+                            }  !px-[10px] !py-[4px] whitespace-nowrap	`}
                           onClick={() => {
                             updateStatus(item);
                           }}
@@ -439,9 +401,8 @@ const AllUsers = (props: usersList) => {
       </div>
       <div className="flex pt-[25px] items-center justify-end">
         <ReactPaginate
-          className={`history_pagination ${
-            mode === "dark" ? "paginate_dark" : ""
-          }`}
+          className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+            }`}
           breakLabel="..."
           nextLabel=">"
           onPageChange={handlePageClick}
