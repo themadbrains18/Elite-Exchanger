@@ -34,7 +34,7 @@ const Participate = () => {
           {
             participation?.map((item:any,index:number)=>{
               return(
-                <div key={index} className="rounded-[8px] overflow-hidden bg-white">
+                <div key={index} className="rounded-[8px] overflow-hidden bg-bg-secondary dark:bg-white">
                   <div className="py-[19px] px-[23px] bg-primary  w-full whitespace-nowrap">
                     <div className="relative">
                     <p className="text-white text-[20px] tracking-[0.25px] leading-[42px] font-bold ">{item?.price} USDT Bonus</p>
@@ -43,7 +43,7 @@ const Participate = () => {
                     </div>
 
                   </div>
-                  <div className="py-[19px] px-[23px] w-full bg-white">
+                  <div className="py-[19px] px-[23px] w-full ">
                     <p className="text-[14px] tracking-[0.25px]">{item?.desc}</p>
 
                   </div>

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 const Banner = () => {
   const calculateTimeLeft = () => {
-    const difference = +new Date("2024-02-01T00:00:00Z") - +new Date();
+    const difference = +new Date("2024-02-03T00:00:00Z") - +new Date();
     let timeLeft = {};
 
     if (difference > 0) {

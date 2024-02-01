@@ -1,4 +1,5 @@
 import Banner from "@/components/events/banner";
+import Invite from "@/components/events/invite";
 import Participate from "@/components/events/participate";
 import Terms from "@/components/events/terms";
 
@@ -7,6 +8,7 @@ const Events = () => {
     <>
       <Banner />
       <Participate />
+      <Invite />
       <Terms />
     </>
   );
