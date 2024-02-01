@@ -573,3 +573,7 @@ input[name="colored-radio"].contactform:checked + .custom-radio{
 .worldmap__figure-container path {
   fill: #90caf9 !important;
 }
+
+.grid-cards{
+  grid-template-columns: repeat(auto-fill, minmax(283px, 1fr));
+}
