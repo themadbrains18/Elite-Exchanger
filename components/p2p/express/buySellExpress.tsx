@@ -74,7 +74,7 @@ const BuySellExpress = (props: propsData) => {
       method: "GET"
     }).then(response => response.json());
 
-    setUsdtToInr(priceData?.data?.rate);
+    setUsdtToInr(priceData?.data?.rate?.toFixed(8));
   }
 
   /**
@@ -130,7 +130,7 @@ const BuySellExpress = (props: propsData) => {
           method: "GET"
         }).then(response => response.json());
 
-        setUsdtToInr(priceData?.data?.rate);
+        setUsdtToInr(priceData?.data?.rate?.toFixed(8));
 
       }
       else {
@@ -141,7 +141,7 @@ const BuySellExpress = (props: propsData) => {
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
-        currentPrice = token[0]?.price * priceData?.data?.rate;
+        currentPrice = (token[0]?.price * priceData?.data?.rate);
         setUsdtToInr(currentPrice);
       }
     }
@@ -190,7 +190,7 @@ const BuySellExpress = (props: propsData) => {
           method: "GET"
         }).then(response => response.json());
 
-        setUsdtToInr(priceData?.data?.rate);
+        setUsdtToInr(priceData?.data?.rate?.toFixed(8));
 
       }
       else {
@@ -641,7 +641,7 @@ const BuySellExpress = (props: propsData) => {
 
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">
-                    Estimated price: 1 {secondCurrency} = {usdtToInr} INR
+                    Estimated price: 1 {secondCurrency} = {usdtToInr.toFixed(8)} INR
                   </p>
                 </div>
 

@@ -209,7 +209,7 @@ const TransferModal = (props: showPopup) => {
       </p>
       <p className="top-label !text-[16px] mt-[15px]">
         Available{" "}
-        {userAsset !== undefined && userAsset !== null ? userAsset?.balance : 0}{" "}
+        {userAsset !== undefined && userAsset !== null ? userAsset?.balance?.toFixed(8) : 0}{" "}
         {selectedCoin}
       </p>
       <button

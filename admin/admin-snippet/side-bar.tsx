@@ -69,6 +69,11 @@ const  { mode , setMode } = useContext(Context);
         "link":"/sitemaintenance"
     },
     {
+        "title":"Referral Program",
+        "svgType":"adminSettings",
+        "link":"/referralprogram"
+    },
+    {
         "title":"Settings",
         "svgType":"adminSettings",
         "link":"/settings"
