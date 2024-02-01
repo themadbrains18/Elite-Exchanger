@@ -96,7 +96,9 @@ const BuySell = (props: fullWidth) => {
     stopls: openOrderObj,
   });
 
-
+  // ------------------------------
+  // Initial market price
+  // ------------------------------
   let marketPrice =
     props?.currentToken?.token !== null
       ? props?.currentToken?.token?.price
@@ -127,7 +129,7 @@ const BuySell = (props: fullWidth) => {
         setButtonStyle(false);
       }
 
-      setAvailBalance(asset[0].balance);
+      setAvailBalance(asset[0].balance.toFixed(6));
     } else {
       setAvailBalance(0);
       setButtonStyle(true);
@@ -158,7 +160,7 @@ const BuySell = (props: fullWidth) => {
       } else {
         setButtonStyle(false);
       }
-      setAvailBalance(asset[0].balance);
+      setAvailBalance(asset[0].balance?.toFixed(6));
     } else {
       setAvailBalance(0);
       setButtonStyle(true);

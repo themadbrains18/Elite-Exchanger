@@ -5,7 +5,7 @@ import React from 'react'
 const Settings = () => {
   return (
     <DasboardLayout>
-<AdminSettings />
+      <AdminSettings />
     </DasboardLayout>
   )
 }
