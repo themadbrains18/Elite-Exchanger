@@ -172,6 +172,10 @@ img{
     @apply font-normal text-[12px] leading-18  text-gamma;
   }
 
+  .info-14 {
+    @apply font-normal text-[12px] md:text-[14px] leading-[14px] md:leading-17 text-gamma dark:text-beta;
+  }
+
   .info-10-14 {
     @apply font-normal text-[10px] md:text-[14px] leading-[14px] md:leading-17 text-gamma dark:text-beta;
   }

@@ -21,6 +21,9 @@ const schema = yup.object().shape({
     description: yup.string().required("Please enter program short description"),
     amount: yup.number().required("Please enter total amount for program").typeError('Please enter total amount for program'),
     type: yup.string().required("Please enter program name"),
+    deposit : yup.number().required("Please enter amount for deposit by user").typeError('Please enter amount for deposit by user'),
+    trade : yup.number().required("Please enter amount for trade by user").typeError('Please enter amount for trade by user'),
+
 });
 
 const AddInviteProgram = (props: ActiveSession) => {
@@ -44,7 +47,7 @@ const AddInviteProgram = (props: ActiveSession) => {
         resolver: yupResolver(schema),
     });
 
-    let typeList = ['Register', 'Invite']
+    let typeList = ['Bounce', 'coupen','Rewards']
 
     const onHandleSubmit = async (data: any) => {
         try {
@@ -159,6 +162,32 @@ const AddInviteProgram = (props: ActiveSession) => {
                     />
                     {errors?.amount && (
                         <p style={{ color: "#ff0000d1" }}>{errors?.amount?.message}</p>
+                    )}
+                </div>
+                <div className=" relative ">
+                    <p className="sm-text mb-3 mt-3">Deposit Amount</p>
+                    <input
+                        type="number"
+                        {...register("deposit")}
+                        name="deposit"
+                        placeholder="Please enter amount of deposit "
+                        className="sm-text input-cta2 w-full"
+                    />
+                    {errors?.deposit && (
+                        <p style={{ color: "#ff0000d1" }}>{errors?.deposit?.message}</p>
+                    )}
+                </div>
+                <div className=" relative ">
+                    <p className="sm-text mb-3 mt-3">Trade Amount</p>
+                    <input
+                        type="number"
+                        {...register("trade")}
+                        name="trade"
+                        placeholder="Please enter amount of trade"
+                        className="sm-text input-cta2 w-full"
+                    />
+                    {errors?.trade && (
+                        <p style={{ color: "#ff0000d1" }}>{errors?.trade?.message}</p>
                     )}
                 </div>
                 <div className=" relative ">

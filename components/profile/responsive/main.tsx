@@ -15,6 +15,7 @@ interface showTabContent {
   kycInfo?: any;
   referalList?:any;
   activity?:any;
+  eventList?:any;
 }
 const MainResponsivePage = (props: showTabContent) => {
 
@@ -46,7 +47,7 @@ const MainResponsivePage = (props: showTabContent) => {
         <KycDone fixed={true} show={props.show} setShow={props.setShow} session={session} />
       }
 
-      <Referal fixed={true} show={props.show} setShow={props.setShow} session={session} referalList={props.referalList}/>
+      <Referal fixed={true} show={props.show} setShow={props.setShow} session={session} referalList={props.referalList} eventList={props.eventList}/>
 
     </>
   )

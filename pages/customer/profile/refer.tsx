@@ -13,14 +13,15 @@ interface propsData {
     user: any
   },
   referalList : any,
-  userDetail :any
+  userDetail :any,
+  eventList?:any,
 }
 
 const Refer = (props: propsData) => {
   return (
-    <SideBarLayout userDetail={props.userDetail} referalList={props.referalList}>
+    <SideBarLayout userDetail={props.userDetail} referalList={props.referalList} eventList={props.eventList}>
       <ToastContainer />
-      <Referal session={props.session} referalList={props.referalList}/>
+      <Referal session={props.session} referalList={props.referalList} eventList={props.eventList}/>
     </SideBarLayout>
   )
 }
@@ -47,13 +48,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         "Authorization": session?.user?.access_token
       },
     }).then(response => response.json());
+
+    let eventList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/referal/customer`, {
+      method: "GET"
+    }).then(response => response.json());
     
     return {
       props: {
         sessions: session,
         session: session,
         referalList : referalList?.data || [],
-        userDetail: profileDashboard?.data || null
+        userDetail: profileDashboard?.data || null,
+        eventList: eventList?.data?.data || []
       },
     };
   }

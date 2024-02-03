@@ -25,7 +25,7 @@ const schema = yup.object().shape({
   password: yup.string().min(8).max(32).required(),
   confirmPassword: yup.string()
     .oneOf([yup.ref('password')], 'Passwords must match'),
-  refeer_code:yup.string().optional()
+  refeer_code: yup.string().optional()
 });
 
 const validateEmail = (email: string | undefined) => {
@@ -52,6 +52,10 @@ const SignUp = () => {
   const [sendOtpRes, setSendOtpRes] = useState<any>();
 
   const queryParams = searchParams.get('r');
+  const referLink = searchParams.get('e');
+
+  console.log(referLink,'---------------referLink');
+  
 
   let { register, setValue, handleSubmit, watch, setError, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
@@ -64,6 +68,7 @@ const SignUp = () => {
       data.confirmPassword = true;
       data.otp = "string";
       data.step = 1;
+      data.referral_id = referLink;
       setIsEmail(isEmailExist);
 
       const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
@@ -89,8 +94,8 @@ const SignUp = () => {
     }
   }
 
-  if(queryParams){
-    setValue('refeer_code',queryParams); 
+  if (queryParams) {
+    setValue('refeer_code', queryParams);
   }
 
   return (
@@ -149,7 +154,7 @@ const SignUp = () => {
                       />
                     </div>
                     {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword.message}</p>}
-                    <input type="text" {...register('refeer_code')} disabled={queryParams!==null?true:false} placeholder="Referal Code(Optional)" className="input-cta" />
+                    <input type="text" {...register('refeer_code')} disabled={queryParams !== null ? true : false} placeholder="Referal Code(Optional)" className="input-cta" />
                   </div>
                   <div className="flex mt-[30px] gap-5">
                     <input type="checkbox" id="checkbox" className="hidden" />
@@ -208,11 +213,11 @@ const SignUp = () => {
       }
       {
         step === 1 &&
-        <Verification step={step} setStep={setStep} isEmail={isEmail} formData={formData} api='register' setSendOtpRes={setSendOtpRes}/>
+        <Verification step={step} setStep={setStep} isEmail={isEmail} formData={formData} api='register' setSendOtpRes={setSendOtpRes} />
       }
       {
         step === 2 &&
-        <SecurityCode formData={formData} api='register' sendOtpRes={sendOtpRes}/>
+        <SecurityCode formData={formData} api='register' sendOtpRes={sendOtpRes} />
       }
     </>
   );

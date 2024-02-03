@@ -13,7 +13,8 @@ interface profileSec {
     profileInfo?: any;
     kycInfo?: any;
     referalList?: any;
-    activity?: any
+    activity?: any;
+    eventList?:any;
 }
 
 const SideBar = (props: profileSec) => {
@@ -46,7 +47,12 @@ const SideBar = (props: profileSec) => {
             "link": "/profile/kyc"
         },
         {
-            "title": "Refer a Friend",
+            "title": "My Rewards",
+            "svgType": "refer",
+            "link": "/profile/rewards"
+        },
+        {
+            "title": "Referral Program",
             "svgType": "refer",
             "link": "/profile/refer"
         },
@@ -196,7 +202,7 @@ const SideBar = (props: profileSec) => {
             </div>
             {/* responsive tabs for profile pages */}
             <div className='lg:hidden block'>
-                <MainResponsivePage show={show} setShow={setShow} profileInfo1={props.profileInfo} kycInfo={props.kycInfo} referalList={props.referalList} activity={props?.activity} />
+                <MainResponsivePage show={show} setShow={setShow} profileInfo1={props.profileInfo} kycInfo={props.kycInfo} referalList={props.referalList} activity={props?.activity} eventList={props.eventList}/>
             </div>
         </>
     )

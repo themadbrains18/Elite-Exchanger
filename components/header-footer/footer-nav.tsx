@@ -79,7 +79,7 @@ const FooterNav = () => {
             "linkurl":"#"
         },
         {
-            "linktext":"Referral",
+            "linktext":"Referral Program",
             "linkurl":"/refer"
         },
         {

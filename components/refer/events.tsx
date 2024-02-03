@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 import React from "react";
 
 interface propsData {
@@ -6,6 +7,9 @@ interface propsData {
 }
 
 const Events = (props: propsData) => {
+
+  const router = useRouter();
+
   return (
     <section className="py-40 md:py-[100px]">
       <div className="container">
@@ -17,41 +21,24 @@ const Events = (props: propsData) => {
             return <div className="flex bg-[#E5F1FF] rounded-10 pt-[26px] md:pt-[36px] pb-20 md:pb-[31px] pr-[13px] pl-10 md:pl-40 items-center">
               <div className="max-w-[342px]">
                 <p className="mb-[13px] md:mb-[30px] text-sm font-medium leading-5 md:md-heading md:font-semibold">
-                {item.name}
+                  {item.name}
                 </p>
                 <p className="text-primary text-[10px] md:text-[19px] leading-normal md:leading-[23px] font-normal">
-                {item.description}
+                  {item.description}
                 </p>
               </div>
-              <div>
+              <div className="text-center">
                 <Image
                   src="/assets/refer/event1.png"
                   width={401}
                   height={291}
                   alt="event1 image"
                 />
+                <button className="py-[10px] px-[15px] bg-primary rounded-[10px] text-white max-w-full sm:max-w-[144px] w-full inline-block text-center mt-[20px]" onClick={()=>router.push(`/events/${(item.name).replace(/ /g,"-")}`)}>Check Detail</button>
               </div>
             </div>
           })}
 
-          {/* <div className="flex bg-[#FFEBEF] rounded-10  pr-[13px] pl-10 md:pl-40 items-center">
-            <div className="max-w-[306px]">
-              <p className="mb-[13px] md:mb-[30px] text-sm font-medium leading-5 md:md-heading md:font-semibold">
-                Draw 100 USDT in the Fortune Wheel!
-              </p>
-              <p className="text-primary text-[10px] md:text-[19px] leading-normal md:leading-[23px] font-normal">
-                Win 100% guaranteed prizes!
-              </p>
-            </div>
-            <div>
-              <Image
-                src="/assets/refer/event2.png"
-                width={401}
-                height={291}
-                alt="event1 image"
-              />
-            </div>
-          </div> */}
         </div>
       </div>
     </section>
