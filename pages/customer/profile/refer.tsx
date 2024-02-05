@@ -22,6 +22,7 @@ const Refer = (props: propsData) => {
     <SideBarLayout userDetail={props.userDetail} referalList={props.referalList} eventList={props.eventList}>
       <ToastContainer />
       <Referal session={props.session} referalList={props.referalList} eventList={props.eventList}/>
+      
     </SideBarLayout>
   )
 }
