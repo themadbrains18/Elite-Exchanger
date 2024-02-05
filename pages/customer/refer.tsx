@@ -12,7 +12,13 @@ import { authOptions } from '../api/auth/[...nextauth]';
 
 interface propsData {
   eventList?: any;
+  fixed?: boolean;
+  show?: number;
+  setShow?: Function | any;
+  session?: any;
+  referalList?: any,
 }
+
 
 const Refer = (props:propsData) => {
 

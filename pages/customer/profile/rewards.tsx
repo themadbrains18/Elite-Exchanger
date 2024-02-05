@@ -9,16 +9,17 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface propsData {
-    session: {
+    session?: {
         user: any
     },
-    referalList: any,
-    userDetail: any,
+    referalList?: any,
+    userDetail?: any,
     eventList?: any,
     rewardsList?: any;
+    fixed?:any;
 }
 
-const Refer = (props: propsData) => {
+const ReferRewards = (props: propsData) => {
     const [active,setActive] = useState(1);
     // console.log(props.rewardsList,'-------------rewards List');
     return (
@@ -27,25 +28,25 @@ const Refer = (props: propsData) => {
             <div className='p-5 md:p-40'>
                 <h3 className='sec-title'>All Rewards</h3>
                 <div className='flex items-center gap-[40px] mt-[40px]'>
-                    <button onClick={()=>{setActive(1)}} className={`solid-button !px-[20px] !py-[10px] ${active == 1 ? '' : '!bg-[#5367ff42]'}`}>All Status</button>
-                    <button onClick={()=>{setActive(2)}} className={`solid-button !px-[20px] !py-[10px] ${active == 2 ? '' : '!bg-[#5367ff42]'}`}>Available </button>
-                    <button onClick={()=>{setActive(3)}} className={`solid-button !px-[20px] !py-[10px] ${active == 3 ? '' : '!bg-[#5367ff42]'} `}>Used</button>
-                    <button onClick={()=>{setActive(4)}} className={`solid-button !px-[20px] !py-[10px] ${active == 4 ? '' : '!bg-[#5367ff42]'}`}>Expired</button>
+                    <button type='button' onClick={()=>{setActive(1)}} className={`solid-button !px-[20px] !py-[10px] ${active == 1 ? '' : '!bg-[#5367ff42]'}`}>All Status</button>
+                    <button type='button' onClick={()=>{setActive(2)}} className={`solid-button !px-[20px] !py-[10px] ${active == 2 ? '' : '!bg-[#5367ff42]'}`}>Available </button>
+                    <button type='button' onClick={()=>{setActive(3)}} className={`solid-button !px-[20px] !py-[10px] ${active == 3 ? '' : '!bg-[#5367ff42]'} `}>Used</button>
+                    <button type='button' onClick={()=>{setActive(4)}} className={`solid-button !px-[20px] !py-[10px] ${active == 4 ? '' : '!bg-[#5367ff42]'}`}>Expired</button>
                 </div>
-                <div className='grid grid-cols-2 mt-[40px]'>
+                <div className='grid max-[1250px]:grid-cols-1 grid-cols-2 mt-[40px]'>
                     <div className='rounded-[10px] bg-white'>
-                        <div className='pl-[24px] py-[30px] pr-[0] rounded-[10px] bg-primary-400 relative z-[1]'>
+                        <div className='pl-[24px] py-[30px] pr-[0] rounded-[10px] bg-primary-400 relative z-[1] group relative after:w-[20px] after:h-[20px] after:absolute after:top-[calc(50%-10px)] after:left-[-10px] overflow-hidden after:bg-[#fff] after:dark:bg-d-bg-primary after:rounded-full before:w-[20px] before:h-[20px] before:absolute before:top-[calc(50%-10px)] before:right-[-10px] overflow-hidden before:bg-[#fff] before:dark:bg-d-bg-primary before:rounded-full'>
                             <div className='flex items-center justify-between gap-[15px]'>
                                 <div>
                                     <div className='flex items-center gap-[15px]'>
                                         <h3 className='sec-title !text-white'>20 USDT</h3>
-                                        <button className='text-white underline'>Details</button>
+                                        <a href='/profile/reward-detail' target='_blank' className='text-white underline opacity-0 group-hover:opacity-[1]'>Details</a>
                                     </div>
                                     <p className='sm-text !text-white mt-[8px]'>Coupon · Derivatives</p>
                                 </div>
                                 <div>
                                     <svg
-                                        className='opacity-[0.3]'
+                                        className='opacity-[0.3] mr-[24px]'
                                         width={97}
                                         height={74}
                                         viewBox="0 0 97 74"
@@ -66,7 +67,7 @@ const Refer = (props: propsData) => {
                                     <div className='bg-[#3844520f] h-[8px] w-full max-w-[100px] rounded-[8px]'></div>
                                     <p className='sm-text '>Use before 2024-02-10</p>
                                 </div>
-                                <button className='solid-button !px-[20px] !py-[10px]'>Use</button>
+                                <button type='button' className='solid-button !px-[20px] !py-[10px]'>Use</button>
                             </div>
                         </div>
                     </div>
@@ -76,7 +77,7 @@ const Refer = (props: propsData) => {
     )
 }
 
-export default Refer
+export default ReferRewards
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const { req } = context;
