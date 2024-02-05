@@ -12,6 +12,8 @@ const EventTaskPopup = (props: activeSection) => {
     const { status, data: session } = useSession();
     const [depositAmount, setDepositAmount] = useState(0);
     const [tradeAmount, setTradeAmount] = useState(0);
+    const [depositEnable, setDepositEnable] = useState(false);
+    const [depsoitTradeEnable, setDepsoitTradeEnable] = useState(false);
 
     interface rewardBody {
         user_id: string,
@@ -38,10 +40,16 @@ const EventTaskPopup = (props: activeSection) => {
             }
         })
 
+        if (props?.referProgamTask?.refer_program_invite !== null) {
+            let eventDeposit = props?.referProgamTask?.refer_program_invite?.deposit;
+            let eventTrade = props?.referProgamTask?.refer_program_invite?.trade;
+            if (depositAmount >= eventDeposit && tradeAmount >= eventTrade) {
+
+            }
+        }
+
         setDepositAmount(userDepositAmount)
         setTradeAmount(userTradeAmount)
-
-
 
     }, [props.referProgamTask]);
 
@@ -62,7 +70,7 @@ const EventTaskPopup = (props: activeSection) => {
                         user_id: session?.user.user_id,
                         type: props?.referProgamTask?.refer_program_invite?.type,
                         amount: props?.referProgamTask?.refer_program_invite.amount - 10,
-                        description: 'Refer Event Task Bonus'
+                        description: `Refer Event Deposit Trade Task ${props?.referProgamTask?.refer_program_invite?.type}`
                     }
                 }
                 else if (depositAmount >= eventDeposit) {
@@ -70,7 +78,7 @@ const EventTaskPopup = (props: activeSection) => {
                         user_id: session?.user.user_id,
                         type: props?.referProgamTask?.refer_program_invite?.type,
                         amount: 10,
-                        description: 'Refer Event Task Bonus'
+                        description: `Refer Event Deposit Trade Task ${props?.referProgamTask?.refer_program_invite?.type}`
                     }
                 }
 
@@ -78,7 +86,7 @@ const EventTaskPopup = (props: activeSection) => {
             }
         } catch (error) {
             console.log(error);
-            
+
         }
     }
 
