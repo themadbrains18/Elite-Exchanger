@@ -5,6 +5,7 @@ import { useSession } from 'next-auth/react';
 interface activeSection {
     setTaskShow: Function;
     referProgamTask?: any;
+    rewardsList?: any;
 }
 
 const EventTaskPopup = (props: activeSection) => {
@@ -15,11 +16,19 @@ const EventTaskPopup = (props: activeSection) => {
     const [depositEnable, setDepositEnable] = useState(false);
     const [depsoitTradeEnable, setDepsoitTradeEnable] = useState(false);
 
+    const [userRewards, setUserRewards] = useState(props.rewardsList);
+
+    const [depositPercentage, setDepositPercentage] = useState(0);
+    const [tradePercentage, setTradePercentage] = useState(0);
+
     interface rewardBody {
         user_id: string,
         type: string,
         amount: number,
-        description: string
+        description: string,
+        event_id: string,
+        event_type: string,
+        refer_user: string
     }
 
     useEffect(() => {
@@ -27,6 +36,7 @@ const EventTaskPopup = (props: activeSection) => {
         let userDepositAmount = 0;
         let userTradeAmount = 0;
 
+        // Get total deposit by user
         props.referProgamTask?.User?.user_deposits.filter((item: any) => {
             let totken = item?.coinName.split('/')[1];
             if (totken === 'USDT') {
@@ -34,71 +44,147 @@ const EventTaskPopup = (props: activeSection) => {
             }
         })
 
+        // Get total trade by user
         props.referProgamTask?.User?.marketOrders.filter((item: any) => {
             if (item.status === true || item.status === 1) {
                 userTradeAmount = userTradeAmount + item?.volume_usdt;
             }
         })
 
-        if (props?.referProgamTask?.refer_program_invite !== null) {
-            let eventDeposit = props?.referProgamTask?.refer_program_invite?.deposit;
-            let eventTrade = props?.referProgamTask?.refer_program_invite?.trade;
-            if (depositAmount >= eventDeposit && tradeAmount >= eventTrade) {
+        // Event program required deposit amount
+        let eventDeposit = props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100;
+        
+        // Event program required trade amount
+        let eventTrade = props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.trade : 100;
 
-            }
-        }
+        let depsoitPer = (userDepositAmount / eventDeposit) * 100;
+        let tradePer = (userTradeAmount / eventTrade) * 100;
 
         setDepositAmount(userDepositAmount)
         setTradeAmount(userTradeAmount)
+        setDepositPercentage(depsoitPer);
+        setTradePercentage(tradePer);
 
-    }, [props.referProgamTask]);
+        // if both depsoit and trade task complete by user and activate there claim
+        if (userDepositAmount >= eventDeposit && userTradeAmount >= eventTrade) {
+            let existRewards;
+            if (props?.referProgamTask?.refer_program_invite !== null) {
+                existRewards = userRewards.filter((item: any) => {
+                    return item.event_type === "trade" && item.event_id === props?.referProgamTask?.refer_program_invite?.id && item?.refer_user === props?.referProgamTask?.User?.id
+                })
+            }
+            else {
+                existRewards = userRewards.filter((item: any) => {
+                    return item.event_type === "trade" && item.event_id === "" && item?.refer_user === props?.referProgamTask?.User?.id
+                })
+            }
+
+            if (existRewards.length === 0) {
+                setDepsoitTradeEnable(true);
+            }
+            else {
+                setDepsoitTradeEnable(false);
+            }
+        }
+
+        // if depsoit task complete by user and activate there claim
+        else if (userDepositAmount >= eventDeposit) {
+
+            let existRewards;
+            if (props?.referProgamTask?.refer_program_invite !== null) {
+                existRewards = userRewards.filter((item: any) => {
+                    return item.event_type === "deposit" && item.event_id === props?.referProgamTask?.refer_program_invite?.id && item?.refer_user === props?.referProgamTask?.User?.id
+                })
+            }
+            else {
+                existRewards = userRewards.filter((item: any) => {
+                    return item.event_type === "deposit" && item.event_id === "" && item?.refer_user === props?.referProgamTask?.User?.id
+                })
+            }
+
+            if (existRewards.length === 0) {
+                setDepositEnable(true);
+            }
+            else {
+                setDepositEnable(false);
+            }
+        }
+
+    }, [props.referProgamTask, userRewards]);
 
     const handleRewardsRequest = () => {
         try {
-            if (props?.referProgamTask?.refer_program_invite !== null) {
-                let welcomeObj = {
-                    user_id: "",
-                    type: "",
-                    amount: 0,
-                    description: ""
-                };
+            let welcomeObj = {
+                user_id: "",
+                type: "",
+                amount: 0,
+                description: "",
+                event_id: "",
+                event_type: "",
+                refer_user: ""
+            };
 
-                let eventDeposit = props?.referProgamTask?.refer_program_invite?.deposit;
-                let eventTrade = props?.referProgamTask?.refer_program_invite?.trade;
-                if (depositAmount >= eventDeposit && tradeAmount >= eventTrade) {
-                    welcomeObj = {
-                        user_id: session?.user.user_id,
-                        type: props?.referProgamTask?.refer_program_invite?.type,
-                        amount: props?.referProgamTask?.refer_program_invite.amount - 10,
-                        description: `Refer Event Deposit Trade Task ${props?.referProgamTask?.refer_program_invite?.type}`
-                    }
-                }
-                else if (depositAmount >= eventDeposit) {
-                    welcomeObj = {
-                        user_id: session?.user.user_id,
-                        type: props?.referProgamTask?.refer_program_invite?.type,
-                        amount: 10,
-                        description: `Refer Event Deposit Trade Task ${props?.referProgamTask?.refer_program_invite?.type}`
-                    }
-                }
+            let eventDeposit = props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100;
+            let eventTrade = props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.trade : 500;
 
-                createUserRewards(welcomeObj);
+            // create rewards request body if both depsoit and trade task complete by user 
+            if (depositAmount >= eventDeposit && tradeAmount >= eventTrade) {
+                welcomeObj = {
+                    user_id: session?.user.user_id,
+                    type: props?.referProgamTask?.refer_program_invite?.type,
+                    amount: props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite.amount - 10 : 20,
+                    description: `Refer Event Deposit Trade Task ${props?.referProgamTask?.refer_program_invite?.type}`,
+                    event_id: props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.id : '',
+                    event_type: "trade",
+                    refer_user: props?.referProgamTask?.User?.id
+                }
             }
+
+            // create rewards request body if depsoit task complete by user
+            else if (depositAmount >= eventDeposit) {
+                welcomeObj = {
+                    user_id: session?.user.user_id,
+                    type: props?.referProgamTask?.refer_program_invite?.type,
+                    amount: 10,
+                    description: `Refer Event Deposit Trade Task ${props?.referProgamTask?.refer_program_invite?.type}`,
+                    event_id: props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.id : '',
+                    event_type: "deposit",
+                    refer_user: props?.referProgamTask?.User?.id
+                }
+            }
+
+            createUserRewards(welcomeObj);
         } catch (error) {
             console.log(error);
 
         }
     }
 
+    // create post request to save records
     const createUserRewards = async (body: rewardBody) => {
-        let rewardsList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/rewards`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                "Authorization": session?.user?.access_token
-            },
-            body: JSON.stringify(body)
-        }).then(response => response.json());
+        try {
+            let rewardsResponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/rewards`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": session?.user?.access_token
+                },
+                body: JSON.stringify(body)
+            }).then(response => response.json());
+
+            if (rewardsResponse.data.status === 200) {
+                let rewardsList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/rewards?userid=${session?.user?.user_id}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": session?.user?.access_token
+                    },
+                }).then(response => response.json());
+
+                setUserRewards(rewardsList?.data);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     return (
@@ -161,12 +247,14 @@ const EventTaskPopup = (props: activeSection) => {
                 <div className="max-w-[70%] w-full bg-white px-[24px] py-[16px]  rounded-[8px] min-h-[126px] relative flex items-center mr-[-16px]">
                     <div className='w-full'>
                         <div className='flex items-center justify-between gap-[15px]'>
-
                             <h4 className="sm-heading">Deposit ≥ {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100} USDT</h4>
-                            <button className='text-primary underline'>Claim Now</button>
+                            {depositEnable &&
+                                <button className='text-primary underline' onClick={() => handleRewardsRequest()}>Claim Now</button>
+                            }
                         </div>
                         <div className="bg-[#f5f7fa] rounded-[8px] h-[8px] w-full mt-[20px] relative">
-                            <div className='bg-primary absolute top-0 left-0 w-[60%] h-full  rounded-[8px]'></div>
+
+                            <div style={{ width: depositPercentage.toFixed(2) + '%' }} className={`bg-primary absolute top-0 left-0 h-full  rounded-[8px]`}></div>
                         </div>
                         <p className="info-14 mt-[8px]">{depositAmount} / {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100} USDT</p>
                     </div>
@@ -198,15 +286,15 @@ const EventTaskPopup = (props: activeSection) => {
                 </div>
                 <div className="max-w-[70%] w-full bg-white px-[24px] py-[16px]  rounded-[8px] min-h-[126px] relative flex items-center mr-[-16px] after:absolute after:top-[50%] after:left-[50%]  after:translate-x-[-50%] after:translate-y-[-50%] after:w-[2px] after:h-full after:bg-[#f5f7fa]">
                     <div className='flex flex-col w-full'>
-                        <button className='text-primary underline text-end mb-[20px]'>Claim Now</button>
+                        {depsoitTradeEnable &&
+                            <button className='text-primary underline text-end mb-[20px]'>Claim Now</button>
+                        }
                         <div className="grid grid-cols-[1fr_auto_1fr] gap-[24px] w-full relative  items-end">
                             <div>
-                                
-                                    <h4 className="sm-heading">Deposit ≥ {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100} USDT</h4>
-                                    
-                            
+
+                                <h4 className="sm-heading">Deposit ≥ {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100} USDT</h4>
                                 <div className="bg-[#f5f7fa] rounded-[8px] h-[8px] w-full mt-[20px] relative">
-                                    <div className='bg-primary absolute top-0 left-0 w-[67%] h-full  rounded-[8px]'></div>
+                                    <div style={{ width: depositPercentage.toFixed(2) + '%' }} className={`bg-primary absolute top-0 left-0  h-full  rounded-[8px]`}></div>
                                 </div>
                                 <p className="info-14 mt-[8px]">{depositAmount} / {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100} USDT</p>
                             </div>
@@ -218,7 +306,7 @@ const EventTaskPopup = (props: activeSection) => {
                             <div>
                                 <h4 className="sm-heading">Trade ≥ {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.trade : 500} USDT</h4>
                                 <div className="bg-[#f5f7fa] rounded-[8px] h-[8px] w-full mt-[20px] relative">
-                                    <div className='bg-primary absolute top-0 left-0 w-[48%] h-full  rounded-[8px]'></div>
+                                    <div style={{ width: tradePercentage.toFixed(2) + '%' }} className={`bg-primary absolute top-0 left-0 h-full  rounded-[8px]`}></div>
                                 </div>
                                 <p className="info-14 mt-[8px]">{tradeAmount} / {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.trade : 500} USDT</p>
                             </div>

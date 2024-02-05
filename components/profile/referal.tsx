@@ -14,6 +14,7 @@ interface fixSection {
   session?: any;
   referalList?: any,
   eventList?: any,
+  rewardsList?: any;
 }
 
 const Referal = (props: fixSection) => {
@@ -362,11 +363,12 @@ const Referal = (props: fixSection) => {
 
 
           </div>
+
         </div>
       </section>
 
       {taskShow &&
-        <EventTaskPopup setTaskShow={setTaskShow} referProgamTask={referProgamTask} />
+        <EventTaskPopup setTaskShow={setTaskShow} referProgamTask={referProgamTask} rewardsList={props.rewardsList} />
       }
 
       {

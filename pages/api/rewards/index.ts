@@ -31,8 +31,6 @@ router
 
             let token = req.headers.authorization;
 
-            console.log(req.body,'------------req body');
-            
             // const decodedStr = decodeURIComponent(req.body);
             // let formData = AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
 
