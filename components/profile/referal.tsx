@@ -42,7 +42,7 @@ const Referal = (props: fixSection) => {
   return (
     <>
       <div
-        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show || taskShow? "opacity-80 visible" : "opacity-0 invisible"
+        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show || taskShow ? "opacity-80 visible" : "opacity-0 invisible"
           }`}
       ></div>
       <section
