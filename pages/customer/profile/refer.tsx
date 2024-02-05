@@ -12,17 +12,18 @@ interface propsData {
   session: {
     user: any
   },
-  referalList : any,
-  userDetail :any,
-  eventList?:any,
+  referalList: any,
+  userDetail: any,
+  eventList?: any,
+  rewardsList?: any;
 }
 
 const Refer = (props: propsData) => {
   return (
     <SideBarLayout userDetail={props.userDetail} referalList={props.referalList} eventList={props.eventList}>
       <ToastContainer />
-      <Referal session={props.session} referalList={props.referalList} eventList={props.eventList}/>
-      
+      <Referal session={props.session} referalList={props.referalList} eventList={props.eventList} rewardsList={props.rewardsList} />
+
     </SideBarLayout>
   )
 }
@@ -35,7 +36,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const providers = await getProviders()
 
   if (session) {
-    
+
     let referalList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/referal?userid=${session?.user?.user_id}`, {
       method: "GET",
       headers: {
@@ -53,14 +54,22 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     let eventList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/referal/customer`, {
       method: "GET"
     }).then(response => response.json());
-    
+
+    let rewardsList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/rewards?userid=${session?.user?.user_id}`, {
+      method: "GET",
+      headers: {
+        "Authorization": session?.user?.access_token
+      },
+    }).then(response => response.json());
+
     return {
       props: {
         sessions: session,
         session: session,
-        referalList : referalList?.data || [],
+        referalList: referalList?.data || [],
         userDetail: profileDashboard?.data || null,
-        eventList: eventList?.data?.data || []
+        eventList: eventList?.data?.data || [],
+        rewardsList: rewardsList?.data || []
       },
     };
   }
