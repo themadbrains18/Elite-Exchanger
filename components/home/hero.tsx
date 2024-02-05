@@ -7,7 +7,7 @@ const Hero = () => {
         <div className="pb-[0] pt-[20px]   w-full">
             <div className="dark:bg-d-bg-primary bg-bg-primary rounded-20 xl:px-[114px] py-[20px] lg:py-[32px] ">
                 <div className="container ">
-                    <div className="heroGrid grid lg:grid-cols-2  gap-4 " >
+                    <div className="heroGrid grid lg:grid-cols-2  gap-4 ">
                         <div className="hero_left self-center max-w-[760px] w-full lg:order-1 order-2">
                             <div className="hero_Header ">
                                 <h2 className="xxl-heading text-banner-heading dark:text-d-banner-heading">Buy & Sell</h2>
