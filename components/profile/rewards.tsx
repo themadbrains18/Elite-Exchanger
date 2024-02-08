@@ -50,8 +50,29 @@ const Rewards = (props: fixSection) => {
             }
         } catch (error) {
             console.log(error);
-
         }
+    }
+
+    const filterRewards = async (id: number) => {
+        let rewards = await props?.rewardsList.filter((item: any) => {
+            if (id === 1) {
+                return item
+            }
+            else if (id === 2 && (item.claim === true || item?.claim === 1)) {
+                const difference = +new Date(item.expired_on) - +new Date();
+                if (difference > 0) {
+                    return item
+                }
+            }
+            else if (id === 4 && (item.claim === true || item?.claim === 1)) {
+                const difference = +new Date(item.expired_on) - +new Date();
+                if (difference < 0) {
+                    return item
+                }
+            }
+        })
+
+        setList(rewards);
     }
 
     return (
@@ -59,20 +80,20 @@ const Rewards = (props: fixSection) => {
             <div className='p-5 md:p-40'>
                 <h3 className='sec-title'>All Rewards</h3>
                 <div className='flex items-center gap-[40px] mt-[40px]'>
-                    <button type='button' onClick={() => { setActive(1) }} className={`solid-button !px-[20px] !py-[10px] ${active == 1 ? '' : '!bg-[#5367ff42]'}`}>All Status</button>
-                    <button type='button' onClick={() => { setActive(2) }} className={`solid-button !px-[20px] !py-[10px] ${active == 2 ? '' : '!bg-[#5367ff42]'}`}>Available </button>
-                    <button type='button' onClick={() => { setActive(3) }} className={`solid-button !px-[20px] !py-[10px] ${active == 3 ? '' : '!bg-[#5367ff42]'} `}>Used</button>
-                    <button type='button' onClick={() => { setActive(4) }} className={`solid-button !px-[20px] !py-[10px] ${active == 4 ? '' : '!bg-[#5367ff42]'}`}>Expired</button>
+                    <button type='button' onClick={() => { setActive(1); filterRewards(1) }} className={`solid-button !px-[20px] !py-[10px] ${active == 1 ? '' : '!bg-[#5367ff42]'}`}>All Status</button>
+                    <button type='button' onClick={() => { setActive(2); filterRewards(2) }} className={`solid-button !px-[20px] !py-[10px] ${active == 2 ? '' : '!bg-[#5367ff42]'}`}>Available </button>
+                    {/* <button type='button' onClick={() => { setActive(3); filterRewards(3) }} className={`solid-button !px-[20px] !py-[10px] ${active == 3 ? '' : '!bg-[#5367ff42]'} `}>Used</button> */}
+                    <button type='button' onClick={() => { setActive(4); filterRewards(4) }} className={`solid-button !px-[20px] !py-[10px] ${active == 4 ? '' : '!bg-[#5367ff42]'}`}>Expired</button>
                 </div>
                 <div className='grid max-[1250px]:grid-cols-1 grid-cols-2 gap-[10px] mt-[40px]'>
-                    {list && list.map((item: any) => {
+                    {list && list.map((item: any, index : number) => {
                         if (item.claimed_on !== null) {
                             // ----------------------------------
                             // check if coupon expired or not
                             // ----------------------------------
                             const difference = +new Date(item.expired_on) - +new Date();
 
-                            return <div className='rounded-[10px] bg-white'>
+                            return <div key={index} className='rounded-[10px] bg-white'>
                                 <div className='pl-[24px] py-[30px] pr-[0] rounded-[10px] bg-primary-400 relative z-[1] group relative after:w-[20px] after:h-[20px] after:absolute after:top-[calc(50%-10px)] after:left-[-10px] overflow-hidden after:bg-[#fff] after:dark:bg-d-bg-primary after:rounded-full before:w-[20px] before:h-[20px] before:absolute before:top-[calc(50%-10px)] before:right-[-10px] overflow-hidden before:bg-[#fff] before:dark:bg-d-bg-primary before:rounded-full'>
                                     <div className='flex items-center justify-between gap-[15px]'>
                                         <div>
@@ -106,21 +127,19 @@ const Rewards = (props: fixSection) => {
                                             <p className='sm-text '>Use before {moment(item?.expired_on).format("YYYY-MM-DD")}</p>
 
                                         </div>
-                                        <button type='button' className='solid-button !px-[20px] !py-[10px]' onClick={() => difference > 0 ? router.push({ pathname: '/future/BTCUSDT' }) : ""}>{difference > 0 ? 'Use' : 'Expired'}</button>
+                                        <button type='button' disabled={difference < 0 ? true : false} className={`solid-button !px-[20px] !py-[10px] ${difference > 0 ? '' : 'cursor-not-allowed opacity-25'}`} onClick={() => difference > 0 ? router.push({ pathname: '/future/BTCUSDT' }) : ""}>{difference > 0 ? 'Use' : 'Expired'}</button>
                                     </div>
                                 </div>
                             </div>
                         }
                         else {
-                            return <div className='rounded-[10px] bg-white'>
+                            return <div key={index} className='rounded-[10px] bg-white'>
                                 <div className='pl-[24px] py-[30px] pr-[0] rounded-[10px] bg-primary-400 relative z-[1] group relative after:w-[20px] after:h-[20px] after:absolute after:top-[calc(50%-10px)] after:left-[-10px] overflow-hidden after:bg-[#fff] after:dark:bg-d-bg-primary after:rounded-full before:w-[20px] before:h-[20px] before:absolute before:top-[calc(50%-10px)] before:right-[-10px] overflow-hidden before:bg-[#fff] before:dark:bg-d-bg-primary before:rounded-full'>
                                     <div className='flex items-center justify-between gap-[15px]'>
                                         <div>
                                             <div className='flex items-center gap-[15px]'>
                                                 <h3 className='sec-title !text-white'>{item?.amount} USDT</h3>
-                                                {/* {item.claimed_on !== null &&
-                                                    <a href={`/profile/reward-detail?id=${item?.id}`} target='_blank' className='text-white underline opacity-0 group-hover:opacity-[1]'>Details</a>
-                                                } */}
+
                                             </div>
                                             <p className='sm-text !text-white mt-[8px]'>{item?.type} · Derivatives</p>
                                         </div>
@@ -145,9 +164,6 @@ const Rewards = (props: fixSection) => {
                                     <div className='flex items-center mt-[24px] gap-[20px] justify-between'>
                                         <div>
                                             <div className='bg-[#3844520f] h-[8px] w-full max-w-[100px] rounded-[8px]'></div>
-                                            {/* {item.expired_on !== null &&
-                                                <p className='sm-text '>Use before {moment(item?.expired_on).format("YYYY-MM-DD")}</p>
-                                            } */}
 
                                         </div>
                                         <button type='button' className='solid-button !px-[20px] !py-[10px]' onClick={() => updateClaimData(item)}>{'Claim Now'}</button>

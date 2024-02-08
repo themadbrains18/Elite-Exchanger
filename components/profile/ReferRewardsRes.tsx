@@ -56,6 +56,28 @@ const ReferRewardsRes = (props: fixSection) => {
 
     }
   }
+
+  const filterRewards = async (id: number) => {
+    let rewards = await props?.rewardsList.filter((item: any) => {
+        if (id === 1) {
+            return item
+        }
+        else if (id === 2 && (item.claim === true || item?.claim === 1)) {
+            const difference = +new Date(item.expired_on) - +new Date();
+            if (difference > 0) {
+                return item
+            }
+        }
+        else if (id === 4 && (item.claim === true || item?.claim === 1)) {
+            const difference = +new Date(item.expired_on) - +new Date();
+            if (difference < 0) {
+                return item
+            }
+        }
+    })
+
+    setList(rewards);
+}
   return (
     <div className={` ${props.show == 5 && "!left-[50%]"} ${props.fixed
       ? " duration-300 p-5 md:p-40 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary "
@@ -83,10 +105,10 @@ const ReferRewardsRes = (props: fixSection) => {
       <div className='p-5 md:p-40 dark:bg-omega bg-white rounded-[10px]'>
         <h3 className='sec-title'>All Rewards</h3>
         <div className='flex items-center gap-[20px] mt-[40px]'>
-          <button type='button' onClick={() => { setActive(1) }} className={`solid-button !px-[20px] !py-[10px] ${active == 1 ? '' : '!bg-[#5367ff42]'}`}>All Status</button>
-          <button type='button' onClick={() => { setActive(2) }} className={`solid-button !px-[20px] !py-[10px] ${active == 2 ? '' : '!bg-[#5367ff42]'}`}>Available </button>
-          <button type='button' onClick={() => { setActive(3) }} className={`solid-button !px-[20px] !py-[10px] ${active == 3 ? '' : '!bg-[#5367ff42]'} `}>Used</button>
-          <button type='button' onClick={() => { setActive(4) }} className={`solid-button !px-[20px] !py-[10px] ${active == 4 ? '' : '!bg-[#5367ff42]'}`}>Expired</button>
+          <button type='button' onClick={() => { setActive(1);filterRewards(1) }} className={`solid-button !px-[20px] !py-[10px] ${active == 1 ? '' : '!bg-[#5367ff42]'}`}>All Status</button>
+          <button type='button' onClick={() => { setActive(2);filterRewards(2) }} className={`solid-button !px-[20px] !py-[10px] ${active == 2 ? '' : '!bg-[#5367ff42]'}`}>Available </button>
+          {/* <button type='button' onClick={() => { setActive(3) }} className={`solid-button !px-[20px] !py-[10px] ${active == 3 ? '' : '!bg-[#5367ff42]'} `}>Used</button> */}
+          <button type='button' onClick={() => { setActive(4);filterRewards(4) }} className={`solid-button !px-[20px] !py-[10px] ${active == 4 ? '' : '!bg-[#5367ff42]'}`}>Expired</button>
         </div>
         <div className='grid max-[1250px]:grid-cols-1 grid-cols-2 gap-[10px] mt-[40px]'>
           {list && list.map((item: any) => {
@@ -130,7 +152,7 @@ const ReferRewardsRes = (props: fixSection) => {
                       <p className='sm-text '>Use before {moment(item?.expired_on).format("YYYY-MM-DD")}</p>
 
                     </div>
-                    <button type='button' className='solid-button !px-[20px] !py-[10px]' onClick={() => difference > 0 ? router.push({ pathname: '/future/BTCUSDT' }) : ""}>{difference > 0 ? 'Use' : 'Expired'}</button>
+                    <button type='button' disabled={difference < 0 ? true : false} className={`solid-button !px-[20px] !py-[10px] ${difference > 0 ? '' : 'cursor-not-allowed opacity-25'}`} onClick={() => difference > 0 ? router.push({ pathname: '/future/BTCUSDT' }) : ""}>{difference > 0 ? 'Use' : 'Expired'}</button>
                   </div>
                 </div>
               </div>
