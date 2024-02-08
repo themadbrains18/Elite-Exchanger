@@ -47,7 +47,7 @@ const Referal = (props: fixSection) => {
           }`}
       ></div>
       <section
-        className={`${props.show == 5 && "!left-[50%]"} ${props.fixed &&
+        className={`${props.show == 6 && "!left-[50%]"} ${props.fixed &&
           "duration-300 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary overflow-y-scroll"
           } p-5 lg:p-40 `}
       >
@@ -74,7 +74,7 @@ const Referal = (props: fixSection) => {
 
           {/* Popular Referral program */}
           <div className=" border-b border-[transparent] lg:border-grey-v-2 lg:dark:border-[#e9eaf026]">
-            <p className="sec-title mb-20 lg:mb-0  border-b-[0.5px] lg:border-none border-grey-v-2  dark:border-[#e9eaf026]   pb-[15px] lg:pb-[30px]">
+            <p className="sec-title pt-[20px] pl-[20px] mb-20 lg:mb-0  border-b-[0.5px] lg:border-none border-grey-v-2  dark:border-[#e9eaf026]   pb-[15px] lg:pb-[30px]">
               Popular Program Event
             </p>
 
