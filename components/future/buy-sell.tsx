@@ -30,6 +30,8 @@ interface fullWidth {
   refreshWalletAssets?: any;
   positions?: any;
   openOrders?: any;
+  rewardsList?: any;
+  totalPoint?: any;
 }
 
 const BuySell = (props: fullWidth) => {
@@ -67,6 +69,7 @@ const BuySell = (props: fullWidth) => {
   const [prefernce, setPreference] = useState(false);
   const [prefernceSymbol, setPreferenceSymbol] = useState('Qty')
   const [positionMode, setPositionMode] = useState('oneWay');
+  const [assetsBalance, setAssetsBalance] = useState(0);
 
   const [shortConfirm, setShortConfirm] = useState(false);
   const [active, setActive] = useState(false);
@@ -121,6 +124,22 @@ const BuySell = (props: fullWidth) => {
       }
     });
 
+    // ---------------------------------------
+    // Rewards points add to derivative
+    // ---------------------------------------
+    let rewardsAmount = 0;
+    if (symbol === "USDT") {
+      rewardsAmount = props?.totalPoint;
+      // props?.rewardsList?.map((item: any) => {
+      //   if (item.claimed_on !== null) {
+      //     const difference = +new Date(item.expired_on) - +new Date();
+      //     if (difference > 0) {
+      //       rewardsAmount = rewardsAmount + item?.amount;
+      //     }
+      //   }
+
+      // });
+    }
 
     if (asset?.length > 0) {
       if (asset[0].balance === 0) {
@@ -129,10 +148,13 @@ const BuySell = (props: fullWidth) => {
         setButtonStyle(false);
       }
 
-      setAvailBalance(asset[0].balance.toFixed(6));
+      let bal = Number(asset[0].balance) + rewardsAmount;
+      setAssetsBalance(Number(asset[0].balance));
+      setAvailBalance(bal);
     } else {
-      setAvailBalance(0);
+      setAvailBalance(rewardsAmount);
       setButtonStyle(true);
+      setAssetsBalance(0);
     }
   }, [props?.currentToken?.coin_symbol, props.assets]);
 
@@ -154,16 +176,36 @@ const BuySell = (props: fullWidth) => {
       return tokenSymbol === token;
     });
 
+    // ---------------------------------------
+    // Rewards points add to derivative
+    // ---------------------------------------
+    let rewardsAmount = 0;
+    if (token === "USDT") {
+      rewardsAmount = props?.totalPoint;
+      // props?.rewardsList?.map((item: any) => {
+      //   if (item.claimed_on !== null) {
+      //     const difference = +new Date(item.expired_on) - +new Date();
+      //     if (difference > 0) {
+      //       rewardsAmount = rewardsAmount + item?.amount;
+      //     }
+      //   }
+
+      // });
+    }
+
     if (asset?.length > 0) {
       if (asset[0].balance === 0) {
         setButtonStyle(true);
       } else {
         setButtonStyle(false);
       }
-      setAvailBalance(asset[0].balance?.toFixed(6));
+      let bal = Number(asset[0].balance) + rewardsAmount;
+      setAssetsBalance(Number(asset[0].balance));
+      setAvailBalance(bal);
     } else {
-      setAvailBalance(0);
+      setAvailBalance(rewardsAmount);
       setButtonStyle(true);
+      setAssetsBalance(0);
     }
     setSymbol(token);
   };
@@ -230,11 +272,11 @@ const BuySell = (props: fullWidth) => {
         direction: show === 1 ? "long" : "short",
         order_type: orderType,
         leverage_type: props?.marginMode?.margin,
-        type: (show === 2 && marketType === 'limit')?'market': marketType,
+        type: (show === 2 && marketType === 'limit') ? 'market' : marketType,
         qty: parseFloat(qty),
         position_mode: positionMode
       };
-    } 
+    }
     else {
       if (entryPrice === 0 || entryPrice < 0) {
         setEntryPriceValidate("Price must be positive number!");
@@ -290,6 +332,7 @@ const BuySell = (props: fullWidth) => {
       };
     }
 
+
     setConfirmOrderData(obj);
     setConfirmModelPopup(1);
     setConfirmModelOverlay(true);
@@ -343,7 +386,7 @@ const BuySell = (props: fullWidth) => {
           direction: show === 1 ? "long" : "short",
           order_type: orderType,
           leverage_type: props?.marginMode?.margin,
-          market_type: (show === 2 && marketType === 'limit')?'market': marketType,
+          market_type: (show === 2 && marketType === 'limit') ? 'market' : marketType,
           qty: parseFloat(qty),
           position_mode: positionMode
         };
@@ -1075,7 +1118,7 @@ const BuySell = (props: fullWidth) => {
                         if (marketType === 'limit') {
                           setActive(true);
                           setShortConfirm(true);
-                        }else{
+                        } else {
                           submitForm()
                         }
                         // submitForm
@@ -1219,8 +1262,8 @@ const BuySell = (props: fullWidth) => {
       }
       {isShow && <PositionModal setIsShow={setIsShow} positionMode={positionMode} setPositionMode={setPositionMode} positions={props.positions} openOrders={props.openOrders} />}
 
-      {shortConfirm && <ConfirmationModel setActive={setActive} setShow={setShortConfirm} title="Risk Alert" 
-      message={'The current order may encounter the following circumstances.\nPlease confirm before you proceed.\n1. The current order may be executed immediately  as a market order.'} actionPerform={actionPerform} />}
+      {shortConfirm && <ConfirmationModel setActive={setActive} setShow={setShortConfirm} title="Risk Alert"
+        message={'The current order may encounter the following circumstances.\nPlease confirm before you proceed.\n1. The current order may be executed immediately  as a market order.'} actionPerform={actionPerform} />}
     </>
   );
 };

@@ -206,8 +206,8 @@ const Referal = (props: fixSection) => {
                 <tbody>
                   {referList && referList.length > 0 && referList.map((item: any) => {
                     return <tr>
-                      <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{(item?.User?.id).substring(1, 7)}</td>
-                      <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</td>
+                      <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{(item?.User?.id)?.substring(1, 7)}</td>
+                      <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{moment(item?.createdAt)?.format('YYYY-MM-DD HH:mm:ss')}</td>
                       <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{item?.User?.refer_code}</td>
                       <td className="text-left py-10 md:py-20 sm-text !text-[#52c41a]">Register</td>
                       <td className="text-left py-10 md:py-20 sm-text !text-[#52c41a] cursor-pointer" onClick={() => { setReferProgramTask(item); setTaskShow(true); }}>view</td>

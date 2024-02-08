@@ -28,7 +28,10 @@ const EventTaskPopup = (props: activeSection) => {
         description: string,
         event_id: string,
         event_type: string,
-        refer_user: string
+        refer_user: string,
+        claimed_on: Date,
+        expired_on: Date,
+        claim : boolean
     }
 
     useEffect(() => {
@@ -53,7 +56,7 @@ const EventTaskPopup = (props: activeSection) => {
 
         // Event program required deposit amount
         let eventDeposit = props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100;
-        
+
         // Event program required trade amount
         let eventTrade = props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.trade : 100;
 
@@ -121,7 +124,10 @@ const EventTaskPopup = (props: activeSection) => {
                 description: "",
                 event_id: "",
                 event_type: "",
-                refer_user: ""
+                refer_user: "",
+                claimed_on: new Date(),
+                expired_on: new Date(),
+                claim : false
             };
 
             let eventDeposit = props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100;
@@ -129,27 +135,40 @@ const EventTaskPopup = (props: activeSection) => {
 
             // create rewards request body if both depsoit and trade task complete by user 
             if (depositAmount >= eventDeposit && tradeAmount >= eventTrade) {
+                const date = new Date();
+                const theDayOfTheMonthOnNextWeek = date.getDate() + 20;
+                date.setDate(theDayOfTheMonthOnNextWeek)
                 welcomeObj = {
                     user_id: session?.user.user_id,
-                    type: props?.referProgamTask?.refer_program_invite?.type,
+                    type: props?.referProgamTask?.refer_program_invite !==null?props?.referProgamTask?.refer_program_invite?.type:'Coupon',
                     amount: props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite.amount - 10 : 20,
-                    description: `Refer Event Deposit Trade Task ${props?.referProgamTask?.refer_program_invite?.type}`,
+                    description: `Refer Event Deposit Trade Task ${props?.referProgamTask?.refer_program_invite !==null?props?.referProgamTask?.refer_program_invite?.type:'Coupon'}`,
                     event_id: props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.id : '',
                     event_type: "trade",
-                    refer_user: props?.referProgamTask?.User?.id
+                    refer_user: props?.referProgamTask?.User?.id,
+                    claimed_on: new Date(),
+                    expired_on: date,
+                    claim : true
                 }
             }
 
             // create rewards request body if depsoit task complete by user
             else if (depositAmount >= eventDeposit) {
+
+                const date = new Date();
+                const theDayOfTheMonthOnNextWeek = date.getDate() + 7;
+                date.setDate(theDayOfTheMonthOnNextWeek)
                 welcomeObj = {
                     user_id: session?.user.user_id,
-                    type: props?.referProgamTask?.refer_program_invite?.type,
+                    type: props?.referProgamTask?.refer_program_invite !==null?props?.referProgamTask?.refer_program_invite?.type:'Coupon',
                     amount: 10,
-                    description: `Refer Event Deposit Trade Task ${props?.referProgamTask?.refer_program_invite?.type}`,
+                    description: `Refer Event Deposit Trade Task ${props?.referProgamTask?.refer_program_invite !==null?props?.referProgamTask?.refer_program_invite?.type:'Coupon'}`,
                     event_id: props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.id : '',
                     event_type: "deposit",
-                    refer_user: props?.referProgamTask?.User?.id
+                    refer_user: props?.referProgamTask?.User?.id,
+                    claimed_on: new Date(),
+                    expired_on: date,
+                    claim : true
                 }
             }
 
@@ -251,6 +270,7 @@ const EventTaskPopup = (props: activeSection) => {
                             {depositEnable &&
                                 <button className='text-primary underline' onClick={() => handleRewardsRequest()}>Claim Now</button>
                             }
+                            {/* <button className='text-primary underline' onClick={() => handleRewardsRequest()}>Claim Now</button> */}
                         </div>
                         <div className="bg-[#f5f7fa] rounded-[8px] h-[8px] w-full mt-[20px] relative">
 

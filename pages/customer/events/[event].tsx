@@ -54,5 +54,5 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       session: session
     },
   };
-  
+
 }

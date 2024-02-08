@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createRouter, expressWrapper } from "next-connect";
-import { getMethod, postData } from "../../../libs/requestMethod";
+import { getMethod, postData, putData } from "../../../libs/requestMethod";
 
 import AES from 'crypto-js/aes';
 import { enc } from 'crypto-js';
@@ -35,6 +35,22 @@ router
             // let formData = AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
 
             let data = await postData(`${process.env.NEXT_PUBLIC_APIURL}/refer/rewards/create`, req.body, token);
+            return res.status(200).send({ data });
+        } catch (error: any) {
+            throw new Error(error.message)
+        }
+    });
+
+router
+    .put(async (req, res) => {
+        try {
+
+            let token = req.headers.authorization;
+
+            // const decodedStr = decodeURIComponent(req.body);
+            // let formData = AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
+
+            let data = await putData(`${process.env.NEXT_PUBLIC_APIURL}/refer/rewards/update`, req.body, token);
             return res.status(200).send({ data });
         } catch (error: any) {
             throw new Error(error.message)

@@ -28,6 +28,8 @@ interface Session {
     coinList: any,
     assets: any,
     serverSlug: any;
+    rewardsList?: any;
+    totalPoint?: any;
 }
 
 const FutureTrading = (props: Session) => {
@@ -49,6 +51,8 @@ const FutureTrading = (props: Session) => {
     const [openOrderHistoryData, setOpenOrderHistoryData] = useState([]);
     const [topHLOCData, setTopHLOCData] = useState(Object);
     const [positionRecord, setPositionRecord] = useState([]);
+
+    const [rewardsTotalPoint, setRewardsTotalPoint] = useState(props?.totalPoint);
 
     useEffect(() => {
         socket();
@@ -183,6 +187,15 @@ const FutureTrading = (props: Session) => {
         }).then(response => response.json());
 
         setAllAssets(userAssets);
+
+        let rewardsList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/rewards?userid=${props?.session?.user?.user_id}`, {
+            method: "GET",
+            headers: {
+                "Authorization": props?.session?.user?.access_token
+            },
+        }).then(response => response.json());
+
+        setRewardsTotalPoint(rewardsList?.data?.total);
     }
 
     // ================================================ //
@@ -266,6 +279,8 @@ const FutureTrading = (props: Session) => {
         }
     }
 
+    
+
     return (
         <>
             <ToastContainer />
@@ -283,7 +298,7 @@ const FutureTrading = (props: Session) => {
                                 </div>
                                 {/* Future chart */}
                                 <div className='max-[1499px]:pl-[20px] w-full max-w-full min-[1500px]:max-w-[calc(100%-300px)] bg-[#fafafa] dark:bg-[#1a1b1f] '>
-                                    <ChartSec slug={`${props?.serverSlug}`} view="desktop"/>
+                                    <ChartSec slug={`${props?.serverSlug}`} view="desktop" />
                                 </div>
                             </div>
                         </div>
@@ -299,7 +314,7 @@ const FutureTrading = (props: Session) => {
                 </div>
                 <div>
                     {/* Buy/Sell open short traading component */}
-                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} />
+                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} />
                     <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
                 </div>
             </div>
@@ -312,7 +327,7 @@ const FutureTrading = (props: Session) => {
                         <CoinTypes coins={props?.coinList} />
                     </div>
                 </div>
-                
+
                 <div className='overflow-x-auto hide-scroller dark:bg-[#1a1b1f] bg-[#fafafa]'>
                     <div className='flex items-center gap-[20px] w-max p-[16px] '>
                         <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[30px] after:translate-x-[-50%] after:h-[2px] ${showMob === 1 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(1) }}>Chart</button>
@@ -322,7 +337,7 @@ const FutureTrading = (props: Session) => {
                     {
                         showMob === 1 &&
                         // <FutureChart id={'tradingview_0d0de12'} />
-                        <ChartSec slug={`${props?.serverSlug}`} view="mobile"/>
+                        <ChartSec slug={`${props?.serverSlug}`} view="mobile" />
                     }
                     {
                         showMob === 2 &&
@@ -333,9 +348,9 @@ const FutureTrading = (props: Session) => {
                         <MarketTrades widthFull={true} setShow={setShow} show={show} positionRecord={positionRecord} />
                     }
                 </div>
-                
+
                 <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} positionHistoryData={positionHistoryData} openOrderHistoryData={openOrderHistoryData} />
-                <BuySell setOverlay={setOverlay} inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} />
+                <BuySell setOverlay={setOverlay} inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint}/>
                 <MarginRatio fullWidth={true} heightAuto={true} setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
             </div>
 
@@ -372,8 +387,16 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
 
     let userAssets: any = [];
+    let rewardsList: any = [];
     if (session) {
         userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${session?.user?.user_id}`, {
+            method: "GET",
+            headers: {
+                "Authorization": session?.user?.access_token
+            },
+        }).then(response => response.json());
+
+        rewardsList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/rewards?userid=${session?.user?.user_id}`, {
             method: "GET",
             headers: {
                 "Authorization": session?.user?.access_token
@@ -388,7 +411,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
             provider: providers,
             coinList: tokenList?.data || [],
             assets: userAssets,
-            serverSlug: slug
+            serverSlug: slug,
+            rewardsList: rewardsList?.data?.list || [],
+            totalPoint: rewardsList?.data?.total || 0
         },
     };
 
