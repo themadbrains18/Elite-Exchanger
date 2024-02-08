@@ -8,7 +8,7 @@ import Activity from '../activity/activity';
 import { useSession } from 'next-auth/react';
 import KycPending from '../kyc-pending';
 import KycDone from '../kyc-done';
-import ReferRewards from '@/pages/customer/profile/rewards';
+// import Rewards from '../rewards';
 import ReferRewardsRes from '../ReferRewardsRes';
 
 interface showTabContent {
@@ -19,6 +19,7 @@ interface showTabContent {
   referalList?:any;
   activity?:any;
   eventList?:any;
+  rewardsList?:any;
 }
 const MainResponsivePage = (props: showTabContent) => {
 
@@ -51,7 +52,7 @@ const MainResponsivePage = (props: showTabContent) => {
       }
 
       {/* <ReferRewards fixed={true} show={props.show} setShow={props.setShow} session={session} />   */}
-      <ReferRewardsRes fixed={true} show={props.show} setShow={props.setShow} session={session} />
+      <ReferRewardsRes rewardsList={props.rewardsList} fixed={true} show={props.show} setShow={props.setShow} session={session}/>
       
       <Referal fixed={true} show={props.show} setShow={props.setShow} session={session} referalList={props.referalList} eventList={props.eventList}/>
 

@@ -17,11 +17,14 @@ interface propsData {
     userDetail?: any,
     eventList?: any,
     rewardsList?: any;
+    fixed?: boolean;
+    show?: number;
+    setShow?: Function | any;
 }
 
 const ReferRewards = (props: propsData) => {
     return (
-        <SideBarLayout userDetail={props.userDetail} referalList={props.referalList} eventList={props.eventList}>
+        <SideBarLayout userDetail={props.userDetail} referalList={props.referalList} eventList={props.eventList} rewardsList={props.rewardsList}>
             <ToastContainer />
             <Rewards rewardsList={props.rewardsList} />
         </SideBarLayout>
@@ -61,7 +64,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
                 "Authorization": session?.user?.access_token
             },
         }).then(response => response.json());
-        
+
         return {
             props: {
                 sessions: session,
@@ -70,7 +73,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
                 userDetail: profileDashboard?.data || null,
                 eventList: eventList?.data?.data || [],
                 rewardsList: rewardsList?.data?.list || [],
-                totalPoint : rewardsList?.data?.total || 0
+                totalPoint: rewardsList?.data?.total || 0
             },
         };
     }
