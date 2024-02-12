@@ -20,7 +20,7 @@ const TransferModal = (props: showPopup) => {
   const [Spot, setSpot] = useState("Spot");
   const [future, setFuture] = useState("Futures");
   const [userAsset, setUserAsset] = useState(Object);
-  const [selectedCoin, setSelectedCoin] = useState("USDT");
+  const [selectedCoin, setSelectedCoin] = useState("");
   const [isError, setIsError] = useState(false);
   const [amount, setAmount] = useState(0);
 
@@ -49,7 +49,7 @@ const TransferModal = (props: showPopup) => {
     });
 
     setCoinList(coins);
-    filterAsset(selectedCoin, "Spot");
+    // filterAsset(selectedCoin, Spot === "Spot" ? "Futures" : "Spot");
   }, [props?.assets]);
 
   const filterAsset = (symbol: string, type: string) => {
@@ -175,7 +175,7 @@ const TransferModal = (props: showPopup) => {
       <div className="flex items-center justify-between px-[12px] py-[12px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[25px] relative">
         <SelectDropdown
           list={coinList}
-          defaultValue="USDT"
+          defaultValue="Select Token"
           fullWidth={true}
           whiteColor={true}
           filterAsset={filterAsset}

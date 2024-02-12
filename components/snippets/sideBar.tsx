@@ -157,7 +157,7 @@ const SideBar = (props: profileSec) => {
                                 </div>
                             </div>
                             <p className='sec-title text-center'>{props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.fName !== null ? props.profileInfo?.fName + ' ' + props.profileInfo?.lName : session?.user?.name}</p>
-                            <p className='info-14-18 text-center mt-[5px]'>{props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.uName !== null? props.profileInfo?.uName : session?.user?.email}</p>
+                            <p className='info-14-18 text-center mt-[5px]'>{props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.uName !== null? props.profileInfo?.uName[0].toUpperCase() + props.profileInfo?.uName.slice(1) : session?.user?.email}</p>
 
                         </div>
                     }

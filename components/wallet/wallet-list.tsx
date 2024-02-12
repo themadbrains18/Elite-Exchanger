@@ -471,7 +471,12 @@ const WalletList = (props: propsData): any => {
                                 <span className="text-primary block">Withdraw</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
-                              <button className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                              <button onClick={() => {
+                                setSelectedCoinBalance(item?.balance);
+                                setPopupMode(3);
+                                setShow1(4);
+                                setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                              }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Transfer</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
@@ -761,7 +766,12 @@ const WalletList = (props: propsData): any => {
                           <td className="max-[1023px]:hidden ">
                             <div className="flex items-center gap-[20px]">
 
-                              <button className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                              <button onClick={() => {
+                                setSelectedCoinBalance(item?.balance);
+                                setPopupMode(3);
+                                setShow1(4);
+                                setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                              }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Transfer</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
@@ -853,7 +863,12 @@ const WalletList = (props: propsData): any => {
                           <div className={`fullWidthContent`}>
                             <div className="flex items-center gap-[10px] justify-center pb-[10px] overflow-x-auto">
 
-                              <button className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                              <button onClick={() => {
+                                setSelectedCoinBalance(item?.balance);
+                                setPopupMode(3);
+                                setShow1(4);
+                                setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                              }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Transfer</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>

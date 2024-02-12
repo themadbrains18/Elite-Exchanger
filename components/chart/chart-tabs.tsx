@@ -219,7 +219,7 @@ const ChartTabs = (props: propsData) => {
                       </div>
                     </th>
                     <th className=" py-5">
-                      <div className="flex">
+                      <div className="flex max-[767px]:justify-end">
                         <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
                           Coin Price
                         </p>
@@ -306,6 +306,7 @@ const ChartTabs = (props: propsData) => {
                               width={30}
                               height={30}
                               alt="coins"
+                              className="w-[30px] h-[30px]"
                             />
                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                               <p className="info-14-18 dark:text-white">
@@ -328,7 +329,7 @@ const ChartTabs = (props: propsData) => {
                           </p>
                         </td>
                         <td>
-                          <p className="info-14-18 dark:text-white  ">
+                          <p className="info-14-18 dark:text-white  max-[767px]:text-end">
                             ${item.price}
                           </p>
                         </td>
@@ -360,7 +361,7 @@ const ChartTabs = (props: propsData) => {
                             ${item.maxSupply && item.maxSupply}
                           </p>
                         </td>
-                        <td className="max-[1023px]:hidden">
+                        <td className="max-[1023px]:hidden ">
                           <p className="info-14-18 dark:text-white">
                             <Image
                               src="/assets/market/Graph.svg"
@@ -641,9 +642,9 @@ const ChartTabs = (props: propsData) => {
             <div className="overflow-x-auto">
               <div className="table lg:min-w-[1018px] w-full ">
                 <div
-                  className={`head_row border-b border-t border-grey-v-3 dark:border-opacity-[15%] grid grid-cols-4 md:grid-cols-9  justify-between`}
+                  className={`head_row border-b border-t border-grey-v-3 dark:border-opacity-[15%] grid grid-cols-3 md:grid-cols-9  justify-between`}
                 >
-                  <div className="flex py-5 col-span-2 items-center">
+                  <div className="flex py-5 md:col-span-2 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma  ">
                       Pair
                     </p>
@@ -747,9 +748,9 @@ const ChartTabs = (props: propsData) => {
                         className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] relative"
                       >
                         <div
-                          className={`grid grid-cols-9 items-center  justify-between `}
+                          className={`grid grid-cols-3 relative md:grid-cols-9 items-center  justify-between `}
                         >
-                          <div className="flex gap-2 col-span-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
+                          <div className="flex gap-2 md:col-span-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                             <Image
                               src={`${item?.token !== null
                                 ? item?.token?.image
@@ -823,7 +824,7 @@ const ChartTabs = (props: propsData) => {
                               <p className="info-14-18 dark:text-white">
                                 {item.market_type}
                               </p>
-                              <p className="info-10">{item.token_amount}</p>
+                              <p className="info-10">{item.token_amount.toFixed(4)}</p>
                             </div>
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
@@ -874,7 +875,7 @@ const ChartTabs = (props: propsData) => {
                         {/* Sub transaction record listing */}
                         {sortBlogPostsByDate &&
                           <div
-                            className="absolute top-[44px] right-[10px]  max-w-[10px] w-full cursor-pointer"
+                            className="absolute top-[32px]  right-[10px]  max-w-[10px] w-full cursor-pointer"
                             onClick={setHeight}
                           >
                             <svg
@@ -918,8 +919,8 @@ const ChartTabs = (props: propsData) => {
                             }
 
                             return (
-                              <div className={`grid grid-cols-9 items-center  justify-between `}>
-                                <div className="flex gap-2 col-span-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
+                              <div className={`grid grid-cols-3 md:grid-cols-9 items-center  justify-between `}>
+                                <div className="flex gap-2 md:col-span-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                                 </div>
                                 <div className="flex items-center py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                                   <div
@@ -972,7 +973,7 @@ const ChartTabs = (props: propsData) => {
                                     <p className="info-14-18 dark:text-white">
                                       {elm.market_type}
                                     </p>
-                                    <p className="info-10">{elm.token_amount}</p>
+                                    <p className="info-10">{elm.token_amount.toFixed(4)}</p>
                                   </div>
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">

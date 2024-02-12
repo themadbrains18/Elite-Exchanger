@@ -35,7 +35,7 @@ const ResponsiveFixCta = (props:propsData) => {
             {
                 router.pathname.includes('/market')  ||
                 router.pathname.includes('/chart') &&
-                <button className='fixed bottom-30 left-[50%] translate-x-[-50%] w-[calc(100%-70px)] solid-button' onClick={()=>{setShow(true)}}>
+                <button className='fixed bottom-30 z-[2] left-[50%] translate-x-[-50%] w-[calc(100%-70px)] solid-button' onClick={()=>{setShow(true)}}>
                     Buy & Sell
                 </button>
             }

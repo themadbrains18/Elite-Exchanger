@@ -49,7 +49,7 @@ const Referal = (props: fixSection) => {
       <section
         className={`${props.show == 6 && "!left-[50%]"} ${props.fixed &&
           "duration-300 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary overflow-y-scroll"
-          } p-5 lg:p-40 `}
+          } max-[767px]:px-[15px] p-5 lg:p-40 `}
       >
         {/* only for mobile view */}
         <div className="lg:hidden flex dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0  w-full  rounded-bl-[20px] rounded-br-[20px]  z-[6] dark:bg-omega bg-white  h-[105px]">
@@ -106,7 +106,7 @@ const Referal = (props: fixSection) => {
           </div>
 
           {/* How to Invite friends */}
-          <div className="p-20 lg:py-[50px] border-b border-[transparent] lg:border-grey-v-2 lg:dark:border-[#e9eaf026]">
+          <div className="p-[15px] lg:py-[50px] border-b border-[transparent] lg:border-grey-v-2 lg:dark:border-[#e9eaf026]">
             <p className="sec-title mb-20 lg:mb-0  border-b-[0.5px] lg:border-none border-grey-v-2  dark:border-[#e9eaf026]   pb-[15px] lg:pb-[30px]">
               How To Refer Your Friends
             </p>
@@ -138,7 +138,7 @@ const Referal = (props: fixSection) => {
           </div>
 
           {/* My Referral code and link */}
-          <div className="lg:pb-[50px] border-b p-20 border-[transparent] lg:border-grey-v-2 lg:dark:border-[#e9eaf026]">
+          <div className="lg:pb-[50px] border-b p-[15px] border-[transparent] lg:border-grey-v-2 lg:dark:border-[#e9eaf026]">
             <p className="sec-title lg:px-0  py-20 mb-[20px]">
               Refer Friends
             </p>
@@ -165,7 +165,7 @@ const Referal = (props: fixSection) => {
           </div>
 
           {/* Referral friend History */}
-          <div className="p-20 lg:py-[50px] border-b border-[transparent] lg:border-grey-v-2 lg:dark:border-[#e9eaf026]">
+          <div className="p-[15px] lg:py-[50px] border-b border-[transparent] lg:border-grey-v-2 lg:dark:border-[#e9eaf026]">
             <div className="flex gap-60 justify-between items-center   pb-[15px] lg:pb-[30px]">
               <p className="sec-title">
                 My Referrals
@@ -191,13 +191,14 @@ const Referal = (props: fixSection) => {
                     <th className="text-left py-10 md:py-20 sm-text">
                       Registered Time
                     </th>
-                    <th className="text-left py-10 md:py-20 sm-text">
-                      Invite ID
+                    <th className="text-left py-10 md:py-20 sm-text hidden md:block">
+                      Invite Id
                     </th>
+                   
                     <th className="text-left py-10 md:py-20 sm-text">
                       Status
                     </th>
-                    <th className="text-left py-10 md:py-20 sm-text">
+                    <th className="text-left py-10 md:py-20 sm-text max-[767px]:text-end ">
                       Task View
                     </th>
                   </tr>
@@ -208,9 +209,9 @@ const Referal = (props: fixSection) => {
                     return <tr>
                       <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{(item?.User?.id)?.substring(1, 7)}</td>
                       <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{moment(item?.createdAt)?.format('YYYY-MM-DD HH:mm:ss')}</td>
-                      <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{item?.User?.refer_code}</td>
+                      <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white hidden md:block">{item?.refer_code}</td>
                       <td className="text-left py-10 md:py-20 sm-text !text-[#52c41a]">Register</td>
-                      <td className="text-left py-10 md:py-20 sm-text !text-[#52c41a] cursor-pointer" onClick={() => { setReferProgramTask(item); setTaskShow(true); }}>view</td>
+                      <td className="text-left py-10 md:py-20 sm-text !text-[#52c41a] cursor-pointer max-[767px]:text-end " onClick={() => { setReferProgramTask(item); setTaskShow(true); }}>view</td>
                     </tr>
                   })}
 
@@ -253,7 +254,7 @@ const Referal = (props: fixSection) => {
           </div>
 
           {/* Collect commision from referral program history */}
-          <div className="p-20 lg:pt-[50px] ">
+          <div className="p-[15px] lg:pt-[50px] ">
             <div className="flex gap-60 justify-between items-center   pb-[15px] lg:pb-[30px]">
               <p className="sec-title  ">
                 Referral Commision
