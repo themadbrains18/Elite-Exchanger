@@ -64,9 +64,9 @@ const Referal = (props: fixSection) => {
             <div className="text-center">
               <p className="sec-title">Refer Friends</p>
             </div>
-            <div>
+            {/* <div>
               <IconsComponent type="editIcon" hover={false} active={false} />
-            </div>
+            </div> */}
           </div>
         </div>
 

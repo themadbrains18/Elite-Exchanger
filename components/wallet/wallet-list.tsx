@@ -94,7 +94,7 @@ const WalletList = (props: propsData): any => {
     const futureOffset = futureItemOffset + itemsCoinsPerPage;
     const futureWalletItems = futureAssets.slice(futureItemOffset, futureOffset);
     setFutureWalletItems(futureWalletItems)
-  }, []);
+  }, [itemOffset, withdrawitemOffset, coinItemOffset, futureItemOffset]);
 
   //==========================================================
   //=============Spot wallet pagging start==================
@@ -1056,7 +1056,7 @@ const WalletList = (props: propsData): any => {
         show1 === 1 &&
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-          <Deposit setShow1={setShow1} networks={props.networks} session={props.session} token={selectedCoin}/>
+          <Deposit setShow1={setShow1} networks={props.networks} session={props.session} token={selectedCoin} />
         </>
       }
       {

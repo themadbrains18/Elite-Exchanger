@@ -79,7 +79,7 @@ const BuyPopup = (props: activeSection) => {
         spend_amount: data?.spend_amount,
         receive_amount: data?.receive_amount,
         spend_currency: 'INR',
-        receive_currency: props?.selectedPost?.token!==null? props?.selectedPost?.token?.symbol: props?.selectedPost?.global_token?.symbol,
+        receive_currency: props?.selectedPost?.token !== null ? props?.selectedPost?.token?.symbol : props?.selectedPost?.global_token?.symbol,
         p_method: '',
         type: 'buy',
         status: 'isProcess'
@@ -115,7 +115,7 @@ const BuyPopup = (props: activeSection) => {
 
       }
       else {
-        toast.error(res?.data?.data?.message!==undefined?res?.data?.data?.message : res?.data?.data);
+        toast.error(res?.data?.data?.message !== undefined ? res?.data?.data?.message : res?.data?.data);
       }
     }
     else {
@@ -162,7 +162,7 @@ const BuyPopup = (props: activeSection) => {
               <div className="mt-30 md:mt-50 grid md:grid-cols-1 grid-cols-2">
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Available</p>
-                  <p className="sm-text w-full">{props?.selectedPost?.quantity} {props?.selectedPost?.token!==null? props?.selectedPost?.token?.symbol:props?.selectedPost?.global_token?.symbol}</p>
+                  <p className="sm-text w-full">{props?.selectedPost?.quantity} {props?.selectedPost?.token !== null ? props?.selectedPost?.token?.symbol : props?.selectedPost?.global_token?.symbol}</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Limit</p>
@@ -186,7 +186,6 @@ const BuyPopup = (props: activeSection) => {
                     }
                   </div>
                 </div>
-
               </div>
             </div>
             <div className="max-w-full md:max-w-[50%] w-full">
@@ -227,8 +226,8 @@ const BuyPopup = (props: activeSection) => {
                       }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full dark:text-white" placeholder="Your ammount in USDT" />
                     </div>
                     <div className="pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] flex gap-[5px] items-center">
-                      <Image src={props?.selectedPost?.token!==null ?props?.selectedPost?.token?.image : props?.selectedPost?.global_token?.image} alt="error" width={20} height={20} />
-                      <p className={`sm-text rounded-[5px]   !text-banner-text`}>{props?.selectedPost?.token!==null? props?.selectedPost?.token?.symbol: props?.selectedPost?.global_token?.symbol}</p>
+                      <Image src={props?.selectedPost?.token !== null ? props?.selectedPost?.token?.image : props?.selectedPost?.global_token?.image} alt="error" width={20} height={20} />
+                      <p className={`sm-text rounded-[5px]   !text-banner-text`}>{props?.selectedPost?.token !== null ? props?.selectedPost?.token?.symbol : props?.selectedPost?.global_token?.symbol}</p>
                     </div>
                   </div>
 
@@ -238,11 +237,15 @@ const BuyPopup = (props: activeSection) => {
                 )}
               </div>
             </div>
-
           </div>
           <div className=" border-t-[0.5px] p-0 pt-[10px] md:px-40 md:pt-20 md:pb-30 border-grey-v-1 flex md:flex-row flex-col gap-[15px] items-start md:items-center justify-between">
             <p className="sm-text text-start">The Trading Password is Required</p>
-            <button className="solid-button w-full max-w-full md:max-w-[50%] !p-[17px]" >Place order</button>
+            {session &&
+              <button className="solid-button w-full max-w-full md:max-w-[50%] !p-[17px]" >Place order</button>
+            }
+            {session === null &&
+              <button type="button" className="solid-button w-full max-w-full md:max-w-[50%] !p-[17px]" onClick={()=>route.push('/login')}>Login</button>
+            }
           </div>
         </div>
       </form>

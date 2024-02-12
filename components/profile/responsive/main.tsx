@@ -54,7 +54,7 @@ const MainResponsivePage = (props: showTabContent) => {
       {/* <ReferRewards fixed={true} show={props.show} setShow={props.setShow} session={session} />   */}
       <ReferRewardsRes rewardsList={props.rewardsList} fixed={true} show={props.show} setShow={props.setShow} session={session}/>
       
-      <Referal fixed={true} show={props.show} setShow={props.setShow} session={session} referalList={props.referalList} eventList={props.eventList}/>
+      <Referal fixed={true} show={props.show} setShow={props.setShow} session={session} referalList={props.referalList} eventList={props.eventList} rewardsList={props.rewardsList}/>
 
     </>
   )
