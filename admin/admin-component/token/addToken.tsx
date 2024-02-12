@@ -93,7 +93,7 @@ const AddToken = (props: activeSection) => {
     formState,
     control,
     formState: { errors },
-  } = useForm<UserSubmitForm>({
+  } = useForm({
     mode: "onChange",
     resolver: yupResolver(schema),
   });
@@ -134,7 +134,7 @@ const AddToken = (props: activeSection) => {
 
   };
 
-  const onHandleSubmit = async (data: UserSubmitForm) => {
+  const onHandleSubmit = async (data: any) => {
     try {
       let networks: any = [];
 
@@ -148,7 +148,7 @@ const AddToken = (props: activeSection) => {
         });
         return;
       }
-      networks = data?.network.filter((e) => {
+      networks = data?.network.filter((e:any) => {
         if (e.checked == true) {
           return e;
         }
