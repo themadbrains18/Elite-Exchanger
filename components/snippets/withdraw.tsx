@@ -68,7 +68,7 @@ const Withdraw = (props: activeSection) => {
     reset,
     getValues,
     formState: { errors },
-  } = useForm<UserSubmitForm>({
+  } = useForm({
     resolver: yupResolver(schema),
   });
 

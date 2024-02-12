@@ -53,7 +53,7 @@ const SecurityVerification = (props: activeSection) => {
     setError,
     clearErrors,
     formState: { errors },
-  } = useForm<UserSubmitForm>({
+  } = useForm({
     resolver: yupResolver(schema),
   });
 

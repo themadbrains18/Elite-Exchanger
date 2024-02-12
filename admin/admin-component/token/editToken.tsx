@@ -123,7 +123,7 @@ const EditToken = (props: activeSection) => {
         formState,
         control,
         formState: { errors },
-    } = useForm<UserSubmitForm>({
+    } = useForm({
         mode: "onChange",
         resolver: yupResolver(schema),
     });
@@ -164,7 +164,7 @@ const EditToken = (props: activeSection) => {
         
     };
 
-    const onHandleSubmit = async (data: UserSubmitForm) => {
+    const onHandleSubmit = async (data: any) => {
         try {
             let networks: any = [];
 
@@ -178,7 +178,7 @@ const EditToken = (props: activeSection) => {
                 });
                 return;
             }
-            networks = data?.network.filter((e) => {
+            networks = data?.network.filter((e:any) => {
                 if (e.checked == true) {
                     return e;
                 }
@@ -402,7 +402,7 @@ const EditToken = (props: activeSection) => {
                         )}
                     </div>
                     <div className="pt-[30px]">
-                        {props?.networkList?.map((item: any, index: any) => {
+                        {props?.networkList?.map((item: any, index: number) => {
                             // const fieldName = `network[${index}]`;
                             let previous = props.editToken.networks.filter((e: any) => {
                                 return e?.id === item?.id
@@ -418,7 +418,7 @@ const EditToken = (props: activeSection) => {
                                             {...register(`network.${index}.checked`)}
                                             onClick={(e: any) => {
                                                 clickHandler(e, index);
-                                                setValue(`network[${index}].id`, item?.id);
+                                                setValue(`network.${index}.id`, item?.id);
                                             }}
                                         />
                                         <label
@@ -463,7 +463,7 @@ const EditToken = (props: activeSection) => {
                                                 </div>
                                                 {errors?.network?.[index]?.fee && (
                                                     <p style={{ color: "red" }}>
-                                                        {errors?.network?.[index]?.fee?.message}
+                                                        {errors?.network[index]?.fee?.message}
                                                     </p>
                                                 )}
                                             </div>
@@ -478,7 +478,7 @@ const EditToken = (props: activeSection) => {
                                                 </div>
                                                 {errors?.network?.[index]?.contract && (
                                                     <p style={{ color: "red" }}>
-                                                        {errors?.network?.[index]?.contract?.message}
+                                                        {errors?.network[index]?.contract?.message}
                                                     </p>
                                                 )}
                                             </div>

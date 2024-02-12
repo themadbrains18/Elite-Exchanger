@@ -106,7 +106,7 @@ const KycAuth = (props: fixSection) => {
     getValues,
     clearErrors,
     formState: { errors },
-  } = useForm<UserSubmitForm>({
+  } = useForm({
     resolver: yupResolver(schema),
   });
 

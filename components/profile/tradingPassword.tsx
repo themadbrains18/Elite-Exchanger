@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Context from '../contexts/context'
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -24,18 +24,24 @@ type UserSubmitForm = {
 };
 
 
-const schema = yup.object().shape({
-  new_password: yup
-    .string()
-    .min(6)
-    .max(6)
-    .required("New password is required"),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("new_password")], "Passwords must match"),
-});
+// const schema = yup.object().shape({
+//   new_password: yup
+//     .string()
+//     .min(6)
+//     .max(6)
+//     .required("New password is required"),
+//   confirmPassword: yup
+//     .string()
+//     .oneOf([yup.ref("new_password")], "Passwords must match"),
+// });
 const schema2 = yup.object().shape({
-  old_password: yup.string().required("Old password is required"),
+  exist_password: yup.boolean(),
+  old_password: yup.string().when('exist_password', {
+    is: true,
+    then(schema) {
+      return schema.required('Must enter Old password');
+    },
+  }),
   new_password: yup
     .string()
     .min(6)
@@ -58,13 +64,14 @@ const TradingPassword = (props: activeSection) => {
     reset,
     watch,
     getValues,
+    clearErrors,
     setError,
     formState: { errors },
-  } = useForm<UserSubmitForm>({
-    resolver: yupResolver((props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? schema : schema2),
+  } = useForm({
+    resolver: yupResolver(schema2),
   });
 
-  const onHandleSubmit = async (data: UserSubmitForm) => {
+  const onHandleSubmit = async (data: any) => {
     try {
       let username =
         props.session?.user.email !== "null"
@@ -77,7 +84,7 @@ const TradingPassword = (props: activeSection) => {
           old_password: data?.old_password,
           new_password: data?.new_password,
           otp: "string",
-          step : 1
+          step: 1
         }
       }
       else {
@@ -85,8 +92,9 @@ const TradingPassword = (props: activeSection) => {
           username: username,
           new_password: data?.new_password,
           otp: "string",
-          step : 1
+          step: 1
         }
+        
       }
 
       if (status === "authenticated") {
@@ -139,7 +147,7 @@ const TradingPassword = (props: activeSection) => {
           old_password: formData?.old_password,
           new_password: formData?.new_password,
           otp: "string",
-          step : 2
+          step: 2
         }
       }
       else {
@@ -147,7 +155,7 @@ const TradingPassword = (props: activeSection) => {
           username: username,
           new_password: formData?.new_password,
           otp: "string",
-          step : 2
+          step: 2
         }
       }
 
@@ -167,7 +175,7 @@ const TradingPassword = (props: activeSection) => {
 
         if (res.status === 200) {
           toast.success(res?.data?.message);
-          
+
           setTimeout(() => {
             setEnable(1);
             setSendOtpRes(res?.data?.otp);
@@ -196,13 +204,13 @@ const TradingPassword = (props: activeSection) => {
           : props.session?.user?.number;
       let request;
 
-      if (( props?.session?.user?.tradingPassword !== null && props.tradePassword === true)) {
+      if ((props?.session?.user?.tradingPassword !== null && props.tradePassword === true)) {
         request = {
           username: username,
           old_password: formData?.old_password,
           new_password: formData?.new_password,
           otp: otp,
-          step : 3
+          step: 3
         }
       }
       else {
@@ -210,7 +218,7 @@ const TradingPassword = (props: activeSection) => {
           username: username,
           new_password: formData?.new_password,
           otp: otp,
-          step : 3
+          step: 3
         }
       }
 
@@ -248,6 +256,15 @@ const TradingPassword = (props: activeSection) => {
     }
   }
 
+  useEffect(() => {
+    if (props?.session?.user?.tradingPassword === null && props.tradePassword === false) {
+      setValue('exist_password', false);
+    }
+    else {
+      setValue('exist_password', true);
+    }
+  }, []);
+
 
   return (
     <>
@@ -257,7 +274,7 @@ const TradingPassword = (props: activeSection) => {
         <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <div className="flex items-center justify-between ">
             <p className="sec-title">
-              {( props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? "Add" : "Edit"} Trading Password
+              {(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? "Add" : "Edit"} Trading Password
             </p>
             <svg
               onClick={() => {
@@ -296,7 +313,7 @@ const TradingPassword = (props: activeSection) => {
                 Set a unique password to protect your trading.
               </p>
               <div className="mt-[30px] ">
-                <div className={` md:flex-row flex-col gap-[30px] ${( props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? 'hidden' : "flex"}`}>
+                <div className={` md:flex-row flex-col gap-[30px] ${(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? 'hidden' : "flex"}`}>
                   <div className=" w-full">
                     <p className="sm-text mb-[10px]">Old Trading Password</p>
                     <input
@@ -307,7 +324,7 @@ const TradingPassword = (props: activeSection) => {
                     />
                   </div>
                 </div>
-                {( props?.session?.user?.tradingPassword !== null && props?.tradePassword === true) && errors.old_password && (
+                {(props?.session?.user?.tradingPassword !== null && props?.tradePassword === true) && errors.old_password && (
                   <p style={{ color: "#ff0000d1" }}>
                     {errors.old_password.message}
                   </p>

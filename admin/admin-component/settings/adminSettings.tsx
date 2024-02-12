@@ -92,7 +92,7 @@ const AdminSettings = (props: fixSection) => {
     watch,
     setError,
     formState: { errors },
-  } = useForm<UserSubmitForm>({
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
