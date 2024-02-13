@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
-import IconsComponent from '../snippets/icons';
+import IconsComponent from '../../snippets/icons';
 import Image from 'next/image';
-import Context from "../contexts/context";
+import Context from "../../contexts/context";
 
 interface propsData {
     slug?: any;

@@ -1,9 +1,9 @@
 import Image from "next/image";
 import React, { useContext, useState } from "react";
-import IconsComponent from "../snippets/icons";
+import IconsComponent from "../../snippets/icons";
 import ReactPaginate from "react-paginate";
-import Context from "../contexts/context";
-import ConfirmationModel from "../snippets/confirmation";
+import Context from "../../contexts/context";
+import ConfirmationModel from "../../snippets/confirmation";
 import { useSession } from "next-auth/react";
 import AES from "crypto-js/aes";
 import moment from "moment";

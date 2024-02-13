@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import Context from "../contexts/context";
+import Context from "../../contexts/context";
 import React, { useContext, useState } from 'react'
 
 interface propsData {
