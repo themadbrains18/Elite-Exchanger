@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import React, { Fragment, useEffect, useState } from 'react'
-import IconsComponent from '../snippets/icons';
+import IconsComponent from '../../snippets/icons';
 import { useRouter } from 'next/router';
 
 
