@@ -22,6 +22,8 @@ router
             const decodedStr = decodeURIComponent(req.body);
             let formData =  AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
             let token = '';
+            
+            
             let data = await postData(`${process.env.NEXT_PUBLIC_APIURL}/user/register`, JSON.parse(formData),token);
             return res.status(data.status).send({ data });
             

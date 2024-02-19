@@ -154,7 +154,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
       <div className='bg-white dark:bg-d-bg-primary p-[20px] rounded-[10px]'>
         <div className='flex items-center gap-[15px] cursor-pointer pb-[23px] border-b border-[#E9EAF0] dark:border-[#e9eaf00f] mb-[30px] relative' onClick={() => { props.setShowMenu(false) }}>
           <div className='relative inline-block clip-bg'>
-            <Image src={props.userDetail !== null && props.userDetail?.messgae === undefined ? process.env.NEXT_PUBLIC_APIURL + "/dp/" + props.userDetail?.image : Avtar} alt='error' width={64} height={64} className='rounded-full object-cover object-top w-[50px] h-[50px]' />
+            <Image src={props.userDetail !== null && props.userDetail?.messgae === undefined ?  props.userDetail?.image : Avtar} alt='error' width={64} height={64} className='rounded-full object-cover object-top w-[50px] h-[50px]' />
           </div>
           <div>
             <p className='nav-text-lg'>{props.userDetail !== null && props.userDetail?.messgae === undefined && props.userDetail?.fName !== null ? (props.userDetail?.fName + ' ' + props.userDetail?.lName) : props?.session?.user?.name}</p>

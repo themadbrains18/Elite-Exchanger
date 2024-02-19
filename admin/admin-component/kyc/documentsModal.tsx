@@ -50,7 +50,8 @@ const DocumentsModal = (props: Details) => {
             <p className="admin-table-data">Id Front</p>
             <Image
               src={
-                process.env.NEXT_PUBLIC_APIURL + "/kyc/" + props?.data?.idfront
+                props?.data?.idfront
+                // process.env.NEXT_PUBLIC_APIURL + "/kyc/" + props?.data?.idfront
               }
               alt="idfront"
               width={200}
@@ -60,7 +61,10 @@ const DocumentsModal = (props: Details) => {
         <div>
         <p className="admin-table-data">Id Back</p>
         <Image
-          src={process.env.NEXT_PUBLIC_APIURL + "/kyc/" + props?.data?.idback}
+          src={
+            props?.data?.idback
+            // process.env.NEXT_PUBLIC_APIURL + "/kyc/" + props?.data?.idback
+          }
           alt="idback"
           width={200}
           height={200}
@@ -70,7 +74,8 @@ const DocumentsModal = (props: Details) => {
         <p className="admin-table-data">Statement</p>
         <Image
           src={
-            process.env.NEXT_PUBLIC_APIURL + "/kyc/" + props?.data?.statement
+            props?.data?.statement
+            // process.env.NEXT_PUBLIC_APIURL + "/kyc/" + props?.data?.statement
           }
           alt="statement"
           width={200}

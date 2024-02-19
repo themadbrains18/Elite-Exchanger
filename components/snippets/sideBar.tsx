@@ -14,14 +14,14 @@ interface profileSec {
     kycInfo?: any;
     referalList?: any;
     activity?: any;
-    eventList?:any;
-    rewardsList?:any;
+    eventList?: any;
+    rewardsList?: any;
 }
 
 const SideBar = (props: profileSec) => {
 
     const [show, setShow] = useState(0);
-    const [profileImg, setProfileImg] = useState(props?.profileInfo && props?.profileInfo?.image !== null && props?.profileInfo?.messgae === undefined ? process.env.NEXT_PUBLIC_APIURL + "/dp/" + props?.profileInfo?.image : '');
+    const [profileImg, setProfileImg] = useState(props?.profileInfo && props?.profileInfo?.image !== null && props?.profileInfo?.messgae === undefined ? props?.profileInfo?.image : '');
     const router = useRouter()
 
     const { status, data: session } = useSession();
@@ -59,6 +59,17 @@ const SideBar = (props: profileSec) => {
         },
 
     ]
+    const readFile = (file: any) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+
+            reader.onload = () => {
+                resolve(reader.result);
+            };
+            reader.onerror = reject;
+        });
+    };
 
     const handleProfiledpChange = async (e: any) => {
 
@@ -70,40 +81,68 @@ const SideBar = (props: profileSec) => {
             return;
         }
 
-        let files = e.target.files[0];
-        var reader = new FileReader();
-        if (files) {
-            reader.readAsDataURL(files);
-            reader.onloadend = async function (e: any) {
-                setProfileImg(reader.result as string);
+        const file = await readFile(e.target.files[0]);
+        try {
+            const response = await fetch(
+                "https://lucent-kelpie-aa145b.netlify.app/.netlify/functions/upload",
+                {
+                    method: "POST",
+                    body: file
+                } as any);
+            const data = await response.json();
 
-                var formData = new FormData();
-                formData.append("image", files);
-
-                let response = await fetch(
-                    `${process.env.NEXT_PUBLIC_BASEURL}/profile/dp`,
-                    {
-                        method: "POST",
-                        headers: {
-                            "Authorization": session?.user?.access_token
-                        },
-                        body: formData,
-                    }
-                ).then((response) => response.json());
-
-                if (response?.data?.status === 200) {
-                    const websocket = new WebSocket('ws://localhost:3001/');
-                    let profile = {
-                        ws_type: 'profile',
-                        user_id: session?.user?.user_id,
-                    }
-                    websocket.onopen = () => {
-                        websocket.send(JSON.stringify(profile));
-                    }
+            console.log(data.secure_url);
+            let obj = { image: data.secure_url };
+            let response2 = await fetch(
+                `${process.env.NEXT_PUBLIC_BASEURL}/profile/dp`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Authorization": session?.user?.access_token
+                    },
+                    body: JSON.stringify(obj),
                 }
-
-            }.bind(this);
+            ).then((response) => response.json());
+            if (response2?.data?.status === 200) {
+                setProfileImg(data.secure_url);
+            }
+        } catch (error) {
+            console.error(error);
         }
+        // let files = e.target.files[0];
+        // var reader = new FileReader();
+        // if (files) {
+        //     reader.readAsDataURL(files);
+        //     reader.onloadend = async function (e: any) {
+        //         setProfileImg(reader.result as string);
+
+        //         var formData = new FormData();
+        //         formData.append("image", files);
+
+        //         let response = await fetch(
+        //             `${process.env.NEXT_PUBLIC_BASEURL}/profile/dp`,
+        //             {
+        //                 method: "POST",
+        //                 headers: {
+        //                     "Authorization": session?.user?.access_token
+        //                 },
+        //                 body: formData,
+        //             }
+        //         ).then((response) => response.json());
+
+        //         if (response?.data?.status === 200) {
+        //             const websocket = new WebSocket('ws://localhost:3001/');
+        //             let profile = {
+        //                 ws_type: 'profile',
+        //                 user_id: session?.user?.user_id,
+        //             }
+        //             websocket.onopen = () => {
+        //                 websocket.send(JSON.stringify(profile));
+        //             }
+        //         }
+
+        //     }.bind(this);
+        // }
 
     };
     return (
@@ -157,7 +196,7 @@ const SideBar = (props: profileSec) => {
                                 </div>
                             </div>
                             <p className='sec-title text-center'>{props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.fName !== null ? props.profileInfo?.fName + ' ' + props.profileInfo?.lName : session?.user?.name}</p>
-                            <p className='info-14-18 text-center mt-[5px]'>{props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.uName !== null? props.profileInfo?.uName[0].toUpperCase() + props.profileInfo?.uName.slice(1) : session?.user?.email}</p>
+                            <p className='info-14-18 text-center mt-[5px]'>{props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.uName !== null ? props.profileInfo?.uName[0].toUpperCase() + props.profileInfo?.uName.slice(1) : session?.user?.email}</p>
 
                         </div>
                     }
@@ -203,7 +242,7 @@ const SideBar = (props: profileSec) => {
             </div>
             {/* responsive tabs for profile pages */}
             <div className='lg:hidden block'>
-                <MainResponsivePage show={show} setShow={setShow} profileInfo1={props.profileInfo} kycInfo={props.kycInfo} referalList={props.referalList} activity={props?.activity} eventList={props.eventList} rewardsList={props.rewardsList}/>
+                <MainResponsivePage show={show} setShow={setShow} profileInfo1={props.profileInfo} kycInfo={props.kycInfo} referalList={props.referalList} activity={props?.activity} eventList={props.eventList} rewardsList={props.rewardsList} />
             </div>
         </>
     )

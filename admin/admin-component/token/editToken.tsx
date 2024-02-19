@@ -11,7 +11,7 @@ interface activeSection {
     setEditShow: Function;
     networkList: any;
     editToken?: any;
-    refreshTokenList?:any;
+    refreshTokenList?: any;
 }
 
 type UserSubmitForm = {
@@ -109,7 +109,7 @@ const EditToken = (props: activeSection) => {
             }
             index++;
         }
-    },[]);
+    }, []);
 
     let {
         register,
@@ -154,14 +154,14 @@ const EditToken = (props: activeSection) => {
         setValue("image", files);
         setTokenImg(files);
         clearErrors("image");
-        if(files){
+        if (files) {
             var reader = new FileReader();
             reader.readAsDataURL(files);
             reader.onloadend = function (e: any) {
                 setTokenImage(reader?.result as string);
             }.bind(this);
         }
-        
+
     };
 
     const onHandleSubmit = async (data: any) => {
@@ -178,7 +178,7 @@ const EditToken = (props: activeSection) => {
                 });
                 return;
             }
-            networks = data?.network.filter((e:any) => {
+            networks = data?.network.filter((e: any) => {
                 if (e.checked == true) {
                     return e;
                 }
@@ -189,23 +189,46 @@ const EditToken = (props: activeSection) => {
             });
 
             // Parse the JSON string back to an array
-            var formData = new FormData();
-            formData.append("symbol", data?.symbol);
-            formData.append("decimals", data?.decimal?.toString() || "");
-            formData.append("image", tokenImg);
-            formData.append("minimum_withdraw", data?.minimum_withdraw);
-            formData.append("fullName", data?.fullName);
-            formData.append("price", data?.price?.toString() || "");
-            formData.append("tokenType", data?.tokenType);
-            formData.append("min_price", data?.min_price?.toString() || "");
-            formData.append("max_price", data?.max_price?.toString() || "");
-            formData.append("networks", JSON.stringify(networks));
-            formData.append("type", "admin");
-            formData.append('id',props.editToken?.id);
+            // var formData = new FormData();
+            // formData.append("symbol", data?.symbol);
+            // formData.append("decimals", data?.decimal?.toString() || "");
+            // formData.append("image", tokenImg);
+            // formData.append("minimum_withdraw", data?.minimum_withdraw);
+            // formData.append("fullName", data?.fullName);
+            // formData.append("price", data?.price?.toString() || "");
+            // formData.append("tokenType", data?.tokenType);
+            // formData.append("min_price", data?.min_price?.toString() || "");
+            // formData.append("max_price", data?.max_price?.toString() || "");
+            // formData.append("networks", JSON.stringify(networks));
+            // formData.append("type", "admin");
+            // formData.append('id',props.editToken?.id);
+
+            // let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/edit`, {
+            //     method: "POST",
+            //     body: formData,
+            // });
+
+            let formData = {
+                symbol: data?.symbol,
+                decimals: data?.decimal?.toString() || "",
+                image: tokenImg,
+                minimum_withdraw: data?.minimum_withdraw,
+                fullName: data?.fullName,
+                price: data?.price?.toString() || "",
+                tokenType: data?.tokenType,
+                min_price: data?.min_price?.toString() || "",
+                max_price: data?.max_price?.toString() || "",
+                networks: JSON.stringify(networks),
+                type: "admin",
+                id: props.editToken?.id
+            }
 
             let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/edit`, {
                 method: "POST",
-                body: formData,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData),
             });
 
             let result = await res.json();

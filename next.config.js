@@ -22,6 +22,18 @@ const nextConfig = {
         port: '3000',
         pathname: '/**',
       },
+      {
+        protocol :'http',
+        hostname :'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol :'https',
+        hostname :'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      }
     ],
   },
   transpilePackages: ['react-ts-tradingview-widgets'],

@@ -45,7 +45,7 @@ const BuyPopup = (props: activeSection) => {
     resolver: yupResolver(schema)
   });
 
-  const profileImg = props?.selectedPost?.User?.profile && props?.selectedPost?.User?.profile?.image !== null ? process.env.NEXT_PUBLIC_APIURL + "/dp/" + props?.selectedPost?.User?.profile?.image : `/assets/orders/user1.png`;
+  const profileImg = props?.selectedPost?.User?.profile && props?.selectedPost?.User?.profile?.image !== null ? props?.selectedPost?.User?.profile?.image : `/assets/orders/user1.png`;
   const userName = props?.selectedPost?.User?.profile && props?.selectedPost?.User?.profile?.fName !== null ? props?.selectedPost?.User?.profile?.fName : props?.selectedPost?.User?.user_kyc?.fname;
 
   // onClick={() => { route.push("/p2p/my-orders?buy"); }}

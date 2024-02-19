@@ -271,8 +271,7 @@ const Header = (props: propsData) => {
                           src={
                             userDetail === null || userDetail?.messgae !== undefined
                               ? "/assets/profile/avtar.png"
-                              : process.env.NEXT_PUBLIC_APIURL +
-                              "/dp/" +
+                              : 
                               userDetail?.image
                           }
                           alt="error"

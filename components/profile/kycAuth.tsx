@@ -124,78 +124,141 @@ const KycAuth = (props: fixSection) => {
     clearErrors("dob");
   };
 
+  const readFile = (file: any) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = reject;
+    });
+  };
+
   const handleFileChange = async (e: any) => {
-    let files = e.target.files[0];
-    setValue("idfront", files);
-    setFromFrontImg(files)
-    clearErrors("idfront");
-    if (files) {
-      var reader = new FileReader();
-      reader.readAsDataURL(files);
-      reader.onloadend = function (e: any) {
-        setFrontImg(reader?.result as string);
-      }.bind(this);
+    try {
+      const file = await readFile(e.target.files[0]);
+      const response = await fetch(
+        "https://lucent-kelpie-aa145b.netlify.app/.netlify/functions/upload",
+        {
+          method: "POST",
+          body: file
+        } as any);
+      const data = await response.json();
+      setFromFrontImg(data.secure_url);
+      setFrontImg(data.secure_url);
+      setValue("idfront", data.secure_url);
+      clearErrors("idfront");
+    } catch (error) {
+      console.error(error);
     }
+    // let files = e.target.files[0];
+    // setValue("idfront", files);
+    // setFromFrontImg(files)
+    // clearErrors("idfront");
+    // if (files) {
+    //   var reader = new FileReader();
+    //   reader.readAsDataURL(files);
+    //   reader.onloadend = function (e: any) {
+    //     setFrontImg(reader?.result as string);
+    //   }.bind(this);
+    // }
 
   };
 
   const handleBackChange = async (e: any) => {
-    let files = e.target.files[0];
-    setFromBackImg(files);
-    setValue("idback", files as string);
 
-    clearErrors("idback");
-    if (files) {
-      var reader = new FileReader();
-      reader.readAsDataURL(files);
-      reader.onloadend = function (e: any) {
-        setBackImg(reader?.result as string);
-      }.bind(this);
+    try {
+      const file = await readFile(e.target.files[0]);
+      const response = await fetch(
+        "https://lucent-kelpie-aa145b.netlify.app/.netlify/functions/upload",
+        {
+          method: "POST",
+          body: file
+        } as any);
+      const data = await response.json();
+      setFromBackImg(data.secure_url);
+      setBackImg(data.secure_url);
+      setValue("idback", data.secure_url);
+      clearErrors("idback");
+    } catch (error) {
+      console.error(error);
     }
+
+    // let files = e.target.files[0];
+    // setFromBackImg(files);
+    // setValue("idback", files as string);
+    // if (files) {
+    //   var reader = new FileReader();
+    //   reader.readAsDataURL(files);
+    //   reader.onloadend = function (e: any) {
+    //     setBackImg(reader?.result as string);
+    //   }.bind(this);
+    // }
 
   };
 
   const handleSelfieChange = async (e: any) => {
-    let files = e.target.files[0];
 
-    setFormSelfieImg(files);
-    setValue("statement", files as string);
-    clearErrors("statement");
-    if (files) {
-      var reader = new FileReader();
-      reader.readAsDataURL(files);
-      reader.onloadend = function (e: any) {
-        setSelfieImg(reader.result as string);
-      }.bind(this);
+    try {
+      const file = await readFile(e.target.files[0]);
+      const response = await fetch(
+        "https://lucent-kelpie-aa145b.netlify.app/.netlify/functions/upload",
+        {
+          method: "POST",
+          body: file
+        } as any);
+      const data = await response.json();
+      setFormSelfieImg(data.secure_url);
+      setSelfieImg(data.secure_url)
+      setValue("statement", data.secure_url);
+      clearErrors("statement");
+    } catch (error) {
+      console.error(error);
     }
+    // let files = e.target.files[0];
+    // setFormSelfieImg(files);
+    // setValue("statement", files as string);
+    // clearErrors("statement");
+    // if (files) {
+    //   var reader = new FileReader();
+    //   reader.readAsDataURL(files);
+    //   reader.onloadend = function (e: any) {
+    //     setSelfieImg(reader.result as string);
+    //   }.bind(this);
+    // }
 
   };
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
     try {
 
-      var formData = new FormData();
-      formData.append("idback", formBackImg);
-      formData.append("idfront", formFrontImg);
-      formData.append("statement", formSelfieImg);
-      formData.append("country", data?.country);
-      formData.append("fname", data?.fname);
-      // formData.append("lname", "asdasdass");
-      formData.append("doctype", data?.doctype);
-      formData.append("docnumber", data?.docnumber);
-      formData.append("userid", session?.user?.user_id);
-      formData.append("username", session?.user?.email);
-      formData.append("dob", data?.dob.toString());
+      // var formData = new FormData();
+      // formData.append("idback", formBackImg);
+      // formData.append("idfront", formFrontImg);
+      // formData.append("statement", formSelfieImg);
+      // formData.append("country", data?.country);
+      // formData.append("fname", data?.fname);
+      // // formData.append("lname", "asdasdass");
+      // formData.append("doctype", data?.doctype);
+      // formData.append("docnumber", data?.docnumber);
+      // formData.append("userid", session?.user?.user_id);
+      // formData.append("username", session?.user?.email);
+      // formData.append("dob", data?.dob.toString());
+
+      const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
+      let record = encodeURIComponent(ciphertext.toString());
 
       if (status === 'authenticated') {
-
         let res = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/kyc`,
           {
             method: "POST",
             headers: {
+              'Content-Type': 'application/json',
               "Authorization": session?.user?.access_token
             },
-            body: formData
+            body: JSON.stringify(record)
           }
         )
 
@@ -209,13 +272,13 @@ const KycAuth = (props: fixSection) => {
           setFrontImg('')
           setValue("doctype", '')
           setValue("country", '')
-          if(window.innerWidth<768){
+          if (window.innerWidth < 768) {
             props?.setVerified(false)
-            setTimeout(()=>{
+            setTimeout(() => {
               props.setShow(4)
-            },1000)
+            }, 1000)
           }
-          else{
+          else {
             router.reload()
 
           }

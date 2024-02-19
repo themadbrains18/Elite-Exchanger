@@ -119,18 +119,53 @@ const AddToken = (props: activeSection) => {
     clearErrors("tokenType");
   };
 
+  const readFile = (file: any) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = reject;
+    });
+  };
+
   const handleFileChange = async (e: any) => {
-    let files = e.target.files[0];
-    setValue("image", files);
-    setTokenImg(files);
-    clearErrors("image");
-    if (files) {
-      var reader = new FileReader();
-      reader.readAsDataURL(files);
-      reader.onloadend = function (e: any) {
-        setTokenImage(reader?.result as string);
-      }.bind(this);
+
+    try {
+      const file = await readFile(e.target.files[0]);
+      // var formData = new FormData();
+      // formData.append("image", e.target.files[0]);
+      // formData.append("folder", "token");
+      // let obj = {
+      //   image: file,
+      //   folder: 'token'
+      // }
+      const response = await fetch(
+        "https://lucent-kelpie-aa145b.netlify.app/.netlify/functions/upload",
+        {
+          method: "POST",
+          body: file
+        } as any);
+      const data = await response.json();
+      setTokenImg(data.secure_url);
+      setValue("image", data.secure_url);
+      clearErrors("image");
+    } catch (error) {
+      console.error(error);
     }
+    // let files = e.target.files[0];
+    // setValue("image", files);
+    // setTokenImg(files);
+    // clearErrors("image");
+    // if (files) {
+    //   var reader = new FileReader();
+    //   reader.readAsDataURL(files);
+    //   reader.onloadend = function (e: any) {
+    //     setTokenImage(reader?.result as string);
+    //   }.bind(this);
+    // }
 
   };
 
@@ -148,7 +183,7 @@ const AddToken = (props: activeSection) => {
         });
         return;
       }
-      networks = data?.network.filter((e:any) => {
+      networks = data?.network.filter((e: any) => {
         if (e.checked == true) {
           return e;
         }
@@ -158,29 +193,60 @@ const AddToken = (props: activeSection) => {
         delete v.checked;
       });
 
-      // Parse the JSON string back to an array
-      var formData = new FormData();
-      formData.append("symbol", data?.symbol);
-      formData.append("decimals", data?.decimal?.toString() || "");
-      formData.append("image", tokenImg);
-      formData.append("minimum_withdraw", data?.minimum_withdraw);
-      formData.append("fullName", data?.fullName);
-      // formData.append("lname", "asdasdass");
-      formData.append("price", data?.price?.toString() || "");
-      formData.append("tokenType", data?.tokenType);
-      formData.append("min_price", data?.min_price?.toString() || "");
-      formData.append("max_price", data?.max_price?.toString() || "");
-      formData.append("networks", JSON.stringify(networks));
-      formData.append("type", "admin");
-      formData.append('fees', "500");
+      if(tokenImg === ""){
+        setError("image", {
+          type: "custom",
+          message: `Please upload token symbol`,
+        });
+        return;
+      }
 
+      // Parse the JSON string back to an array
+      // var formData = new FormData();
+      // formData.append("symbol", data?.symbol);
+      // formData.append("decimals", data?.decimal?.toString() || "");
+      // formData.append("image", tokenImg);
+      // formData.append("minimum_withdraw", data?.minimum_withdraw);
+      // formData.append("fullName", data?.fullName);
+      // // formData.append("lname", "asdasdass");
+      // formData.append("price", data?.price?.toString() || "");
+      // formData.append("tokenType", data?.tokenType);
+      // formData.append("min_price", data?.min_price?.toString() || "");
+      // formData.append("max_price", data?.max_price?.toString() || "");
+      // formData.append("networks", JSON.stringify(networks));
+      // formData.append("type", "admin");
+      // formData.append('fees', "500");
+
+      // let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/create`, {
+      //   method: "POST",
+      //   headers: {
+      //     "Authorization": session?.user?.access_token || ''
+      //   },
+      //   body: formData,
+      // });
+
+      let formData = {
+        symbol: data?.symbol,
+        decimals: data?.decimal?.toString() || "",
+        image: tokenImg,
+        minimum_withdraw: data?.minimum_withdraw,
+        fullName: data?.fullName,
+        price: data?.price?.toString() || "",
+        tokenType: data?.tokenType,
+        min_price: data?.min_price?.toString() || "",
+        max_price: data?.max_price?.toString() || "",
+        networks: JSON.stringify(networks),
+        type: "admin",
+        fees: "500"
+      }
 
       let res = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/token/create`, {
         method: "POST",
         headers: {
+          'Content-Type': 'application/json',
           "Authorization": session?.user?.access_token || ''
         },
-        body: formData,
+        body: JSON.stringify(formData),
       });
 
       let result = await res.json();
