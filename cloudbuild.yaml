@@ -1,20 +1,15 @@
-  steps:
-  # Build the container image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/cloudrun/placeholder@sha256:f4591519961e83429afdeb65e4a3c236350dc5cd4953e707ad469f859f3eb7e3', '.']
-  # Push the container image to Container Registry
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/cloudrun/placeholder@sha256:f4591519961e83429afdeb65e4a3c236350dc5cd4953e707ad469f859f3eb7e3']
-  # Deploy container image to Cloud Run
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args:
-    - 'run'
-    - 'deploy'
-    - 'SERVICE-NAME'
-    - '--image'
-    - 'gcr.io/cloudrun/placeholder@sha256:f4591519961e83429afdeb65e4a3c236350dc5cd4953e707ad469f859f3eb7e3'
-    - '--region'
-    - 'REGION'
-  images:
-  - 'gcr.io/$PROJECT_ID/SERVICE-NAME:$COMMIT_SHA'
+# [START cloudbuild_npm_node]
+steps:
+  # Install dependencies
+  - name: node
+    entrypoint: npm
+    args: ["install"]
+  # Run tests
+  - name: node
+    entrypoint: npm
+    args: ["test"]
+  # Run custom commands
+  - name: node
+    entrypoint: npm
+    args: ["run", "build"]
+# [END cloudbuild_npm_node]
