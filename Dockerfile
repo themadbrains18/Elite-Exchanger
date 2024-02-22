@@ -14,5 +14,5 @@ EXPOSE 4000
 CMD ["npm", "run","start"]
 
 
-#gcr.io/crypto-planet-415008/github.com/themadbrains18/nextjs-google-cloud
+#asia-south1-docker.pkg.dev/crypto-planet-415008/cloud-run-source-deploy/elite-exchanger/elite-exchange
 #310839749430-compute@developer.gserviceaccount.com
