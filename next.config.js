@@ -33,6 +33,13 @@ const nextConfig = {
         hostname :'res.cloudinary.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        // https://elite-exchange-7gch2fryja-el.a.run.app/
+        protocol: 'https',
+        hostname: 'elite-exchange-7gch2fryja-el.a.run.app',
+        port: '',
+        pathname: '/**',
       }
     ],
   },
