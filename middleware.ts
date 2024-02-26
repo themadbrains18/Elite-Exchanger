@@ -33,7 +33,7 @@ export default async function middleware(req: NextRequest, res : NextResponse) {
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:7000)
   let hostname = req.headers
     .get("host")!
-    .replace(".elite-exchange-7gch2fryja-el.a.run.app", `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
+    .replace(`.${process.env.NEXT_PUBLIC_APP_HOSTNAME}`, `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
   // special case for Vercel preview deployment URLs
   if (
@@ -77,7 +77,7 @@ export default async function middleware(req: NextRequest, res : NextResponse) {
   // console.log(path,"==path");
   // rewrite root application to `/home` folder
   if (
-    hostname === "elite-exchange-7gch2fryja-el.a.run.app" ||
+    hostname === process.env.NEXT_PUBLIC_APP_HOSTNAME ||
     hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
   ) {
  
