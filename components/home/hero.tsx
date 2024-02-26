@@ -50,18 +50,18 @@ const Hero = () => {
                                 </div> */}
 
                             <div className="md:grid hidden grid-cols-3 gap-[15px]">
-                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/../public/assets/home/bannerLogo-1.png" alt="Logo" width={251} height={50}/>
-                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/../public/assets/home/bannerLogo-2.png" alt="Logo" width={251} height={50}/>
-                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/../public/assets/home/bannerLogo-3.png" alt="Logo" width={251} height={50}/>
-                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/../public/assets/home/bannerLogo-4.png" alt="Logo" width={251} height={50}/>
-                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/../public/assets/home/bannerLogo-5.png" alt="Logo" width={251} height={50}/>
-                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/../public/assets/home/bannerLogo-6.png" alt="Logo" width={251} height={50}/>
+                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-1.png" alt="Logo" width={251} height={50}/>
+                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-2.png" alt="Logo" width={251} height={50}/>
+                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-3.png" alt="Logo" width={251} height={50}/>
+                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-4.png" alt="Logo" width={251} height={50}/>
+                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-5.png" alt="Logo" width={251} height={50}/>
+                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-6.png" alt="Logo" width={251} height={50}/>
                             </div>
                             </div>
                         </div>
 
                         <div className="hero_right w-full max-w-[820px] lg:flex lg:items-center order-1 lg:order-2">
-                            <Image src="/../public/assets/home/BannerLight1.png" alt="Laptop-image" className="block w-full" width={653} height={500}/>
+                            <Image src="/assets/home/BannerLight1.png" alt="Laptop-image" className="block w-full" width={653} height={500}/>
                         </div>
                     </div>
                 </div>
