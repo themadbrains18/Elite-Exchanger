@@ -77,7 +77,7 @@ export default async function middleware(req: NextRequest, res : NextResponse) {
   // console.log(path,"==path");
   // rewrite root application to `/home` folder
   if (
-    hostname === "https://elite-exchange-7gch2fryja-el.a.run.app" ||
+    hostname === "elite-exchange-7gch2fryja-el.a.run.app" ||
     hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
   ) {
  
