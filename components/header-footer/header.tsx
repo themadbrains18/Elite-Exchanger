@@ -124,13 +124,13 @@ const Header = (props: propsData) => {
     // console.log(tokenList,"==hfjdhjfhdjfj");
 
     let spot = tokenList?.data.filter((item: any) => {
-      return item.tradePair !== null
+      return item.tradepair !== null
     });
 
     SetSpotTrade(spot);
 
     let future = tokenList?.data.filter((item: any) => {
-      return item.futureTradePair !== null
+      return item.futuretradepair !== null
     });
     // console.log(future,"===dshkjhd");
 
@@ -177,14 +177,14 @@ const Header = (props: propsData) => {
                                   return (
                                     <li key={nesIndex} className="mb-[10px]">
                                       {/* onClick={() => router.push({
-                                        pathname: `/chart/${item?.tradePair?.symbolOne}`
+                                        pathname: `/chart/${item?.tradepair?.symbolOne}`
                                       })} */}
-                                      <Link href={`/chart/${item?.tradePair?.symbolOne}`}>
-                                      <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full cursor-pointer" onClick={() => {router.push(`/chart/${item?.tradePair?.symbolOne}`)}}>
+                                      <Link href={`/chart/${item?.tradepair?.symbolOne}`}>
+                                      <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full cursor-pointer" onClick={() => {router.push(`/chart/${item?.tradepair?.symbolOne}`)}}>
                                         <Image src={`${item.image}`} width={30} height={30} alt="coins" className="min-w-[30px]" />
                                         <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                          <p className="info-14-18 dark:text-white">{item?.tradePair?.symbolOne}/{item?.tradePair?.symbolTwo}</p>
-                                          <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.tradePair?.symbolOne}{item?.tradePair?.symbolTwo}</p>
+                                          <p className="info-14-18 dark:text-white">{item?.tradepair?.symbolOne}/{item?.tradepair?.symbolTwo}</p>
+                                          <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.tradepair?.symbolOne}{item?.tradepair?.symbolTwo}</p>
                                         </div>
                                       </div>
                                       </Link>
@@ -199,15 +199,15 @@ const Header = (props: propsData) => {
                             <div className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px]">
                               <ul>
                                 {futureTrade?.map((item: any, nesIndex: any) => {
-                                  let symbol = item?.futureTradePair?.coin_symbol === 'BTCB' ? 'BTC' : item?.futureTradePair?.coin_symbol === 'BNBT' ? 'BNB' : item?.futureTradePair?.coin_symbol
+                                  let symbol = item?.futuretradepair?.coin_symbol === 'BTCB' ? 'BTC' : item?.futuretradepair?.coin_symbol === 'BNBT' ? 'BNB' : item?.futuretradepair?.coin_symbol
                                   return (
                                     <li key={nesIndex} className="mb-[10px]">
-                                      <Link href={`/future/${symbol}${item?.futureTradePair?.usdt_symbol}`}>
+                                      <Link href={`/future/${symbol}${item?.futuretradepair?.usdt_symbol}`}>
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
                                           <Image src={`${item.image}`} width={30} height={30} alt="coins" className="min-w-[30px]" />
                                           <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                            <p className="info-14-18 dark:text-white">{symbol}{item?.futureTradePair?.usdt_symbol}</p>
-                                            <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.futureTradePair?.coin_symbol}{item?.futureTradePair?.usdt_symbol}</p>
+                                            <p className="info-14-18 dark:text-white">{symbol}{item?.futuretradepair?.usdt_symbol}</p>
+                                            <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.futuretradepair?.coin_symbol}{item?.futuretradepair?.usdt_symbol}</p>
                                           </div>
                                         </div>
                                       </Link>
