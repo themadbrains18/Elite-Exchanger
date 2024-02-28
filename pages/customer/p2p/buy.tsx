@@ -82,17 +82,24 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const providers = await getProviders()
 
   let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
-    method: "GET"
+    method: "GET",
+    headers:{
+      "Access-Control-Allow-Origin" :"*",
+    }
   }).then(response => response.json());
 
   let allPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/buy`, {
     method: "GET",
+    headers:{
+      "Access-Control-Allow-Origin" :"*",
+    }
   }).then(response => response.json());
 
   // masterpayment
   let masterPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/masterpayment`, {
     method: "GET",
     headers: {
+      "Access-Control-Allow-Origin" :"*",
       "Authorization": session?.user?.access_token
     },
   }).then(response => response.json());
