@@ -48,7 +48,6 @@ export async function getData(url: string = '', data: any = {}) {
     cache: 'no-cache',
     credentials: 'same-origin',
     headers: {
-      "Access-Control-Allow-Origin" :"*",
       'Content-Type': 'application/json',
     },
     redirect: 'follow',
@@ -83,7 +82,6 @@ export async function getMethod(url = '', token = '') {
     cache: 'no-cache',
     credentials: 'same-origin',
     headers: {
-      "Access-Control-Allow-Origin" :"*",
       'Content-Type': 'application/json',
       'authorization': `${token.trim()}`
     },

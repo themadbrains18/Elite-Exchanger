@@ -68,6 +68,8 @@ const P2pBuy = (props: propsData) => {
 
   return (
     <P2pLayout>
+      <>
+      </>
       <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} posts={newPosts.length > 0 ? newPosts : props.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} />
       <BuyPopup show1={show1} setShow1={setShow1} selectedPost={selectedPost} />
     </P2pLayout>
@@ -82,24 +84,17 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const providers = await getProviders()
 
   let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
-    method: "GET",
-    headers:{
-      "Access-Control-Allow-Origin" :"*",
-    }
+    method: "GET"
   }).then(response => response.json());
 
   let allPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/buy`, {
     method: "GET",
-    headers:{
-      "Access-Control-Allow-Origin" :"*",
-    }
   }).then(response => response.json());
 
   // masterpayment
   let masterPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/masterpayment`, {
     method: "GET",
     headers: {
-      "Access-Control-Allow-Origin" :"*",
       "Authorization": session?.user?.access_token
     },
   }).then(response => response.json());
