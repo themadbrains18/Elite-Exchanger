@@ -93,8 +93,6 @@ export async function getMethod(url = '', token = '') {
   let status = response.status;
   let res = await response.json()
 
-  res.setHeader('Access-Control-Allow-Credentials', true)
-  res.setHeader('Access-Control-Allow-Origin', '*')
   if (typeof res == "object") {
     return res;
   } else {
