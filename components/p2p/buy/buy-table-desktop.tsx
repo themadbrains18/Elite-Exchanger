@@ -87,9 +87,9 @@ const BuyTableDesktop = (props: activeSection) => {
 
               // console.log(item, '========post list');
               if (session?.user?.user_id !== item?.user_id) {
-                const profileImg = item?.User.profile && item?.User?.profile?.image !== null ? item?.User?.profile?.image : `/assets/orders/user1.png`;
+                const profileImg = item?.User.profile && item?.User?.profile?.image !== null ? `${process.env.NEXT_PUBLIC_APIURL}/dp/${item?.User?.profile?.image}` : `/assets/orders/user1.png`;
                 const userName = item?.User?.profile && item?.User?.profile?.fName !== null ? item?.User?.profile?.fName : item?.User?.user_kyc?.fname;
-
+                
                 return (
                   <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FAFAFA] cursor-pointer">
                     <td className="group-hover:bg-[#FAFAFA] dark:group-hover:bg-black-v-1 ">
