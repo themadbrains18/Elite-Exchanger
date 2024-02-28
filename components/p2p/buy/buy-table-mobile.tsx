@@ -31,7 +31,7 @@ const BuyTableMobile = (props: activeSection) => {
         <>
             {
                 currentItems?.map((item: any, ind: number) => {
-                    const profileImg = item?.User.profile && item?.User?.profile?.image !== null ? `${process.env.NEXT_PUBLIC_APIURL}/dp/${item?.User?.profile?.image}` : `/assets/orders/user1.png`;
+                    const profileImg = item?.User?.profile && item?.User?.profile?.image !== null ? `${process.env.NEXT_PUBLIC_APIURL}/dp/${item?.User?.profile?.image}` : `/assets/orders/user1.png`;
                     const userName = item?.User?.profile && item?.User?.profile?.fName !== null ? item?.User?.profile?.fName : item?.User?.user_kyc?.fname;
                     return (
                         <Fragment key={ind}>
