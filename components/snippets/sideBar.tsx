@@ -81,15 +81,17 @@ const SideBar = (props: profileSec) => {
             return;
         }
 
-        const file = await readFile(e.target.files[0]);
+        // const file = await readFile(e.target.files[0]);
         try {
-            const response = await fetch(
-                "https://lucent-kelpie-aa145b.netlify.app/.netlify/functions/upload",
-                {
-                    method: "POST",
-                    body: file
-                } as any);
-            const data = await response.json();
+            let file = e.target.files[0]
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'my-uploads');
+
+            const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
+                method: 'POST',
+                body: formData
+            }).then(r => r.json());
 
             console.log(data.secure_url);
             let obj = { image: data.secure_url };

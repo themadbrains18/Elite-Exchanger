@@ -134,21 +134,15 @@ const AddToken = (props: activeSection) => {
   const handleFileChange = async (e: any) => {
 
     try {
-      const file = await readFile(e.target.files[0]);
-      // var formData = new FormData();
-      // formData.append("image", e.target.files[0]);
-      // formData.append("folder", "token");
-      // let obj = {
-      //   image: file,
-      //   folder: 'token'
-      // }
-      const response = await fetch(
-        "https://lucent-kelpie-aa145b.netlify.app/.netlify/functions/upload",
-        {
-          method: "POST",
-          body: file
-        } as any);
-      const data = await response.json();
+      let file = e.target.files[0]
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'my-uploads');
+
+      const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
+        method: 'POST',
+        body: formData
+      }).then(r => r.json());
       setTokenImg(data.secure_url);
       setValue("image", data.secure_url);
       clearErrors("image");

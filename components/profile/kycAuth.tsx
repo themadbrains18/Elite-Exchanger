@@ -138,18 +138,22 @@ const KycAuth = (props: fixSection) => {
 
   const handleFileChange = async (e: any) => {
     try {
-      const file = await readFile(e.target.files[0]);
-      const response = await fetch(
-        "https://lucent-kelpie-aa145b.netlify.app/.netlify/functions/upload",
-        {
-          method: "POST",
-          body: file
-        } as any);
-      const data = await response.json();
+
+      let file = e.target.files[0]
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'my-uploads');
+
+      const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
+        method: 'POST',
+        body: formData
+      }).then(r => r.json());
+
       setFromFrontImg(data.secure_url);
       setFrontImg(data.secure_url);
       setValue("idfront", data.secure_url);
       clearErrors("idfront");
+
     } catch (error) {
       console.error(error);
     }
@@ -170,14 +174,17 @@ const KycAuth = (props: fixSection) => {
   const handleBackChange = async (e: any) => {
 
     try {
-      const file = await readFile(e.target.files[0]);
-      const response = await fetch(
-        "https://lucent-kelpie-aa145b.netlify.app/.netlify/functions/upload",
-        {
-          method: "POST",
-          body: file
-        } as any);
-      const data = await response.json();
+      let file = e.target.files[0]
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'my-uploads');
+
+      const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
+        method: 'POST',
+        body: formData
+      }).then(r => r.json());
+
+
       setFromBackImg(data.secure_url);
       setBackImg(data.secure_url);
       setValue("idback", data.secure_url);
@@ -202,14 +209,16 @@ const KycAuth = (props: fixSection) => {
   const handleSelfieChange = async (e: any) => {
 
     try {
-      const file = await readFile(e.target.files[0]);
-      const response = await fetch(
-        "https://lucent-kelpie-aa145b.netlify.app/.netlify/functions/upload",
-        {
-          method: "POST",
-          body: file
-        } as any);
-      const data = await response.json();
+      let file = e.target.files[0]
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'my-uploads');
+
+      const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
+        method: 'POST',
+        body: formData
+      }).then(r => r.json());
+
       setFormSelfieImg(data.secure_url);
       setSelfieImg(data.secure_url)
       setValue("statement", data.secure_url);
