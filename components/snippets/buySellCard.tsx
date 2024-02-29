@@ -97,7 +97,7 @@ const BuySellCard = (props: DynamicId) => {
       setFirstCurrency(symbol);
 
       let token = list.filter((item: any) => {
-        return item.symbol === symbol && item?.tradePair !== null
+        return item.symbol === symbol && item?.tradepair !== null
       });
 
       if (token.length > 0) {
@@ -407,7 +407,7 @@ const BuySellCard = (props: DynamicId) => {
               </div>
             </div>
 
-            {show === 1 && props.token?.tradePair?.limit_trade === false &&
+            {show === 1 && props.token?.tradepair?.limit_trade === false &&
               <>
                 <p className={`mt-[60px] info-16-18 text-center`}>
                   Limit orders are unavailable for {props?.slug} at the moment
@@ -418,7 +418,7 @@ const BuySellCard = (props: DynamicId) => {
               </>
 
             }
-            {((show === 1 && props.token?.tradePair?.limit_trade === true) || show === 2) &&
+            {((show === 1 && props.token?.tradepair?.limit_trade === true) || show === 2) &&
               <>
                 <div className="mt-5 flex gap-[18px] items-center">
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
@@ -497,7 +497,7 @@ const BuySellCard = (props: DynamicId) => {
             }
           </div>
 
-          {((show === 1 && props.token?.tradePair?.limit_trade === true) || show === 2) &&
+          {((show === 1 && props.token?.tradepair?.limit_trade === true) || show === 2) &&
             <>
               {props?.session ?
                 <button type="submit" className=" solid-button w-full" >{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>

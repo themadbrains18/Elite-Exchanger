@@ -198,11 +198,11 @@ const ResponsiveSidebar = (props: defaultStates) => {
                             {props?.spotTrade?.map((item: any, nesIndex: any) => {
                               return (
                                 <li key={nesIndex} className="mb-[10px]">
-                                  <Link href={`/chart/${item?.tradePair?.symbolOne}`} className='block'>
+                                  <Link href={`/chart/${item?.tradepair?.symbolOne}`} className='block'>
                                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
                                       <Image src={`${item.image}`} width={30} height={30} alt="coins" />
                                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                        <p className="info-14-18 dark:text-white">{item?.tradePair?.symbolOne}/{item?.tradePair?.symbolTwo}</p>
+                                        <p className="info-14-18 dark:text-white">{item?.tradepair?.symbolOne}/{item?.tradepair?.symbolTwo}</p>
                                         <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.tradePair?.symbolOne}{item?.tradePair?.symbolTwo}</p>
                                       </div>
                                     </div>
@@ -220,12 +220,12 @@ const ResponsiveSidebar = (props: defaultStates) => {
                             {props?.futureTrade?.map((item: any, nesIndex: any) => {
                               return (
                                 <li key={nesIndex} className="mb-[10px]">
-                                  <Link href={`/future/${item?.futureTradePair?.coin_symbol}${item?.futureTradePair?.usdt_symbol}`} className='block'>
+                                  <Link href={`/future/${item?.futuretradepair?.coin_symbol}${item?.futuretradepair?.usdt_symbol}`} className='block'>
                                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
                                       <Image src={`${item.image}`} width={30} height={30} alt="coins" />
                                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                        <p className="info-14-18 dark:text-white">{item?.futureTradePair?.coin_symbol}{item?.futureTradePair?.usdt_symbol}</p>
-                                        <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.futureTradePair?.coin_symbol}{item?.futureTradePair?.usdt_symbol}</p>
+                                        <p className="info-14-18 dark:text-white">{item?.futuretradepair?.coin_symbol}{item?.futuretradepair?.usdt_symbol}</p>
+                                        <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.futuretradepair?.coin_symbol}{item?.futuretradepair?.usdt_symbol}</p>
                                       </div>
                                     </div>
                                   </Link>
