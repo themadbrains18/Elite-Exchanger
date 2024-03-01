@@ -25,9 +25,14 @@ const InvestorSec = () => {
     ]
   return (
     <>
-        <section className="investor-sec py-40 md:py-100 bg-bg-secondary dark:bg-d-bg-primary">
+        <section className="investor-sec py-60 md:py-100 bg-bg-secondary dark:bg-d-bg-primary">
             <div className="container">
-                <div className='capitalize text-center sec-title'>Backed By Investors</div>
+                <div className='flex gap-[30px] items-center'>
+                    <div className='max-w-full w-full h-[2px] bg-lineGradient'></div>
+                <div className='capitalize text-center sec-title whitespace-nowrap'>Backed By Investors</div>
+                    <div className='max-w-full w-full h-[2px] bg-lineGradient'></div>
+
+                </div>
                 <div className='flex pt-50 gap-[30px] justify-between align-middle flex-wrap'>
                 {
                     investorData.map((elem,ind)=>{

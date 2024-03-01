@@ -5,7 +5,7 @@ import BitCoin from '../../public/assets/home/bitcoin-bg.png';
 const StartMinning = () => {
   return (
     <section className='py-[30px] md:py-100 dark:bg-black-v-1'>
-        <div className="container max-w-[1272px] px-20 py-60 lg:p-50 bg-primary lg:rounded-16 relative">
+        <div className="container max-w-[1272px] px-20 py-60 lg:p-50 bg-[#3671E9] lg:rounded-16 relative">
             <Image src={ETH} width={170} height={185} alt='error' className='absolute top-0 left-0' />
             <Image src={BitCoin} width={170} height={185} alt='error'  className='absolute bottom-0 right-0' />
             <div className='flex items-center flex-col lg:flex-row justify-between relative z-1'>
@@ -14,7 +14,7 @@ const StartMinning = () => {
                     <p className='sec-text !text-white'>Join now with DYNAMIC to get the latest news and start mining now</p>
                 </div>
                 <div className='flex flex-col sm:flex-row items-center gap-[42px] max-w-full md:max-w-[598px] w-full justify-center lg:justify-end'>
-                    <input type="text" id='miningEmail' name='miningEmail' placeholder='Enter your email' className='pb-[10px] sec-text text-white outline-none border-b border-[#ffffff66] bg-[transparent] max-w-[396px] w-full' />
+                    <input type="text" id='miningEmail' name='miningEmail' placeholder='Enter your email' className='pb-[10px] sec-text !text-white outline-none border-b placeholder:text-white dark:border-white border-[#ffffff66] bg-[transparent] max-w-[396px] w-full' />
                     <button type='submit' className='w-full sm:w-auto pill-solid-button '>Subscribe</button>
                 </div>
             </div>

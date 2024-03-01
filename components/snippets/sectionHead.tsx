@@ -19,7 +19,7 @@ const SectionHead = (props:secHeaddata) => {
 return (
     <div>
         <div className={`secHeader ${props.center && 'text-center'} ${props.headData.spacing && 'mb-[20px] md:mb-[36px]'}`}>
-            <span className={` ${props.headData.spacing && 'block mb-[10px] md:mb-[36px]'} mb-[10px] block sec-title !text-primary`}>{props.headData.title}</span>
+            <span className={` ${props.headData.spacing && 'block mb-[10px] md:mb-[36px]'} !text-[18px] font-normal md:mb-[15px] mb-[10px] block sec-title !text-primary`}>{props.headData.title}</span>
             <p className='sec-subTitle mb-[31px]'>{props.headData.subTitle}</p>
         </div>
         <div className={`${props.headData.spacing && 'mb-[50px] md:mb-[70px]'} secBody `}>

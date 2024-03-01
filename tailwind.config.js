@@ -116,6 +116,7 @@ module.exports = {
         'darkLaptop': 'url("../public/assets/darkLaptop.png")',
         'lightLaptop': 'url("../public/assets/lightLaptop.png")',
         'calenderIcon': "url('../public/assets/payment/calender.svg')",
+        'lineGradient':'linear-gradient(90deg,rgba(233, 234, 240, 0.15) 0%,rgba(233, 234, 240, 0) 186.74%)'
       },
       boxShadow: {
         'card': '0px 13px 37px 0px rgba(0, 0, 0, 0.21)'
