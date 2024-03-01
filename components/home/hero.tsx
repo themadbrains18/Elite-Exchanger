@@ -5,8 +5,8 @@ import { useContext } from "react";
 import Context from "../contexts/context";
 
 const Hero = () => {
-    const {mode} = useContext(Context)
-    return(
+    const { mode } = useContext(Context)
+    return (
         <div className="pb-[0] pt-[20px]   w-full">
             <div className="dark:bg-d-bg-primary bg-bg-primary rounded-[10px] md:rounded-20 xl:px-[114px] py-[20px] lg:py-[32px] ">
                 <div className="container ">
@@ -21,7 +21,7 @@ const Hero = () => {
                                 <p className="font-medium text-[14px] md:text-[18px] leading-22 md:leading-24 text-banner-text dark:text-d-banner-text mb-[40px] md:mb-50">Join world’s biggest & tursted Exchange.Trade in Bitcoin, Ethereum, Ripple and many more currencies.</p>
                                 <Link className="solid-button text-[18px] max-w-full sm:max-w-[244px] w-full inline-block text-center" href="/chart/BTCB">Start Trading</Link>
                             </div>
-                        
+
 
                             <div className="hero_footer">
                                 {/* <div className="block md:hidden">
@@ -52,24 +52,24 @@ const Hero = () => {
                                     </Swiper>
                                 </div> */}
 
-                            <div className="md:grid hidden grid-cols-3 gap-x-[101px] gap-y-[50px]">
-                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-1.png" alt="Logo" width={251} height={50}/>
-                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-2.png" alt="Logo" width={251} height={50}/>
-                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-3.png" alt="Logo" width={251} height={50}/>
-                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-4.png" alt="Logo" width={251} height={50}/>
-                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-5.png" alt="Logo" width={251} height={50}/>
-                                <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-6.png" alt="Logo" width={251} height={50}/>
-                            </div>
+                                <div className="md:grid flex overflow-x-auto gap-[30px] grid-cols-3 md:gap-x-[101px] md:gap-y-[50px]">
+                                    <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-1.png" alt="Logo" width={251} height={50} />
+                                    <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-2.png" alt="Logo" width={251} height={50} />
+                                    <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-3.png" alt="Logo" width={251} height={50} />
+                                    <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-4.png" alt="Logo" width={251} height={50} />
+                                    <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-5.png" alt="Logo" width={251} height={50} />
+                                    <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-6.png" alt="Logo" width={251} height={50} />
+                                </div>
                             </div>
                         </div>
 
                         <div className="hero_right w-full max-w-[820px] lg:flex lg:items-center order-1 lg:order-2">
-                            <Image src={`/assets/home/${mode==="light"?"BannerLight1.png":"BannerDark1.png"}`} alt="Laptop-image" className="block w-full" width={653} height={500}/>
+                            <Image src={`/assets/home/${mode === "light" ? "BannerLight1.png" : "BannerDark1.png"}`} alt="Laptop-image" className="block w-full" width={653} height={500} />
                         </div>
                     </div>
                 </div>
             </div>
-        
+
         </div>
     )
 }
