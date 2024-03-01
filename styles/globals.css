@@ -588,3 +588,37 @@ input[name="colored-radio"].contactform:checked + .custom-radio{
 .info-wrapper:hover + div{
   opacity: 1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*  home page card hover effect  */
+
+
+.cardoverlay {
+
+  transform: rotateX(22deg);
+}
+
+/* .cardcantainerhovereffect:hover .cardoverlay {
+  width: 100%;
+  left: 0;
+  opacity: 0.3;
+  transform: unset;
+  border-radius: 10px;
+} */
+
+.cardcontent {
+  height: 400px;
+  background-color: black;
+}

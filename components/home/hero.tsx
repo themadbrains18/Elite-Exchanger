@@ -53,7 +53,7 @@ const Hero = () => {
                                 </div> */}
 
                                 <div className="md:grid flex overflow-x-auto gap-[30px] grid-cols-3 md:gap-x-[101px] md:gap-y-[50px]">
-                                    <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-1.png" alt="Logo" width={251} height={50} />
+                                    <Image className="block m-auto aspect-[1] h-[50px] object-contain w-[157px]" src="/assets/home/bannerLogo-1.png" alt="Logo" width={251} height={50} />
                                     <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-2.png" alt="Logo" width={251} height={50} />
                                     <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-3.png" alt="Logo" width={251} height={50} />
                                     <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-4.png" alt="Logo" width={251} height={50} />
