@@ -57,7 +57,7 @@ const DashboardHeader = () => {
   
   
   return ( 
-    <header className='bg-white shadow-[0px_5px_8px_0px_#464e5f05] z-[9] dark:shadow-[0px_5px_8px_0px_#464e5f05] dark:bg-grey-v-4  fixed top-0 w-full right-0 w-full max-w-[calc(100%-240px)] py-[30px] px-[24px]'>
+    <header className='bg-white shadow-[0px_5px_8px_0px_#464e5f05] z-[9] dark:shadow-[0px_5px_8px_0px_#464e5f05] dark:bg-grey-v-4  fixed top-0 w-full right-0  max-w-[calc(100%-240px)] py-[30px] px-[24px]'>
       <div className='flex items-center justify-between'>
         <div>
           {

@@ -6,7 +6,7 @@ const BestServices = () => {
     const headData = {
         title: 'Benefits',
         subTitle: 'Our Best Service',
-        brief: '',
+        brief: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown",
         spacing:false,
         Cta:false,
         hidden:false

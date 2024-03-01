@@ -31,12 +31,12 @@ export default function App({ Component, pageProps: { sessions, ...pageProps } }
         <Context.Provider value={{ mode, setMode }}>
           {
             !router.pathname.includes('/register') && !router.pathname.includes('/login') && !router.pathname.includes('/forget') && !router.pathname.includes('/admin') &&
-            <>
+            <div className={mode === "dark" ? "dark bg-black" : "light" }>
               <Header session={sessions} />
               <Preference />
-            </>
+            </div>
           }
-          <div className={` ${!router.pathname.includes('/register') && !router.pathname.includes('/login') && !router.pathname.includes('/forget') && !router.pathname.includes('/future/') && !router.pathname.includes('/admin') ? "mt-[106px] lg:mt-[129px]" : "" } `}>
+          <div className={` ${!router.pathname.includes('/register') && !router.pathname.includes('/login') && !router.pathname.includes('/forget') && !router.pathname.includes('/future/') && !router.pathname.includes('/admin') ? "pt-[95px] lg:pt-0 lg:mt-[121px]" : "" } `}>
             <Component {...pageProps} />
           </div>
           {

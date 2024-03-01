@@ -39,10 +39,10 @@ const Header = (props: propsData) => {
       name: "Market",
       url: "/market",
     },
-    {
-      name: "WatchList",
-      url: "/watchlist",
-    },
+    // {
+    //   name: "WatchList",
+    //   url: "/watchlist",
+    // },
     {
       name: "Trades",
       url: "#",
@@ -141,7 +141,7 @@ const Header = (props: propsData) => {
   return (
     <>
       <header
-        className={`${router.pathname.includes('/future/') ? 'py-[10px]' : 'py-[35px]'}    z-[6] dark:bg-omega bg-white z-9 xl:rounded-none dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 w-full border-b dark:border-[#25262a] border-[#e5e7eb]`}
+        className={`${router.pathname.includes('/future/') ? 'py-[10px]' : 'py-[30px]'} z-[6] dark:bg-omega bg-white z-9 xl:rounded-none dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 w-full rounded-b-[20px] border-b-0 md:border-b dark:border-[#25262a] border-[#e5e7eb]`}
       >
         <div className={`container ${router.pathname.includes('/future/') && '!max-w-full'}`}>
           {/* this is for desktop */}
@@ -171,7 +171,7 @@ const Header = (props: propsData) => {
                           </Link>
 
                           {elem?.dropdown && elem.name == 'Trades' &&
-                            <div className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px]">
+                            <div className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px] border dark:border-[#25262a] border-[#e5e7eb]">
                               <ul>
                                 {spotTrade?.map((item: any, nesIndex: any) => {
                                   return (
@@ -196,7 +196,7 @@ const Header = (props: propsData) => {
                             </div>
                           }
                           {elem?.dropdown && elem.name == 'Derivatives' &&
-                            <div className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px]">
+                            <div className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px] border dark:border-[#25262a] border-[#e5e7eb]">
                               <ul>
                                 {futureTrade?.map((item: any, nesIndex: any) => {
                                   let symbol = item?.futuretradepair?.coin_symbol === 'BTCB' ? 'BTC' : item?.futuretradepair?.coin_symbol === 'BNBT' ? 'BNB' : item?.futuretradepair?.coin_symbol
@@ -232,7 +232,7 @@ const Header = (props: propsData) => {
               {props.session === null || props.session === undefined ? (
                 <div className="flex items-center gap-[30px] justify-end">
                   <Link
-                    className="nav-text-lg !text-primary whitespace-nowrap"
+                    className="nav-text-lg text-[18px] !text-primary whitespace-nowrap hover:!text-white"
                     href="/login"
                   >
                     Sign In
@@ -333,7 +333,7 @@ const Header = (props: propsData) => {
             </div>
           </div>
           {/* this is for mobile */}
-          <div className="lg:hidden">
+          <div className="lg:hidden z-[9]">
             <div className="flex items-center justify-between">
               <div>
                 <Link href="/">

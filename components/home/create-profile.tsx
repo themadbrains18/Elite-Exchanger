@@ -8,7 +8,7 @@ const CreateProfile = () => {
 const headData = {
     title: 'Create Profile',
     subTitle: 'Easy Way to Get Started',
-    brief: '',
+    brief: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown",
     spacing:true,
     Cta:true,
     hidden:true
@@ -37,7 +37,7 @@ const cardsData = [
     },
 ]
     return (
-        <section className='md:py-[100px] py-[40px] dark:bg-omega bg-bg-secondary'>
+        <section className='md:py-[100px] py-[60px] dark:bg-omega bg-bg-secondary'>
             <div className='container'>
                 <div className='flex items-center justify-between gap-[0px] lg:gap-[60px] flex-col lg:flex-row'>
                     <div className='max-w-full lg:max-w-[50%] w-full'>
@@ -46,7 +46,7 @@ const cardsData = [
                         </div>
                     </div>
                     <div className='max-w-full lg:max-w-[50%] w-full'>
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-[30px] place-items-center lg:place-items-start	'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-[20px] md:gap-[30px] place-items-center lg:place-items-start	'>
                             {
                                 cardsData.map((elem,ind)=>{
                                     return(
@@ -68,7 +68,7 @@ const cardsData = [
                     </div>
                 </div>
                 <Link href="/chart/BTCB" className='sec-Brief flex lg:hidden items-center gap-[10px] !text-primary mt-[50px] mx-auto text-center md:text-start justify-center'>
-                    <span className='block relative after:absolute after:w-full after:h-[2px] after:bg-primary after:top-[100%] after:left-0'>Start Trading</span>
+                    <span className='block relative !text-[18px] !leading-[24px] after:absolute after:w-full after:h-[2px] after:bg-primary after:top-[100%] after:left-0'>Start Trading</span>
                     <IconsComponent type='rightArrow' hover={false} active={false}/>
                 </Link>
             </div>
