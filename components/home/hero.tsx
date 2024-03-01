@@ -49,7 +49,7 @@ const Hero = () => {
                                     </Swiper>
                                 </div> */}
 
-                            <div className="md:grid hidden grid-cols-3 gap-[15px]">
+                            <div className="md:grid hidden grid-cols-3 gap-x-[101px] gap-y-[50px]">
                                 <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-1.png" alt="Logo" width={251} height={50}/>
                                 <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-2.png" alt="Logo" width={251} height={50}/>
                                 <Image className="block m-auto aspect-[1] h-[50px] object-contain" src="/assets/home/bannerLogo-3.png" alt="Logo" width={251} height={50}/>
