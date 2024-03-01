@@ -122,7 +122,7 @@ const NewListing = (props: propsData) => {
                     key={index}
                     className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer"
                     onClick={() =>
-                      item?.tradePair !== null
+                      item?.tradepair !== null
                         ? router.push(`/chart/${item.symbol}`)
                         : ""
                     }

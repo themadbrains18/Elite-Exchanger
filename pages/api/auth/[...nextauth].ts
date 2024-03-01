@@ -39,13 +39,13 @@ export const authOptions: NextAuthOptions = {
                     headers: { 'authorization': token?.access_token }
                 } as any).then(response => response.json());
 
-                console.log(datauser,'=====jwt token===================');
+                // console.log(datauser,'=====jwt token===================');
                 
                 if(datauser?.data?.message !==undefined){
                     session = null as any
                 }
                 else{
-                    console.log(datauser,'==============token==============');
+                    // console.log(datauser,'==============token==============');
                     
                     session.user = { 
                         name: token?.own_code, 

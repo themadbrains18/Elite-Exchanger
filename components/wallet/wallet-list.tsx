@@ -302,10 +302,10 @@ const WalletList = (props: propsData): any => {
                       // Trade button enable or disable
                       // ================================
                       let tradeCusrsor = false;
-                      if (item.token !== null && item?.token?.tradePair !== null) {
+                      if (item.token !== null && item?.token?.tradepair !== null) {
                         tradeCusrsor = true;
                       }
-                      if (item.global_token !== null && item?.global_token?.tradePair !== null) {
+                      if (item.global_token !== null && item?.global_token?.tradepair !== null) {
                         tradeCusrsor = true;
                       }
                       return (
@@ -431,10 +431,10 @@ const WalletList = (props: propsData): any => {
                       // Trade button enable or disable
                       // ================================
                       let tradeCusrsor = false;
-                      if (item.token !== null && item?.token?.tradePair !== null) {
+                      if (item.token !== null && item?.token?.tradepair !== null) {
                         tradeCusrsor = true;
                       }
-                      if (item.global_token !== null && item?.global_token?.tradePair !== null) {
+                      if (item.global_token !== null && item?.global_token?.tradepair !== null) {
                         tradeCusrsor = true;
                       }
                       return (
@@ -737,10 +737,10 @@ const WalletList = (props: propsData): any => {
                       // Trade button enable or disable
                       // ================================
                       let tradeCusrsor = false;
-                      if (item.token !== null && item?.token?.futureTradePair !== null) {
+                      if (item.token !== null && item?.token?.futuretradepair !== null) {
                         tradeCusrsor = true;
                       }
-                      if (item.global_token !== null && item?.global_token?.futureTradePair !== null) {
+                      if (item.global_token !== null && item?.global_token?.futuretradepair !== null) {
                         tradeCusrsor = true;
                       }
                       return (
@@ -776,7 +776,7 @@ const WalletList = (props: propsData): any => {
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
 
-                              <button onClick={() => router.push(`/future/${item?.token !== null ? item?.token?.futureTradePair?.coin_symbol : item?.global_token?.futureTradePair?.coin_symbol}${item?.token !== null ? item?.token?.futureTradePair?.usdt_symbol : item?.global_token?.futureTradePair?.usdt_symbol}`)} disabled={!tradeCusrsor} className={` max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  ${tradeCusrsor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
+                              <button onClick={() => router.push(`/future/${item?.token !== null ? item?.token?.futuretradepair?.coin_symbol : item?.global_token?.futuretradepair?.coin_symbol}${item?.token !== null ? item?.token?.futuretradepair?.usdt_symbol : item?.global_token?.futuretradepair?.usdt_symbol}`)} disabled={!tradeCusrsor} className={` max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  ${tradeCusrsor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
                                 <span className="text-primary block">Trade</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
@@ -834,10 +834,10 @@ const WalletList = (props: propsData): any => {
                       // Trade button enable or disable
                       // ================================
                       let tradeCusrsor = false;
-                      if (item.token !== null && item?.token?.futureTradePair !== null) {
+                      if (item.token !== null && item?.token?.futuretradepair !== null) {
                         tradeCusrsor = true;
                       }
-                      if (item.global_token !== null && item?.global_token?.futureTradePair !== null) {
+                      if (item.global_token !== null && item?.global_token?.futuretradepair !== null) {
                         tradeCusrsor = true;
                       }
                       return (
@@ -872,7 +872,7 @@ const WalletList = (props: propsData): any => {
                                 <span className="text-primary block">Transfer</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
-                              <button onClick={() => router.push(`/future/${item?.token !== null ? item?.token?.futureTradePair?.coin_symbol : item?.global_token?.futureTradePair?.coin_symbol}${item?.token !== null ? item?.token?.futureTradePair?.usdt_symbol : item?.global_token?.futureTradePair?.usdt_symbol}`)} disabled={!tradeCusrsor} className={` max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  ${tradeCusrsor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
+                              <button onClick={() => router.push(`/future/${item?.token !== null ? item?.token?.futuretradepair?.coin_symbol : item?.global_token?.futuretradepair?.coin_symbol}${item?.token !== null ? item?.token?.futuretradepair?.usdt_symbol : item?.global_token?.futuretradepair?.usdt_symbol}`)} disabled={!tradeCusrsor} className={` max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  ${tradeCusrsor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
                                 <span className="text-primary block">Trade</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>

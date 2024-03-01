@@ -66,7 +66,7 @@ const CoinList = (props: propsData) => {
 
     // spot trade token
     let spot = props.coins.filter((item: any) => {
-      return item.tradePair !== null
+      return item.tradepair !== null
     });
     SetSpotTrade(spot);
 
