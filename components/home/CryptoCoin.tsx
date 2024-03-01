@@ -19,7 +19,7 @@ interface propsData {
 const CryptoCoin = (props: propsData) => {
 
   const headData = {
-    title: 'Benefits',
+    title: 'Top Market',
     subTitle: 'Get Various Crypto Coin',
     brief: '',
     spacing: false,
@@ -40,7 +40,7 @@ const CryptoCoin = (props: propsData) => {
   
   return (
     <>
-      <section className='py-60 md:py-[100px]'>
+      <section className='py-[30px] md:py-[100px]'>
         <div className='container'>
           <SectionHead headData={headData} center={true} />
           <div className='cryptoCoin_cards hidden lg:mt-[60px] mt-[50px] md:flex items-center flex-wrap justify-center gap-[30px]'>
@@ -55,7 +55,7 @@ const CryptoCoin = (props: propsData) => {
             }
           </div>
           <div className='block md:hidden mt-[50px]'>
-            <Swiper slidesPerView={1.2} spaceBetween={10} pagination={true} modules={[Pagination]} className="mySwiper tmb-swiper">
+            <Swiper slidesPerView={1.2} spaceBetween={20} pagination={true} modules={[Pagination]} className="mySwiper tmb-swiper">
               {
                 cardData.map((elem: any, ind: any) => {
                   return (

@@ -1,13 +1,16 @@
 import Image from "next/image"
 import 'swiper/css';
 import Link from "next/link";
+import { useContext } from "react";
+import Context from "../contexts/context";
 
 const Hero = () => {
+    const {mode} = useContext(Context)
     return(
         <div className="pb-[0] pt-[20px]   w-full">
-            <div className="dark:bg-d-bg-primary bg-bg-primary rounded-20 xl:px-[114px] py-[20px] lg:py-[32px] ">
+            <div className="dark:bg-d-bg-primary bg-bg-primary rounded-[10px] md:rounded-20 xl:px-[114px] py-[20px] lg:py-[32px] ">
                 <div className="container ">
-                    <div className="heroGrid grid lg:grid-cols-2  gap-4 ">
+                    <div className="heroGrid grid lg:grid-cols-2 gap-[60px] md:gap-4 ">
                         <div className="hero_left self-center max-w-[760px] w-full lg:order-1 order-2">
                             <div className="hero_Header ">
                                 <h2 className="xxl-heading text-banner-heading dark:text-d-banner-heading">Buy & Sell</h2>
@@ -15,8 +18,8 @@ const Hero = () => {
                             </div>
 
                             <div className="hero_body mt-5 md:mt-30 mb-[60px] md:mb-80 ">
-                                <p className="text-banner-text dark:text-d-banner-text mb-[40px] md:mb-50">Join world’s biggest & tursted Exchange.Trade inBitcoin, Ethereum, Ripple and many more currencies.</p>
-                                <Link className="solid-button max-w-full sm:max-w-[244px] w-full inline-block text-center" href="/chart/BTCB">Start Trading</Link>
+                                <p className="font-medium text-[14px] md:text-[18px] leading-22 md:leading-24 text-banner-text dark:text-d-banner-text mb-[40px] md:mb-50">Join world’s biggest & tursted Exchange.Trade in Bitcoin, Ethereum, Ripple and many more currencies.</p>
+                                <Link className="solid-button text-[18px] max-w-full sm:max-w-[244px] w-full inline-block text-center" href="/chart/BTCB">Start Trading</Link>
                             </div>
                         
 
@@ -61,7 +64,7 @@ const Hero = () => {
                         </div>
 
                         <div className="hero_right w-full max-w-[820px] lg:flex lg:items-center order-1 lg:order-2">
-                            <Image src="/assets/home/BannerLight1.png" alt="Laptop-image" className="block w-full" width={653} height={500}/>
+                            <Image src={`/assets/home/${mode==="light"?"BannerLight1.png":"BannerDark1.png"}`} alt="Laptop-image" className="block w-full" width={653} height={500}/>
                         </div>
                     </div>
                 </div>

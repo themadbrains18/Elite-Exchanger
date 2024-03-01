@@ -8,7 +8,7 @@ const Footer = () => {
 // let { mode  } = useContext(Context);
 
   return (
-    <footer className='bg-blue dark:bg-omega pt-[70px]'>
+    <footer className='bg-blue dark:bg-omega pt-[30px] md:pt-[70px]'>
         <div className="container">
           <FooterHead />
           <FooterNav />

@@ -8,7 +8,7 @@ const TradeAnyWhere = () => {
     const headData = {
         title: 'Download the app',
         subTitle: 'Trade Anywhere, Anytime',
-        brief: '',
+        brief: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown",
         spacing:true,
         Cta:false,
         hidden:false
@@ -36,7 +36,7 @@ const TradeAnyWhere = () => {
         }
     ]
   return (
-    <section className='py-[40px] md:py-[100px] dark:bg-black-v-1'>
+    <section className='py-[60px] md:py-[100px] dark:bg-black-v-1'>
         <div className="container">
             <div className='flex items-center flex-col lg:flex-row gap-[50px] md:gap-[70px]'>
                 <div className='max-w-full md:max-w-[554px] w-full'>
@@ -50,18 +50,18 @@ const TradeAnyWhere = () => {
                     <div className='lg:block hidden max-w-full lg:max-w-[600px] w-full'> 
                         <SectionHead headData={headData}  center={false} />
                     </div>
-                    <div className='grid grid-cols-2 xl:grid-cols-4 gap-[20px] md:gap-[30px]'>
+                    <div className='grid grid-cols-2 xl:grid-cols-4 gap-y-[30px] gap-[20px] md:gap-[30px]'>
                         
                         {
                             cardsData.map((elem,ind)=>{
                                 return(
                                 <Fragment key={ind}>
-                                    <div className='dark:bg-omega bg-bg-secondary p-[14px] md:p-[35px] rounded-[10px] duration-300 hover:drop-shadow-xl max-w-full w-full lg:max-w-[330px]  text-center'>
+                                    <div className='dark:bg-omega bg-bg-secondary p-[20px] md:p-[35px] rounded-[10px] duration-300 hover:drop-shadow-xl max-w-full w-full lg:max-w-[330px]  text-center'>
                                         <div className='max-w-[40px] w-full mx-auto'>
                                             <IconsComponent type={elem.svgType} hover={false}  active={false}/>
                                         </div>
                                         <div>
-                                            <h4 className='sm-heading text-[14px] font-[700] md:text-[19px] dark:text-white mt-[15px] mb-[10px]'>{elem.cardHeading}</h4>
+                                            <h4 className='sm-heading text-[14px] font-[700] md:text-[19px] dark:text-white mt-[30px] md:mt-[40px] mb-[10px]'>{elem.cardHeading}</h4>
                                             <p className='sec-text text-[12px] dark:text-beta md:text-[14px]'>{elem.cardInfo}</p>
                                         </div>
                                     </div>
