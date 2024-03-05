@@ -128,20 +128,10 @@ const ChartTabs = (props: propsData) => {
         setActive(false);
         setShow(false);
         setOrderId("");
-        const websocket = new WebSocket("ws://localhost:3001/");
-        let withdraw = {
-          ws_type: "market",
-        };
-        websocket.onopen = () => {
-          websocket.send(JSON.stringify(withdraw));
-        };
-      } else {
       }
 
     } catch (error) {
-
       console.log("error in chart page trade history", error);
-
     }
   };
 

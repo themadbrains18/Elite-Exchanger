@@ -19,6 +19,12 @@ import ChartSec from '@/components/chart/chart-sec';
 import TransferModal from '@/components/future/popups/transfer-modal';
 import TradingFeeMadal from '@/components/future/popups/trading-fee-madal';
 
+import Pusher from 'pusher-js';
+
+const pusher = new Pusher('b275b2f9e51725c09934', {
+    cluster: 'ap2'
+});
+
 
 interface Session {
     session: {
@@ -82,13 +88,13 @@ const FutureTrading = (props: Session) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
 
-            if (eventDataType === "price") {
-                await refreshTokenList();
-                getUserFuturePositionData();
-                getUserOpenOrderData();
-                getUserFuturePositionHistoryData();
-                getUserFutureOpenOrderHistoryData();
-            }
+            // if (eventDataType === "price") {
+            //     await refreshTokenList();
+            //     getUserFuturePositionData();
+            //     getUserOpenOrderData();
+            //     getUserFuturePositionHistoryData();
+            //     getUserFutureOpenOrderHistoryData();
+            // }
 
             if (eventDataType === 'position') {
                 refreshWalletAssets();
@@ -101,6 +107,15 @@ const FutureTrading = (props: Session) => {
             }
         }
 
+        var channel = pusher.subscribe('crypto-channel');
+        channel.bind('price', async function (data: any) {
+            await refreshTokenList();
+            getUserFuturePositionData();
+            getUserOpenOrderData();
+            getUserFuturePositionHistoryData();
+            getUserFutureOpenOrderHistoryData();
+        });
+    
     }
 
     // ===================================== //
@@ -279,7 +294,7 @@ const FutureTrading = (props: Session) => {
         }
     }
 
-    
+
 
     return (
         <>
@@ -350,7 +365,7 @@ const FutureTrading = (props: Session) => {
                 </div>
 
                 <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} positionHistoryData={positionHistoryData} openOrderHistoryData={openOrderHistoryData} />
-                <BuySell setOverlay={setOverlay} inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint}/>
+                <BuySell setOverlay={setOverlay} inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} />
                 <MarginRatio fullWidth={true} heightAuto={true} setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
             </div>
 

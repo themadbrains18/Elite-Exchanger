@@ -17,6 +17,11 @@ import { authOptions } from '../api/auth/[...nextauth]';
 // const VisitorAPI = dynamic(() => import('visitorapi') as any, {
 //   ssr: false,
 // });
+import Pusher from 'pusher-js';
+
+const pusher = new Pusher('b275b2f9e51725c09934', {
+  cluster: 'ap2'
+});
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -57,19 +62,24 @@ export default function Home({ session, coinList }: Session) {
   }
 
   useEffect(() => {
-    const websocket = new WebSocket('ws://localhost:3001/');
+    // const websocket = new WebSocket('ws://localhost:3001/');
 
-    websocket.onopen = () => {
-      console.log('connected');
-    }
+    // websocket.onopen = () => {
+    //   console.log('connected');
+    // }
 
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data).data;
-      let eventDataType = JSON.parse(event.data).type;
-      if (eventDataType === "price") {
-        refreshTokenList()
-      }
-    }
+    // websocket.onmessage = (event) => {
+    //   const data = JSON.parse(event.data).data;
+    //   let eventDataType = JSON.parse(event.data).type;
+    //   if (eventDataType === "price") {
+    //     refreshTokenList()
+    //   }
+    // }
+
+    var channel = pusher.subscribe('crypto-channel');
+    channel.bind('price', function (data: any) {
+      refreshTokenList()
+    });
 
   }, [])
 

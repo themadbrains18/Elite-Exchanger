@@ -16,6 +16,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
 import AES from 'crypto-js/aes';
 
+import Pusher from 'pusher-js';
+
+const pusher = new Pusher('b275b2f9e51725c09934', {
+    cluster: 'ap2'
+});
+
 interface Session {
     session: {
         user: any
@@ -43,26 +49,39 @@ const Chart = (props: Session) => {
     let { slug } = router.query;
 
     const socket = () => {
-        const websocket = new WebSocket('ws://localhost:3001/');
+        // const websocket = new WebSocket('ws://localhost:3001/');
 
-        websocket.onopen = () => {
-            console.log('connected');
-        }
+        // websocket.onopen = () => {
+        //     console.log('connected');
+        // }
 
-        websocket.onmessage = (event) => {
-            const data = JSON.parse(event.data).data;
-            let eventDataType = JSON.parse(event.data).type;
-            if (eventDataType === "price") {
-                refreshTokenList()
+        // websocket.onmessage = (event) => {
+        //     const data = JSON.parse(event.data).data;
+        //     let eventDataType = JSON.parse(event.data).type;
+        //     // if (eventDataType === "price") {
+        //     //     refreshTokenList()
+        //     // }
+        //     if (eventDataType === "market") {
+        //         if (props.session) {
+        //             getUserOpenOrder(slug);
+        //             getUserTradeHistory(slug);
+        //         }
+        //         getAllMarketOrderByToken(slug);
+        //     }
+        // }
+
+        var channel = pusher.subscribe('crypto-channel');
+        channel.bind('price', function (data: any) {
+            refreshTokenList()
+        });
+
+        channel.bind('market', function (data: any) {
+            if (props.session) {
+                getUserOpenOrder(slug);
+                getUserTradeHistory(slug);
             }
-            if (eventDataType === "market") {
-                if (props.session) {
-                    getUserOpenOrder(slug);
-                    getUserTradeHistory(slug);
-                }
-                getAllMarketOrderByToken(slug);
-            }
-        }
+            getAllMarketOrderByToken(slug);
+        })
 
     };
 
