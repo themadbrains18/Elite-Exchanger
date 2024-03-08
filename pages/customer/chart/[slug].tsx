@@ -49,39 +49,39 @@ const Chart = (props: Session) => {
     let { slug } = router.query;
 
     const socket = () => {
-        // const websocket = new WebSocket('ws://localhost:3001/');
+        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
-        // websocket.onopen = () => {
-        //     console.log('connected');
-        // }
+        websocket.onopen = () => {
+            console.log('connected');
+        }
 
-        // websocket.onmessage = (event) => {
-        //     const data = JSON.parse(event.data).data;
-        //     let eventDataType = JSON.parse(event.data).type;
-        //     // if (eventDataType === "price") {
-        //     //     refreshTokenList()
-        //     // }
-        //     if (eventDataType === "market") {
-        //         if (props.session) {
-        //             getUserOpenOrder(slug);
-        //             getUserTradeHistory(slug);
-        //         }
-        //         getAllMarketOrderByToken(slug);
-        //     }
-        // }
-
-        var channel = pusher.subscribe('crypto-channel');
-        channel.bind('price', function (data: any) {
-            refreshTokenList()
-        });
-
-        channel.bind('market', function (data: any) {
-            if (props.session) {
-                getUserOpenOrder(slug);
-                getUserTradeHistory(slug);
+        websocket.onmessage = (event) => {
+            const data = JSON.parse(event.data).data;
+            let eventDataType = JSON.parse(event.data).type;
+            // if (eventDataType === "price") {
+            //     refreshTokenList()
+            // }
+            if (eventDataType === "market") {
+                if (props.session) {
+                    getUserOpenOrder(slug);
+                    getUserTradeHistory(slug);
+                }
+                getAllMarketOrderByToken(slug);
             }
-            getAllMarketOrderByToken(slug);
-        })
+        }
+
+        // var channel = pusher.subscribe('crypto-channel');
+        // channel.bind('price', function (data: any) {
+        //     refreshTokenList()
+        // });
+
+        // channel.bind('market', function (data: any) {
+        //     if (props.session) {
+        //         getUserOpenOrder(slug);
+        //         getUserTradeHistory(slug);
+        //     }
+        //     getAllMarketOrderByToken(slug);
+        // })
 
     };
 

@@ -35,7 +35,7 @@ const Blocksetting = (props: scanner) => {
 
 
   function startWebsocket() {
-    const websocket = new WebSocket("ws://localhost:8000/");
+    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
     websocket.onopen = () => {
 

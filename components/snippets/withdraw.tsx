@@ -275,7 +275,7 @@ const Withdraw = (props: activeSection) => {
 
       if (response.data.status === 200) {
         toast.success("Withdraw request sent successfully");
-        const websocket = new WebSocket('ws://localhost:3001/');
+        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
         let withdraw = {
           ws_type: 'user_withdraw',
           user_id: props?.session?.user?.user_id,

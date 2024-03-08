@@ -28,7 +28,7 @@ const MyOrders = (props: propsData) => {
   // const { data: session } = useSession();
 
   useEffect(() => {
-    const websocket = new WebSocket('ws://localhost:3001/');
+    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
     websocket.onopen = () => {
       console.log('connected');

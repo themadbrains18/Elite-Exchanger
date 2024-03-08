@@ -50,7 +50,7 @@ const PositionsTable = (props: propsData) => {
       toast.error(closeReponse?.data?.message);
     }
     else {
-      const websocket = new WebSocket('ws://localhost:3001/');
+      const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
       let position = {
         ws_type: 'position'
       }
@@ -78,7 +78,7 @@ const PositionsTable = (props: propsData) => {
     }).then(response => response.json());
 
     if (closeReponse?.data?.status === 200) {
-      const websocket = new WebSocket('ws://localhost:3001/');
+      const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
       let position = {
         ws_type: 'position'
       }

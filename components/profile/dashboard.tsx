@@ -59,7 +59,7 @@ const Dashboard = (props: fixSection) => {
 
     if (response?.data?.status === 200) {
       setEditable(false);
-      const websocket = new WebSocket('ws://localhost:3001/');
+      const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
       let profile = {
         ws_type: 'profile',
         user_id: props?.session?.user?.user_id,

@@ -29,23 +29,23 @@ const Token = (props: Session) => {
   }
 
   useEffect(() => {
-    // const websocket = new WebSocket('ws://localhost:3001/');
+    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
-    // websocket.onopen = () => {
-    //   console.log('connected');
-    // }
+    websocket.onopen = () => {
+      console.log('connected');
+    }
 
-    // websocket.onmessage = (event) => {
-    //   const data = JSON.parse(event.data).data;
-    //   let eventDataType = JSON.parse(event.data).type;
-    //   if (eventDataType === "price") {
-    //     refreshPriceTokenList()
-    //   }
-    // }
-    var channel = pusher.subscribe('crypto-channel');
-    channel.bind('price', function (data: any) {
-      refreshPriceTokenList()
-    });
+    websocket.onmessage = (event) => {
+      const data = JSON.parse(event.data).data;
+      let eventDataType = JSON.parse(event.data).type;
+      if (eventDataType === "price") {
+        refreshPriceTokenList()
+      }
+    }
+    // var channel = pusher.subscribe('crypto-channel');
+    // channel.bind('price', function (data: any) {
+    //   refreshPriceTokenList()
+    // });
 
   }, [])
 
