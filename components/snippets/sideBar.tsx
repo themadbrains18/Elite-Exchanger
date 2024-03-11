@@ -93,7 +93,6 @@ const SideBar = (props: profileSec) => {
                 body: formData
             }).then(r => r.json());
 
-            console.log(data.secure_url);
             let obj = { image: data.secure_url };
             let response2 = await fetch(
                 `${process.env.NEXT_PUBLIC_BASEURL}/profile/dp`,

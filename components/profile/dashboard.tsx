@@ -124,7 +124,7 @@ const Dashboard = (props: fixSection) => {
                       <input
                         type="text"
                         {...register('fName')} name="fName"
-                        placeholder={editable ? "Enter first name" : "Allie"}
+                        placeholder={editable ? "Enter first name" : "Enter first name"}
                         defaultValue={getValues('fName')}
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />
@@ -137,7 +137,7 @@ const Dashboard = (props: fixSection) => {
                       <input
                         type="text"
                         {...register('lName')} name="lName"
-                        placeholder={editable ? "Enter Last name" : "Joe"}
+                        placeholder={editable ? "Enter Last name" : "Enter Last name"}
                         defaultValue={getValues('lName')}
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />
@@ -153,7 +153,7 @@ const Dashboard = (props: fixSection) => {
                         <input
                           type="text"
                           {...register('dName')} name="dName"
-                          placeholder={editable ? "Enter display name" : "Allie Joe"}
+                          placeholder={editable ? "Enter display name" : "Enter display name"}
                           defaultValue={getValues('dName')}
                           className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
 
@@ -168,7 +168,7 @@ const Dashboard = (props: fixSection) => {
                       <input
                         type="text"
                         {...register('uName')} name="uName"
-                        placeholder={editable ? "Enter user name" : "AllieJoe"}
+                        placeholder={editable ? "Enter user name" : "Enter user name"}
                         defaultValue={getValues('uName')}
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />
