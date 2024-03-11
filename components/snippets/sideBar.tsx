@@ -93,7 +93,7 @@ const SideBar = (props: profileSec) => {
                 body: formData
             }).then(r => r.json());
 
-            if (Object.keys(data.error).length > 0) {
+            if (data.error!==undefined) {
                 toast.error(data?.error?.message)
                 return;
             }

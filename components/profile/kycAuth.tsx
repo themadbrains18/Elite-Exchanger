@@ -150,7 +150,7 @@ const KycAuth = (props: fixSection) => {
         body: formData
       }).then(r => r.json());
 
-      if(Object.keys(data.error).length>0){
+      if(data.error!==undefined){
         setError("idfront", {
           type: "custom",
           message: data?.error?.message,
@@ -192,7 +192,7 @@ const KycAuth = (props: fixSection) => {
         body: formData
       }).then(r => r.json());
 
-      if(Object.keys(data.error).length>0){
+      if(data.error!==undefined){
         setError("idback", {
           type: "custom",
           message: data?.error?.message,
@@ -234,7 +234,7 @@ const KycAuth = (props: fixSection) => {
         body: formData
       }).then(r => r.json());
 
-      if(Object.keys(data.error).length>0){
+      if(data.error!==undefined){
         setError("statement", {
           type: "custom",
           message: data?.error?.message,

@@ -144,7 +144,7 @@ const AddToken = (props: activeSection) => {
         body: formData
       }).then(r => r.json());
 
-      if (Object.keys(data.error).length > 0) {
+      if (data.error!==undefined) {
         // toast.error(data?.error?.message)
         setError("image", {
           type: "custom",
