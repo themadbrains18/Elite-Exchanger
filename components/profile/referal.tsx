@@ -47,7 +47,7 @@ const Referal = (props: fixSection) => {
           }`}
       ></div>
       <section
-        className={`${props.show == 6 && "!left-[50%]"} ${props.fixed &&
+        className={`${props.show == 5 && "!left-[50%]"} ${props.fixed &&
           "duration-300 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary overflow-y-scroll"
           } max-[767px]:px-[15px] p-5 lg:p-40 `}
       >
@@ -79,8 +79,8 @@ const Referal = (props: fixSection) => {
             </p>
 
             <div className="  grid grid-cols-1 xl:grid-cols-2 gap-20 lg:gap-30  ">
-              {props.eventList && props.eventList.map((item: any) => {
-                return <div className="flex bg-bg-secondary  dark:bg-[#080808] rounded-10 pt-[26px] md:pt-[36px] pb-20 md:pb-[31px] pr-[13px] pl-10 md:pl-40 items-center justify-between flex-col	 md:flex-row ">
+              {props.eventList && props.eventList.map((item: any, index:number) => {
+                return <div key={index} className="flex bg-bg-secondary  dark:bg-[#080808] rounded-10 pt-[26px] md:pt-[36px] pb-20 md:pb-[31px] pr-[13px] pl-10 md:pl-40 items-center justify-between flex-col	 md:flex-row ">
                   <div className="max-w-full md:max-w-[70%] w-full">
                     <p className="mb-[13px] md:mb-[30px] text-center md:text-start md-text font-medium leading-5">
                       {item.name}
@@ -205,8 +205,8 @@ const Referal = (props: fixSection) => {
                 </thead>
 
                 <tbody>
-                  {referList && referList.length > 0 && referList.map((item: any) => {
-                    return <tr>
+                  {referList && referList.length > 0 && referList.map((item: any,index:number) => {
+                    return <tr key={index}>
                       <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{(item?.User?.id)?.substring(1, 7)}</td>
                       <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{moment(item?.createdAt)?.format('YYYY-MM-DD HH:mm:ss')}</td>
                       <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white hidden md:block">{item?.refer_code}</td>

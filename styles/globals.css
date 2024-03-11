@@ -270,7 +270,7 @@ img{
 }
 
 .tmb-swiper .swiper-pagination{
-  @apply static mt-[30px];
+  @apply static mt-[20px] md:mt-[30px];
 }
 .tmb-swiper .swiper-pagination-bullet{
   @apply bg-[#808080];

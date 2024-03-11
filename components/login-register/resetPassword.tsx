@@ -173,7 +173,7 @@ const ResetPassword = () => {
                       <input type={`${show1 === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
                       <Image
                         src={`/assets/register/${show1 === true ? "show.svg" : "hide.svg"}`}
-                        alt="eyeicon"
+                        alt="eyeicon2"
                         width={24}
                         height={24}
                         onClick={() => {

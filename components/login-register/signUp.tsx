@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Context from "../contexts/context";
 import HeaderLogo from "../svg-snippets/headerLogo";
 import Link from "next/link";
@@ -54,7 +54,6 @@ const SignUp = () => {
   const queryParams = searchParams.get('r');
   const referLink = searchParams.get('e');
 
-  console.log(referLink,'---------------referLink');
   
 
   let { register, setValue, handleSubmit, watch, setError, formState: { errors } } = useForm({
@@ -90,13 +89,17 @@ const SignUp = () => {
         toast.error(userExist.data.data);
       }
     } catch (error) {
+console.log(error);
 
     }
   }
 
-  if (queryParams) {
-    setValue('refeer_code', queryParams);
-  }
+  useEffect(() => {
+    if (queryParams) {
+      setValue('refeer_code', queryParams);
+    }
+  }, [queryParams]);
+
 
   return (
     <>
@@ -122,13 +125,14 @@ const SignUp = () => {
                 {/**Form Start  */}
                 <form onSubmit={handleSubmit(onHandleSubmit)}>
                   <div className="flex flex-col gap-[15px] lg:gap-10">
-                    <input type="text" placeholder="Enter Email or Phone Number" {...register('username')} name="username" className="input-cta" />
+                    <input type="text" placeholder="Enter Email / Phone Number" {...register('username')} name="username" className="input-cta" />
                     {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
                     <div
                       className="relative"
                     >
                       <input type={`${show === true ? "text" : "password"}`} {...register('password')} name="password" placeholder="Password" className="input-cta w-full" />
                       <Image
+                        data-testid="show-hide"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
                         alt="eyeicon"
                         width={24}
@@ -143,6 +147,7 @@ const SignUp = () => {
                     <div className="relative">
                       <input type={`${show1 === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
                       <Image
+                        data-testid="show-hide2"
                         src={`/assets/register/${show1 === true ? "show.svg" : "hide.svg"}`}
                         alt="eyeicon"
                         width={24}
@@ -213,7 +218,9 @@ const SignUp = () => {
       }
       {
         step === 1 &&
+        <span data-testid="verification-modal">
         <Verification step={step} setStep={setStep} isEmail={isEmail} formData={formData} api='register' setSendOtpRes={setSendOtpRes} />
+        </span>
       }
       {
         step === 2 &&

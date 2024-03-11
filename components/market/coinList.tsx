@@ -112,7 +112,7 @@ const CoinList = (props: propsData) => {
               {tabsData.map((item, ind) => {
                 return (
                   <Fragment key={ind}>
-                    <button className={`sec-text text-center whitespace-nowrap text-gamma border-b-2 border-[transparent] pb-[25px]  ${active1 === item.id && "!text-primary border-primary"}`} onClick={() => setActive1(item.id)}>
+                    <button className={`sec-text text-center whitespace-nowrap text-gamma border-b-2 border-[transparent] pb-[8px] md:pb-[25px]  ${active1 === item.id && "!text-primary border-primary"}`} onClick={() => setActive1(item.id)}>
                       {item.name}
                     </button>
                   </Fragment>

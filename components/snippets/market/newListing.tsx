@@ -36,7 +36,7 @@ const NewListing = (props: propsData) => {
             <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">
               <th className="lg:sticky bg-white dark:bg-d-bg-primary py-5">
                 <div className="flex ">
-                  <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">
+                  <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">
                     Coin Name
                   </p>
                   <Image
@@ -49,7 +49,7 @@ const NewListing = (props: propsData) => {
               </th>
               <th className=" py-5">
                 <div className="flex">
-                  <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
+                  <p className="text-start !text-[12px] md:!text-[14px]  nav-text-sm md:nav-text-lg dark:text-gamma">
                     Coin Price
                   </p>
                   <Image
@@ -62,7 +62,7 @@ const NewListing = (props: propsData) => {
               </th>
               <th className="max-[1023px]:hidden py-5">
                 <div className="flex">
-                  <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
+                  <p className="text-start !text-[12px] md:!text-[14px]  nav-text-sm md:nav-text-lg dark:text-gamma">
                     Circulating Supply
                   </p>
                   <Image
@@ -75,7 +75,7 @@ const NewListing = (props: propsData) => {
               </th>
               <th className="max-[1023px]:hidden py-5">
                 <div className="flex">
-                  <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
+                  <p className="text-start !text-[12px] md:!text-[14px]  nav-text-sm md:nav-text-lg dark:text-gamma">
                     Total Supply{" "}
                   </p>
                   <Image
@@ -88,7 +88,7 @@ const NewListing = (props: propsData) => {
               </th>
               <th className="max-[1023px]:hidden py-5">
                 <div className="flex">
-                  <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
+                  <p className="text-start !text-[12px] md:!text-[14px]  nav-text-sm md:nav-text-lg dark:text-gamma">
                     Max Supply{" "}
                   </p>
                   <Image
@@ -101,7 +101,7 @@ const NewListing = (props: propsData) => {
               </th>
               <th className="max-[1023px]:hidden py-5">
                 <div className="flex">
-                  <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">
+                  <p className="text-center !text-[12px] md:!text-[14px]s nav-text-sm md:nav-text-lg dark:text-gamma">
                     Chart
                   </p>
                   <Image
@@ -146,14 +146,14 @@ const NewListing = (props: propsData) => {
                       </div>
                     </td>
                     <td>
-                      <p className="info-14-18 dark:text-white  ">
+                      <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">
                         ${item.price.toFixed(5)}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">
                       <div className={` items-center gap-[10px] flex`}>
                         <p
-                          className={`footer-text-secondary  ${
+                          className={`footer-text-secondary  !text-[14px] md:!text-[16px] ${
                             item.status == "high"
                               ? "!text-[#03A66D]"
                               : "!text-[#DC2626]"
@@ -170,17 +170,17 @@ const NewListing = (props: propsData) => {
                     </td>
 
                     <td className="max-[1023px]:hidden">
-                      <p className="info-14-18 dark:text-white">
+                      <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
                         ${item.totalSupply}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">
-                      <p className="info-14-18 dark:text-white">
+                      <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
                         ${item.maxSupply}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">
-                      <p className="info-14-18 dark:text-white">
+                      <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
                         <Image
                           src="/assets/market/Graph.svg"
                           width={114}

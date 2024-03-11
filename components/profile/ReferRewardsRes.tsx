@@ -85,7 +85,7 @@ const ReferRewardsRes = (props: fixSection) => {
     }
   }
   return (
-    <div className={` ${props.show == 5 && "!left-[50%]"} ${props.fixed
+    <div className={` ${props.show == 4 && "!left-[50%]"} ${props.fixed
       ? " duration-300 p-5 md:p-40 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary "
       : "p-5 md:p-40  block"
       }} overflow-y-auto`}>
@@ -111,7 +111,7 @@ const ReferRewardsRes = (props: fixSection) => {
       <div className='p-5 md:p-40 dark:bg-omega bg-white rounded-[10px]'>
         <h3 className='sec-title'>All Rewards</h3>
         <div className='flex items-center gap-[20px] mt-[40px]'>
-          <button type='button' onClick={() => { setActive(1); filterRewards(1) }} className={`solid-button !px-[20px] !py-[10px] ${active == 1 ? '' : '!bg-[#5367ff42]'}`}>All Status</button>
+          <button type='button' onClick={() => { setActive(1); filterRewards(1) }} className={`solid-button !px-[20px] !py-[10px] ${active == 1 ? '' : '!bg-[#5367ff42]'}`}>All</button>
           <button type='button' onClick={() => { setActive(2); filterRewards(2) }} className={`solid-button !px-[20px] !py-[10px] ${active == 2 ? '' : '!bg-[#5367ff42]'}`}>Available </button>
           {/* <button type='button' onClick={() => { setActive(3) }} className={`solid-button !px-[20px] !py-[10px] ${active == 3 ? '' : '!bg-[#5367ff42]'} `}>Used</button> */}
           <button type='button' onClick={() => { setActive(4); filterRewards(4) }} className={`solid-button !px-[20px] !py-[10px] ${active == 4 ? '' : '!bg-[#5367ff42]'}`}>Expired</button>
@@ -126,7 +126,7 @@ const ReferRewardsRes = (props: fixSection) => {
               const difference = +new Date(item.expired_on) - +new Date();
 
               return <div className='rounded-[10px] bg-white'>
-                <div className='pl-[24px] py-[30px] pr-[0] rounded-[10px] bg-primary-400 relative z-[1] group relative after:w-[20px] after:h-[20px] after:absolute after:top-[calc(50%-10px)] after:left-[-10px] overflow-hidden after:bg-[#fff] after:dark:bg-d-bg-primary after:rounded-full before:w-[20px] before:h-[20px] before:absolute before:top-[calc(50%-10px)] before:right-[-10px] overflow-hidden before:bg-[#fff] before:dark:bg-d-bg-primary before:rounded-full'>
+                <div className='pl-[24px] py-[30px] pr-[0] rounded-[10px] bg-primary-400 relative z-[1] group after:w-[20px] after:h-[20px] after:absolute after:top-[calc(50%-10px)] after:left-[-10px] after:bg-[#fff] after:dark:bg-d-bg-primary after:rounded-full before:w-[20px] before:h-[20px] before:absolute before:top-[calc(50%-10px)] before:right-[-10px] overflow-hidden before:bg-[#fff] before:dark:bg-d-bg-primary before:rounded-full'>
                   <div className='flex items-center justify-between gap-[15px]'>
                     <div>
                       <div className='flex items-center gap-[15px]'>

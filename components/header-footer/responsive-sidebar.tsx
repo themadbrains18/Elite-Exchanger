@@ -150,11 +150,11 @@ const ResponsiveSidebar = (props: defaultStates) => {
 
   return (
 
-    <div className={` ${props.showMenu ? "opacity-1 visible" : "opacity-0 invisible"} duration-300 fixed ${router.pathname.includes("/future") ? 'top-[57px]' : 'top-[100px]'} left-0 w-full h-full min-h-[100vh] overflow-y-auto bg-off-white dark:bg-black-v-1 py-[40px] px-[15px] pb-[120px] z-[9]`}>
+    <div className={` ${props.showMenu ? "opacity-1 visible" : "opacity-0 invisible"} duration-300 fixed ${router?.pathname?.includes("/future") ? 'top-[57px]' : 'top-[100px]'} left-0 w-full h-full min-h-[100vh] overflow-y-auto bg-off-white dark:bg-black-v-1 py-[40px] px-[15px] pb-[120px] z-[9]`}>
       <div className='bg-white dark:bg-d-bg-primary p-[20px] rounded-[10px]'>
         <div className='flex items-center gap-[15px] cursor-pointer pb-[23px] border-b border-[#E9EAF0] dark:border-[#e9eaf00f] mb-[30px] relative' onClick={() => { props.setShowMenu(false) }}>
           <div className='relative inline-block clip-bg'>
-            <Image src={props.userDetail !== null && props.userDetail?.messgae === undefined ?  props.userDetail?.image : Avtar} alt='error' width={64} height={64} className='rounded-full object-cover object-top w-[50px] h-[50px]' />
+        {  props.userDetail !== undefined &&   <Image src={props.userDetail !== undefined && props.userDetail !== null && props.userDetail?.messgae === undefined ?  props.userDetail?.image : Avtar} alt='error' width={64} height={64} className='rounded-full object-cover object-top w-[50px] h-[50px]' />}
           </div>
           <div>
             <p className='nav-text-lg'>{props.userDetail !== null && props.userDetail?.messgae === undefined && props.userDetail?.fName !== null ? (props.userDetail?.fName + ' ' + props.userDetail?.lName) : props?.session?.user?.name}</p>

@@ -33,37 +33,37 @@ const TopGainers = (props: propsData) => {
                         <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">
                             <th className="lg:sticky bg-white dark:bg-d-bg-primary py-5">
                                 <div className="flex ">
-                                    <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">Coin Name</p>
+                                    <p className="text-start !text-[12px] md:!text-[14px]nav-text-sm md:nav-text-lg dark:text-gamma">Coin Name</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className=" py-5">
                                 <div className="flex">
-                                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Coin Price</p>
+                                    <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Coin Price</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Volume</p>
+                                    <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Volume</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Total Supply </p>
+                                    <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Total Supply </p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Max Supply </p>
+                                    <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Max Supply </p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Chart</p>
+                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Chart</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
@@ -84,23 +84,23 @@ const TopGainers = (props: propsData) => {
                                         </div>
                                     </td>
                                     <td>
-                                        <p className="info-14-18 dark:text-white  ">${item.price.toFixed(2)}</p>
+                                        <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white  ">${item.price.toFixed(2)}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <div className={` items-center gap-[10px] flex`}>
-                                            <p className={`footer-text-secondary  ${item.status == "high" ? "!text-[#03A66D]" : "!text-[#DC2626]"}`}>{item.volume}</p>
+                                            <p className={`footer-text-secondary  !text-[14px] md:!text-[16px] ${item.status == "high" ? "!text-[#03A66D]" : "!text-[#DC2626]"}`}>{item.volume}</p>
                                             <IconsComponent type={item.status} active={false} hover={false} />
                                         </div>
                                     </td>
 
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 dark:text-white">${item.totalSupply}</p>
+                                        <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white">${item.totalSupply}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 dark:text-white">${item.maxSupply}</p>
+                                        <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white">${item.maxSupply}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 dark:text-white">
+                                        <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white">
                                             <Image src="/assets/market/Graph.svg" width={114} height={48} alt="graph" />
                                         </p>
                                     </td>

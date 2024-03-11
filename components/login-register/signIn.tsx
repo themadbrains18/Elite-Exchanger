@@ -144,6 +144,7 @@ const SignIn = (Props: loginType) => {
                       <input type={`${show === true ? "text" : "password"}`} placeholder="Password" {...register('password')} name="password" className="input-cta w-full" />
 
                       <Image
+                      data-testid="show-hide"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
                         alt="eyeicon"
                         width={24}
@@ -211,7 +212,10 @@ const SignIn = (Props: loginType) => {
       }
       {
         step === 1 &&
-        <Verification step={step} setStep={setStep} isEmail={isEmail} formData={formData} api='login' setSendOtpRes={setSendOtpRes}/>
+        <span data-testid="verification-modal">
+          <Verification  step={step} setStep={setStep} isEmail={isEmail} formData={formData} api='login' setSendOtpRes={setSendOtpRes}/>
+
+        </span>
       }
       {
         step === 2 &&

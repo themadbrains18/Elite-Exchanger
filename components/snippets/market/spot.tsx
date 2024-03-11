@@ -38,38 +38,43 @@ const Spot = (props: propsData) => {
                         <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">
                             <th className="lg:sticky bg-white dark:bg-d-bg-primary py-5">
                                 <div className="flex ">
-                                    <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">Coin Name</p>
+                                    <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Coin Name</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className=" py-5">
                                 <div className="flex">
-                                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Coin Price</p>
+                                    <p className="text-start !text-[12px] md:!text-[14px]  nav-text-sm md:nav-text-lg dark:text-gamma">Coin Price</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Circulating Supply</p>
+                                    <p className="text-start !text-[12px] md:!text-[14px]  nav-text-sm md:nav-text-lg dark:text-gamma">Circulating Supply</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Total Supply </p>
+                                    <p className="text-start !text-[12px] md:!text-[14px]  nav-text-sm md:nav-text-lg dark:text-gamma">Total Supply </p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Max Supply </p>
+                                    <p className="text-start !text-[12px] md:!text-[14px]  nav-text-sm md:nav-text-lg dark:text-gamma">Max Supply </p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Chart</p>
+                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Chart</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                                </div>
+                            </th>
+                            <th className="max-[1023px]:hidden py-5">
+                                <div className="flex">
+                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Deposit</p>
                                 </div>
                             </th>
                         </tr>
@@ -89,29 +94,29 @@ const Spot = (props: propsData) => {
                                         </div>
                                     </td>
                                     <td>
-                                        <p className="info-14-18 dark:text-white  ">${item.price.toFixed(5)}</p>
+                                        <p className="info-14-18 dark:text-white !text-[14px] md:!text-[16px] ">${item.price.toFixed(5)}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <div className={` items-center gap-[10px] flex`}>
-                                            <p className={`footer-text-secondary  ${item.status == "high" ? "!text-[#03A66D]" : "!text-[#DC2626]"}`}>{item.circulatingSupply}</p>
+                                            <p className={`footer-text-secondary !text-[14px] md:!text-[16px] ${item.status == "high" ? "!text-[#03A66D]" : "!text-[#DC2626]"}`}>{item.circulatingSupply}</p>
                                             <IconsComponent type={item.status} active={false} hover={false} />
                                         </div>
                                     </td>
 
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 dark:text-white">${item.totalSupply}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${item.totalSupply}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 dark:text-white">${item.maxSupply}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">$ {item?.maxSupply || 0 }</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 dark:text-white">
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
                                             <Image src="/assets/market/Graph.svg" width={114} height={48} alt="graph" />
                                         </p>
                                     </td>
                                     <td className="">
                                     <button onClick={(e) => {e.stopPropagation(); setShow1(1) }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                <span className="text-primary block">Deposit</span>
+                                <span className="text-primary  md:block hidden">Deposit</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
                                     </td>
