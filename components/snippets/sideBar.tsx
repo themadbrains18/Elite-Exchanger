@@ -93,6 +93,11 @@ const SideBar = (props: profileSec) => {
                 body: formData
             }).then(r => r.json());
 
+            if (Object.keys(data.error).length > 0) {
+                toast.error(data?.error?.message)
+                return;
+            }
+
             let obj = { image: data.secure_url };
             let response2 = await fetch(
                 `${process.env.NEXT_PUBLIC_BASEURL}/profile/dp`,

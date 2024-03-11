@@ -150,6 +150,13 @@ const KycAuth = (props: fixSection) => {
         body: formData
       }).then(r => r.json());
 
+      if(Object.keys(data.error).length>0){
+        setError("idfront", {
+          type: "custom",
+          message: data?.error?.message,
+        });
+        return;
+      }
       setFromFrontImg(data.secure_url);
       setFrontImg(data.secure_url);
       setValue("idfront", data.secure_url);
@@ -185,6 +192,13 @@ const KycAuth = (props: fixSection) => {
         body: formData
       }).then(r => r.json());
 
+      if(Object.keys(data.error).length>0){
+        setError("idback", {
+          type: "custom",
+          message: data?.error?.message,
+        });
+        return;
+      }
 
       setFromBackImg(data.secure_url);
       setBackImg(data.secure_url);
@@ -220,6 +234,13 @@ const KycAuth = (props: fixSection) => {
         body: formData
       }).then(r => r.json());
 
+      if(Object.keys(data.error).length>0){
+        setError("statement", {
+          type: "custom",
+          message: data?.error?.message,
+        });
+        return;
+      }
       setFormSelfieImg(data.secure_url);
       setSelfieImg(data.secure_url)
       setValue("statement", data.secure_url);
@@ -859,7 +880,7 @@ const KycAuth = (props: fixSection) => {
 
           <div className="h-[1px] w-full bg-grey-v-2 dark:bg-opacity-[15%]"></div>
 
-          <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-between pt-5 md:pt-[30px] lg:px-0 px-20">
+          <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-end pt-5 md:pt-[30px] lg:px-0 px-20">
             {/* <p className="sm-text">
               This account was created on January 10, 2022, 02:12 PM
             </p> */}
