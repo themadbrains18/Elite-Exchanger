@@ -193,7 +193,7 @@ const KycAuth = (props: fixSection) => {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'my-uploads');
-
+      setEnableBack(true);
       const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
         method: 'POST',
         body: formData
@@ -204,6 +204,7 @@ const KycAuth = (props: fixSection) => {
           type: "custom",
           message: data?.error?.message,
         });
+        setEnableBack(false);
         return;
       }
 
@@ -211,8 +212,10 @@ const KycAuth = (props: fixSection) => {
       setBackImg(data.secure_url);
       setValue("idback", data.secure_url);
       clearErrors("idback");
+      setEnableBack(false);
     } catch (error) {
       console.error(error);
+      setEnableBack(false);
     }
 
     // let files = e.target.files[0];
@@ -235,7 +238,7 @@ const KycAuth = (props: fixSection) => {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'my-uploads');
-
+      setEnableStatement(true);
       const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
         method: 'POST',
         body: formData
@@ -246,14 +249,17 @@ const KycAuth = (props: fixSection) => {
           type: "custom",
           message: data?.error?.message,
         });
+        setEnableStatement(false);
         return;
       }
       setFormSelfieImg(data.secure_url);
       setSelfieImg(data.secure_url)
       setValue("statement", data.secure_url);
       clearErrors("statement");
+      setEnableStatement(false);
     } catch (error) {
       console.error(error);
+      setEnableStatement(false);
     }
     // let files = e.target.files[0];
     // setFormSelfieImg(files);
@@ -841,7 +847,13 @@ const KycAuth = (props: fixSection) => {
             <div className="w-full">
               <label className="sm-text ">A Selfie with your identity</label>
 
-              <div className="w-full min-h-[133px]  flex mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
+              <div className="w-full relative min-h-[133px]  flex mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
+              {enableStatement &&
+                  <>
+                    <div className="bg-black  z-[1] duration-300 absolute top-0 left-0 h-full w-full opacity-80 visible"></div>
+                    <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#ff815d] rounded-full animate-spin border-t-[#ff815d75] '></div>
+                  </>
+                }
                 <div className="m-auto ">
                   <input
                     type="file"
