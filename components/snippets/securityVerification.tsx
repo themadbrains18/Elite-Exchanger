@@ -188,7 +188,7 @@ const SecurityVerification = (props: activeSection) => {
               <div className="pt-5 md:pt-30">
                 <div className="mt-[5px] md:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
                   <p className="sec-text text-ellipsis overflow-hidden">{secret?.base32}</p>
-                  <button className="solid-button py-2 sec-text font-normal" onClick={() => { navigator.clipboard.writeText(secret?.base32); toast.success('copy to clipboard') }}>Copy</button>
+                  <button type="button" className="solid-button py-2 sec-text font-normal" onClick={() => { navigator.clipboard.writeText(secret?.base32); toast.success('copy to clipboard') }}>Copy</button>
                 </div>
               </div>
             </div>

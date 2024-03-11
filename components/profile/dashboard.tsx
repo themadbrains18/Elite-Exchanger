@@ -32,6 +32,7 @@ const Dashboard = (props: fixSection) => {
     resolver: yupResolver(schema),
   });
 
+
   useEffect(() => {
     if (props.userDetail) {
       setValue('fName', props?.userDetail?.fName);
@@ -179,7 +180,7 @@ const Dashboard = (props: fixSection) => {
               {editable && (
                 <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-between pt-5 md:pt-[30px]">
                   <p className="sm-text">
-                    This account was created on {moment(props?.userDetail?.User?.createdAt).format("YYYY-MM-DD HH:mm:ss  A")}
+                    This account was created on {moment(props?.userDetail?.createdAt).format("YYYY-MM-DD HH:mm:ss  A")}
                   </p>
                   <div className="flex gap-[30px]">
                     <button type="button" className="solid-button2 " onClick={() => { setEditable(false) }}>Cancel</button>
