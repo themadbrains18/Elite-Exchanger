@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AES from 'crypto-js/aes';
+import StrengthCheck from "../snippets/strengthCheck";
 
 import { useSearchParams } from 'next/navigation'
 
@@ -22,7 +23,11 @@ const schema = yup.object().shape({
     .test('email_or_phone', 'Email / Phone is invalid', (value) => {
       return validateEmail(value) || validatePhone(value);
     }),
-  password: yup.string().min(8).max(32).required(),
+  password: yup.string().min(8).max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter")
+  .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
+  .matches(/\d/, "Password must have a number")
+  .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character")
+  .matches(/^\S*$/, "White Spaces are not allowed"),
   confirmPassword: yup.string()
     .oneOf([yup.ref('password')], 'Passwords must match'),
   refeer_code: yup.string().optional()
@@ -51,11 +56,17 @@ const SignUp = () => {
   const searchParams = useSearchParams();
   const [sendOtpRes, setSendOtpRes] = useState<any>();
 
+  const [pswd, setpswd] = useState('');
+
+  // auto generate password
+  const [passwordLength, setPasswordLength] = useState(12);
+  const [useSymbols, setUseSymbols] = useState(true);
+  const [useNumbers, setUseNumbers] = useState(true);
+  const [useLowerCase, setUseLowerCase] = useState(true);
+  const [useUpperCase, setUseUpperCase] = useState(true);
+
   const queryParams = searchParams.get('r');
   const referLink = searchParams.get('e');
-
-  console.log(referLink,'---------------referLink');
-  
 
   let { register, setValue, handleSubmit, watch, setError, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
@@ -98,6 +109,25 @@ const SignUp = () => {
     setValue('refeer_code', queryParams);
   }
 
+
+  const generatePassword = () => {
+    let charset = "";
+    let newPassword = "";
+
+    if (useSymbols) charset += "!@#$%^&*()";
+    if (useNumbers) charset += "0123456789";
+    if (useLowerCase) charset += "abcdefghijklmnopqrstuvwxyz";
+    if (useUpperCase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    for (let i = 0; i < passwordLength; i++) {
+        newPassword += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+
+    setpswd(newPassword);
+    setValue('password',newPassword);
+    setValue('confirmPassword',newPassword);
+};
+
   return (
     <>
       <ToastContainer />
@@ -124,10 +154,14 @@ const SignUp = () => {
                   <div className="flex flex-col gap-[15px] lg:gap-10">
                     <input type="text" placeholder="Enter Email or Phone Number" {...register('username')} name="username" className="input-cta" />
                     {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
+                    <div className="relative text-end">
+                      <button type="button" className="!text-primary" onClick={()=> generatePassword()}>Generate Password</button>
+                    </div>
                     <div
                       className="relative"
                     >
-                      <input type={`${show === true ? "text" : "password"}`} {...register('password')} name="password" placeholder="Password" className="input-cta w-full" />
+                      <input type={`${show === true ? "text" : "password"}`} {...register('password')}
+                        name="password" placeholder="Password" className="input-cta w-full password-input" onChange={(e:any)=> setpswd(e.target.value)} />
                       <Image
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
                         alt="eyeicon"
@@ -139,7 +173,9 @@ const SignUp = () => {
                         className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                       />
                     </div>
+                    <StrengthCheck password={pswd} />
                     {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
+                    
                     <div className="relative">
                       <input type={`${show1 === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
                       <Image
@@ -167,6 +203,8 @@ const SignUp = () => {
                   </div>
                   <button type="submit" className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-600" >Register</button>
                 </form>
+
+                
                 {/**Form End  */}
                 <div className="flex justify-center">
                   <p className="sec-text text-nav-primary dark:text-white">Already have an account?&nbsp;</p>

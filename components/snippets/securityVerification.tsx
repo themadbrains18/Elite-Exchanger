@@ -7,6 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { signOut, useSession } from "next-auth/react";
 import { Sigmar } from "next/font/google";
+import Image from "next/image";
+import QRCode from "qrcode";
 
 interface activeSection {
   setActive: Function;
@@ -15,7 +17,6 @@ interface activeSection {
   session: any;
   setGoogleAuth?: Function | any;
   sendOtp?: any;
-  sendOtpRes?:any;
 }
 
 type UserSubmitForm = {
@@ -23,7 +24,6 @@ type UserSubmitForm = {
   key: string;
   code: string;
   username?: string;
-  otp?: string;
   TwoFA?: boolean;
 
 };
@@ -32,7 +32,6 @@ const schema = yup.object().shape({
   password: yup.string().required("Account password is required"),
   key: yup.string().required("Google authenticator key is required"),
   code: yup.string().required("Google authenticator code is required"),
-  otp: yup.string().required("OTP is required"),
 });
 
 const SecurityVerification = (props: activeSection) => {
@@ -40,9 +39,9 @@ const SecurityVerification = (props: activeSection) => {
   const [fillOtp, setOtp] = useState("");
   const { status, data: session } = useSession()
 
-  const Ref: any = useRef(null);
-  const [timeLeft, setTimer] = useState('');
-  const [enable, setEnable] = useState(false);
+  const [qrImg, setImage] = useState('');
+
+  const [secret, setSecret] = useState(props?.session?.user?.secret !== undefined && JSON.parse(props?.session?.user?.secret));
 
   let {
     register,
@@ -58,72 +57,21 @@ const SecurityVerification = (props: activeSection) => {
   });
 
   useEffect(() => {
-    orderTimeCalculation();
-    const inputElements = document.querySelectorAll(".input_wrapper2 input");
-    // console.log(inputElements.length);
-
-    inputElements.forEach((ele, index) => {
-      ele.addEventListener("keydown", (e: any) => {
-        if (e.keyCode === 8 && e.target.value === "") {
-          (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
-        }
-      });
-      ele.addEventListener("input", (e: any) => {
-        const [first, ...rest] = e.target.value;
-        e.target.value = first ?? "";
-        const lastInputBox = index === inputElements.length - 1;
-        const didInsertContent = first !== undefined;
-        if (didInsertContent && !lastInputBox) {
-          // continue to input the rest of the string
-          (inputElements[index + 1] as HTMLElement).focus();
-          (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
-          inputElements[index + 1].dispatchEvent(new Event("input"));
-        } else {
-          setOtp(
-            (inputElements[0] as HTMLInputElement).value +
-            "" +
-            (inputElements[1] as HTMLInputElement).value +
-            "" +
-            (inputElements[2] as HTMLInputElement).value +
-            "" +
-            (inputElements[3] as HTMLInputElement).value +
-            "" +
-            (inputElements[4] as HTMLInputElement).value +
-            "" +
-            (inputElements[5] as HTMLInputElement).value
-          );
-          setValue('otp', (inputElements[0] as HTMLInputElement).value +
-            "" +
-            (inputElements[1] as HTMLInputElement).value +
-            "" +
-            (inputElements[2] as HTMLInputElement).value +
-            "" +
-            (inputElements[3] as HTMLInputElement).value +
-            "" +
-            (inputElements[4] as HTMLInputElement).value +
-            "" +
-            (inputElements[5] as HTMLInputElement).value)
-
-          clearErrors("otp");
-        }
-      });
+    QRCode.toDataURL(secret.otpauth_url, (err, image_data: any) => {
+      setImage(image_data);
     });
-  }, [props?.sendOtpRes]);
 
-  const onHandleSubmit = async (data: UserSubmitForm) => {
+    setValue('key', secret?.base32);
+    clearErrors('key');
+  }, []);
+
+  const onHandleSubmit = async (data: any) => {
     try {
       let username =
         props.session?.user.email !== "null"
           ? props.session?.user.email
           : props.session?.user?.number;
 
-      if (fillOtp === '') {
-        setError("otp", {
-          type: "custom",
-          message: `Please enter One-Time password`,
-        });
-        return;
-      }
       let request = {
         username: username,
         password: data.password,
@@ -174,52 +122,6 @@ const SecurityVerification = (props: activeSection) => {
       console.log(error);
     }
   };
-
-  const orderTimeCalculation = async () => {
-    setEnable(true);
-    let deadline = new Date(props?.sendOtpRes?.expire);
-
-    deadline.setMinutes(deadline.getMinutes());
-    deadline.setSeconds(deadline.getSeconds() + 1);
-    let currentTime = new Date();
-
-    if (currentTime < deadline) {
-      if (Ref.current) clearInterval(Ref.current);
-      const timer = setInterval(() => {
-        calculateTimeLeft(deadline);
-      }, 1000);
-      Ref.current = timer;
-    }
-    else if (currentTime > deadline) {
-      setEnable(false);
-    }
-  }
-
-  const calculateTimeLeft = (e: any) => {
-    let { total, minutes, seconds }
-      = getTimeRemaining(e);
-
-    if (total >= 0) {
-      setTimer(
-        (minutes > 9 ? minutes : '0' + minutes) + ':'
-        + (seconds > 9 ? seconds : '0' + seconds)
-      )
-    }
-    else {
-      if (Ref.current) clearInterval(Ref.current);
-      setEnable(false);
-    }
-  }
-
-  const getTimeRemaining = (e: any) => {
-    let current: any = new Date();
-    const total = Date.parse(e) - Date.parse(current);
-    const seconds = Math.floor((total / 1000) % 60);
-    const minutes = Math.floor((total / 1000 / 60) % 60);
-    return {
-      total, minutes, seconds
-    };
-  }
 
   return (
     <>
@@ -274,77 +176,23 @@ const SecurityVerification = (props: activeSection) => {
 
         <form onSubmit={handleSubmit(onHandleSubmit)}>
           <div className="py-30 md:py-40">
-            <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
-              <label className="sm-text">Account Password</label>
-              <input
-                type="password"
-                placeholder="Re-Enter password"
-                className={`sm-text input-cta2 w-full ${errors.password && 'border-1 border-[#ff0000]'}`}
-                {...register("password")}
-              />
-              {errors.password && (
-                <p style={{ color: "red" }} className="absolute top-[100%] text-[10px] md:text-[12px]">{errors.password.message}</p>
-              )}
+
+            <div className="py-30 md:py-40">
+              <div className="py-[10px]">
+                <p className="info-14-18 text-center dark:text-white text-black">Scan Qr From Google Authenticator App</p>
+                <div className="mt-[15px] p-5 max-w-[154px] bg-white rounded-5 shadow-card mx-auto">
+                  <Image src={qrImg} width={154} height={154} alt="QR" />
+                </div>
+              </div>
+
+              <div className="pt-5 md:pt-30">
+                <div className="mt-[5px] md:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
+                  <p className="sec-text text-ellipsis overflow-hidden">{secret?.base32}</p>
+                  <button className="solid-button py-2 sec-text font-normal" onClick={() => { navigator.clipboard.writeText(secret?.base32); toast.success('copy to clipboard') }}>Copy</button>
+                </div>
+              </div>
             </div>
 
-            <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
-              <label className="sm-text">GA Secret Key</label>
-              <input
-                type="text"
-                placeholder="Enter text"
-                className={`sm-text input-cta2 w-full ${errors.key && 'border-1 border-[#ff0000]'}`}
-                {...register("key")}
-              />
-              {errors.key && <p style={{ color: "red" }} className="absolute top-[100%] text-[10px] md:text-[12px]">{errors.key.message}</p>}
-            </div>
-
-            <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
-              <label className="sm-text">Enter 6 Digit OTP</label>
-              <div className="flex gap-[10px] justify-center items-center input_wrapper2 relative">
-                <input
-                  type="text"
-                  autoComplete="off"
-                  className={`block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none  ${errors.otp && '!border-[1px] !border-[#ff0000]'}`}
-                  name="code1"
-                />
-                <input
-                  type="text"
-                  autoComplete="off"
-                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary ${errors.otp && '!border-[1px] !border-[#ff0000]'} `}
-                  name="code2"
-                />
-                <input
-                  type="text"
-                  autoComplete="off"
-                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary ${errors.otp && '!border-[1px] !border-[#ff0000]'}`}
-                  name="code3"
-                />
-                <input
-                  type="text"
-                  autoComplete="off"
-                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary ${errors.otp && '!border-[1px] !border-[#ff0000]'} `}
-                  name="code4"
-                />
-                <input
-                  type="text"
-                  autoComplete="off"
-                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary ${errors.otp && '!border-[1px] !border-[#ff0000]'}`}
-                  name="code5"
-                />
-                <input
-                  type="text"
-                  autoComplete="off"
-                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary ${errors.otp && '!border-[1px] !border-[#ff0000]'}`}
-                  name="code6"
-                />
-                {errors.otp && <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.otp.message}</p>}
-              </div>
-              <div className={`flex  ${enable === true ? '' : 'hidden'}`}>
-                <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>
-                <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
-              </div>
-              <p className={`info-14-18 !text-primary-700 text-end cursor-pointer ${enable === true ? 'hidden' : ''}` } onClick={() => props.sendOtp()}>Resend SMS</p>
-            </div>
             <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
               <label className="sm-text">GA 6 Digit Security Code</label>
               <input
@@ -355,6 +203,19 @@ const SecurityVerification = (props: activeSection) => {
               />
               {errors.code && (
                 <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.code.message}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
+              <label className="sm-text">Account Password</label>
+              <input
+                type="password"
+                placeholder="Re-Enter password"
+                className={`sm-text input-cta2 w-full ${errors.password && 'border-1 border-[#ff0000]'}`}
+                {...register("password")}
+              />
+              {errors.password && (
+                <p style={{ color: "red" }} className="absolute top-[100%] text-[10px] md:text-[12px]">{errors.password.message}</p>
               )}
             </div>
           </div>
@@ -368,7 +229,7 @@ const SecurityVerification = (props: activeSection) => {
             >
               Cancel
             </button>
-            <button className="solid-button px-[51px] w-full" onClick={() => { }}>
+            <button type="submit" className="solid-button px-[51px] w-full">
               Finish Setup
             </button>
           </div>

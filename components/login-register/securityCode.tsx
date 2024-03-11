@@ -149,6 +149,11 @@ const SecurityCode = (props: propsData) => {
 
   const sendOtp = async () => {
     try {
+      const inputElements = document.querySelectorAll(".input_wrapper input");
+      inputElements?.forEach((ele, index) => {
+        (inputElements[index] as HTMLInputElement).value = "" 
+      });
+      setOtp('');
       props.formData.step = 2;
       props.formData.otp="";
       const ciphertext = AES.encrypt(

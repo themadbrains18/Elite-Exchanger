@@ -324,22 +324,29 @@ const SecuritySettings = (props: fixSection) => {
                     </div>
                     {item.Add != false && (
                       <div
-                        className="py-[8px] cursor-pointer pr-[15px] pl-1 hidden md:flex gap-[8px] items-center border rounded-5 border-grey-v-1 dark:border-opacity-[15%] max-w-fit w-full"
+                        className="py-[8px] cursor-pointer pl-[10px] pr-[10px] pl-1 hidden md:flex gap-[8px] items-center border rounded-5 border-grey-v-1 dark:border-opacity-[15%] max-w-fit w-full"
                         onClick={() => {
-                          setActive(index + 1);
-                          setShow(true);
+                          console.log(props?.session?.user,'==========props?.session?.user');
+                          if(googleAuth === true){
+                            setActive(index + 1);
+                            setShow(true);
+                          }
+                          else{
+                            toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again',{position:'top-center'})
+                          }
+                          
                         }}
                       >
-                        <Image
+                        {/* <Image
                           src="/assets/market/add.svg"
                           width={16}
                           height={16}
                           alt="add"
-                        />
+                        /> */}
                         {item?.title === "Email Authentication" ? (
                           <p className="nav-text-sm text-beta">
                             {props?.session?.user?.email !== "null"
-                              ? "Edit"
+                              ? "Change Email"
                               : "Add"}
                           </p>
                         ) : (
@@ -347,7 +354,7 @@ const SecuritySettings = (props: fixSection) => {
                             {item?.title === "SMS Authentication" &&
                               props?.session?.user?.number == "null"
                               ? "Add"
-                              : "Edit"}
+                              : "Change"}
                           </p>
                         )}
                       </div>
@@ -355,20 +362,21 @@ const SecuritySettings = (props: fixSection) => {
 
                     {item.CtaText == "Enable" ? (
                       index === 0 ? (
-                        <button
-                          className={`max-w-full w-full md:max-w-[130px] h-40 ${props?.session?.user?.email == "null"
-                            ? "bg-primary text-white"
-                            : "bg-grey-v-2 !text-primary"
-                            }  rounded-5 info-16-18 `}
-                          onClick={() => {
-                            setEnable(index + 1);
-                            setShow(true);
-                          }}
-                        >
-                          {props?.session?.user?.email == "null"
-                            ? "Enable"
-                            : "Disable"}
-                        </button>
+                        <></>
+                        // <button
+                        //   className={`max-w-full w-full md:max-w-[130px] h-40 ${props?.session?.user?.email == "null"
+                        //     ? "bg-primary text-white"
+                        //     : "bg-grey-v-2 !text-primary"
+                        //     }  rounded-5 info-16-18 `}
+                        //   onClick={() => {
+                        //     setEnable(index + 1);
+                        //     setShow(true);
+                        //   }}
+                        // >
+                        //   {props?.session?.user?.email == "null"
+                        //     ? "Enable"
+                        //     : "Disable"}
+                        // </button>
                       ) : index === 1 ? (
                         <button
                           className={`max-w-full w-full md:max-w-[130px] h-40 ${props?.session?.user?.number == "null"

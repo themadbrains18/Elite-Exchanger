@@ -80,16 +80,16 @@ const AdNumber = (props: activeSection) => {
         } else {
           setOtp(
             (inputElements[0] as HTMLInputElement).value +
-              "" +
-              (inputElements[1] as HTMLInputElement).value +
-              "" +
-              (inputElements[2] as HTMLInputElement).value +
-              "" +
-              (inputElements[3] as HTMLInputElement).value +
-              "" +
-              (inputElements[4] as HTMLInputElement).value +
-              "" +
-              (inputElements[5] as HTMLInputElement).value
+            "" +
+            (inputElements[1] as HTMLInputElement).value +
+            "" +
+            (inputElements[2] as HTMLInputElement).value +
+            "" +
+            (inputElements[3] as HTMLInputElement).value +
+            "" +
+            (inputElements[4] as HTMLInputElement).value +
+            "" +
+            (inputElements[5] as HTMLInputElement).value
           );
         }
       });
@@ -171,16 +171,21 @@ const AdNumber = (props: activeSection) => {
         } else {
           setError("uname", {
             type: "custom",
-            message: `Please enter valid ${
-              props?.type === "email" ? "email" : "number"
-            }}`,
+            message: `Please enter valid ${props?.type === "email" ? "email" : "number"
+              }}`,
           });
         }
       } else {
-        toast.error("Your session is expired. Its auto redirect to login page");
-        setTimeout(() => {
-          signOut();
-        }, 4000);
+        setError("uname", {
+          type: "custom",
+          message: `This field is required`,
+        });
+        setDisabled(false);
+        return;
+        // toast.error("Your session is expired. Its auto redirect to login page");
+        // setTimeout(() => {
+        //   signOut();
+        // }, 4000);
       }
       //   props.formData.step = 2;
     } catch (error) {
@@ -240,7 +245,7 @@ const AdNumber = (props: activeSection) => {
           signOut();
         }, 4000);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   return (
@@ -298,14 +303,16 @@ const AdNumber = (props: activeSection) => {
                   <p style={{ color: "red" }}>{errors.uname.message}</p>
                 )}
               </div>
+              <div className="text-end">
+                <button
+                  className="info-10-14 text-end cursor-pointer hover:text-primary"
+                  onClick={() => sendOtp()}
+                  disabled={disabled}
+                >
+                  {statuss ? "Resend OTP" : "Send OTP"}
+                </button>
+              </div>
 
-              <button
-                className="info-10-14 text-end cursor-pointer hover:text-primary"
-                onClick={() => sendOtp()}
-                disabled={disabled}
-              >
-                {statuss ? "Resend OTP" : "Send OTP"}
-              </button>
             </div>
             <div className="flex flex-col  gap-20">
               <label className="sm-text">Enter 6 Digit OTP</label>
