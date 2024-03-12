@@ -2,7 +2,9 @@ import Image from 'next/image'
 import React from 'react'
 
 interface changeProps{
-    data:Object
+    setShow:Function
+    setEnable:Function
+    setShow2:Function
 }
 
 const EmailChangeAlert = (props:changeProps) => {
@@ -22,15 +24,18 @@ const EmailChangeAlert = (props:changeProps) => {
             <div className="flex items-center gap-10 mt-6">
                     <button
                         className="solid-button2 w-full"
-                  
+                  onClick={()=>{
+                    props?.setShow2(false);
+                    props.setEnable(0);
+                  }}
                     >
                         Cancel
                     </button>
                     <button
                         className="solid-button w-full"
-                        // onClick={() => {
-                        //     props.actionPerform();
-                        // }}
+                        onClick={() => {
+                            props.setShow(false);
+                        }}
                     >
                         Continue
                     </button>

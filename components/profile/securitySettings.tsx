@@ -511,17 +511,16 @@ const SecuritySettings = (props: fixSection) => {
         )}
       </section>
       {enable === 1 && (
-        // <Verification
-        //   setShow={setShow}
-        //   setEnable={setEnable}
-        //   type="email"
-        //   data={formData}
-        //   session={props?.session}
-        //   finalOtpVerification={finalOtpVerification}
-        //   snedOtpToUser={snedOtpToUser}
-        //   sendOtpRes={sendOtpRes}
-        // />
-        <EmailChangeAlert />
+        <Verification
+          setShow={setShow}
+          setEnable={setEnable}
+          type="email"
+          data={formData}
+          session={props?.session}
+          finalOtpVerification={finalOtpVerification}
+          snedOtpToUser={snedOtpToUser}
+          sendOtpRes={sendOtpRes}
+        />
       )}
       {enable === 2 && (
         <Verification
