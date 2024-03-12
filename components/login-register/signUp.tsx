@@ -108,7 +108,7 @@ console.log(error);
         step === 0 &&
 
         <section className="bg-primary-300 lg:dark:bg-black-v-1  lg:bg-bg-primary ">
-          <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none">
+          <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none h-screen">
             <div className="max-w-[1018px]  w-full lg:block hidden">
               <Image src="/assets/register/register.png" width={1018} height={1100} alt="signup" className="object-cover h-full block" />
             </div>
@@ -170,7 +170,7 @@ console.log(error);
                       </Link>
                     </label>
                   </div>
-                  <button type="submit" className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-600" >Register</button>
+                  <button type="submit" className="my-[30px] lg:my-[50px] solid-button w-full " >Register</button>
                 </form>
                 {/**Form End  */}
                 <div className="flex justify-center">

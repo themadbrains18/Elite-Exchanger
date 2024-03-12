@@ -585,7 +585,7 @@ const KycAuth = (props: fixSection) => {
           className="max-[1023px] dark:bg-omega bg-white  rounded-[10px]"
         >
           <div className="flex items-center gap-5 justify-between">
-            <p className="sec-title lg:px-0 px-20 pt-20">KYC Verification </p>
+            <p data-testid="kyc-auth" className="sec-title lg:px-0 px-20 pt-20">KYC Verification </p>
             <div className="py-[13px] px-[15px] border dark:border-opacity-[15%]  border-grey-v-1 items-center rounded-5 hidden md:flex gap-[10px]">
               <Image
                 src="/assets/profile/edit.svg"
@@ -617,8 +617,9 @@ const KycAuth = (props: fixSection) => {
             <div className="mt-[30px]">
               <div className="flex gap-[30px] md:flex-row flex-col">
                 <div className="max-w-full md:max-w-[30%] w-full">
-                  <label className="sm-text mb-[10px]">ID Card Number</label>
+                  <label htmlFor="docnumber" className="sm-text mb-[10px]">ID Card Number</label>
                   <input
+                  id="docnumber"
                     type="text"
                     {...register("docnumber")}
                     placeholder="Enter ID number"
@@ -631,10 +632,11 @@ const KycAuth = (props: fixSection) => {
                   )}
                 </div>
                 <div className="max-w-full md:max-w-[70%] w-full">
-                  <label className="sm-text mb-[10px]">
+                  <label htmlFor="fname" className="sm-text mb-[10px]">
                     Full name on Identity
                   </label>
                   <input
+                  id="fname"
                     type="text"
                     {...register("fname")}
                     // value="gjsg"
@@ -686,7 +688,11 @@ const KycAuth = (props: fixSection) => {
 
           <div className="flex md:flex-row flex-col gap-[30px] py-[30px] md:py-[50px] lg:px-0 px-20">
             <div className="w-full">
-              <label className="sm-text ">Identity Document Front Side</label>
+              <label htmlFor={`front${props?.num}`}
+              
+              
+              
+              className="sm-text ">Identity Document Front Side</label>
 
               <div className="w-full min-h-[160px] hover:dark:bg-black-v-1 flex  mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
                 <div className="m-auto ">

@@ -107,7 +107,7 @@ const ResetPassword = () => {
       <ToastContainer />
       {step === 0 && (
         <section className="bg-primary-300 lg:dark:bg-black-v-1 h-screen xl:h-full  lg:bg-bg-primary ">
-          <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none">
+          <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none h-screen">
             <div className="max-w-[848px]  w-full lg:block hidden">
               <Image
                 src="/assets/register/forget.png"

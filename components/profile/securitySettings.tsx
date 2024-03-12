@@ -15,6 +15,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { signOut, useSession } from "next-auth/react";
+import EmailChangeAlert from "../snippets/emailChangeAlert";
 
 const schema = yup.object().shape({
   old_password: yup.string().required("Old password is required"),
@@ -502,16 +503,17 @@ const SecuritySettings = (props: fixSection) => {
         )}
       </section>
       {enable === 1 && (
-        <Verification
-          setShow={setShow}
-          setEnable={setEnable}
-          type="email"
-          data={formData}
-          session={props?.session}
-          finalOtpVerification={finalOtpVerification}
-          snedOtpToUser={snedOtpToUser}
-          sendOtpRes={sendOtpRes}
-        />
+        // <Verification
+        //   setShow={setShow}
+        //   setEnable={setEnable}
+        //   type="email"
+        //   data={formData}
+        //   session={props?.session}
+        //   finalOtpVerification={finalOtpVerification}
+        //   snedOtpToUser={snedOtpToUser}
+        //   sendOtpRes={sendOtpRes}
+        // />
+        <EmailChangeAlert />
       )}
       {enable === 2 && (
         <Verification

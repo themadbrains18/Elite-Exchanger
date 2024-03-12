@@ -195,7 +195,7 @@ const SecurityCode = (props: propsData) => {
 
   return (
     <section className="bg-primary-300 lg:dark:bg-black-v-1 h-screen xl:h-full  lg:bg-bg-primary ">
-      <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none">
+      <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none h-screen">
         <div className="max-w-[1018px]  w-full lg:block hidden">
           <Image src="/assets/register/register.png" width={1018} height={1100} alt="signup" className="object-cover h-full block" />
         </div>
@@ -226,7 +226,7 @@ const SecurityCode = (props: propsData) => {
             <p className={`info-10-14 text-end cursor-pointer lg:pr-[60px] pr-[30px] !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => sendOtp()}>
               Resend Code
             </p>
-            <button className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-600" onClick={() => {
+            <button className="my-[30px] lg:my-[50px] solid-button w-full " onClick={() => {
               matchUserOtp()
             }}>Continue</button>
           </div>
