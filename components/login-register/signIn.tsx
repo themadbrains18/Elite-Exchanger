@@ -20,7 +20,7 @@ const schema = yup.object().shape({
     .test('email_or_phone', 'Email / Phone is invalid', (value) => {
       return validateEmail(value) || validatePhone(value);
     }),
-  password: yup.string().min(5).max(32).required(),
+  password: yup.string().required('Password must be required'),
   confirmPassword: yup.string()
     .oneOf([yup.ref('password')], 'Passwords must match')
 });
@@ -51,7 +51,7 @@ const SignIn = (Props: loginType) => {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
 
-  let { register, setValue, handleSubmit, watch, setError, formState: { errors } } = useForm({
+  let { register, setValue, handleSubmit, watch, setError,clearErrors, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -63,6 +63,21 @@ const SignIn = (Props: loginType) => {
       .then(data => {
       });
   }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (errors.password) {
+        clearErrors('password');
+      }
+      if (errors.username) {
+        clearErrors('username');
+      }
+      if (errors.confirmPassword) {
+        clearErrors('confirmPassword');
+      }
+    }, 3000);
+
+  }, [errors])
 
   const onHandleSubmit = async (data: any) => {
     try {

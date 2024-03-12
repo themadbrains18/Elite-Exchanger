@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Context from "../contexts/context";
 import HeaderLogo from "../svg-snippets/headerLogo";
 import Link from "next/link";
@@ -69,7 +69,7 @@ const SignUp = () => {
   const queryParams = searchParams.get('r');
   const referLink = searchParams.get('e');
 
-  let { register, setValue, handleSubmit, watch, setError, formState: { errors } } = useForm({
+  let { register, setValue, handleSubmit, watch, setError, clearErrors, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
 
   });
@@ -157,6 +157,24 @@ const SignUp = () => {
     const symbols = "~*$%@#^&!?*'-=/,.{}()[]<>";
     return symbols[random(0, symbols.length - 1)];
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (errors.password) {
+        clearErrors('password');
+      }
+      if (errors.username) {
+        clearErrors('username');
+      }
+      if (errors.confirmPassword) {
+        clearErrors('confirmPassword');
+      }
+      if (errors.agree) {
+        clearErrors('agree');
+      }
+    }, 3000);
+
+  }, [errors])
 
   return (
     <>
