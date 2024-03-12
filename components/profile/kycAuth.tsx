@@ -162,6 +162,14 @@ const KycAuth = (props: fixSection) => {
         setEnableFront(false);
         return;
       }
+      if (data.format === 'pdf') {
+        setError("idfront", {
+          type: "custom",
+          message: 'Unsupported pdf file',
+        });
+        setEnableFront(false);
+        return;
+    }
       setFromFrontImg(data.secure_url);
       setFrontImg(data.secure_url);
       setValue("idfront", data.secure_url);
@@ -207,6 +215,14 @@ const KycAuth = (props: fixSection) => {
         setEnableBack(false);
         return;
       }
+      if (data.format === 'pdf') {
+        setError("idback", {
+          type: "custom",
+          message: 'Unsupported pdf file',
+        });
+        setEnableBack(false);
+        return;
+    }
 
       setFromBackImg(data.secure_url);
       setBackImg(data.secure_url);
@@ -252,6 +268,15 @@ const KycAuth = (props: fixSection) => {
         setEnableStatement(false);
         return;
       }
+
+      if (data.format === 'pdf') {
+        setError("statement", {
+          type: "custom",
+          message: 'Unsupported pdf file',
+        });
+        setEnableStatement(false);
+        return;
+    }
       setFormSelfieImg(data.secure_url);
       setSelfieImg(data.secure_url)
       setValue("statement", data.secure_url);

@@ -23,7 +23,7 @@ const SideBar = (props: profileSec) => {
     const [show, setShow] = useState(0);
     const [profileImg, setProfileImg] = useState(props?.profileInfo && props?.profileInfo?.image !== null && props?.profileInfo?.messgae === undefined ? props?.profileInfo?.image : '');
     const router = useRouter()
-
+    const [enableDp, setEnableDP] = useState(false);
     const { status, data: session } = useSession();
 
     let data = [
@@ -87,14 +87,21 @@ const SideBar = (props: profileSec) => {
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', 'my-uploads');
-
+            setEnableDP(true);
             const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
                 method: 'POST',
                 body: formData
             }).then(r => r.json());
 
-            if (data.error!==undefined) {
+            if (data.error !== undefined) {
                 toast.error(data?.error?.message)
+                setEnableDP(false);
+                return;
+            }
+
+            if (data.format === 'pdf') {
+                toast.error('Unsupported pdf file when upload dp')
+                setEnableDP(false);
                 return;
             }
 
@@ -111,9 +118,11 @@ const SideBar = (props: profileSec) => {
             ).then((response) => response.json());
             if (response2?.data?.status === 200) {
                 setProfileImg(data.secure_url);
+                setEnableDP(false);
             }
         } catch (error) {
             console.error(error);
+            setEnableDP(false);
         }
         // let files = e.target.files[0];
         // var reader = new FileReader();
@@ -160,6 +169,12 @@ const SideBar = (props: profileSec) => {
                         props.profileSec &&
                         <div className='mb-30 relative text-center'>
                             <div className='relative inline-block  mb-5 clip-bg'>
+                                {enableDp &&
+                                    <>
+                                        <div className="bg-black  z-[1] duration-300 absolute top-0 left-0 h-full w-full opacity-80 visible"></div>
+                                        <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#ff815d] rounded-full animate-spin border-t-[#ff815d75] '></div>
+                                    </>
+                                }
                                 {profileImg === '' && <Image src='/assets/profile/avtar.png' width={125} height={125} alt='avtar profile' className='m-auto' />}
                                 {profileImg !== '' &&
                                     <div
