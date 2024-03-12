@@ -22,15 +22,23 @@ const StrengthCheck = (props: propsData) => {
     return (
         <>
             <div>
-                <div className="password-strength-meter" style={{
-                    width: `${(passwordStrength / 5) * 100}%`,
-                    backgroundColor: `${['red', 'orange', '#03a2cc', '#03a2cc', '#0ce052']
-                    [passwordStrength - 1] || ''
-                        }`,
-                    display: 'block',
-                    borderRadius: '3px',
-                    height: '5px'
-                }}></div>
+                <div className="flex justify-between gap-[20px] items-center">
+                    <div className="password-strength-meter" style={{
+                        width: `${(passwordStrength / 5) * 100}%`,
+                        backgroundColor: `${['red', 'orange', '#03a2cc', '#03a2cc', '#0ce052']
+                        [passwordStrength - 1] || ''
+                            }`,
+                        display: 'block',
+                        borderRadius: '3px',
+                        height: '5px'
+                    }}></div>
+                    <div className="sm-text text-gamma dark:text-white">
+                        {['Too Weak', 'Medium', 'Average', 'Good', 'Strong']
+                        [passwordStrength - 1] || ''
+                            }
+                    </div>
+                </div>
+
 
                 {/* <div>
                     <h3 className="checklist-title">Password should be</h3>

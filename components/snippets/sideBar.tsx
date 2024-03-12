@@ -37,11 +37,11 @@ const SideBar = (props: profileSec) => {
             "svgType": "securityIcon",
             "link": "/profile/security"
         },
-        {
-            "title": "Notification Preferences",
-            "svgType": "notificationIcon",
-            "link": "/profile/notification"
-        },
+        // {
+        //     "title": "Notification Preferences",
+        //     "svgType": "notificationIcon",
+        //     "link": "/profile/notification"
+        // },
         {
             "title": "KYC Verification",
             "svgType": "kycIcon",

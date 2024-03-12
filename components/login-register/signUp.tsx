@@ -24,13 +24,14 @@ const schema = yup.object().shape({
       return validateEmail(value) || validatePhone(value);
     }),
   password: yup.string().min(8).max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter")
-  .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
-  .matches(/\d/, "Password must have a number")
-  .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character")
-  .matches(/^\S*$/, "White Spaces are not allowed"),
+    .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
+    .matches(/\d/, "Password must have a number")
+    .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character")
+    .matches(/^\S*$/, "White Spaces are not allowed"),
   confirmPassword: yup.string()
     .oneOf([yup.ref('password')], 'Passwords must match'),
-  refeer_code: yup.string().optional()
+  refeer_code: yup.string().optional(),
+  agree: yup.bool().oneOf([true], "You must accept the terms and conditions")
 });
 
 const validateEmail = (email: string | undefined) => {
@@ -59,7 +60,7 @@ const SignUp = () => {
   const [pswd, setpswd] = useState('');
 
   // auto generate password
-  const [passwordLength, setPasswordLength] = useState(12);
+  const [passwordLength, setPasswordLength] = useState(18);
   const [useSymbols, setUseSymbols] = useState(true);
   const [useNumbers, setUseNumbers] = useState(true);
   const [useLowerCase, setUseLowerCase] = useState(true);
@@ -70,6 +71,7 @@ const SignUp = () => {
 
   let { register, setValue, handleSubmit, watch, setError, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
+
   });
 
   const onHandleSubmit = async (data: any) => {
@@ -120,13 +122,41 @@ const SignUp = () => {
     if (useUpperCase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
     for (let i = 0; i < passwordLength; i++) {
-        newPassword += charset.charAt(Math.floor(Math.random() * charset.length));
+      let choice = random(0, 3);
+      if (useLowerCase && choice === 0) {
+        newPassword += randomLower();
+      } else if (useUpperCase && choice === 1) {
+        newPassword += randomUpper();
+      } else if (useSymbols && choice === 2) {
+        newPassword += randomSymbol();
+      } else if (useNumbers && choice === 3) {
+        newPassword += random(0, 9);
+      } else {
+        i--;
+      }
     }
 
     setpswd(newPassword);
-    setValue('password',newPassword);
-    setValue('confirmPassword',newPassword);
-};
+    setValue('password', newPassword);
+    setValue('confirmPassword', newPassword);
+  };
+
+  const random = (min = 0, max = 1) => {
+    return Math.floor(Math.random() * (max + 1 - min) + min);
+  };
+
+  const randomLower = () => {
+    return String.fromCharCode(random(97, 122));
+  };
+
+  const randomUpper = () => {
+    return String.fromCharCode(random(65, 90));
+  };
+
+  const randomSymbol = () => {
+    const symbols = "~*$%@#^&!?*'-=/,.{}()[]<>";
+    return symbols[random(0, symbols.length - 1)];
+  };
 
   return (
     <>
@@ -155,13 +185,13 @@ const SignUp = () => {
                     <input type="text" placeholder="Enter Email or Phone Number" {...register('username')} name="username" className="input-cta" />
                     {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
                     <div className="relative text-end">
-                      <button type="button" className="!text-primary" onClick={()=> generatePassword()}>Generate Password</button>
+                      <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
                     </div>
                     <div
                       className="relative"
                     >
                       <input type={`${show === true ? "text" : "password"}`} {...register('password')}
-                        name="password" placeholder="Password" className="input-cta w-full password-input" onChange={(e:any)=> setpswd(e.target.value)} />
+                        name="password" placeholder="Password" className="input-cta w-full password-input" onChange={(e: any) => setpswd(e.target.value)} />
                       <Image
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
                         alt="eyeicon"
@@ -175,7 +205,7 @@ const SignUp = () => {
                     </div>
                     <StrengthCheck password={pswd} />
                     {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
-                    
+
                     <div className="relative">
                       <input type={`${show1 === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
                       <Image
@@ -193,7 +223,7 @@ const SignUp = () => {
                     <input type="text" {...register('refeer_code')} disabled={queryParams !== null ? true : false} placeholder="Referal Code(Optional)" className="input-cta" />
                   </div>
                   <div className="flex mt-[30px] gap-5">
-                    <input type="checkbox" id="checkbox" className="hidden" />
+                    <input type="checkbox" id="checkbox" {...register('agree')} />
                     <label htmlFor="checkbox" className=" cursor-pointer sec-text text-gamma dark:text-white ">
                       By Register i agree that i’m 18 years of age or older, ot the{" "}
                       <Link href="#" className="!text-primary">
@@ -201,10 +231,11 @@ const SignUp = () => {
                       </Link>
                     </label>
                   </div>
+                  {errors.agree && <p style={{ color: 'red' }}>{errors.agree.message}</p>}
                   <button type="submit" className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-600" >Register</button>
                 </form>
 
-                
+
                 {/**Form End  */}
                 <div className="flex justify-center">
                   <p className="sec-text text-nav-primary dark:text-white">Already have an account?&nbsp;</p>
