@@ -25,7 +25,7 @@ const Remarks = (props: propsData) => {
 
     useEffect(() => {
 
-        const websocket = new WebSocket('ws://localhost:3001/');
+        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
         websocket.onopen = () => {
             console.log('connected');
@@ -119,7 +119,7 @@ const Remarks = (props: propsData) => {
 
             if (res.data.status === 200) {
                 props.getUserOrders();
-                const websocket = new WebSocket('ws://localhost:3001/');
+                const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
                 let orderData = {
                     ws_type: 'order',
                     orderid: props.orderid
@@ -170,7 +170,7 @@ const Remarks = (props: propsData) => {
             let res = await responseData.json();
 
             if (res.data.result) {
-                const websocket = new WebSocket('ws://localhost:3001/');
+                const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
                 let orderData = {
                     ws_type: 'order',
                     orderid: props.orderid
@@ -223,7 +223,7 @@ const Remarks = (props: propsData) => {
 
             if (res?.data?.status === 200) {
                 props.getUserOrders();
-                const websocket = new WebSocket('ws://localhost:3001/');
+                const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
                 let orderData = {
                     ws_type: 'order',
                     orderid: props.orderid

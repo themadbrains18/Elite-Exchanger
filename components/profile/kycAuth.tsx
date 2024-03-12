@@ -85,6 +85,11 @@ const KycAuth = (props: fixSection) => {
   const [selfieImg, setSelfieImg] = useState("");
   const [formSelfieImg, setFormSelfieImg] = useState("");
   const { data: session, status } = useSession();
+  const [btnDisabled, setBtnDisabled] = useState(false);
+
+  const [enableFront, setEnableFront] = useState(false);
+  const [enableBack, setEnableBack] = useState(false);
+  const [enableStatement, setEnableStatement] = useState(false);
 
   const router = useRouter()
 
@@ -143,19 +148,37 @@ const KycAuth = (props: fixSection) => {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'my-uploads');
-
+      setEnableFront(true);
       const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
         method: 'POST',
         body: formData
       }).then(r => r.json());
 
+      if (data.error !== undefined) {
+        setError("idfront", {
+          type: "custom",
+          message: data?.error?.message,
+        });
+        setEnableFront(false);
+        return;
+      }
+      if (data.format === 'pdf') {
+        setError("idfront", {
+          type: "custom",
+          message: 'Unsupported pdf file',
+        });
+        setEnableFront(false);
+        return;
+    }
       setFromFrontImg(data.secure_url);
       setFrontImg(data.secure_url);
       setValue("idfront", data.secure_url);
       clearErrors("idfront");
+      setEnableFront(false);
 
     } catch (error) {
       console.error(error);
+      setEnableFront(false);
     }
     // let files = e.target.files[0];
     // setValue("idfront", files);
@@ -178,19 +201,37 @@ const KycAuth = (props: fixSection) => {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'my-uploads');
-
+      setEnableBack(true);
       const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
         method: 'POST',
         body: formData
       }).then(r => r.json());
 
+      if (data.error !== undefined) {
+        setError("idback", {
+          type: "custom",
+          message: data?.error?.message,
+        });
+        setEnableBack(false);
+        return;
+      }
+      if (data.format === 'pdf') {
+        setError("idback", {
+          type: "custom",
+          message: 'Unsupported pdf file',
+        });
+        setEnableBack(false);
+        return;
+    }
 
       setFromBackImg(data.secure_url);
       setBackImg(data.secure_url);
       setValue("idback", data.secure_url);
       clearErrors("idback");
+      setEnableBack(false);
     } catch (error) {
       console.error(error);
+      setEnableBack(false);
     }
 
     // let files = e.target.files[0];
@@ -213,18 +254,37 @@ const KycAuth = (props: fixSection) => {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'my-uploads');
-
+      setEnableStatement(true);
       const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
         method: 'POST',
         body: formData
       }).then(r => r.json());
 
+      if (data.error !== undefined) {
+        setError("statement", {
+          type: "custom",
+          message: data?.error?.message,
+        });
+        setEnableStatement(false);
+        return;
+      }
+
+      if (data.format === 'pdf') {
+        setError("statement", {
+          type: "custom",
+          message: 'Unsupported pdf file',
+        });
+        setEnableStatement(false);
+        return;
+    }
       setFormSelfieImg(data.secure_url);
       setSelfieImg(data.secure_url)
       setValue("statement", data.secure_url);
       clearErrors("statement");
+      setEnableStatement(false);
     } catch (error) {
       console.error(error);
+      setEnableStatement(false);
     }
     // let files = e.target.files[0];
     // setFormSelfieImg(files);
@@ -260,6 +320,7 @@ const KycAuth = (props: fixSection) => {
       let record = encodeURIComponent(ciphertext.toString());
 
       if (status === 'authenticated') {
+        setBtnDisabled(true);
         let res = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/kyc`,
           {
             method: "POST",
@@ -294,9 +355,11 @@ const KycAuth = (props: fixSection) => {
         }
         else {
           toast.error(result.data.data + " you auto redirect to login page");
+          setBtnDisabled(false);
         }
       } else {
         toast.error('Your session is expired. Its auto redirect to login page');
+        setBtnDisabled(false);
         setTimeout(() => {
           signOut();
         }, 4000);
@@ -304,6 +367,7 @@ const KycAuth = (props: fixSection) => {
       }
 
     } catch (error) {
+      setBtnDisabled(false);
       console.log(error, "kyc auth");
     }
   };
@@ -694,7 +758,14 @@ const KycAuth = (props: fixSection) => {
               
               className="sm-text ">Identity Document Front Side</label>
 
-              <div className="w-full min-h-[160px] hover:dark:bg-black-v-1 flex  mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
+              <div className="w-full relative min-h-[160px] hover:dark:bg-black-v-1 flex  mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
+                {enableFront &&
+                  <>
+                    <div className="bg-black  z-[1] duration-300 absolute top-0 left-0 h-full w-full opacity-80 visible"></div>
+                    <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#ff815d] rounded-full animate-spin border-t-[#ff815d75] '></div>
+                  </>
+                }
+
                 <div className="m-auto ">
                   <input
                     type="file"
@@ -702,14 +773,15 @@ const KycAuth = (props: fixSection) => {
                     id={`front${props?.num}`}
                     name="front"
                     autoComplete="off"
-                    className="hidden "
+                    className={`hidden`}
+                    disabled={(enableBack === true || enableStatement === true) ? true : false}
                     onChange={(e) => {
                       handleFileChange(e);
                     }}
                   />
                   <label
                     htmlFor={`front${props?.num}`}
-                    className="py-[30px]  cursor-pointer block h-full items-stretch "
+                    className={`py-[30px]  ${(enableStatement === true || enableBack === true) ? 'cursor-default' : 'cursor-pointer'} block h-full items-stretch `}
                   >
                     <div className={`${frontImg === "" ? "block" : "hidden"}`}>
                       <p className="nav-text-sm md:nav-text-lg text-center  mb-2">
@@ -747,7 +819,13 @@ const KycAuth = (props: fixSection) => {
 
             <div className="w-full ">
               <label className="sm-text ">Identity Document Back Side</label>
-              <div className="w-full min-h-[160px] mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 flex dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
+              <div className="w-full relative min-h-[160px] mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 flex dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
+                {enableBack &&
+                  <>
+                    <div className="bg-black  z-[1] duration-300 absolute top-0 left-0 h-full w-full opacity-80 visible"></div>
+                    <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#ff815d] rounded-full animate-spin border-t-[#ff815d75] '></div>
+                  </>
+                }
                 <div className="m-auto ">
                   <input
                     type="file"
@@ -755,14 +833,15 @@ const KycAuth = (props: fixSection) => {
                     id={`back${props?.num}`}
                     name="back"
                     autoComplete="off"
-                    className="hidden "
+                    className={`hidden`}
+                    disabled={(enableFront === true || enableStatement === true) ? true : false}
                     onChange={(e) => {
                       handleBackChange(e);
                     }}
                   />
                   <label
                     htmlFor={`back${props?.num}`}
-                    className="py-[30px]  cursor-pointer block h-full items-stretch"
+                    className={`py-[30px]  ${(enableStatement === true || enableFront === true) ? 'cursor-default' : 'cursor-pointer'} block h-full items-stretch`}
                   >
                     <div className={`${backImg === "" ? "block" : "hidden"}`}>
                       <p className="nav-text-sm md:nav-text-lg text-center  mb-2">
@@ -799,7 +878,13 @@ const KycAuth = (props: fixSection) => {
             <div className="w-full">
               <label className="sm-text ">A Selfie with your identity</label>
 
-              <div className="w-full min-h-[133px]  flex mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
+              <div className="w-full relative min-h-[133px]  flex mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
+              {enableStatement &&
+                  <>
+                    <div className="bg-black  z-[1] duration-300 absolute top-0 left-0 h-full w-full opacity-80 visible"></div>
+                    <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#ff815d] rounded-full animate-spin border-t-[#ff815d75] '></div>
+                  </>
+                }
                 <div className="m-auto ">
                   <input
                     type="file"
@@ -807,7 +892,8 @@ const KycAuth = (props: fixSection) => {
                     id={`statement${props?.num}`}
                     name="statement"
                     autoComplete="off"
-                    className="hidden "
+                    className={`hidden `}
+                    disabled={(enableBack === true || enableFront === true) ? true : false}
                     onChange={(e) => {
                       handleSelfieChange(e);
                     }}
@@ -815,7 +901,7 @@ const KycAuth = (props: fixSection) => {
 
                   <label
                     htmlFor={`statement${props?.num}`}
-                    className="py-[30px]  cursor-pointer block h-full items-stretch"
+                    className={`py-[30px]  ${(enableBack === true || enableFront === true) ? 'cursor-default' : 'cursor-pointer'} block h-full items-stretch`}
                   >
                     <div className={`${selfieImg === "" ? "block" : "hidden"}`}>
                       <Image
@@ -860,15 +946,21 @@ const KycAuth = (props: fixSection) => {
 
           <div className="h-[1px] w-full bg-grey-v-2 dark:bg-opacity-[15%]"></div>
 
-          <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-between pt-5 md:pt-[30px] lg:px-0 px-20">
-            <p className="sm-text">
+          <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-end pt-5 md:pt-[30px] lg:px-0 px-20">
+            {/* <p className="sm-text">
               This account was created on January 10, 2022, 02:12 PM
-            </p>
+            </p> */}
 
-            <button
+            <button disabled={(btnDisabled === true || frontImg === "" || backImg === "" || selfieImg === "") ? true : false}
               type="submit"
-              className="solid-button px-[23px] md:px-[51px]"
+              className={`solid-button px-[23px] md:px-[51px] ${frontImg === "" || backImg === "" || selfieImg === "" ? 'opacity-25 cursor-not-allowed' : ''}`}
             >
+              {btnDisabled &&
+                <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
+                  <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />
+                </svg>
+              }
               Submit
             </button>
           </div>

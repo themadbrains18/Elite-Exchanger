@@ -11,6 +11,11 @@ import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
+import Pusher from 'pusher-js';
+
+const pusher = new Pusher('b275b2f9e51725c09934', {
+    cluster: 'ap2'
+});
 
 interface Session {
     session: {
@@ -22,7 +27,7 @@ interface Session {
     withdrawList: any,
     assets: any,
     convertList: any,
-    depositList:any
+    depositList: any
 }
 
 const Wallet = (props: Session) => {
@@ -35,7 +40,7 @@ const Wallet = (props: Session) => {
     const [allCoins, setAllCoins] = useState(props.coinList);
 
     useEffect(() => {
-        const websocket = new WebSocket('ws://localhost:3001/');
+        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
         websocket.onopen = () => {
             console.log('connected');
@@ -49,6 +54,10 @@ const Wallet = (props: Session) => {
                 refreshData();
             }
         }
+        // var channel = pusher.subscribe('crypto-channel');
+        // channel.bind('price', function (data: any) {
+        //     refreshTokenList()
+        // });
 
     }, [])
 
@@ -105,7 +114,7 @@ const Wallet = (props: Session) => {
             <div className=" bg-light-v-1 py-[20px] md:py-[80px] dark:bg-black-v-1">
                 <div className="container flex gap-30 flex-wrap">
                     <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
-                        <Banner coinList={allCoins} networks={props?.networks} session={props.session} assets={userAssetsList} withdrawList={userWithdrawList} depositList={userDepositList}/>
+                        <Banner coinList={allCoins} networks={props?.networks} session={props.session} assets={userAssetsList} withdrawList={userWithdrawList} depositList={userDepositList} />
                         <WalletList coinList={allCoins} networks={props?.networks} session={props.session} withdrawList={userWithdrawList} depositList={userDepositList} assets={userAssetsList} refreshData={refreshData} userConvertList={userConvertList} />
                     </div>
                     <div className="lg:max-w-[432px] w-full md:block hidden">

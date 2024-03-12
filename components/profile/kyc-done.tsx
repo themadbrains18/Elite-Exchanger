@@ -36,11 +36,11 @@ const KycDone = (props:fixSection) => {
             <p className="sec-title">KYC Verification</p>
             <div className='flex items-center gap-10'>
               <IconsComponent type="kycComplete" hover={false} active={false} />
-              <p className='nav-text-sm'>Completed</p>
+              <p className='nav-text-sm'>Verified</p>
             </div>
         </div>
         <div>
-            <p className='nav-text-lg !text-[18px] mb-[10px]'>Your KYC  is Completed</p>
+            <p className='nav-text-lg !text-[18px] mb-[10px]'>Your KYC  is Verified</p>
             <Image src="/assets/kyc/kyc-done.jpg" alt='image-description' width={1047} height={691} className='max-w-full w-full' />
         </div>
     </div>

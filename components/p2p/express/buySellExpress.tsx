@@ -270,7 +270,7 @@ const BuySellExpress = (props: propsData) => {
 
       if (res.data.status === 200) {
         toast.success(res?.data?.data?.message);
-        const websocket = new WebSocket('ws://localhost:3001/');
+        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
         let buy = {
           ws_type: 'buy',
           sellerid: finalPost?.User?.id

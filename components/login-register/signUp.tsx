@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import AES from 'crypto-js/aes';
+import StrengthCheck from "../snippets/strengthCheck";
 
 import { useSearchParams } from 'next/navigation'
 
@@ -22,10 +23,15 @@ const schema = yup.object().shape({
     .test('email_or_phone', 'Email / Phone is invalid', (value) => {
       return validateEmail(value) || validatePhone(value);
     }),
-  password: yup.string().min(8).max(32).required(),
+  password: yup.string().min(8).max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter")
+    .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
+    .matches(/\d/, "Password must have a number")
+    .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character")
+    .matches(/^\S*$/, "White Spaces are not allowed"),
   confirmPassword: yup.string()
     .oneOf([yup.ref('password')], 'Passwords must match'),
-  refeer_code: yup.string().optional()
+  refeer_code: yup.string().optional(),
+  agree: yup.bool().oneOf([true], "You must accept the terms and conditions")
 });
 
 const validateEmail = (email: string | undefined) => {
@@ -51,13 +57,21 @@ const SignUp = () => {
   const searchParams = useSearchParams();
   const [sendOtpRes, setSendOtpRes] = useState<any>();
 
+  const [pswd, setpswd] = useState('');
+
+  // auto generate password
+  const [passwordLength, setPasswordLength] = useState(18);
+  const [useSymbols, setUseSymbols] = useState(true);
+  const [useNumbers, setUseNumbers] = useState(true);
+  const [useLowerCase, setUseLowerCase] = useState(true);
+  const [useUpperCase, setUseUpperCase] = useState(true);
+
   const queryParams = searchParams.get('r');
   const referLink = searchParams.get('e');
 
-  
-
-  let { register, setValue, handleSubmit, watch, setError, formState: { errors } } = useForm({
+  let { register, setValue, handleSubmit, watch, setError, clearErrors, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
+
   });
 
   const onHandleSubmit = async (data: any) => {
@@ -101,6 +115,71 @@ console.log(error);
   }, [queryParams]);
 
 
+
+  const generatePassword = () => {
+    let charset = "";
+    let newPassword = "";
+
+    if (useSymbols) charset += "!@#$%^&*()";
+    if (useNumbers) charset += "0123456789";
+    if (useLowerCase) charset += "abcdefghijklmnopqrstuvwxyz";
+    if (useUpperCase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    for (let i = 0; i < passwordLength; i++) {
+      let choice = random(0, 3);
+      if (useLowerCase && choice === 0) {
+        newPassword += randomLower();
+      } else if (useUpperCase && choice === 1) {
+        newPassword += randomUpper();
+      } else if (useSymbols && choice === 2) {
+        newPassword += randomSymbol();
+      } else if (useNumbers && choice === 3) {
+        newPassword += random(0, 9);
+      } else {
+        i--;
+      }
+    }
+
+    setpswd(newPassword);
+    setValue('password', newPassword);
+    setValue('confirmPassword', newPassword);
+  };
+
+  const random = (min = 0, max = 1) => {
+    return Math.floor(Math.random() * (max + 1 - min) + min);
+  };
+
+  const randomLower = () => {
+    return String.fromCharCode(random(97, 122));
+  };
+
+  const randomUpper = () => {
+    return String.fromCharCode(random(65, 90));
+  };
+
+  const randomSymbol = () => {
+    const symbols = "~*$%@#^&!?*'-=/,.{}()[]<>";
+    return symbols[random(0, symbols.length - 1)];
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (errors.password) {
+        clearErrors('password');
+      }
+      if (errors.username) {
+        clearErrors('username');
+      }
+      if (errors.confirmPassword) {
+        clearErrors('confirmPassword');
+      }
+      if (errors.agree) {
+        clearErrors('agree');
+      }
+    }, 3000);
+
+  }, [errors])
+
   return (
     <>
       <ToastContainer />
@@ -127,10 +206,14 @@ console.log(error);
                   <div className="flex flex-col gap-[15px] lg:gap-10">
                     <input type="text" placeholder="Enter Email / Phone Number" {...register('username')} name="username" className="input-cta" />
                     {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
+                    <div className="relative text-end">
+                      <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
+                    </div>
                     <div
                       className="relative"
                     >
-                      <input type={`${show === true ? "text" : "password"}`} {...register('password')} name="password" placeholder="Password" className="input-cta w-full" />
+                      <input type={`${show === true ? "text" : "password"}`} {...register('password')}
+                        name="password" placeholder="Password" className="input-cta w-full password-input" onChange={(e: any) => setpswd(e.target.value)} />
                       <Image
                         data-testid="show-hide"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
@@ -143,7 +226,9 @@ console.log(error);
                         className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                       />
                     </div>
+                    <StrengthCheck password={pswd} />
                     {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
+
                     <div className="relative">
                       <input type={`${show1 === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
                       <Image
@@ -162,16 +247,19 @@ console.log(error);
                     <input type="text" {...register('refeer_code')} disabled={queryParams !== null ? true : false} placeholder="Referal Code(Optional)" className="input-cta" />
                   </div>
                   <div className="flex mt-[30px] gap-5">
-                    <input type="checkbox" id="checkbox" className="hidden" />
-                    <label htmlFor="checkbox" className=" cursor-pointer sec-text text-gamma dark:text-white ">
+                    <input type="checkbox" id="checkbox" {...register('agree')} />
+                    <label htmlFor="checkbox" className=" cursor-pointer sm-text text-gamma dark:text-white ">
                       By Register i agree that i’m 18 years of age or older, ot the{" "}
                       <Link href="#" className="!text-primary">
                         User Agreements, Privacy Policy, Cookie Policy.
                       </Link>
                     </label>
                   </div>
+                  {errors.agree && <p style={{ color: 'red' }}>{errors.agree.message}</p>}
                   <button type="submit" className="my-[30px] lg:my-[50px] solid-button w-full " >Register</button>
                 </form>
+
+
                 {/**Form End  */}
                 <div className="flex justify-center">
                   <p className="sec-text text-nav-primary dark:text-white">Already have an account?&nbsp;</p>

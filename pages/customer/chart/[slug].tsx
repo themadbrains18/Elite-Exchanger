@@ -16,6 +16,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
 import AES from 'crypto-js/aes';
 
+import Pusher from 'pusher-js';
+
+const pusher = new Pusher('b275b2f9e51725c09934', {
+    cluster: 'ap2'
+});
+
 interface Session {
     session: {
         user: any
@@ -43,7 +49,7 @@ const Chart = (props: Session) => {
     let { slug } = router.query;
 
     const socket = () => {
-        const websocket = new WebSocket('ws://localhost:3001/');
+        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
         websocket.onopen = () => {
             console.log('connected');
@@ -52,9 +58,9 @@ const Chart = (props: Session) => {
         websocket.onmessage = (event) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
-            if (eventDataType === "price") {
-                refreshTokenList()
-            }
+            // if (eventDataType === "price") {
+            //     refreshTokenList()
+            // }
             if (eventDataType === "market") {
                 if (props.session) {
                     getUserOpenOrder(slug);
@@ -63,6 +69,19 @@ const Chart = (props: Session) => {
                 getAllMarketOrderByToken(slug);
             }
         }
+
+        // var channel = pusher.subscribe('crypto-channel');
+        // channel.bind('price', function (data: any) {
+        //     refreshTokenList()
+        // });
+
+        // channel.bind('market', function (data: any) {
+        //     if (props.session) {
+        //         getUserOpenOrder(slug);
+        //         getUserTradeHistory(slug);
+        //     }
+        //     getAllMarketOrderByToken(slug);
+        // })
 
     };
 

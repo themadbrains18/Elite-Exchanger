@@ -17,6 +17,11 @@ import { authOptions } from '../api/auth/[...nextauth]';
 // const VisitorAPI = dynamic(() => import('visitorapi') as any, {
 //   ssr: false,
 // });
+import Pusher from 'pusher-js';
+
+const pusher = new Pusher('b275b2f9e51725c09934', {
+  cluster: 'ap2'
+});
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -57,7 +62,7 @@ export default function Home({ session, coinList }: Session) {
   }
 
   useEffect(() => {
-    const websocket = new WebSocket('ws://localhost:3001/');
+    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
     websocket.onopen = () => {
       console.log('connected');
@@ -70,6 +75,11 @@ export default function Home({ session, coinList }: Session) {
         refreshTokenList()
       }
     }
+
+    // var channel = pusher.subscribe('crypto-channel');
+    // channel.bind('price', function (data: any) {
+    //   refreshTokenList()
+    // });
 
   }, [])
 

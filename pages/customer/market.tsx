@@ -6,6 +6,11 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Pusher from 'pusher-js';
+
+const pusher = new Pusher('b275b2f9e51725c09934', {
+  cluster: 'ap2'
+});
 
 interface Session {
   session: {
@@ -23,7 +28,7 @@ const Market = ({ session, coinList, assets, networks }: Session) => {
   const [allCoins, setAllCoins] = useState(coinList);
 
   useEffect(() => {
-    const websocket = new WebSocket('ws://localhost:3001/');
+    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
     websocket.onopen = () => {
       console.log('connected');
@@ -36,6 +41,11 @@ const Market = ({ session, coinList, assets, networks }: Session) => {
         refreshTokenList()
       }
     }
+    
+    // var channel = pusher.subscribe('crypto-channel');
+    // channel.bind('price', function (data: any) {
+    //   refreshTokenList()
+    // });
 
   }, [])
 

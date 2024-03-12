@@ -143,6 +143,15 @@ const AddToken = (props: activeSection) => {
         method: 'POST',
         body: formData
       }).then(r => r.json());
+
+      if (data.error!==undefined) {
+        // toast.error(data?.error?.message)
+        setError("image", {
+          type: "custom",
+          message: data?.error?.message,
+        });
+        return;
+      }
       setTokenImg(data.secure_url);
       setValue("image", data.secure_url);
       clearErrors("image");
@@ -187,7 +196,7 @@ const AddToken = (props: activeSection) => {
         delete v.checked;
       });
 
-      if(tokenImg === ""){
+      if (tokenImg === "") {
         setError("image", {
           type: "custom",
           message: `Please upload token symbol`,

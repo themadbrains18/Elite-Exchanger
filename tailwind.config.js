@@ -111,6 +111,12 @@ module.exports = {
       'public-sans': ['Public Sans', 'sans-serif'],
     },
     extend: {
+      keyframes: {
+        loader:{  
+          '0%': { transform: 'rotate(0deg)',
+          '100%': {transform: 'rotate(359deg)'}
+        }
+      }},
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'darkLaptop': 'url("../public/assets/darkLaptop.png")',

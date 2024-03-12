@@ -9,6 +9,12 @@ import { GetServerSidePropsContext } from "next";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { getProviders } from "next-auth/react";
+import Pusher from 'pusher-js';
+
+const pusher = new Pusher('b275b2f9e51725c09934', {
+  cluster: 'ap2'
+});
+
 interface Session {
   coinList?: any,
   topgainer: any,
@@ -23,7 +29,7 @@ const Token = (props: Session) => {
   }
 
   useEffect(() => {
-    const websocket = new WebSocket('ws://localhost:3001/');
+    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
     websocket.onopen = () => {
       console.log('connected');
@@ -36,6 +42,10 @@ const Token = (props: Session) => {
         refreshPriceTokenList()
       }
     }
+    // var channel = pusher.subscribe('crypto-channel');
+    // channel.bind('price', function (data: any) {
+    //   refreshPriceTokenList()
+    // });
 
   }, [])
 

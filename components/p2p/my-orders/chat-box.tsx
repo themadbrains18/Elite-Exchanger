@@ -19,7 +19,7 @@ const ChatBox = (props: propsData) => {
     useEffect(() => {
         getChatByOrderId();
 
-        const websocket = new WebSocket('ws://localhost:3001/');
+        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
         websocket.onopen = () => {
             console.log('connected');
@@ -90,7 +90,7 @@ const ChatBox = (props: propsData) => {
 
                 if (res.data.status === 200) {
                     setMessage('');
-                    const websocket = new WebSocket('ws://localhost:3001/');
+                    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
                     let chat = {
                         ws_type: 'chat',
                         orderid: props?.order?.id

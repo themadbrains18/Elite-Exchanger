@@ -32,6 +32,7 @@ const Dashboard = (props: fixSection) => {
     resolver: yupResolver(schema),
   });
 
+
   useEffect(() => {
     if (props.userDetail) {
       setValue('fName', props?.userDetail?.fName);
@@ -59,7 +60,7 @@ const Dashboard = (props: fixSection) => {
 
     if (response?.data?.status === 200) {
       setEditable(false);
-      const websocket = new WebSocket('ws://localhost:3001/');
+      const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
       let profile = {
         ws_type: 'profile',
         user_id: props?.session?.user?.user_id,
@@ -123,7 +124,7 @@ const Dashboard = (props: fixSection) => {
                       <input
                         type="text"
                         {...register('fName')} name="fName"
-                        placeholder={editable ? "Enter first name" : "Allie"}
+                        placeholder={editable ? "Enter first name" : "Enter first name"}
                         defaultValue={getValues('fName')}
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />
@@ -136,7 +137,7 @@ const Dashboard = (props: fixSection) => {
                       <input
                         type="text"
                         {...register('lName')} name="lName"
-                        placeholder={editable ? "Enter Last name" : "Joe"}
+                        placeholder={editable ? "Enter Last name" : "Enter Last name"}
                         defaultValue={getValues('lName')}
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />
@@ -152,7 +153,7 @@ const Dashboard = (props: fixSection) => {
                         <input
                           type="text"
                           {...register('dName')} name="dName"
-                          placeholder={editable ? "Enter display name" : "Allie Joe"}
+                          placeholder={editable ? "Enter display name" : "Enter display name"}
                           defaultValue={getValues('dName')}
                           className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
 
@@ -167,7 +168,7 @@ const Dashboard = (props: fixSection) => {
                       <input
                         type="text"
                         {...register('uName')} name="uName"
-                        placeholder={editable ? "Enter user name" : "AllieJoe"}
+                        placeholder={editable ? "Enter user name" : "Enter user name"}
                         defaultValue={getValues('uName')}
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />
@@ -179,7 +180,7 @@ const Dashboard = (props: fixSection) => {
               {editable && (
                 <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-between pt-5 md:pt-[30px]">
                   <p className="sm-text">
-                    This account was created on {moment(props?.userDetail?.User?.createdAt).format("YYYY-MM-DD HH:mm:ss  A")}
+                    This account was created on {moment(props?.userDetail?.createdAt).format("YYYY-MM-DD HH:mm:ss  A")}
                   </p>
                   <div className="flex gap-[30px]">
                     <button type="button" className="solid-button2 " onClick={() => { setEditable(false) }}>Cancel</button>

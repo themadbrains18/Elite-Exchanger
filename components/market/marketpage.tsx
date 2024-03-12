@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MarketCoin from "./marketCoin";
 import CoinList from "./coinList";
 import BuySellCard from "../snippets/market/buySellCard";
@@ -16,8 +16,12 @@ const Marketpage = (props: propsData) => {
 
   const watchCoinList = props.coinList.slice(0, 8);
   const marketCoinList = props.coinList.slice(0, 6);
-  const [coins, setCoins] = useState(props.coinList);
+  const [coins, setCoins] = useState([]);
 
+  useEffect(()=>{
+    setCoins(props.coinList)
+  },[props.coinList]);
+  
   return (
     <section className=" bg-light-v-1 py-[20px] md:py-[80px]  dark:bg-black-v-1">
       <div className="container flex flex-wrap gap-30">

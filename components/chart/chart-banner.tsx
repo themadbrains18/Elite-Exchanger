@@ -2,7 +2,11 @@ import Image from 'next/image';
 import React, { Fragment, useEffect, useState } from 'react'
 import IconsComponent from '../snippets/icons';
 import { useRouter } from 'next/router';
+import Pusher from 'pusher-js';
 
+const pusher = new Pusher('b275b2f9e51725c09934', {
+  cluster: 'ap2'
+});
 
 const ChartBanner = () => {
 
@@ -14,7 +18,7 @@ const ChartBanner = () => {
   const { slug } = router.query;
 
   useEffect(() => {
-    const websocket = new WebSocket('ws://localhost:3001/');
+    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
     websocket.onopen = () => {
       console.log('connected');
@@ -27,6 +31,10 @@ const ChartBanner = () => {
         refreshTokenList()
       }
     }
+    // var channel = pusher.subscribe('crypto-channel');
+    // channel.bind('price', function (data: any) {
+    //   refreshTokenList()
+    // });
 
     refreshTokenList();
   }, [slug])

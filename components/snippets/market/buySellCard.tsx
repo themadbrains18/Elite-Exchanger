@@ -12,6 +12,11 @@ import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import ConfirmBuy from "../confirmBuy";
+import Pusher from 'pusher-js';
+
+const pusher = new Pusher('b275b2f9e51725c09934', {
+  cluster: 'ap2'
+});
 
 const schema = yup.object().shape({
   token_amount: yup.number().positive().required('Please enter quantity').typeError('Please enter quantity').default(0),
@@ -74,7 +79,7 @@ const BuySellCard = (props: DynamicId) => {
   // }, [props.token]);
 
   const Socket = () => {
-    const websocket = new WebSocket('ws://localhost:3001/');
+    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
     websocket.onopen = () => {
       console.log('connected');
@@ -90,6 +95,11 @@ const BuySellCard = (props: DynamicId) => {
         }
       }
     }
+    // var channel = pusher.subscribe('crypto-channel');
+    // channel.bind('market', async function (data: any) {
+    //   // alert('---here market pusher');
+    //   getAssets();
+    // });
   };
 
   const setCurrencyName = (symbol: string, dropdown: number) => {
@@ -136,7 +146,7 @@ const BuySellCard = (props: DynamicId) => {
 
   const onHandleSubmit = async (data: any) => {
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
-
+    
     if (active1 === 1 && totalAmount > price) {
       toast.error('Insufficiant balance');
       return;
@@ -183,7 +193,7 @@ const BuySellCard = (props: DynamicId) => {
         setSecondCurrency('USDT');
         setActive(false);
 
-        const websocket = new WebSocket('ws://localhost:3001/');
+        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
         let withdraw = {
           ws_type: 'market',
         }
@@ -214,7 +224,7 @@ const BuySellCard = (props: DynamicId) => {
           }).then(response => response.json());
 
           if (executionReponse?.data?.message === undefined) {
-            const websocket = new WebSocket('ws://localhost:3001/');
+            const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
             let withdraw = {
               ws_type: 'market',
             }
@@ -407,8 +417,8 @@ const BuySellCard = (props: DynamicId) => {
               </div>
             </div>
 
-            
-            {(show === 1  || show === 2) &&
+
+            {(show === 1 || show === 2) &&
               <>
                 <div className="mt-5 flex gap-[18px] items-center">
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
