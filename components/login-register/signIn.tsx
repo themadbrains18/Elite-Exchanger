@@ -190,8 +190,8 @@ const SignIn = (Props: loginType) => {
 
                 {/**Form End  */}
                 <div className="flex md:flex-nowrap flex-wrap justify-center">
-                  <p className="sec-text text-nav-primary dark:text-white">If you don’t have an account you can&nbsp;</p>
-                  <Link href="/register" className="sec-text !text-primary">
+                  <p className="sm-text text-nav-primary dark:text-white">If you don’t have an account you can&nbsp;</p>
+                  <Link href="/register" className="sm-text !text-primary">
                     Register Here!
                   </Link>
                 </div>

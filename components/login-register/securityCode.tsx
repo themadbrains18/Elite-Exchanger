@@ -58,6 +58,9 @@ const SecurityCode = (props: propsData) => {
       
       if (fillOtp === '') {
         setOtpMessage('Please enter One-Time password to authenticate.');
+        setTimeout(() => {
+          setOtpMessage('');
+        }, 3000);
         return;
       }
       setOtpMessage('');
@@ -200,6 +203,7 @@ const SecurityCode = (props: propsData) => {
     }
   };
 
+
   return (
     <section className="bg-primary-300 lg:dark:bg-black-v-1 h-screen xl:h-full  lg:bg-bg-primary ">
       <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none">
@@ -230,7 +234,7 @@ const SecurityCode = (props: propsData) => {
               <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
             </div>
 
-            <p className={`info-10-14 text-end cursor-pointer lg:pr-[60px] pr-[30px] !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => sendOtp()}>
+            <p className={`info-10-14 text-end cursor-pointer lg:pr-[60px] pr-[30px] !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => {setEnable(true); sendOtp()}}>
               Resend Code
             </p>
             <button disabled={btnDisabled} className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-600" onClick={() => {

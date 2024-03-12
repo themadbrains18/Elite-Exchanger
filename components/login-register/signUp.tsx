@@ -242,7 +242,7 @@ const SignUp = () => {
                   </div>
                   <div className="flex mt-[30px] gap-5">
                     <input type="checkbox" id="checkbox" {...register('agree')} />
-                    <label htmlFor="checkbox" className=" cursor-pointer sec-text text-gamma dark:text-white ">
+                    <label htmlFor="checkbox" className=" cursor-pointer sm-text text-gamma dark:text-white ">
                       By Register i agree that i’m 18 years of age or older, ot the{" "}
                       <Link href="#" className="!text-primary">
                         User Agreements, Privacy Policy, Cookie Policy.
