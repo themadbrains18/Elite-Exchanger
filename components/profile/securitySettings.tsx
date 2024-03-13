@@ -170,7 +170,7 @@ const SecuritySettings = (props: fixSection) => {
         if (res.data.message) {
           toast.error(res.data.message);
         } else {
-          setEnable(4);
+          setEnable(5);
           setShow(true);
           setFormData(data);
           reset();

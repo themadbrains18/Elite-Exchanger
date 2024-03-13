@@ -102,7 +102,7 @@ const Activity = (props: fixSection) => {
                 className="nav-text-sm !text-beta outline-none bg-[transparent] w-full"
               />
             </div> */}
-            <button className=" solid-button w-full hover:bg-primary-600" onClick={() => clearActivity()}>
+            <button className=" solid-button w-full hover:bg-primary-800" onClick={() => clearActivity()}>
               Clear All
             </button>
           </div>
