@@ -34,7 +34,7 @@ const ReEnterpass = () => {
                 className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                 />
             </div>
-            <button type="submit" className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-600">Sign in</button>
+            <button type="submit" className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-800">Sign in</button>
         </form>
     </div>
   )
