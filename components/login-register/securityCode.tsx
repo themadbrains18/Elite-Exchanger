@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { signIn } from "next-auth/react"
 import { toast } from 'react-toastify';
 import AES from 'crypto-js/aes';
+import ResetSuccessful from "../snippets/resetSuccessful";
 
 interface propsData {
   formData?: any,
@@ -21,7 +22,7 @@ const SecurityCode = (props: propsData) => {
   const [timeLeft, setTimer] = useState('');
   const [enable, setEnable] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(false);
-
+const [successModal,setSuccessModal] = useState(false)
   useEffect(() => {
 
     const inputElements = document.querySelectorAll(".input_wrapper input");
@@ -85,8 +86,9 @@ const SecurityCode = (props: propsData) => {
           router.push('/login');
         }
         else if (props.api === 'forget') {
-          toast.success(response?.data?.message);
-          router.push('/login');
+          setSuccessModal(true)
+          // toast.success(response?.data?.message);
+          // router.push('/login');
         }
       }
       else {
@@ -205,6 +207,7 @@ const SecurityCode = (props: propsData) => {
 
 
   return (
+    <>
     <section className="bg-primary-300 lg:dark:bg-black-v-1 h-screen xl:h-full  lg:bg-bg-primary ">
       <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none h-screen">
         <div className="max-w-[1018px]  w-full lg:block hidden">
@@ -237,7 +240,7 @@ const SecurityCode = (props: propsData) => {
             <p className={`info-10-14 text-end cursor-pointer lg:pr-[60px] pr-[30px] !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => {setEnable(true); sendOtp()}}>
               Resend Code
             </p>
-            <button disabled={btnDisabled} className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-600" onClick={() => {
+            <button disabled={btnDisabled} className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-800" onClick={() => {
               matchUserOtp()
             }}>
               {btnDisabled &&
@@ -250,6 +253,11 @@ const SecurityCode = (props: propsData) => {
         </div>
       </div>
     </section>
+    {
+      successModal &&
+      <ResetSuccessful />
+    }
+    </>
   );
 };
 

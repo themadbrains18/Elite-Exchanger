@@ -196,7 +196,7 @@ const SignIn = (Props: loginType) => {
                     Register Here!
                   </Link>
                 </div>
-                <div className="mt-[30px] md:mt-[70px]">
+                {/* <div className="mt-[30px] md:mt-[70px]">
                   <div className="flex gap-5 items-center justify-center">
                     <span className="border border-footer-text max-w-[79px] md:max-w-[192px] w-full h-[1px]"></span>
                     <p className="md-text !text-gamma dark:!text-white">or continue with</p>
@@ -227,7 +227,7 @@ const SignIn = (Props: loginType) => {
                       <Image src="/assets/register/fb.svg" alt="fb" width={36} height={36} className=" group-hover:scale-110 duration-300" />
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

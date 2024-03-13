@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { signOut, useSession } from "next-auth/react";
 import StrengthCheck from "../snippets/strengthCheck";
 import EmailChangeAlert from "../snippets/emailChangeAlert";
+import ResetSuccessful from "../snippets/resetSuccessful";
 
 const schema = yup.object().shape({
   old_password: yup.string().required("Old password is required"),
@@ -61,6 +62,7 @@ const SecuritySettings = (props: fixSection) => {
   const { status, data: session } = useSession()
   const [tradePassword, setTradePassword] = useState(false);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
+  const [successModal,setSuccessModal] = useState(false)
 
   const [pswd, setpswd] = useState('');
 
@@ -168,7 +170,7 @@ const SecuritySettings = (props: fixSection) => {
         if (res.data.message) {
           toast.error(res.data.message);
         } else {
-          setEnable(4);
+          setEnable(5);
           setShow(true);
           setFormData(data);
           reset();
@@ -264,12 +266,14 @@ const SecuritySettings = (props: fixSection) => {
         }
       ).then((response) => response.json());
       if (response.data.result) {
-        toast.success(response.data.message);
-        setTimeout(() => {
-          signOut();
-          setEnable(0),
-            setShow(false);
-        }, 1000);
+         setEnable(0),
+        // toast.success(response.data.message);
+        // setTimeout(() => {
+        //   signOut();
+        //   setEnable(0),
+        //     setShow(false);
+        // }, 1000);
+        setSuccessModal(true)
       } else {
         toast.error(response.data.message);
       }
@@ -628,7 +632,7 @@ const SecuritySettings = (props: fixSection) => {
                   type="submit"
                   className="solid-button px-[23px] md:px-[51px]"
                 >
-                  Save Password
+                  Save   
                 </button>
               </div>
             </form>
@@ -701,6 +705,10 @@ const SecuritySettings = (props: fixSection) => {
           session={props?.session}
         />
       )}
+       {
+      successModal &&
+      <ResetSuccessful />
+    }
     </>
   );
 };
