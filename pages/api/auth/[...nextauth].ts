@@ -58,7 +58,8 @@ export const authOptions: NextAuthOptions = {
                         secret:datauser?.data?.secret, 
                         role : token?.role, 
                         tradingPassword : datauser?.data?.tradingPassword,
-                        kyc : datauser?.data?.kycstatus 
+                        kyc : datauser?.data?.kycstatus,
+                        createdAt: datauser?.data?.createdAt
                     } as any;
                 }
             }
