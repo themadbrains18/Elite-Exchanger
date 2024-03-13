@@ -18,10 +18,10 @@ const Head = () => {
       linkText: "Buy",
       linkUrl: "/p2p/buy",
     },
-    {
-      linkText: "Sell",
-      linkUrl: "/p2p/sell",
-    },
+    // {
+    //   linkText: "Sell",
+    //   linkUrl: "/p2p/postad",
+    // },
 
     {
       linkText: "User Center",
