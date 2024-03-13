@@ -23,6 +23,7 @@ const Future = (props: propsData) => {
     const [show1, setShow1] = useState(0);
     const router = useRouter();
     const { mode } = useContext(Context)
+    const [token,setToken] = useState(Object);
 
     let itemsPerPage = 10;
     const endOffset = itemOffset + itemsPerPage;
@@ -119,7 +120,7 @@ const Future = (props: propsData) => {
                                         </p>
                                     </td>
                                     <td className="">
-                                    <button onClick={(e) => {e.stopPropagation(); setShow1(1) }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                    <button onClick={(e) => {e.stopPropagation(); setToken(item); setShow1(1) }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Deposit</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
@@ -164,7 +165,7 @@ const Future = (props: propsData) => {
         show1 === 1 &&
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-          <Deposit setShow1={setShow1} networks={props.networks} session={props.session} />
+          <Deposit setShow1={setShow1} networks={props.networks} session={props.session} token={token}/>
         </>
       }
             </>

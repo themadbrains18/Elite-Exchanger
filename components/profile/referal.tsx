@@ -79,7 +79,7 @@ const Referal = (props: fixSection) => {
             </p>
 
             <div className="  grid grid-cols-1 xl:grid-cols-2 gap-20 lg:gap-30  ">
-              {props.eventList && props.eventList.map((item: any, index:number) => {
+              {props.eventList && props.eventList.map((item: any, index: number) => {
                 return <div key={index} className="flex bg-bg-secondary  dark:bg-[#080808] rounded-10 pt-[26px] md:pt-[36px] pb-20 md:pb-[31px] pr-[13px] pl-10 md:pl-40 items-center justify-between flex-col	 md:flex-row ">
                   <div className="max-w-full md:max-w-[70%] w-full">
                     <p className="mb-[13px] md:mb-[30px] text-center md:text-start md-text font-medium leading-5">
@@ -147,7 +147,16 @@ const Referal = (props: fixSection) => {
                 <label className="sm-text">Lite Referral ID</label>
                 <div className="mt-[5px] lg:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
                   <p className="sec-text text-gamma">{props?.session?.user?.refer_code}</p>
-                  <button className="solid-button py-2 sec-text font-normal" onClick={() => { navigator.clipboard.writeText(props?.session?.user?.refer_code); toast.success('copy to clipboard') }}>
+                  <button className="solid-button py-2 sec-text font-normal" onClick={() => {
+                    // navigator.clipboard.writeText(props?.session?.user?.refer_code);
+                    const input = document.createElement('textarea')
+                    input.value = props?.session?.user?.refer_code
+                    document.body.appendChild(input)
+                    input.select()
+                    document.execCommand('copy')
+                    document.body.removeChild(input)
+                    toast.success('copy to clipboard')
+                  }}>
                     Copy
                   </button>
                 </div>
@@ -156,7 +165,16 @@ const Referal = (props: fixSection) => {
                 <label className="sm-text mb-[10px]">Lite Referral Link</label>
                 <div className="mt-[5px] lg:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
                   <p className="sec-text text-gamma">{`http://...?r=${props?.session?.user?.refer_code}`}</p>
-                  <button className="solid-button py-2 sec-text font-normal" onClick={() => { navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}`); toast.success('copy to clipboard') }}>
+                  <button className="solid-button py-2 sec-text font-normal" onClick={() => {
+                    // navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}`);
+                    const input = document.createElement('textarea')
+                    input.value = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}`
+                    document.body.appendChild(input)
+                    input.select()
+                    document.execCommand('copy')
+                    document.body.removeChild(input) 
+                    toast.success('copy to clipboard')
+                  }}>
                     Copy
                   </button>
                 </div>
@@ -194,7 +212,7 @@ const Referal = (props: fixSection) => {
                     <th className="text-left py-10 md:py-20 sm-text hidden md:block">
                       Invite Id
                     </th>
-                   
+
                     <th className="text-left py-10 md:py-20 sm-text">
                       Status
                     </th>
@@ -205,7 +223,7 @@ const Referal = (props: fixSection) => {
                 </thead>
 
                 <tbody>
-                  {referList && referList.length > 0 && referList.map((item: any,index:number) => {
+                  {referList && referList.length > 0 && referList.map((item: any, index: number) => {
                     return <tr key={index}>
                       <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{(item?.User?.id)?.substring(1, 7)}</td>
                       <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{moment(item?.createdAt)?.format('YYYY-MM-DD HH:mm:ss')}</td>

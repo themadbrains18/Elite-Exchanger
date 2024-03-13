@@ -8,8 +8,8 @@ import Deposit from "../deposit";
 
 interface propsData {
     coins: any,
-    session:any,
-    networks:any
+    session: any,
+    networks: any
 }
 
 
@@ -18,7 +18,8 @@ const Spot = (props: propsData) => {
     const [itemOffset, setItemOffset] = useState(0);
     const [show1, setShow1] = useState(0);
     const router = useRouter();
-    const { mode } = useContext(Context)
+    const { mode } = useContext(Context);
+    const [token, setToken] = useState(Object);
 
     let itemsPerPage = 10;
     const endOffset = itemOffset + itemsPerPage;
@@ -82,7 +83,7 @@ const Spot = (props: propsData) => {
                     <tbody>
                         {currentItems.length > 0 && currentItems?.map((item: any, index: any) => {
                             return (
-                                <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => {window.location.href=`/chart/${item.symbol}`; }}>
+                                <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => { window.location.href = `/chart/${item.symbol}`; }}>
 
                                     <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
@@ -107,7 +108,7 @@ const Spot = (props: propsData) => {
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${item.totalSupply}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">$ {item?.maxSupply || 0 }</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">$ {item?.maxSupply || 0}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
@@ -115,10 +116,10 @@ const Spot = (props: propsData) => {
                                         </p>
                                     </td>
                                     <td className="">
-                                    <button onClick={(e) => {e.stopPropagation(); setShow1(1) }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                <span className="text-primary  md:block hidden">Deposit</span>
-                                <IconsComponent type="openInNewTab" hover={false} active={false} />
-                              </button>
+                                        <button onClick={(e) => { e.stopPropagation(); setToken(item); setShow1(1) }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                            <span className="text-primary  md:block hidden">Deposit</span>
+                                            <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                        </button>
                                     </td>
                                 </tr>
                             );
@@ -156,13 +157,13 @@ const Spot = (props: propsData) => {
                     renderOnZeroPageCount={null} />
             </div>
             {
-        show1 === 1 &&
-        <>
-          <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-          <Deposit setShow1={setShow1} networks={props.networks} session={props.session} />
+                show1 === 1 &&
+                <>
+                    <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
+                    <Deposit setShow1={setShow1} networks={props.networks} session={props.session} token={token} />
+                </>
+            }
         </>
-      }
-            </>
     )
 }
 

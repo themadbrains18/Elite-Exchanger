@@ -78,7 +78,16 @@ const ReferPopup = (props: activeSection) => {
           <label className="sm-text">Lite Referral ID</label>
           <div className="mt-[5px] lg:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
             <p className="sec-text text-gamma">{props?.session?.user?.refer_code}</p>
-            <button className="solid-button py-2 sec-text font-normal" onClick={() => { navigator.clipboard.writeText(props?.session?.user?.refer_code); toast.success('copy to clipboard') }}>
+            <button className="solid-button py-2 sec-text font-normal" onClick={() => {
+              // navigator.clipboard.writeText(props?.session?.user?.refer_code);
+              const input = document.createElement('textarea')
+              input.value = props?.session?.user?.refer_code
+              document.body.appendChild(input)
+              input.select()
+              document.execCommand('copy')
+              document.body.removeChild(input)
+              toast.success('copy to clipboard')
+            }}>
               Copy
             </button>
           </div>
@@ -87,7 +96,16 @@ const ReferPopup = (props: activeSection) => {
           <label className="sm-text mb-[10px]">Lite Referral Link</label>
           <div className="mt-[5px] lg:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
             <p className="sec-text text-gamma">{`http://...?r=${props?.session?.user?.refer_code}&e=${props.referEvent}`}</p>
-            <button className="solid-button py-2 sec-text font-normal" onClick={() => { navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}&e=${props.referEvent}`); toast.success('copy to clipboard') }}>
+            <button className="solid-button py-2 sec-text font-normal" onClick={() => {
+              // navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}&e=${props.referEvent}`);
+              const input = document.createElement('textarea')
+              input.value = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}&e=${props.referEvent}`
+              document.body.appendChild(input)
+              input.select()
+              document.execCommand('copy')
+              document.body.removeChild(input)
+              toast.success('copy to clipboard')
+            }}>
               Copy
             </button>
           </div>
