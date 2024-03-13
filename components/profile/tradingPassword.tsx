@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import ConfirmPopup from '@/admin/admin-snippet/confirm-popup';
 import { signOut, useSession } from 'next-auth/react';
 import Verification from '../snippets/verification';
+import Image from "next/image";
 
 interface activeSection {
   setShow?: any;
@@ -57,6 +58,10 @@ const TradingPassword = (props: activeSection) => {
   const [formData, setFormData] = useState<UserSubmitForm | null>();
   const { status } = useSession()
   const [sendOtpRes, setSendOtpRes] = useState<any>();
+  const [showOld, setShowOld] = useState(false);
+  const [showNew, setShowNew] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+
   let {
     register,
     setValue,
@@ -94,7 +99,7 @@ const TradingPassword = (props: activeSection) => {
           otp: "string",
           step: 1
         }
-        
+
       }
 
       if (status === "authenticated") {
@@ -316,12 +321,25 @@ const TradingPassword = (props: activeSection) => {
                 <div className={` md:flex-row flex-col gap-[30px] ${(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? 'hidden' : "flex"}`}>
                   <div className=" w-full">
                     <p className="sm-text mb-[10px]">Old Trading Password</p>
-                    <input
-                      type="password"
-                      {...register("old_password")}
-                      placeholder="Enter Old password"
-                      className="sm-text input-cta2 w-full"
-                    />
+                    <div className='relative'>
+                      <input
+                        type={`${showOld === true ? "text" : "password"}`}
+                        {...register("old_password")}
+                        placeholder="Enter Old password"
+                        className="sm-text input-cta2 w-full"
+                      />
+                      <Image
+                        src={`/assets/register/${showOld === true ? "show.svg" : "hide.svg"}`}
+                        alt="eyeicon"
+                        width={24}
+                        height={24}
+                        onClick={() => {
+                          setShowOld(!showOld);
+                        }}
+                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                      />
+                    </div>
+
                   </div>
                 </div>
                 {(props?.session?.user?.tradingPassword !== null && props?.tradePassword === true) && errors.old_password && (
@@ -331,13 +349,25 @@ const TradingPassword = (props: activeSection) => {
                 )}
                 <div className=" my-30 w-full">
                   <p className="sm-text mb-[10px]">New Trading Password</p>
+                  <div className='relative'>
+                    <input
+                      type={`${showNew === true ? "text" : "password"}`}
+                      {...register("new_password")}
+                      placeholder="Enter new password"
+                      className="sm-text input-cta2 w-full"
+                    />
+                    <Image
+                      src={`/assets/register/${showNew === true ? "show.svg" : "hide.svg"}`}
+                      alt="eyeicon"
+                      width={24}
+                      height={24}
+                      onClick={() => {
+                        setShowNew(!showNew);
+                      }}
+                      className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                    />
+                  </div>
 
-                  <input
-                    type="password"
-                    {...register("new_password")}
-                    placeholder="Enter new password"
-                    className="sm-text input-cta2 w-full"
-                  />
                   {errors.new_password && (
                     <p style={{ color: "#ff0000d1" }}>
                       {errors.new_password.message}
@@ -347,13 +377,25 @@ const TradingPassword = (props: activeSection) => {
 
                 <div className=" w-full">
                   <p className="sm-text mb-[10px]">Re-enter Trading password</p>
+                  <div className='relative'>
+                    <input
+                      type={`${showConfirm === true ? "text" : "password"}`}
+                      {...register("confirmPassword")}
+                      placeholder="Re-Enter password"
+                      className="sm-text input-cta2 w-full"
+                    />
+                    <Image
+                      src={`/assets/register/${showConfirm === true ? "show.svg" : "hide.svg"}`}
+                      alt="eyeicon"
+                      width={24}
+                      height={24}
+                      onClick={() => {
+                        setShowConfirm(!showConfirm);
+                      }}
+                      className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                    />
+                  </div>
 
-                  <input
-                    type="password"
-                    {...register("confirmPassword")}
-                    placeholder="Re-Enter password"
-                    className="sm-text input-cta2 w-full"
-                  />
                   {errors.confirmPassword && (
                     <p style={{ color: "#ff0000d1" }}>
                       {errors.confirmPassword.message}

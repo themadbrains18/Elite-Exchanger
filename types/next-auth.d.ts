@@ -16,6 +16,7 @@ declare module "next-auth" {
       kyc:any;
       tradingPassword:any;
       role:string;
+      createdAt:string
     } & DefaultSession["user"]
   }
 }

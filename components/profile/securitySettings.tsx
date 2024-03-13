@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IconsComponent from "../snippets/icons";
 import GoogleAuth from "../snippets/googleAuth";
 import Verification from "../snippets/verification";
@@ -15,6 +15,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { signOut, useSession } from "next-auth/react";
+import StrengthCheck from "../snippets/strengthCheck";
 
 const schema = yup.object().shape({
   old_password: yup.string().required("Old password is required"),
@@ -22,7 +23,11 @@ const schema = yup.object().shape({
     .string()
     .min(8)
     .max(32)
-    .required("New password is required"),
+    .required("New password is required").matches(/\w*[a-z]\w*/, "Password must have a small letter")
+    .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
+    .matches(/\d/, "Password must have a number")
+    .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character")
+    .matches(/^\S*$/, "White Spaces are not allowed"),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref("new_password")], "Passwords must match"),
@@ -56,6 +61,19 @@ const SecuritySettings = (props: fixSection) => {
   const [tradePassword, setTradePassword] = useState(false);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
 
+  const [pswd, setpswd] = useState('');
+
+  // auto generate password
+  const [passwordLength, setPasswordLength] = useState(18);
+  const [useSymbols, setUseSymbols] = useState(true);
+  const [useNumbers, setUseNumbers] = useState(true);
+  const [useLowerCase, setUseLowerCase] = useState(true);
+  const [useUpperCase, setUseUpperCase] = useState(true);
+
+  const [showOldPswd, setShowOldPswd] = useState(false);
+  const [showpswd, setShowPswd] = useState(false);
+  const [showconfirm, setShowconfirm] = useState(false);
+
   let data = [
     {
       image: "mail.svg",
@@ -81,6 +99,15 @@ const SecuritySettings = (props: fixSection) => {
       Add: false,
       CtaText: "Enable",
     },
+
+    {
+      image: "activity.svg",
+      bg: "green",
+      title: "Trading Password",
+      desc: "",
+      Add: false,
+      CtaText: "Enable",
+    },
     {
       image: "activity.svg",
       bg: "green",
@@ -90,14 +117,6 @@ const SecuritySettings = (props: fixSection) => {
       ctaLink: "/activity",
       CtaText: "Activity log",
     },
-    {
-      image: "activity.svg",
-      bg: "green",
-      title: "Trading Password",
-      desc: "",
-      Add: false,
-      CtaText: "Enable",
-    },
   ];
 
   let {
@@ -106,7 +125,7 @@ const SecuritySettings = (props: fixSection) => {
     handleSubmit,
     reset,
     watch,
-    setError,
+    setError, clearErrors,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -258,9 +277,71 @@ const SecuritySettings = (props: fixSection) => {
     }
   }
 
+  const generatePassword = () => {
+    let charset = "";
+    let newPassword = "";
+
+    if (useSymbols) charset += "!@#$%^&*()";
+    if (useNumbers) charset += "0123456789";
+    if (useLowerCase) charset += "abcdefghijklmnopqrstuvwxyz";
+    if (useUpperCase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    for (let i = 0; i < passwordLength; i++) {
+      let choice = random(0, 3);
+      if (useLowerCase && choice === 0) {
+        newPassword += randomLower();
+      } else if (useUpperCase && choice === 1) {
+        newPassword += randomUpper();
+      } else if (useSymbols && choice === 2) {
+        newPassword += randomSymbol();
+      } else if (useNumbers && choice === 3) {
+        newPassword += random(0, 9);
+      } else {
+        i--;
+      }
+    }
+
+    setpswd(newPassword);
+    setValue('new_password', newPassword);
+    setValue('confirmPassword', newPassword);
+  };
+
+  const random = (min = 0, max = 1) => {
+    return Math.floor(Math.random() * (max + 1 - min) + min);
+  };
+
+  const randomLower = () => {
+    return String.fromCharCode(random(97, 122));
+  };
+
+  const randomUpper = () => {
+    return String.fromCharCode(random(65, 90));
+  };
+
+  const randomSymbol = () => {
+    const symbols = "~*$%@#^&!?*'-=/,.{}()[]<>";
+    return symbols[random(0, symbols.length - 1)];
+  };
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (errors.new_password) {
+        clearErrors('new_password');
+      }
+      if (errors.confirmPassword) {
+        clearErrors('confirmPassword');
+      }
+      if (errors.old_password) {
+        clearErrors('old_password');
+      }
+
+    }, 3000);
+
+  }, [errors])
+
   return (
     <>
-      <ToastContainer position="top-right"/>
+      <ToastContainer position="top-right" />
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"
           }`}
@@ -288,7 +369,7 @@ const SecuritySettings = (props: fixSection) => {
         </div>
 
         {showActivity ? (
-          <Activity activity={props?.activity} setShowActivity={setShowActivity} showActivity={showActivity} />
+          <Activity setShowActivity={setShowActivity} showActivity={showActivity} />
         ) : (
           <div className="max-[1023px] dark:bg-omega bg-white rounded-[10px]">
             <p className="sec-title lg:p-0 pl-20 pt-20">Security</p>
@@ -326,15 +407,15 @@ const SecuritySettings = (props: fixSection) => {
                       <div
                         className="py-[8px] cursor-pointer pl-[10px] pr-[10px] pl-1 hidden md:flex gap-[8px] items-center border rounded-5 border-grey-v-1 dark:border-opacity-[15%] max-w-fit w-full"
                         onClick={() => {
-                          console.log(props?.session?.user,'==========props?.session?.user');
-                          if(googleAuth === true){
+                          console.log(props?.session?.user, '==========props?.session?.user');
+                          if (googleAuth === true) {
                             setActive(index + 1);
                             setShow(true);
                           }
-                          else{
-                            toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again',{position:'top-center'})
+                          else {
+                            toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again', { position: 'top-center' })
                           }
-                          
+
                         }}
                       >
                         {/* <Image
@@ -404,7 +485,7 @@ const SecuritySettings = (props: fixSection) => {
                             ? "Enable"
                             : "Disable"}
                         </button>
-                      ) : index === 4 && (
+                      ) : index === 3 && (
                         <button
                           className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${(props?.session?.user?.tradingPassword === null && tradePassword === false) ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
                           onClick={() => {
@@ -432,24 +513,36 @@ const SecuritySettings = (props: fixSection) => {
               })}
             </div>
             <div className="h-[1px] w-full bg-grey-v-2 dark:bg-opacity-[15%]"></div>
+
             <form onSubmit={handleSubmit(onHandleSubmit)}>
               <div className="py-[30px] md:py-[50px] lg:px-0 px-20">
                 <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
-                  Password
+                  Change Password
                 </p>
-                <p className="sm-text ">
-                  Set a unique password to protect your personal account.
-                </p>
+                
                 <div className="mt-[30px] ">
                   <div className="flex md:flex-row flex-col gap-[30px]">
                     <div className=" w-full">
                       <p className="sm-text mb-[10px]">Old Password</p>
-                      <input
-                        type="password"
-                        {...register("old_password")}
-                        placeholder="Enter Old password"
-                        className="sm-text input-cta2 w-full"
-                      />
+                      <div className="relative">
+                        <input
+                          type={`${showOldPswd === true ? "text" : "password"}`}
+                          {...register("old_password")}
+                          placeholder="Enter Old password"
+                          className="sm-text input-cta2 w-full"
+                        />
+                        <Image
+                          src={`/assets/register/${showOldPswd === true ? "show.svg" : "hide.svg"}`}
+                          alt="eyeicon"
+                          width={24}
+                          height={24}
+                          onClick={() => {
+                            setShowOldPswd(!showOldPswd);
+                          }}
+                          className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                        />
+                      </div>
+
                     </div>
                   </div>
                   {errors.old_password && (
@@ -459,14 +552,33 @@ const SecuritySettings = (props: fixSection) => {
                   )}
                   <div className="mt-5 flex gap-[30px] md:flex-row flex-col">
                     <div className=" w-full">
-                      <p className="sm-text mb-[10px]">New Password</p>
+                      <div className="flex justify-between">
+                        <p className="sm-text mb-[10px]">New Password</p>
+                        <div className="relative text-end">
+                          <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
+                        </div>
+                      </div>
+                      <div className='relative'>
+                        <input
+                          type={`${showpswd === true ? "text" : "password"}`}
+                          {...register("new_password")}
+                          onChange={(e: any) => setpswd(e.target.value)}
+                          placeholder="Enter new password"
+                          className="sm-text input-cta2 w-full"
+                        />
+                        <Image
+                          src={`/assets/register/${showpswd === true ? "show.svg" : "hide.svg"}`}
+                          alt="eyeicon"
+                          width={24}
+                          height={24}
+                          onClick={() => {
+                            setShowPswd(!showpswd);
+                          }}
+                          className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                        />
+                      </div>
 
-                      <input
-                        type="password"
-                        {...register("new_password")}
-                        placeholder="Enter new password"
-                        className="sm-text input-cta2 w-full"
-                      />
+                      <StrengthCheck password={pswd} />
                       {errors.new_password && (
                         <p style={{ color: "#ff0000d1" }}>
                           {errors.new_password.message}
@@ -476,13 +588,26 @@ const SecuritySettings = (props: fixSection) => {
 
                     <div className=" w-full">
                       <p className="sm-text mb-[10px]">Re-enter password</p>
+                      <div className="relative">
+                        <input
+                          type={`${showconfirm === true ? "text" : "password"}`}
+                          {...register("confirmPassword")}
+                          placeholder="Re-Enter password"
+                          className="sm-text input-cta2 w-full"
+                        />
+                        <Image
+                          src={`/assets/register/${showconfirm === true ? "show.svg" : "hide.svg"}`}
+                          alt="eyeicon"
+                          width={24}
+                          height={24}
+                          onClick={() => {
+                            setShowconfirm(!showconfirm);
+                          }}
+                          className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                        />
+                        
+                      </div>
 
-                      <input
-                        type="password"
-                        {...register("confirmPassword")}
-                        placeholder="Re-Enter password"
-                        className="sm-text input-cta2 w-full"
-                      />
                       {errors.confirmPassword && (
                         <p style={{ color: "#ff0000d1" }}>
                           {errors.confirmPassword.message}
@@ -493,11 +618,11 @@ const SecuritySettings = (props: fixSection) => {
                 </div>
               </div>
               <div className="h-[1px] w-full bg-grey-v-2 dark:bg-opacity-[15%]"></div>
-              <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-between pt-5 md:pt-[30px] lg:px-0 px-20">
-                <p className="sm-text">
+              <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-end pt-5 md:pt-[30px] lg:px-0 px-20">
+                {/* <p className="sm-text">
                   To ensure your account is well protected, please use 8 or more
                   characters with a mix of letters, numbers & symbols.
-                </p>
+                </p> */}
                 <button
                   type="submit"
                   className="solid-button px-[23px] md:px-[51px]"
@@ -540,7 +665,7 @@ const SecuritySettings = (props: fixSection) => {
           setGoogleAuth={setGoogleAuth}
         />
       )}
-      {enable === 4 && (
+      {enable === 5 && (
         <ConfirmPopup
           setEnable={setEnable}
           setShow={setShow}
@@ -550,7 +675,7 @@ const SecuritySettings = (props: fixSection) => {
           snedOtpToUser={snedOtpToUser}
         />
       )}
-      {enable === 5 && (
+      {enable === 4 && (
         <TradingPassword
           setEnable={setEnable}
           setShow={setShow}
