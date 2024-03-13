@@ -31,8 +31,8 @@ const BuyTableMobile = (props: activeSection) => {
         <>
             {
                 currentItems?.map((item: any, ind: number) => {
-                    const profileImg = item?.User?.profile && item?.User?.profile?.image !== null ? `${process.env.NEXT_PUBLIC_APIURL}/dp/${item?.User?.profile?.image}` : `/assets/orders/user1.png`;
-                    const userName = item?.User?.profile && item?.User?.profile?.fName !== null ? item?.User?.profile?.fName : item?.User?.user_kyc?.fname;
+                    const profileImg = item?.user?.profile && item?.user?.profile?.image !== null ? `${item?.user?.profile?.image}` : `/assets/orders/user1.png`;
+                    const userName = item?.user?.profile && item?.user?.profile?.dName !== null ? item?.user?.profile?.dName : item?.user?.user_kyc?.fname;
                     return (
                         <Fragment key={ind}>
                             {/* row */}
@@ -62,13 +62,13 @@ const BuyTableMobile = (props: activeSection) => {
                                 </div>
                                 <div className='mt-[12px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Available:</p>
-                                    <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{item?.quantity} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
+                                    <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{Number(item?.quantity).toFixed(4)} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                 </div>
                                 <div className='mt-[12px]'>
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Available:</p>
                                     <div className='flex items-center gap-10 mt-[5px]'>
                                         {
-                                            item?.user_p_method.map((elem: any, ind: any) => {
+                                            item?.user?.user_payment_methods.map((elem: any, ind: any) => {
                                                 return (
                                                     <Fragment key={ind}>
                                                         <Image src={`${process.env.NEXT_PUBLIC_APIURL}/payment_icon/${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />
