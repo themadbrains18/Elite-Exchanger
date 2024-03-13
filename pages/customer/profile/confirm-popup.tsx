@@ -102,7 +102,7 @@ const ConfirmPopup = (props: activeSection) => {
             </div>
             <input type="email" placeholder="Enter Email " className="input-cta2 bg-primary-100" disabled={true} value={props.session?.user?.email !== "null" ? props.session?.user?.email : ''} />
           </div>
-          <button className="mt-[30px] lg:mt-[50px] solid-button w-full hover:bg-primary-600" onClick={() => { sendOtp() }}>Continue</button>
+          <button className="mt-[30px] lg:mt-[50px] solid-button w-full " onClick={() => { sendOtp() }}>Continue</button>
         </div>
       </div>
     </>

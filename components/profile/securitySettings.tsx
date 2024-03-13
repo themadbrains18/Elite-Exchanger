@@ -16,6 +16,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { signOut, useSession } from "next-auth/react";
 import StrengthCheck from "../snippets/strengthCheck";
+import EmailChangeAlert from "../snippets/emailChangeAlert";
 
 const schema = yup.object().shape({
   old_password: yup.string().required("Old password is required"),

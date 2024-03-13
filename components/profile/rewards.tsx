@@ -80,7 +80,7 @@ const Rewards = (props: fixSection) => {
             <div className='p-5 md:p-40'>
                 <h3 className='sec-title'>All Rewards</h3>
                 <div className='flex items-center gap-[40px] mt-[40px]'>
-                    <button type='button' onClick={() => { setActive(1); filterRewards(1) }} className={`solid-button !px-[20px] !py-[10px] ${active == 1 ? '' : '!bg-[#5367ff42]'}`}>All Status</button>
+                    <button type='button' onClick={() => { setActive(1); filterRewards(1) }} className={`solid-button !px-[20px] !py-[10px] ${active == 1 ? '' : '!bg-[#5367ff42]'}`}>All</button>
                     <button type='button' onClick={() => { setActive(2); filterRewards(2) }} className={`solid-button !px-[20px] !py-[10px] ${active == 2 ? '' : '!bg-[#5367ff42]'}`}>Available </button>
                     {/* <button type='button' onClick={() => { setActive(3); filterRewards(3) }} className={`solid-button !px-[20px] !py-[10px] ${active == 3 ? '' : '!bg-[#5367ff42]'} `}>Used</button> */}
                     <button type='button' onClick={() => { setActive(4); filterRewards(4) }} className={`solid-button !px-[20px] !py-[10px] ${active == 4 ? '' : '!bg-[#5367ff42]'}`}>Expired</button>

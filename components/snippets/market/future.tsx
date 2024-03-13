@@ -42,37 +42,37 @@ const Future = (props: propsData) => {
                         <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">
                             <th className="lg:sticky bg-white dark:bg-d-bg-primary py-5">
                                 <div className="flex ">
-                                    <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">Pair</p>
+                                    <p className="text-start !text-[12px] md:!text-[14px]nav-text-sm md:nav-text-lg dark:text-gamma">Pair</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className=" py-5">
                                 <div className="flex">
-                                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Last Price</p>
+                                    <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Last Price</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">24h Change</p>
+                                    <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">24h Change</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">24h Low </p>
+                                    <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">24h Low </p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">24h High </p>
+                                    <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">24h High </p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Trade</p>
+                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Trade</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
@@ -101,20 +101,20 @@ const Future = (props: propsData) => {
                                         </div>
                                     </td>
                                     <td>
-                                        <p className="info-14-18 dark:text-white  ">${marketPrice}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">${marketPrice}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 dark:text-white">{change?.toFixed(4)}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{change?.toFixed(4)}</p>
                                     </td>
 
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 dark:text-white">${item?.hloc?.low?.toFixed(4)}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${item?.hloc?.low?.toFixed(4)}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 dark:text-white">${item?.hloc?.high?.toFixed(4)}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${item?.hloc?.high?.toFixed(4)}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 dark:text-white">
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
                                             <Image src="/assets/market/Graph.svg" width={114} height={48} alt="graph" />
                                         </p>
                                     </td>

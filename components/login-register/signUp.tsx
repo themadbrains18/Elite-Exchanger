@@ -103,13 +103,17 @@ const SignUp = () => {
         toast.error(userExist.data.data);
       }
     } catch (error) {
+console.log(error);
 
     }
   }
 
-  if (queryParams) {
-    setValue('refeer_code', queryParams);
-  }
+  useEffect(() => {
+    if (queryParams) {
+      setValue('refeer_code', queryParams);
+    }
+  }, [queryParams]);
+
 
 
   const generatePassword = () => {
@@ -183,7 +187,7 @@ const SignUp = () => {
         step === 0 &&
 
         <section className="bg-primary-300 lg:dark:bg-black-v-1  lg:bg-bg-primary ">
-          <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none">
+          <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none h-screen">
             <div className="max-w-[1018px]  w-full lg:block hidden">
               <Image src="/assets/register/register.png" width={1018} height={1100} alt="signup" className="object-cover h-full block" />
             </div>
@@ -200,7 +204,7 @@ const SignUp = () => {
                 {/**Form Start  */}
                 <form onSubmit={handleSubmit(onHandleSubmit)}>
                   <div className="flex flex-col gap-[15px] lg:gap-10">
-                    <input type="text" placeholder="Enter Email or Phone Number" {...register('username')} name="username" className="input-cta" />
+                    <input type="text" placeholder="Enter Email / Phone Number" {...register('username')} name="username" className="input-cta" />
                     {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
                     <div className="relative text-end">
                       <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
@@ -211,6 +215,7 @@ const SignUp = () => {
                       <input type={`${show === true ? "text" : "password"}`} {...register('password')}
                         name="password" placeholder="Password" className="input-cta w-full password-input" onChange={(e: any) => setpswd(e.target.value)} />
                       <Image
+                        data-testid="show-hide"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
                         alt="eyeicon"
                         width={24}
@@ -227,6 +232,7 @@ const SignUp = () => {
                     <div className="relative">
                       <input type={`${show1 === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
                       <Image
+                        data-testid="show-hide2"
                         src={`/assets/register/${show1 === true ? "show.svg" : "hide.svg"}`}
                         alt="eyeicon"
                         width={24}
@@ -250,7 +256,7 @@ const SignUp = () => {
                     </label>
                   </div>
                   {errors.agree && <p style={{ color: 'red' }}>{errors.agree.message}</p>}
-                  <button type="submit" className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-600" >Register</button>
+                  <button type="submit" className="my-[30px] lg:my-[50px] solid-button w-full " >Register</button>
                 </form>
 
 
@@ -300,7 +306,9 @@ const SignUp = () => {
       }
       {
         step === 1 &&
+        <span data-testid="verification-modal">
         <Verification step={step} setStep={setStep} isEmail={isEmail} formData={formData} api='register' setSendOtpRes={setSendOtpRes} />
+        </span>
       }
       {
         step === 2 &&

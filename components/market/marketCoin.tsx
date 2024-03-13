@@ -67,9 +67,8 @@ const MarketCoin = (props: propsData) => {
             },
           }}
           className="mySwiper tmb-swiper">
-          {cardData.map((elem: any, ind: any) => {
+          {cardData.map((elem: any, ind: any) => {            
             return (
-
               <SwiperSlide key={ind}>
                 <Link href={`/chart/${elem.symbol}`} className="block">
                   <div className="items-center flex w-full rounded-8 p-20 bg-primary-100 dark:bg-black-v-1 border border-grey dark:border-[transparent] duration-300 hover:drop-shadow-xl gap-[10px] justify-between">

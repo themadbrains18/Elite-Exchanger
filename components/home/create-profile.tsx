@@ -46,13 +46,13 @@ const cardsData = [
                         </div>
                     </div>
                     <div className='max-w-full lg:max-w-[50%] w-full'>
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-[20px] md:gap-[30px] place-items-center lg:place-items-start	'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-[20px] md:gap-[30px] place-items-center lg:place-items-start bg-contain bg-no-repeat bg-center bg-[url("/assets/home/profileBg.png")]'>
                             {
                                 cardsData.map((elem,ind)=>{
                                     return(
                                     <Fragment key={ind}>
-                                        <div className='dark:bg-black-v-1 bg-white card duration-300 hover:drop-shadow-xl  px-[30px] md:px-[20px] py-[30px] max-w-full lg:max-w-[330px] w-full md:text-center rounded-[10px] gap-[50px] flex items-center md:block' key={ind}>
-                                            <div className='max-w-[40px] w-full mx-auto'>
+                                        <div className='dark:bg-black-v-1 bg-white card duration-300 hover:drop-shadow-xl  px-[30px] md:px-[20px] py-[30px] max-w-full lg:max-w-[330px] w-full md:text-center rounded-[10px] gap-[30px] md:gap-[50px] flex items-center md:block' key={ind}>
+                                            <div className='max-w-[40px] w-full md:mx-auto mx-0'>
                                                 <IconsComponent type={elem.svgType} hover={false}  active={false}/>
                                             </div>
                                             <div>
@@ -67,10 +67,13 @@ const cardsData = [
                         </div>
                     </div>
                 </div>
-                <Link href="/chart/BTCB" className='sec-Brief flex lg:hidden items-center gap-[10px] !text-primary mt-[50px] mx-auto text-center md:text-start justify-center'>
-                    <span className='block relative !text-[18px] !leading-[24px] after:absolute after:w-full after:h-[2px] after:bg-primary after:top-[100%] after:left-0'>Start Trading</span>
+                
+                <Link href="/chart/BTCB" className='sec-Brief breief flex lg:hidden items-center gap-[10px] !text-primary mt-[50px] mx-auto text-center md:text-start justify-center'>
+                    <span className='block relative !text-[18px] !leading-[24px] after:absolute after:w-full after:h-[2px] after:bg-primary hover:!text-white after:top-[100%] after:left-0'>Start Trading</span>
                     <IconsComponent type='rightArrow' hover={false} active={false}/>
+                    <p>Hii</p>
                 </Link>
+                
             </div>
         </section> 
     )

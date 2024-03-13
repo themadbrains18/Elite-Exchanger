@@ -56,7 +56,7 @@ const Header = (props: propsData) => {
   ];
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (session!==undefined && status === "authenticated") {
       getUserBasicDetail();
       getUserNotification();
     }
@@ -94,7 +94,7 @@ const Header = (props: propsData) => {
     }).then(response => response.json());
 
     if (profileDashboard) {
-      let data = profileDashboard?.data.filter((item: any) => {
+      let data = profileDashboard?.data?.filter((item: any) => {
         return item?.status === 0 || item?.status === false
       })
       setNotificationData(data)
@@ -123,13 +123,13 @@ const Header = (props: propsData) => {
     }).then(response => response.json());
     // console.log(tokenList,"==hfjdhjfhdjfj");
 
-    let spot = tokenList?.data.filter((item: any) => {
+    let spot = tokenList?.data?.filter((item: any) => {
       return item.tradepair !== null
     });
 
     SetSpotTrade(spot);
 
-    let future = tokenList?.data.filter((item: any) => {
+    let future = tokenList?.data?.filter((item: any) => {
       return item.futuretradepair !== null
     });
     // console.log(future,"===dshkjhd");
@@ -140,10 +140,10 @@ const Header = (props: propsData) => {
 
   return (
     <>
-      <header
-        className={`${router.pathname.includes('/future/') ? 'py-[10px]' : 'py-[30px]'} z-[6] dark:bg-omega bg-white z-9 xl:rounded-none dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 w-full rounded-b-[20px] border-b-0 md:border-b dark:border-[#25262a] border-[#e5e7eb]`}
+      <header 
+        className={`${router?.pathname?.includes('/future/') ? 'py-[10px]' : 'py-[30px]'} z-[6] dark:bg-omega bg-white z-9 xl:rounded-none dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 w-full rounded-b-[20px] border-b-0 md:border-b dark:border-[#25262a] border-[#e5e7eb]`}
       >
-        <div className={`container ${router.pathname.includes('/future/') && '!max-w-full'}`}>
+        <div className={`container ${router?.pathname?.includes('/future/') && '!max-w-full'}`}>
           {/* this is for desktop */}
           <div className="hidden lg:grid header-wrapper items-center justify-between">
             <div className={`flex items-center`}>
@@ -157,9 +157,10 @@ const Header = (props: propsData) => {
                 <ul className="flex items-center gap-[24px] xl:gap-[40px]">
                   {linkList.map((elem, index) => {
                     return (
-                      <>
-                        <li key={index} className="relative group hover:pb-[20px] hover:mb-[-20px] ">
+                      
+                        <li key={index+elem.name} className="relative group hover:pb-[20px] hover:mb-[-20px] ">
                           <Link
+                          data-testid={elem.name}
                             href={elem.url}
                             className="md-text flex items-center gap-[5px] dark:text-d-nav-primary text-nav-primary whitespace-nowrap group-hover:!text-primary"
                           >
@@ -171,16 +172,16 @@ const Header = (props: propsData) => {
                           </Link>
 
                           {elem?.dropdown && elem.name == 'Trades' &&
-                            <div className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px] border dark:border-[#25262a] border-[#e5e7eb]">
+                            <div data-testid="trades-dropdown" className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px] border dark:border-[#25262a] border-[#e5e7eb]">
                               <ul>
                                 {spotTrade?.map((item: any, nesIndex: any) => {
                                   return (
-                                    <li key={nesIndex} className="mb-[10px]">
+                                    <li key={nesIndex+Date.now()} className="mb-[10px]">
                                       {/* onClick={() => router.push({
                                         pathname: `/chart/${item?.tradepair?.symbolOne}`
                                       })} */}
                                       <Link href={`/chart/${item?.tradepair?.symbolOne}`}>
-                                      <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full cursor-pointer" onClick={() => {router.push(`/chart/${item?.tradepair?.symbolOne}`)}}>
+                                      <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full cursor-pointer" onClick={() => {router?.push(`/chart/${item?.tradepair?.symbolOne}`)}}>
                                         <Image src={`${item.image}`} width={30} height={30} alt="coins" className="min-w-[30px]" />
                                         <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                           <p className="info-14-18 dark:text-white">{item?.tradepair?.symbolOne}/{item?.tradepair?.symbolTwo}</p>
@@ -201,7 +202,7 @@ const Header = (props: propsData) => {
                                 {futureTrade?.map((item: any, nesIndex: any) => {
                                   let symbol = item?.futuretradepair?.coin_symbol === 'BTCB' ? 'BTC' : item?.futuretradepair?.coin_symbol === 'BNBT' ? 'BNB' : item?.futuretradepair?.coin_symbol
                                   return (
-                                    <li key={nesIndex} className="mb-[10px]">
+                                    <li key={nesIndex+ Date.now()} className="mb-[10px]">
                                       <Link href={`/future/${symbol}${item?.futuretradepair?.usdt_symbol}`}>
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
                                           <Image src={`${item.image}`} width={30} height={30} alt="coins" className="min-w-[30px]" />
@@ -218,8 +219,7 @@ const Header = (props: propsData) => {
 
                             </div>
                           }
-                        </li >
-                      </>
+                        </li>
                     );
                   })}
                 </ul>
@@ -232,13 +232,13 @@ const Header = (props: propsData) => {
               {props.session === null || props.session === undefined ? (
                 <div className="flex items-center gap-[30px] justify-end">
                   <Link
-                    className="nav-text-lg text-[18px] !text-primary whitespace-nowrap hover:!text-white"
+                    className="nav-text-lg text-[18px] !text-primary whitespace-nowrap dark:hover:!text-white hover:!text-black"
                     href="/login"
                   >
                     Sign In
                   </Link>
                   <Link
-                    className={`solid-button !max-w-[161px] w-full text-center ${router.pathname.includes('/future/') && '!py-[12px]'}`}
+                    className={`solid-button !max-w-[161px] w-full text-center ${router?.pathname?.includes('/future/') && '!py-[12px]'}`}
                     href="/register"
                   >
                     Register
@@ -247,7 +247,8 @@ const Header = (props: propsData) => {
               ) : (
                 <div className="flex items-center gap-[24px] xl:gap-[30px] justify-end">
                   <Link
-                    className={`solid-button flex !bg-grey items-center group gap-[10px] dark:!bg-black-v-1  border dark:border-black-v-1 !text-nav-secondary hover:!border-primary  ${router.pathname.includes('/future/') && '!py-[12px]'}`}
+                  data-testid="trade-history"
+                    className={`solid-button flex !bg-grey items-center group gap-[10px] dark:!bg-black-v-1  border dark:border-black-v-1 !text-nav-secondary hover:!border-primary  ${router?.pathname?.includes('/future/') && '!py-[12px]'}`}
                     href="/history"
                   >
                     <TradeIcon hover={true} />
@@ -256,7 +257,8 @@ const Header = (props: propsData) => {
                     </span>
                   </Link>
                   <Link
-                    className={`solid-button flex !bg-grey group items-center gap-[10px] dark:!bg-black-v-1 !text-nav-secondary border dark:border-black-v-1 hover:!border-primary  ${router.pathname.includes('/future/') && '!py-[12px]'}`}
+                   data-testid="wallet"
+                    className={`solid-button flex !bg-grey group items-center gap-[10px] dark:!bg-black-v-1 !text-nav-secondary border dark:border-black-v-1 hover:!border-primary  ${router?.pathname?.includes('/future/') && '!py-[12px]'}`}
                     href="/wallet"
                   >
                     <Wallet hover={true} />
@@ -264,10 +266,10 @@ const Header = (props: propsData) => {
                       Wallet
                     </span>
                   </Link>
-                  <div className="profile-wrapper hover:pb-[32px] hover:mb-[-32px] relative">
-                    <div className="flex items-center gap-[12px] cursor-pointer">
-                      <div>
-                        <Image
+                  <div  className="profile-wrapper hover:pb-[32px] hover:mb-[-32px] relative">
+                    <div className="flex items-center gap-[12px] cursor-pointer" >
+                      <div data-testid="user-icon">
+                  {   userDetail === null || userDetail?.messgae !== undefined &&      <Image
                           src={
                             userDetail === null || userDetail?.messgae !== undefined
                               ? "/assets/profile/avtar.png"
@@ -275,12 +277,13 @@ const Header = (props: propsData) => {
                               userDetail?.image
                           }
                           alt="error"
+
                           width={32}
                           height={32}
                           className="rounded-full w-[40px] h-[40px] object-cover object-top"
-                        />
+                        />}
                       </div>
-                      <p className="nav-text-lg !text-gamma hidden xl:block">
+                      <p id="username" data-testid="username" className="nav-text-lg !text-gamma hidden xl:block">
                         {userDetail === null || userDetail?.messgae !== undefined
                           ? props.session?.user?.name
                           : userDetail?.dName}
@@ -305,7 +308,7 @@ const Header = (props: propsData) => {
                   </div>
                   <div className="profile-wrapper hover:pb-[32px] hover:mb-[-32px] relative">
                     <div className="flex items-center gap-[12px] cursor-pointer">
-                      <div className="relative" onClick={() => router.push('/notification')}>
+                      <div data-testid="notification-icon" className="relative notification-icon" onClick={() => router?.push('/notification')}>
                         <IconsComponent
                           type="bell"
                           hover={false}
@@ -314,14 +317,14 @@ const Header = (props: propsData) => {
                       </div>
 
                       <span className="w-20 h-20 text-center bg-primary-400 rounded-full absolute top-[-10px]  right-[-10px]">
-                        <span className="nav-text-lg !text-white hidden xl:block mt-[-2px]">
-                          {notificationData.length}
+                        <span data-testid="notification-count" className="nav-text-lg !text-white hidden xl:block mt-[-2px]">
+                          {notificationData?.length}
                         </span>
                       </span>
                     </div>
 
-                    {notificationData.length > 0 &&
-                      <div className="absolute top-[96px] opacity-0 invisible duration-300  right-[0px] hover:block dropdown_wrapper">
+                    {notificationData?.length > 0 &&
+                      <div data-testid="notification-panel" className="absolute top-[96px] opacity-0 invisible duration-300  right-[0px] hover:block dropdown_wrapper notification-panel" >
                         <Notification notificationData={notificationData} getUserNotification={getUserNotification} />
                       </div>
                     }

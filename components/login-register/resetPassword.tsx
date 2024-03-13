@@ -185,7 +185,7 @@ const ResetPassword = () => {
       <ToastContainer />
       {step === 0 && (
         <section className="bg-primary-300 lg:dark:bg-black-v-1 h-screen xl:h-full  lg:bg-bg-primary ">
-          <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none">
+          <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none h-screen">
             <div className="max-w-[848px]  w-full lg:block hidden">
               <Image
                 src="/assets/register/forget.png"
@@ -255,7 +255,7 @@ const ResetPassword = () => {
                       <input type={`${show1 === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
                       <Image
                         src={`/assets/register/${show1 === true ? "show.svg" : "hide.svg"}`}
-                        alt="eyeicon"
+                        alt="eyeicon2"
                         width={24}
                         height={24}
                         onClick={() => {

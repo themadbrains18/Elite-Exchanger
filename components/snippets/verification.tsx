@@ -4,6 +4,7 @@ import { AES } from "crypto-js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signOut } from "next-auth/react";
+import EmailChangeAlert from "./emailChangeAlert";
 
 interface activeSection {
   setEnable: Function;
@@ -23,6 +24,7 @@ const Verification = (props: activeSection) => {
   const Ref: any = useRef(null);
   const [timeLeft, setTimer] = useState('');
   const [enable, setEnable] = useState(false);
+  
 
   useEffect(() => {
     orderTimeCalculation();
@@ -119,10 +121,12 @@ const Verification = (props: activeSection) => {
     }
   };
 
+
   return (
     <>
       {/* <ToastContainer position="top-right" /> */}
-      <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+   
+        <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex items-center justify-between ">
           <p className="sec-title">Enter Otp</p>
           <svg

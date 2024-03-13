@@ -13,6 +13,7 @@ import { AES } from "crypto-js";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signOut, useSession } from "next-auth/react";
+import EmailChangeAlert from "../snippets/emailChangeAlert";
 
 const schema = yup.object().shape({
   uname: yup
@@ -56,7 +57,7 @@ const AdNumber = (props: activeSection) => {
   const [statuss, setStatuss] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const { status } = useSession();
-
+  const [show,setShow] = useState(true)
   useEffect(() => {
     const inputElements = document.querySelectorAll(".input_wrapper input");
     // console.log(inputElements.length);
@@ -250,6 +251,9 @@ const AdNumber = (props: activeSection) => {
 
   return (
     <>
+       {show && props?.type === "email" ?
+        <EmailChangeAlert setShow={setShow} setEnable={props?.setActive} setShow2={props?.setShow}/>
+:
       <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex items-center justify-between ">
           <p className="sec-title">
@@ -369,6 +373,7 @@ const AdNumber = (props: activeSection) => {
           </div>
         </form>
       </div>
+      }
       {step === true && (
         <Password
           setShow={props?.setShow}
