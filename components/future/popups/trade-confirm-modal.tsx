@@ -1,8 +1,9 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import RangeSlider from '../range-slider';
 import SelectDropdown from '../snippet/select-dropdown';
 import Context from '@/components/contexts/context';
 import { useSession } from 'next-auth/react';
+import clickOutSidePopupClose from '@/components/snippets/clickOutSidePopupClose';
 
 interface showPopup {
     modelPopup?: number;
@@ -17,8 +18,15 @@ const TradeConfirmPopupModal = (props: showPopup) => {
 
     let { mode } = useContext(Context);
 
+    const closePopup = () => {
+        props.setConfirmModelOverlay(false);
+                        props.setConfirmModelPopup(0);
+      }
+      const wrapperRef = useRef(null);
+      clickOutSidePopupClose({ wrapperRef, closePopup });
+
     return (
-        <div className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[520px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.modelPopup == 1 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
+        <div ref={wrapperRef} className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[520px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.modelPopup == 1 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
             <div className="flex items-center justify-between mb-[20px]">
                 <p className="sec-title !text-[20px]">Market Buy {props?.confirmOrderData?.symbol} </p>
                 <svg

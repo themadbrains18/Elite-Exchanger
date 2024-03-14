@@ -1,5 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../contexts/context";
+import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
 interface propsData {
   setPreference: Function;
@@ -9,26 +10,33 @@ interface propsData {
 }
 const OrderPreferenceModal = (props: propsData) => {
   const { mode } = useContext(Context);
-  const [value,setValue] = useState(props?.prefernceSymbol)
-  
+  const [value, setValue] = useState(props?.prefernceSymbol)
+
   useEffect(() => {
     let radioCta = document.querySelector("#custom-radio1") as HTMLInputElement | null;
     let radioCta2 = document.querySelector("#custom-radio2") as HTMLInputElement | null;
-     
-    if ( value==="Qty") {
+
+    if (value === "Qty") {
       radioCta?.click();
     }
-    else{
-radioCta2?.click()
+    else {
+      radioCta2?.click()
     }
 
   }, [value]);
+
+  const closePopup = () => {
+    props?.setPreference(false);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
+
   return (
     <>
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible`}
       ></div>
-      <div className="prefrence max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
+      <div ref={wrapperRef} className="prefrence max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
         <div className="flex items-center justify-between ">
           <p className={`sec-title text-[18px]`}>Order Placement Preferences</p>
           <svg
@@ -118,7 +126,7 @@ radioCta2?.click()
           </div>
           <div className="flex justify-between mt-20">
             <div>
-              <div className="flex justify-between items-center w-full mb-[5px]" onClick={()=>{setValue("Value")}}>
+              <div className="flex justify-between items-center w-full mb-[5px]" onClick={() => { setValue("Value") }}>
                 <div
                   className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`}
                 >

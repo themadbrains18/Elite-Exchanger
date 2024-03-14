@@ -2,6 +2,7 @@ import React, {
   FormEventHandler,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import Context from "../contexts/context";
@@ -14,6 +15,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signOut, useSession } from "next-auth/react";
 import EmailChangeAlert from "../snippets/emailChangeAlert";
+import clickOutSidePopupClose from "../snippets/clickOutSidePopupClose";
 
 const schema = yup.object().shape({
   uname: yup
@@ -249,12 +251,18 @@ const AdNumber = (props: activeSection) => {
     } catch (error) { }
   };
 
+  const closePopup = () => {
+    props?.setShow(false);
+              props.setActive(0);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
   return (
     <>
        {show && props?.type === "email" ?
         <EmailChangeAlert setShow={setShow} setEnable={props?.setActive} setShow2={props?.setShow}/>
 :
-      <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+      <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex items-center justify-between ">
           <p className="sec-title">
             {props?.type === "email"

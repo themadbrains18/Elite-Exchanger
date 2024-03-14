@@ -1,6 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
+import clickOutSidePopupClose from './clickOutSidePopupClose';
 
 interface activeSection {
     setTaskShow: Function;
@@ -206,8 +207,14 @@ const EventTaskPopup = (props: activeSection) => {
         }
     }
 
+    const closePopup = () => {
+        props.setTaskShow(false);
+      }
+      const wrapperRef = useRef(null);
+      clickOutSidePopupClose({ wrapperRef, closePopup });
+
     return (
-        <div className="fixed max-h-[calc(100%-124px)] overscroll-none	 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] p-[24px] rounded-[10px] bg-white  z-[99] max-w-[calc(100%-36px)] xl:max-w-[1065px] w-full overflow-auto">
+        <div ref={wrapperRef} className="fixed max-h-[calc(100%-124px)] overscroll-none	 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] p-[24px] rounded-[10px] bg-white  z-[99] max-w-[calc(100%-36px)] xl:max-w-[1065px] w-full overflow-auto">
             <div className="flex items-center justify-between mb-[20px]">
 
                 <h3 className="sm-heading ">Task Rewards History ({(props?.referProgamTask?.User?.id)?.substring(1, 7)})</h3>

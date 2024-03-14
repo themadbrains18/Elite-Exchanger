@@ -5,6 +5,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signOut } from "next-auth/react";
 import EmailChangeAlert from "./emailChangeAlert";
+import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
 interface activeSection {
   setEnable: Function;
@@ -24,7 +25,7 @@ const Verification = (props: activeSection) => {
   const Ref: any = useRef(null);
   const [timeLeft, setTimer] = useState('');
   const [enable, setEnable] = useState(false);
-  
+
 
   useEffect(() => {
     orderTimeCalculation();
@@ -63,7 +64,7 @@ const Verification = (props: activeSection) => {
       });
     });
 
-    
+
   }, [props?.sendOtpRes]);
 
   const orderTimeCalculation = async () => {
@@ -121,12 +122,18 @@ const Verification = (props: activeSection) => {
     }
   };
 
+  const closePopup = () => {
+    props?.setShow(false);
+    props.setEnable(0);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
 
   return (
     <>
       {/* <ToastContainer position="top-right" /> */}
-   
-        <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+
+      <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex items-center justify-between ">
           <p className="sec-title">Enter Otp</p>
           <svg
@@ -199,7 +206,7 @@ const Verification = (props: activeSection) => {
                 autoComplete="off"
                 className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                 name="code6"
-                
+
               />
             </div>
             <div className={`flex  ${enable === true ? '' : 'hidden'}`}>

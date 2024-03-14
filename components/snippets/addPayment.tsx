@@ -1,8 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Context from "../contexts/context";
 import FiliterSelectMenu from "./filter-select-menu";
 
 import { useForm } from "react-hook-form";
+import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
 
 interface activeSection {
@@ -77,8 +78,15 @@ const AddPayment = (props: activeSection) => {
 
   }
 
+  const closePopup = () => {
+    props?.setShow(false);
+    props.setActive(0)
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
+
   return (
-    <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+    <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
       <div className="flex items-center justify-between ">
         <p className="sec-title">Payment Method Setting</p>
         <svg

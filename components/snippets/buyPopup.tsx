@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useRef, useState } from "react";
 import Image from "next/image";
 import Context from "../contexts/context";
 import { useRouter } from "next/router";
@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
+import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
 const schema = yup.object().shape({
   spend_amount: yup.number().positive().required('Please enter amount in INR').typeError('Please enter amount in INR'),
@@ -133,8 +134,14 @@ const BuyPopup = (props: activeSection) => {
 
   }
 
+  const closePopup = () => {
+    props?.setShow1(false);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
+
   return (
-    <>
+    <div ref={wrapperRef}>
       <ToastContainer />
       <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow1(false) }}></div>
       <form onSubmit={handleSubmit(onHandleSubmit)}>
@@ -257,7 +264,7 @@ const BuyPopup = (props: activeSection) => {
           </div>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

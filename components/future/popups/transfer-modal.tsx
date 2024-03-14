@@ -1,9 +1,10 @@
 import Context from "@/components/contexts/context";
 import IconsComponent from "@/components/snippets/icons";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import SelectDropdown from "../snippet/select-dropdown";
 import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
+import clickOutSidePopupClose from "@/components/snippets/clickOutSidePopupClose";
 
 interface showPopup {
   popupMode?: number;
@@ -74,53 +75,59 @@ const TransferModal = (props: showPopup) => {
 
   const transferToWallet = async () => {
     try {
-        if (amount === 0 || amount < 0) {
-          toast.error("Transfer amount must be positive number");
-          return;
+      if (amount === 0 || amount < 0) {
+        toast.error("Transfer amount must be positive number");
+        return;
+      }
+
+      let obj = {
+        user_id: session?.user?.user_id,
+        from: Spot === "Spot" ? "main_wallet" : "future_wallet",
+        to: future === "Futures" ? "future_wallet" : "main_wallet",
+        token_id: userAsset?.token_id,
+        balance: amount,
+      };
+
+      let assetReponse = await fetch(
+        `${process.env.NEXT_PUBLIC_BASEURL}/transfer`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: session?.user?.access_token,
+          },
+          body: JSON.stringify(obj),
         }
-  
-        let obj = {
-          user_id: session?.user?.user_id,
-          from: Spot === "Spot" ? "main_wallet" : "future_wallet",
-          to: future === "Futures" ? "future_wallet" : "main_wallet",
-          token_id: userAsset?.token_id,
-          balance: amount,
-        };
-  
-        let assetReponse = await fetch(
-          `${process.env.NEXT_PUBLIC_BASEURL}/transfer`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: session?.user?.access_token,
-            },
-            body: JSON.stringify(obj),
-          }
-        ).then((response) => response.json());
-  
-        if (assetReponse?.data?.status === 200) {
-          toast.success(assetReponse?.data.data.message);
-          props?.refreshWalletAssets();
-          props.setOverlay(false);
-          props.setPopupMode(0);
-          setAmount(0);
-        } else {
-        }
-        toast.error(assetReponse?.data.data);
+      ).then((response) => response.json());
+
+      if (assetReponse?.data?.status === 200) {
+        toast.success(assetReponse?.data.data.message);
+        props?.refreshWalletAssets();
+        props.setOverlay(false);
+        props.setPopupMode(0);
+        setAmount(0);
+      } else {
+      }
+      toast.error(assetReponse?.data.data);
     } catch (error) {
-        console.log("error in transfer modal",error);
-        
+      console.log("error in transfer modal", error);
+
     }
   };
 
+  const closePopup = () => {
+    props.setOverlay(false);
+            props.setPopupMode(0);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
+
   return (
-    <div
-      className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[550px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${
-        props.popupMode === 3
+    <div ref={wrapperRef}
+      className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[550px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.popupMode === 3
           ? "top-[50%] opacity-1 visible"
           : "top-[52%] opacity-0 invisible"
-      } left-[50%] translate-x-[-50%] translate-y-[-50%]`}
+        } left-[50%] translate-x-[-50%] translate-y-[-50%]`}
     >
       <div className="flex items-center justify-between mb-[20px]">
         <p className="sec-title !text-[20px]">Transfer</p>
@@ -200,9 +207,8 @@ const TransferModal = (props: showPopup) => {
         <p className="top-label dark:!text-primary cursor-pointer">All</p>
       </div>
       <p
-        className={`top-label !text-[16px] mt-[15px] ${
-          isError === true ? "visible" : "hidden"
-        }`}
+        className={`top-label !text-[16px] mt-[15px] ${isError === true ? "visible" : "hidden"
+          }`}
         style={{ color: "red" }}
       >
         Insufficiant Balance
@@ -215,11 +221,10 @@ const TransferModal = (props: showPopup) => {
       <button
         disabled={status === "unauthenticated" ? true : false || isError}
         onClick={transferToWallet}
-        className={`border bg-[#13c2c2] text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px] ${
-          isError === true || status === "unauthenticated"
+        className={`border bg-[#13c2c2] text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px] ${isError === true || status === "unauthenticated"
             ? "cursor-not-allowed opacity-50"
             : ""
-        }`}
+          }`}
       >
         Transfer
       </button>

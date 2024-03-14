@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import Context from "../contexts/context";
 import Image from "next/image";
 import FiliterSelectMenu from "./filter-select-menu";
@@ -12,6 +12,7 @@ import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import ConfirmPopup from "@/pages/customer/profile/confirm-popup";
 import Verification from "./verification";
+import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
 const schema = yup.object().shape({
   networkId: yup.string().optional().default(""),
@@ -304,11 +305,17 @@ const Withdraw = (props: activeSection) => {
     }
   }
 
+  const closePopup = () => {
+    props?.setShow1(false);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
+
   return (
     <>
       <ToastContainer position="top-right" />
       {enable === 1 && (
-        <div className="max-h-[614px] lg:max-h-fit overflow-y-auto max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+        <div ref={wrapperRef} className="max-h-[614px] lg:max-h-fit overflow-y-auto max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <div className="flex items-center justify-between pb-[10px] md:pb-[15px] border-b border-grey-v-2 dark:border-opacity-[15%] dark:border-beta">
             <p className="sec-title">Withdraw Coin From Wallet to Another</p>
             <svg

@@ -1,5 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import Context from "../contexts/context";
+import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
 interface activeSection {
     setActive: Function;
@@ -16,10 +17,17 @@ const ConfirmationModel = (props: activeSection) => {
     const text:any = props.message;
     const newText = text.split('\n');
 
+    const closePopup = () => {
+        props?.setShow(false);
+        props.setActive(0);
+      }
+      const wrapperRef = useRef(null);
+      clickOutSidePopupClose({ wrapperRef, closePopup });
+
     return (
         <>
             <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show ? "opacity-80 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow(false) }}></div>
-            <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
+            <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
                 <div className="flex items-center justify-between ">
                     <p className="sec-title">{props?.title}</p>
                     <svg
