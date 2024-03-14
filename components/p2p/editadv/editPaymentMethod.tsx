@@ -140,7 +140,7 @@ const EditPaymentMethod = (props: activeSection) => {
                       </label>
                     </div>
                     <div className="flex gap-10 items-center w-full max-w-[145px]">
-                      <Image src={`${process.env.NEXT_PUBLIC_APIURL}/payment_icon/${item?.master_payment_method?.icon}`} alt="payment image" width={32} height={32} />
+                      <Image src={`${item?.master_payment_method?.icon}`} alt="payment image" width={32} height={32} />
                       <p className="sec-text !text-h-primary dark:!text-white !font-medium">{item?.pm_name}</p>
                     </div>
                     <p className="md:block hidden sec-text !text-banner-text dark:!text-white">({item?.pmObject?.phonenumber})</p>

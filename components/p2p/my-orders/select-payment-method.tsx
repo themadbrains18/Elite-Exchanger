@@ -85,7 +85,7 @@ const SlectPaymentMethod = (props: propsData) => {
                                         flex items-center gap-10
                                         ">
                                         <Fragment key={ind}>
-                                            <Image src={`${process.env.NEXT_PUBLIC_APIURL}/payment_icon/${elem.master_payment_method.icon}`} alt='error' width={28} height={28} />
+                                            <Image src={`${elem.master_payment_method.icon}`} alt='error' width={28} height={28} />
                                         </Fragment>
                                         <span className='text-banner-text'>{elem.master_payment_method?.payment_method}</span>
                                     </label>
