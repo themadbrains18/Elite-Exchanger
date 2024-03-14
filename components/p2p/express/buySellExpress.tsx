@@ -43,7 +43,7 @@ const BuySellExpress = (props: propsData) => {
   const [paymentMethod, setPaymentMethod] = useState('');
   const [finalPost, setFinalPost] = useState(Object);
   const [filterAsset, setFilterAsset] = useState(Object);
-
+  const [changeSymbol, setChangeSymbol] = useState(false);
   const { status, data: session } = useSession();
   const route = useRouter();
 
@@ -124,13 +124,14 @@ const BuySellExpress = (props: propsData) => {
 
       let conversionPrice = 0;
       let currentPrice = 0;
-
+      setChangeSymbol(true);
       if (token[0]?.tokenType !== 'mannual') {
         let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${symbol}&tsyms=INR`, {
           method: "GET"
         }).then(response => response.json());
 
         setUsdtToInr(priceData?.data?.rate?.toFixed(8));
+        setChangeSymbol(false);
 
       }
       else {
@@ -143,6 +144,7 @@ const BuySellExpress = (props: propsData) => {
         });
         currentPrice = (token[0]?.price * priceData?.data?.rate);
         setUsdtToInr(currentPrice);
+        setChangeSymbol(false);
       }
     }
     //================
@@ -184,13 +186,14 @@ const BuySellExpress = (props: propsData) => {
 
       let conversionPrice = 0;
       let currentPrice = 0;
-
+      setChangeSymbol(true);
       if (token[0]?.tokenType !== 'mannual') {
         let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${symbol}&tsyms=INR`, {
           method: "GET"
         }).then(response => response.json());
 
         setUsdtToInr(priceData?.data?.rate?.toFixed(8));
+        setChangeSymbol(false);
 
       }
       else {
@@ -203,6 +206,7 @@ const BuySellExpress = (props: propsData) => {
         });
         currentPrice = token[0]?.price * priceData?.data?.rate;
         setUsdtToInr(currentPrice);
+        setChangeSymbol(false);
       }
     }
 
@@ -326,8 +330,8 @@ const BuySellExpress = (props: propsData) => {
 
     if (seller.length > 0) {
       for (const post of seller) {
-        let userPaymentMethod = post?.User?.user_payment_methods;
-        let sellerPost = userPaymentMethod.filter((item: any) => {
+        let userPaymentMethod = post?.user?.user_payment_methods;
+        let sellerPost = userPaymentMethod?.filter((item: any) => {
           return item?.pmid === id
         })
         if (sellerPost.length > 0) {
@@ -420,7 +424,13 @@ const BuySellExpress = (props: propsData) => {
             {/* //============ Express Buy process ==========*/}
             {/* //======================*/}
             {active1 === 1 &&
-              <div className="py-20">
+              <div className="py-20 relative">
+                {changeSymbol &&
+                  <>
+                    <div className="bg-black  z-[1] duration-300 absolute top-0 left-0 h-full w-full opacity-80 visible"></div>
+                    <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#ff815d] rounded-full animate-spin border-t-[#ff815d75] '></div>
+                  </>
+                }
                 {/* First Currency Inputs */}
                 <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
                   <div className="">
