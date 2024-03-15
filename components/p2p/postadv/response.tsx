@@ -288,7 +288,7 @@ const Response = (props: activeSection) => {
           </div>
           <div className="mt-50 flex gap-30">
             <button type="button"
-              className="solid-button2 max-w-[262px] w-full"
+              className="solid-button2 dark:bg-black-v-1 dark:text-primary max-w-[262px] w-full"
               onClick={() => {
                 props?.setStep(2);
               }}
