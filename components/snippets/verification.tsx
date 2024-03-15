@@ -114,6 +114,8 @@ const Verification = (props: activeSection) => {
 
   const matchUserOtp = async () => {
     try {
+      console.log(fillOtp,"==fillOtp");
+      
       props.finalOtpVerification(fillOtp);
       setOtp('');
     } catch (error) {

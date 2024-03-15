@@ -18,6 +18,7 @@ import { signOut, useSession } from "next-auth/react";
 import StrengthCheck from "../snippets/strengthCheck";
 import EmailChangeAlert from "../snippets/emailChangeAlert";
 import ResetSuccessful from "../snippets/resetSuccessful";
+import AntiPhishing from "./antiPhishing";
 
 const schema = yup.object().shape({
   old_password: yup.string().required("Old password is required"),
@@ -113,12 +114,21 @@ const SecuritySettings = (props: fixSection) => {
     },
     {
       image: "activity.svg",
-      bg: "green",
+      bg: "red",
       title: "Activity log",
       desc: "",
       Add: false,
       ctaLink: "/activity",
       CtaText: "Activity log",
+    },
+    {
+      image: "google.svg",
+      bg: "blue",
+      title: "Anti-phishing code",
+      desc: "",
+      Add: false,
+      // ctaLink: "/activity",
+      CtaText: "Enable",
     },
   ];
 
@@ -490,7 +500,7 @@ const SecuritySettings = (props: fixSection) => {
                             ? "Enable"
                             : "Disable"}
                         </button>
-                      ) : index === 3 && (
+                      ) : index === 3 ? (
                         <button
                           className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${(props?.session?.user?.tradingPassword === null && tradePassword === false) ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
                           onClick={() => {
@@ -502,7 +512,23 @@ const SecuritySettings = (props: fixSection) => {
                             ? "Add"
                             : "Edit"}
                         </button>
-                      )
+                      ):<button
+                      className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${(props?.session?.user?.tradingPassword === null && tradePassword === false) ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
+                      onClick={() => {
+                        if(googleAuth === true){
+                        setEnable(index + 1);
+                        setShow(true);
+                      }
+                      else {
+                        toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again', { position: 'top-center' })
+                      }
+                      }}
+                    >
+                      {(props?.session?.user?.antiphishing === null )
+                        ? "Add"
+                        : "Edit"}
+                    </button>
+
                     ) : (
                       <button
                         className="max-w-full asasdasds w-full flex cursor-pointer items-center justify-center md:max-w-[130px] h-40 bg-primary rounded-5 info-16-18 text-white "
@@ -687,6 +713,13 @@ const SecuritySettings = (props: fixSection) => {
           session={props?.session}
           setTradePassword={setTradePassword}
           tradePassword={tradePassword}
+        />
+      )}
+      {enable === 6 && (
+        <AntiPhishing
+          setEnable={setEnable}
+          setShow={setShow}
+          session={props?.session}
         />
       )}
       {active === 1 && (

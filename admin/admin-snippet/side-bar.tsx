@@ -78,6 +78,11 @@ const  { mode , setMode } = useContext(Context);
         "svgType":"adminSettings",
         "link":"/settings"
     },
+    {
+        "title":"Payment Methods",
+        "svgType":"Wallet",
+        "link":"/payment"
+    },
 
 ]
   return (

@@ -203,7 +203,7 @@ const GoogleAuth = (props: activeSection) => {
           <p className="sec-title" style={{ fontSize: '18px' }}>Set Up Google Two-Factor Authentication</p>
           <svg
             onClick={() => {
-              props.setShow(false);
+              props.setShow(false); 
               props?.setEnable(0)
             }}
             enableBackground="new 0 0 60.963 60.842"
