@@ -421,7 +421,7 @@ const PaymentMethod = (props: activeSection) => {
                 <div className="md:mt-50 mt-20 flex sm:gap-30 gap-10 sm:flex-row flex-col">
                   <button
                     type="button"
-                    className="solid-button2 max-w-full sm:max-w-[262px] w-full"
+                    className="solid-button2 dark:bg-black-v-1 dark:text-primary max-w-full sm:max-w-[262px] w-full"
                     onClick={() => {
                       props?.setStep(1);
                     }}
