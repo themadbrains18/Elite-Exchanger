@@ -112,6 +112,7 @@ const SecuritySettings = (props: fixSection) => {
       Add: false,
       CtaText: "Enable",
     },
+   
     {
       image: "activity.svg",
       bg: "red",
@@ -512,8 +513,10 @@ const SecuritySettings = (props: fixSection) => {
                             ? "Add"
                             : "Edit"}
                         </button>
-                      ):<button
-                      className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${(props?.session?.user?.tradingPassword === null && tradePassword === false) ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
+                      )
+                      :
+                      <button
+                      className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${props?.session?.user?.antiphishing === null ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
                       onClick={() => {
                         if(googleAuth === true){
                         setEnable(index + 1);

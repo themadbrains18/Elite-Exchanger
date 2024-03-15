@@ -219,22 +219,18 @@ const AntiPhishingCode = (props: activeSection) => {
             <div className="py-[30px]  px-0 lg:px-20">
               <div className="">
                 <div
-                  className={` md:flex-row flex-col gap-[30px] ${
-                    props?.session?.user?.antiphishing === null
-                      ? "hidden"
-                      : "flex"
-                  }`}
+                  className={` md:flex-row flex-col gap-[30px] flex`}
                 >
                   <div className=" w-full">
                     <p className="sm-text mb-[10px]">Anti-Phishing Code</p>
-                    <div className="relative">
+            
                       <input
                         type="text"
                         {...register("antiphishing")}
                         placeholder="Anti-Phishing Code"
                         className="sm-text input-cta2 w-full"
                       />
-                    </div>
+                  
                   </div>
                 </div>
 
@@ -243,7 +239,7 @@ const AntiPhishingCode = (props: activeSection) => {
                     ${errors.antiphishing ? "text-red-dark" : "text-[#b7bdc6]"} text-[14px]`
                   }
                 >
-                  Please enter 4-20 characters, excluding special symbols.
+                  Please enter 4-20 characters.
                 </p>
               </div>
             </div>
