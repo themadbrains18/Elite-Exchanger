@@ -78,7 +78,7 @@ const AntiPhishingCode = (props: activeSection) => {
       let obj;
 
       if (
-        props?.session?.user?.tradingPassword === null 
+        props?.session?.user?.antiphishing === null 
       ) {
         obj = {
           username: username,
