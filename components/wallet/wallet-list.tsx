@@ -94,7 +94,7 @@ const WalletList = (props: propsData): any => {
     const futureOffset = futureItemOffset + itemsCoinsPerPage;
     const futureWalletItems = futureAssets.slice(futureItemOffset, futureOffset);
     setFutureWalletItems(futureWalletItems)
-  }, [itemOffset, withdrawitemOffset, coinItemOffset, futureItemOffset]);
+  }, [itemOffset, withdrawitemOffset, coinItemOffset, futureItemOffset,props.coinList]);
 
   //==========================================================
   //=============Spot wallet pagging start==================
