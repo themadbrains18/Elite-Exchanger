@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { AES } from "crypto-js";
 
-const AddPaymentModal = (props) => {
+const AddPaymentModal = (props:any) => {
   const { mode } = useContext(Context);
   const schema = yup.object().shape({
     payment_method: yup.string().required("This field is required"),
@@ -73,7 +73,7 @@ const AddPaymentModal = (props) => {
 
   const [logo, setLogo] = useState('');
 
-  
+
 
   const handleFileChange = async (e: any) => {
     try {
@@ -114,7 +114,7 @@ const AddPaymentModal = (props) => {
     // }
   };
 
-  let submitForm = async (data:any, e:any) => {
+  let submitForm = async (data: any, e: any) => {
     e.preventDefault(e);
     let fields = [];
     let obj = {
@@ -132,40 +132,40 @@ const AddPaymentModal = (props) => {
     data["fields"] = data.paymentFields;
 
     data.icon = data.icon;
-delete data.numberOfFields
-delete data.paymentFields
-const ciphertext = AES.encrypt(
-    JSON.stringify(data),
-    `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
-  );
+    delete data.numberOfFields
+    delete data.paymentFields
+    const ciphertext = AES.encrypt(
+      JSON.stringify(data),
+      `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+    );
 
-  let record = encodeURIComponent(ciphertext.toString());
+    let record = encodeURIComponent(ciphertext.toString());
     let res = await fetch(`/api/payment/save`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": session?.user?.access_token || ''
-        },
-        body: JSON.stringify(record),
-      });
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": session?.user?.access_token || ''
+      },
+      body: JSON.stringify(record),
+    });
 
-      let result = await res.json();
+    let result = await res.json();
 
-      if (result?.data?.status===200) {
-        toast.success(result?.data?.data?.message);
-        setTimeout(()=>{
-            props?.setOpen(false);
-        },1000)
-        // setValue("tokenType", "");
-      } else {
-        toast.error(result.data.data);
-      }
+    if (result?.data?.status === 200) {
+      toast.success(result?.data?.data?.message);
+      setTimeout(() => {
+        props?.setOpen(false);
+      }, 1000)
+      // setValue("tokenType", "");
+    } else {
+      toast.error(result.data.data);
+    }
 
   };
 
   return (
     <>
-    <ToastContainer/>
+      <ToastContainer />
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible`}
       ></div>
@@ -253,7 +253,7 @@ const ciphertext = AES.encrypt(
                         height={50}
                         className={`${logo == "" ? "hidden" : "flex"} w-full`}
                       />
-                      <div  className={`${logo != "" ? "hidden" : "block"}`}>
+                      <div className={`${logo != "" ? "hidden" : "block"}`}>
                         <p className="nav-text-sm md:nav-text-lg text-center  mb-2">
                           Drop your file upload or{" "}
                           <span className="text-primary">Browse</span>
@@ -304,7 +304,7 @@ const ciphertext = AES.encrypt(
                       name={`paymentFields[${i}][label]`}
                       id="label"
                       placeholder="Label"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].label  && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].label && "border-red-dark"}`}
                     />
                     <input
                       type="text"
@@ -312,7 +312,7 @@ const ciphertext = AES.encrypt(
                       name={`paymentFields[${i}][name]`}
                       id="name"
                       placeholder="name"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].name  && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].name && "border-red-dark"}`}
                     />
                     <input
                       type="text"
@@ -320,7 +320,7 @@ const ciphertext = AES.encrypt(
                       name={`paymentFields[${i}][type]`}
                       id="type"
                       placeholder="type"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].type  && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].type && "border-red-dark"}`}
                     />
                     <input
                       type="text"
@@ -328,7 +328,7 @@ const ciphertext = AES.encrypt(
                       name={`paymentFields[${i}][placeholder]`}
                       id="placeholder"
                       placeholder="placeholder"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].placeholder  && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].placeholder && "border-red-dark"}`}
                     />
                     <input
                       type="text"
@@ -336,7 +336,7 @@ const ciphertext = AES.encrypt(
                       name={`paymentFields[${i}][ifoptional]`}
                       id="ifoptional"
                       placeholder="ifoptional"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].ifoptional  && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].ifoptional && "border-red-dark"}`}
                     />
                     <input
                       type="text"
@@ -344,7 +344,7 @@ const ciphertext = AES.encrypt(
                       name={`paymentFields[${i}][required]`}
                       id="required"
                       placeholder="required"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].required  && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].required && "border-red-dark"}`}
                     />
                     <input
                       type="text"
@@ -352,7 +352,7 @@ const ciphertext = AES.encrypt(
                       name={`paymentFields[${i}][err_msg]`}
                       id="err_msg"
                       placeholder="err_msg"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].err_msg  && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].err_msg && "border-red-dark"}`}
                     />
                   </div>
 
