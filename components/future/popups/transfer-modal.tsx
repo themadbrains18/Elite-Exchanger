@@ -204,7 +204,7 @@ const TransferModal = (props: showPopup) => {
             }
           }}
         />
-        <p className="top-label dark:!text-primary cursor-pointer">All</p>
+        <p className="top-label dark:!text-primary cursor-pointer" onClick={()=>setAmount(userAsset !== undefined && userAsset !== null ? userAsset?.balance?.toFixed(8) : 0)}>All</p>
       </div>
       <p
         className={`top-label !text-[16px] mt-[15px] ${isError === true ? "visible" : "hidden"
