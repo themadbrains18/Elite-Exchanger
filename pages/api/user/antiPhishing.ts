@@ -22,6 +22,9 @@ router
             const decodedStr = decodeURIComponent(req.body);
             let formData =  AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
             let token = req.headers.authorization;
+
+            console.log(formData,'-------------formData');
+            
             let data = await putData(`${process.env.NEXT_PUBLIC_APIURL}/user/anti-phishing`, JSON.parse(formData),token);
              return res.status(200).send({status:200, data}  );
             
