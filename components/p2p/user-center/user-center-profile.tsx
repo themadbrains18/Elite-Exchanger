@@ -23,10 +23,10 @@ const UserCenterProfile = (props: propsData) => {
                     <div className='flex md:flex-row flex-col items-center gap-[20px] cursor-pointer  relative'>
                         <div>
                             {props?.userDetail && props?.userDetail?.image &&
-                                <Image src={`${props?.userDetail?.image}`} alt='profile' width={100} height={100} className='rouned-full' />
+                                <Image src={`${props?.userDetail?.image}`} alt='profile' width={100} height={100} className='rounded-full h-[130px] w-[130px] object-cover' />
                             }
                             {props?.userDetail?.fName === undefined &&
-                                <Image src={Avtar} alt='error' width={100} height={100} className='rouned-full' />
+                                <Image src={Avtar} alt='error' width={100} height={100} className='rounded-full' />
                             }
 
                         </div>
