@@ -176,12 +176,12 @@ const AddPaymentModal = (props:any) => {
           <div className="px-3 py-2 max-w-3xl mx-auto">
             <div className="flex justify-between items-center mb-4">
               <h6 className="sec-title"> Payment Method</h6>
-              <button className="focus:outline-none">
+              <button type="button" className="focus:outline-none">
                 <svg
-                  // onClick={() => {
-                  //   props.setShow(false);
-                  //   props?.setEnable(0)
-                  // }}
+                  onClick={() => {
+                    props.setOpen(false);
+                   
+                  }}
                   enableBackground="new 0 0 60.963 60.842"
                   version="1.1"
                   id="Layer_1"
@@ -207,7 +207,7 @@ const AddPaymentModal = (props:any) => {
 
             <div className="grid grid-cols-1 gap-4">
               <div>
-                <label htmlFor="payment_method" className="block mb-1">
+                <label htmlFor="payment_method" className="block mb-1 dark:text-white">
                   Add Payment Name
                 </label>
                 <input
@@ -271,13 +271,13 @@ const AddPaymentModal = (props:any) => {
               </div>
 
               <div className="flex justify-between items-center">
-                <h6 className="text-[18px]">Add Fields</h6>
+                <h6 className="text-[18px]  dark:!text-white">Add Fields</h6>
               </div>
 
               <div className="card-body w-full">
                 <div className="form-row">
                   <div className="form-group flex items-center justify-between">
-                    <label className="mr-2">Number of Fields</label>
+                    <label className="mr-2 dark:text-white">Number of Fields</label>
                     <select
                       {...register("numberOfFields")}
                       className={`p-[8px] border rounded-[8px] max-w-[150px] outline-none w-full block border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] `}
@@ -295,7 +295,7 @@ const AddPaymentModal = (props:any) => {
 
               {fields.map((item, i) => (
                 <div key={i} className="grid grid-cols-1 gap-4">
-                  <h6 className="text-lg">Field {i + 1} <sup className="text-red-dark text-[10px]">*(Required)</sup></h6>
+                  <h6 className="text-lg  dark:text-white">Field {i + 1} <sup className="text-red-dark text-[10px]">*(Required)</sup></h6>
                   <div className="grid grid-cols-3 gap-[10px]">
                     <input
                       type="text"
@@ -361,7 +361,9 @@ const AddPaymentModal = (props:any) => {
             </div>
 
             <div className="flex justify-between items-center mt-4 gap-2">
-              <button className="outline-button w-full">Cancel</button>
+              <button type="button" className="outline-button w-full"  onClick={()=>{
+                props?.setOpen(false)
+              }}>Cancel</button>
               <button type="submit" className="solid-button w-full">
                 Submit
               </button>

@@ -16,7 +16,7 @@ const PaymentList = () => {
 
   useEffect(() => {
     getToken(itemOffset)
-  }, [itemOffset])
+  }, [itemOffset,open])
 
 
   const getToken = async (itemOffset: number) => {
