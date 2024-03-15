@@ -175,7 +175,7 @@ const SideBar = (props: profileSec) => {
                                         <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#ff815d] rounded-full animate-spin border-t-[#ff815d75] '></div>
                                     </>
                                 }
-                                {profileImg === '' && <Image src='/assets/profile/avtar.png' width={125} height={125} alt='avtar profile' className='m-auto' />}
+                                {profileImg === '' && <Image src={`${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`} width={125} height={125} alt='avtar profile' className='m-auto' />}
                                 {profileImg !== '' &&
                                     <div
                                         className={`${profileImg !== ""

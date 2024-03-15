@@ -324,7 +324,7 @@ const AllUsers = (props: usersList) => {
                     </td>
                     <td className=" py-[14px] flex gap-[10px] items-center admin-table-data">
                       <Image
-                        src={`/assets/admin/Avatar.png`}
+                        src={`${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`}
                         width={32}
                         height={32}
                         alt="avtar"
