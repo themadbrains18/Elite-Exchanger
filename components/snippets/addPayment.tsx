@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useState } from "react";
 import Context from "../contexts/context";
 import FiliterSelectMenu from "./filter-select-menu";
-
+import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
@@ -11,14 +11,14 @@ interface activeSection {
   setShow: Function;
   masterPayMethod?: any,
   setFormMethod?: any,
+  list?:any;
 }
 
 const AddPayment = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [paymentFields, setPaymentFields] = useState([]);
 
-
-
+  
   let {
     register,
     setValue,
@@ -53,11 +53,20 @@ const AddPayment = (props: activeSection) => {
 
   const onHandleSubmit = (data: any) => {
 
-
     if(data?.phonenumber?.length<10){
-      setError("phonenumber",{ type: "custom", message: "Number contain 10 digits" })
+      toast.error("Number contain 10 digits");
+      return;
+      // setError("phonenumber",{ type: "custom", message: "Number contain 10 digits" })
     }
     else{
+      let pmt = props.list.filter((item:any)=>{
+        return item.pm_name === data.selectPayment.payment_method && item.pmObject.phonenumber === data.phonenumber
+      })
+
+      if(pmt.length>0){
+        toast.error("This Number is already added.");
+        return;
+      }
 
       let pmid = data?.selectPayment?.id;
       let pm_name = data?.selectPayment?.payment_method;
@@ -137,9 +146,11 @@ const AddPayment = (props: activeSection) => {
                   <input type={item?.type} placeholder={item?.placeholder} {...register(`${item?.name}`, { required: item?.required === 'true'?true:false })} className="outline-none sm-text w-full bg-[transparent]" />
                 </div>
               </div>
+
               {errors?.[item?.name] && (
                 <p style={{ color: "#ff0000d1" }}>{item.err_msg}</p>
               )}
+
             </>
           })}
 

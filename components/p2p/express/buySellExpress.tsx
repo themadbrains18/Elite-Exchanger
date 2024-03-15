@@ -379,14 +379,15 @@ const BuySellExpress = (props: propsData) => {
   const getFilterAsset = (tokenID: string) => {
     if (tokenID === null || tokenID === undefined || tokenID === "") {
       let asset = props.assets.filter((item: any) => {
-        return item?.global_token?.symbol === 'USDT'
+        return item?.global_token?.symbol === 'USDT' && item.walletTtype === "main_wallet"
+
       });
 
       setFilterAsset(asset[0]);
     }
     else {
       let asset = props.assets.filter((item: any) => {
-        return item?.token_id === tokenID
+        return item?.token_id === tokenID && item.walletTtype === "main_wallet"
       });
 
       setFilterAsset(asset[0]);
@@ -563,7 +564,7 @@ const BuySellExpress = (props: propsData) => {
               <div className="py-20">
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">
-                    Available Balance: {filterAsset?.balance}
+                    Available Balance: {filterAsset!==undefined? filterAsset?.balance:'0.0'}
                   </p>
                 </div>
                 {/* First Currency Inputs */}

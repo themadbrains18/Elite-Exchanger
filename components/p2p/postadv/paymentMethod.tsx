@@ -443,6 +443,7 @@ const PaymentMethod = (props: activeSection) => {
           setActive={setActive}
           masterPayMethod={props.masterPayMethod}
           setFormMethod={setFormMethod}
+          list={list}
         />
       )}
       {active == 2 && (
