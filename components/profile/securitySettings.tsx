@@ -65,6 +65,8 @@ const SecuritySettings = (props: fixSection) => {
   const [sendOtpRes, setSendOtpRes] = useState<any>();
   const [successModal,setSuccessModal] = useState(false)
 
+  const [antiFishingCode, setAntiFishingCode] = useState(false);
+
   const [pswd, setpswd] = useState('');
 
   // auto generate password
@@ -527,7 +529,7 @@ const SecuritySettings = (props: fixSection) => {
                       }
                       }}
                     >
-                      {(props?.session?.user?.antiphishing === null )
+                      {(props?.session?.user?.antiphishing === null && antiFishingCode === false)
                         ? "Add"
                         : "Edit"}
                     </button>
@@ -723,6 +725,7 @@ const SecuritySettings = (props: fixSection) => {
           setEnable={setEnable}
           setShow={setShow}
           session={props?.session}
+          setAntiFishingCode={setAntiFishingCode}
         />
       )}
       {active === 1 && (
@@ -731,6 +734,7 @@ const SecuritySettings = (props: fixSection) => {
           setActive={setActive}
           type="email"
           session={props?.session}
+          
         />
       )}
       {active === 2 && (

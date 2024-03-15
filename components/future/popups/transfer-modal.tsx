@@ -221,7 +221,7 @@ const TransferModal = (props: showPopup) => {
       <button
         disabled={status === "unauthenticated" ? true : false || isError}
         onClick={transferToWallet}
-        className={`border bg-[#13c2c2] text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px] ${isError === true || status === "unauthenticated"
+        className={`border bg-primary hover:bg-primary-800 text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px] ${isError === true || status === "unauthenticated"
             ? "cursor-not-allowed opacity-50"
             : ""
           }`}

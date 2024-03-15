@@ -20,8 +20,6 @@ router.post(async (req, res) => {
         const decodedStr = decodeURIComponent(req.body);
         let formData = AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
 
-console.log(JSON.parse(formData));
-
         let data = await postData(`${process.env.NEXT_PUBLIC_APIURL}/payment/save`, JSON.parse(formData), token);
         return res.status(200).send({ data });
 

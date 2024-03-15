@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../contexts/context";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,11 +9,13 @@ import ConfirmPopup from "@/admin/admin-snippet/confirm-popup";
 import { signOut, useSession } from "next-auth/react";
 import Verification from "../snippets/verification";
 import Image from "next/image";
+import clickOutSidePopupClose from "../snippets/clickOutSidePopupClose";
 
 interface activeSection {
   setShow?: any;
   session?: any;
   setEnable?: any;
+  setAntiFishingCode?:any;
 }
 
 type UserSubmitForm = {
@@ -60,7 +62,7 @@ const AntiPhishingCode = (props: activeSection) => {
 
   const onHandleSubmit = async (data: any) => {
     try {
-    
+
       setEnable(4);
       setFormData(data);
     } catch (error) {
@@ -78,14 +80,14 @@ const AntiPhishingCode = (props: activeSection) => {
       let obj;
 
       if (
-        props?.session?.user?.antiphishing === null 
+        props?.session?.user?.antiphishing === null
       ) {
         obj = {
           username: username,
-          antiphishing:formData?.antiphishing,
+          antiphishing: formData?.antiphishing,
           otp: "string",
         };
-      } 
+      }
 
       if (status === "authenticated") {
         const ciphertext = AES.encrypt(
@@ -122,13 +124,13 @@ const AntiPhishingCode = (props: activeSection) => {
           signOut();
         }, 1000);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   const finalOtpVerification = async (otp: any) => {
     try {
-      console.log(otp,"==otp");
-      
+      console.log(otp, "==otp");
+
       let username =
         props.session?.user.email !== "null"
           ? props.session?.user.email
@@ -136,11 +138,11 @@ const AntiPhishingCode = (props: activeSection) => {
       let request;
 
       if (
-        props?.session?.user?.antiphishing === null 
+        props?.session?.user?.antiphishing === null
       ) {
         request = {
           username: username,
-          antiphishing:formData?.antiphishing,
+          antiphishing: formData?.antiphishing,
           otp: otp,
         };
       }
@@ -152,7 +154,7 @@ const AntiPhishingCode = (props: activeSection) => {
 
       let record = encodeURIComponent(ciphertext.toString());
       console.log("hete");
-      
+
       let response = await fetch(
         `${process.env.NEXT_PUBLIC_BASEURL}/user/antiPhishing`,
         {
@@ -166,6 +168,7 @@ const AntiPhishingCode = (props: activeSection) => {
       ).then((response) => response.json());
       if (response.data.result) {
         toast.success(response.data.message);
+        props.setAntiFishingCode(true);
         setTimeout(() => {
           setEnable(0);
           props.setEnable(0);
@@ -174,18 +177,25 @@ const AntiPhishingCode = (props: activeSection) => {
       } else {
         toast.error(response.data.message);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
+
+  const closePopup = () => {
+    props?.setShow(false);
+    props.setEnable(0);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
 
   return (
     <>
       <ToastContainer position="top-right" />
       {enable === 0 && (
-        <div className="max-w-[calc(100%-30px)] md:max-w-[400px] w-full p-5 md:p-20 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+        <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[400px] w-full p-5 md:p-20 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <div className="flex items-center justify-between ">
             <p className="sec-title">
-           
-            {props?.session?.user?.antiphishing === null?"Create":"Change"} Anti-Phishing Code
+
+              {props?.session?.user?.antiphishing === null ? "Create" : "Change"} Anti-Phishing Code
             </p>
             <svg
               onClick={() => {
@@ -223,14 +233,14 @@ const AntiPhishingCode = (props: activeSection) => {
                 >
                   <div className=" w-full">
                     <p className="sm-text mb-[10px]">Anti-Phishing Code</p>
-            
-                      <input
-                        type="text"
-                        {...register("antiphishing")}
-                        placeholder="Anti-Phishing Code"
-                        className="sm-text input-cta2 w-full"
-                      />
-                  
+
+                    <input
+                      type="text"
+                      {...register("antiphishing")}
+                      placeholder="Anti-Phishing Code"
+                      className="sm-text input-cta2 w-full"
+                    />
+
                   </div>
                 </div>
 
