@@ -99,13 +99,15 @@ const Adverstisement = (props: propsData) => {
   }
 
   const onHandleSubmit = (data: any) => {
-    if (assetsBalance > getValues('price')) {
-      setStep1Data(data);
+    setStep1Data(data);
       setStep(2);
-    }
-    else {
-      toast.error('Insufficiant Balance')
-    }
+    // if (assetsBalance > getValues('price')) {
+    //   setStep1Data(data);
+    //   setStep(2);
+    // }
+    // else {
+    //   toast.error('Insufficiant Balance')
+    // }
 
   }
 

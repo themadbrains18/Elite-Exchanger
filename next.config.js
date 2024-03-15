@@ -19,7 +19,7 @@ const nextConfig = {
       {
         protocol: 'http',
         hostname: 'localhost',
-        port: '3000',
+        port: '8080',
         pathname: '/**',
       },
       {
@@ -39,6 +39,12 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'elite-exchange-7gch2fryja-el.a.run.app',
         port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'launchyourexchange.com',
+        port: '8080',
         pathname: '/**',
       }
     ],

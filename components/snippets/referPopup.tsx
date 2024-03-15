@@ -1,9 +1,10 @@
-import React, { useContext } from 'react'
+import React, { useContext, useRef } from 'react'
 import Context from '../contexts/context';
 import Image from 'next/image';
 import IconsComponent from './icons';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
+import clickOutSidePopupClose from './clickOutSidePopupClose';
 
 
 interface activeSection {
@@ -41,6 +42,12 @@ const ReferPopup = (props: activeSection) => {
       iconLink: "https://www.instagram.com/"
     },
   ]
+
+  const closePopup = () => {
+    props?.setShow(false);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
   return (
     <div className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[562px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
       <div className="flex items-center justify-between mb-40">
@@ -78,7 +85,16 @@ const ReferPopup = (props: activeSection) => {
           <label className="sm-text">Lite Referral ID</label>
           <div className="mt-[5px] lg:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
             <p className="sec-text text-gamma">{props?.session?.user?.refer_code}</p>
-            <button className="solid-button py-2 sec-text font-normal" onClick={() => { navigator.clipboard.writeText(props?.session?.user?.refer_code); toast.success('copy to clipboard') }}>
+            <button className="solid-button py-2 sec-text font-normal" onClick={() => {
+              // navigator.clipboard.writeText(props?.session?.user?.refer_code);
+              const input = document.createElement('textarea')
+              input.value = props?.session?.user?.refer_code
+              document.body.appendChild(input)
+              input.select()
+              document.execCommand('copy')
+              document.body.removeChild(input)
+              toast.success('copy to clipboard')
+            }}>
               Copy
             </button>
           </div>
@@ -87,7 +103,16 @@ const ReferPopup = (props: activeSection) => {
           <label className="sm-text mb-[10px]">Lite Referral Link</label>
           <div className="mt-[5px] lg:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
             <p className="sec-text text-gamma">{`http://...?r=${props?.session?.user?.refer_code}&e=${props.referEvent}`}</p>
-            <button className="solid-button py-2 sec-text font-normal" onClick={() => { navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}&e=${props.referEvent}`); toast.success('copy to clipboard') }}>
+            <button className="solid-button py-2 sec-text font-normal" onClick={() => {
+              // navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}&e=${props.referEvent}`);
+              const input = document.createElement('textarea')
+              input.value = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}&e=${props.referEvent}`
+              document.body.appendChild(input)
+              input.select()
+              document.execCommand('copy')
+              document.body.removeChild(input)
+              toast.success('copy to clipboard')
+            }}>
               Copy
             </button>
           </div>

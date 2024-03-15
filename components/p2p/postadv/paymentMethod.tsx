@@ -242,7 +242,7 @@ const PaymentMethod = (props: activeSection) => {
                       <div className="flex gap-30 items-center">
                         <div className="flex gap-10 items-center w-full max-w-[145px]">
                           <Image
-                            src={`${process.env.NEXT_PUBLIC_APIURL}/payment_icon/${item?.master_payment_method?.icon}`}
+                            src={`${item?.master_payment_method?.icon}`}
                             alt="payment image"
                             width={32}
                             height={32}

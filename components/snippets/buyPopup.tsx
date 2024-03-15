@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState } from "react";
+import React, { Fragment, useContext, useRef, useState } from "react";
 import Image from "next/image";
 import Context from "../contexts/context";
 import { useRouter } from "next/router";
@@ -10,6 +10,7 @@ import { useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
+import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
 const schema = yup.object().shape({
   spend_amount: yup.number().positive().required('Please enter amount in INR').typeError('Please enter amount in INR'),
@@ -45,8 +46,8 @@ const BuyPopup = (props: activeSection) => {
     resolver: yupResolver(schema)
   });
 
-  const profileImg = props?.selectedPost?.User?.profile && props?.selectedPost?.User?.profile?.image !== null ? props?.selectedPost?.User?.profile?.image : `/assets/orders/user1.png`;
-  const userName = props?.selectedPost?.User?.profile && props?.selectedPost?.User?.profile?.fName !== null ? props?.selectedPost?.User?.profile?.fName : props?.selectedPost?.User?.user_kyc?.fname;
+  const profileImg = props?.selectedPost?.user?.profile && props?.selectedPost?.user?.profile?.image !== null ? props?.selectedPost?.user?.profile?.image : `/assets/orders/user1.png`;
+  const userName = props?.selectedPost?.user?.profile && props?.selectedPost?.user?.profile?.dName !== null ? props?.selectedPost?.user?.profile?.dName : props?.selectedPost?.user?.user_kyc?.fname;
 
   // onClick={() => { route.push("/p2p/my-orders?buy"); }}
 
@@ -56,6 +57,14 @@ const BuyPopup = (props: activeSection) => {
       setError("spend_amount", {
         type: "custom",
         message: `Please enter price greater than minimum limit ${props?.selectedPost?.min_limit}`,
+      });
+      return;
+    }
+
+    if (data.spend_amount > props?.selectedPost?.max_limit) {
+      setError("spend_amount", {
+        type: "custom",
+        message: `Please enter price less than maximum limit ${props?.selectedPost?.max_limit}`,
       });
       return;
     }
@@ -71,7 +80,7 @@ const BuyPopup = (props: activeSection) => {
     if (status === 'authenticated') {
       let obj = {
         post_id: props?.selectedPost?.id,
-        sell_user_id: props?.selectedPost?.User?.id,
+        sell_user_id: props?.selectedPost?.user?.id,
         buy_user_id: session?.user?.user_id,
         token_id: props?.selectedPost?.token_id,
         price: props?.selectedPost?.price,
@@ -104,7 +113,7 @@ const BuyPopup = (props: activeSection) => {
         const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
         let buy = {
           ws_type: 'buy',
-          sellerid: props?.selectedPost?.User?.id
+          sellerid: props?.selectedPost?.user?.id
         }
         websocket.onopen = () => {
           websocket.send(JSON.stringify(buy));
@@ -125,8 +134,14 @@ const BuyPopup = (props: activeSection) => {
 
   }
 
+  const closePopup = () => {
+    props?.setShow1(false);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
+
   return (
-    <>
+    <div ref={wrapperRef}>
       <ToastContainer />
       <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow1(false) }}></div>
       <form onSubmit={handleSubmit(onHandleSubmit)}>
@@ -176,10 +191,10 @@ const BuyPopup = (props: activeSection) => {
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Payment Method</p>
                   <div className="w-full flex gap-10">
                     {
-                      props?.selectedPost?.user_p_method && props?.selectedPost?.user_p_method.map((elem: any, ind: any) => {
+                      props?.selectedPost?.user?.user_payment_methods && props?.selectedPost?.user?.user_payment_methods.map((elem: any, ind: any) => {
                         return (
                           <Fragment key={ind}>
-                            <Image src={`${process.env.NEXT_PUBLIC_APIURL}/payment_icon/${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />
+                            <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />
                           </Fragment>
                         )
                       })
@@ -238,8 +253,8 @@ const BuyPopup = (props: activeSection) => {
               </div>
             </div>
           </div>
-          <div className=" border-t-[0.5px] p-0 pt-[10px] md:px-40 md:pt-20 md:pb-30 border-grey-v-1 flex md:flex-row flex-col gap-[15px] items-start md:items-center justify-between">
-            <p className="sm-text text-start">The Trading Password is Required</p>
+          <div className=" border-t-[0.5px] p-0 pt-[10px] md:px-40 md:pt-20 md:pb-30 border-grey-v-1 flex md:flex-row flex-col gap-[15px] items-start md:items-center justify-end">
+            {/* <p className="sm-text text-start">The Trading Password is Required</p> */}
             {session &&
               <button className="solid-button w-full max-w-full md:max-w-[50%] !p-[17px]" >Place order</button>
             }
@@ -249,7 +264,7 @@ const BuyPopup = (props: activeSection) => {
           </div>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

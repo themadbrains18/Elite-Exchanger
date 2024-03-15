@@ -21,7 +21,7 @@ const SlectPaymentMethod = (props: propsData) => {
         }
     }
 
-    let sellerUser = props?.userOrder?.user_post?.User;
+    let sellerUser = props?.userOrder?.user_post?.user;
 
     const [payment_method, setPaymentMethod] = useState([]);
 
@@ -30,7 +30,7 @@ const SlectPaymentMethod = (props: propsData) => {
         let payment_method: any = [];
         if(orderPost!==null  ){
             for (const upid of orderPost?.p_method) {
-                orderPost?.User?.user_payment_methods.filter((item: any) => {
+                orderPost?.user?.user_payment_methods.filter((item: any) => {
                     if (item?.id === upid?.upm_id) {
                         payment_method.push(item);
                     }
@@ -85,7 +85,7 @@ const SlectPaymentMethod = (props: propsData) => {
                                         flex items-center gap-10
                                         ">
                                         <Fragment key={ind}>
-                                            <Image src={`${process.env.NEXT_PUBLIC_APIURL}/payment_icon/${elem.master_payment_method.icon}`} alt='error' width={28} height={28} />
+                                            <Image src={`${elem.master_payment_method.icon}`} alt='error' width={28} height={28} />
                                         </Fragment>
                                         <span className='text-banner-text'>{elem.master_payment_method?.payment_method}</span>
                                     </label>

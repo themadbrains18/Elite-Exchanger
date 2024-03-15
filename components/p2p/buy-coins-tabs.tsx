@@ -87,7 +87,7 @@ const BuyCoinsTabs = (props: activeSection) => {
           <div className="max-w-full  md:max-w-[50%] w-full">
             <FiliterSelectMenu
               data={list}
-              placeholder="Choose Payment Method"
+              placeholder="Payment Method"
               auto={false}
               widthFull={false}
               type="pmethod"

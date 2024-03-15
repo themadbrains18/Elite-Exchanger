@@ -9,6 +9,7 @@ import { signOut, useSession } from "next-auth/react";
 import { Sigmar } from "next/font/google";
 import Image from "next/image";
 import QRCode from "qrcode";
+import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
 interface activeSection {
   setActive: Function;
@@ -123,10 +124,17 @@ const SecurityVerification = (props: activeSection) => {
     }
   };
 
+  const closePopup = () => {
+    props?.setShow(false);
+    props.setEnable(0);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
+
   return (
     <>
       {/* <ToastContainer /> */}
-      <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+      <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex items-center justify-between gap-[10px]">
           <svg
             onClick={() => {
@@ -188,7 +196,16 @@ const SecurityVerification = (props: activeSection) => {
               <div className="pt-5 md:pt-30">
                 <div className="mt-[5px] md:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
                   <p className="sec-text text-ellipsis overflow-hidden">{secret?.base32}</p>
-                  <button type="button" className="solid-button py-2 sec-text font-normal" onClick={() => { navigator.clipboard.writeText(secret?.base32); toast.success('copy to clipboard') }}>Copy</button>
+                  <button type="button" className="solid-button py-2 sec-text font-normal" onClick={() => {
+                    // navigator.clipboard.writeText(secret?.base32);
+                    const input = document.createElement('textarea')
+                    input.value = secret?.base32
+                    document.body.appendChild(input)
+                    input.select()
+                    document.execCommand('copy')
+                    document.body.removeChild(input) 
+                    toast.success('copy to clipboard')
+                  }}>Copy</button>
                 </div>
               </div>
             </div>

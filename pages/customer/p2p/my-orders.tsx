@@ -89,7 +89,7 @@ const MyOrders = (props: propsData) => {
                 <SlectPaymentMethod userOrder={order} setPaymentMethod={setPaymentMethod} />
                 <Remarks paymentMethod={paymentMethod} orderid={order?.id} userOrder={order} getUserOrders={getUserOrders} />
               </div>
-              <ChatBox sellerUser={order?.user_post?.User?.id === props.session?.user?.user_id ? order?.User : order?.user_post?.User} order={order} />
+              <ChatBox sellerUser={order?.user_post?.user?.id === props.session?.user?.user_id ? order?.User : order?.user_post?.user} order={order} />
             </div>
           </>
           :

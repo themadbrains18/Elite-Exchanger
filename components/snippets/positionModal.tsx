@@ -1,7 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../contexts/context";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
 interface propsData {
   setIsShow: Function;
@@ -29,12 +30,18 @@ const PositionModal = (props: propsData) => {
       radioCta2?.click();
     }
   }, []);
+
+  const closePopup = () => {
+    props?.setIsShow(false);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
   return (
     <>
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible`}
       ></div>
-      <div className="prefrence max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
+      <div ref={wrapperRef} className="prefrence max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
         <div className="flex items-center justify-between ">
           <p className={`sec-title text-[18px]`}>Position Mode</p>
           <svg
@@ -219,12 +226,12 @@ const PositionModal = (props: propsData) => {
             <button
               className="solid-button w-full px-[20px] py-[15px]"
               onClick={(e) => {
-                if(props?.positions?.length >0 || props?.openOrders?.length>0){
+                if (props?.positions?.length > 0 || props?.openOrders?.length > 0) {
                   toast.error('It is not allowed to switch between one-way mode and hedge mode while holding positions', {
                     position: toast.POSITION.TOP_CENTER
                   })
                   props?.setIsShow(false);
-                  return;  
+                  return;
                 }
                 props?.setPositionMode(value)
                 props?.setIsShow(false);

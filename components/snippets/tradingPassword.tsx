@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../contexts/context";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
 import { useSession } from "next-auth/react";
+import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
 interface activeSection {
   setActive: Function,
@@ -19,6 +20,8 @@ const TradingPassword = (props: activeSection) => {
   const [fillOtp, setOtp] = useState("");
 
   const { status, data: session } = useSession();
+  const [timeLeft, setTimer] = useState('');
+  const [enable, setEnable] = useState(false);
 
   useEffect(() => {
     const inputElements = document.querySelectorAll(".input_wrapper input");
@@ -121,6 +124,10 @@ const TradingPassword = (props: activeSection) => {
       })
 
       let res = await responseData.json();
+      if(res){
+        orderTimeCalculation(res?.data?.data?.otp?.expire);
+      }
+      
     } catch (error) {
 
     }
@@ -186,10 +193,65 @@ const TradingPassword = (props: activeSection) => {
 
   }
 
+  const closePopup = () => {
+    props?.setShow(false);
+    props.setActive(0)
+  }
+  const wrapperRef: any = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
+
+  const Ref: any = useRef(null);
+
+  const orderTimeCalculation = async (time:any) => {
+    setEnable(true);
+    let deadline = new Date(time);
+
+    deadline.setMinutes(deadline.getMinutes());
+    deadline.setSeconds(deadline.getSeconds() + 1);
+    let currentTime = new Date();
+
+    if (currentTime < deadline) {
+      if (Ref.current) clearInterval(Ref.current);
+      const timer = setInterval(() => {
+        calculateTimeLeft(deadline);
+      }, 1000);
+      Ref.current = timer;
+    }
+    else if (currentTime > deadline) {
+      setEnable(false);
+    }
+  }
+
+  const calculateTimeLeft = (e: any) => {
+    let { total, minutes, seconds }
+      = getTimeRemaining(e);
+
+    if (total >= 0) {
+      setTimer(
+        (minutes > 9 ? minutes : '0' + minutes) + ':'
+        + (seconds > 9 ? seconds : '0' + seconds)
+      )
+    }
+    else {
+      if (Ref.current) clearInterval(Ref.current);
+      setEnable(false);
+    }
+  }
+
+  const getTimeRemaining = (e: any) => {
+    let current: any = new Date();
+    const total = Date.parse(e) - Date.parse(current);
+    const seconds = Math.floor((total / 1000) % 60);
+    const minutes = Math.floor((total / 1000 / 60) % 60);
+    return {
+      total, minutes, seconds
+    };
+  }
+
   return (
     <>
       <ToastContainer />
-      <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+      <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex items-center justify-between ">
           <p className="sec-title">Set Trading Passsword</p>
           <svg
@@ -225,25 +287,32 @@ const TradingPassword = (props: activeSection) => {
             <div className="flex flex-col mb-[15px] md:mb-30 gap-20">
               <label className="sm-text">Enter Trading Password</label>
               <div className="flex gap-10 justify-center items-center input_wrapper">
-                <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
-                <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
-                <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code3" />
-                <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code4" />
-                <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code5" />
-                <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code6" onChange={(e) => { console.log(e) }} />
+                <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
+                <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
+                <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code3" />
+                <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code4" />
+                <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code5" />
+                <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code6" onChange={(e) => { console.log(e) }} />
               </div>
             </div>
             <div className="flex flex-col mb-[15px] md:mb-30 gap-20">
               <label className="sm-text">Enter Code Verification Code</label>
               <div className="flex gap-10 justify-center items-center input_wrapper2">
-                <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
-                <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
-                <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code3" />
-                <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code4" />
-                <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code5" />
-                <input type="number" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code6" />
+                <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
+                <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
+                <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code3" />
+                <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code4" />
+                <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code5" />
+                <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code6" />
               </div>
-              <p className="info-10-14 text-end" onClick={sendOtp}>Send Code</p>
+              <div className={`flex  ${enable === true ? '' : 'hidden'}`}>
+                <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>
+                <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
+              </div>
+              <div>
+                <p className={`info-10-14 text-end cursor-pointer ${enable === true ? 'hidden' : ''}`} onClick={sendOtp}>Send Code</p>
+              </div>
+              
             </div>
 
           </div>

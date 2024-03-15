@@ -18,12 +18,12 @@ const UserCenterProfile = (props: propsData) => {
     return (
         <div>
             <div className='mt-40 mb-30'>
-                <div className='flex items-center justify-center md:justify-between'>
+                <div className='flex items-center md:justify-between'>
 
                     <div className='flex md:flex-row flex-col items-center gap-[20px] cursor-pointer  relative'>
                         <div>
                             {props?.userDetail && props?.userDetail?.image &&
-                                <Image src={`${process.env.NEXT_PUBLIC_APIURL}/dp/${props?.userDetail?.image}`} alt='profile' width={100} height={100} className='rouned-full' />
+                                <Image src={`${props?.userDetail?.image}`} alt='profile' width={100} height={100} className='rouned-full' />
                             }
                             {props?.userDetail?.fName === undefined &&
                                 <Image src={Avtar} alt='error' width={100} height={100} className='rouned-full' />
@@ -32,7 +32,7 @@ const UserCenterProfile = (props: propsData) => {
                         </div>
                         <div className='md:text-start text-center'>
                             <p className='sec-title'>{props?.userDetail ? props?.userDetail.fName : session?.user?.name}</p>
-                            <p className='sec-text !text-gamma'>{props?.userDetail ? props?.userDetail.uName : session?.user?.name}</p>
+                            <p className='sec-text !text-gamma'>{props?.userDetail ? props?.userDetail.dName : session?.user?.name}</p>
                         </div>
                     </div>
 
@@ -51,15 +51,15 @@ const UserCenterProfile = (props: propsData) => {
                         <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text whitespace-nowrap'>E-mail</p>
                     </div>
                     <div className='flex items-center gap-[15px] border dark:border-opacity-[15%] border-grey-v-1 p-10 md:px-[20px] md:py-[14px] rounded-[5px]'>
-                        <IconsComponent type={( props?.userDetail && props?.userDetail?.User !==undefined && (props?.userDetail?.User?.tradingPassword!== "" || props?.userDetail?.User?.tradingPassword!== null ||  props?.userDetail?.User?.tradingPassword!== undefined) )?'verified':'infoIconRed'} hover={false} active={false} />
+                        <IconsComponent type={( props?.userDetail && props?.userDetail?.user !==undefined && (props?.userDetail?.user?.tradingPassword!== "" || props?.userDetail?.user?.tradingPassword!== null ||  props?.userDetail?.user?.tradingPassword!== undefined) )?'verified':'infoIconRed'} hover={false} active={false} />
                         <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text whitespace-nowrap'>Trade Password</p>
                     </div>
                     <div className='flex items-center gap-[15px] border dark:border-opacity-[15%] border-grey-v-1 p-10 md:px-[20px] md:py-[14px] rounded-[5px]'>
-                        <IconsComponent type={(props?.userDetail && props?.userDetail?.User !==undefined && props?.userDetail?.User?.user_kyc!== "" && props?.userDetail?.User?.user_kyc!== null)?'verified':'infoIconRed'} hover={false} active={false} />
+                        <IconsComponent type={(props?.userDetail && props?.userDetail?.user !==undefined && props?.userDetail?.user?.user_kyc!== "" && props?.userDetail?.user?.user_kyc!== null)?'verified':'infoIconRed'} hover={false} active={false} />
                         <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text'>KYC</p>
                     </div>
                     <div className='flex items-center gap-[15px] border dark:border-opacity-[15%] border-grey-v-1 p-10 md:px-[20px] md:py-[14px] rounded-[5px]'>
-                        <IconsComponent type={( props?.userDetail && props?.userDetail?.User !==undefined &&props?.userDetail?.User?.number!== "" && props?.userDetail?.User?.number!== null)?'verified':'infoIconRed'} hover={false} active={false} />
+                        <IconsComponent type={( props?.userDetail && props?.userDetail?.user !==undefined &&props?.userDetail?.user?.number!== "" && props?.userDetail?.user?.number!== null)?'verified':'infoIconRed'} hover={false} active={false} />
                         <p className='info-14-18 !text-[18px] dark:!text-white !text-banner-text'>SMS</p>
                     </div>
                 </div>

@@ -87,8 +87,8 @@ const BuyTableDesktop = (props: activeSection) => {
 
               // console.log(item, '========post list');
               if (session?.user?.user_id !== item?.user_id) {
-                const profileImg = item?.User?.profile && item?.User?.profile?.image !== null ? `${process.env.NEXT_PUBLIC_APIURL}/dp/${item?.User?.profile?.image}` : `/assets/orders/user1.png`;
-                const userName = item?.User?.profile && item?.User?.profile?.fName !== null ? item?.User?.profile?.fName : item?.User?.user_kyc?.fname;
+                const profileImg = item?.user?.profile && item?.user?.profile?.image !== null ? `${item?.user?.profile?.image}` : `/assets/orders/user1.png`;
+                const userName = item?.user?.profile && item?.user?.profile?.dName !== null ? item?.user?.profile?.dName : item?.user?.user_kyc?.fname;
                 
                 return (
                   <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FAFAFA] cursor-pointer">
@@ -118,16 +118,16 @@ const BuyTableDesktop = (props: activeSection) => {
                     </td>
 
                     <td>
-                      <p className="info-14-18 dark:text-white  ">{item?.quantity} {item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
+                      <p className="info-14-18 dark:text-white  ">{Number(item?.quantity).toFixed(4)} {item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
                     </td>
 
                     <td>
                       <div className='flex items-center gap-10'>
                         {
-                          item?.user_p_method.map((elem: any, ind: any) => {
+                          item?.user?.user_payment_methods.map((elem: any, ind: any) => {
                             return (
                               <Fragment key={ind}>
-                                <Image src={`${process.env.NEXT_PUBLIC_APIURL}/payment_icon/${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />
+                                <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />
                               </Fragment>
                             )
                           })

@@ -6,6 +6,7 @@ import QRCode from "qrcode";
 import { useSession } from "next-auth/react";
 import { toast } from 'react-toastify';
 import { AES } from "crypto-js";
+import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
 
 interface activeSection {
@@ -196,9 +197,16 @@ const GoogleAuth = (props: activeSection) => {
     }
   }
 
+  const closePopup = () => {
+    props?.setShow(false);
+    props.setEnable(0);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
+
   return (
     <>
-      <div className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
+      <div ref={wrapperRef} className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
         <div className="flex items-center justify-between">
           <p className="sec-title" style={{ fontSize: '18px' }}>Set Up Google Two-Factor Authentication</p>
           <svg

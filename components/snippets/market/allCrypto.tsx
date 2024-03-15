@@ -8,17 +8,18 @@ import Deposit from "../deposit";
 
 interface propsData {
     coins: any,
-    session:any,
-    networks:any
+    session: any,
+    networks: any
 }
 
 
-const AllCrypto = (props:propsData) => {
+const AllCrypto = (props: propsData) => {
 
     const [itemOffset, setItemOffset] = useState(0);
     const [show1, setShow1] = useState(0);
     const router = useRouter();
     const { mode } = useContext(Context)
+    const [token, setToken] = useState(Object);
 
     let itemsPerPage = 10;
     const endOffset = itemOffset + itemsPerPage;
@@ -75,10 +76,10 @@ const AllCrypto = (props:propsData) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems && currentItems.length>0 && currentItems?.map((item: any, index: any) => {
+                        {currentItems && currentItems.length > 0 && currentItems?.map((item: any, index: any) => {
                             return (
                                 <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => (item?.tradepair !== null ? router.push(`/chart/${item.symbol}`) : '')}>
-                                    
+
                                     <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                                             <Image src={item.image} width={30} height={30} alt="coins" />
@@ -110,30 +111,30 @@ const AllCrypto = (props:propsData) => {
                                         </p>
                                     </td>
                                     <td className="">
-                                    <button onClick={(e) => {e.stopPropagation(); setShow1(1) }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                <span className="text-primary block">Deposit</span>
-                                <IconsComponent type="openInNewTab" hover={false} active={false} />
-                              </button>
+                                        <button onClick={(e) => { e.stopPropagation(); setToken(item); setShow1(1) }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                            <span className="text-primary block">Deposit</span>
+                                            <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                        </button>
                                     </td>
 
                                 </tr>
                             );
                         })}
-                        {currentItems.length === 0 && 
+                        {currentItems.length === 0 &&
                             <tr>
-                            <td colSpan={6}>
-                              <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
-                                <Image
-                                  src="/assets/refer/empty.svg"
-                                  alt="emplty table"
-                                  width={107}
-                                  height={104}
-                                />
-                                <p > No Record Found </p>
-                              </div>
-    
-                            </td>
-                          </tr>
+                                <td colSpan={6}>
+                                    <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
+                                        <Image
+                                            src="/assets/refer/empty.svg"
+                                            alt="emplty table"
+                                            width={107}
+                                            height={104}
+                                        />
+                                        <p > No Record Found </p>
+                                    </div>
+
+                                </td>
+                            </tr>
                         }
 
                     </tbody>
@@ -153,13 +154,13 @@ const AllCrypto = (props:propsData) => {
                     renderOnZeroPageCount={null} />
             </div>
             {
-        show1 === 1 &&
-        <>
-          <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-          <Deposit setShow1={setShow1} networks={props.networks} session={props.session} />
+                show1 === 1 &&
+                <>
+                    <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
+                    <Deposit setShow1={setShow1} networks={props.networks} session={props.session} token={token} />
+                </>
+            }
         </>
-      }
-            </>
     )
 }
 

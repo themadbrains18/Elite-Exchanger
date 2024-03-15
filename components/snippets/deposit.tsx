@@ -1,10 +1,11 @@
 import Image from "next/image";
-import React, { useContext, useLayoutEffect, useState } from "react";
+import React, { useContext, useLayoutEffect, useState, useRef, useEffect } from "react";
 import Context from "../contexts/context";
 import FiliterSelectMenu from "./filter-select-menu";
 import { useQRCode } from 'next-qrcode';
 import FilterSelectMenuWithCoin from "./filter-select-menu-with-coin";
 import { toast, ToastContainer } from "react-toastify";
+import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
 interface activeSection {
   setShow1: Function;
@@ -14,16 +15,25 @@ interface activeSection {
   token?: any;
 }
 
+
+
 const Deposit = (props: activeSection) => {
 
   const [address, setWalletAddress] = useState('');
   const [list, setNetworkList] = useState([]);
   const [depositToken, setDepositToken] = useState(props?.token);
   const { SVG } = useQRCode();
+  const { mode } = useContext(Context);
 
   useLayoutEffect(() => {
     filterNetworkListByCoin(props.token);
   }, []);
+
+  const closePopup=()=>{
+    props.setShow1(0);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({wrapperRef, closePopup});
 
   const filterNetworkListByCoin = async (token: any) => {
     let networks: any = [];
@@ -45,8 +55,6 @@ const Deposit = (props: activeSection) => {
     setNetworkList(networks);
   }
 
-  const { mode } = useContext(Context);
-
   const getAddress = async (network: any) => {
     try {
       let wallet = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/wallet?user_id=${props.session.user.user_id}&network=${network?.walletSupport}`, {
@@ -63,8 +71,10 @@ const Deposit = (props: activeSection) => {
     }
   }
 
+  
+
   return (
-    <div className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
+    <div ref={wrapperRef} className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
       <div className="flex items-center justify-between">
         <p className="sec-title">{depositToken?.symbol} Deposit Address</p>
         <svg
@@ -133,7 +143,17 @@ const Deposit = (props: activeSection) => {
           <p className="sm-text text-start md:text-center ">Destination</p>
           <div className="mt-[5px] md:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
             <p className="sec-text text-ellipsis overflow-hidden">{address}</p>
-            <button className={`solid-button py-2 sec-text font-normal ${address === '' ? 'cursor-not-allowed' : 'cursor-pointer'} `} disabled={address === '' ? true : false} onClick={() => { navigator.clipboard.writeText(address); toast.success('copy to clipboard') }}>Copy</button>
+            <button className={`solid-button py-2 sec-text font-normal ${address === '' ? 'cursor-not-allowed' : 'cursor-pointer'} `}
+              disabled={address === '' ? true : false} onClick={() => {
+                // navigator.clipboard.writeText(address);
+                const input = document.createElement('textarea')
+                input.value = address
+                document.body.appendChild(input)
+                input.select()
+                document.execCommand('copy')
+                document.body.removeChild(input)
+                toast.success('copy to clipboard')
+              }}>Copy</button>
           </div>
         </div>
         <div className="flex items-center justify-between pt-5 md:pt-30">

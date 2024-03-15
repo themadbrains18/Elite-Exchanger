@@ -199,7 +199,7 @@ const DesktopTable = (props: dataTypes) => {
                                                         item.user_p_method.map((elem: any, ind: any) => {
                                                             return (
                                                                 <Fragment key={ind}>
-                                                                    <Image src={`${process.env.NEXT_PUBLIC_APIURL}/payment_icon/${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />
+                                                                    <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />
                                                                 </Fragment>
                                                             )
                                                         })

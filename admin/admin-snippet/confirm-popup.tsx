@@ -1,6 +1,7 @@
+import clickOutSidePopupClose from '@/components/snippets/clickOutSidePopupClose';
 import { AES } from 'crypto-js';
 import { signOut, useSession } from 'next-auth/react';
-import React from 'react'
+import React, { useRef } from 'react'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -34,11 +35,18 @@ const ConfirmPopup = (props: activeSection) => {
     }
   }
 
+  const closePopup = () => {
+    props?.setShow(false);
+    props.setEnable(0);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
+
   return (
     <>
       {/* <ToastContainer position="top-right" /> */}
 
-      <div className='fixed top-[50%] z-[9] left-[50%] translate-x-[-50%] translate-y-[-50%] lg:bg-white lg:dark:bg-d-bg-primary lg:p-40 max-w-[557px] w-full rounded-10'>
+      <div ref={wrapperRef} className='fixed top-[50%] z-[9] left-[50%] translate-x-[-50%] translate-y-[-50%] lg:bg-white lg:dark:bg-d-bg-primary lg:p-40 max-w-[557px] w-full rounded-10'>
         <div className=" lg:p-0 p-5  max-w-[calc(100%-30px)] md:mx-0 mx-auto md:mb-0 mb-[10px]  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
           <div className="flex flex-col gap-[15px] lg:gap-5 mb-[30px]">
             <div className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`} >
