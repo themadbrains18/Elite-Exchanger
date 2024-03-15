@@ -50,7 +50,7 @@ const AddPaymentModal = (props:any) => {
   useEffect(() => {
     console.log("hii");
 
-    const newVal = parseInt(numberOfFields || 0);
+    const newVal = Number(numberOfFields || 0);
     const oldVal = fields.length;
     if (newVal > oldVal) {
       for (let i = oldVal; i < newVal; i++) {
@@ -279,7 +279,6 @@ const AddPaymentModal = (props:any) => {
                   <div className="form-group flex items-center justify-between">
                     <label className="mr-2">Number of Fields</label>
                     <select
-                      name="numberOfFields"
                       {...register("numberOfFields")}
                       className={`p-[8px] border rounded-[8px] max-w-[150px] outline-none w-full block border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] `}
                     >
@@ -304,7 +303,7 @@ const AddPaymentModal = (props:any) => {
                       name={`paymentFields[${i}][label]`}
                       id="label"
                       placeholder="Label"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].label && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i]?.label && "border-red-dark"}`}
                     />
                     <input
                       type="text"
@@ -312,7 +311,7 @@ const AddPaymentModal = (props:any) => {
                       name={`paymentFields[${i}][name]`}
                       id="name"
                       placeholder="name"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].name && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i]?.name && "border-red-dark"}`}
                     />
                     <input
                       type="text"
@@ -320,7 +319,7 @@ const AddPaymentModal = (props:any) => {
                       name={`paymentFields[${i}][type]`}
                       id="type"
                       placeholder="type"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].type && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i]?.type && "border-red-dark"}`}
                     />
                     <input
                       type="text"
@@ -328,7 +327,7 @@ const AddPaymentModal = (props:any) => {
                       name={`paymentFields[${i}][placeholder]`}
                       id="placeholder"
                       placeholder="placeholder"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].placeholder && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i]?.placeholder && "border-red-dark"}`}
                     />
                     <input
                       type="text"
@@ -336,7 +335,7 @@ const AddPaymentModal = (props:any) => {
                       name={`paymentFields[${i}][ifoptional]`}
                       id="ifoptional"
                       placeholder="ifoptional"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].ifoptional && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i]?.ifoptional && "border-red-dark"}`}
                     />
                     <input
                       type="text"
@@ -344,7 +343,7 @@ const AddPaymentModal = (props:any) => {
                       name={`paymentFields[${i}][required]`}
                       id="required"
                       placeholder="required"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].required && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i]?.required && "border-red-dark"}`}
                     />
                     <input
                       type="text"
@@ -352,7 +351,7 @@ const AddPaymentModal = (props:any) => {
                       name={`paymentFields[${i}][err_msg]`}
                       id="err_msg"
                       placeholder="err_msg"
-                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i].err_msg && "border-red-dark"}`}
+                      className={`sm-text input-cta2 w-full !px-[10px] !h-[40px] !rounded-[5px] !py-[8px] border border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] ${errors?.paymentFields?.[i]?.err_msg && "border-red-dark"}`}
                     />
                   </div>
 
