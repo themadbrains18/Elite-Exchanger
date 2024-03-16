@@ -280,8 +280,9 @@ const WalletList = (props: propsData): any => {
                         </div>
                       </th> */}
                       <th className="py-5 max-[1023px]:hidden ">
-                        <div className=" ">
+                        <div className=" flex lg:justify-start justify-end">
                           <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Action</p>
+                          <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                         </div>
                       </th>
                     </tr>
@@ -725,8 +726,10 @@ const WalletList = (props: propsData): any => {
                         </div>
                       </th>
                       <th className="py-5 max-[1023px]:hidden ">
-                        <div className=" ">
+                        <div className="flex lg:justify-start justify-end ">
                           <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">Action</p>
+                          <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+
                         </div>
                       </th>
                     </tr>
