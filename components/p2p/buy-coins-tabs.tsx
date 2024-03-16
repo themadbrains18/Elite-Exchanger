@@ -16,7 +16,7 @@ const BuyCoinsTabs = (props: activeSection) => {
   const [active, setActive] = useState(1);
   const [firstCurrency, setFirstCurrency] = useState("");
   const [selectedToken, setSelectedToken] = useState(Object);
-  const [posts, setPosts] = useState(props.posts);
+  const [posts, setPosts] = useState(props?.posts);
   const [listWithCoin, setListWithCoin] = useState(props.coinList);
   const [paymentId, setPaymentId] = useState("");
 
@@ -56,7 +56,7 @@ const BuyCoinsTabs = (props: activeSection) => {
     let filter_posts:any = [];
     console.log(id,"==id");
     
-    for (const post of props.posts) {
+    for (const post of props?.posts) {
       console.log(post,"=jhdjhf");
       
       for (const upid of post.user.user_payment_methods) {

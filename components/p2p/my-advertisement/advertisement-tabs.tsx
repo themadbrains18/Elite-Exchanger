@@ -21,14 +21,14 @@ const AdvertisementTabs = (props: propsData) => {
 
     const [firstCurrency, setFirstCurrency] = useState('');
     const [selectedToken, setSelectedToken] = useState(Object);
-    // const [posts, setPosts] = useState(props.posts);
+    // const [posts, setPosts] = useState(props?.posts);
     const [paymentId, setPaymentId] = useState('');
 
     const [publishedData, setPublishedData] = useState(props.published);
 
     const [unpublishedData, setUnpublishedData] = useState(props.unpublished);
 
-    const [adsHistory, setAdsHistory] = useState(props.posts);
+    const [adsHistory, setAdsHistory] = useState(props?.posts);
 
     const [startDate, setStartDate] = useState();
 
@@ -76,7 +76,7 @@ const AdvertisementTabs = (props: propsData) => {
                 filterRecord = props.unpublished;
             }
             if (active === 3) {
-                filterRecord = props.posts;
+                filterRecord = props?.posts;
             }
 
             let filter_posts = filterRecord.filter((item: any) => {
@@ -125,7 +125,7 @@ const AdvertisementTabs = (props: propsData) => {
             filterRecord = props.unpublished;
         }
         if (active === 3) {
-            filterRecord = props.posts;
+            filterRecord = props?.posts;
         }
 
 
@@ -172,7 +172,7 @@ const AdvertisementTabs = (props: propsData) => {
             filterRecord = props.unpublished;
         }
         if (active === 3) {
-            filterRecord = props.posts;
+            filterRecord = props?.posts;
         }
 
         if (paymentId !== '') {

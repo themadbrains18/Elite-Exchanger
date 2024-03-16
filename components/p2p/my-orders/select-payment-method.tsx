@@ -89,7 +89,7 @@ const SlectPaymentMethod = (props: propsData) => {
                                         </Fragment>
                                         <span className='text-banner-text'>{elem.master_payment_method?.payment_method}</span>
                                     </label>
-                                    <p className='info-14-18 !text-banner-heading dark:!text-white md:block hidden'>( BankName@{elem.master_payment_method?.payment_method} )</p>
+                                    {/* <p className='info-14-18 !text-banner-heading dark:!text-white md:block hidden'>( BankName@{elem.master_payment_method?.payment_method} )</p> */}
                                 </div>
                                 <div className='cursor-pointer' onClick={(e) => { showOpt(e) }}>
                                     <IconsComponent type='downArrow' hover={false} active={false} />

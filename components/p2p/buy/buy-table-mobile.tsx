@@ -14,7 +14,7 @@ const BuyTableMobile = (props: activeSection) => {
     const { mode } = useContext(Context);
 
 
-    let data = props.posts;
+    let data = props?.posts;
 
     let itemsPerPage = 10;
     const endOffset = itemOffset + itemsPerPage;

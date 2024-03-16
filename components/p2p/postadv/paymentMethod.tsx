@@ -61,7 +61,7 @@ const PaymentMethod = (props: activeSection) => {
   const [list, setList] = useState([]);
   const [id, setId] = useState();
   const { data: session } = useSession();
-
+  const [inputValue, setInputValue] = useState('');
   // let list = props.userPaymentMethod;
 
   const router = useRouter();
@@ -131,6 +131,12 @@ const PaymentMethod = (props: activeSection) => {
   };
 
   const checkBalnce = (e: any) => {
+    const value = e.target.value;
+
+    // Check if the value matches the pattern (up to 5 digits after the decimal point)
+    if (/^\d*\.?\d{0,6}$/.test(value)) {
+      setInputValue(value);
+    }
     if (e.target.value > props.assetsBalance) {
       setError("quantity", {
         type: "custom",
@@ -309,6 +315,7 @@ const PaymentMethod = (props: activeSection) => {
                               type="number"
                               id="quantity"
                               step={0.000001}
+                              value={inputValue} 
                               {...register("quantity")}
                               name="quantity"
                               onChange={(e) => checkBalnce(e)}
@@ -335,7 +342,7 @@ const PaymentMethod = (props: activeSection) => {
                     <div className="mt-10">
                       <p className="info-10-14 text-end">
                         {" "}
-                        = {props.assetsBalance} {props?.selectedAssets?.symbol}
+                        = {Number(props.assetsBalance).toFixed(6)} {props?.selectedAssets?.symbol}
                       </p>
                     </div>
                   </div>

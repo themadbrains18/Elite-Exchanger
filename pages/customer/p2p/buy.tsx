@@ -19,11 +19,14 @@ interface propsData {
 
 const P2pBuy = (props: propsData) => {
 
+  console.log(props?.posts,"==props?.posts");
+  
+
   const [show1, setShow1] = useState(false);
   const [selectedPost, setSelectedPost] = useState(Object);
   const [newPosts, setNewPosts] = useState([]);
 
-  for (const post of props.posts) {
+  for (const post of props?.posts) {
     let payment_method: any = [];
     for (const upid of post.p_method) {
       post?.User?.user_payment_methods.filter((item: any) => {
@@ -70,7 +73,7 @@ const P2pBuy = (props: propsData) => {
     <P2pLayout>
       <>
       </>
-      <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} posts={newPosts.length > 0 ? newPosts : props.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} />
+      <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} posts={newPosts.length > 0 ? newPosts : props?.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} />
       <BuyPopup show1={show1} setShow1={setShow1} selectedPost={selectedPost} />
     </P2pLayout>
   )
