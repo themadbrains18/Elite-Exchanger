@@ -340,7 +340,7 @@ const Remarks = (props: propsData) => {
 
                     {
                         props.userOrder?.status === 'isCanceled' &&
-                        < button className={`solid-button2 max-w-full sm:max-w-[220px] w-full cursor-auto`}>
+                        < button className={`solid-button2 dark:bg-black-v-1 dark:text-primary max-w-full sm:max-w-[220px] w-full cursor-auto`}>
                             Order Cancelled
                         </button>
                     }

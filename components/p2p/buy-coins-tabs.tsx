@@ -53,14 +53,22 @@ const BuyCoinsTabs = (props: activeSection) => {
   };
 
   const onPaymentMethodChange = (id: any) => {
-    let filter_posts = [];
+    let filter_posts:any = [];
+    console.log(id,"==id");
+    
     for (const post of props.posts) {
-      for (const upid of post.user_p_method) {
+      console.log(post,"=jhdjhf");
+      
+      for (const upid of post.user.user_payment_methods) {
+        console.log(upid,"===upid");
+        
         if (id === upid?.pmid) {
-          filter_posts.push(post);
+            filter_posts.push(post);
+          
         }
       }
     }
+    filter_posts=[...new Set(filter_posts)]
 
     if (firstCurrency !== "") {
       filter_posts = filter_posts.filter((item: any) => {
@@ -68,6 +76,7 @@ const BuyCoinsTabs = (props: activeSection) => {
       });
     }
     setPaymentId(id);
+
     setPosts(filter_posts);
   };
 
