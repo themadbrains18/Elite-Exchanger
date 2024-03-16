@@ -74,42 +74,44 @@ const DesktopTable = (props: dataTypes) => {
     }
 
     const updateAdsStatus = async (postid: string) => {
-        if (status === 'authenticated') {
-            let obj = {
-                post_id: postid,
-                user_id: session?.user?.user_id
+        
+            if (status === 'authenticated') {
+                let obj = {
+                    post_id: postid,
+                    user_id: session?.user?.user_id
+                }
+
+                const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+                let record = encodeURIComponent(ciphertext.toString());
+
+                let putResponse: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/editadvertisement`, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": session?.user?.access_token
+                    },
+                    body: JSON.stringify(record)
+                }).then(response => response.json());
+
+                if (putResponse?.data) {
+
+                    let remainingPost = postList.filter((item: any) => {
+                        return item.id !== putResponse?.data?.result?.id
+                    })
+                    props.updatePublishedPsot(putResponse?.data?.result);
+                    toast.success(`Post ${putResponse?.data?.result?.status=== true?"Active":"Inactive"}  successfully`)
+                    setPostList(remainingPost);
+                    setActive(0);
+                    setShow(false);
+                }
+                else {
+                    toast.error(putResponse?.data)
+                }
             }
-
-            const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-            let record = encodeURIComponent(ciphertext.toString());
-
-            let putResponse: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/editadvertisement`, {
-                method: "PUT",
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": session?.user?.access_token
-                },
-                body: JSON.stringify(record)
-            }).then(response => response.json());
-
-            if (putResponse?.data) {
-
-                let remainingPost = postList.filter((item: any) => {
-                    return item.id !== putResponse?.data?.result?.id
-                })
-                toast.success(`Post ${putResponse?.data?.result?.status=== true?"Active":"Inactive"}  successfully`)
-                setPostList(remainingPost);
-                props.updatePublishedPsot(putResponse?.data?.result);
-                setActive(0);
-                setShow(false);
+            else if (status === 'unauthenticated') {
+                toast.error('Unauthorized user!!')
             }
-            else {
-                toast.error(putResponse?.data)
-            }
-        }
-        else if (status === 'unauthenticated') {
-            toast.error('Unauthorized user!!')
-        }
+        
     }
     
 
@@ -206,9 +208,28 @@ const DesktopTable = (props: dataTypes) => {
                                                     }
                                                 </div>
                                             </td>
-                                            <td className="bg-white dark:bg-d-bg-primary py-5 cursor-pointer">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white' onClick={() => { (props.active === undefined || props.active !== 3) ? updateAdsStatus(item?.id) : '' }}>{item?.status === true ? 'Active' : 'InActive'}</p>
+                                             <td className="bg-white dark:bg-d-bg-primary py-5 cursor-pointer">
+                                                    {/* {item?.status === true ? 'Active' : 'InActive'} */}
+
+                                                    <div className="flex items-center justify-start w-full" >
+                                                        <label htmlFor="toggle" className="flex items-center cursor-pointer">
+                                                            <input type="checkbox" id="toggle" className="sr-only peer" defaultChecked={item?.status}  onChange={() => { (props.active === undefined || props.active !== 3) ? setTimeout(()=>{ updateAdsStatus(item?.id)},1000) : '' }} />
+                                                            <div className={`block relative bg-[#CCCED9] w-[50px] h-[25px] p-1 rounded-full before:absolute before:top-[3px] before:bg-blue-600 before:w-[19px] before:h-[19px] before:p-1 before:rounded-full before:transition-all before:duration-500 before:left-1 peer-checked:before:left-[27px] before:bg-white peer-checked:!bg-primary peer-checked:before:!bg-white `} ></div>
+                                                        </label>
+                                                    </div>
                                             </td>
+                                            {/* <div className="inline-flex items-center">
+  <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
+    <input id="switch-component" type="checkbox"
+      className="absolute w-8 h-4 transition-colors duration-300 rounded-full appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-gray-900 peer-checked:border-gray-900 peer-checked:before:bg-gray-900"
+      disabled />
+    <label htmlFor="switch-component"
+      className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-gray-900 peer-checked:before:bg-gray-900">
+      <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
+        data-ripple-dark="true"></div>
+    </label>
+  </div>
+</div> */}
                                             {(props.active === undefined || props.active !== 3) &&
                                                 <td>
                                                     <div className='flex items-center gap-10'>

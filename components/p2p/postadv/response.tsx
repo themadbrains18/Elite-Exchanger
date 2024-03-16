@@ -25,7 +25,7 @@ interface activeSection {
 }
 
 const Response = (props: activeSection) => {
-  const condition = ["Complete KYC", "Holding More Than 0.01 BTC"];
+  const condition = [{name:"Complete KYC",value:"complete_kyc"}, {name:"Holding More Than 0.01 BTC",value:"min_btc"}];
   // const status = ["Online Right Now", "Online, Manually later"]
 
   const [show, setShow] = useState(false);
@@ -92,8 +92,8 @@ const Response = (props: activeSection) => {
       "status": false,
       "remarks": data?.remarks,
       "auto_reply": data?.auto_reply,
-      "complete_kyc": data?.complete_kyc,
-      "min_btc": data?.min_btc,
+      "complete_kyc":data.condition==="complete_kyc"?true:false,
+      "min_btc": data?.min_btc=="min_btc"?true:false,
       "fundcode": ''
     }
 
@@ -205,7 +205,7 @@ const Response = (props: activeSection) => {
                 {condition?.map((item, index) => {
                   return (
                     <div key={index} className="mb-10 md:mb-20 cursor-pointer">
-                      <input id={`radio${item}`} type="radio" {...register('condition')} onChange={() => selectCondition(item)} value={item} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                      <input id={`radio${item}`} type="radio" {...register('condition')} onChange={() => selectCondition(item.value)} value={item.value} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                       <label
                         htmlFor={`radio${item}`}
                         className="
@@ -233,7 +233,7 @@ const Response = (props: activeSection) => {
                           before:absolute
                           before:z-[1]"
                       >
-                        {item}
+                        {item.name}
                       </label>
                     </div>
                   );

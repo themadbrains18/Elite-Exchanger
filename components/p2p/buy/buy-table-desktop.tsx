@@ -19,7 +19,7 @@ const BuyTableDesktop = (props: activeSection) => {
 
   const { status, data: session } = useSession();
 
-  let data = props.posts;
+  let data = props?.posts || [];
 
   let itemsPerPage = 10;
   const endOffset = itemOffset + itemsPerPage;
