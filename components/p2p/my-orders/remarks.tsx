@@ -47,6 +47,7 @@ const Remarks = (props: propsData) => {
         }
         if(props.userOrder?.status === 'isReleased' &&  props.userOrder?.buy_user_id === session?.user?.user_id){
             toast.info('Assets Released successfully!..')
+            setActive1(true);
         }
 
     }, [props?.orderid, props.userOrder]);
@@ -245,7 +246,7 @@ const Remarks = (props: propsData) => {
                     props.getUserOrders();
                     setShow(false);
                     setActive(false);
-                    setActive1(true)
+                    setActive1(true);
                     const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
                     let orderData = {
                         ws_type: 'order',
