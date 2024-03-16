@@ -212,8 +212,8 @@ const DesktopTable = (props: dataTypes) => {
                                                     {/* {item?.status === true ? 'Active' : 'InActive'} */}
 
                                                     <div className="flex items-center justify-start w-full" >
-                                                        <label htmlFor="toggle" className="flex items-center cursor-pointer">
-                                                            <input type="checkbox" id="toggle" className="sr-only peer" defaultChecked={item?.status}  onChange={() => { (props.active === undefined || props.active !== 3) ? setTimeout(()=>{ updateAdsStatus(item?.id)},1000) : '' }} />
+                                                        <label htmlFor={item?.id} className="flex items-center cursor-pointer">
+                                                            <input type="checkbox" id={item?.id} className="sr-only peer" defaultChecked={item?.status}  onChange={() => { (props.active === undefined || props.active !== 3) && updateAdsStatus(item?.id) }} />
                                                             <div className={`block relative bg-[#CCCED9] w-[50px] h-[25px] p-1 rounded-full before:absolute before:top-[3px] before:bg-blue-600 before:w-[19px] before:h-[19px] before:p-1 before:rounded-full before:transition-all before:duration-500 before:left-1 peer-checked:before:left-[27px] before:bg-white peer-checked:!bg-primary peer-checked:before:!bg-white `} ></div>
                                                         </label>
                                                     </div>
