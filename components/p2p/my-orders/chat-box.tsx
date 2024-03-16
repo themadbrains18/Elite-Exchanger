@@ -119,7 +119,7 @@ const ChatBox = (props: propsData) => {
 
     }
 
-    const profileImg = props?.sellerUser?.profile && props?.sellerUser?.profile?.image !== null ? props?.sellerUser?.profile?.image : `/assets/orders/user.png`;
+    const profileImg = props?.sellerUser?.profile && props?.sellerUser?.profile?.image !== null ? props?.sellerUser?.profile?.image : `${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`;
 
     return (
         <>

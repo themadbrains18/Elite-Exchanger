@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
 import { signOut, useSession } from 'next-auth/react';
+import TradingPasswordAds from '../postadv/tradingPasswordAds';
 
 interface propsData {
     paymentMethod: any;
@@ -17,11 +18,18 @@ const Remarks = (props: propsData) => {
     const [timeLeft, setTimer] = useState('');
 
     const { status, data: session } = useSession();
+    const [active, setActive] = useState(false);
+    const [show, setShow] = useState(false);
 
     const Ref: any = useRef(null);
 
+    const [finalFormData, setFinalFormData] = useState({
+        "order_id": "",
+        "user_id": "",
+        "fundcode": ''
+    });
+
     // console.log(props.userOrder,'=========user order==========');
-    
 
     useEffect(() => {
 
@@ -33,7 +41,7 @@ const Remarks = (props: propsData) => {
 
         orderTimeCalculation();
 
-    }, [props?.orderid]);
+    }, [props?.orderid, props.userOrder]);
 
     const orderTimeCalculation = async () => {
         let deadline = new Date(props.userOrder?.createdAt);
@@ -51,7 +59,6 @@ const Remarks = (props: propsData) => {
             await orderCancel();
         }
     }
-
 
     /**
      * calculate time left for order to payment pay by buyer
@@ -203,45 +210,63 @@ const Remarks = (props: propsData) => {
         let obj = {
             "order_id": props.orderid,
             "user_id": session?.user?.user_id,
-            "fundcode": '123456'
+            "fundcode": ''
         }
 
-        if (status === 'authenticated') {
-            const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-            let record = encodeURIComponent(ciphertext.toString());
+        setFinalFormData(obj);
+        setShow(true);
+        setActive(true);
 
-            let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/updatemethod`, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": session?.user?.access_token
-                },
-                body: JSON.stringify(record)
-            })
 
-            let res = await responseData.json();
+    }
 
-            if (res?.data?.status === 200) {
-                props.getUserOrders();
-                const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-                let orderData = {
-                    ws_type: 'order',
-                    orderid: props.orderid
+    const finalSubmitAds = async (pass: string) => {
+        try {
+
+            finalFormData.fundcode = pass;
+
+            if (status === 'authenticated') {
+                const ciphertext = AES.encrypt(JSON.stringify(finalFormData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+                let record = encodeURIComponent(ciphertext.toString());
+
+                let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/updatemethod`, {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": session?.user?.access_token
+                    },
+                    body: JSON.stringify(record)
+                })
+
+                let res = await responseData.json();
+
+                if (res?.data?.status === 200) {
+                    props.getUserOrders();
+                    setShow(false);
+                    setActive(false);
+                    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
+                    let orderData = {
+                        ws_type: 'order',
+                        orderid: props.orderid
+                    }
+                    websocket.onopen = () => {
+                        websocket.send(JSON.stringify(orderData));
+                    }
+                    toast.success(res?.data?.data?.message);
+                    if (Ref.current) clearInterval(Ref.current);
                 }
-                websocket.onopen = () => {
-                    websocket.send(JSON.stringify(orderData));
+                else {
+                    toast.error(res?.data?.data);
+                    return;
                 }
-                toast.success(res?.data?.data?.message);
-                if (Ref.current) clearInterval(Ref.current);
             }
             else {
-                toast.error(res?.data?.data);
-                return;
+                toast.error('Unauthenticated User');
+                signOut();
             }
-        }
-        else {
-            toast.error('Unauthenticated User');
-            signOut();
+
+        } catch (error) {
+
         }
     }
 
@@ -341,6 +366,10 @@ const Remarks = (props: propsData) => {
 
                 </div>
             </div >
+
+            {active &&
+                <TradingPasswordAds setActive={setActive} setShow={setShow} show={show} finalSubmitAds={finalSubmitAds} />
+            }
         </>
 
     )

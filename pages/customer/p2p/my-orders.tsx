@@ -38,9 +38,6 @@ const MyOrders = (props: propsData) => {
       const data = JSON.parse(event.data).data;
       let eventDataType = JSON.parse(event.data).type;
       if (eventDataType === "order") {
-
-        // console.log(data,'==========socket order data=============');
-        
         getOrderByOrderId(data?.id);
         // setOrderDetail(data)
       }
@@ -89,9 +86,9 @@ const MyOrders = (props: propsData) => {
                 <SlectPaymentMethod userOrder={order} setPaymentMethod={setPaymentMethod} />
                 <Remarks paymentMethod={paymentMethod} orderid={order?.id} userOrder={order} getUserOrders={getUserOrders} />
               </div>
-              <ChatBox sellerUser={order?.user_post?.user?.id === props.session?.user?.user_id ? order?.User : order?.user_post?.user} order={order} />
+              <ChatBox sellerUser={order?.user_post?.user?.id === props.session?.user?.user_id ? order?.user : order?.user_post?.user} order={order} />
             </div>
-          </>
+          </> 
           :
           <OrdersTabs orderList={newOrderList} setOrderId={setOrderId} />
       }
