@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
 import { signOut, useSession } from 'next-auth/react';
 import TradingPasswordAds from '../postadv/tradingPasswordAds';
+import Successfull from '@/components/snippets/successfull';
 
 interface propsData {
     paymentMethod: any;
@@ -19,6 +20,7 @@ const Remarks = (props: propsData) => {
 
     const { status, data: session } = useSession();
     const [active, setActive] = useState(false);
+    const [active1, setActive1] = useState(false);
     const [show, setShow] = useState(false);
 
     const Ref: any = useRef(null);
@@ -244,6 +246,7 @@ const Remarks = (props: propsData) => {
                     props.getUserOrders();
                     setShow(false);
                     setActive(false);
+                    setActive1(true)
                     const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
                     let orderData = {
                         ws_type: 'order',
@@ -252,7 +255,7 @@ const Remarks = (props: propsData) => {
                     websocket.onopen = () => {
                         websocket.send(JSON.stringify(orderData));
                     }
-                    toast.success(res?.data?.data?.message);
+                    // toast.success(res?.data?.data?.message);
                     if (Ref.current) clearInterval(Ref.current);
                 }
                 else {
@@ -369,6 +372,10 @@ const Remarks = (props: propsData) => {
 
             {active &&
                 <TradingPasswordAds setActive={setActive} setShow={setShow} show={show} finalSubmitAds={finalSubmitAds} />
+            }
+            {
+                active1 && 
+                  <Successfull setShow={setShow} setActive={setActive1} type="release" />
             }
         </>
 

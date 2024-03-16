@@ -12,15 +12,25 @@ const Successfull = (props: activeSection) => {
   const { mode } = useContext(Context);
 
   const closePopup = () => {
-    props.setShow(false), 
-    props.setActive(0);
-  }
+    props.setShow(false), props.setActive(0);
+  };
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
   return (
-    <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+    <div
+      ref={wrapperRef}
+      className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+    >
       <div className="flex items-center justify-between ">
-        <p className="sec-title">{props?.type === "success" ? "Payment Method Setting" : "Risk Warning"}</p>
+        <p className="sec-title">
+          {props?.type === "success"
+            ? "Payment Method Setting"
+            : "Risk Warning"}
+            {
+              props?.type==="release"&&
+              "Assets Release"
+            }
+        </p>
         <svg
           onClick={() => {
             props.setShow(false), props.setActive(0);
@@ -46,8 +56,16 @@ const Successfull = (props: activeSection) => {
           />
         </svg>
       </div>
-      <p className="py-40 info-14-18">{props?.type === "success" ? "New payment method has been added successfully." : "Before releasing the crypto, please confirm that you have received the payment and have checked if the amount and payers name match those of the order if payment information is inconsistent or there arise a dispute , please immediatly contact the customer support and do not release the crypto."}</p>
-      {props?.type === "success" ? (
+      <p className="py-40 info-14-18">
+        {props?.type === "success"
+          ? "New payment method has been added successfully."
+          : "Before releasing the crypto, please confirm that you have received the payment and have checked if the amount and payers name match those of the order if payment information is inconsistent or there arise a dispute , please immediatly contact the customer support and do not release the crypto."}
+      </p>
+
+      {props?.type === "release" && (
+        <p className="py-40 info-14-18"> Assets Released successfully.</p>
+      )}
+      {props?.type === "success" || props?.type === "release" ? (
         <button
           className="solid-button w-full"
           onClick={() => {
@@ -66,7 +84,7 @@ const Successfull = (props: activeSection) => {
               props.setShow(false);
             }}
           >
-           Cancel 
+            Cancel
           </button>
           <button
             className="solid-button w-full"
@@ -75,7 +93,7 @@ const Successfull = (props: activeSection) => {
               props.setShow(false);
             }}
           >
-           Confirm
+            Confirm
           </button>
         </div>
       )}
