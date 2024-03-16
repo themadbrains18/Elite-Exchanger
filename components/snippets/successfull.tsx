@@ -23,13 +23,12 @@ const Successfull = (props: activeSection) => {
     >
       <div className="flex items-center justify-between ">
         <p className="sec-title">
+       
           {props?.type === "success"
             ? "Payment Method Setting"
+            : props?.type==="release"? "Assets Release"
             : "Risk Warning"}
-            {
-              props?.type==="release"&&
-              "Assets Release"
-            }
+          
         </p>
         <svg
           onClick={() => {
@@ -59,12 +58,11 @@ const Successfull = (props: activeSection) => {
       <p className="py-40 info-14-18">
         {props?.type === "success"
           ? "New payment method has been added successfully."
+          :props?.type === "release" ?"Assets Released successfully."
           : "Before releasing the crypto, please confirm that you have received the payment and have checked if the amount and payers name match those of the order if payment information is inconsistent or there arise a dispute , please immediatly contact the customer support and do not release the crypto."}
       </p>
 
-      {props?.type === "release" && (
-        <p className="py-40 info-14-18"> Assets Released successfully.</p>
-      )}
+    
       {props?.type === "success" || props?.type === "release" ? (
         <button
           className="solid-button w-full"

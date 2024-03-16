@@ -13,7 +13,7 @@ import TradingPasswordAds from "./tradingPasswordAds";
 const schema = yup.object().shape({
   condition: yup.string().optional().default(''),
   status: yup.string().optional().default(''),
-  notes: yup.string().optional().default(''),
+  remarks: yup.string().optional().default(''),
   auto_reply: yup.string().optional().default('')
 });
 
@@ -25,8 +25,8 @@ interface activeSection {
 }
 
 const Response = (props: activeSection) => {
-  const condition = ["Complete KYC", "Registered 0 day(s) ago", "Holding More The 0.01 BTC"];
-  const status = ["Online Right Now", "Online, Manually later"]
+  const condition = ["Complete KYC", "Holding More Than 0.01 BTC"];
+  // const status = ["Online Right Now", "Online, Manually later"]
 
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(false);
@@ -42,8 +42,10 @@ const Response = (props: activeSection) => {
     "payment_time": "",
     "condition": "",
     "status": false,
-    "notes": "",
+    "remarks": "",
     "auto_reply": "",
+    "complete_kyc": false,
+    "min_btc": false,
     "fundcode": ''
   });
 
@@ -68,6 +70,8 @@ const Response = (props: activeSection) => {
 
   const onHandleSubmit = async (data: any) => {
 
+    console.log(data.condition);
+    
     let p_method = [];
 
     for (const pm of props?.step2Data?.p_method) {
@@ -86,8 +90,10 @@ const Response = (props: activeSection) => {
       "payment_time": props.step2Data?.payment_time,
       "condition": data?.condition,
       "status": false,
-      "notes": data?.notes,
+      "remarks": data?.remarks,
       "auto_reply": data?.auto_reply,
+      "complete_kyc": data?.complete_kyc,
+      "min_btc": data?.min_btc,
       "fundcode": ''
     }
 
@@ -109,7 +115,7 @@ const Response = (props: activeSection) => {
 
     // formData.append("condition", data?.condition);
     // formData.append("status", data?.status);
-    // formData.append("notes", data?.notes);
+    // formData.append("remarks", data?.remarks);
     // formData.append("auto_reply", data?.auto_reply);
 
   }
@@ -175,11 +181,11 @@ const Response = (props: activeSection) => {
               <div className="w-full">
                 <p className="info-10-14">Remarks (Optional)</p>
                 <div className="border mt-10 border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px]">
-                  <input type="text" id="notes" {...register('notes')} name="notes" className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Type " />
+                  <input type="text" id="remarks" {...register('remarks')} name="remarks" className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Type " />
                 </div>
               </div>
-              {errors?.notes && (
-                <p style={{ color: "#ff0000d1" }}>{errors?.notes?.message}</p>
+              {errors?.remarks && (
+                <p style={{ color: "#ff0000d1" }}>{errors?.remarks?.message}</p>
               )}
               <div className="w-full">
                 <p className="info-10-14">Auto-Reply (Optional)</p>
@@ -234,7 +240,7 @@ const Response = (props: activeSection) => {
                 })}
               </div>
 
-              <div className="w-full">
+              {/* <div className="w-full">
                 <p className="sm-text mb-20">Status</p>
                 <div>
                   {status?.map((item, index) => {
@@ -276,7 +282,7 @@ const Response = (props: activeSection) => {
                     );
                   })}
                 </div>
-              </div>
+              </div> */}
 
             </div>
             {errors?.condition && (

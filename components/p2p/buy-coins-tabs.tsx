@@ -32,7 +32,7 @@ const BuyCoinsTabs = (props: activeSection) => {
       setSelectedToken(token[0]);
 
       let postData = [];
-      let filter_posts = props.posts.filter((item: any) => {
+      let filter_posts = props?.posts.filter((item: any) => {
         return token[0]?.id === item?.token_id;
       });
 

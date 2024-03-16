@@ -232,7 +232,7 @@ const EditPaymentMethod = (props: activeSection) => {
             <div className="md:mt-30 py-20 px-10 flex gap-10 items-center">
               <Image src={`/assets/payment-methods/gpay.png`} alt="payment image" width={32} height={32} />
               <p className="sec-text !text-h-primary dark:!text-white !font-medium">Google Pay</p>
-              <p className="sec-text !text-h-primary dark:!text-white">15 Min </p>
+              <p className="sec-text !text-h-primary dark:!text-white">15 Minutes </p>
             </div>
             <div className="md:mt-50 mt-20 flex sm:gap-30 gap-10 sm:flex-row flex-col">
               <button type="button" className="solid-button2 max-w-full sm:max-w-[262px] w-full" onClick={() => { props?.setStep(1) }}>Previous</button>
