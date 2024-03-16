@@ -42,10 +42,10 @@ const Response = (props: activeSection) => {
     "payment_time": "",
     "condition": "",
     "status": false,
-    "remarks": "",
-    "auto_reply": "",
-    "complete_kyc": false,
-    "min_btc": false,
+    // "remarks": "",
+    // "auto_reply": "",
+    // "complete_kyc": false,
+    // "min_btc": false,
     "fundcode": ''
   });
 
@@ -90,10 +90,10 @@ const Response = (props: activeSection) => {
       "payment_time": props.step2Data?.payment_time,
       "condition": data?.condition,
       "status": false,
-      "remarks": data?.remarks,
-      "auto_reply": data?.auto_reply,
-      "complete_kyc": data?.complete_kyc,
-      "min_btc": data?.min_btc,
+      // "remarks": data?.remarks,
+      // "auto_reply": data?.auto_reply,
+      // "complete_kyc": data?.complete_kyc,
+      // "min_btc": data?.min_btc,
       "fundcode": ''
     }
 
