@@ -34,14 +34,20 @@ const Remarks = (props: propsData) => {
     // console.log(props.userOrder,'=========user order==========');
 
     useEffect(() => {
-
         const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-
         websocket.onopen = () => {
             console.log('connected');
         }
-
         orderTimeCalculation();
+        if(props.userOrder?.status === 'isCompleted' && props.userOrder?.sell_user_id === session?.user?.user_id){
+            toast.info('Buyer Sned you payment.Please Release Assets.')
+        }
+        if(props.userOrder?.status === 'isProcess' && props.userOrder?.sell_user_id === session?.user?.user_id){
+            toast.info('Third party user buy assets')
+        }
+        if(props.userOrder?.status === 'isReleased' &&  props.userOrder?.buy_user_id === session?.user?.user_id){
+            toast.info('Assets Released successfully!..')
+        }
 
     }, [props?.orderid, props.userOrder]);
 
@@ -156,8 +162,6 @@ const Remarks = (props: propsData) => {
      * @returns 
      */
     const orderCancel = async () => {
-
-
         let obj = {
             "order_id": props.orderid,
             "user_id": props.userOrder?.buy_user_id
@@ -195,7 +199,6 @@ const Remarks = (props: propsData) => {
                 toast.error(res.data.data);
                 return;
             }
-
         }
         else if (status === 'unauthenticated') {
             toast.error('Unauthenticated User');
@@ -208,18 +211,14 @@ const Remarks = (props: propsData) => {
      * @returns 
      */
     const orderReleased = async () => {
-
         let obj = {
             "order_id": props.orderid,
             "user_id": session?.user?.user_id,
             "fundcode": ''
         }
-
         setFinalFormData(obj);
         setShow(true);
         setActive(true);
-
-
     }
 
     const finalSubmitAds = async (pass: string) => {
@@ -374,8 +373,8 @@ const Remarks = (props: propsData) => {
                 <TradingPasswordAds setActive={setActive} setShow={setShow} show={show} finalSubmitAds={finalSubmitAds} />
             }
             {
-                active1 && 
-                  <Successfull setShow={setShow} setActive={setActive1} type="release" />
+                active1 &&
+                <Successfull setShow={setShow} setActive={setActive1} type="release" />
             }
         </>
 
