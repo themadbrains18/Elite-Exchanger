@@ -288,7 +288,7 @@ const ResetPassword = () => {
       )}
         {
       confirmation &&
-      <ConfirmationModel title="Reset Password" message="After reset password, transactions will be hold for 24 hours for security reasons" actionPerform={confirmOtp} show={layout} setShow={setLayout} setActive={setConfirmation}/>
+      <ConfirmationModel title="Reset Password" message="After reset password, Withdrawal will be restricted for 24 hours after changing your password." actionPerform={confirmOtp} show={layout} setShow={setLayout} setActive={setConfirmation}/>
     }
       {step === 1 && (
         <Verification
