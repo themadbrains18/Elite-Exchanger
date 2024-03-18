@@ -42,7 +42,7 @@ const WalletList = (props: propsData): any => {
   const [overlay, setOverlay] = useState(false);
   const [popupMode, setPopupMode] = useState(0);
 
-  const {status, data:session} = useSession();
+  const { status, data: session } = useSession();
   const router = useRouter();
   let itemsPerPage = 10;
 
@@ -98,7 +98,7 @@ const WalletList = (props: propsData): any => {
     const futureOffset = futureItemOffset + itemsCoinsPerPage;
     const futureWalletItems = futureAssets.slice(futureItemOffset, futureOffset);
     setFutureWalletItems(futureWalletItems)
-  }, [itemOffset, withdrawitemOffset, coinItemOffset, futureItemOffset,props.coinList]);
+  }, [itemOffset, withdrawitemOffset, coinItemOffset, futureItemOffset, props.coinList]);
 
   //==========================================================
   //=============Spot wallet pagging start==================
@@ -335,17 +335,25 @@ const WalletList = (props: propsData): any => {
                           </td> */}
                           <td className="max-[1023px]:hidden ">
                             <div className="flex items-center gap-[10px]">
-                              <button onClick={() => { setShow1(1); setSelectedCoin(item.token !== null ? item?.token : item?.global_token); }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                              <button onClick={() => {
+                                const expire = new Date(`${session?.user?.pwdupdatedAt}`).getTime();
+                                const updateDate = Date.now();
+                                let expireDate = Math.floor(expire / 1000);
+                                let currentDate = Math.floor(updateDate / 1000);
+                                if (currentDate >= expireDate) {
+                                  setShow1(1); setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                                }
+                                else {
+                                  toast.warning('You cannot do any action next 24 hours');
+                                }
+
+                              }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Deposit</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
                               <button onClick={() => {
-                               
-                                console.log('------here withdarw');
-                                
                                 const expire = new Date(`${session?.user?.pwdupdatedAt}`).getTime();
                                 const updateDate = Date.now();
-                          
                                 let expireDate = Math.floor(expire / 1000);
                                 let currentDate = Math.floor(updateDate / 1000);
                                 if (currentDate >= expireDate) {
@@ -353,7 +361,7 @@ const WalletList = (props: propsData): any => {
                                   setShow1(2);
                                   setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
                                 }
-                                else{
+                                else {
                                   toast.warning('You cannot do any action next 24 hours');
                                 }
                               }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
@@ -372,9 +380,19 @@ const WalletList = (props: propsData): any => {
                               </button>
 
                               <button onClick={() => {
-                                setSelectedCoin(item?.token !== null ? item?.token : item?.global_token);
-                                setSelectedCoinBalance(item?.balance);
-                                setShow1(3);
+                                const expire = new Date(`${session?.user?.pwdupdatedAt}`).getTime();
+                                const updateDate = Date.now();
+                                let expireDate = Math.floor(expire / 1000);
+                                let currentDate = Math.floor(updateDate / 1000);
+                                if (currentDate >= expireDate) {
+                                  setSelectedCoin(item?.token !== null ? item?.token : item?.global_token);
+                                  setSelectedCoinBalance(item?.balance);
+                                  setShow1(3);
+                                }
+                                else {
+                                  toast.warning('You cannot do any action next 24 hours');
+                                }
+                                
                               }} disabled={!cursor} className={` max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  ${cursor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
                                 <span className="text-primary block">Staking</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
@@ -484,10 +502,10 @@ const WalletList = (props: propsData): any => {
                               <button onClick={() => {
 
                                 console.log('------here withdarw');
-                                
+
                                 const expire = new Date(`${session?.user?.pwdupdatedAt}`).getTime();
                                 const updateDate = Date.now();
-                          
+
                                 let expireDate = Math.floor(expire / 1000);
                                 let currentDate = Math.floor(updateDate / 1000);
                                 if (currentDate >= expireDate) {
@@ -495,10 +513,10 @@ const WalletList = (props: propsData): any => {
                                   setShow1(2);
                                   setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
                                 }
-                                else{
+                                else {
                                   toast.warning('You cannot do any action next 24 hours');
                                 }
-                                
+
                               }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Withdraw</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
