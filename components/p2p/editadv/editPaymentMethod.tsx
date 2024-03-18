@@ -34,6 +34,9 @@ const EditPaymentMethod = (props: activeSection) => {
   const [active, setActive] = useState(0)
   const [formMethod, setFormMethod] = useState();
   const [list, setList] = useState(props.userPaymentMethod);
+  const [inputValue, setInputValue] = useState(0.000000);
+  const [minInputValue, setMinInputValue] = useState(0.000000);
+  const [maxInputValue, setMaxInputValue] = useState(0.000000);
 
   useEffect(()=>{
     setValue('quantity', props?.editPost?.quantity);
@@ -81,6 +84,10 @@ const EditPaymentMethod = (props: activeSection) => {
   }
 
   const checkBalnce = (e: any) => {
+    const value = e.target.value;
+    if (/^\d*\.?\d{0,6}$/.test(value)) {
+      setInputValue(value);
+    }
     if (e.target.value > props.assetsBalance) {
       setError("quantity", {
         type: "custom",
@@ -90,9 +97,18 @@ const EditPaymentMethod = (props: activeSection) => {
     }
     else {
       setValue('max_limit', props.price * e.target.value);
+      setMaxInputValue(Number(props.price) * Number(e.target.value))
       clearErrors('quantity');
     }
   }
+
+  const checkInput=(e:any,type:string)=>{
+    const value = e.target.value;
+    if (/^\d*\.?\d{0,6}$/.test(value)) {
+      type==="min"?setMinInputValue(value):setMaxInputValue(value);
+    }
+  }
+
 
   return (
     <>
@@ -168,7 +184,7 @@ const EditPaymentMethod = (props: activeSection) => {
                   <div className="border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px]">
                     <div className="flex items-center cursor-pointer">
                       <div className="w-full">
-                        <input type="number" id="quantity" step={0.000001} {...register('quantity')} name="quantity" onChange={(e) => checkBalnce(e)} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Quntity" />
+                        <input type="number" id="quantity" step={0.000001}  value={inputValue}  {...register('quantity')} name="quantity" onChange={(e) => checkBalnce(e)} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Quntity" />
                       </div>
 
                       <div className="pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] flex items-center">
@@ -192,7 +208,7 @@ const EditPaymentMethod = (props: activeSection) => {
                   <div className="border  border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px]">
                     <div className="flex items-center cursor-pointer ">
                       <div className="w-full">
-                        <input type="number" id="min_limit" step={0.000001} {...register('min_limit')} name="min_limit" className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Min. Amount" />
+                        <input type="number" id="min_limit" step={0.000001} value={minInputValue} {...register('min_limit')} onChange={(e)=>{checkInput(e,'min')}} name="min_limit" className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Min. Amount" />
                       </div>
 
                       <div className="pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] flex items-center">
@@ -212,7 +228,7 @@ const EditPaymentMethod = (props: activeSection) => {
                   <div className="border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px]">
                     <div className="flex items-center cursor-pointer">
                       <div className="w-full">
-                        <input type="number" id="max_limit" step={0.000001} {...register('max_limit')} name="max_limit" className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Max. Amount" />
+                        <input type="number" id="max_limit" step={0.000001} value={maxInputValue}{...register('max_limit')} onChange={(e)=>{checkInput(e,'max')}} name="max_limit" className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Max. Amount" />
                       </div>
 
                       <div className="pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] flex items-center">

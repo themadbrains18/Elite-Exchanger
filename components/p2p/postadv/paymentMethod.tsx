@@ -61,7 +61,9 @@ const PaymentMethod = (props: activeSection) => {
   const [list, setList] = useState([]);
   const [id, setId] = useState();
   const { data: session } = useSession();
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(0.000000);
+  const [minInputValue, setMinInputValue] = useState(0.000000);
+  const [maxInputValue, setMaxInputValue] = useState(0.000000);
   // let list = props.userPaymentMethod;
 
   const router = useRouter();
@@ -145,6 +147,7 @@ const PaymentMethod = (props: activeSection) => {
       return;
     } else {
       setValue("max_limit", props.price * e.target.value);
+      setMaxInputValue(Number(props.price) * Number(e.target.value))
       clearErrors("quantity");
     }
   };
@@ -177,6 +180,14 @@ const PaymentMethod = (props: activeSection) => {
       console.log(error, "=error");
     }
   };
+
+  const checkInput=(e:any,type:string)=>{
+    const value = e.target.value;
+    if (/^\d*\.?\d{0,6}$/.test(value)) {
+      type==="min"?setMinInputValue(value):setMaxInputValue(value);
+    }
+  }
+
 
   return (
     <>
@@ -358,6 +369,8 @@ const PaymentMethod = (props: activeSection) => {
                               id="min_limit"
                               step={0.000001}
                               {...register("min_limit")}
+                              value={minInputValue}
+                              onChange={(e)=>{checkInput(e,'min')}}
                               name="min_limit"
                               className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white"
                               placeholder="Enter Min. Amount"
@@ -393,6 +406,8 @@ const PaymentMethod = (props: activeSection) => {
                               step={0.000001}
                               {...register("max_limit")}
                               name="max_limit"
+                              value={maxInputValue}
+                              onChange={(e)=>{checkInput(e,'max')}}
                               className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white"
                               placeholder="Enter Max. Amount"
                             />
