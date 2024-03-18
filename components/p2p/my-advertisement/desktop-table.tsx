@@ -213,23 +213,12 @@ const DesktopTable = (props: dataTypes) => {
 
                                                     <div className="flex items-center justify-start w-full" >
                                                         <label htmlFor={item?.id} className="flex items-center cursor-pointer">
-                                                            <input type="checkbox" id={item?.id} className="sr-only peer" defaultChecked={item?.status}  onChange={() => { (props.active === undefined || props.active !== 3) && updateAdsStatus(item?.id) }} />
+                                                            <input type="checkbox" id={item?.id} className="sr-only peer" checked={item?.status}  onChange={() => { (props.active === undefined || props.active !== 3) && updateAdsStatus(item?.id) }} />
                                                             <div className={`block relative bg-[#CCCED9] w-[50px] h-[25px] p-1 rounded-full before:absolute before:top-[3px] before:bg-blue-600 before:w-[19px] before:h-[19px] before:p-1 before:rounded-full before:transition-all before:duration-500 before:left-1 peer-checked:before:left-[27px] before:bg-white peer-checked:!bg-primary peer-checked:before:!bg-white `} ></div>
                                                         </label>
                                                     </div>
                                             </td>
-                                            {/* <div className="inline-flex items-center">
-  <div className="relative inline-block w-8 h-4 rounded-full cursor-pointer">
-    <input id="switch-component" type="checkbox"
-      className="absolute w-8 h-4 transition-colors duration-300 rounded-full appearance-none cursor-pointer peer bg-blue-gray-100 checked:bg-gray-900 peer-checked:border-gray-900 peer-checked:before:bg-gray-900"
-      disabled />
-    <label htmlFor="switch-component"
-      className="before:content[''] absolute top-2/4 -left-1 h-5 w-5 -translate-y-2/4 cursor-pointer rounded-full border border-blue-gray-100 bg-white shadow-md transition-all duration-300 before:absolute before:top-2/4 before:left-2/4 before:block before:h-10 before:w-10 before:-translate-y-2/4 before:-translate-x-2/4 before:rounded-full before:bg-blue-gray-500 before:opacity-0 before:transition-opacity hover:before:opacity-10 peer-checked:translate-x-full peer-checked:border-gray-900 peer-checked:before:bg-gray-900">
-      <div className="inline-block p-5 rounded-full top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4"
-        data-ripple-dark="true"></div>
-    </label>
-  </div>
-</div> */}
+                                  
                                             {(props.active === undefined || props.active !== 3) &&
                                                 <td>
                                                     <div className='flex items-center gap-10'>
