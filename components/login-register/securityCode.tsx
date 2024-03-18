@@ -240,7 +240,7 @@ const [successModal,setSuccessModal] = useState(false)
             <p className={`info-10-14 text-end cursor-pointer lg:pr-[60px] pr-[30px] !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => {setEnable(true); sendOtp()}}>
               Resend Code
             </p>
-            <button disabled={btnDisabled} className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-800" onClick={() => {
+            <button disabled={btnDisabled} className="my-[30px] lg:mt-[50px] mb-[10px] solid-button w-full hover:bg-primary-800" onClick={() => {
               matchUserOtp()
             }}>
               {btnDisabled &&
@@ -250,6 +250,9 @@ const [successModal,setSuccessModal] = useState(false)
               </svg>
             }Continue</button>
           </div>
+          <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] !text-primary-700 `} onClick={() => {setEnable(true); sendOtp()}}>
+          Didn't receive the code?
+            </p>
         </div>
       </div>
     </section>
