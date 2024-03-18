@@ -103,7 +103,7 @@ const AllCrypto = (props: propsData) => {
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${item.totalSupply}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${item.maxSupply}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${item.maxSupply || 0}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
