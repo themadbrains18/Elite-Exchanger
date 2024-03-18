@@ -34,9 +34,9 @@ const EditPaymentMethod = (props: activeSection) => {
   const [active, setActive] = useState(0)
   const [formMethod, setFormMethod] = useState();
   const [list, setList] = useState(props.userPaymentMethod);
-  const [inputValue, setInputValue] = useState(0.000000);
-  const [minInputValue, setMinInputValue] = useState(0.000000);
-  const [maxInputValue, setMaxInputValue] = useState(0.000000);
+  const [inputValue, setInputValue] = useState(props?.editPost?.quantity);
+  const [minInputValue, setMinInputValue] = useState(props?.editPost?.min_limit);
+  const [maxInputValue, setMaxInputValue] = useState(props?.editPost?.max_limit);
 
   useEffect(()=>{
     setValue('quantity', props?.editPost?.quantity);
@@ -71,7 +71,14 @@ const EditPaymentMethod = (props: activeSection) => {
   });
 
   const onHandleSubmit = async (data: any) => {
-    if (data.quantity > props.assetsBalance) {
+    if (data.quantity < props.assetsBalance || data.quantity == props?.editPost?.quantity ) {
+      props.setPaymentMethod(data);
+      props.setStep(3);
+     
+    }
+    else{
+      console.log("here");
+      
       setError("quantity", {
         type: "custom",
         message: `Insufficiant balance`,
@@ -79,8 +86,6 @@ const EditPaymentMethod = (props: activeSection) => {
       setFocus('quantity');
       return;
     }
-    props.setPaymentMethod(data);
-    props.setStep(3);
   }
 
   const checkBalnce = (e: any) => {
@@ -88,17 +93,20 @@ const EditPaymentMethod = (props: activeSection) => {
     if (/^\d*\.?\d{0,6}$/.test(value)) {
       setInputValue(value);
     }
-    if (e.target.value > props.assetsBalance) {
+    if (e.target.value < props.assetsBalance || e.target.value == props?.editPost?.quantity) {
+      setValue('max_limit', props.price * e.target.value);
+      setMaxInputValue(Number(props.price) * Number(e.target.value))
+      clearErrors('quantity');
+      
+    }
+    else {
+      setValue('max_limit', props.price * e.target.value);
+      setMaxInputValue(Number(props.price) * Number(e.target.value))
       setError("quantity", {
         type: "custom",
         message: `Insufficiant balance`,
       });
       return;
-    }
-    else {
-      setValue('max_limit', props.price * e.target.value);
-      setMaxInputValue(Number(props.price) * Number(e.target.value))
-      clearErrors('quantity');
     }
   }
 

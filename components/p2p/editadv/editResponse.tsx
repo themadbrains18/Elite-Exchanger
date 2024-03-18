@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 const schema = yup.object().shape({
   condition: yup.string().optional().default(''),
   status: yup.string().optional().default(''),
-  notes: yup.string().optional().default(''),
+  remarks: yup.string().optional().default(''),
   auto_reply: yup.string().optional().default('')
 });
 
@@ -25,14 +25,15 @@ interface activeSection {
 }
 
 const EditResponse = (props: activeSection) => {
-  const condition = ["Complete KYC", "Registered 0 day(s) ago", "Holding More The 0.01 BTC"];
-  const status = ["Online Right Now", "Online, Manually later"]
+  const condition = [{name:"Complete KYC",value:"complete_kyc"}, {name:"Holding More Than 0.01 BTC",value:"min_btc"}];
+  // sconst status = ["Online Right Now", "Online, Manually later"]
 
   const { data: session } = useSession();
   const route = useRouter();
 
   useEffect(()=>{
-    setValue('notes',props?.editPost?.notes);
+    setValue('remarks',props?.editPost?.remarks);
+    setValue('auto_reply',props?.editPost?.auto_reply);
   },[props?.editPost])
 
   let {
@@ -72,8 +73,10 @@ const EditResponse = (props: activeSection) => {
       "payment_time": props.step2Data?.payment_time,
       "condition": data?.condition,
       "status": false,
-      "notes": data?.notes,
+      "remarks": data?.remarks,
       "auto_reply": data?.auto_reply,
+      "complete_kyc":data?.condition==="complete_kyc"?true:false,
+      "min_btc": data?.min_btc=="min_btc"?true:false,
       "fundcode": '123456'
     }
 
@@ -146,11 +149,11 @@ const EditResponse = (props: activeSection) => {
               <div className="w-full">
                 <p className="info-10-14">Remarks (Optional)</p>
                 <div className="border mt-10 border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px]">
-                  <input type="text" id="notes" {...register('notes')} name="notes" className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Type " />
+                  <input type="text" id="remarks" {...register('remarks')} name="remarks" className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Type " />
                 </div>
               </div>
-              {errors?.notes && (
-                <p style={{ color: "#ff0000d1" }}>{errors?.notes?.message}</p>
+              {errors?.remarks && (
+                <p style={{ color: "#ff0000d1" }}>{errors?.remarks?.message}</p>
               )}
               <div className="w-full">
                 <p className="info-10-14">Auto-Reply (Optional)</p>
@@ -170,7 +173,7 @@ const EditResponse = (props: activeSection) => {
                 {condition?.map((item, index) => {
                   return (
                     <div key={index} className="mb-10 md:mb-20 cursor-pointer">
-                      <input id={`radio${item}`} type="radio" {...register('condition')} onChange={() => selectCondition(item)} value={item} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                      <input id={`radio${item}`} type="radio" {...register('condition')}  onChange={() => selectCondition(item.value)} value={item?.value} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                       <label
                         htmlFor={`radio${item}`}
                         className="
@@ -198,14 +201,14 @@ const EditResponse = (props: activeSection) => {
                     before:absolute
                     before:z-[1]"
                       >
-                        {item}
+                        {item?.name}
                       </label>
                     </div>
                   );
                 })}
               </div>
 
-              <div className="w-full">
+              {/* <div className="w-full">
                 <p className="sm-text mb-20">Status</p>
                 <div>
                   {status?.map((item, index) => {
@@ -247,7 +250,7 @@ const EditResponse = (props: activeSection) => {
                     );
                   })}
                 </div>
-              </div>
+              </div> */}
 
             </div>
             {errors?.condition && (
