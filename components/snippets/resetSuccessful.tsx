@@ -3,7 +3,7 @@ import Context from "../contexts/context";
 import Link from "next/link";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 
 const ResetSuccessful = () => {
@@ -24,9 +24,12 @@ const ResetSuccessful = () => {
 
         <button
           className="solid-button w-full hover:bg-primary-800"
-          onClick={() => {
-            signOut();
-            route.push('/login');
+          onClick={async() => {
+           await signOut({ redirect: false }).then(() => {
+              route.push("/login"); // Redirect to the dashboard page after signing out
+          });
+        
+         
           }}
         >
           Return to Login
