@@ -73,6 +73,7 @@ const EditAdverstisement = (props: propsData) => {
       }
     ).then((response) => response.json());
 
+
     setInrPrice(usdtToINR?.data?.rate);
     setSelectedAssets(item);
     let balances = props?.assets?.filter((e: any) => {
@@ -311,12 +312,18 @@ const EditAdverstisement = (props: propsData) => {
                   </button>
                 </div>
                 <div className="md:py-50 py-20">
-                  <div className="flex items-center justify-between gap-2 pb-[15px] border-b border-grey-v-1 dark:border-opacity-20">
+                  <div className="flex items-center justify-between gap-2 relative pb-[15px] border-b border-grey-v-1 dark:border-opacity-20">
                     <p className="info-14-18 dark:!text-white">Cuurent  Price</p>
+                    {
+                     selectedAssets?.price == undefined ?
+                    <div className='loader w-[35px] z-[2] h-[35px] absolute top-0 right-0 border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>    
+                      :
                     <p className="sec-title md:!text-[18px] !text-[14px]">
             
                       ₹{" "}{Number(selectedAssets?.price * inrPrice).toFixed(2)}
                     </p>
+
+                    }
                   </div>
                   {/* <div className="flex items-center justify-between gap-2 pt-[15px] ">
                     <p className="info-14-18 dark:!text-white">

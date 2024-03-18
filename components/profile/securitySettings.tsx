@@ -19,6 +19,7 @@ import StrengthCheck from "../snippets/strengthCheck";
 import EmailChangeAlert from "../snippets/emailChangeAlert";
 import ResetSuccessful from "../snippets/resetSuccessful";
 import AntiPhishing from "./antiPhishing";
+import ConfirmationModel from "../snippets/confirmation";
 
 const schema = yup.object().shape({
   old_password: yup.string().required("Old password is required"),
@@ -64,6 +65,8 @@ const SecuritySettings = (props: fixSection) => {
   const [tradePassword, setTradePassword] = useState(false);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
   const [successModal,setSuccessModal] = useState(false)
+
+  const [confirmation, setConfirmation] = useState(false)
 
   const [antiFishingCode, setAntiFishingCode] = useState(false);
 
@@ -183,7 +186,8 @@ const SecuritySettings = (props: fixSection) => {
         if (res.data.message) {
           toast.error(res.data.message);
         } else {
-          setEnable(5);
+          setConfirmation(true)
+          
           setShow(true);
           setFormData(data);
           reset();
@@ -198,6 +202,12 @@ const SecuritySettings = (props: fixSection) => {
       console.log(error, "security settings");
     }
   };
+
+  const confirmOtp=()=>{
+    setConfirmation(false)
+setEnable(5);
+setShow(true);
+  }
 
   const snedOtpToUser = async () => {
     try {
@@ -748,6 +758,10 @@ const SecuritySettings = (props: fixSection) => {
        {
       successModal &&
       <ResetSuccessful />
+    }
+    {
+      confirmation &&
+      <ConfirmationModel title="Reset Password" message="After reset password, transactions will be hold for 24 hours for security reasons" actionPerform={confirmOtp} setShow={setShow} setActive={setConfirmation}/>
     }
     </>
   );

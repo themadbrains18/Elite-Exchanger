@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { AES } from "crypto-js";
 import { toast, ToastContainer } from "react-toastify";
 import StrengthCheck from "../snippets/strengthCheck";
+import ConfirmationModel from "../snippets/confirmation";
 
 const schema = yup.object().shape({
   username: yup
@@ -62,8 +63,9 @@ const ResetPassword = () => {
   const [show1, setShow1] = useState(false);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
 
+  const [layout, setLayout] = useState(false)
   const [pswd, setpswd] = useState('');
-
+  const [confirmation, setConfirmation] = useState(false)
   // auto generate password
   const [passwordLength, setPasswordLength] = useState(18);
   const [useSymbols, setUseSymbols] = useState(true);
@@ -110,7 +112,8 @@ const ResetPassword = () => {
       let res = await responseData.json();
 
       if (res.status === 200) {
-        setStep(1);
+        setLayout(true)
+        setConfirmation(true)
         setFormData(data);
       } else {
         toast.error(res.data.data);
@@ -179,6 +182,10 @@ const ResetPassword = () => {
     const symbols = "~*$%@#^&!?*'-=/,.{}()[]<>";
     return symbols[random(0, symbols.length - 1)];
   };
+  const confirmOtp=()=>{
+    setConfirmation(false)
+    setStep(1);
+  }
 
   return (
     <>
@@ -279,6 +286,10 @@ const ResetPassword = () => {
           </div>
         </section>
       )}
+        {
+      confirmation &&
+      <ConfirmationModel title="Reset Password" message="After reset password, transactions will be hold for 24 hours for security reasons" actionPerform={confirmOtp} show={layout} setShow={setLayout} setActive={setConfirmation}/>
+    }
       {step === 1 && (
         <Verification
           step={step}
