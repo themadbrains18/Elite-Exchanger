@@ -39,17 +39,6 @@ const Remarks = (props: propsData) => {
             console.log('connected');
         }
         orderTimeCalculation();
-        if(props.userOrder?.status === 'isCompleted' && props.userOrder?.sell_user_id === session?.user?.user_id){
-            toast.info('Buyer Sned you payment.Please Release Assets.')
-        }
-        if(props.userOrder?.status === 'isProcess' && props.userOrder?.sell_user_id === session?.user?.user_id){
-            toast.info('Third party user buy assets')
-        }
-        if(props.userOrder?.status === 'isReleased' &&  props.userOrder?.buy_user_id === session?.user?.user_id){
-            toast.info('Assets Released successfully!..')
-            setActive1(true);
-        }
-
     }, [props?.orderid, props.userOrder]);
 
     const orderTimeCalculation = async () => {

@@ -42,10 +42,10 @@ const Response = (props: activeSection) => {
     "payment_time": "",
     "condition": "",
     "status": false,
-    "remarks": "",
-    "auto_reply": "",
-    "complete_kyc": false,
-    "min_btc": false,
+    // "remarks": "",
+    // "auto_reply": "",
+    // "complete_kyc": false,
+    // "min_btc": false,
     "fundcode": ''
   });
 

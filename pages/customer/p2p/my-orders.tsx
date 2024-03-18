@@ -10,7 +10,10 @@ import { getProviders, useSession } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
-import { useRouter } from 'next/router';
+// import { useRouter } from 'next/router';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Successfull from '@/components/snippets/successfull';
 
 interface propsData {
   userOrder?: any;
@@ -24,7 +27,10 @@ const MyOrders = (props: propsData) => {
   const [order, setOrderDetail] = useState(props.userOrder);
   const [newOrderList, setNewOrderList] = useState(props.orderList);
   const [orderId, setOrderId] = useState('')
-
+  const { status, data: session } = useSession();
+  const [active1, setActive1] = useState(false);
+  const [show, setShow] = useState(false);
+  
   // const { data: session } = useSession();
 
   useEffect(() => {
@@ -61,6 +67,18 @@ const MyOrders = (props: propsData) => {
     }).then(response => response.json());
 
     setOrderDetail(userOrder?.data);
+    if (userOrder?.data) {
+      // if (userOrder?.data?.status === 'isCompleted' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
+      //   toast.info('Buyer Sned you payment.Please Release Assets.')
+      // }
+      // if (userOrder?.data?.status === 'isProcess' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
+      //   toast.info('Third party user buy assets')
+      // }
+      if (userOrder?.data?.status === 'isReleased' && userOrder?.data?.buy_user_id === session?.user?.user_id) {
+        // toast.info('Assets Released successfully!..')
+        setActive1(true);
+      }
+    }
   }
 
   const getUserOrders = async () => {
@@ -72,6 +90,7 @@ const MyOrders = (props: propsData) => {
     }).then(response => response.json());
 
     setNewOrderList(userAllOrderList?.data);
+
   }
 
   return (
@@ -80,6 +99,7 @@ const MyOrders = (props: propsData) => {
         (props.userOrder !== null)
           ?
           <>
+            <ToastContainer />
             <div className='mt-30 flex items-start gap-30'>
               <div className='max-[1200px]:max-w-full max-w-[75%] w-full'>
                 <OrderInfo userOrder={order} />
@@ -88,7 +108,11 @@ const MyOrders = (props: propsData) => {
               </div>
               <ChatBox sellerUser={order?.user_post?.user?.id === props.session?.user?.user_id ? order?.user : order?.user_post?.user} order={order} />
             </div>
-          </> 
+            {
+              active1 &&
+              <Successfull setShow={setShow} setActive={setActive1} type="release" />
+            }
+          </>
           :
           <OrdersTabs orderList={newOrderList} setOrderId={setOrderId} />
       }
