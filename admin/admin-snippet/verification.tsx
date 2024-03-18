@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signOut } from "next-auth/react";
 import Context from "@/components/contexts/context";
+import CodeNotRecieved from "@/components/snippets/codeNotRecieved";
 
 interface activeSection {
   setEnable: Function;
@@ -22,6 +23,7 @@ const Verification = (props: activeSection) => {
   const Ref: any = useRef(null);
   const [timeLeft, setTimer] = useState('');
   const [enable, setEnable] = useState(false);
+  const [popup, setPopup] = useState(false);
 
   useEffect(() => {
     orderTimeCalculation();
@@ -214,8 +216,17 @@ const Verification = (props: activeSection) => {
           }}
         >
           Submit
+
         </button>
+        <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] mt-[10px] !text-primary-700 `} onClick={() => {setPopup(true)}}>
+          Didn't receive the code?
+            </p>
       </div>
+
+      {
+      popup &&
+      <CodeNotRecieved setEnable={setPopup}/>
+    }
     </>
   );
 };

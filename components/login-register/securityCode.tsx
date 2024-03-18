@@ -6,6 +6,7 @@ import { signIn } from "next-auth/react"
 import { toast } from 'react-toastify';
 import AES from 'crypto-js/aes';
 import ResetSuccessful from "../snippets/resetSuccessful";
+import CodeNotRecieved from "../snippets/codeNotRecieved";
 
 interface propsData {
   formData?: any,
@@ -21,6 +22,7 @@ const SecurityCode = (props: propsData) => {
   const Ref: any = useRef(null);
   const [timeLeft, setTimer] = useState('');
   const [enable, setEnable] = useState(false);
+  const [popup, setPopup] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(false);
 const [successModal,setSuccessModal] = useState(false)
   useEffect(() => {
@@ -250,12 +252,16 @@ const [successModal,setSuccessModal] = useState(false)
               </svg>
             }Continue</button>
           </div>
-          <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] !text-primary-700 `} onClick={() => {setEnable(true); sendOtp()}}>
+          <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] !text-primary-700 `} onClick={() => {setPopup(true)}}>
           Didn't receive the code?
             </p>
         </div>
       </div>
     </section>
+    {
+      popup &&
+      <CodeNotRecieved setEnable={setPopup}/>
+    }
     {
       successModal &&
       <ResetSuccessful />

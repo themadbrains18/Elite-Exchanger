@@ -55,7 +55,7 @@ const schema2 = yup.object().shape({
 });
 const TradingPassword = (props: activeSection) => {
   const { mode } = useContext(Context)
-  const [enable, setEnable] = useState(0)
+  const [enable, setEnable] = useState(1)
   const [formData, setFormData] = useState<UserSubmitForm | null>();
   const { status } = useSession()
   const [sendOtpRes, setSendOtpRes] = useState<any>();
@@ -183,7 +183,7 @@ const TradingPassword = (props: activeSection) => {
           toast.success(res?.data?.message);
 
           setTimeout(() => {
-            setEnable(1);
+            setEnable(2);
             setSendOtpRes(res?.data?.otp);
             props?.setShow(true)
           }, 1000)
@@ -249,7 +249,7 @@ const TradingPassword = (props: activeSection) => {
       if (response.data.result) {
         toast.success(response.data.message);
         setTimeout(() => {
-          setEnable(0);
+          setEnable(1);
           props.setEnable(0);
           props.setTradePassword(true);
           props.setShow(false);
@@ -283,7 +283,7 @@ const TradingPassword = (props: activeSection) => {
     <>
       <ToastContainer position="top-right" />
       {
-        enable === 0 &&
+        enable === 1 &&
         <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <div className="flex items-center justify-between ">
             <p className="sec-title">
@@ -427,7 +427,7 @@ const TradingPassword = (props: activeSection) => {
           </form>
         </div>
       }
-      {enable === 1 && (
+      {enable === 2 && (
         <Verification
           setShow={props?.setShow}
           setEnable={setEnable}

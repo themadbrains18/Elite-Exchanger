@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { signOut, useSession } from "next-auth/react";
 import EmailChangeAlert from "../snippets/emailChangeAlert";
 import clickOutSidePopupClose from "../snippets/clickOutSidePopupClose";
+import CodeNotRecieved from "../snippets/codeNotRecieved";
 
 const schema = yup.object().shape({
   uname: yup
@@ -60,6 +61,7 @@ const AdNumber = (props: activeSection) => {
   const [disabled, setDisabled] = useState(false);
   const { status } = useSession();
   const [show,setShow] = useState(true)
+  const [popup, setPopup] = useState(false);
   useEffect(() => {
     const inputElements = document.querySelectorAll(".input_wrapper input");
     // console.log(inputElements.length);
@@ -379,6 +381,9 @@ const AdNumber = (props: activeSection) => {
             </button>
             <button className="solid-button px-[51px] w-full">Next</button>
           </div>
+          <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] mt-[10px] !text-primary-700 `} onClick={() => {setPopup(true)}}>
+          Didn't receive the code?
+            </p>
         </form>
       </div>
       }
@@ -391,6 +396,10 @@ const AdNumber = (props: activeSection) => {
           formData={formData}
         />
       )}
+        {
+      popup &&
+      <CodeNotRecieved setEnable={setPopup}/>
+    }
     </>
   );
 };

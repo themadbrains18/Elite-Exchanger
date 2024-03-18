@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signOut, useSession } from "next-auth/react";
 import clickOutSidePopupClose from "../snippets/clickOutSidePopupClose";
+import CodeNotRecieved from "../snippets/codeNotRecieved";
 
 interface activeSection {
   setActive: Function;
@@ -25,7 +26,7 @@ const Password = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [fillOtp2, setOtp2] = useState("");
   let { data: session, status } = useSession();
-
+  const [popup, setPopup] = useState(false);
 
   let {
     register,
@@ -154,6 +155,7 @@ const Password = (props: activeSection) => {
   clickOutSidePopupClose({ wrapperRef, closePopup });
 
   return (
+    <>
     <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
       <div className="flex items-center justify-between ">
         <p className="sec-title">Add Mobile Number</p>
@@ -257,8 +259,16 @@ const Password = (props: activeSection) => {
             Add
           </button>
         </div>
+        <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] !text-primary-700 mt-[10px]`} onClick={() => {setPopup(true)}}>
+          Didn't receive the code?
+            </p>
       </form>
     </div>
+    {
+      popup &&
+      <CodeNotRecieved setEnable={setPopup}/>
+    }
+    </>
   );
 };
 

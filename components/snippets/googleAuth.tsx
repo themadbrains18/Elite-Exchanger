@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { toast } from 'react-toastify';
 import { AES } from "crypto-js";
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
+import CodeNotRecieved from "./codeNotRecieved";
 
 
 interface activeSection {
@@ -18,7 +19,7 @@ interface activeSection {
 
 const GoogleAuth = (props: activeSection) => {
   // console.log(props?.session,"==props?.session?.secret");
-
+  const [popup, setPopup] = useState(false);
   const { mode } = useContext(Context);
   const [active, setActive] = useState(false)
   // const [qrImg, setImage] = useState('');
@@ -318,11 +319,18 @@ const GoogleAuth = (props: activeSection) => {
           }}>Cancel</button>
           <button className="solid-button px-[51px] w-full" onClick={() => { confirmUserOtp() }}>Confirm</button>
         </div>
+        <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] !text-primary-700 mt-[10px]`} onClick={() => {setPopup(true)}}>
+          Didn't receive the code?
+            </p>
       </div>
       {
         active &&
         <SecurityVerification setShow={props?.setShow} setEnable={props.setEnable} setActive={setActive} session={props?.session} setGoogleAuth={props.setGoogleAuth} sendOtp={sendOtp} />
       }
+        {
+      popup &&
+      <CodeNotRecieved setEnable={setPopup}/>
+    }
     </>
   );
 };
