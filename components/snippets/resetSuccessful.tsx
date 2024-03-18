@@ -1,13 +1,14 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useReducer } from "react";
 import Context from "../contexts/context";
 import Link from "next/link";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
-
+import { useRouter } from "next/navigation";
 
 
 const ResetSuccessful = () => {
   const { mode } = useContext(Context);
+  const route = useRouter();
 
   return (
     <>
@@ -24,7 +25,8 @@ const ResetSuccessful = () => {
         <button
           className="solid-button w-full hover:bg-primary-800"
           onClick={() => {
-            signOut()
+            signOut();
+            route.push('/login');
           }}
         >
           Return to Login

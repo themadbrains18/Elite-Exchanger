@@ -9,6 +9,8 @@ import Withdraw from "../snippets/withdraw";
 import StakingModel from "../snippets/stake/staking";
 import TransferModal from "../future/popups/transfer-modal";
 import moment from 'moment';
+import { toast } from "react-toastify";
+import { useSession } from "next-auth/react";
 
 interface propsData {
   coinList: any,
@@ -39,6 +41,8 @@ const WalletList = (props: propsData): any => {
 
   const [overlay, setOverlay] = useState(false);
   const [popupMode, setPopupMode] = useState(0);
+
+  const {status, data:session} = useSession();
   const router = useRouter();
   let itemsPerPage = 10;
 
@@ -336,9 +340,22 @@ const WalletList = (props: propsData): any => {
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
                               <button onClick={() => {
-                                setSelectedCoinBalance(item?.balance);
-                                setShow1(2);
-                                setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                               
+                                console.log('------here withdarw');
+                                
+                                const expire = new Date(`${session?.user?.pwdupdatedAt}`).getTime();
+                                const updateDate = Date.now();
+                          
+                                let expireDate = Math.floor(expire / 1000);
+                                let currentDate = Math.floor(updateDate / 1000);
+                                if (currentDate >= expireDate) {
+                                  setSelectedCoinBalance(item?.balance);
+                                  setShow1(2);
+                                  setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                                }
+                                else{
+                                  toast.warning('You cannot do any action next 24 hours');
+                                }
                               }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Withdraw</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
@@ -465,9 +482,23 @@ const WalletList = (props: propsData): any => {
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
                               <button onClick={() => {
-                                setSelectedCoinBalance(item?.balance);
-                                setShow1(2);
-                                setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+
+                                console.log('------here withdarw');
+                                
+                                const expire = new Date(`${session?.user?.pwdupdatedAt}`).getTime();
+                                const updateDate = Date.now();
+                          
+                                let expireDate = Math.floor(expire / 1000);
+                                let currentDate = Math.floor(updateDate / 1000);
+                                if (currentDate >= expireDate) {
+                                  setSelectedCoinBalance(item?.balance);
+                                  setShow1(2);
+                                  setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                                }
+                                else{
+                                  toast.warning('You cannot do any action next 24 hours');
+                                }
+                                
                               }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Withdraw</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
