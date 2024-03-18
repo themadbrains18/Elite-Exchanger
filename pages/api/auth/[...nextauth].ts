@@ -60,7 +60,8 @@ export const authOptions: NextAuthOptions = {
                         tradingPassword : datauser?.data?.tradingPassword,
                         antiphishing : datauser?.data?.antiphishing,
                         kyc : datauser?.data?.kycstatus,
-                        createdAt: datauser?.data?.createdAt
+                        createdAt: datauser?.data?.createdAt,
+                        pwdupdatedAt:datauser?.data?.pwdupdatedAt
                     } as any;
                 }
             }
