@@ -28,7 +28,7 @@ const SlectPaymentMethod = (props: propsData) => {
     useEffect(() => {
         let orderPost = props?.userOrder?.user_post;
         let payment_method: any = [];
-        if(orderPost!==null  ){
+        if (orderPost !== null) {
             for (const upid of orderPost?.p_method) {
                 orderPost?.user?.user_payment_methods.filter((item: any) => {
                     if (item?.id === upid?.upm_id) {

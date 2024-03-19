@@ -20,8 +20,8 @@ const pusher = new Pusher('b275b2f9e51725c09934', {
 });
 
 const schema = yup.object().shape({
-  token_amount: yup.number().positive().required('Please enter quantity').typeError('Please enter quantity').default(0),
-  limit_usdt: yup.number().positive().required('Please enter limit amount').typeError('Please enter limit amount').default(0),
+  token_amount: yup.number().positive().required('Please enter quantity').typeError('Please enter quantity'),
+  limit_usdt: yup.number().positive().required('Please enter limit amount').typeError('Please enter limit amount'),
   // market_type:yup.string().optional().default('limit')
 });
 
@@ -99,11 +99,6 @@ const BuySellCard = (props: DynamicId) => {
         }
       }
     }
-    // var channel = pusher.subscribe('crypto-channel');
-    // channel.bind('market', async function (data: any) {
-    //   // alert('---here market pusher');
-    //   getAssets();
-    // });
   };
 
   const setCurrencyName = (symbol: string, dropdown: number) => {
@@ -313,15 +308,6 @@ const BuySellCard = (props: DynamicId) => {
     }
   }
 
-  // useEffect(() => {
-  //   let radioCta = document.querySelector(".custom-radio") as HTMLInputElement | null;
-  //   let prevSibling: ChildNode | null | undefined = radioCta?.previousSibling;
-  //   if (prevSibling instanceof HTMLElement) {
-  //     prevSibling.click();
-  //   }
-
-  // }, []);
-
 
   return (
     <>
@@ -443,7 +429,7 @@ const BuySellCard = (props: DynamicId) => {
                 <div className="mt-5 flex gap-[18px] items-center">
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
                   {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
-                  <p className="md-text w-full">{price.toFixed(8)}({active1 === 1 ? 'USDT' : firstCurrency})</p>
+                  <p className="md-text w-full">{price.toFixed(6)}({active1 === 1 ? 'USDT' : firstCurrency})</p>
 
                   <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className="min-w-[24px]" alt="wallet2" width={24} height={24} />
                   {router.pathname.includes("/chart") && <p className="md-text">
@@ -505,7 +491,7 @@ const BuySellCard = (props: DynamicId) => {
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">Total:</p>
                   {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
-                  <p className="sm-text dark:text-white">{totalAmount}</p>
+                  <p className="sm-text dark:text-white">{totalAmount.toFixed(6)}</p>
 
                 </div>
                 <div className="mt-5 flex gap-2">
@@ -515,6 +501,8 @@ const BuySellCard = (props: DynamicId) => {
                 </div>
               </>
             }
+
+          
           </div>
 
           {((show === 1 && props.token?.tradepair?.limit_trade === true) || show === 2) &&

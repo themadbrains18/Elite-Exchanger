@@ -113,7 +113,8 @@ const BuyPopup = (props: activeSection) => {
         const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
         let buy = {
           ws_type: 'buy',
-          sellerid: props?.selectedPost?.user?.id
+          sellerid: props?.selectedPost?.user?.id,
+          orderId : res?.data?.data?.result?.id
         }
         websocket.onopen = () => {
           websocket.send(JSON.stringify(buy));

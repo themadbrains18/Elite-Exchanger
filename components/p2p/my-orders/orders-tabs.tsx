@@ -4,7 +4,7 @@ import OrdersTableMobile from './orders-table-mobile';
 
 interface propsData {
     orderList?: any;
-    setOrderId?:any;
+    setOrderId?: any;
 }
 
 const OrdersTabs = (props: propsData) => {
@@ -69,7 +69,7 @@ const OrdersTabs = (props: propsData) => {
                 active === 1 &&
                 <div>
                     <div className='md:block hidden'>
-                        <OrdersTableDesktop data={AllTypedata} setOrderId={props.setOrderId}/>
+                        <OrdersTableDesktop data={AllTypedata} setOrderId={props.setOrderId} />
                     </div>
                     <div className='md:hidden'>
                         <OrdersTableMobile data={AllTypedata} setOrderId={props.setOrderId} />
@@ -80,10 +80,10 @@ const OrdersTabs = (props: propsData) => {
                 active === 2 &&
                 <div>
                     <div className='md:block hidden'>
-                        <OrdersTableDesktop data={pendingOrder} setOrderId={props.setOrderId}/>
+                        <OrdersTableDesktop data={pendingOrder} setOrderId={props.setOrderId} />
                     </div>
                     <div className='md:hidden'>
-                        <OrdersTableMobile data={pendingOrder} setOrderId={props.setOrderId}/>
+                        <OrdersTableMobile data={pendingOrder} setOrderId={props.setOrderId} />
                     </div>
                 </div>
             }
@@ -91,10 +91,10 @@ const OrdersTabs = (props: propsData) => {
                 active === 3 &&
                 <div>
                     <div className='md:block hidden'>
-                        <OrdersTableDesktop data={CompletedOrder} setOrderId={props.setOrderId}/>
+                        <OrdersTableDesktop data={CompletedOrder} setOrderId={props.setOrderId} />
                     </div>
                     <div className='md:hidden'>
-                        <OrdersTableMobile data={CompletedOrder} setOrderId={props.setOrderId}/>
+                        <OrdersTableMobile data={CompletedOrder} setOrderId={props.setOrderId} />
                     </div>
                 </div>
             }
@@ -102,10 +102,10 @@ const OrdersTabs = (props: propsData) => {
                 active === 4 &&
                 <div>
                     <div className='md:block hidden'>
-                        <OrdersTableDesktop data={CanceledOrder} setOrderId={props.setOrderId}/>
+                        <OrdersTableDesktop data={CanceledOrder} setOrderId={props.setOrderId} />
                     </div>
                     <div className='md:hidden'>
-                        <OrdersTableMobile data={CanceledOrder} setOrderId={props.setOrderId}/>
+                        <OrdersTableMobile data={CanceledOrder} setOrderId={props.setOrderId} />
                     </div>
                 </div>
             }

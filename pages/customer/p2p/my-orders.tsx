@@ -30,7 +30,7 @@ const MyOrders = (props: propsData) => {
   const { status, data: session } = useSession();
   const [active1, setActive1] = useState(false);
   const [show, setShow] = useState(false);
-  
+
   // const { data: session } = useSession();
 
   useEffect(() => {
@@ -68,14 +68,14 @@ const MyOrders = (props: propsData) => {
 
     setOrderDetail(userOrder?.data);
     if (userOrder?.data) {
-      // if (userOrder?.data?.status === 'isCompleted' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
-      //   toast.info('Buyer Sned you payment.Please Release Assets.')
-      // }
-      // if (userOrder?.data?.status === 'isProcess' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
-      //   toast.info('Third party user buy assets')
-      // }
+      if (userOrder?.data?.status === 'isCompleted' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
+        toast.info('Buyer Sned you payment.Please Release Assets.')
+      }
+      if (userOrder?.data?.status === 'isProcess' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
+        toast.info('Third party user buy assets')
+      }
       if (userOrder?.data?.status === 'isReleased' && userOrder?.data?.buy_user_id === session?.user?.user_id) {
-        // toast.info('Assets Released successfully!..')
+        toast.info('Assets Released successfully!..')
         setActive1(true);
       }
     }
@@ -94,30 +94,34 @@ const MyOrders = (props: propsData) => {
   }
 
   return (
-    <P2pLayout>
-      {
-        (props.userOrder !== null)
-          ?
-          <>
-            <ToastContainer />
-            <div className='mt-30 flex items-start gap-30'>
-              <div className='max-[1200px]:max-w-full max-w-[75%] w-full'>
-                <OrderInfo userOrder={order} />
-                <SlectPaymentMethod userOrder={order} setPaymentMethod={setPaymentMethod} />
-                <Remarks paymentMethod={paymentMethod} orderid={order?.id} userOrder={order} getUserOrders={getUserOrders} />
-              </div>
-              <ChatBox sellerUser={order?.user_post?.user?.id === props.session?.user?.user_id ? order?.user : order?.user_post?.user} order={order} />
-            </div>
-            {
-              active1 &&
-              <Successfull setShow={setShow} setActive={setActive1} type="release" />
-            }
-          </>
-          :
-          <OrdersTabs orderList={newOrderList} setOrderId={setOrderId} />
-      }
+    <>
+      <ToastContainer limit={1} />
+      <P2pLayout>
+        {
+          (props.userOrder !== null)
+            ?
+            <>
 
-    </P2pLayout>
+              <div className='mt-30 flex items-start gap-30'>
+                <div className='max-[1200px]:max-w-full max-w-[75%] w-full'>
+                  <OrderInfo userOrder={order} />
+                  <SlectPaymentMethod userOrder={order} setPaymentMethod={setPaymentMethod} />
+                  <Remarks paymentMethod={paymentMethod} orderid={order?.id} userOrder={order} getUserOrders={getUserOrders} />
+                </div>
+                <ChatBox sellerUser={order?.user_post?.user?.id === props.session?.user?.user_id ? order?.user : order?.user_post?.user} order={order} />
+              </div>
+              {
+                active1 &&
+                <Successfull setShow={setShow} setActive={setActive1} type="release" />
+              }
+            </>
+            :
+            <OrdersTabs orderList={newOrderList} setOrderId={setOrderId} />
+        }
+
+      </P2pLayout>
+    </>
+
   )
 }
 

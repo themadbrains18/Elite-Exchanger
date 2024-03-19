@@ -19,9 +19,6 @@ interface propsData {
 
 const P2pBuy = (props: propsData) => {
 
-  console.log(props?.posts,"==props?.posts");
-  
-
   const [show1, setShow1] = useState(false);
   const [selectedPost, setSelectedPost] = useState(Object);
   const [newPosts, setNewPosts] = useState([]);

@@ -4,6 +4,8 @@ import HeaderLogo from "../svg-snippets/headerLogo";
 import Link from "next/link";
 import TradeIcon from "../svg-snippets/trade-icon";
 import { Wallet } from "../svg-snippets/wallet-icon";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import Context from "../contexts/context";
 import ResponsiveSidebar from "./responsive-sidebar";
@@ -61,9 +63,10 @@ const Header = (props: propsData) => {
       getUserNotification();
     }
     getTokenList();
+    socket();
   }, []);
 
-  useEffect(() => {
+  const socket = () => {
     const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
     websocket.onopen = () => {
@@ -81,9 +84,11 @@ const Header = (props: propsData) => {
           setUserDetail(data);
         }
       }
+      // if (eventDataType === "buy") {
+      //   getOrderByOrderId(data?.orderId);
+      // }
     };
-
-  }, []);
+  };
 
   const getUserNotification = async () => {
     let profileDashboard = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/notification?userid=${session?.user?.user_id}`, {
@@ -137,9 +142,31 @@ const Header = (props: propsData) => {
     SetFutureTrade(future);
   }
 
+  const getOrderByOrderId = async (orderid: any) => {
+    let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {
+      method: "GET",
+      headers: {
+        "Authorization": props.session?.user?.access_token
+      },
+    }).then(response => response.json());
+
+    if (userOrder?.data) {
+      if (userOrder?.data?.status === 'isCompleted' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
+        toast.info('Buyer Sned you payment.Please Release Assets.')
+      }
+      if (userOrder?.data?.status === 'isProcess' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
+        toast.info('Third party user buy assets')
+      }
+      if (userOrder?.data?.status === 'isReleased' && userOrder?.data?.buy_user_id === session?.user?.user_id) {
+        toast.info('Assets Released successfully!..')
+      }
+    }
+  }
+
 
   return (
     <>
+      {/* <ToastContainer limit={1} /> */}
       <header
         className={`${router?.pathname?.includes('/future/') ? 'py-[10px]' : 'py-[30px]'} z-[6] dark:bg-omega bg-white z-9 xl:rounded-none dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 w-full rounded-b-[20px] border-b-0 md:border-b dark:border-[#25262a] border-[#e5e7eb]`}
       >
@@ -269,7 +296,7 @@ const Header = (props: propsData) => {
                   <div className="profile-wrapper hover:pb-[32px] hover:mb-[-32px] relative">
                     <div className="flex items-center gap-[12px] cursor-pointer" >
                       <div data-testid="user-icon">
-                        {userDetail === null || userDetail?.messgae !== undefined && <Image
+                        <Image
                           src={
                             userDetail === null || userDetail?.messgae !== undefined
                               ? `${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`
@@ -281,7 +308,7 @@ const Header = (props: propsData) => {
                           width={32}
                           height={32}
                           className="rounded-full w-[40px] h-[40px] object-cover object-top"
-                        />}
+                        />
                       </div>
                       <p id="username" data-testid="username" className="nav-text-lg !text-gamma hidden xl:block">
                         {userDetail === null || userDetail?.messgae !== undefined
