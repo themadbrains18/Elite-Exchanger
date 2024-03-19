@@ -218,7 +218,7 @@ const Verification = (props: activeSection) => {
           Submit
 
         </button>
-        <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] mt-[10px] !text-primary-700 `} onClick={() => {setPopup(true)}}>
+        <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] mt-[10px] !text-primary `} onClick={() => {setPopup(true)}}>
           Didn't receive the code?
             </p>
       </div>

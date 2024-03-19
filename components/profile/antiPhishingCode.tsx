@@ -22,16 +22,6 @@ type UserSubmitForm = {
   antiphishing?: string;
 };
 
-// const schema = yup.object().shape({
-//   new_password: yup
-//     .string()
-//     .min(6)
-//     .max(6)
-//     .required("New password is required"),
-//   confirmPassword: yup
-//     .string()
-//     .oneOf([yup.ref("new_password")], "Passwords must match"),
-// });
 const schema2 = yup.object().shape({
   antiphishing: yup
     .string()
@@ -62,7 +52,6 @@ const AntiPhishingCode = (props: activeSection) => {
 
   const onHandleSubmit = async (data: any) => {
     try {
-      console.log("==here");
       
       setEnable(4);
       setFormData(data);

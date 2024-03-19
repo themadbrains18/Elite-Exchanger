@@ -25,10 +25,12 @@ const CodeNotRecieved = (props: changeProps) => {
       ></div>
       <div
         ref={wrapperRef}
-        className="p-6 fixed max-h-[calc(100%-124px)] overscroll-none	 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  rounded-[10px] bg-white  z-[99] max-w-[calc(100%-36px)] md:max-w-[520px] w-full overflow-auto"
+        className="p-6 fixed max-h-[calc(100%-124px)] overscroll-none	 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  rounded-[10px] bg-white dark:bg-black-v-1  z-[99] max-w-[calc(100%-36px)] md:max-w-[520px] w-full overflow-auto"
       >
         <div className="flex items-center justify-between mb-[16px]">
-          <p className="sec-title">Didn't receive the code?</p>
+          <p className="sec-title dark:text-off-white">
+            Didn't receive the code?
+          </p>
           <svg
             onClick={() => {
               props.setEnable(0);
@@ -76,27 +78,40 @@ const CodeNotRecieved = (props: changeProps) => {
             Mobile
           </p>
         </div>
-        <p className="text-[14px] leading-4  mb-2">
-          Sorry to hear that! Have you tried the following steps?
+        <p className="text-[14px] text-d-body-primary mb-2">
+          If you have not received the code after several attempts, please try
+          the following
         </p>
         <ol className="px-[6px] list-decimal list-inside my-4">
           <li className="text-[14px] leading-[22px] text-d-body-primary">
             {" "}
-            Make sure you typed your {active === 1
+            Check it once again your {active === 1
               ? "email"
               : "mobile number"}{" "}
-            correctly.
+            is valid.
           </li>
-          <li className="text-[14px] leading-[22px] text-d-body-primary">
-            Check your spam folder.
+          <li className="text-[14px] text-d-body-primary">
+            Check if the code is in the Spam/trash bin
           </li>
-          <li className="text-[14px] leading-[22px] text-d-body-primary">
+          <li className="text-[14px] text-d-body-primary">
             Give it a few minutes. There might have been a delay.
           </li>
+          <li className="text-[14px] leading-[22px] text-d-body-primary">
+            {" "}
+            Try a different {active === 1
+              ? "email"
+              : "mobile number"}{" "}.
+          </li>
         </ol>
-        <p className="text-[14px] leading-[22px] text-d-body-primary">
-          If you haven’t received your code timely, please contact our customer
-          support team.
+        <p className="text-[14px] text-d-body-primary">
+          If you haven’t received your code timely, please contact us at{" "}
+          <a
+            href="mailto:support@launchyourexchange.com"
+            className="text-primary underline"
+          >
+            support@launchyourexchange.com
+          </a>
+          .
         </p>
         <div className="flex items-center gap-10 mt-6">
           <button
