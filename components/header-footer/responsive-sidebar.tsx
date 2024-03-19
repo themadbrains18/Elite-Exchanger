@@ -160,17 +160,17 @@ const ResponsiveSidebar = (props: defaultStates) => {
             <p className='nav-text-lg'>{props.userDetail !== null && props.userDetail?.messgae === undefined && props.userDetail?.fName !== null ? (props.userDetail?.fName + ' ' + props.userDetail?.lName) : props?.session?.user?.name}</p>
             <p className='nav-text-lg !text-gamma '>{props.userDetail !== null && props.userDetail?.messgae === undefined && props.userDetail?.dName !== null ? (props?.userDetail?.dName) : props?.session?.user?.email}</p>
             {props.session?.user?.kyc === 'approve' &&
-              <>
+              <div className="flex justify-start text-center items-center gap-[3px]">
                 <IconsComponent type="kycComplete" hover={false} active={false} />
-                <p className='nav-text-lg'>Verified</p>
-              </>
+                <p className="nav-text-lg">Verified</p>
+              </div>
 
             }
             {props.session?.user?.kyc !== 'approve' &&
-              <>
+              <div className="flex justify-start text-center items-center gap-[3px]" >
                 <IconsComponent type="kychold" hover={false} active={false} />
-                <p className='nav-text-lg'>UnVerified</p>
-              </>
+                <p className="nav-text-lg">Unverified</p>
+              </div>
 
             }
           </div>

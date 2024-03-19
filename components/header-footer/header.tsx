@@ -310,25 +310,29 @@ const Header = (props: propsData) => {
                           className="rounded-full w-[40px] h-[40px] object-cover object-top"
                         />
                       </div>
-                      <p id="username" data-testid="username" className="nav-text-lg !text-gamma hidden xl:block">
-                        {userDetail === null || userDetail?.messgae !== undefined
-                          ? props.session?.user?.name
-                          : userDetail?.dName}
+                      <div>
+                        <p id="username" data-testid="username" className="nav-text-lg !text-gamma hidden xl:block">
+                          {userDetail === null || userDetail?.messgae !== undefined
+                            ? props.session?.user?.name
+                            : userDetail?.dName}
+                          
+                        </p>
                         {props.session?.user?.kyc === 'approve' && 
-                          <>
+                          <div className="flex justify-start text-center items-center gap-[3px]">
                             <IconsComponent type="kycComplete" hover={false} active={false} />
-                            Verified
-                          </>
+                            <p className="nav-text-lg !text-gamma hidden xl:block">Verified</p>
+                          </div>
                           
                         }
                         {props.session?.user?.kyc !== 'approve' && 
-                          <>
+                          <div className="flex justify-start text-center items-center gap-[3px]" >
                             <IconsComponent type="kychold" hover={false} active={false} />
-                            UnVerified
-                          </>
+                            <p className="nav-text-lg !text-gamma hidden xl:block">Unverified</p>
+                          </div>
                           
                         }  
-                      </p>
+                      </div>
+                      
                       <svg
                         className="hidden xl:block duration-300 arrow"
                         width={11}
