@@ -125,7 +125,7 @@ const BothVerificationOptions = (props: activeSection) => {
             <button type='button' className="solid-button2 w-full" onClick={() => { props?.setShow(false); props.setEnable(1) }}>Cancel </button>
             <button type='button' className="solid-button w-full" onClick={() => { props?.setEnable(1), props?.setShow(false); }}>Submit</button>
           </div>
-          <p className={`mt-[10px] info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] !text-primary-700 `} onClick={() => {setPopup(true)}}>
+          <p className={`mt-[10px] info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] !text-primary`} onClick={() => {setPopup(true)}}>
           Didn't receive the code?
             </p>
         </form>
