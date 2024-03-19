@@ -69,7 +69,7 @@ const MyOrders = (props: propsData) => {
     setOrderDetail(userOrder?.data);
     if (userOrder?.data) {
       if (userOrder?.data?.status === 'isCompleted' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
-        toast.info('Buyer Sned you payment.Please Release Assets.')
+        toast.info('Payment released by buyer.')
       }
       if (userOrder?.data?.status === 'isProcess' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
         toast.info('Third party user buy assets')

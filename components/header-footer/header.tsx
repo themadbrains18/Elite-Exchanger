@@ -152,7 +152,7 @@ const Header = (props: propsData) => {
 
     if (userOrder?.data) {
       if (userOrder?.data?.status === 'isCompleted' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
-        toast.info('Buyer Sned you payment.Please Release Assets.')
+        toast.info('Payment released by buyer.')
       }
       if (userOrder?.data?.status === 'isProcess' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
         toast.info('Third party user buy assets')
@@ -315,24 +315,24 @@ const Header = (props: propsData) => {
                           {userDetail === null || userDetail?.messgae !== undefined
                             ? props.session?.user?.name
                             : userDetail?.dName}
-                          
+
                         </p>
-                        {props.session?.user?.kyc === 'approve' && 
+                        {props.session?.user?.kyc === 'approve' &&
                           <div className="flex justify-start text-center items-center gap-[3px]">
                             <IconsComponent type="kycComplete" hover={false} active={false} />
-                            <p className="nav-text-lg !text-gamma hidden xl:block">Verified</p>
+                            <p className="top-label !text-gamma hidden xl:block">Verified</p>
                           </div>
-                          
+
                         }
-                        {props.session?.user?.kyc !== 'approve' && 
+                        {props.session?.user?.kyc !== 'approve' &&
                           <div className="flex justify-start text-center items-center gap-[3px]" >
                             <IconsComponent type="kychold" hover={false} active={false} />
-                            <p className="nav-text-lg !text-gamma hidden xl:block">Unverified</p>
+                            <p className="top-label !text-gamma hidden xl:block">Unverified</p>
                           </div>
-                          
-                        }  
+
+                        }
                       </div>
-                      
+
                       <svg
                         className="hidden xl:block duration-300 arrow"
                         width={11}
@@ -346,8 +346,8 @@ const Header = (props: propsData) => {
                           fill="#9295A6"
                         />
                       </svg>
-                      
-                      
+
+
                     </div>
                     <div className="absolute top-[96px] opacity-0 invisible duration-300  right-[0px] hover:block dropdown_wrapper">
                       <SideBar profileSec={false} />
