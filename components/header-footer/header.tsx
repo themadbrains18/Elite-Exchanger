@@ -328,6 +328,10 @@ const Header = (props: propsData) => {
                           fill="#9295A6"
                         />
                       </svg>
+                      {props.session?.user?.kyc === 'approve' && 
+                        <IconsComponent type="kycComplete" hover={false} active={false} />
+                      }
+                      
                     </div>
                     <div className="absolute top-[96px] opacity-0 invisible duration-300  right-[0px] hover:block dropdown_wrapper">
                       <SideBar profileSec={false} />
