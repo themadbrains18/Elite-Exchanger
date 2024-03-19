@@ -162,14 +162,14 @@ const ResponsiveSidebar = (props: defaultStates) => {
             {props.session?.user?.kyc === 'approve' &&
               <>
                 <IconsComponent type="kycComplete" hover={false} active={false} />
-                <p className='nav-text-lg'>Veified</p>
+                <p className='nav-text-lg'>Verified</p>
               </>
 
             }
             {props.session?.user?.kyc !== 'approve' &&
               <>
                 <IconsComponent type="kychold" hover={false} active={false} />
-                <p className='nav-text-lg'>UnVeified</p>
+                <p className='nav-text-lg'>UnVerified</p>
               </>
 
             }

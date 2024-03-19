@@ -317,14 +317,14 @@ const Header = (props: propsData) => {
                         {props.session?.user?.kyc === 'approve' && 
                           <>
                             <IconsComponent type="kycComplete" hover={false} active={false} />
-                            Veified
+                            Verified
                           </>
                           
                         }
                         {props.session?.user?.kyc !== 'approve' && 
                           <>
                             <IconsComponent type="kychold" hover={false} active={false} />
-                            UnVeified
+                            UnVerified
                           </>
                           
                         }  
