@@ -14,6 +14,7 @@ interface propsData {
   tradehistory?: any;
   getUserOpenOrder?: any;
   getUserTradeHistory?: any;
+  slug?: any;
 }
 
 const ChartTabs = (props: propsData) => {
@@ -25,6 +26,7 @@ const ChartTabs = (props: propsData) => {
   const [openItemOffset, setOpenItemOffset] = useState(0);
   const [tradeItemOffset, setTradeItemOffset] = useState(0);
   const { mode } = useContext(Context);
+  const [cancelItemSymbol, setCancelItemSymbol] = useState('');
 
   const [active, setActive] = useState(false);
   const [show, setShow] = useState(false);
@@ -128,6 +130,8 @@ const ChartTabs = (props: propsData) => {
         setActive(false);
         setShow(false);
         setOrderId("");
+        props.getUserOpenOrder(props.slug);
+        props.getUserTradeHistory(props.slug);
       }
 
     } catch (error) {
@@ -147,7 +151,7 @@ const ChartTabs = (props: propsData) => {
                 }`}
               onClick={() => setActiveTab(1)}
             >
-              Open Position
+              Listed Coin
             </button>
           </div>
           {/* User Open Order */}

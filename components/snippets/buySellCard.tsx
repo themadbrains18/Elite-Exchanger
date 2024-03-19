@@ -50,6 +50,9 @@ const BuySellCard = (props: DynamicId) => {
   const router = useRouter()
   const [spotType, setSpotType] = useState('buy');
 
+  const [tokenInputValue, setTokenInputValue] = useState(0.000000);
+  const [limitInputValue, setLimitInputValue] = useState(0.000000);
+
   const list = props.coins;
 
   let secondList = props.coins?.filter((item: any) => {
@@ -249,6 +252,13 @@ const BuySellCard = (props: DynamicId) => {
     } catch (error) {
       console.log("error while create market order", error);
 
+    }
+  }
+
+  const checkInput=(e:any,type:string)=>{
+    const value = e.target.value;
+    if (/^\d*\.?\d{0,6}$/.test(value)) {
+      type ==='limit'?setLimitInputValue(value): setTokenInputValue(value);
     }
   }
 
@@ -458,8 +468,8 @@ const BuySellCard = (props: DynamicId) => {
 
                     <div className="">
                       <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
-                      <input type="number" placeholder="$0" step="any" {...register('limit_usdt', {
-                        onChange: () => { convertTotalAmount() }
+                      <input type="number" placeholder="$0" step="0.000000" value={limitInputValue} {...register('limit_usdt', {
+                        onChange: (e) => { {convertTotalAmount(); checkInput(e,'limit')} }
                       })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
                     </div>
 
@@ -474,8 +484,8 @@ const BuySellCard = (props: DynamicId) => {
                 <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
                   <div className="">
                     <p className="sm-text dark:text-white">Quantity({firstCurrency})</p>
-                    <input type="number" placeholder="0" min={0} step=".00001" {...register('token_amount', {
-                      onChange: () => { convertTotalAmount() }
+                    <input type="number" placeholder="0" step={0.000001} value={tokenInputValue} {...register('token_amount', {
+                      onChange: (e) => { {convertTotalAmount(); checkInput(e,'max')} }
                     })} name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text " />
                   </div>
                   <div>

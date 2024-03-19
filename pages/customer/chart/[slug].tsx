@@ -58,9 +58,9 @@ const Chart = (props: Session) => {
         websocket.onmessage = (event) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
-            // if (eventDataType === "price") {
-            //     refreshTokenList()
-            // }
+            if (eventDataType === "price") {
+                refreshTokenList()
+            }
             if (eventDataType === "market") {
                 if (props.session) {
                     getUserOpenOrder(slug);
@@ -69,20 +69,6 @@ const Chart = (props: Session) => {
                 getAllMarketOrderByToken(slug);
             }
         }
-
-        // var channel = pusher.subscribe('crypto-channel');
-        // channel.bind('price', function (data: any) {
-        //     refreshTokenList()
-        // });
-
-        // channel.bind('market', function (data: any) {
-        //     if (props.session) {
-        //         getUserOpenOrder(slug);
-        //         getUserTradeHistory(slug);
-        //     }
-        //     getAllMarketOrderByToken(slug);
-        // })
-
     };
 
     const refreshTokenList = async () => {
@@ -243,7 +229,7 @@ const Chart = (props: Session) => {
                             <ChartSec slug={`${slug === 'BTCB' ? 'BTC' : slug === 'BNBT' ? 'BNB' : slug}USDT`} view={view} />
                             {/* hidden on mobile */}
                             <div className='lg:block hidden'>
-                                <ChartTabs coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
+                                <ChartTabs slug={slug} coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
                             </div>
                         </div>
                         <div className="max-w-full lg:max-w-[432px] w-full">
@@ -257,7 +243,7 @@ const Chart = (props: Session) => {
                             {/* hidden on desktop */}
                             <div className='lg:hidden'>
                                 <OrderBookMobile slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} />
-                                <ChartTabs coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
+                                <ChartTabs slug={slug} coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
                             </div>
                         </div>
                     </div>
