@@ -154,11 +154,25 @@ const ResponsiveSidebar = (props: defaultStates) => {
       <div className='bg-white dark:bg-d-bg-primary p-[20px] rounded-[10px]'>
         <div className='flex items-center gap-[15px] cursor-pointer pb-[23px] border-b border-[#E9EAF0] dark:border-[#e9eaf00f] mb-[30px] relative' onClick={() => { props.setShowMenu(false) }}>
           <div className='relative inline-block clip-bg'>
-        {  props.userDetail !== undefined &&   <Image src={props.userDetail !== undefined && props.userDetail !== null && props.userDetail?.messgae === undefined ?  props.userDetail?.image : process.env.NEXT_PUBLIC_AVATAR_PROFILE} alt='error' width={64} height={64} className='rounded-full object-cover object-top w-[50px] h-[50px]' />}
+            {props.userDetail !== undefined && <Image src={props.userDetail !== undefined && props.userDetail !== null && props.userDetail?.messgae === undefined ? props.userDetail?.image : process.env.NEXT_PUBLIC_AVATAR_PROFILE} alt='error' width={64} height={64} className='rounded-full object-cover object-top w-[50px] h-[50px]' />}
           </div>
           <div>
             <p className='nav-text-lg'>{props.userDetail !== null && props.userDetail?.messgae === undefined && props.userDetail?.fName !== null ? (props.userDetail?.fName + ' ' + props.userDetail?.lName) : props?.session?.user?.name}</p>
             <p className='nav-text-lg !text-gamma '>{props.userDetail !== null && props.userDetail?.messgae === undefined && props.userDetail?.dName !== null ? (props?.userDetail?.dName) : props?.session?.user?.email}</p>
+            {props.session?.user?.kyc === 'approve' &&
+              <>
+                <IconsComponent type="kycComplete" hover={false} active={false} />
+                <p className='nav-text-lg'>Veified</p>
+              </>
+
+            }
+            {props.session?.user?.kyc !== 'approve' &&
+              <>
+                <IconsComponent type="kychold" hover={false} active={false} />
+                <p className='nav-text-lg'>UnVeified</p>
+              </>
+
+            }
           </div>
           <Link href="/profile" className='absolute top-0 left-0 right-0 h-full'></Link>
         </div>
@@ -355,10 +369,10 @@ const ResponsiveSidebar = (props: defaultStates) => {
           </div>
           :
           <div className='flex items-center gap-[15px] pt-[20px] mt-[30px] border-t border-[#E9EAF0] dark:border-[#e9eaf00f]'>
-          <button className=' bg-primary text-white py-[15px] px-[5px]  w-full rounded-[12px]' onClick={()=>{signOut()}}>
-          Sign Out
-      </button>
-      </div>
+            <button className=' bg-primary text-white py-[15px] px-[5px]  w-full rounded-[12px]' onClick={() => { signOut() }}>
+              Sign Out
+            </button>
+          </div>
         }
         {/* {props?.session &&
          <div className='flex items-center gap-[15px] pt-[20px] mt-[30px] border-t border-[#E9EAF0] dark:border-[#e9eaf00f]'>

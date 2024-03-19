@@ -314,6 +314,20 @@ const Header = (props: propsData) => {
                         {userDetail === null || userDetail?.messgae !== undefined
                           ? props.session?.user?.name
                           : userDetail?.dName}
+                        {props.session?.user?.kyc === 'approve' && 
+                          <>
+                            <IconsComponent type="kycComplete" hover={false} active={false} />
+                            Veified
+                          </>
+                          
+                        }
+                        {props.session?.user?.kyc !== 'approve' && 
+                          <>
+                            <IconsComponent type="kychold" hover={false} active={false} />
+                            UnVeified
+                          </>
+                          
+                        }  
                       </p>
                       <svg
                         className="hidden xl:block duration-300 arrow"
@@ -328,9 +342,7 @@ const Header = (props: propsData) => {
                           fill="#9295A6"
                         />
                       </svg>
-                      {props.session?.user?.kyc === 'approve' && 
-                        <IconsComponent type="kycComplete" hover={false} active={false} />
-                      }
+                      
                       
                     </div>
                     <div className="absolute top-[96px] opacity-0 invisible duration-300  right-[0px] hover:block dropdown_wrapper">
