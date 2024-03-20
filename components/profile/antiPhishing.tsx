@@ -20,6 +20,7 @@ const AntiPhishing = (props: activeSection) => {
   }
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
+
   return (
     <>
 
@@ -55,7 +56,7 @@ const AntiPhishing = (props: activeSection) => {
                 />
               </svg>
             </div>
-            <div className="flex bg-primary-200 rounded-5 p-3 mt-5 mb-6 mx-2 gap-2">
+            <div className="flex bg-[#EF4444] bg-opacity-[30%] rounded-5 p-3 mt-5 mb-6 mx-2 gap-2">
               <div className="max-w-[24px] w-full">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -67,7 +68,7 @@ const AntiPhishing = (props: activeSection) => {
                     fill-rule="evenodd"
                     clip-rule="evenodd"
                     d="M12 21a9 9 0 100-18 9 9 0 000 18zm-1.25-5.5V18h2.5v-2.5h-2.5zm0-9.5v7h2.5V6h-2.5z"
-                    fill="#19191a6e"
+                    fill="#EF4444"
                   ></path>
                 </svg>
 
@@ -79,15 +80,16 @@ const AntiPhishing = (props: activeSection) => {
             </div>
             <div className="mx-2 mb-6">
               <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">What is an Anti-Phishing Code?</p>
-              <p className="sm-text ">An Anti-Phishing Code is a code that helps to prevent phishing attempts from fake Binance websites or email addresses</p>
+              <p className="sm-text ">An Anti-Phishing Code is a code that helps to prevent phishing attempts from fake Crypto Planet websites or email addresses</p>
             </div>
             <div className="mx-2 mb-6">
               <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">How does it work?</p>
-              <p className="sm-text ">Once you've set your unique Anti-Phishing Code, it will be included in all official Binance emails.</p>
+              <p className="sm-text ">Once you've set your unique Anti-Phishing Code, it will be included in all official Crypto Planet emails.</p>
             </div>
             <button
               className="solid-button w-full"
               onClick={() => {
+                // props.setEnable(0);
                 setActive(true)
               }}
             >

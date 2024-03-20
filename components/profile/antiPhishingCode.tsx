@@ -67,17 +67,11 @@ const AntiPhishingCode = (props: activeSection) => {
           ? props.session?.user.email
           : props.session?.user?.number;
 
-      let obj;
-
-      if (
-        props?.session?.user?.antiphishing === null
-      ) {
-        obj = {
-          username: username,
-          antiphishing: formData?.antiphishing,
-          otp: "string",
-        };
-      }
+      let obj = {
+        username: username,
+        antiphishing: formData?.antiphishing,
+        otp: "string",
+      };
 
       if (status === "authenticated") {
         const ciphertext = AES.encrypt(
@@ -125,17 +119,11 @@ const AntiPhishingCode = (props: activeSection) => {
         props.session?.user.email !== "null"
           ? props.session?.user.email
           : props.session?.user?.number;
-      let request;
-
-      if (
-        props?.session?.user?.antiphishing === null
-      ) {
-        request = {
-          username: username,
-          antiphishing: formData?.antiphishing,
-          otp: otp,
-        };
-      }
+      let request = {
+        username: username,
+        antiphishing: formData?.antiphishing,
+        otp: otp,
+      };
 
       const ciphertext = AES.encrypt(
         JSON.stringify(request),
@@ -234,9 +222,8 @@ const AntiPhishingCode = (props: activeSection) => {
                   </div>
                 </div>
 
-                <p
-                  className={`
-                    ${errors.antiphishing ? "text-red-dark" : "text-[#b7bdc6]"} text-[14px]`
+                <p className={`
+                    ${errors.antiphishing ? "text-red-dark" : "text-[#b7bdc6]"} text-[16px] mt-[5px]`
                   }
                 >
                   Please enter 4-20 characters.

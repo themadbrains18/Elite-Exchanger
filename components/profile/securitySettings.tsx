@@ -64,7 +64,7 @@ const SecuritySettings = (props: fixSection) => {
   const { status, data: session } = useSession()
   const [tradePassword, setTradePassword] = useState(false);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
-  const [successModal,setSuccessModal] = useState(false)
+  const [successModal, setSuccessModal] = useState(false)
 
   const [confirmation, setConfirmation] = useState(false)
 
@@ -117,16 +117,6 @@ const SecuritySettings = (props: fixSection) => {
       Add: false,
       CtaText: "Enable",
     },
-   
-    {
-      image: "activity.svg",
-      bg: "red",
-      title: "Activity log",
-      desc: "",
-      Add: false,
-      ctaLink: "/activity",
-      CtaText: "Activity log",
-    },
     {
       image: "google.svg",
       bg: "blue",
@@ -136,6 +126,16 @@ const SecuritySettings = (props: fixSection) => {
       // ctaLink: "/activity",
       CtaText: "Enable",
     },
+    {
+      image: "activity.svg",
+      bg: "red",
+      title: "Activity log",
+      desc: "",
+      Add: false,
+      ctaLink: "/activity",
+      CtaText: "Activity log",
+    },
+
   ];
 
   let {
@@ -187,7 +187,7 @@ const SecuritySettings = (props: fixSection) => {
           toast.error(res.data.message);
         } else {
           setConfirmation(true)
-          
+
           setShow(true);
           setFormData(data);
           reset();
@@ -203,10 +203,10 @@ const SecuritySettings = (props: fixSection) => {
     }
   };
 
-  const confirmOtp=()=>{
+  const confirmOtp = () => {
     setConfirmation(false)
-setEnable(5);
-setShow(true);
+    setEnable(6);
+    setShow(true);
   }
 
   const snedOtpToUser = async () => {
@@ -289,14 +289,14 @@ setShow(true);
         }
       ).then((response) => response.json());
       if (response.data.result) {
-         setEnable(0),
-        // toast.success(response.data.message);
-        // setTimeout(() => {
-        //   signOut();
-        //   setEnable(0),
-        //     setShow(false);
-        // }, 1000);
-        setSuccessModal(true)
+        setEnable(0),
+          // toast.success(response.data.message);
+          // setTimeout(() => {
+          //   signOut();
+          //   setEnable(0),
+          //     setShow(false);
+          // }, 1000);
+          setSuccessModal(true)
       } else {
         toast.error(response.data.message);
       }
@@ -526,23 +526,23 @@ setShow(true);
                             : "Edit"}
                         </button>
                       )
-                      :
-                      <button
-                      className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${props?.session?.user?.antiphishing === null ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
-                      onClick={() => {
-                        if(googleAuth === true){
-                        setEnable(index + 1);
-                        setShow(true);
-                      }
-                      else {
-                        toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again', { position: 'top-center' })
-                      }
-                      }}
-                    >
-                      {(props?.session?.user?.antiphishing === null && antiFishingCode === false)
-                        ? "Add"
-                        : "Edit"}
-                    </button>
+                        :
+                        <button
+                          className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${props?.session?.user?.antiphishing === null ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
+                          onClick={() => {
+                            if (googleAuth === true) {
+                              setEnable(index + 1);
+                              setShow(true);
+                            }
+                            else {
+                              toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again', { position: 'top-center' })
+                            }
+                          }}
+                        >
+                          {(props?.session?.user?.antiphishing === null && antiFishingCode === false)
+                            ? "Add"
+                            : "Edit"}
+                        </button>
 
                     ) : (
                       <button
@@ -565,7 +565,7 @@ setShow(true);
                 <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
                   Change Password
                 </p>
-                
+
                 <div className="mt-[30px] ">
                   <div className="flex md:flex-row flex-col gap-[30px]">
                     <div className=" w-full">
@@ -651,7 +651,7 @@ setShow(true);
                           }}
                           className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                         />
-                        
+
                       </div>
 
                       {errors.confirmPassword && (
@@ -673,13 +673,14 @@ setShow(true);
                   type="submit"
                   className="solid-button px-[23px] md:px-[51px]"
                 >
-                  Save   
+                  Save
                 </button>
               </div>
             </form>
           </div>
         )}
       </section>
+
       {enable === 1 && (
         <Verification
           setShow={setShow}
@@ -711,7 +712,7 @@ setShow(true);
           setGoogleAuth={setGoogleAuth}
         />
       )}
-      {enable === 5 && (
+      {enable === 6 && (
         <ConfirmPopup
           setEnable={setEnable}
           setShow={setShow}
@@ -730,7 +731,7 @@ setShow(true);
           tradePassword={tradePassword}
         />
       )}
-      {enable === 6 && (
+      {enable === 5 && (
         <AntiPhishing
           setEnable={setEnable}
           setShow={setShow}
@@ -744,7 +745,7 @@ setShow(true);
           setActive={setActive}
           type="email"
           session={props?.session}
-          
+
         />
       )}
       {active === 2 && (
@@ -755,14 +756,14 @@ setShow(true);
           session={props?.session}
         />
       )}
-       {
-      successModal &&
-      <ResetSuccessful />
-    }
-    {
-      confirmation &&
-      <ConfirmationModel title="Reset Password" message="After reset password, Withdrawal will be restricted for 24 hours after changing your password." actionPerform={confirmOtp} setShow={setShow} setActive={setConfirmation}/>
-    }
+      {
+        successModal &&
+        <ResetSuccessful />
+      }
+      {
+        confirmation &&
+        <ConfirmationModel title="Reset Password" message="After reset password, Withdrawal will be restricted for 24 hours after changing your password." actionPerform={confirmOtp} setShow={setShow} setActive={setConfirmation} />
+      }
     </>
   );
 };

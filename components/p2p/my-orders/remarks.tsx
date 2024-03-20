@@ -6,6 +6,8 @@ import AES from 'crypto-js/aes';
 import { signOut, useSession } from 'next-auth/react';
 import TradingPasswordAds from '../postadv/tradingPasswordAds';
 import Successfull from '@/components/snippets/successfull';
+import CancelOrder from '@/components/snippets/cancelOrder';
+import { useRouter } from 'next/router';
 
 interface propsData {
     paymentMethod: any;
@@ -22,6 +24,8 @@ const Remarks = (props: propsData) => {
     const [active, setActive] = useState(false);
     const [active1, setActive1] = useState(false);
     const [show, setShow] = useState(false);
+    const [confirmation,  setConfirmation] = useState(false)
+    const router= useRouter();
 
     const Ref: any = useRef(null);
 
@@ -323,15 +327,15 @@ const Remarks = (props: propsData) => {
 
                     {
                         (props.userOrder?.status === 'isProcess' || props.userOrder?.status === 'isCompleted') && props.userOrder?.buy_user_id === session?.user?.user_id &&
-                        <button className={`solid-button2 max-w-full sm:max-w-[220px] w-full `} onClick={() => { orderCancel() }}>
+                        <button className={`solid-button2 max-w-full sm:max-w-[220px] w-full `} onClick={() => {setShow(true); setConfirmation(true) }}>
                             Cancel Order
                         </button>
                     }
 
                     {
                         props.userOrder?.status === 'isCanceled' &&
-                        < button className={`solid-button2 dark:bg-black-v-1 dark:text-primary max-w-full sm:max-w-[220px] w-full cursor-auto`}>
-                            Order Cancelled
+                        <button onClick={()=>{router.push('/p2p/buy')}} className={`solid-button2 cursor-pointer dark:bg-black-v-1 dark:text-primary max-w-full sm:max-w-[400px] w-full `}>
+                           Go back and place another order
                         </button>
                     }
 
@@ -366,6 +370,11 @@ const Remarks = (props: propsData) => {
                 active1 &&
                 <Successfull setShow={setShow} setActive={setActive1} type="release" />
             }
+            {
+                confirmation &&
+                <CancelOrder setShow={setShow} actionPerform={orderCancel} setEnable={setConfirmation}/>
+            }
+          
         </>
 
     )
