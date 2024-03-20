@@ -115,7 +115,7 @@ const FutureTrading = (props: Session) => {
             getUserFuturePositionHistoryData();
             getUserFutureOpenOrderHistoryData();
         });
-    
+
     }
 
     // ===================================== //
@@ -373,16 +373,21 @@ const FutureTrading = (props: Session) => {
             <div className={`sdsadsadd bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${overlay && '!opacity-[70%] !visible'}`}></div>
 
             {/* Leverage and margin type popup component */}
-            <MarginMode setOverlay={setOverlay} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setPopupMode={setPopupMode} popupMode={popupMode} setMarginModeAndLeverage={setMarginModeAndLeverage} />
+            {popupMode === 1 ?
 
-            {/* Future profit/loss and liquidation price calculate */}
-            <SwapModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
+                <MarginMode setOverlay={setOverlay} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setPopupMode={setPopupMode} popupMode={popupMode} setMarginModeAndLeverage={setMarginModeAndLeverage} />
+                :
+                popupMode === 2 ?
+                    <SwapModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
+                    :
+                    popupMode === 3 ?
+                        <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} refreshWalletAssets={refreshWalletAssets} />
+                        : popupMode === 4 && <TradingFeeMadal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
+            }
 
             {/* Asset transfer from wallet to other walllet  */}
-            <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} refreshWalletAssets={refreshWalletAssets} />
 
             {/* Show trading fee detail */}
-            <TradingFeeMadal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
         </>
     )
 }

@@ -77,7 +77,7 @@ const SwapModal = (props:showPopup) => {
                     <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' />
                     <p className='top-label min-w-max'>XRP</p>
                 </div>
-                <button className="border bg-[#13c2c2] text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px]">Calculate</button>
+                <button className="border bg-primary text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px]">Calculate</button>
             </div>
             <div className='max-[991px]:max-w-full max-w-[50%] w-full dark:bg-[#30333e] bg-[#fafafa] p-[20px] relative'>
                 <p className='admin-body-text !text-[16px] mb-[10px]'>Result</p>

@@ -61,7 +61,7 @@ const MarginMode = (props: fullWidth) => {
                 </svg>
             </div>
             <div className='flex items-center mt-10 gap-[15px]'>
-                <button className={`w-full relative py-[12px] px-[5px] rounded-[4px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[2px] border ${cross === 1 ? 'text-[#13c2c2] border-[#13c2c2]' : 'text-[#a3a8b7] border-[#f0f8ff00]'}`} onClick={() => { setCross(1); setMarginType('Cross') }}>
+                <button className={`w-full relative py-[12px] px-[5px] md:rounded-[4px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[2px] border ${cross === 1 ? 'text-primary border-primary' : 'text-[#a3a8b7] border-[#f0f8ff00]'}`} onClick={() => { setCross(1); setMarginType('Cross') }}>
                     <span> Cross</span>
                     {
                         cross === 1 &&
@@ -72,7 +72,7 @@ const MarginMode = (props: fullWidth) => {
                             xmlns="http://www.w3.org/2000/svg"
                             className="absolute top-0 right-0"
                         >
-                            <path d="M0 0h14a4 4 0 0 1 4 4v14L9.5 9.5 0 0Z" fill="#13C2C2" />
+                            <path d="M0 0h14a4 4 0 0 1 4 4v14L9.5 9.5 0 0Z" fill="#005FD2" />
                             <path fill="#fff" d="m9 5.95.707-.707 2.829 2.828-.707.707z" />
                             <path fill="#fff" d="m11.121 8.071 4.243-4.243.707.708-4.243 4.242z" />
                         </svg>
@@ -80,7 +80,7 @@ const MarginMode = (props: fullWidth) => {
 
 
                 </button>
-                <button className={`w-full relative py-[12px] px-[5px] rounded-[4px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[2px] border ${cross === 2 ? 'text-[#13c2c2] border-[#13c2c2]' : 'text-[#a3a8b7] border-[#f0f8ff00]'}`} onClick={() => { setCross(2); setMarginType('Isolated') }}>
+                <button className={`w-full relative py-[12px] px-[5px] md:rounded-[4px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[2px] border ${cross === 2 ? 'text-primary border-primary' : 'text-[#a3a8b7] border-[#f0f8ff00]'}`} onClick={() => { setCross(2); setMarginType('Isolated') }}>
                     <span> Isolated </span>
                     {
                         cross === 2 &&
@@ -91,7 +91,7 @@ const MarginMode = (props: fullWidth) => {
                             xmlns="http://www.w3.org/2000/svg"
                             className="absolute top-0 right-0"
                         >
-                            <path d="M0 0h14a4 4 0 0 1 4 4v14L9.5 9.5 0 0Z" fill="#13C2C2" />
+                            <path d="M0 0h14a4 4 0 0 1 4 4v14L9.5 9.5 0 0Z" fill="#005FD2" />
                             <path fill="#fff" d="m9 5.95.707-.707 2.829 2.828-.707.707z" />
                             <path fill="#fff" d="m11.121 8.071 4.243-4.243.707.708-4.243 4.242z" />
                         </svg>
@@ -116,7 +116,7 @@ const MarginMode = (props: fullWidth) => {
 
             <div className='flex items-center gap-[15px] mt-[15px]'>
                 <button className='border dark:text-white text-[#1A1B1F] dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[15px] px-[10px] w-full max-w-full' onClick={() => { props.setOverlay(false); props.setPopupMode(0) }}>Cancel</button>
-                <button className='border bg-[#13c2c2] text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[15px] px-[10px] w-full max-w-full' onClick={() => {
+                <button className='border bg-primary text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[15px] px-[10px] w-full max-w-full' onClick={() => {
                     props.setMarginModeAndLeverage(marginType, leverageValue);
                 }}>Confirm</button>
             </div>
