@@ -73,7 +73,7 @@ const AntiPhishing = (props: activeSection) => {
                 </svg>
 
               </div>
-              <p className="text-[14px]">
+              <p className="text-[14px] dark:text-white">
                 Do not disclose your password or verification codes to anyone,
                 including Crypto Planet Support.
               </p>

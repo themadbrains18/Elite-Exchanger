@@ -121,8 +121,8 @@ const BuyPopup = (props: activeSection) => {
           websocket.send(JSON.stringify(buy));
         }
         setTimeout(() => {
-          setBtnDisabled(false)
           route.push(`/p2p/my-orders?buy=${res?.data?.data?.result?.id}`);
+          setBtnDisabled(false)
         }, 3000);
 
       }
