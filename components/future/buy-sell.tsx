@@ -719,7 +719,7 @@ const BuySell = (props: fullWidth) => {
                   <span>Isolated </span>
                 )}
               </p>
-              <p className="bg-[#13c2c21f] px-[5px] text-[#13c2c2] text-[12px]">
+              <p className="bg-[#13c2c21f] px-[5px] text-primary text-[12px]">
                 {props?.marginMode?.leverage}X
               </p>
               <p className="top-label dark:!text-white !text-[#000]">

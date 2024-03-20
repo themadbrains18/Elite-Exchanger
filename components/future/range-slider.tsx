@@ -45,12 +45,12 @@ const RangeSlider = (props: uniqueIds) => {
 
     return (
         <>
-            <div className='w-full bg-[#03A66D] h-[4px] flex items-center justify-between mt-[20px]'>
-                <div className='w-[10px] h-[10px] rounded-full bg-[#03A66D]'></div>
-                <div className='w-[10px] h-[10px] rounded-full bg-[#03A66D]'></div>
-                <div className='w-[10px] h-[10px] rounded-full bg-[#03A66D]'></div>
-                <div className='w-[10px] h-[10px] rounded-full bg-[#03A66D]'></div>
-                <div className='w-[10px] h-[10px] rounded-full bg-[#03A66D]'></div>
+            <div className='w-full bg-primary h-[4px] flex items-center justify-between mt-[20px]'>
+                <div className='w-[10px] h-[10px] rounded-full bg-primary'></div>
+                <div className='w-[10px] h-[10px] rounded-full bg-primary'></div>
+                <div className='w-[10px] h-[10px] rounded-full bg-primary'></div>
+                <div className='w-[10px] h-[10px] rounded-full bg-primary'></div>
+                <div className='w-[10px] h-[10px] rounded-full bg-primary'></div>
             </div>
             <div className="range-slider mt-[-12px] cursor-pointer">
                 <div id={props.thumbId} className="range-slider_thumb"></div>
