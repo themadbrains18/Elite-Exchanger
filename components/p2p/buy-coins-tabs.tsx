@@ -57,14 +57,9 @@ const BuyCoinsTabs = (props: activeSection) => {
     console.log(id,"==id");
     
     for (const post of props?.posts) {
-      console.log(post,"=jhdjhf");
-      
       for (const upid of post.user.user_payment_methods) {
-        console.log(upid,"===upid");
-        
         if (id === upid?.pmid) {
             filter_posts.push(post);
-          
         }
       }
     }

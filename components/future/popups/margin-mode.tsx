@@ -103,13 +103,13 @@ const MarginMode = (props: fullWidth) => {
             <div className='flex bg-[#e5ecf0] dark:bg-[#3c4355] items-center justify-between relative z-[4]'>
                 <p className='text-[25px] dark:text-white text-black cursor-pointer w-[50px] h-[40px] text-center'> - </p>
                 <div>
-                    <input type="text" className='bg-[#e5ecf0] dark:bg-[#3c4355] outline-none text-center inputPercent dark:text-[#fff] text-[#000]' readOnly value={leverageValue.toString()+'x'} />
+                    <input type="text" className='bg-[#e5ecf0] dark:bg-[#3c4355] outline-none text-center inputPercent dark:text-[#fff] text-[#000]' readOnly value={leverageValue.toString() + 'x'} />
                 </div>
                 {/* <p className='text-[18px] font-[600] text-center dark:text-[#fff] text-[#000] inputPercent'>20</p> */}
                 <p className='text-[25px] dark:text-white text-black cursor-pointer w-[50px] h-[40px] text-center' onClick={() => { increment() }}> + </p>
             </div>
 
-            <RangeSlider inputId={props.inputId} thumbId={props.thumbId} lineId={props.lineId} onChangeSizeInPercentage={onChangeSizeInPercentage} rangetype={'X'} step={1}/>
+            <RangeSlider inputId={props.inputId} thumbId={props.thumbId} lineId={props.lineId} onChangeSizeInPercentage={onChangeSizeInPercentage} rangetype={'X'} step={1} />
 
             <p className='top-label mt-[10px]'>Maximum position at current leverage: 3500000 USDT</p>
             <p className='top-label mb-[25px]'>Selecting higher leverage such as [10x] increases your liquidation risk. Always manage your risk levels.</p>
