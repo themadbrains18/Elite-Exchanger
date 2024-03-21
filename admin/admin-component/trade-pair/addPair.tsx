@@ -31,9 +31,10 @@ const schema = yup.object().shape({
   tokenTwo: yup.string().required("Please enter symbol"),
   symbolOne: yup.string().required("Please enter symbol"),
   symbolTwo: yup.string().required("Please enter symbol"),
-  maker: yup.number().notRequired(),
-  taker: yup.number().notRequired(),
-  min_trade: yup.number().positive().required("Please enter symbol"),
+  maker: yup.number().optional().default(0),
+  taker: yup.number().optional().default(0),
+  min_trade: yup.number().positive("Please enter min trade amount").required("Please enter min trade amount").typeError("Please enter coin minimum trade limit"),
+  max_trade: yup.number().positive("Please enter min trade amount").required("Please enter max trade amount").typeError("Please enter coin maximum trade limit"),
 
 });
 
@@ -211,6 +212,19 @@ const AddPair = (props: ActiveSession) => {
           />
           {errors?.min_trade && (
             <p style={{ color: "#ff0000d1" }}>{errors?.min_trade?.message}</p>
+          )}
+        </div>
+        <div className=" relative ">
+          <p className="sm-text mb-2">Maximum trade amount</p>
+          <input
+            type="text"
+            {...register("max_trade")}
+            name="min_trade"
+            placeholder="Please enter limit case fee"
+            className="sm-text input-cta2 w-full"
+          />
+          {errors?.max_trade && (
+            <p style={{ color: "#ff0000d1" }}>{errors?.max_trade?.message}</p>
           )}
         </div>
         <button className="solid-button w-full mt-30">Submit</button>
