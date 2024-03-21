@@ -154,6 +154,14 @@ const BuySellCard = (props: DynamicId) => {
       return;
     }
 
+    if (props.token?.tradepair?.maxTrade < data.token_amount) {
+      setError("token_amount", {
+        type: "custom",
+        message: "you can trade less than max amount " + props.token?.tradepair?.maxTrade,
+      });
+      return;
+    }
+
     let obj = {
       "user_id": props.session.user.user_id,
       "token_id": selectedToken?.id,
@@ -250,10 +258,10 @@ const BuySellCard = (props: DynamicId) => {
     }
   }
 
-  const checkInput=(e:any,type:string)=>{
+  const checkInput = (e: any, type: string) => {
     const value = e.target.value;
     if (/^\d*\.?\d{0,6}$/.test(value)) {
-      type ==='limit'?setLimitInputValue(value): setTokenInputValue(value);
+      type === 'limit' ? setLimitInputValue(value) : setTokenInputValue(value);
     }
   }
 
@@ -455,7 +463,7 @@ const BuySellCard = (props: DynamicId) => {
                     <div className="">
                       <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
                       <input type="number" placeholder="$0" step="0.000000" value={limitInputValue} {...register('limit_usdt', {
-                        onChange: (e) => { {convertTotalAmount(); checkInput(e,'limit')} }
+                        onChange: (e) => { { convertTotalAmount(); checkInput(e, 'limit') } }
                       })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
                     </div>
 
@@ -471,7 +479,7 @@ const BuySellCard = (props: DynamicId) => {
                   <div className="">
                     <p className="sm-text dark:text-white">Quantity({firstCurrency})</p>
                     <input type="number" placeholder="0" step={0.000001} value={tokenInputValue} {...register('token_amount', {
-                      onChange: (e) => { {convertTotalAmount(); checkInput(e,'max')} }
+                      onChange: (e) => { { convertTotalAmount(); checkInput(e, 'max') } }
                     })} name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text " />
                   </div>
                   <div>
@@ -488,10 +496,17 @@ const BuySellCard = (props: DynamicId) => {
                 </div>
                 {errors.token_amount && <p style={{ color: 'red' }}>{errors?.token_amount?.message}</p>}
 
-                <div className="mt-5 flex gap-2">
-                  <p className="sm-text dark:text-white">Total:</p>
-                  {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
-                  <p className="sm-text dark:text-white">{totalAmount.toFixed(6)}</p>
+                <div className="mt-5 flex gap-2 justify-between">
+                  <div className="flex gap-2">
+                    <p className="sm-text dark:text-white">Total:</p>
+                    {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
+                    <p className="sm-text dark:text-white">{totalAmount.toFixed(6)}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <p className="sm-text dark:text-white">Max Trade:</p>
+                    {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
+                    <p className="sm-text dark:text-white">{props.token?.tradepair?.maxTrade}</p>
+                  </div>
 
                 </div>
                 <div className="mt-5 flex gap-2">
@@ -502,7 +517,7 @@ const BuySellCard = (props: DynamicId) => {
               </>
             }
 
-          
+
           </div>
 
           {((show === 1 && props.token?.tradepair?.limit_trade === true) || show === 2) &&

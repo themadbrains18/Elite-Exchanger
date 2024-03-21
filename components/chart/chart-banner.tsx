@@ -2,18 +2,21 @@ import Image from 'next/image';
 import React, { Fragment, useEffect, useState } from 'react'
 import IconsComponent from '../snippets/icons';
 import { useRouter } from 'next/router';
-import Pusher from 'pusher-js';
+// import Pusher from 'pusher-js';
 
-const pusher = new Pusher('b275b2f9e51725c09934', {
-  cluster: 'ap2'
-});
+// const pusher = new Pusher('b275b2f9e51725c09934', {
+//   cluster: 'ap2'
+// });
 
-const ChartBanner = () => {
+interface propsData{
+  hlocData?:any;
+}
+
+const ChartBanner = (props:propsData) => {
 
   let [fillFav, setFillFav] = useState(false);
   const [currentToken, setCurrentToken] = useState<any>(Object);
   const [cardsData, setCardsData] = useState([]);
-
   const router = useRouter();
   const { slug } = router.query;
 
@@ -31,10 +34,6 @@ const ChartBanner = () => {
         refreshTokenList()
       }
     }
-    // var channel = pusher.subscribe('crypto-channel');
-    // channel.bind('price', function (data: any) {
-    //   refreshTokenList()
-    // });
 
     refreshTokenList();
   }, [slug])
@@ -52,26 +51,26 @@ const ChartBanner = () => {
       {
         "cardTitle": "Market Cap",
         "titleIcon": "marketCap",
-        "cardPrice": "$" + `${ccurrentToken[0]?.totalSupply && ccurrentToken[0]?.totalSupply?.toLocaleString('en-US')}`,
+        "cardPrice": "$" + `${ccurrentToken[0]?.marketcap && ccurrentToken[0]?.marketcap?.toLocaleString('en-US')}`,
         "cardLowHigh": "+2%",
         "bg": "blue",
       },
       {
-        "cardTitle": "Full Diluted",
+        "cardTitle": "Max Supply",
         "titleIcon": "infoIcon",
-        "cardPrice": "$" + ccurrentToken[0]?.totalSupply?.toLocaleString('en-US'),
+        "cardPrice": "$" + ccurrentToken[0]?.maxSupply !== null ? ccurrentToken[0]?.maxSupply?.toLocaleString('en-US') : ccurrentToken[0]?.circulatingSupply?.toLocaleString('en-US'),
         "cardLowHigh": "+2%",
         "bg": "red",
       },
       {
         "cardTitle": "24 Volume",
         "titleIcon": "watchIcon",
-        "cardPrice": "$" + ccurrentToken[0]?.circulatingSupply?.toLocaleString('en-US'),
+        "cardPrice": "$" + ccurrentToken[0]?.volume?.toLocaleString('en-US'),
         "cardLowHigh": "+2%",
         "bg": "green",
       },
       {
-        "cardTitle": "Circulating Supply",
+        "cardTitle": "Total Supply",
         "titleIcon": "infoIcon",
         "cardPrice": ccurrentToken[0]?.circulatingSupply?.toLocaleString('en-US'),
         "cardLowHigh": "+2%",
@@ -163,8 +162,8 @@ const ChartBanner = () => {
               </div>
               <div className='flex items-center lg:max-w-[50%] w-full gap-[30px] lg:justify-start justify-between mb-20'>
                 <p className="info-10-14 !text-gamma py-0 md:py-[5px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">Rank #{`${currentToken?.rank && currentToken?.rank}`}</p>
-                <p className="info-10-14 !text-gamma">Coin</p>
-                <p className="info-10-14 !text-gamma">On 2,771,773 watchlists</p>
+                {/* <p className="info-10-14 !text-gamma">Coin</p>
+                <p className="info-10-14 !text-gamma">On 2,771,773 watchlists</p> */}
               </div>
             </div>
 
@@ -172,8 +171,13 @@ const ChartBanner = () => {
               <div className='flex items-center gap-[20px] lg:max-w-[50%] lg:justify-start justify-between'>
                 <h3 className='md-heading dark:text-white'>${`${currentToken?.price?.toFixed(5)}`}</h3>
                 <div className={` items-center gap-[10px] flex`}>
-                  <p className={`footer-text-secondary !text-buy`}>+2%</p>
-                  <IconsComponent type="high" active={false} hover={false} />
+                  <p className={`footer-text-secondary ${Number(props?.hlocData?.changeRate) > 0?'!text-buy':'!text-sell'}`}>{Number(props?.hlocData?.changeRate) > 0?'+':''}{(Number(props?.hlocData?.changeRate)*100).toFixed(3)}%</p>
+                  {Number(props?.hlocData?.changeRate) > 0 &&
+                    <IconsComponent type="high" active={false} hover={false} />
+                  }
+                  {Number(props?.hlocData?.changeRate) < 0 &&
+                    <IconsComponent type="low" active={false} hover={false} />
+                  }
                 </div>
               </div>
               <div className='max-w-full lg:max-w-[50%] w-full lg:mt-0 mt-20'>
@@ -185,15 +189,15 @@ const ChartBanner = () => {
                   </div>
                   <p className="info-10-14 cursor-pointer !text-gamma py-0 md:py-[5px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5 flex items-center gap-[10px]">
                     <span>24h</span>
-                    <IconsComponent type='downArrow' hover={false} active={false} />
+                    {/* <IconsComponent type='downArrow' hover={false} active={false} /> */}
                   </p>
                 </div>
                 <div className='mb-[15px] mt-[15px] w-full h-[5px] rounded-[5px] bg-grey-v-2'>
                   <div className='w-[40%] h-[5px] rounded-[5px] bg-primary'></div>
                 </div>
                 <div className='flex items-center justify-between'>
-                  <p className="info-10-14 !text-gamma">Low : $37,005.19</p>
-                  <p className="info-10-14 !text-gamma">High : $37,005.19</p>
+                  <p className="info-10-14 !text-gamma">Low : ${props?.hlocData?.low}</p>
+                  <p className="info-10-14 !text-gamma">High : ${props?.hlocData?.high}</p>
                 </div>
               </div>
             </div>
@@ -213,10 +217,10 @@ const ChartBanner = () => {
                         <p className='info-10-14 !text-gamma'>{ele.cardTitle}</p>
                       </div>
                       <p className="md-text !font-bold">{ele.cardPrice}</p>
-                      <div className={` items-center gap-[10px] flex`}>
+                      {/* <div className={` items-center gap-[10px] flex`}>
                         <p className={`footer-text-secondary !text-[12px] lg:!text-[16px] !text-buy`}>{ele.cardLowHigh}</p>
                         <IconsComponent type="high" active={false} hover={false} />
-                      </div>
+                      </div> */}
                     </div>
                   </Fragment>
                 )

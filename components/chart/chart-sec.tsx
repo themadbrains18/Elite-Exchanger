@@ -24,6 +24,7 @@ const ChartSec = (props: propsData) => {
         interval="D"
         theme={mode === "dark" ? "dark" : "light"}
         height={630}
+        width={'100%'}
         container_id={`tradingview_46b68${props.view}`}
       ></AdvancedRealTimeChart>
       {/* <DemoChart /> */}
