@@ -8,11 +8,11 @@ import { useRouter } from 'next/router';
 //   cluster: 'ap2'
 // });
 
-interface propsData{
-  hlocData?:any;
+interface propsData {
+  hlocData?: any;
 }
 
-const ChartBanner = (props:propsData) => {
+const ChartBanner = (props: propsData) => {
 
   let [fillFav, setFillFav] = useState(false);
   const [currentToken, setCurrentToken] = useState<any>(Object);
@@ -97,9 +97,8 @@ const ChartBanner = (props:propsData) => {
         <div className='max-w-full lg:max-w-[50%] w-full flex items-start lg:flex-row flex-col'>
           <div className='max-w-full lg:max-w-[100%] w-full'>
             <div className='flex gap-30 justify-between flex-wrap xl:flex-nowrap'>
-
-              <div className="flex gap-[15px] max-w-full w-full lg:max-w-[50%] items-center lg:justify-start justify-between">
-                <div className='flex gap-[10px]'>
+              <div className="flex gap-[15px] max-w-full w-full lg:max-w-[50%] items-start lg:justify-start justify-between">
+                <div className='flex gap-[15px] items-center'>
                   <Image
                     alt="coins"
                     loading="lazy"
@@ -110,76 +109,70 @@ const ChartBanner = (props:propsData) => {
                     style={{ color: "transparent" }}
                     src={`${currentToken?.image !== undefined ? currentToken?.image : '/assets/home/coinLogo.png'}`}
                   />
-                  <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px] ss">
-                    <p className="info-14-18 dark:text-white">{`${currentToken?.fullName}`}</p>
-                    <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">
-                      {`${currentToken?.symbol}`}
-                    </p>
+                  <div>
+                    <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px] ss">
+                      <p className="info-14-18 dark:text-white">{`${currentToken?.fullName}`}</p>
+                      <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">
+                        {`${currentToken?.symbol}`}
+                      </p>
+                      <svg
+                        width={24}
+                        height={24}
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        className='m-auto'
+                        onClick={() => {
+                          let existItem: any = localStorage.getItem('favToken');
+                          if (existItem) {
+                            existItem = JSON.parse(existItem);
+                          }
+                          if (existItem && existItem.indexOf(currentToken?.id) !== -1) {
+                            existItem = existItem.filter((item: any) => {
+                              return item !== currentToken?.id
+                            })
+                            setFillFav(false);
+                          }
+                          else if (existItem) {
+                            setFillFav(true);
+                            existItem.push(`${currentToken?.id}`)
+
+                          }
+                          else {
+                            // localStorage.setItem('favToken', JSON.stringify([`${props?.token?.id}`]));
+                            existItem = [`${currentToken?.id}`];
+                          }
+                          localStorage.setItem('favToken', JSON.stringify(existItem));
+                        }}
+                      >
+                        <g id="Icon">
+                          <path
+                            id="Mask"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M17.7363 20.95C17.5867 20.95 17.4361 20.915 17.2979 20.843L12.4692 18.3202L7.64151 20.843C7.32143 21.0087 6.93506 20.9803 6.64528 20.7682C6.35361 20.5561 6.20873 20.1972 6.27028 19.842L7.1898 14.5124L3.28824 10.7387C3.02877 10.4878 2.93502 10.1109 3.04581 9.76617C3.15661 9.42336 3.45302 9.17241 3.81097 9.12128L9.20876 8.33718L11.6217 3.48296C11.9417 2.83901 12.9976 2.83901 13.3177 3.48296L15.7306 8.33718L21.1284 9.12128C21.4864 9.17241 21.7828 9.42336 21.8936 9.76617C22.0043 10.1109 21.9106 10.4878 21.6511 10.7387L17.7496 14.5124L18.6691 19.842C18.7306 20.1972 18.5848 20.5561 18.2941 20.7682C18.1293 20.8894 17.9333 20.95 17.7363 20.95Z"
+                            fill={fillFav === true ? "#5367FF" : '#ffffff'}
+                          />
+                        </g>
+                      </svg>
+                    </div>
+                    <div className='flex items-center gap-[20px] lg:max-w-[50%] lg:justify-start justify-between mt-[15px]'>
+                      <p className="info-14-18 dark:text-white">${currentToken?.price!==undefined? currentToken?.price?.toFixed(5):'0.0'}</p>
+                      {/* <h4 className='md-heading dark:text-white'>${`${currentToken?.price?.toFixed(5)}`}</h4> */}
+                      <div className={` items-center gap-[10px] flex`}>
+                        <p className={`footer-text-secondary ${Number(props?.hlocData?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(props?.hlocData?.changeRate) > 0 ? '+' : ''}{props?.hlocData?.changeRate !== undefined ? (Number(props?.hlocData?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
+                        {Number(props?.hlocData?.changeRate) > 0 &&
+                          <IconsComponent type="high" active={false} hover={false} />
+                        }
+                        {Number(props?.hlocData?.changeRate) < 0 &&
+                          <IconsComponent type="low" active={false} hover={false} />
+                        }
+                      </div>
+                    </div>
                   </div>
                 </div>
-                <div className='w-[42px] flex h-[42px] rounded-[5px] dark:bg-black-v-1 bg-primary-100'>
-                  <svg
-                    width={24}
-                    height={24}
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className='m-auto'
-                    onClick={() => {
-                      let existItem: any = localStorage.getItem('favToken');
-                      if (existItem) {
-                        existItem = JSON.parse(existItem);
-                      }
-                      if (existItem && existItem.indexOf(currentToken?.id) !== -1) {
-                        existItem = existItem.filter((item: any) => {
-                          return item !== currentToken?.id
-                        })
-                        setFillFav(false);
-                      }
-                      else if (existItem) {
-                        setFillFav(true);
-                        existItem.push(`${currentToken?.id}`)
+              </div>
 
-                      }
-                      else {
-                        // localStorage.setItem('favToken', JSON.stringify([`${props?.token?.id}`]));
-                        existItem = [`${currentToken?.id}`];
-                      }
-                      localStorage.setItem('favToken', JSON.stringify(existItem));
-                    }}
-                  >
-                    <g id="Icon">
-                      <path
-                        id="Mask"
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M17.7363 20.95C17.5867 20.95 17.4361 20.915 17.2979 20.843L12.4692 18.3202L7.64151 20.843C7.32143 21.0087 6.93506 20.9803 6.64528 20.7682C6.35361 20.5561 6.20873 20.1972 6.27028 19.842L7.1898 14.5124L3.28824 10.7387C3.02877 10.4878 2.93502 10.1109 3.04581 9.76617C3.15661 9.42336 3.45302 9.17241 3.81097 9.12128L9.20876 8.33718L11.6217 3.48296C11.9417 2.83901 12.9976 2.83901 13.3177 3.48296L15.7306 8.33718L21.1284 9.12128C21.4864 9.17241 21.7828 9.42336 21.8936 9.76617C22.0043 10.1109 21.9106 10.4878 21.6511 10.7387L17.7496 14.5124L18.6691 19.842C18.7306 20.1972 18.5848 20.5561 18.2941 20.7682C18.1293 20.8894 17.9333 20.95 17.7363 20.95Z"
-                        fill={fillFav === true ? "#5367FF" : '#ffffff'}
-                      />
-                    </g>
-                  </svg>
-                </div>
-              </div>
-              <div className='flex items-center lg:max-w-[50%] w-full gap-[30px] lg:justify-start justify-between mb-20'>
-                <p className="info-10-14 !text-gamma py-0 md:py-[5px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">Rank #{`${currentToken?.rank && currentToken?.rank}`}</p>
-                {/* <p className="info-10-14 !text-gamma">Coin</p>
-                <p className="info-10-14 !text-gamma">On 2,771,773 watchlists</p> */}
-              </div>
-            </div>
-
-            <div className='flex gap-30 justify-between flex-wrap xl:flex-nowrap'>
-              <div className='flex items-center gap-[20px] lg:max-w-[50%] lg:justify-start justify-between'>
-                <h3 className='md-heading dark:text-white'>${`${currentToken?.price?.toFixed(5)}`}</h3>
-                <div className={` items-center gap-[10px] flex`}>
-                  <p className={`footer-text-secondary ${Number(props?.hlocData?.changeRate) > 0?'!text-buy':'!text-sell'}`}>{Number(props?.hlocData?.changeRate) > 0?'+':''}{(Number(props?.hlocData?.changeRate)*100).toFixed(3)}%</p>
-                  {Number(props?.hlocData?.changeRate) > 0 &&
-                    <IconsComponent type="high" active={false} hover={false} />
-                  }
-                  {Number(props?.hlocData?.changeRate) < 0 &&
-                    <IconsComponent type="low" active={false} hover={false} />
-                  }
-                </div>
-              </div>
               <div className='max-w-full lg:max-w-[50%] w-full lg:mt-0 mt-20'>
 
                 <div className='flex items-center justify-between '>
@@ -196,11 +189,27 @@ const ChartBanner = (props:propsData) => {
                   <div className='w-[40%] h-[5px] rounded-[5px] bg-primary'></div>
                 </div>
                 <div className='flex items-center justify-between'>
-                  <p className="info-10-14 !text-gamma">Low : ${props?.hlocData?.low}</p>
-                  <p className="info-10-14 !text-gamma">High : ${props?.hlocData?.high}</p>
+                  <p className="info-10-14 !text-gamma">Low : ${props?.hlocData?.changeRate !== undefined ? props?.hlocData?.low : 0.0}</p>
+                  <p className="info-10-14 !text-gamma">High : ${props?.hlocData?.changeRate !== undefined ? props?.hlocData?.high : 0.0}</p>
                 </div>
               </div>
+
             </div>
+
+            {/* <div className='flex gap-30 justify-between flex-wrap xl:flex-nowrap'>
+              <div className='flex items-center gap-[20px] lg:max-w-[50%] lg:justify-start justify-between'>
+                <h3 className='md-heading dark:text-white'>${`${currentToken?.price?.toFixed(5)}`}</h3>
+                <div className={` items-center gap-[10px] flex`}>
+                  <p className={`footer-text-secondary ${Number(props?.hlocData?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(props?.hlocData?.changeRate) > 0 ? '+' : ''}{props?.hlocData?.changeRate !== undefined ? (Number(props?.hlocData?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
+                  {Number(props?.hlocData?.changeRate) > 0 &&
+                    <IconsComponent type="high" active={false} hover={false} />
+                  }
+                  {Number(props?.hlocData?.changeRate) < 0 &&
+                    <IconsComponent type="low" active={false} hover={false} />
+                  }
+                </div>
+              </div>
+            </div> */}
           </div>
         </div>
 
@@ -212,7 +221,7 @@ const ChartBanner = (props:propsData) => {
                 return (
                   <Fragment key={ind} >
                     <div className={`dark:bg-black-v-1 p-10 rounded-[5px] ${ele.bg === "blue" ? "bg-[#B9DDFF]" : ele.bg === "red" ? "bg-[#FEE2E2]" : ele.bg === "green" ? "bg-[#D1FAE5]" : "bg-[#E2F2FF]"}`} >
-                      <div className='flex items-center gap-[10px] lg:mb-[28px] mb-[18px]'>
+                      <div className='flex items-center gap-[10px] lg:mb-[15px] mb-[18px]'>
                         <IconsComponent type={ele.titleIcon} hover={false} active={false} />
                         <p className='info-10-14 !text-gamma'>{ele.cardTitle}</p>
                       </div>
