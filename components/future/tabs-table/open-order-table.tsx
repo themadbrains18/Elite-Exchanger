@@ -6,6 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmationModel from '@/components/snippets/confirmation';
 import moment from 'moment';
+import { AES } from 'crypto-js';
 
 interface propsData {
     openOrders?: any;
@@ -26,6 +27,11 @@ const OpenOrderTable = (props: propsData) => {
 
     const actionPerform = async () => {
         let obj = { "id": positionId };
+        const ciphertext = AES.encrypt(
+            JSON.stringify(obj),
+            `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+          );
+          let record = encodeURIComponent(ciphertext.toString());
         
         let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeopenorder`, {
             method: "POST",
@@ -33,7 +39,7 @@ const OpenOrderTable = (props: propsData) => {
                 'Content-Type': 'application/json',
                 "Authorization": session?.user?.access_token
             },
-            body: JSON.stringify(obj)
+            body: JSON.stringify(record)
         }).then(response => response.json());
 
         if (closeReponse?.data?.status !== 200) {

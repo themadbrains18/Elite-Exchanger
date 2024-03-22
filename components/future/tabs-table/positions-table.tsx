@@ -175,11 +175,11 @@ const PositionsTable = (props: propsData) => {
           </thead>
           <tbody>
             {
-              props?.positions && props?.positions.length > 0 && props?.positions.map((item: any, index: number) => {
+              props?.positions && props?.positions.length > 0 && props?.positions?.map((item: any, index: number) => {
 
                 let tpsl = '--';
                 {
-                  item?.futureOpenOrders !== null && item?.futureOpenOrders.map((oo: any) => {
+                  item?.futureOpenOrders !== null && item?.futureOpenOrders?.map((oo: any) => {
                     if (tpsl === '--' && oo?.type === 'take profit market') {
                       tpsl = oo?.trigger;
                     }

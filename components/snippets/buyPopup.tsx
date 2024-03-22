@@ -122,16 +122,18 @@ const BuyPopup = (props: activeSection) => {
         }
         setTimeout(() => {
           route.push(`/p2p/my-orders?buy=${res?.data?.data?.result?.id}`);
-          setBtnDisabled(false)
+          // setBtnDisabled(false)
         }, 3000);
 
       }
       else {
         toast.error(res?.data?.data?.message !== undefined ? res?.data?.data?.message : res?.data?.data);
+        setBtnDisabled(false)
       }
     }
     else {
       toast.error('Unauthenticated User. Please Login to buy any assets');
+      setBtnDisabled(false)
       return;
     }
 
@@ -139,6 +141,7 @@ const BuyPopup = (props: activeSection) => {
 
   const closePopup = () => {
     props?.setShow1(false);
+    setBtnDisabled(false)
   }
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });

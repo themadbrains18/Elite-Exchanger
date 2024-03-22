@@ -440,7 +440,6 @@ const BuySell = (props: fullWidth) => {
           leverage_type: props?.marginMode?.margin,
           coin_id: props?.currentToken?.coin_id,
           qty: parseFloat(qty),
-          position_mode: positionMode
         };
       }
 
