@@ -15,6 +15,11 @@ import SideBar from "../snippets/sideBar";
 import { useSession } from "next-auth/react";
 import IconsComponent from "../snippets/icons";
 import Notification from "../snippets/notification";
+// import Pusher from 'pusher-js';
+
+// const pusher = new Pusher('b275b2f9e51725c09934', {
+//   cluster: 'ap2'
+// });
 
 interface propsData {
   session: any;
@@ -25,13 +30,11 @@ const Header = (props: propsData) => {
   const router = useRouter();
   const [userDetail, setUserDetail] = useState<any>(null);
   const [notificationData, setNotificationData] = useState([]);
-
   const [spotTrade, SetSpotTrade] = useState([]);
   const [futureTrade, SetFutureTrade] = useState([]);
-
   const { status, data: session } = useSession();
-
   let [showMenu, setShowMenu] = useState(false);
+
   const linkList = [
     {
       name: "Buy Crypto",
@@ -64,6 +67,25 @@ const Header = (props: propsData) => {
     }
     getTokenList();
     socket();
+    // var channel = pusher.subscribe('crypto-channel');
+    // channel.bind('p2p', function (data: any) {
+    //   if (data?.data?.sell_user_id === session?.user?.user_id) {
+    //     toast(
+    //       <div
+    //         style={{
+    //           height: "100%",
+    //           borderLeft: "5px solid green",
+    //           alignItems: "center",
+    //         }}
+    //       >
+    //         <span style={{ fontWeight: "bold", color: "#000" }}>P2p transaction notification</span>
+    //         {"  "}
+    //         <span style={{ marginLeft: 5 }}>Order is placed. Buyer is making the transfer to you</span>
+    //       </div>
+    //     );
+    //   }
+    // });
+
   }, []);
 
   const socket = () => {
@@ -84,9 +106,7 @@ const Header = (props: propsData) => {
           setUserDetail(data);
         }
       }
-      // if (eventDataType === "buy") {
-      //   getOrderByOrderId(data?.orderId);
-      // }
+
     };
   };
 
@@ -140,27 +160,6 @@ const Header = (props: propsData) => {
     // console.log(future,"===dshkjhd");
 
     SetFutureTrade(future);
-  }
-
-  const getOrderByOrderId = async (orderid: any) => {
-    let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {
-      method: "GET",
-      headers: {
-        "Authorization": props.session?.user?.access_token
-      },
-    }).then(response => response.json());
-
-    if (userOrder?.data) {
-      if (userOrder?.data?.status === 'isCompleted' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
-        toast.info('Payment released by buyer.')
-      }
-      if (userOrder?.data?.status === 'isProcess' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
-        toast.info('Third party user buy assets')
-      }
-      if (userOrder?.data?.status === 'isReleased' && userOrder?.data?.buy_user_id === session?.user?.user_id) {
-        toast.info('Assets Released successfully!..')
-      }
-    }
   }
 
 
