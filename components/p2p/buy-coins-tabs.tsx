@@ -54,7 +54,7 @@ const BuyCoinsTabs = (props: activeSection) => {
 
   const onPaymentMethodChange = (id: any) => {
     let filter_posts:any = [];
-    console.log(id,"==id");
+    // console.log(id,"==id");
     
     for (const post of props?.posts) {
       for (const upid of post.user.user_payment_methods) {

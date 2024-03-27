@@ -70,7 +70,7 @@ const Response = (props: activeSection) => {
 
   const onHandleSubmit = async (data: any) => {
 
-    console.log(data.condition);
+    // console.log(data.condition);
     
     let p_method = [];
 

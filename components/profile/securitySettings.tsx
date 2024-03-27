@@ -20,6 +20,8 @@ import EmailChangeAlert from "../snippets/emailChangeAlert";
 import ResetSuccessful from "../snippets/resetSuccessful";
 import AntiPhishing from "./antiPhishing";
 import ConfirmationModel from "../snippets/confirmation";
+import Whitelist from "./whitelist";
+import AddressManagement from "./address-management/address-management";
 
 const schema = yup.object().shape({
   old_password: yup.string().required("Old password is required"),
@@ -55,6 +57,7 @@ type UserSubmitForm = {
 
 const SecuritySettings = (props: fixSection) => {
   const [showActivity, setShowActivity] = useState(false);
+  const [showAddressManagement, setShowAddressManagement] = useState(false);
 
   const [enable, setEnable] = useState(0);
   const [show, setShow] = useState(false);
@@ -63,6 +66,7 @@ const SecuritySettings = (props: fixSection) => {
   const [formData, setFormData] = useState<UserSubmitForm | null>();
   const { status, data: session } = useSession()
   const [tradePassword, setTradePassword] = useState(false);
+  const [whitelist, setWhitelist] = useState(false);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
   const [successModal, setSuccessModal] = useState(false)
 
@@ -83,12 +87,16 @@ const SecuritySettings = (props: fixSection) => {
   const [showpswd, setShowPswd] = useState(false);
   const [showconfirm, setShowconfirm] = useState(false);
 
+
+  // console.log(props?.session,"==sesionnn in secutity setting");
+  
+
   let data = [
     {
       image: "mail.svg",
       bg: "blue",
       title: "Email Authentication",
-      desc: "",
+      desc: "Use your email to protect your account and transactions.",
       Add: true,
       CtaText: "Enable",
     },
@@ -96,7 +104,7 @@ const SecuritySettings = (props: fixSection) => {
       image: "phone.svg",
       bg: "green",
       title: "SMS Authentication",
-      desc: "",
+      desc: "Use your phone number to protect your account and transactions.",
       Add: true,
       CtaText: "Enable",
     },
@@ -104,7 +112,7 @@ const SecuritySettings = (props: fixSection) => {
       image: "google.svg",
       bg: "red",
       title: "Google Authentication",
-      desc: "",
+      desc: "Use Google Authenticator to protect your account and transactions.",
       Add: false,
       CtaText: "Enable",
     },
@@ -113,7 +121,7 @@ const SecuritySettings = (props: fixSection) => {
       image: "activity.svg",
       bg: "green",
       title: "Trading Password",
-      desc: "",
+      desc: "Protect your account and withdrawals with Trading Password and/or security key",
       Add: false,
       CtaText: "Enable",
     },
@@ -121,16 +129,27 @@ const SecuritySettings = (props: fixSection) => {
       image: "google.svg",
       bg: "blue",
       title: "Anti-phishing code",
-      desc: "",
+      desc: "Protect your account from phishing attempts and ensure that your notification emails are from Crypto Planet only.",
       Add: false,
       // ctaLink: "/activity",
+      CtaText: "Enable",
+    },
+    {
+      image: "google.svg",
+      bg: "blue",
+      title: "Withdrawal Whitelist",
+      desc: "Once this function is enabled, your account will only be able to withdraw to addresses on your whitelist.",
+      Add: false,
+      // ctaLink: "/activity",
+      link:"",
+      linkText:'Address Management',
       CtaText: "Enable",
     },
     {
       image: "activity.svg",
       bg: "red",
       title: "Activity log",
-      desc: "",
+      desc: "Check recent login activity",
       Add: false,
       ctaLink: "/activity",
       CtaText: "Activity log",
@@ -205,7 +224,7 @@ const SecuritySettings = (props: fixSection) => {
 
   const confirmOtp = () => {
     setConfirmation(false)
-    setEnable(6);
+    setEnable(7);
     setShow(true);
   }
 
@@ -398,7 +417,13 @@ const SecuritySettings = (props: fixSection) => {
 
         {showActivity ? (
           <Activity setShowActivity={setShowActivity} showActivity={showActivity} />
-        ) : (
+        ) :
+        showAddressManagement?
+        (
+            <AddressManagement setShowActivity={setShowAddressManagement} showActivity={showAddressManagement}/>
+          )
+        :
+        (
           <div className="max-[1023px] dark:bg-omega bg-white rounded-[10px]">
             <p className="sec-title lg:p-0 pl-20 pt-20">Security</p>
             <div className="py-[30px] md:py-[50px] px-20 lg:px-0">
@@ -429,13 +454,17 @@ const SecuritySettings = (props: fixSection) => {
                           {item.title}
                         </p>
                         <p className="info-12">{item.desc}</p>
+                        {
+                          item?.linkText &&
+                          <p onClick={()=>{setShowAddressManagement(true)}} className="!text-primary font-bold info-14  mt-[5px] cursor-pointer">{item?.linkText}</p>
+                        }
                       </div>
                     </div>
                     {item.Add != false && (
                       <div
                         className="py-[8px] cursor-pointer pl-[10px] pr-[10px] pl-1 hidden md:flex gap-[8px] items-center border rounded-5 border-grey-v-1 dark:border-opacity-[15%] max-w-fit w-full"
                         onClick={() => {
-                          console.log(props?.session?.user, '==========props?.session?.user');
+                          // console.log(props?.session?.user, '==========props?.session?.user');
                           if (googleAuth === true) {
                             setActive(index + 1);
                             setShow(true);
@@ -526,6 +555,19 @@ const SecuritySettings = (props: fixSection) => {
                             : "Edit"}
                         </button>
                       )
+                       : index === 5 ? (
+                        <button
+                          className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${whitelist===false  ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
+                          onClick={() => {
+                            setEnable(index + 1);
+                            setShow(true);
+                          }}
+                        >
+                          { whitelist===false  
+                            ? "Enable"
+                            : "Disable"}
+                        </button>
+                      )
                         :
                         <button
                           className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${props?.session?.user?.antiphishing === null ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
@@ -543,7 +585,6 @@ const SecuritySettings = (props: fixSection) => {
                             ? "Add"
                             : "Edit"}
                         </button>
-
                     ) : (
                       <button
                         className="max-w-full asasdasds w-full flex cursor-pointer items-center justify-center md:max-w-[130px] h-40 bg-primary rounded-5 info-16-18 text-white "
@@ -712,7 +753,7 @@ const SecuritySettings = (props: fixSection) => {
           setGoogleAuth={setGoogleAuth}
         />
       )}
-      {enable === 6 && (
+      {enable === 7 && (
         <ConfirmPopup
           setEnable={setEnable}
           setShow={setShow}
@@ -737,6 +778,15 @@ const SecuritySettings = (props: fixSection) => {
           setShow={setShow}
           session={props?.session}
           setAntiFishingCode={setAntiFishingCode}
+        />
+      )}
+      {enable === 6 && (
+        <Whitelist
+          setEnable={setEnable}
+          setShow={setShow}
+          session={props?.session}
+          whitelist={whitelist}
+          setWhitelist={setWhitelist}
         />
       )}
       {active === 1 && (

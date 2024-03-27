@@ -48,7 +48,7 @@ const AddPaymentModal = (props:any) => {
   const numberOfFields = watch("numberOfFields");
   const { data: session } = useSession()
   useEffect(() => {
-    console.log("hii");
+    // console.log("hii");
 
     const newVal = Number(numberOfFields || 0);
     const oldVal = fields.length;

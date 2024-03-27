@@ -113,7 +113,7 @@ const AntiPhishingCode = (props: activeSection) => {
 
   const finalOtpVerification = async (otp: any) => {
     try {
-      console.log(otp, "==otp");
+      // console.log(otp, "==otp");
 
       let username =
         props.session?.user.email !== "null"
@@ -131,7 +131,7 @@ const AntiPhishingCode = (props: activeSection) => {
       );
 
       let record = encodeURIComponent(ciphertext.toString());
-      console.log("hete");
+      // console.log("hete");
 
       let response = await fetch(
         `${process.env.NEXT_PUBLIC_BASEURL}/user/antiPhishing`,

@@ -75,7 +75,7 @@ const AllKycUsers = () => {
     try {
       let actionKyc = e.currentTarget.innerHTML;
 
-      console.log(item,'--------kyc item');
+      // console.log(item,'--------kyc item');
       
       let obj = {
         userid: item,
