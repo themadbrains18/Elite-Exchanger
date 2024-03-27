@@ -162,7 +162,7 @@ const EditAdverstisement = (props: propsData) => {
                   </p>
                   <div className="mt-20 mb-20 md:mb-0 md:mt-30 grid grid-cols-3 md:flex flex-wrap gap-x-10 gap-y-30 md:gap-20 p-10 md:p-0">
                     {cash?.map((item, index) => {
-                                  {console.log(selectedAssets?.price , inrPrice)} 
+                                  // {console.log(selectedAssets?.price , inrPrice)} 
                       return (
                         <div
                           key={index}

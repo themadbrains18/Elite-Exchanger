@@ -59,6 +59,7 @@ export const authOptions: NextAuthOptions = {
                         role : token?.role, 
                         tradingPassword : datauser?.data?.tradingPassword,
                         antiphishing : datauser?.data?.antiphishing,
+                        whitelist : datauser?.data?.whitelist=== 1?true:false,
                         kyc : datauser?.data?.kycstatus,
                         createdAt: datauser?.data?.createdAt,
                         pwdupdatedAt:datauser?.data?.pwdupdatedAt

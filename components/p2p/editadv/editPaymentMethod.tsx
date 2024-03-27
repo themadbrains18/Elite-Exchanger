@@ -77,7 +77,7 @@ const EditPaymentMethod = (props: activeSection) => {
      
     }
     else{
-      console.log("here");
+      // console.log("here");
       
       setError("quantity", {
         type: "custom",

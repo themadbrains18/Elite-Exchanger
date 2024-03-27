@@ -55,7 +55,7 @@ export default async function middleware(req: NextRequest, res : NextResponse) {
   if (hostname == `admin.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     const session = await getToken({ req });
 
-    console.log(session,path, ' ==== session session session session session session session session session ====')
+    // console.log(session,path, ' ==== session session session session session session session session session ====')
     let role : unknown  = session?.role;
 
     if (!session && !path.includes("/login")) {

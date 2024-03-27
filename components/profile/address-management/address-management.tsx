@@ -6,56 +6,30 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import AddAddress from "./addAddress";
 
 interface fixSection {
   showActivity?: boolean;
   setShowActivity: Function;
   // activity?: any;
 }
-const Activity = (props: fixSection) => {
-  const [active, setActive] = useState(1);
+const AddressManagement = (props: fixSection) => {
+  const [active, setActive] = useState(false);
   const { mode } = useContext(Context);
   const [itemOffset, setItemOffset] = useState(0);
   const { data: session } = useSession()
   const [data, setData] = useState([]);
+  const [list, setList] = useState([]);
 
-  const clearActivity = async () => {
-
-    let obj = {
-      user_id: session?.user?.user_id
-    }
-
-    const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-    let record = encodeURIComponent(ciphertext.toString());
-
-    let response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASEURL}/user/activity`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: session?.user?.access_token,
-        },
-        body: JSON.stringify(record)
-      }
-    ).then((response) => response.json());
+  useEffect(()=>{
+  getAllNetworks()
+  getAllWhitelistAddress()
+  },[])
 
 
-    if (response) {
-      toast.success(response?.data),
-      setData([]);
-    }
-
-  };
-
-  useEffect(() => {
-    // setData(props?.activity);
-    getActivityData();
-  }, []);
-
-  const getActivityData = async () => {
+  const getAllNetworks = async () => {
     try {
-      let activity = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/activity?userid=${session?.user?.user_id}`, {
+      let activity = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/network`, {
         method: "GET",
         headers: {
           "Authorization": session?.user?.access_token
@@ -68,6 +42,51 @@ const Activity = (props: fixSection) => {
 
     }
   }
+  const getAllWhitelistAddress = async () => {
+    try {
+      let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list?user_id=${session?.user?.user_id}`, {
+        method: "GET",
+        headers: {
+            "Authorization": session?.user?.access_token
+        },
+    }).then(response => response.json());
+
+      // console.log(address.data,'-----address data');
+      setList(address?.data);
+    } catch (error) {
+
+    }
+  }
+
+  const updateStatus = async (data: any) => {
+    try {
+      const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+      let record = encodeURIComponent(ciphertext.toString());
+
+      let responseStatus = await fetch(
+        `/api/address/update`,
+        {
+          headers: {
+            "content-type": "application/json",
+            "Authorization": session?.user?.access_token
+          },
+          method: "PUT",
+          body: JSON.stringify(record),
+        }
+      ).then((response) => response.json());
+
+      // console.log(responseStatus, "==responseStatus");
+
+      if (responseStatus) {
+        getAllWhitelistAddress();
+      }
+
+    } catch (error) {
+      console.log(error, "error in pair update");
+
+    }
+  };
+  
 
   return (
     <>
@@ -84,26 +103,12 @@ const Activity = (props: fixSection) => {
           <p className="nav-text-sm">Back</p>
         </div>
         <div className="flex gap-5 justify-between mb-[40px]">
-          <p className="sec-title">Activity log</p>
+          <p className="sec-title">Address Management</p>
           <div className="flex gap-2 items-center">
-            {/* <div className="border w-full rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[331px]  py-[13px] px-[10px] ">
-              <Image
-                alt="search"
-                loading="lazy"
-                width="24"
-                height="24"
-                decoding="async"
-                data-nimg="1"
-                src="/assets/history/search.svg"
-              />
-              <input
-                type="search"
-                placeholder="Search"
-                className="nav-text-sm !text-beta outline-none bg-[transparent] w-full"
-              />
-            </div> */}
-            <button className=" solid-button w-full hover:bg-primary-800" onClick={() => clearActivity()}>
-              Clear All
+            <button onClick={()=>{
+                setActive(true)
+            }} className=" solid-button w-full hover:bg-primary-800">
+            Add address
             </button>
           </div>
         </div>
@@ -114,7 +119,7 @@ const Activity = (props: fixSection) => {
                 <th className="lg:sticky bg-white dark:bg-d-bg-primary py-5">
                   <div className="flex ">
                     <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">
-                      Device
+                    Address label
                     </p>
                     <Image
                       src="/assets/history/uparrow.svg"
@@ -127,7 +132,7 @@ const Activity = (props: fixSection) => {
                 <th className=" py-5">
                   <div className="flex">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                      IP Address
+                    Whitelist
                     </p>
                     <Image
                       src="/assets/history/uparrow.svg"
@@ -140,7 +145,7 @@ const Activity = (props: fixSection) => {
                 <th className=" py-5">
                   <div className="flex">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                      Location
+                    Address
                     </p>
                     <Image
                       src="/assets/history/uparrow.svg"
@@ -153,7 +158,7 @@ const Activity = (props: fixSection) => {
                 <th className=" py-5">
                   <div className="flex">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                      Date / Time
+                    Network
                     </p>
                     <Image
                       src="/assets/history/uparrow.svg"
@@ -163,23 +168,11 @@ const Activity = (props: fixSection) => {
                     />
                   </div>
                 </th>
-                {/* <th className=" py-5">
-                <div className="flex justify-end">
-                  <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                    Device
-                  </p>
-                  <Image
-                    src="/assets/history/uparrow.svg"
-                    width={15}
-                    height={15}
-                    alt="uparrow"
-                  />
-                </div>
-              </th> */}
+           
               </tr>
             </thead>
             <tbody>
-              {data?.map((item: any, index: any) => {
+              {list?.map((item: any, index: any) => {
                 return (
                   <>
                     <tr>
@@ -187,29 +180,35 @@ const Activity = (props: fixSection) => {
                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                           {/* <Image src={`/assets/security/${item.image}`} width={30} height={30} alt="coins" /> */}
                           <p className="info-14-18 dark:text-white !leading-[30px]">
-                            {item?.browser}/{item.deviceType}
+                            {item?.label}
                           </p>
                         </div>
                       </td>
                       <td className="">
-                        <p className="info-14-18 dark:text-white">{item.ip}</p>
+                        <p className={`info-14-18 dark:text-white ${item?.status===true?'text-dark-green':'text-red-dark'}`}>{item?.status===true?"Active":"Inactive"}</p>
                       </td>
 
                       <td className="">
                         <p className="info-14-18 dark:text-white">
-                          {item.location}
+                          {item.address}
                         </p>
                       </td>
                       <td className="">
                         <p className="info-14-18 dark:text-white">
-                          {moment(item.lastLogin).format("YYYY-MM-DD HH:mm:ss A")}
+                     {item.network.fullname}
                         </p>
                       </td>
-                      {/* <td className=" !text-end">
-                      <p className="info-14-18 inline-block py-[5px] px-[9px] rounded-[4px]  ">
-                        {item.deviceType}
-                      </p>
-                    </td> */}
+
+                      <td> <button
+                            onClick={() => updateStatus(item)}
+                            className={`admin-outline-button ${item?.status == false
+                              ? "dark:text-[#66BB6A] text-[#0BB783] !border-[#0bb78380] dark:!border-[#66bb6a1f]"
+                              : "dark:text-[#F44336] text-[#F64E60] !border-[#f64e6080] dark:!border-[#f443361f]"
+                              } !px-[10px] !py-[4px] whitespace-nowrap	`}
+                          >
+                            {item?.status == false ? "Activate " : "Inactivate"}
+                          </button></td>
+                    
                     </tr>
                   </>
                 );
@@ -218,8 +217,12 @@ const Activity = (props: fixSection) => {
           </table>
         </div>
       </section>
+      {
+active &&
+<AddAddress active={active} setActive={setActive} networks={data} session={session} refreshData={getAllWhitelistAddress}/>
+      }
     </>
   );
 };
 
-export default Activity;
+export default AddressManagement;
