@@ -14,9 +14,9 @@ export const config = {
 
 router.get(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
-        let token = req.headers.authorization;
+        // let token = req.headers.authorization;
         
-        let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/payment/list`, token);
+        let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/payment/list`, "");
 
         return res.status(200).send({ data });
     } catch (error: any) {

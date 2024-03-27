@@ -94,9 +94,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   // masterpayment
   let masterPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/masterpayment`, {
     method: "GET",
-    headers: {
-      "Authorization": session?.user?.access_token
-    },
+    
   }).then(response => response.json());
 
   if (session) {
