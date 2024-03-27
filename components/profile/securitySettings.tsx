@@ -66,7 +66,7 @@ const SecuritySettings = (props: fixSection) => {
   const [formData, setFormData] = useState<UserSubmitForm | null>();
   const { status, data: session } = useSession()
   const [tradePassword, setTradePassword] = useState(false);
-  const [whitelist, setWhitelist] = useState(false);
+  const [whitelist, setWhitelist] = useState(props.session?.user?.whitelist);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
   const [successModal, setSuccessModal] = useState(false)
 
@@ -384,6 +384,8 @@ const SecuritySettings = (props: fixSection) => {
 
     }, 3000);
 
+    // setWhitelist(props?.session?.user?.whitelist)
+
   }, [errors])
 
   return (
@@ -557,13 +559,13 @@ const SecuritySettings = (props: fixSection) => {
                       )
                        : index === 5 ? (
                         <button
-                          className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${whitelist===false  ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
+                          className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${ whitelist===false  ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
                           onClick={() => {
                             setEnable(index + 1);
                             setShow(true);
                           }}
                         >
-                          { whitelist===false  
+                          { whitelist===false
                             ? "Enable"
                             : "Disable"}
                         </button>
