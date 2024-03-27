@@ -44,7 +44,7 @@ router.post(async (req, res) => {
     const os = userAgent.os.toString();
     var locationData:any;
 
-    await fetch('http://ip-api.com/json')
+    await fetch(`${process.env.NEXT_PUBLIC_IP_GET_URL}`)
       .then(response => response.json())
       .then(data => {
         locationData=data

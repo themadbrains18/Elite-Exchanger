@@ -58,7 +58,7 @@ const SignIn = (Props: loginType) => {
 
   useEffect(() => {
     let agent = window.navigator.userAgent;
-    fetch('http://ip-api.com/json')
+    fetch(`${process.env.NEXT_PUBLIC_IP_GET_URL}`)
       .then(response => response.json())
       .then(data => {
       });
