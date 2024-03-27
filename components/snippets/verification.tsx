@@ -27,6 +27,7 @@ const Verification = (props: activeSection) => {
   const [timeLeft, setTimer] = useState('');
   const [enable, setEnable] = useState(false);
   const [popup, setPopup] = useState(false);
+  const [ disabled, setDisabled ] = useState(false)
 
   useEffect(() => {
     orderTimeCalculation();
@@ -85,6 +86,7 @@ const Verification = (props: activeSection) => {
     }
     else if (currentTime > deadline) {
       setEnable(false);
+      setDisabled(false)
     }
   }
 
@@ -101,6 +103,7 @@ const Verification = (props: activeSection) => {
     else {
       if (Ref.current) clearInterval(Ref.current);
       setEnable(false);
+      setDisabled(false)
     }
   }
 
@@ -117,9 +120,21 @@ const Verification = (props: activeSection) => {
   const matchUserOtp = async () => {
     try {
       // console.log(fillOtp,"==fillOtp");                        
-      
+      setDisabled(true)
+      if(fillOtp === "" || fillOtp==="string" || fillOtp===null){
+          toast.error("Please enter OTP");
+          setDisabled(false)
+          return;
+      }
+
+ 
+
       props.finalOtpVerification(fillOtp);
       setOtp('');
+      setTimeout(()=>{
+        setDisabled(false)
+
+      },4000)
     } catch (error) {
       console.log(error);
     }
@@ -231,22 +246,23 @@ const Verification = (props: activeSection) => {
         >
           Submit
         </button> : <button
-          className={`solid-button w-full`}
+          className={`solid-button w-full `}
+          disabled={disabled}
           onClick={() => {
             matchUserOtp();
           }}
         >
           Submit
         </button>}
-        <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] !text-primary mt-[10px]`} onClick={() => {setPopup(true)}}>
+        <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] !text-primary mt-[10px]`} onClick={() => { setPopup(true) }}>
           Didn't receive the code?
-            </p>
+        </p>
 
       </div>
       {
-      popup &&
-      <CodeNotRecieved setEnable={setPopup}/>
-    }
+        popup &&
+        <CodeNotRecieved setEnable={setPopup} />
+      }
     </>
   );
 };
