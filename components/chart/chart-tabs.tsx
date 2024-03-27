@@ -228,7 +228,7 @@ const ChartTabs = (props: propsData) => {
                     <th className="max-[1023px]:hidden py-5">
                       <div className="flex">
                         <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                          Circulating Supply
+                          Volume
                         </p>
                         <Image
                           src="/assets/history/uparrow.svg"
@@ -330,12 +330,9 @@ const ChartTabs = (props: propsData) => {
                         <td className="max-[1023px]:hidden">
                           <div className={` items-center gap-[10px] flex`}>
                             <p
-                              className={`footer-text-secondary  ${item.status == "high"
-                                ? "!text-[#03A66D]"
-                                : "!text-[#DC2626]"
-                                }`}
+                              className={`footer-text-secondary  `}
                             >
-                              {item.circulatingSupply && item.circulatingSupply}
+                              {item.volume && item.volume}
                             </p>
                             <IconsComponent
                               type={item.status}

@@ -46,6 +46,8 @@ const Chart = (props: Session) => {
     const [sellTrade, setSellTrade] = useState([]);
     const [BuyTrade, setBuyTrade] = useState([]);
 
+    const [hlocData, setHLOCData] = useState<any>(Object);
+
     let { slug } = router.query;
 
     const socket = () => {
@@ -72,9 +74,18 @@ const Chart = (props: Session) => {
     };
 
     const refreshTokenList = async () => {
+
+        let hlocv = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/hloc?slug=${slug}`, {
+            method: "GET"
+        }).then(response => response.json());
+
+        setHLOCData(hlocv?.data?.data);
+
         let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
             method: "GET"
         }).then(response => response.json());
+
+        
 
         let ccurrentToken = tokenList?.data.filter((item: any) => {
             return item.symbol === slug
@@ -103,6 +114,7 @@ const Chart = (props: Session) => {
         getAllMarketOrderByToken(slug);
         socket();
         addToWatchList(ccurrentToken[0]?.id);
+        refreshTokenList();
 
     }, [slug]);
 
@@ -214,7 +226,6 @@ const Chart = (props: Session) => {
         }
     }
 
-
     slug = slug
     return (
         <>
@@ -222,7 +233,7 @@ const Chart = (props: Session) => {
                 <ToastContainer />
                 <div className=" bg-light-v-1 py-20 dark:bg-black-v-1">
                     <div className="container p-[15px] lg:p-20 gap-30">
-                        <ChartBanner />
+                        <ChartBanner hlocData={hlocData}/>
                     </div>
                     <div className="container p-[15px] lg:p-20 flex gap-30 flex-wrap">
                         <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
@@ -237,12 +248,12 @@ const Chart = (props: Session) => {
                                 <BuySellCard id={1} coins={allCoins} session={props.session} token={currentToken[0]} slug={slug} assets={props.assets} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
                                 {/* hidden on mobile */}
                                 <div className='lg:block hidden'>
-                                    <OrderBook slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} />
+                                    <OrderBook slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} hlocData={hlocData}/>
                                 </div>
                             </div>
                             {/* hidden on desktop */}
                             <div className='lg:hidden'>
-                                <OrderBookMobile slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} />
+                                <OrderBookMobile slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} hlocData={hlocData}/>
                                 <ChartTabs slug={slug} coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} getUserOpenOrder={getUserOpenOrder} getUserTradeHistory={getUserTradeHistory} />
                             </div>
                         </div>

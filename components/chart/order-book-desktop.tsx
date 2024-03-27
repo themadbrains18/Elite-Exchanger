@@ -8,6 +8,7 @@ interface propsData {
     allTradeHistory?:any;
     sellTrade?:any;
     BuyTrade?:any;
+    hlocData?:any;
 }
 
 const OrderBook = (props: propsData) => {
@@ -84,7 +85,7 @@ const OrderBook = (props: propsData) => {
                             </div>
 
                             <div>
-                                <button type='button' className='solid-button w-full bg-buy my-20'>$ {props?.token?.price.toFixed(4)}</button>
+                                <button type='button' className={`solid-button w-full my-20 ${Number(props?.hlocData?.changeRate) > 0?'bg-buy ':'bg-sell '} `}>$ {props?.token?.price.toFixed(4)}</button>
                             </div>
 
                             {/* This is for desktop sell/bids */}

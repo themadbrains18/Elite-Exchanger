@@ -1,7 +1,9 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import IconsComponent from '../snippets/icons';
 import { useRouter } from 'next/router';
 import moment from "moment";
+import Image from "next/image";
+import Context from "../contexts/context";
 
 interface fixSection {
   fixed?: boolean;
@@ -14,7 +16,7 @@ const ReferRewardsRes = (props: fixSection) => {
   const [active, setActive] = useState(1);
 
   const router = useRouter();
-
+  const { mode } = useContext(Context)
   const [list, setList] = useState(props.rewardsList);
 
   const updateClaimData = async (data: any) => {
@@ -116,7 +118,7 @@ const ReferRewardsRes = (props: fixSection) => {
           {/* <button type='button' onClick={() => { setActive(3) }} className={`solid-button !px-[20px] !py-[10px] ${active == 3 ? '' : '!bg-[#5367ff42]'} `}>Used</button> */}
           <button type='button' onClick={() => { setActive(4); filterRewards(4) }} className={`solid-button !px-[20px] !py-[10px] ${active == 4 ? '' : '!bg-[#5367ff42]'}`}>Expired</button>
         </div>
-        <div className='grid max-[1250px]:grid-cols-1 grid-cols-2 gap-[10px] mt-[40px]'>
+        <div className={`${list && list.length === 0?'':'grid'} max-[1250px]:grid-cols-1 grid-cols-2 gap-[10px] mt-[40px]`}>
           {list && list.length > 0 && list.map((item: any) => {
 
             if (item.claimed_on !== null) {
@@ -206,8 +208,16 @@ const ReferRewardsRes = (props: fixSection) => {
           })}
 
           {list && list.length === 0 &&
-            <div className='rounded-[10px] bg-white'>
-              No Records Found
+            <div className={`${mode === "dark" ? 'text-[#ffffff] bg-black' : 'text-[#000000] bg-white'} rounded-[10px]`}>
+              <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
+                <Image
+                  src="/assets/refer/empty.svg"
+                  alt="emplty table"
+                  width={107}
+                  height={104}
+                />
+                <p > No Record Found </p>
+              </div>
             </div>
           }
         </div>

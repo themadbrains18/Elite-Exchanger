@@ -9,6 +9,7 @@ interface propsData {
     allTradeHistory?:any;
     sellTrade?:any;
     BuyTrade?:any;
+    hlocData?:any;
 }
 
 const OrderBookMobile = (props: propsData) => {

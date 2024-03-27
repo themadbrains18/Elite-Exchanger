@@ -440,7 +440,6 @@ const BuySell = (props: fullWidth) => {
           leverage_type: props?.marginMode?.margin,
           coin_id: props?.currentToken?.coin_id,
           qty: parseFloat(qty),
-          position_mode: positionMode
         };
       }
 
@@ -1034,6 +1033,7 @@ const BuySell = (props: fullWidth) => {
                   }}
                   value=""
                   name="colored-radio"
+                  // defaultChecked={modelPopup?true:false}
                   className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]"
                 />
                 <label
