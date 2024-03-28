@@ -6,11 +6,11 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Pusher from 'pusher-js';
+// import Pusher from 'pusher-js';
 
-const pusher = new Pusher('b275b2f9e51725c09934', {
-  cluster: 'ap2'
-});
+// const pusher = new Pusher('b275b2f9e51725c09934', {
+//   cluster: 'ap2'
+// });
 
 interface Session {
   session: {

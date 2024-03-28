@@ -369,7 +369,7 @@ const ChartTabs = (props: propsData) => {
               </table>
             </div>
             <div className="flex pt-[25px] gap-[10px] items-center justify-between flex-wrap xl:flex-nowrap">
-              <p className="info-12 md:footer-text !text-gamma">52 assets</p>
+              <p className="info-12 md:footer-text !text-gamma">{props?.coinsList?.length} assets</p>
 
               <ReactPaginate
                 className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
