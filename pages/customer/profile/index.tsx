@@ -61,8 +61,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders()
-
-  console.log(session,'--------------session profile page');
   
   if (session) {
 
