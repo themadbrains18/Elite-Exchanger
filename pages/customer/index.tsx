@@ -13,15 +13,12 @@ import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
-// import dynamic from "next/dynamic";
-// const VisitorAPI = dynamic(() => import('visitorapi') as any, {
-//   ssr: false,
-// });
-import Pusher from 'pusher-js';
 
-const pusher = new Pusher('b275b2f9e51725c09934', {
-  cluster: 'ap2'
-});
+// import Pusher from 'pusher-js';
+
+// const pusher = new Pusher('b275b2f9e51725c09934', {
+//   cluster: 'ap2'
+// });
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -39,29 +36,6 @@ export default function Home({ session, coinList }: Session) {
   const [allCoins, setAllCoins] = useState(coinList);
 
   useEffect(() => {
-
-    // console.log(detectBrowser());
-
-    fetch(`${process.env.NEXT_PUBLIC_IP_GET_URL}`)
-      .then(response => response.json())
-      .then(data => {
-        // console.log(data, '=====api all data')
-      });
-  }, []);
-
-  const detectBrowser = () => {
-    let os = navigator.userAgent.toLowerCase();
-    // if (!!document.DOCUMENT_NODE === true) {
-    //   return "IE"
-    // }
-    if (os.search('chrome') > -1 || os.search('crios') > -1) {
-      return 'Chrome';
-    } else if (os.search('firefox') > -1 || os.search('fxios') > -1 || os.search('focus') > -1) {
-      return 'Firefox';
-    }
-  }
-
-  useEffect(() => {
     const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
 
     websocket.onopen = () => {
@@ -75,11 +49,6 @@ export default function Home({ session, coinList }: Session) {
         refreshTokenList()
       }
     }
-
-    // var channel = pusher.subscribe('crypto-channel');
-    // channel.bind('price', function (data: any) {
-    //   refreshTokenList()
-    // });
 
   }, [])
 

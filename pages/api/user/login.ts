@@ -27,42 +27,47 @@ router.post(async (req, res) => {
 
     const deviceType = userAgent.device.family.toLowerCase();
 
-    let device=''
+    let device = ''
     // You can now check the device type and take appropriate actions
     if (deviceType.includes("iphone") || deviceType.includes("android")) {
       // It's a mobile device
-      device= "mobile" 
+      device = "mobile"
     } else if (deviceType.includes("ipad") || deviceType.includes("tablet")) {
       // It's a tablet
-      device= "tablet" 
+      device = "tablet"
     } else {
       // It's a desktop or other device
-      device= "desktop" 
+      device = "desktop"
     }
     // Access different properties of the user agent object
     const browser = userAgent.toAgent();
     const os = userAgent.os.toString();
-    var locationData:any;
+    var locationData: any;
 
-    await fetch(`${process.env.NEXT_PUBLIC_IP_GET_URL}`)
-      .then(response => response.json())
-      .then(data => {
-        locationData=data
-      });
+    let ipInfoData = await fetch("https://ipinfo.io/json")
+    .then((response) => response.text())
+    .then((result) => {locationData = JSON.parse(result) })
+    .catch((error) => console.error(error));
+    
+    // .then(response => response.json())
+    // .then(data => {
+    //   locationData = data
+    // });
+
     const decodedStr = decodeURIComponent(req.body);
     let formData = AES.decrypt(
       decodedStr,
       `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
     ).toString(enc.Utf8);
-    let formdata = JSON.parse(formData);
-    formdata.deviceType=device
-    formdata.os=os
-    formdata.browser=browser
-    formdata.ip=locationData?.query
-    formdata.location=locationData?.country
-    formdata.region=locationData?.regionName
 
-      
+    let formdata = JSON.parse(formData);
+    formdata.deviceType = device
+    formdata.os = os
+    formdata.browser = browser
+    formdata.ip = locationData?.ip
+    formdata.location = locationData?.country
+    formdata.region = locationData?.region
+
 
     let token = "";
     let data = await postData(
@@ -72,6 +77,8 @@ router.post(async (req, res) => {
     );
     return res.status(200).send({ data });
   } catch (error: any) {
+    console.log(error);
+
     throw new Error(error.message);
   }
 });
