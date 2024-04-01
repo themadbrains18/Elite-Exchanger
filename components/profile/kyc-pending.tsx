@@ -34,8 +34,8 @@ const KycPending = (props: fixSection) => {
       <div className='flex items-center justify-between gap-20 mb-[46px]'>
         <p className="sec-title">KYC Verification</p>
         <div className='flex items-center gap-10'>
-          <IconsComponent type="underProcess" hover={false} active={false} />
-          <p className='nav-text-sm'>Under Process</p>
+          <IconsComponent type="kychold" hover={false} active={false} width={20} height={20}/>
+          <p className='nav-text-sm'>Unverified</p>
         </div>
       </div>
       <div>

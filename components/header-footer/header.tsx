@@ -318,14 +318,14 @@ const Header = (props: propsData) => {
                         </p>
                         {props.session?.user?.kyc === 'approve' &&
                           <div className="flex justify-start text-center items-center gap-[3px]">
-                            <IconsComponent type="kycComplete" hover={false} active={false} />
+                            <IconsComponent type="kycComplete" hover={false} active={false} width={14} height={14}/>
                             <p className="top-label !text-gamma hidden xl:block">Verified</p>
                           </div>
 
                         }
                         {props.session?.user?.kyc !== 'approve' &&
                           <div className="flex justify-start text-center items-center gap-[3px]" >
-                            <IconsComponent type="kychold" hover={false} active={false} />
+                            <IconsComponent type="kychold" hover={false} active={false} width={14} height={14}/>
                             <p className="top-label !text-gamma hidden xl:block">Unverified</p>
                           </div>
 

@@ -35,7 +35,7 @@ const KycDone = (props:fixSection) => {
         <div className='flex items-center justify-between gap-20 mb-[46px]'>
             <p className="sec-title">KYC Verification</p>
             <div className='flex items-center gap-10'>
-              <IconsComponent type="kycComplete" hover={false} active={false} />
+              <IconsComponent type="kycComplete" hover={false} active={false} width={20} height={20}/>
               <p className='nav-text-sm'>Verified</p>
             </div>
         </div>
