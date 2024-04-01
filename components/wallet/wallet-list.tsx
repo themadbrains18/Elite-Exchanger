@@ -11,6 +11,7 @@ import TransferModal from "../future/popups/transfer-modal";
 import moment from 'moment';
 import { toast } from "react-toastify";
 import { useSession } from "next-auth/react";
+import WithdrawAuthenticationModelPopup from "./withdrawAuthentication";
 
 interface propsData {
   coinList: any,
@@ -41,6 +42,9 @@ const WalletList = (props: propsData): any => {
 
   const [overlay, setOverlay] = useState(false);
   const [popupMode, setPopupMode] = useState(0);
+
+  const [withdrawActive, setWithdrawActive] = useState(false);
+  const [withdrawShow, setWithdrawShow] = useState(false);
 
   const { status, data: session } = useSession();
   const router = useRouter();
@@ -343,18 +347,25 @@ const WalletList = (props: propsData): any => {
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
                               <button onClick={() => {
-                                const expire = new Date(`${session?.user?.pwdupdatedAt}`).getTime();
-                                const updateDate = Date.now();
-                                let expireDate = Math.floor(expire / 1000);
-                                let currentDate = Math.floor(updateDate / 1000);
-                                if (currentDate >= expireDate) {
-                                  setSelectedCoinBalance(item?.balance);
-                                  setShow1(2);
-                                  setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                                if (session?.user.TwoFA === false || (session.user.email === '' || session.user.email === null)) {
+                                  setWithdrawActive(true);
+                                  setWithdrawShow(true);
                                 }
                                 else {
-                                  toast.warning('You cannot do any action next 24 hours');
+                                  const expire = new Date(`${session?.user?.pwdupdatedAt}`).getTime();
+                                  const updateDate = Date.now();
+                                  let expireDate = Math.floor(expire / 1000);
+                                  let currentDate = Math.floor(updateDate / 1000);
+                                  if (currentDate >= expireDate) {
+                                    setSelectedCoinBalance(item?.balance);
+                                    setShow1(2);
+                                    setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                                  }
+                                  else {
+                                    toast.warning('You cannot do any action next 24 hours');
+                                  }
                                 }
+
                               }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                 <span className="text-primary block">Withdraw</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
@@ -374,7 +385,7 @@ const WalletList = (props: propsData): any => {
                                 setSelectedCoin(item?.token !== null ? item?.token : item?.global_token);
                                 setSelectedCoinBalance(item?.balance);
                                 setShow1(3);
-                                
+
                               }} disabled={!cursor} className={` max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  ${cursor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
                                 <span className="text-primary block">Staking</span>
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
@@ -1109,7 +1120,9 @@ const WalletList = (props: propsData): any => {
         show1 === 2 &&
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
+
           <Withdraw setShow1={setShow1} refreshData={props.refreshData} networks={props.networks} session={props.session} token={selectedCoin} selectedCoinBalance={selectedCoinBalance} />
+
         </>
       }
       {
@@ -1124,6 +1137,9 @@ const WalletList = (props: propsData): any => {
         <>
           <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={props.assets} refreshWalletAssets={props.refreshData} />
         </>
+      }
+      {withdrawActive === true &&
+        <WithdrawAuthenticationModelPopup setActive={setWithdrawActive} setShow={setWithdrawShow} show={withdrawShow} title="Withdrawl Security Settings" />
       }
     </>
   );
