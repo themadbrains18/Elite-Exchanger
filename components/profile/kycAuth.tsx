@@ -335,7 +335,7 @@ const KycAuth = (props: fixSection) => {
         let result = await res.json()
 
         if (result?.data?.status === 200) {
-          toast.success("KYC Done Successfully");
+          toast.success("KYC Applied Successfully.");
           reset()
           setSelfieImg('')
           setBackImg('')

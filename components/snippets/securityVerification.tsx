@@ -136,7 +136,7 @@ const SecurityVerification = (props: activeSection) => {
       {/* <ToastContainer /> */}
       <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex items-center justify-between gap-[10px]">
-          <svg
+          {/* <svg
             onClick={() => {
               props.setActive(false);
             }}
@@ -152,7 +152,7 @@ const SecurityVerification = (props: activeSection) => {
               d="M20 10.9999H6.135L9.768 7.63991C10.122 7.21591 10.064 6.58491 9.64 6.23191C9.215 5.87791 8.585 5.93591 8.232 6.35991L3.232 11.3599C3.193 11.4069 3.173 11.4619 3.144 11.5139C3.12 11.5559 3.091 11.5919 3.073 11.6379C3.028 11.7529 3.001 11.8739 3.001 11.9959L3 11.9999L3.001 12.0039C3.001 12.1259 3.028 12.2469 3.073 12.3619C3.091 12.4079 3.12 12.4439 3.144 12.4859C3.173 12.5379 3.193 12.5929 3.232 12.6399L8.232 17.6399C8.43 17.8769 8.714 17.9999 9 17.9999C9.226 17.9999 9.453 17.9239 9.64 17.7679C10.064 17.4149 10.122 16.7839 9.768 16.3599L6.135 12.9999H20C20.552 12.9999 21 12.5519 21 11.9999C21 11.4479 20.552 10.9999 20 10.9999Z"
               fill="#9295A6"
             />
-          </svg>
+          </svg> */}
           <p className="sec-title w-full">Security Verification</p>
           <svg
             onClick={() => {

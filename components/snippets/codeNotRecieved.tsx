@@ -5,6 +5,7 @@ import Context from "../contexts/context";
 
 interface changeProps {
   setEnable: Function;
+  setShow?: any;
 }
 
 const CodeNotRecieved = (props: changeProps) => {
@@ -12,7 +13,9 @@ const CodeNotRecieved = (props: changeProps) => {
   const [active, setActive] = useState(1);
 
   const closePopup = () => {
+    props?.setShow(true);
     props.setEnable(0);
+    
   };
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
@@ -33,7 +36,9 @@ const CodeNotRecieved = (props: changeProps) => {
           </p>
           <svg
             onClick={() => {
+              props?.setShow(true);
               props.setEnable(0);
+              
             }}
             enableBackground="new 0 0 60.963 60.842"
             version="1.1"
@@ -58,9 +63,8 @@ const CodeNotRecieved = (props: changeProps) => {
         </div>
         <div className="flex items-center gap-[40px] mb-6">
           <p
-            className={`info-10-14 pb-4 border-b-[2px] cursor-pointer border-[transparent] ${
-              active === 1 && " border-b-primary font-bold"
-            }`}
+            className={`info-10-14 pb-4 border-b-[2px] cursor-pointer border-[transparent] ${active === 1 && " border-b-primary font-bold"
+              }`}
             onClick={() => {
               setActive(1);
             }}
@@ -68,9 +72,8 @@ const CodeNotRecieved = (props: changeProps) => {
             Email
           </p>
           <p
-            className={`info-10-14 pb-4 border-b-[2px] cursor-pointer border-[transparent] ${
-              active === 2 && " border-b-primary font-bold"
-            }`}
+            className={`info-10-14 pb-4 border-b-[2px] cursor-pointer border-[transparent] ${active === 2 && " border-b-primary font-bold"
+              }`}
             onClick={() => {
               setActive(2);
             }}
@@ -117,7 +120,9 @@ const CodeNotRecieved = (props: changeProps) => {
           <button
             className="solid-button w-full"
             onClick={() => {
+              props?.setShow(true);
               props.setEnable(0);
+              
             }}
           >
             OK

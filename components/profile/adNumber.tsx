@@ -392,6 +392,7 @@ const AdNumber = (props: activeSection) => {
               className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] mt-[10px] !text-primary `}
               onClick={() => {
                 setPopup(true);
+                props.setShow(false);
               }}
             >
               Didn't receive the code?
@@ -408,7 +409,7 @@ const AdNumber = (props: activeSection) => {
           formData={formData}
         />
       )}
-      {popup && <CodeNotRecieved setEnable={setPopup} />}
+      {popup && <CodeNotRecieved setEnable={setPopup} setShow={props.setShow}/>}
     </>
   );
 };
