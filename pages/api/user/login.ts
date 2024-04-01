@@ -44,15 +44,22 @@ router.post(async (req, res) => {
     const os = userAgent.os.toString();
     var locationData: any;
 
-    let ipInfoData = await fetch("https://ipinfo.io/json")
-    .then((response) => response.text())
-    .then((result) => {locationData = JSON.parse(result) })
-    .catch((error) => console.error(error));
+    let ip = await fetch("https://api.ipgeolocation.io/getip");
+    
+    let ipAddress = await ip.json();
+    // console.log(await ipAddress.ip,'---------get ip');
+    let ipInfoData = await fetch(`https://api.ipgeolocation.io/ipgeo?ip=${ipAddress?.ip}&apiKey=7d5fe611c25341e098d44f283185d665`);
+    // .then((response) => response.text())
+    // .then((result) => {locationData = JSON.parse(result) })
+    // .catch((error) => console.error(error));
     
     // .then(response => response.json())
     // .then(data => {
     //   locationData = data
     // });
+    // console.log(await ipInfoData.json(),'-------------ipInfoData');
+    locationData = await ipInfoData.json();
+    // return 
 
     const decodedStr = decodeURIComponent(req.body);
     let formData = AES.decrypt(
@@ -65,8 +72,8 @@ router.post(async (req, res) => {
     formdata.os = os
     formdata.browser = browser
     formdata.ip = locationData?.ip
-    formdata.location = locationData?.country
-    formdata.region = locationData?.region
+    formdata.location = locationData?.country_name
+    formdata.region = locationData?.state_prov
 
 
     let token = "";
