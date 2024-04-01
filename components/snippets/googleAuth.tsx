@@ -184,7 +184,7 @@ const GoogleAuth = (props: activeSection) => {
       if (response?.data?.status === 200) {
         clearInterval(Ref.current);
         const inputElements = document.querySelectorAll(".input_wrapper2 input");
-        inputElements.forEach((ele, index)=>{
+        inputElements.forEach((ele, index) => {
           (inputElements[index] as HTMLInputElement).value = ""
         })
         setTimer('');
@@ -206,13 +206,13 @@ const GoogleAuth = (props: activeSection) => {
   clickOutSidePopupClose({ wrapperRef, closePopup });
 
   return (
-    <>
-      <div ref={wrapperRef} className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
+    <div ref={wrapperRef}>
+      <div  className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
         <div className="flex items-center justify-between">
           <p className="sec-title" style={{ fontSize: '18px' }}>Set Up Google Two-Factor Authentication</p>
           <svg
             onClick={() => {
-              props.setShow(false); 
+              props.setShow(false);
               props?.setEnable(0)
             }}
             enableBackground="new 0 0 60.963 60.842"
@@ -236,23 +236,6 @@ const GoogleAuth = (props: activeSection) => {
             />
           </svg>
         </div>
-        {/* <div className="py-30 md:py-40">
-          <div className="py-[10px]">
-            <p className="info-14-18 text-center dark:text-white text-black">Scan Qr From Google Authenticator App</p>
-            <div className="mt-[15px] p-5 max-w-[154px] bg-white rounded-5 shadow-card mx-auto">
-              <Image src={qrImg} width={154} height={154} alt="QR" />
-            </div>
-          </div>
-
-
-          <div className="pt-5 md:pt-30">
-            <div className="mt-[5px] md:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
-              <p className="sec-text text-ellipsis overflow-hidden">{secret?.base32}</p>
-              <button className="solid-button py-2 sec-text font-normal" onClick={() => { navigator.clipboard.writeText(secret?.base32); toast.success('copy to clipboard') }}>Copy</button>
-            </div>
-          </div>
-        </div> */}
-
         <div className="flex flex-col mt-[25px] mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
           <label className="sm-text">A verification code will be sent to {props?.session?.user?.email.split("@")[0].substring(0, 3)}***@****</label>
           <div className="flex gap-[10px] justify-center items-center input_wrapper2 relative">
@@ -319,19 +302,19 @@ const GoogleAuth = (props: activeSection) => {
           }}>Cancel</button>
           <button className="solid-button px-[51px] w-full" onClick={() => { confirmUserOtp() }}>Confirm</button>
         </div>
-        <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] !text-primary mt-[10px]`} onClick={() => {setPopup(true)}}>
+        <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] !text-primary mt-[10px]`} onClick={() => { setPopup(true) }}>
           Didn't receive the code?
-            </p>
+        </p>
       </div>
       {
         active &&
         <SecurityVerification setShow={props?.setShow} setEnable={props.setEnable} setActive={setActive} session={props?.session} setGoogleAuth={props.setGoogleAuth} sendOtp={sendOtp} />
       }
-        {
-      popup &&
-      <CodeNotRecieved setEnable={setPopup}/>
-    }
-    </>
+      {
+        popup &&
+        <CodeNotRecieved setEnable={setPopup} />
+      }
+    </div>
   );
 };
 
