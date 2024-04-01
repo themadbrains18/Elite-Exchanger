@@ -347,7 +347,7 @@ const WalletList = (props: propsData): any => {
                                 <IconsComponent type="openInNewTab" hover={false} active={false} />
                               </button>
                               <button onClick={() => {
-                                if (session?.user.TwoFA === false || (session.user.email === '' || session.user.email === null)) {
+                                if (session?.user.TwoFA === false || (session?.user?.email === '' || session?.user?.email === null)) {
                                   setWithdrawActive(true);
                                   setWithdrawShow(true);
                                 }
