@@ -44,7 +44,7 @@ const AddressManagement = (props: fixSection) => {
   }
   const getAllWhitelistAddress = async () => {
     try {
-      let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list?user_id=${session?.user?.user_id}`, {
+      let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list`, {
         method: "GET",
         headers: {
             "Authorization": session?.user?.access_token

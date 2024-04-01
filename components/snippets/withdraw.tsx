@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../contexts/context";
 import Image from "next/image";
 import FiliterSelectMenu from "./filter-select-menu";
@@ -13,6 +13,8 @@ import { useSession } from "next-auth/react";
 import ConfirmPopup from "@/pages/customer/profile/confirm-popup";
 import Verification from "./verification";
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
+import CountrylistDropdown from "./country-list-dropdown";
+import IconsComponent from "./icons";
 
 const schema = yup.object().shape({
   networkId: yup.string().optional().default(""),
@@ -52,13 +54,15 @@ type UserSubmitForm = {
 const Withdraw = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [selectedNetwork, setSelectedNetwork] = useState("");
+  const [selectedNetworkValue, setSelectedNetworkValue] = useState("");
   const { data: session, status } = useSession();
   const [formData, setFormData] = useState<UserSubmitForm | null>();
   const [enable, setEnable] = useState(1);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
   const [disable, setDisable] = useState(false);
   const [addressVerified, setAddressVerified] = useState(false);
-
+  const [addressList, setAddressList] = useState([]);
+  const [show, setShow] = useState(false);
   let {
     register,
     setValue,
@@ -73,6 +77,10 @@ const Withdraw = (props: activeSection) => {
     resolver: yupResolver(schema),
   });
 
+  useEffect(()=>{
+    getAllWhitelistAddress()
+  },[])
+
   const list = props?.networks.filter((item: any) => {
     if (process.env.NEXT_PUBLIC_APPLICATION_MODE === "dev") {
       return item.network === "testnet";
@@ -80,6 +88,30 @@ const Withdraw = (props: activeSection) => {
       return item.network === "mainnet";
     }
   });
+
+  const onAddressChange=(address:string,network:{id:string,fullname:string})=>{
+    setSelectedNetwork(network?.id)
+    setValue('withdraw_wallet',address)
+    setSelectedNetworkValue(network?.fullname)
+
+  }
+
+
+  const getAllWhitelistAddress = async () => {
+    try {
+      let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list`, {
+        method: "GET",
+        headers: {
+            "Authorization": session?.user?.access_token
+        },
+    }).then(response => response.json());
+
+      console.log(address.data,'-----address data');
+      setAddressList(address?.data);
+    } catch (error) {
+
+    }
+  }
 
   const getNetworkDetail = (network: any) => {
     setSelectedNetwork(network?.id);
@@ -375,6 +407,7 @@ const Withdraw = (props: activeSection) => {
                   placeholder="Select Network type"
                   auto={false}
                   widthFull={true}
+                  value={selectedNetworkValue}
                   onNetworkChange={getNetworkDetail}
                 />
                 {errors.networkId && (
@@ -384,14 +417,22 @@ const Withdraw = (props: activeSection) => {
 
               <div className="mb-[15px] md:mb-5">
                 <label className="sm-text ">Destination Address</label>
-                <div className="border border-grey-v-1 dark:border-opacity-[15%] mt-[10px]  gap-[15px] items-center flex rounded-5 p-[11px] md:p-[15px]">
+                <div className={`border border-grey-v-1 dark:border-opacity-[15%] mt-[10px] relative  gap-[15px] items-center ${addressVerified?'flex':'block'} cursor-pointer rounded-5 p-[11px] md:p-[15px]`}>
+                 {/* <div className="flex justify-between items-center relative w-full" onClick={() => { setShow(!show) }}> */}
                   <input
                     type="text"
                     {...register("withdraw_wallet")}
                     name="withdraw_wallet"
                     placeholder="Enter Address"
-                    className="outline-none max-w-[355px] sm-text w-full bg-[transparent]"
+                    className="outline-none max-w-full  sm-text w-full bg-[transparent]"
+                    onClick={() => { setShow(!show) }}
                   />
+                  
+
+                 {/* </div> */}
+                 { show &&
+                  <CountrylistDropdown  data={addressList} address={true} show={show} onCountryChange={onAddressChange}/>
+                  }
                   {/* <Image
                     src="/assets/payment/reenter.svg"
                     width={24}

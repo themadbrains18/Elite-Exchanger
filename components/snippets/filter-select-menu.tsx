@@ -16,12 +16,14 @@ interface dataList {
 }
 
 const FiliterSelectMenu = (props: dataList) => {
+ 
 
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(props.value);
 
   useEffect(() => {
-
+    setActive(props?.value)
+    
     document.addEventListener('click', (evt: any) => {
       let dropdown = document.querySelector('.coin-dropdown');
       let targetEl = evt?.target?.parentNode?.parentElement; // clicked element
@@ -32,7 +34,7 @@ const FiliterSelectMenu = (props: dataList) => {
         setShow(false);
       }
     })
-  }, [])
+  }, [props.value])
 
   return (
     <>
@@ -42,7 +44,7 @@ const FiliterSelectMenu = (props: dataList) => {
           <div className="coin-dropdown flex items-center gap-10 cursor-pointer justify-between" >
             <div className='w-full'>
               <input type="text" id='paymentMethod' className="sm-text max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-[transparent] pr-0 outline-none bg-transparent w-full  cursor-pointer dark:text-white"
-                placeholder={`${props.placeholder}`} readOnly value={active} />
+                placeholder={`${active?active:props.placeholder}`} readOnly value={active} />
             </div>
             <div className='pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer'>
               <IconsComponent type="downArrow" hover={false} active={false} />
