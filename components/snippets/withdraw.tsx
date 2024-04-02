@@ -89,11 +89,25 @@ const Withdraw = (props: activeSection) => {
     }
   });
 
-  const onAddressChange=(address:string,network:{id:string,fullname:string})=>{
+  const onAddressChange= async (address:string,network:{id:string,fullname:string, symbol:string})=>{
     setSelectedNetwork(network?.id)
     setValue('withdraw_wallet',address)
     setSelectedNetworkValue(network?.fullname)
 
+    var raw = JSON.stringify({
+      "address": address,
+      "currency": network?.symbol.toLowerCase()
+    });
+
+    let validAddress = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/verified`,{
+      method: "POST",
+      body: raw,
+    }).then((response) => response.json());
+
+    // let isValid = await validAddress.json();
+    
+    console.log(validAddress,"===isValid");
+    setAddressVerified(validAddress?.data?.data?.isValid);
   }
 
 
@@ -107,7 +121,8 @@ const Withdraw = (props: activeSection) => {
     }).then(response => response.json());
 
       console.log(address.data,'-----address data');
-      setAddressList(address?.data);
+     let res= address?.data.filter((item:any)=>item?.status===true)
+      setAddressList(res);
     } catch (error) {
 
     }
@@ -116,6 +131,7 @@ const Withdraw = (props: activeSection) => {
   const getNetworkDetail = (network: any) => {
     setSelectedNetwork(network?.id);
     clearErrors("networkId");
+    
   };
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
@@ -417,7 +433,7 @@ const Withdraw = (props: activeSection) => {
 
               <div className="mb-[15px] md:mb-5">
                 <label className="sm-text ">Destination Address</label>
-                <div className={`border border-grey-v-1 dark:border-opacity-[15%] mt-[10px] relative  gap-[15px] items-center ${addressVerified?'flex':'block'} cursor-pointer rounded-5 p-[11px] md:p-[15px]`}>
+                <div className={`border border-grey-v-1 dark:border-opacity-[15%] mt-[10px] relative  gap-[15px] items-center ${addressVerified?'flex w-full':'block'} cursor-pointer rounded-5 p-[11px] md:p-[15px]`} onClick={() => { setShow(!show) }}>
                  {/* <div className="flex justify-between items-center relative w-full" onClick={() => { setShow(!show) }}> */}
                   <input
                     type="text"
@@ -425,12 +441,12 @@ const Withdraw = (props: activeSection) => {
                     name="withdraw_wallet"
                     placeholder="Enter Address"
                     className="outline-none max-w-full  sm-text w-full bg-[transparent]"
-                    onClick={() => { setShow(!show) }}
+                    
                   />
                   
 
                  {/* </div> */}
-                 { show &&
+                 {show && addressList.length >0 && 
                   <CountrylistDropdown  data={addressList} address={true} show={show} onCountryChange={onAddressChange}/>
                   }
                   {/* <Image
