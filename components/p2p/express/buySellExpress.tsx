@@ -50,7 +50,7 @@ const BuySellExpress = (props: propsData) => {
   const router = useRouter();
 
   useEffect(() => {
-    getUsdtToInrPrice();
+    getUsdtToInrPrice('USDT');
     getFilterAsset('');
   }, []);
 
@@ -69,12 +69,34 @@ const BuySellExpress = (props: propsData) => {
   /**
    * Get initial usdt tot inr price
    */
-  const getUsdtToInrPrice = async () => {
-    let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
-      method: "GET"
-    }).then(response => response.json());
+  const getUsdtToInrPrice = async (asset:string) => {
+    // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
+    //   method: "GET"
+    // }).then(response => response.json());
 
-    setUsdtToInr(priceData?.data?.rate?.toFixed(8));
+    try {
+      let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+        method: "POST",
+        headers: new Headers({
+          "content-type": "application/json",
+          "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+        }),
+        body: JSON.stringify({
+          currency: "INR",
+          code: asset,
+          meta: false
+        }),
+      });
+
+      let data = await responseData.json();
+
+      setUsdtToInr(data?.rate?.toFixed(6));
+
+      return data;
+    } catch (error: any) {
+      console.log(error?.message);
+    }
+
   }
 
   /**
@@ -87,6 +109,7 @@ const BuySellExpress = (props: propsData) => {
     //================
     //Buy case
     //================
+    
     if (active1 === 1) {
       if (dropdown === 1) {
         setFirstCurrency(symbol);
@@ -126,23 +149,27 @@ const BuySellExpress = (props: propsData) => {
       let currentPrice = 0;
       setChangeSymbol(true);
       if (token[0]?.tokenType !== 'mannual') {
-        let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${symbol}&tsyms=INR`, {
-          method: "GET"
-        }).then(response => response.json());
+        // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${symbol}&tsyms=INR`, {
+        //   method: "GET"
+        // }).then(response => response.json());
 
-        setUsdtToInr(priceData?.data?.rate?.toFixed(8));
+        let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
+        await getUsdtToInrPrice(asset);
         setChangeSymbol(false);
 
       }
       else {
-        let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
-          method: "GET"
-        }).then(response => response.json());
+        // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
+        //   method: "GET"
+        // }).then(response => response.json());
 
+        let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
+        let data = await getUsdtToInrPrice(asset);
+        
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
-        currentPrice = (token[0]?.price * priceData?.data?.rate);
+        currentPrice = (token[0]?.price * data?.rate);
         setUsdtToInr(currentPrice);
         setChangeSymbol(false);
       }
@@ -188,28 +215,37 @@ const BuySellExpress = (props: propsData) => {
       let currentPrice = 0;
       setChangeSymbol(true);
       if (token[0]?.tokenType !== 'mannual') {
-        let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${symbol}&tsyms=INR`, {
-          method: "GET"
-        }).then(response => response.json());
+        // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${symbol}&tsyms=INR`, {
+        //   method: "GET"
+        // }).then(response => response.json());
 
-        setUsdtToInr(priceData?.data?.rate?.toFixed(8));
+        let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
+        let data = await getUsdtToInrPrice(asset);
         setChangeSymbol(false);
 
       }
       else {
-        let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
-          method: "GET"
-        }).then(response => response.json());
+        // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
+        //   method: "GET"
+        // }).then(response => response.json());
 
+        let asset = "USDT";
+        let data = await getUsdtToInrPrice(asset);
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
-        currentPrice = token[0]?.price * priceData?.data?.rate;
+        currentPrice = token[0]?.price * data?.rate;
         setUsdtToInr(currentPrice);
         setChangeSymbol(false);
       }
     }
 
+    setAmount(0);
+    setReceivedAmount(0);
+    setPaymentMethod('');
+    setValue('spend_amount',0);
+    setValue('receive_amount',0);
+    setValue('p_method','');
   };
 
   /**
@@ -221,7 +257,7 @@ const BuySellExpress = (props: propsData) => {
 
     // p2p/postad
     if (active1 === 2) {
-      if(data?.spend_amount > filterAsset?.balance){
+      if (data?.spend_amount > filterAsset?.balance) {
         setError("spend_amount", {
           type: "custom",
           message: `Insufficiant balance`,
@@ -414,7 +450,7 @@ const BuySellExpress = (props: propsData) => {
             <button
               className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 2 && "!text-primary border-primary"
                 }`}
-              onClick={() => { setActive1(2); setSecondCurrency('USDT'); getUsdtToInrPrice() }}
+              onClick={() => { setActive1(2); setSecondCurrency('USDT'); getUsdtToInrPrice('USDT') }}
             >
               Sell
             </button>
@@ -564,7 +600,7 @@ const BuySellExpress = (props: propsData) => {
               <div className="py-20">
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">
-                    Available Balance: {filterAsset!==undefined? filterAsset?.balance:'0.0'}
+                    Available Balance: {filterAsset !== undefined ? filterAsset?.balance : '0.0'}
                   </p>
                 </div>
                 {/* First Currency Inputs */}

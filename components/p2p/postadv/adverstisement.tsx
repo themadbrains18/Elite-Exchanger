@@ -68,22 +68,49 @@ const Adverstisement = (props: propsData) => {
     clearErrors('token_id');
 
     if (item?.tokenType === 'global') {
-      let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${item?.symbol}&tsyms=INR`, {
-        method: "GET",
-      }).then(response => response.json());
+      // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${item?.symbol}&tsyms=INR`, {
+      //   method: "GET",
+      // }).then(response => response.json());
 
-      setInrPrice(usdtToINR?.data?.rate);
+      let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+        method: "POST",
+        headers: new Headers({
+          "content-type": "application/json",
+          "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+        }),
+        body: JSON.stringify({
+          currency: "INR",
+          code: item?.symbol === 'BTCB' ? 'BTC' : item?.symbol === 'BNBT' ? 'BNB' : item?.symbol,
+          meta: false
+        }),
+      });
+      let data = await responseData.json();
+
+      setInrPrice(data?.rate);
     }
     else {
-      let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
-        method: "GET",
-      }).then(response => response.json());
-      setInrPrice(item?.price * usdtToINR?.data?.rate);
+      // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
+      //   method: "GET",
+      // }).then(response => response.json());
+      let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+        method: "POST",
+        headers: new Headers({
+          "content-type": "application/json",
+          "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+        }),
+        body: JSON.stringify({
+          currency: "INR",
+          code: "USDT",
+          meta: false
+        }),
+      });
+      let data = await responseData.json();
+      setInrPrice(item?.price * data?.rate);
     }
 
     setSelectedAssets(item);
     let balances = props?.assets?.filter((e: any) => {
-      return e.token_id === item?.id && e.walletTtype ==='main_wallet'
+      return e.token_id === item?.id && e.walletTtype === 'main_wallet'
     })
     if (balances[0] !== undefined) {
       setAssetsBalance(balances[0]?.balance);
@@ -100,7 +127,7 @@ const Adverstisement = (props: propsData) => {
 
   const onHandleSubmit = (data: any) => {
     setStep1Data(data);
-      setStep(2);
+    setStep(2);
     // if (assetsBalance > getValues('price')) {
     //   setStep1Data(data);
     //   setStep(2);

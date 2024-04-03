@@ -66,15 +66,55 @@ const EditAdverstisement = (props: propsData) => {
     setValue("token_id", item?.id);
     clearErrors("token_id");
 
-    let usdtToINR = await fetch(
-      `${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`,
-      {
-        method: "GET",
-      }
-    ).then((response) => response.json());
+    // let usdtToINR = await fetch(
+    //   `${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`,
+    //   {
+    //     method: "GET",
+    //   }
+    // ).then((response) => response.json());
 
 
-    setInrPrice(usdtToINR?.data?.rate);
+    // setInrPrice(usdtToINR?.data?.rate);
+    if (item?.tokenType === 'global') {
+      // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${item?.symbol}&tsyms=INR`, {
+      //   method: "GET",
+      // }).then(response => response.json());
+
+      let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+        method: "POST",
+        headers: new Headers({
+          "content-type": "application/json",
+          "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+        }),
+        body: JSON.stringify({
+          currency: "INR",
+          code: item?.symbol === 'BTCB' ? 'BTC' : item?.symbol === 'BNBT' ? 'BNB' : item?.symbol,
+          meta: false
+        }),
+      });
+      let data = await responseData.json();
+
+      setInrPrice(data?.rate);
+    }
+    else {
+      // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
+      //   method: "GET",
+      // }).then(response => response.json());
+      let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+        method: "POST",
+        headers: new Headers({
+          "content-type": "application/json",
+          "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+        }),
+        body: JSON.stringify({
+          currency: "INR",
+          code: "USDT",
+          meta: false
+        }),
+      });
+      let data = await responseData.json();
+      setInrPrice(item?.price * data?.rate);
+    }
     setSelectedAssets(item);
     let balances = props?.assets?.filter((e: any) => {
       return e.token_id === item?.id;
