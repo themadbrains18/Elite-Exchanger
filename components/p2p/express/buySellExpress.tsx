@@ -576,7 +576,7 @@ const BuySellExpress = (props: propsData) => {
 
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">
-                    Estimated price: 1 {secondCurrency} = {usdtToInr} INR
+                    Estimated price: 1 {secondCurrency} = {Number(usdtToInr)?.toFixed(2)} INR
                   </p>
                 </div>
                 <div className="mt-5 flex gap-2">
@@ -702,7 +702,7 @@ const BuySellExpress = (props: propsData) => {
 
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">
-                    Estimated price: 1 {secondCurrency} = {usdtToInr} INR
+                    Estimated price: 1 {secondCurrency} = {Number(usdtToInr)?.toFixed(2)} INR
                   </p>
                 </div>
 
