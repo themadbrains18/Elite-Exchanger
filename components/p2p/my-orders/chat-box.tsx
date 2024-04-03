@@ -13,6 +13,7 @@ const ChatBox = (props: propsData) => {
     const [show, setShow] = useState(false)
     const [orderChat, setOrderChat] = useState([]);
     const [message, setMessage] = useState('');
+    const [hovered, setHovered] = useState(false)
 
     const { status, data: session } = useSession();
 
@@ -119,6 +120,15 @@ const ChatBox = (props: propsData) => {
 
     }
 
+    const handleKeyDown = (event:any) => {
+        if (event.key === "Enter") {
+            sendMessage();
+        }
+        else{
+            setHovered(true)
+        }
+    };
+
     const profileImg = props?.sellerUser?.profile && props?.sellerUser?.profile?.image !== null ? props?.sellerUser?.profile?.image : `${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`;
 
     return (
@@ -175,7 +185,7 @@ const ChatBox = (props: propsData) => {
                 {/* send messsage */}
                 <div className="border-t border-[#cccccc7d] p-[16px] py-[24px] dark:bg-omega">
                     <div className="flex items-center gap-[15px]">
-                        <input type="text" onChange={(e) => setMessage(e.target?.value)} value={message} className="border-0 w-full outline-none info-12 dark:!bg-omega !bg-[#F9FAFA] dark:!text-white !text-black" placeholder="input messsage..." />
+                        <input type="text" onChange={(e) => setMessage(e.target?.value)} onKeyDown={(e)=>{handleKeyDown(e) }} onKeyUp={()=>{setHovered(false)}} value={message} className="border-0 w-full outline-none info-12 dark:!bg-omega !bg-[#F9FAFA] dark:!text-white !text-black" placeholder="input messsage..." />
                         {/* <div>
                             <input type="file" className="hidden" id="fileUpload" />
                             <label htmlFor="fileUpload" className="cursor-pointer" >
@@ -183,8 +193,8 @@ const ChatBox = (props: propsData) => {
                             </label>
                         </div>
                         <IconsComponent type='emojiIcon' hover={false} active={false} /> */}
-                        <button className="cta" onClick={sendMessage}>
-                            <IconsComponent type='sendIcon' hover={false} active={false} />
+                        <button className="cta group " onClick={sendMessage} >
+                            <IconsComponent type='sendIcon' hover={true} active={hovered} />
                         </button>
                     </div>
                 </div>

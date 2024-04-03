@@ -64,10 +64,12 @@ const AdNumber = (props: activeSection) => {
   const [popup, setPopup] = useState(false);
   useEffect(() => {
     const inputElements = document.querySelectorAll(".input_wrapper input");
-    // console.log(inputElements.length);
+  
 
     inputElements.forEach((ele, index) => {
       ele.addEventListener("keydown", (e: any) => {
+
+        
         if (e.keyCode === 8 && e.target.value === "") {
           (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
         }
@@ -99,7 +101,7 @@ const AdNumber = (props: activeSection) => {
         }
       });
     });
-  }, []);
+  }, [!show]);
 
   let {
     register,

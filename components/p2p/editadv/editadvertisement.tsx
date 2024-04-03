@@ -268,6 +268,7 @@ const EditAdverstisement = (props: propsData) => {
                         type="radio"
                         value=""
                         name="colored-radio-dd"
+                        checked={show === 1 ? true : false} 
                         className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]"
                       />
                       <label
@@ -317,6 +318,7 @@ const EditAdverstisement = (props: propsData) => {
                         type="radio"
                         value=""
                         name="colored-radio-dd"
+                        checked={show === 2 ? true : false} 
                         className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]"
                       />
                       <label
@@ -374,7 +376,7 @@ const EditAdverstisement = (props: propsData) => {
                     </p>
                   </div> */}
                   <div className="md:mt-30 mt-20">
-                    <p className="info-10-14">Fixed (INR)</p>
+                    <p className="info-10-14">{show===1?"Fixed":"Floating"}</p>
                     <input
                       type="number"
                       step={0.000001}
