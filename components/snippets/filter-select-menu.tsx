@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import IconsComponent from './icons';
+import Image from 'next/image';
 
 interface dataList {
   data?: any;
@@ -46,8 +47,10 @@ const FiliterSelectMenu = (props: dataList) => {
               <input type="text" id='paymentMethod' className="sm-text max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-[transparent] pr-0 outline-none bg-transparent w-full  cursor-pointer dark:text-white"
                 placeholder={`${active?active:props.placeholder}`} readOnly value={active} />
             </div>
-            <div className='pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer'>
-              <IconsComponent type="downArrow" hover={false} active={false} />
+            <div className={`pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer `}>
+             
+               <IconsComponent type="downArrow" hover={false} active={false} rotate={show}/>
+              
             </div>
           </div>
         </div>
@@ -77,6 +80,9 @@ const FiliterSelectMenu = (props: dataList) => {
                 return (
                   <li key={index} onClick={() => { setActive(item?.payment_method); setShow(false); props.onPaymentMethodChange(item?.id) }}>
                     <p className={`sm-text px-10 py-[7px] rounded-[5px] hover:bg-grey dark:hover:bg-d-bg-primary cursor-pointer dark:!text-d-nav-secondary  !text-banner-text`}>{item?.payment_method}</p>
+                 {/* {props.type === 'pmethod' &&
+                 <Image src={item?.} />
+                 } */}
                   </li>
                 )
               })}

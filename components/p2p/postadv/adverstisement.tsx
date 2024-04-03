@@ -213,7 +213,7 @@ const Adverstisement = (props: propsData) => {
                     type="button"
                   >
                     <div className="flex items-center mr-4 md:justify-unset justify-center">
-                      <input id="radio--btn-1" type="radio" value="" name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                      <input id="radio--btn-1" type="radio" value="" name="colored-radio-dd"  checked={show === 1 ? true : false} className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                       <label
                         htmlFor="radio--btn-1"
                         className="
@@ -253,7 +253,7 @@ const Adverstisement = (props: propsData) => {
                     type="button"
                   >
                     <div className="flex items-center mr-4  md:justify-unset justify-center">
-                      <input id="radio-btn2" type="radio" value="" name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                      <input id="radio-btn2" type="radio" value="" name="colored-radio-dd" checked={show === 2 ? true : false} className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                       <label
                         htmlFor="radio-btn2"
                         className="
@@ -296,7 +296,7 @@ const Adverstisement = (props: propsData) => {
                     <p className="sec-title md:!text-[18px] !text-[14px]">₹ 79.29</p>
                   </div> */}
                   <div className="md:mt-30 mt-20">
-                    <p className="info-10-14">Fixed (INR)</p>
+                    <p className="info-10-14">{show===1?"Fixed":"Floating"} (INR)</p>
                     <input type="number" step={0.000001} {...register('price', { required: true })} name="price" placeholder="Enter Amount" className="py-[14px] px-[15px] border rounded-5 border-grey-v-1 mt-[10px] w-full bg-[transparent] dark:border-opacity-20 outline-none info-16-18" />
                   </div>
                   {errors?.price && (
