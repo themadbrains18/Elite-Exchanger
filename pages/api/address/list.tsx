@@ -14,7 +14,7 @@ router
     .get(async (req, res) => {
         try {
             let token = req.headers.authorization;
-            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/address/list/${req.query.user_id}`, token);
+            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/address/list`, token);
 
             return res.status(200).send({ data });
         } catch (error: any) {
