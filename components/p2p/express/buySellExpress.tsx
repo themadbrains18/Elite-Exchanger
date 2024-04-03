@@ -70,11 +70,26 @@ const BuySellExpress = (props: propsData) => {
    * Get initial usdt tot inr price
    */
   const getUsdtToInrPrice = async () => {
-    let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
-      method: "GET"
-    }).then(response => response.json());
+    // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
+    //   method: "GET"
+    // }).then(response => response.json());
 
-    setUsdtToInr(priceData?.data?.rate?.toFixed(8));
+    let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+      method: "POST",
+      headers: new Headers({
+        "content-type": "application/json",
+        "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+      }),
+      body: JSON.stringify({
+        currency: "INR",
+        code: "USDT",
+        meta: false
+      }),
+    });
+
+    let data = await responseData.json();
+
+    setUsdtToInr(data?.rate?.toFixed(6));
   }
 
   /**
@@ -126,23 +141,51 @@ const BuySellExpress = (props: propsData) => {
       let currentPrice = 0;
       setChangeSymbol(true);
       if (token[0]?.tokenType !== 'mannual') {
-        let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${symbol}&tsyms=INR`, {
-          method: "GET"
-        }).then(response => response.json());
-
-        setUsdtToInr(priceData?.data?.rate?.toFixed(8));
+        // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${symbol}&tsyms=INR`, {
+        //   method: "GET"
+        // }).then(response => response.json());
+        let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+          method: "POST",
+          headers: new Headers({
+            "content-type": "application/json",
+            "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+          }),
+          body: JSON.stringify({
+            currency: "INR",
+            code: symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol,
+            meta: false
+          }),
+        });
+    
+        let data = await responseData.json();
+        setUsdtToInr(data?.rate?.toFixed(8));
         setChangeSymbol(false);
 
       }
       else {
-        let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
-          method: "GET"
-        }).then(response => response.json());
+        // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
+        //   method: "GET"
+        // }).then(response => response.json());
+
+        let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+          method: "POST",
+          headers: new Headers({
+            "content-type": "application/json",
+            "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+          }),
+          body: JSON.stringify({
+            currency: "INR",
+            code: "USDT",
+            meta: false
+          }),
+        });
+
+        let data = await responseData.json();
 
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
-        currentPrice = (token[0]?.price * priceData?.data?.rate);
+        currentPrice = (token[0]?.price * data?.rate);
         setUsdtToInr(currentPrice);
         setChangeSymbol(false);
       }
@@ -188,23 +231,49 @@ const BuySellExpress = (props: propsData) => {
       let currentPrice = 0;
       setChangeSymbol(true);
       if (token[0]?.tokenType !== 'mannual') {
-        let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${symbol}&tsyms=INR`, {
-          method: "GET"
-        }).then(response => response.json());
+        // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${symbol}&tsyms=INR`, {
+        //   method: "GET"
+        // }).then(response => response.json());
 
-        setUsdtToInr(priceData?.data?.rate?.toFixed(8));
+        let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+          method: "POST",
+          headers: new Headers({
+            "content-type": "application/json",
+            "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+          }),
+          body: JSON.stringify({
+            currency: "INR",
+            code: symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol,
+            meta: false
+          }),
+        });
+        let data = await responseData.json();
+        setUsdtToInr(data?.rate?.toFixed(8));
         setChangeSymbol(false);
 
       }
       else {
-        let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
-          method: "GET"
-        }).then(response => response.json());
+        // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
+        //   method: "GET"
+        // }).then(response => response.json());
 
+        let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+          method: "POST",
+          headers: new Headers({
+            "content-type": "application/json",
+            "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+          }),
+          body: JSON.stringify({
+            currency: "INR",
+            code: "USDT",
+            meta: false
+          }),
+        });
+        let data = await responseData.json();
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
-        currentPrice = token[0]?.price * priceData?.data?.rate;
+        currentPrice = token[0]?.price * data?.rate;
         setUsdtToInr(currentPrice);
         setChangeSymbol(false);
       }
@@ -221,7 +290,7 @@ const BuySellExpress = (props: propsData) => {
 
     // p2p/postad
     if (active1 === 2) {
-      if(data?.spend_amount > filterAsset?.balance){
+      if (data?.spend_amount > filterAsset?.balance) {
         setError("spend_amount", {
           type: "custom",
           message: `Insufficiant balance`,
@@ -564,7 +633,7 @@ const BuySellExpress = (props: propsData) => {
               <div className="py-20">
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">
-                    Available Balance: {filterAsset!==undefined? filterAsset?.balance:'0.0'}
+                    Available Balance: {filterAsset !== undefined ? filterAsset?.balance : '0.0'}
                   </p>
                 </div>
                 {/* First Currency Inputs */}
