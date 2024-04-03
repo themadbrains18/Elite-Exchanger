@@ -69,7 +69,7 @@ const BuySellExpress = (props: propsData) => {
   /**
    * Get initial usdt tot inr price
    */
-  const getUsdtToInrPrice = async (asset:string) => {
+  const getUsdtToInrPrice = async (asset: string) => {
     // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
     //   method: "GET"
     // }).then(response => response.json());
@@ -109,7 +109,7 @@ const BuySellExpress = (props: propsData) => {
     //================
     //Buy case
     //================
-    
+
     if (active1 === 1) {
       if (dropdown === 1) {
         setFirstCurrency(symbol);
@@ -165,7 +165,7 @@ const BuySellExpress = (props: propsData) => {
 
         let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
         let data = await getUsdtToInrPrice(asset);
-        
+
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
@@ -243,9 +243,9 @@ const BuySellExpress = (props: propsData) => {
     setAmount(0);
     setReceivedAmount(0);
     setPaymentMethod('');
-    setValue('spend_amount',0);
-    setValue('receive_amount',0);
-    setValue('p_method','');
+    setValue('spend_amount', 0);
+    setValue('receive_amount', 0);
+    setValue('p_method', '');
   };
 
   /**
@@ -480,9 +480,13 @@ const BuySellExpress = (props: propsData) => {
                       step="any" required
                       {...register('spend_amount')}
                       onChange={(e: any) => {
-                        setAmount(e?.target?.value);
-                        setReceivedAmount(parseFloat(e?.target?.value) / usdtToInr);
-                        setValue('receive_amount', parseFloat(e?.target?.value) / usdtToInr);
+                        if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
+                          setAmount(e?.target?.value);
+                        }
+                        let receiveAmount: any = parseFloat(e?.target?.value) / usdtToInr;
+                        setReceivedAmount(receiveAmount.toFixed(6));
+
+                        setValue('receive_amount', receiveAmount.toFixed(6));
                         clearErrors('spend_amount');
                         clearErrors('receive_amount');
                         if (Object.keys(finalPost).length > 0) {
@@ -541,10 +545,13 @@ const BuySellExpress = (props: propsData) => {
                       step="any"
                       {...register('receive_amount')}
                       value={receiveAmount}
-                      onChange={(e) => {
-                        setReceivedAmount(parseFloat(e.target.value));
-                        setAmount(parseFloat(e.target.value) * usdtToInr);
-                        setValue('spend_amount', parseFloat(e?.target?.value) * usdtToInr);
+                      onChange={(e:any) => {
+                        if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
+                          setReceivedAmount(e?.target?.value);
+                        }
+                        let spendAmount: any = parseFloat(e.target.value) * usdtToInr;
+                        setAmount(spendAmount?.toFixed(2));
+                        setValue('spend_amount', spendAmount?.toFixed(2));
                         clearErrors('receive_amount');
                         clearErrors('spend_amount')
                       }}
@@ -616,9 +623,13 @@ const BuySellExpress = (props: propsData) => {
                       step="any"
                       {...register('spend_amount')}
                       onChange={(e: any) => {
-                        setAmount(e?.target?.value);
-                        setReceivedAmount(parseFloat(e?.target?.value) * usdtToInr);
-                        setValue('receive_amount', parseFloat(e?.target?.value) * usdtToInr);
+                        if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
+                          setAmount(e?.target?.value);
+                        }
+                        let receiveAmount: any = parseFloat(e?.target?.value) * usdtToInr;
+                        setReceivedAmount(receiveAmount.toFixed(2));
+                        // setReceivedAmount(parseFloat(e?.target?.value) * usdtToInr);
+                        setValue('receive_amount', receiveAmount.toFixed(2));
                         clearErrors('spend_amount');
                         clearErrors('receive_amount');
                       }}
@@ -661,10 +672,13 @@ const BuySellExpress = (props: propsData) => {
                       step="any"
                       {...register('receive_amount')}
                       value={receiveAmount}
-                      onChange={(e) => {
-                        setReceivedAmount(parseFloat(e.target.value));
-                        setAmount(parseFloat(e.target.value) / usdtToInr);
-                        setValue('spend_amount', parseFloat(e?.target?.value) / usdtToInr);
+                      onChange={(e:any) => {
+                        if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
+                          setReceivedAmount((e?.target?.value));
+                        }
+                        let spendAmount: any = parseFloat(e.target.value) / usdtToInr;
+                        setAmount(spendAmount.toFixed(6));
+                        setValue('spend_amount', spendAmount.toFixed(6));
                         clearErrors('spend_amount');
                         clearErrors('receive_amount');
                       }}
