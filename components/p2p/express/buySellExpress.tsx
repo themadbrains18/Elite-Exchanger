@@ -109,6 +109,7 @@ const BuySellExpress = (props: propsData) => {
     //================
     //Buy case
     //================
+    
     if (active1 === 1) {
       if (dropdown === 1) {
         setFirstCurrency(symbol);
@@ -164,7 +165,6 @@ const BuySellExpress = (props: propsData) => {
 
         let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
         let data = await getUsdtToInrPrice(asset);
-        console.log('-----------here api data', data);
         
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
@@ -231,7 +231,6 @@ const BuySellExpress = (props: propsData) => {
 
         let asset = "USDT";
         let data = await getUsdtToInrPrice(asset);
-        console.log('-----------here api data', data);
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
@@ -241,6 +240,12 @@ const BuySellExpress = (props: propsData) => {
       }
     }
 
+    setAmount(0);
+    setReceivedAmount(0);
+    setPaymentMethod('');
+    setValue('spend_amount',0);
+    setValue('receive_amount',0);
+    setValue('p_method','');
   };
 
   /**
