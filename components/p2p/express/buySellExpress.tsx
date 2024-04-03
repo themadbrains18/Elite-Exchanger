@@ -50,7 +50,7 @@ const BuySellExpress = (props: propsData) => {
   const router = useRouter();
 
   useEffect(() => {
-    getUsdtToInrPrice();
+    getUsdtToInrPrice('USDT');
     getFilterAsset('');
   }, []);
 
@@ -69,27 +69,34 @@ const BuySellExpress = (props: propsData) => {
   /**
    * Get initial usdt tot inr price
    */
-  const getUsdtToInrPrice = async () => {
+  const getUsdtToInrPrice = async (asset:string) => {
     // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
     //   method: "GET"
     // }).then(response => response.json());
 
-    let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
-      method: "POST",
-      headers: new Headers({
-        "content-type": "application/json",
-        "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
-      }),
-      body: JSON.stringify({
-        currency: "INR",
-        code: "USDT",
-        meta: false
-      }),
-    });
+    try {
+      let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+        method: "POST",
+        headers: new Headers({
+          "content-type": "application/json",
+          "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+        }),
+        body: JSON.stringify({
+          currency: "INR",
+          code: asset,
+          meta: false
+        }),
+      });
 
-    let data = await responseData.json();
+      let data = await responseData.json();
 
-    setUsdtToInr(data?.rate?.toFixed(6));
+      setUsdtToInr(data?.rate?.toFixed(6));
+
+      return data;
+    } catch (error: any) {
+      console.log(error?.message);
+    }
+
   }
 
   /**
@@ -144,21 +151,9 @@ const BuySellExpress = (props: propsData) => {
         // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${symbol}&tsyms=INR`, {
         //   method: "GET"
         // }).then(response => response.json());
-        let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
-          method: "POST",
-          headers: new Headers({
-            "content-type": "application/json",
-            "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
-          }),
-          body: JSON.stringify({
-            currency: "INR",
-            code: symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol,
-            meta: false
-          }),
-        });
-    
-        let data = await responseData.json();
-        setUsdtToInr(data?.rate?.toFixed(8));
+
+        let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
+        await getUsdtToInrPrice(asset);
         setChangeSymbol(false);
 
       }
@@ -167,21 +162,10 @@ const BuySellExpress = (props: propsData) => {
         //   method: "GET"
         // }).then(response => response.json());
 
-        let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
-          method: "POST",
-          headers: new Headers({
-            "content-type": "application/json",
-            "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
-          }),
-          body: JSON.stringify({
-            currency: "INR",
-            code: "USDT",
-            meta: false
-          }),
-        });
-
-        let data = await responseData.json();
-
+        let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
+        let data = await getUsdtToInrPrice(asset);
+        console.log('-----------here api data', data);
+        
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
@@ -235,20 +219,8 @@ const BuySellExpress = (props: propsData) => {
         //   method: "GET"
         // }).then(response => response.json());
 
-        let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
-          method: "POST",
-          headers: new Headers({
-            "content-type": "application/json",
-            "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
-          }),
-          body: JSON.stringify({
-            currency: "INR",
-            code: symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol,
-            meta: false
-          }),
-        });
-        let data = await responseData.json();
-        setUsdtToInr(data?.rate?.toFixed(8));
+        let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
+        let data = await getUsdtToInrPrice(asset);
         setChangeSymbol(false);
 
       }
@@ -257,19 +229,9 @@ const BuySellExpress = (props: propsData) => {
         //   method: "GET"
         // }).then(response => response.json());
 
-        let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
-          method: "POST",
-          headers: new Headers({
-            "content-type": "application/json",
-            "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
-          }),
-          body: JSON.stringify({
-            currency: "INR",
-            code: "USDT",
-            meta: false
-          }),
-        });
-        let data = await responseData.json();
+        let asset = "USDT";
+        let data = await getUsdtToInrPrice(asset);
+        console.log('-----------here api data', data);
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
@@ -483,7 +445,7 @@ const BuySellExpress = (props: propsData) => {
             <button
               className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 2 && "!text-primary border-primary"
                 }`}
-              onClick={() => { setActive1(2); setSecondCurrency('USDT'); getUsdtToInrPrice() }}
+              onClick={() => { setActive1(2); setSecondCurrency('USDT'); getUsdtToInrPrice('USDT') }}
             >
               Sell
             </button>
