@@ -78,11 +78,11 @@ const FiliterSelectMenu = (props: dataList) => {
             <ul>
               {props?.data && props?.data.map((item: any, index: number) => {
                 return (
-                  <li key={index} onClick={() => { setActive(item?.payment_method); setShow(false); props.onPaymentMethodChange(item?.id) }}>
+                  <li key={index} className='flex justify-between items-center hover:bg-grey dark:hover:bg-d-bg-primary cursor-pointer' onClick={() => { setActive(item?.payment_method); setShow(false); props.onPaymentMethodChange(item?.id) }}>
                     <p className={`sm-text px-10 py-[7px] rounded-[5px] hover:bg-grey dark:hover:bg-d-bg-primary cursor-pointer dark:!text-d-nav-secondary  !text-banner-text`}>{item?.payment_method}</p>
-                 {/* {props.type === 'pmethod' &&
-                 <Image src={item?.} />
-                 } */}
+                 {props.type === 'pmethod' || props.type === 'express' && item?.icon!==undefined &&
+                 <Image src={item?.icon} alt="payment_method" width={20} height={20}/>
+                 }
                   </li>
                 )
               })}
