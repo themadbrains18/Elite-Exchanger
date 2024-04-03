@@ -100,7 +100,7 @@ const TradingPassword = (props: activeSection) => {
       let pmObject: any = props?.formMethod?.pmObject;
       pmObject['passcode'] = passCode;
 
-      delete pmObject.qr_code;
+      // delete pmObject.qr_code;
 
       let obj = {
         "user_id": session?.user?.user_id,
@@ -151,7 +151,7 @@ const TradingPassword = (props: activeSection) => {
       let pmObject: any = props?.formMethod?.pmObject;
       pmObject['passcode'] = passCode;
 
-      delete pmObject.qr_code;
+      // delete pmObject.qr_code;
 
       let obj = {
         "user_id": session?.user?.user_id,
@@ -161,6 +161,9 @@ const TradingPassword = (props: activeSection) => {
         "otp": fillOtp,
         "pmObject": pmObject
       }
+
+      console.log(obj,'-----last submit');
+      
 
       const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
       let record = encodeURIComponent(ciphertext.toString());
