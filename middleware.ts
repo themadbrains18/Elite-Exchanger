@@ -67,7 +67,7 @@ export default async function middleware(req: NextRequest, res : NextResponse) {
     // } else if (session && path == "/login") {
     //   return NextResponse.redirect(new URL("/", req.url));
     // }
-    return NextResponse.redirect(new URL("/", req.url));
+    // return NextResponse.redirect(new URL("/", req.url));
     return NextResponse.rewrite(
       new URL(`/admin${path === "/" ? "" : path}`, req.url),
     );
