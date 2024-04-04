@@ -52,23 +52,7 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
   // rewrites for app pages
   if (hostname == `admin.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     let session = await getToken({ req });
-    if (!session) {
-      setTimeout(async () => {
-        session = await getToken({ req });
-        console.log(session, path, ' ==== session second time call ====')
-        let role: unknown = session?.role;
-
-        if (!session && !path.includes("/login")) {
-          return NextResponse.redirect(new URL("/login", req.url));
-        } else if (session && path == "/login") {
-          return NextResponse.redirect(new URL("/", req.url));
-        }
-        return NextResponse.rewrite(
-          new URL(`/admin${path === "/" ? "" : path}`, req.url),
-        );
-      }, 200);
-    }
-    else {
+    
       console.log(session, path, ' ==== session available call ====')
       let role: unknown = session?.role;
 
@@ -80,7 +64,7 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
       return NextResponse.rewrite(
         new URL(`/admin${path === "/" ? "" : path}`, req.url),
       );
-    }
+    
 
   }
 
