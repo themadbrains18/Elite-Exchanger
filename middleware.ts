@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { signOut, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 
 
 
@@ -25,10 +25,6 @@ const PUBLIC_FILE = /\.(.*)$/; // Files
 
 export default async function middleware(req: NextRequest, res: NextResponse) {
   const url = req.nextUrl;
-  const {data:session} = useSession();
-
-
-  console.log(session, 'user session data---------------');
   
   // Skip public files
   if (PUBLIC_FILE.test(url.pathname) || url.pathname.includes('_next')) return;
@@ -52,6 +48,11 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
   const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""
     }`;
+
+  let userSession = await getSession();  
+
+  console.log(userSession,'------------------user session');
+  
 
   // rewrites for app pages
   if (hostname == `admin.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
