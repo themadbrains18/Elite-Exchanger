@@ -52,11 +52,11 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
     console.log(session, path, ' ==== session available call ====')
     let role: unknown = session?.role;
 
-    if (!session && !path.includes("/login")) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    } else if (session && path == "/login") {
-      return NextResponse.redirect(new URL("/", req.url));
-    }
+    // if (!session && !path.includes("/login")) {
+    //   return NextResponse.redirect(new URL("/login", req.url));
+    // } else if (session && path == "/login") {
+    //   return NextResponse.redirect(new URL("/", req.url));
+    // }
     return NextResponse.rewrite(
       new URL(`/admin${path === "/" ? "" : path}`, req.url),
     );
