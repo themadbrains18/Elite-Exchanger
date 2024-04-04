@@ -13,7 +13,6 @@ const ChatBox = (props: propsData) => {
     const [show, setShow] = useState(false)
     const [orderChat, setOrderChat] = useState([]);
     const [message, setMessage] = useState('');
-    const [hovered, setHovered] = useState(false)
 
     const { status, data: session } = useSession();
 
@@ -104,7 +103,7 @@ const ChatBox = (props: propsData) => {
                         message: {
                             message: `${message}`
                         },
-                        url : `/p2p/my-orders?buy=${props?.order?.id}`
+                        url: `/p2p/my-orders?buy=${props?.order?.id}`
                     }
 
                     websocket.onopen = () => {
@@ -120,12 +119,9 @@ const ChatBox = (props: propsData) => {
 
     }
 
-    const handleKeyDown = (event:any) => {
+    const handleKeyDown = (event: any) => {
         if (event.key === "Enter") {
             sendMessage();
-        }
-        else{
-            setHovered(true)
         }
     };
 
@@ -185,16 +181,15 @@ const ChatBox = (props: propsData) => {
                 {/* send messsage */}
                 <div className="border-t border-[#cccccc7d] p-[16px] py-[24px] dark:bg-omega">
                     <div className="flex items-center gap-[15px]">
-                        <input type="text" onChange={(e) => setMessage(e.target?.value)} onKeyDown={(e)=>{handleKeyDown(e) }} onKeyUp={()=>{setHovered(false)}} value={message} className="border-0 w-full outline-none info-12 dark:!bg-omega !bg-[#F9FAFA] dark:!text-white !text-black" placeholder="input messsage..." />
+                        <input type="text" onChange={(e) => setMessage(e.target?.value)} onKeyDown={(e) => { handleKeyDown(e) }} value={message} className="border-0 w-full outline-none info-12 dark:!bg-omega !bg-[#F9FAFA] dark:!text-white !text-black" placeholder="input messsage..." />
                         {/* <div>
                             <input type="file" className="hidden" id="fileUpload" />
                             <label htmlFor="fileUpload" className="cursor-pointer" >
                                 <IconsComponent type='fileUpload' hover={false} active={false} />
                             </label>
-                        </div>
-                        <IconsComponent type='emojiIcon' hover={false} active={false} /> */}
+                        </div> */}
                         <button className="cta group " onClick={sendMessage} >
-                            <IconsComponent type='sendIcon' hover={true} active={hovered} />
+                            <IconsComponent type='sendIcon' hover={true} active={message!==""?true:false} />
                         </button>
                     </div>
                 </div>
