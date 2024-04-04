@@ -11,14 +11,14 @@ interface activeSection {
   setShow: Function;
   masterPayMethod?: any,
   setFormMethod?: any,
-  list?:any;
+  list?: any;
 }
 
 const AddPayment = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [paymentFields, setPaymentFields] = useState([]);
-
-  
+  const [enableFront, setEnableFront] = useState(false);
+  const [qrCode, setQrCode] = useState("notValid");
   let {
     register,
     setValue,
@@ -51,19 +51,56 @@ const AddPayment = (props: activeSection) => {
     setValue('selectPayment', fieldsItem[0]);
   }
 
+  const handleFileChange = async (e: any) => {
+    try {
+
+      let file = e.target.files[0]
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'my-uploads');
+      setEnableFront(true);
+      const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
+        method: 'POST',
+        body: formData
+      }).then(r => r.json());
+
+      if (data.error !== undefined) {
+        setError("idfront", {
+          type: "custom",
+          message: data?.error?.message,
+        });
+        setEnableFront(false);
+        return;
+      }
+      if (data.format === 'pdf') {
+        setError("idfront", {
+          type: "custom",
+          message: 'Unsupported pdf file',
+        });
+        setEnableFront(false);
+        return;
+      }
+      setQrCode(data.secure_url);
+      setEnableFront(false);
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const onHandleSubmit = (data: any) => {
 
-    if(data?.phonenumber?.length<10){
+    if (data?.phonenumber?.length < 10) {
       toast.error("Number contain 10 digits");
       return;
       // setError("phonenumber",{ type: "custom", message: "Number contain 10 digits" })
     }
-    else{
-      let pmt = props.list.filter((item:any)=>{
+    else {
+      let pmt = props.list.filter((item: any) => {
         return item.pm_name === data.selectPayment.payment_method && item.pmObject.phonenumber === data.phonenumber
       })
 
-      if(pmt.length>0){
+      if (pmt.length > 0) {
         toast.error("This Number is already added.");
         return;
       }
@@ -71,16 +108,17 @@ const AddPayment = (props: activeSection) => {
       let pmid = data?.selectPayment?.id;
       let pm_name = data?.selectPayment?.payment_method;
       let master_method = data?.selectPayment;
-  
+      data.qr_code = qrCode;
+
       delete data.selectPayment;
-  
+
       let obj = {
         pmid: pmid,
         pm_name: pm_name,
         pmObject: data,
         master_method: master_method
       }
-  
+
       props.setFormMethod(obj);
       props.setActive(2);
     }
@@ -138,12 +176,31 @@ const AddPayment = (props: activeSection) => {
 
           {paymentFields && paymentFields.length > 0 && paymentFields.map((item: any) => {
             // console.log(typeof item?.required,'===field require');
-            
+
             return <>
               <div className="flex flex-col mb-[15px] md:mb-5 gap-10">
                 <label className="sm-text">{item?.label}</label>
-                <div className="border  border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px]">
-                  <input type={item?.type} placeholder={item?.placeholder} {...register(`${item?.name}`, { required: item?.required === 'true'?true:false })} className="outline-none sm-text w-full bg-[transparent]" />
+                <div className="border relative border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px]">
+                  {item?.name === "qr_code" &&
+
+                    <>
+                      {enableFront &&
+                        <>
+                          <div className="bg-black  z-[1] duration-300 absolute top-0 left-0 h-full w-full opacity-80 visible"></div>
+                          <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
+                        </>
+                      }
+
+                      <input type={item?.type} placeholder={item?.placeholder} {...register(`${item?.name}`, { required: item?.required === 'true' ? true : false })} onChange={(e) => {
+                        handleFileChange(e);
+                      }} className="outline-none sm-text w-full bg-[transparent]" />
+                    </>
+
+                  }
+                  {item?.name !== "qr_code" &&
+                    <input type={item?.type} placeholder={item?.placeholder} {...register(`${item?.name}`, { required: item?.required === 'true' ? true : false })} className="outline-none sm-text w-full bg-[transparent]" />
+                  }
+
                 </div>
               </div>
 
@@ -155,7 +212,7 @@ const AddPayment = (props: activeSection) => {
           })}
 
         </div>
-        <button className="solid-button w-full" >Submit</button>
+        <button disabled={enableFront} className={`solid-button w-full ${enableFront === true ? 'opacity-25 cursor-not-allowed' : ''}`} >Submit</button>
       </form>
     </div>
   );

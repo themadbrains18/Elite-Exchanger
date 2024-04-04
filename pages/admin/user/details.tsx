@@ -7,16 +7,16 @@ import { getProviders } from "next-auth/react";
 import { useRouter } from "next/router";
 import React from "react";
 
-interface Session{
-  session:any,
- 
+interface Session {
+  session: any,
+
 }
 
-const Details = (props:Session) => {
+const Details = (props: Session) => {
 
   return (
     <DasboardLayout>
-      <UserDetails  session={props?.session}/>
+      <UserDetails session={props?.session} />
     </DasboardLayout>
   );
 };
@@ -28,21 +28,18 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders();
 
-  return {
-    props: {
-      session: session,
-      sessions: session,
-      provider: providers,
-
-
-    },
-  };
-    
-
-  // if (session) {
-
-  // }
-  // return {
-  //   redirect: { destination: "/" },
-  // };
+  if (session) {
+    return {
+      props: {
+        session: session,
+        sessions: session,
+        provider: providers,
+      },
+    };
+  }
+  else {
+    return {
+      redirect: { destination: "/login" },
+    };
+  }
 }

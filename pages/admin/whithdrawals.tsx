@@ -11,7 +11,7 @@ import { GetServerSidePropsContext } from "next";
 const Whithdrawals = () => {
   return (
     <DasboardLayout>
-      <WithdrawTable/>
+      <WithdrawTable />
     </DasboardLayout>
   );
 };
@@ -23,22 +23,20 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders();
 
+  if (session) {
+    return {
+      props: {
+        session: session,
+        sessions: session,
+        provider: providers,
 
-    // console.log(withdraw);
-    
+      },
+    };
+  }
+  else {
+    return {
+      redirect: { destination: "/login" },
+    };
+  }
 
-  return {
-    props: {
-      session: session,
-      sessions: session,
-      provider: providers,
-    
-    },
-  };
-  // if (session) {
-
-  // }
-  // return {
-  //   redirect: { destination: "/" },
-  // };
 }

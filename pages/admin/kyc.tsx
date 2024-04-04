@@ -23,17 +23,19 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders();
-
-
-
-    // console.log(kyc,"==all kyc");
-    
-
-  return {
-    props: {
-      session: session,
-      sessions: session,
-      provider: providers,
-    },
+  if (session){
+    return {
+      props: {
+        session: session,
+        sessions: session,
+        provider: providers,
+      },
+    }
   }
+  else{
+    return {
+      redirect: { destination: "/login" },
+    };
+  }
+  
 }

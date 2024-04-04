@@ -218,9 +218,13 @@ const BuyPopup = (props: activeSection) => {
                   <div className="flex items-center ">
                     <div className="max-w-full md:max-w-[315px] w-full">
                       <input type="number" step={0.000001} id="spendamount" {...register('spend_amount')} name="spend_amount" value={spendAmount} onChange={(e: any) => {
-                        setSpendAmount(e.target.value);
-                        setReceiveAmount((e?.target?.value / props?.selectedPost?.price));
-                        setValue('receive_amount', e?.target?.value / props?.selectedPost?.price);
+                        if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
+                          setSpendAmount(e?.target?.value);
+                        }
+                        // setSpendAmount(e.target.value);
+                        let receiveAmount: any = (e?.target?.value / props?.selectedPost?.price);
+                        setReceiveAmount(receiveAmount.toFixed(6));
+                        setValue('receive_amount', receiveAmount.toFixed(6));
                         clearErrors('spend_amount')
                         clearErrors('receive_amount')
                       }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full  dark:text-white" placeholder="Enter the ammount" />
@@ -239,9 +243,13 @@ const BuyPopup = (props: activeSection) => {
                   <div className="flex items-center ">
                     <div className="max-w-full md:max-w-[315px] w-full">
                       <input type="number" step={0.000001} id="receiveamount" value={receiveAmount} {...register('receive_amount')} name="receive_amount" onChange={(e: any) => {
-                        setSpendAmount(props?.selectedPost?.price * e.target.value);
-                        setReceiveAmount(e.target.value);
-                        setValue('spend_amount', e?.target?.value * props?.selectedPost?.price);
+                        if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
+                          setReceiveAmount(e?.target?.value);
+                        }
+                        let spendAmount: any = props?.selectedPost?.price * e.target.value;
+                        setSpendAmount(spendAmount.toFixed(2));
+                        // setReceiveAmount(e.target.value);
+                        setValue('spend_amount', spendAmount.toFixed(2));
                         clearErrors('spend_amount')
                         clearErrors('receive_amount')
                       }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full dark:text-white" placeholder="Your ammount in USDT" />

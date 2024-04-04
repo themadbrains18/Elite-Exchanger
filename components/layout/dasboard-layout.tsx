@@ -13,7 +13,7 @@ const DasboardLayout = (props: child) => {
 
     useEffect(() => {
 
-        // console.log(session?.user?.role,'===========session user roel====');s
+        console.log(session?.user?.role,'===========session user roel====');
         
         if (session !== null && userPermission.includes(session?.user?.role)) {
 

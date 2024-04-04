@@ -7,14 +7,14 @@ import { getServerSession } from 'next-auth'
 import { getProviders } from 'next-auth/react'
 
 
-interface Session{
-  session:any,
+interface Session {
+  session: any,
 }
 
-const Wallet = (props:Session) => {
+const Wallet = (props: Session) => {
   return (
     <DasboardLayout>
-        <WalletTable  session={props?.session} />
+      <WalletTable session={props?.session} />
     </DasboardLayout>
   )
 }
@@ -26,20 +26,22 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders();
- 
+
+  if (session) {
+    return {
+      props: {
+        session: session,
+        sessions: session,
+        provider: providers,
+      },
+    };
+  }
+  else {
+    return {
+      redirect: { destination: "/login" },
+    };
+  }
 
 
-  return {
-    props: {
-      session: session,
-      sessions: session,
-      provider: providers,
-    },
-  };
-  // if (session) {
 
-  // }
-  // return {
-  //   redirect: { destination: "/" },
-  // };
 }

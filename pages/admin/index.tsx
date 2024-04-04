@@ -14,10 +14,10 @@ import LineChart from "@/admin/admin-snippet/lineChart";
 interface propsData {
   // coinList?: any,
   topgainer: any;
-  userList:any;
-  tradeList:any;
-  adminProfit:any;
-  activity:any;
+  userList: any;
+  tradeList: any;
+  adminProfit: any;
+  activity: any;
 
   session: {
     user: any;
@@ -30,11 +30,11 @@ const Index = (props: propsData) => {
   }, []);
   return (
     <DasboardLayout>
-      <Cards userList={props?.userList} tradeList={props?.tradeList}/>
+      <Cards userList={props?.userList} tradeList={props?.tradeList} />
       <div className="flex items-start gap-[24px]">
         <div className="max-w-[70%] w-full">
           <div className="w-full mb-[24px]">
-          <LineChart />
+            <LineChart />
             {/* <Image
               src="/assets/admin/Graph-dark.svg"
               alt="img-description"
@@ -55,7 +55,7 @@ const Index = (props: propsData) => {
           <MarketOverview />
         </div>
         <div className="max-w-[30%] w-full">
-          <RevenueRsources  adminProfit={props?.adminProfit} activity={props?.activity}/>
+          <RevenueRsources adminProfit={props?.adminProfit} activity={props?.activity} />
         </div>
       </div>
     </DasboardLayout>
@@ -82,7 +82,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   let users: any = [];
   let trades: any = [];
   let profit: any = [];
-  let activityList:any=[]
+  let activityList: any = []
   if (session) {
     // console.log(session)
 
@@ -125,38 +125,37 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       }
     ).then((response) => response.json());
 
-    
- 
+
+
     trades = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market/list?itemOffset=0&itemsPerPage=10`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token
-    },
+      },
     }).then(response => response.json());
+
+    return {
+      props: {
+        session: session,
+        sessions: session,
+        provider: providers,
+        // coinList: tokenList?.data,
+        userList: users?.data || [],
+        tradeList: trades?.data || [],
+        adminProfit: profit?.data || [],
+        assets: userAssets,
+        topgainer: [],
+        activity: activityList.data || []
+        // allUsers:allUsers
+      },
+    };
   }
-  
+  else {
+    return {
+      redirect: { destination: "/login" },
+    };
+  }
 
-  return {
-    props: {
-      session: session,
-      sessions: session,
-      provider: providers,
-      // coinList: tokenList?.data,
-      userList:users?.data || [],
-      tradeList:trades?.data  || [],
-      adminProfit:profit?.data || [],
-      assets: userAssets,
-      topgainer: [],
-      activity:activityList.data || []
-      // allUsers:allUsers
-    },
-  };
-  // if (session) {
-
-  // }
-  // return {
-  //   redirect: { destination: "/" },
-  // };
 }
 
 export default Index;

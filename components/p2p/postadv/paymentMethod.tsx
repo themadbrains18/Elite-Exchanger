@@ -11,16 +11,16 @@ import { useRouter } from "next/router";
 import IconsComponent from "@/components/snippets/icons";
 import { useSession } from "next-auth/react";
 import ConfirmationModel from "@/components/snippets/confirmation";
-import { toast,ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const schema = yup.object().shape({
   p_method: yup.lazy((val) =>
     Array.isArray(val)
       ? yup
-          .array()
-          .of(yup.string().min(1).required())
-          .required("Please select 1 payment method")
+        .array()
+        .of(yup.string().min(1).required())
+        .required("Please select 1 payment method")
       : yup.string().min(1).required("Please select 1 payment method")
   ),
   // yup.array().of(yup.string().min(1).required()).required().nullable(),
@@ -52,6 +52,7 @@ interface activeSection {
   assetsBalance?: any;
   price?: any;
   page?: any;
+  userPosts?:any;
 }
 
 const PaymentMethod = (props: activeSection) => {
@@ -154,6 +155,21 @@ const PaymentMethod = (props: activeSection) => {
 
   const handleDelete = async () => {
     try {
+
+      let paymentMethodRelation = [];
+      for(const post of props?.userPosts){
+        post?.p_method.filter((itm:any)=>{
+          if(itm.upm_id === id){
+            paymentMethodRelation.push(itm);
+          } 
+        })
+      }
+
+      if(paymentMethodRelation.length>0){
+        toast.warning('you can`t remove this payment method because it related to your adds. In case you first edit your adds than remove payment method.');
+        return;
+      }
+
       let responseData = await fetch(
         `${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod?id=${id}`,
         {
@@ -167,11 +183,11 @@ const PaymentMethod = (props: activeSection) => {
       if (responseData?.data) {
         getAllPayments()
         toast.success("Payment method delete successfully");
-        setTimeout(()=>{
+        setTimeout(() => {
           setActive(0);
           setShow(false);
 
-        },1000)
+        }, 1000)
       } else {
         toast.error("Unable to delete");
       }
@@ -181,21 +197,20 @@ const PaymentMethod = (props: activeSection) => {
     }
   };
 
-  const checkInput=(e:any,type:string)=>{
+  const checkInput = (e: any, type: string) => {
     const value = e.target.value;
     if (/^\d*\.?\d{0,6}$/.test(value)) {
-      type==="min"?setMinInputValue(value):setMaxInputValue(value);
+      type === "min" ? setMinInputValue(value) : setMaxInputValue(value);
     }
   }
 
 
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <div
-        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${
-          show ? "opacity-80 visible" : "opacity-0 invisible"
-        }`}
+        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"
+          }`}
       ></div>
       <form onSubmit={handleSubmit(onHandleSubmit)}>
         <div className="mt-40">
@@ -273,9 +288,8 @@ const PaymentMethod = (props: activeSection) => {
                         </p>
                       </div>
                       <div
-                        className={`${
-                          props.page === "user-center" ? "block" : "hidden"
-                        } cursor-pointer`}
+                        className={`${props.page === "user-center" ? "block" : "hidden"
+                          } cursor-pointer`}
                         onClick={() => {
                           setShow(true);
                           setActive(4);
@@ -326,7 +340,7 @@ const PaymentMethod = (props: activeSection) => {
                               type="number"
                               id="quantity"
                               step={0.000001}
-                              value={inputValue} 
+                              value={inputValue}
                               {...register("quantity")}
                               name="quantity"
                               onChange={(e) => checkBalnce(e)}
@@ -370,7 +384,7 @@ const PaymentMethod = (props: activeSection) => {
                               step={0.000001}
                               {...register("min_limit")}
                               value={minInputValue}
-                              onChange={(e)=>{checkInput(e,'min')}}
+                              onChange={(e) => { checkInput(e, 'min') }}
                               name="min_limit"
                               className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white"
                               placeholder="Enter Min. Amount"
@@ -407,7 +421,7 @@ const PaymentMethod = (props: activeSection) => {
                               {...register("max_limit")}
                               name="max_limit"
                               value={maxInputValue}
-                              onChange={(e)=>{checkInput(e,'max')}}
+                              onChange={(e) => { checkInput(e, 'max') }}
                               className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white"
                               placeholder="Enter Max. Amount"
                             />

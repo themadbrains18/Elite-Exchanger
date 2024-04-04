@@ -6,44 +6,43 @@ import { authOptions } from "../api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { getProviders } from "next-auth/react";
 
-interface session{
-    marketOrders:any
+interface session {
+  marketOrders: any
 }
 
-const Trades = (props:session) => {
-    return (
-      <DasboardLayout>
-        <List marketOrders={props?.marketOrders}/>
-      </DasboardLayout>
-    );
+const Trades = (props: session) => {
+  return (
+    <DasboardLayout>
+      <List marketOrders={props?.marketOrders} />
+    </DasboardLayout>
+  );
 };
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
-    const { req } = context;
-    const session = await getServerSession(context.req, context.res, authOptions);
-    const providers = await getProviders();
-  
-     let marketOrders = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/market/admin/all`, {
-        method: "GET",    
-      }).then(response => response.json());
-  
-   
-  
+  const { req } = context;
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const providers = await getProviders();
+
+  if (session) {
+    let marketOrders = await fetch(`${process.env.NEXT_PUBLIC_APIURL}/market/admin/all`, {
+      method: "GET",
+    }).then(response => response.json());
+
     return {
       props: {
         session: session,
         sessions: session,
         provider: providers,
         marketOrders: marketOrders || [],
-        
+
       },
     };
-    // if (session) {
-  
-    // }
-    // return {
-    //   redirect: { destination: "/" },
-    // };
   }
+  else {
+    return {
+      redirect: { destination: "/login" },
+    };
+  }
+}
 
 export default Trades;

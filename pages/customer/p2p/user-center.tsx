@@ -13,6 +13,7 @@ interface propsData{
   userDetail?:any;
   masterPayMethod?:any;
   userPaymentMethod?:any;
+  posts?:any;
 }
 
 const UserCenter = (props:propsData) => {
@@ -21,7 +22,7 @@ const UserCenter = (props:propsData) => {
     <P2pLayout>
        <UserCenterProfile userDetail={props.userDetail}/>
        {/* <ProfileOverview /> */}
-       <PaymentMethod masterPayMethod={props.masterPayMethod} userPaymentMethod={props.userPaymentMethod} page="user-center"/>
+       <PaymentMethod masterPayMethod={props.masterPayMethod} userPaymentMethod={props.userPaymentMethod} page="user-center" userPosts={props?.posts}/>
     </P2pLayout>
   )
 }
@@ -54,6 +55,13 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         "Authorization": session?.user?.access_token
       },
     }).then(response => response.json());
+
+    let userPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/advertisement`, {
+      method: "GET",
+      headers: {
+        "Authorization": session?.user?.access_token
+      },
+    }).then(response => response.json());
     
     return {
       props: {
@@ -63,6 +71,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         userDetail: profileDashboard?.data || null,
         masterPayMethod: masterPaymentMethod?.data || [],
         userPaymentMethod: userPaymentMethod?.data || [],
+        posts: userPosts?.data || [],
       },
     };
   }

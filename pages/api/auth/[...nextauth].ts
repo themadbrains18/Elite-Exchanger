@@ -34,12 +34,14 @@ export const authOptions: NextAuthOptions = {
 
             if(token?.access_token !==undefined || token?.access_token !==null){
 
+                // console.log(token?.access_token,'------------token access token');
+                
                 const datauser = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/checkjwt`, {
                     method: "GET",
                     headers: { 'authorization': token?.access_token }
                 } as any).then(response => response.json());
 
-                // console.log(datauser,'=====jwt token===================');
+                // console.log(datauser,'=====data user detail===================');
                 
                 if(datauser?.data?.message !==undefined){
                     session = null as any

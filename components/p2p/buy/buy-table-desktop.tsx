@@ -89,7 +89,15 @@ const BuyTableDesktop = (props: activeSection) => {
               if (session?.user?.user_id !== item?.user_id) {
                 const profileImg = item?.user?.profile && item?.user?.profile?.image !== null ? `${item?.user?.profile?.image}` : `/assets/orders/user1.png`;
                 const userName = item?.user?.profile && item?.user?.profile?.dName !== null ? item?.user?.profile?.dName : item?.user?.user_kyc?.fname;
-                
+                let payment_method: any = [];
+
+                for (const upid of item?.user?.user_payment_methods) {
+                  item?.p_method.filter((e: any) => {
+                    if (e?.upm_id === upid?.id) {
+                      payment_method.push(upid);
+                    }
+                  })
+                }
                 return (
                   <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FAFAFA] cursor-pointer">
                     <td className="group-hover:bg-[#FAFAFA] dark:group-hover:bg-black-v-1 ">
@@ -118,13 +126,13 @@ const BuyTableDesktop = (props: activeSection) => {
                     </td>
 
                     <td>
-                      <p className="info-14-18 dark:text-white  ">{Number(item?.quantity).toFixed(4)} {item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
+                      <p className="info-14-18 dark:text-white  ">{Number(item?.quantity).toFixed(4)} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                     </td>
 
                     <td>
                       <div className='flex items-center gap-10'>
                         {
-                          item?.user?.user_payment_methods.map((elem: any, ind: any) => {
+                          payment_method?.map((elem: any, ind: any) => {
                             return (
                               <Fragment key={ind}>
                                 <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />

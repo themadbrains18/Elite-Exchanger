@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import AES from 'crypto-js/aes';
+import { toast } from "react-toastify";
 
 interface propsData {
     sellerUser?: any;
@@ -13,9 +14,9 @@ const ChatBox = (props: propsData) => {
     const [show, setShow] = useState(false)
     const [orderChat, setOrderChat] = useState([]);
     const [message, setMessage] = useState('');
-    const [hovered, setHovered] = useState(false)
 
     const { status, data: session } = useSession();
+    const [enableFront, setEnableFront] = useState(false);
 
     useEffect(() => {
         getChatByOrderId();
@@ -62,7 +63,7 @@ const ChatBox = (props: propsData) => {
         }
     }
 
-    const sendMessage = async () => {
+    const sendMessage = async (msg: string) => {
         try {
             let obj = {
                 "post_id": props.order?.post_id,
@@ -71,10 +72,10 @@ const ChatBox = (props: propsData) => {
                 "from": session?.user?.user_id,
                 "to": props?.sellerUser?.id,
                 "orderid": props.order?.id,
-                "chat": message
+                "chat": msg
             }
 
-            if (message !== '') {
+            if (msg !== '') {
                 const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
                 let record = encodeURIComponent(ciphertext.toString());
 
@@ -104,7 +105,7 @@ const ChatBox = (props: propsData) => {
                         message: {
                             message: `${message}`
                         },
-                        url : `/p2p/my-orders?buy=${props?.order?.id}`
+                        url: `/p2p/my-orders?buy=${props?.order?.id}`
                     }
 
                     websocket.onopen = () => {
@@ -120,12 +121,41 @@ const ChatBox = (props: propsData) => {
 
     }
 
-    const handleKeyDown = (event:any) => {
-        if (event.key === "Enter") {
-            sendMessage();
+    const handleFileChange = async (e: any) => {
+        try {
+
+            let file = e.target.files[0]
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('upload_preset', 'my-uploads');
+            setEnableFront(true);
+            const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
+                method: 'POST',
+                body: formData
+            }).then(r => r.json());
+
+            if (data.error !== undefined) {
+                setEnableFront(false);
+                toast.error(data?.error?.message);
+                return;
+            }
+            if (data.format === 'pdf') {
+                setEnableFront(false);
+                toast.error('Unsupported pdf file');
+                return;
+            }
+            // setMessage(data.secure_url);
+            sendMessage(data.secure_url);
+            setEnableFront(false);
+
+        } catch (error) {
+            console.error(error);
         }
-        else{
-            setHovered(true)
+    };
+
+    const handleKeyDown = (event: any) => {
+        if (event.key === "Enter") {
+            sendMessage(message);
         }
     };
 
@@ -160,7 +190,12 @@ const ChatBox = (props: propsData) => {
                             if (item?.from === session?.user?.user_id) {
                                 return <div className="left gap-[4px]">
                                     <div className="mt-[4px] p-[10px] ml-[auto] rounded-lg min-w-[60px] max-w-fit w-full dark:bg-[#232530] bg-primary-600 bottom-right">
-                                        <p className="info-12 text-white ">{item?.message}</p>
+                                        {(item?.message).includes('https://') === true &&
+                                            <Image src={item?.message} alt='error' width={100} height={100} />
+                                        }
+                                        {(item?.message).includes('https://') === false &&
+                                            <p className="info-12 text-white ">{item?.message}</p>
+                                        }
                                     </div>
                                 </div>
                             }
@@ -171,7 +206,12 @@ const ChatBox = (props: propsData) => {
                                     </div> */}
                                     <div>
                                         <div className="mt-[4px] mr-[auto] p-[10px] rounded-lg min-w-[60px] max-w-fit w-full dark:bg-omega bg-[#F1F2F4] bottom-left">
-                                            <p className="info-12 dark:text-white text-[#232530]">{item?.message}</p>
+                                            {(item?.message).includes('https://') === true &&
+                                                <Image src={item?.message} alt='error' width={100} height={100} />
+                                            }
+                                            {(item?.message).includes('https://') === false &&
+                                                <p className="info-12 text-white ">{item?.message}</p>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -185,16 +225,17 @@ const ChatBox = (props: propsData) => {
                 {/* send messsage */}
                 <div className="border-t border-[#cccccc7d] p-[16px] py-[24px] dark:bg-omega">
                     <div className="flex items-center gap-[15px]">
-                        <input type="text" onChange={(e) => setMessage(e.target?.value)} onKeyDown={(e)=>{handleKeyDown(e) }} onKeyUp={()=>{setHovered(false)}} value={message} className="border-0 w-full outline-none info-12 dark:!bg-omega !bg-[#F9FAFA] dark:!text-white !text-black" placeholder="input messsage..." />
-                        {/* <div>
-                            <input type="file" className="hidden" id="fileUpload" />
+                        <input type="text" onChange={(e) => setMessage(e.target?.value)} onKeyDown={(e) => { handleKeyDown(e) }} value={message} className="border-0 w-full outline-none info-12 dark:!bg-omega !bg-[#F9FAFA] dark:!text-white !text-black" placeholder="input messsage..." />
+                        <div>
+                            <input type="file" className="hidden" id="fileUpload" onChange={(e) => {
+                                handleFileChange(e);
+                            }} />
                             <label htmlFor="fileUpload" className="cursor-pointer" >
                                 <IconsComponent type='fileUpload' hover={false} active={false} />
                             </label>
                         </div>
-                        <IconsComponent type='emojiIcon' hover={false} active={false} /> */}
-                        <button className="cta group " onClick={sendMessage} >
-                            <IconsComponent type='sendIcon' hover={true} active={hovered} />
+                        <button className="cta group " onClick={() => sendMessage(message)} >
+                            <IconsComponent type='sendIcon' hover={true} active={message !== "" ? true : false} />
                         </button>
                     </div>
                 </div>
