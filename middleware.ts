@@ -40,6 +40,8 @@ export default async function middleware(req: NextRequest, res : NextResponse) {
     hostname.includes("---") &&
     hostname.endsWith(`.${process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_SUFFIX}`)
   ) {
+    console.log('---------herher sdfsdfsdfnsdffsdf');
+    
     hostname = `${hostname.split("---")[0]}.${
       process.env.NEXT_PUBLIC_ROOT_DOMAIN
     }`;
@@ -51,11 +53,13 @@ export default async function middleware(req: NextRequest, res : NextResponse) {
     searchParams.length > 0 ? `?${searchParams}` : ""
   }`;
 
+  console.log(hostname,'-----------hostname');
+  
   // rewrites for app pages
   if (hostname == `admin.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     const session = await getToken({ req });
 
-    // console.log(session,path, ' ==== session session session session session session session session session ====')
+    console.log(session,path, ' ==== session session session session session session session session session ====')
     let role : unknown  = session?.role;
 
     if (!session && !path.includes("/login")) {
