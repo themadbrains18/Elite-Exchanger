@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 
 
@@ -25,7 +25,11 @@ const PUBLIC_FILE = /\.(.*)$/; // Files
 
 export default async function middleware(req: NextRequest, res: NextResponse) {
   const url = req.nextUrl;
+  const {data:session} = useSession();
 
+
+  console.log(session, 'user session data---------------');
+  
   // Skip public files
   if (PUBLIC_FILE.test(url.pathname) || url.pathname.includes('_next')) return;
 
