@@ -2,9 +2,9 @@ import { GetServerSidePropsContext } from 'next'
 import ReportTable from '../../admin/admin-component/reports/reportTable'
 import DasboardLayout from '../../components/layout/dasboard-layout'
 import React from 'react'
-import { authOptions } from '@/libs/auth'
 import { getServerSession } from 'next-auth'
 import { getProviders } from 'next-auth/react'
+import { authOptions } from '../api/auth/[...nextauth]'
 
 const Reports = () => {
   return (
