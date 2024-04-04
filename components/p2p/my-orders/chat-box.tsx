@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import AES from 'crypto-js/aes';
+import { toast } from "react-toastify";
 
 interface propsData {
     sellerUser?: any;
@@ -135,10 +136,12 @@ const ChatBox = (props: propsData) => {
 
             if (data.error !== undefined) {
                 setEnableFront(false);
+                toast.error(data?.error?.message);
                 return;
             }
             if (data.format === 'pdf') {
                 setEnableFront(false);
+                toast.error('Unsupported pdf file');
                 return;
             }
             // setMessage(data.secure_url);
