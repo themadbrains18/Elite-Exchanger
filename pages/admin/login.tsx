@@ -25,9 +25,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       redirect: { destination: "/" },
     }
   }
-  else{
-    return {
-      redirect: { destination: "/login" },
-    }
-  }
+  // else{
+  //   return {
+  //     redirect: { destination: "/login" },
+  //   }
+  // }
 }
