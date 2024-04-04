@@ -133,24 +133,31 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         "Authorization": session?.user?.access_token
     },
     }).then(response => response.json());
+
+    return {
+      props: {
+        session: session,
+        sessions: session,
+        provider: providers,
+        // coinList: tokenList?.data,
+        userList:users?.data || [],
+        tradeList:trades?.data  || [],
+        adminProfit:profit?.data || [],
+        assets: userAssets,
+        topgainer: [],
+        activity:activityList.data || []
+        // allUsers:allUsers
+      },
+    };
+  }
+  else{
+    return {
+    redirect: { destination: "/login" },
+  };
   }
   
 
-  return {
-    props: {
-      session: session,
-      sessions: session,
-      provider: providers,
-      // coinList: tokenList?.data,
-      userList:users?.data || [],
-      tradeList:trades?.data  || [],
-      adminProfit:profit?.data || [],
-      assets: userAssets,
-      topgainer: [],
-      activity:activityList.data || []
-      // allUsers:allUsers
-    },
-  };
+  
   // if (session) {
 
   // }
