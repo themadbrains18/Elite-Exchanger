@@ -49,7 +49,7 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
   if (hostname == `admin.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     let session = await getToken({ req });
 
-    console.log(session, path, ' ==== session available call ====')
+    // console.log(session, path, ' ==== session available call ====')
     let role: unknown = session?.role;
 
     // if (!session && !path.includes("/login")) {
