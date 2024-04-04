@@ -66,7 +66,7 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
         return NextResponse.rewrite(
           new URL(`/admin${path === "/" ? "" : path}`, req.url),
         );
-      }, 2000);
+      }, 200);
     }
     else {
       console.log(session, path, ' ==== session available call ====')
