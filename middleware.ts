@@ -52,9 +52,24 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
   // rewrites for app pages
   if (hostname == `admin.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     let session = await getToken({ req });
-    setTimeout(async () => {
-      session = await getToken({ req });
-      console.log(session, path, ' ==== session session session session session session session session session ====')
+    if (!session) {
+      setTimeout(async () => {
+        session = await getToken({ req });
+        console.log(session, path, ' ==== session second time call ====')
+        let role: unknown = session?.role;
+
+        if (!session && !path.includes("/login")) {
+          return NextResponse.redirect(new URL("/login", req.url));
+        } else if (session && path == "/login") {
+          return NextResponse.redirect(new URL("/", req.url));
+        }
+        return NextResponse.rewrite(
+          new URL(`/admin${path === "/" ? "" : path}`, req.url),
+        );
+      }, 2000);
+    }
+    else {
+      console.log(session, path, ' ==== session available call ====')
       let role: unknown = session?.role;
 
       if (!session && !path.includes("/login")) {
@@ -65,19 +80,8 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
       return NextResponse.rewrite(
         new URL(`/admin${path === "/" ? "" : path}`, req.url),
       );
-    }, 100);
-
-    console.log(session, path, ' ==== session session session session session session session session session ====')
-    let role: unknown = session?.role;
-
-    if (!session && !path.includes("/login")) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    } else if (session && path == "/login") {
-      return NextResponse.redirect(new URL("/", req.url));
     }
-    return NextResponse.rewrite(
-      new URL(`/admin${path === "/" ? "" : path}`, req.url),
-    );
+
   }
 
   // special case for `vercel.pub` domain
