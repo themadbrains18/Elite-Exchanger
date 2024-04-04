@@ -150,11 +150,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
-  // else {
-  //   return {
-  //     redirect: { destination: "/login" },
-  //   };
-  // }
+  else {
+    return {
+      redirect: { destination: "/login" },
+    };
+  }
 
 
 
