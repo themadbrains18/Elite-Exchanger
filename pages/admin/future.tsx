@@ -32,15 +32,21 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
   ).then((response) => response.json());
 
-
-  return {
-    props: {
-      session: session,
-      sessions: session,
-      provider: providers,
-      coinList: tokenList?.data || [],
-    },
-  };
+  if (session) {
+    return {
+      props: {
+        session: session,
+        sessions: session,
+        provider: providers,
+        coinList: tokenList?.data || [],
+      },
+    };
+  }
+  else {
+    return {
+      redirect: { destination: "/login" },
+    };
+  }
 
 }
 

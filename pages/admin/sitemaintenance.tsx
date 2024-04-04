@@ -8,7 +8,7 @@ import { getProviders } from "next-auth/react";
 import MaintenanceList from "@/admin/admin-component/sitemaintenance/list";
 
 interface Session {
-    list?: any;
+  list?: any;
 }
 
 const SiteMaintenance = (props: Session) => {
@@ -25,25 +25,33 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders();
 
-  let list = await fetch(
-    `${process.env.NEXT_PUBLIC_BASEURL}/sitemaintenance`,
-    {
-      method: "GET",
-      headers:{
-        "Authorization": session?.user?.access_token || ''
-    }
-    }
-  ).then((response) => response.json());
+  if (session) {
+    let list = await fetch(
+      `${process.env.NEXT_PUBLIC_BASEURL}/sitemaintenance`,
+      {
+        method: "GET",
+        headers: {
+          "Authorization": session?.user?.access_token || ''
+        }
+      }
+    ).then((response) => response.json());
 
 
-  return {
-    props: {
-      session: session,
-      sessions: session,
-      provider: providers,
-      list: list?.data || [],
-    },
-  };
+    return {
+      props: {
+        session: session,
+        sessions: session,
+        provider: providers,
+        list: list?.data || [],
+      },
+    };
+  }
+  else {
+    return {
+      redirect: { destination: "/login" },
+    };
+  }
+
 
 }
 

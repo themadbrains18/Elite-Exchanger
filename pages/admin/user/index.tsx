@@ -18,7 +18,7 @@ interface Session {
   networks: any,
   session: any,
   activity: any,
-  usersCounts:any
+  usersCounts: any
 }
 
 const User = (props: Session) => {
@@ -85,56 +85,55 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders();
-
-  let users = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/all?itemOffset=0&itemsPerPage=10`, {
-    method: "GET",
-    headers: {
-      "Authorization": session?.user?.access_token || ""
-    },
-  }).then(response => response.json());
-
-  let usersCounts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/count`, {
-    method: "GET",
-    headers: {
-      "Authorization": session?.user?.access_token || ""
-    },
-  }).then(response => response.json());
-
-  let activityList = await fetch(
-    `${process.env.NEXT_PUBLIC_BASEURL}/activity/list`,
-    {
+  if (session) {
+    let users = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/all?itemOffset=0&itemsPerPage=10`, {
       method: "GET",
       headers: {
-        Authorization: session?.user?.access_token,
+        "Authorization": session?.user?.access_token || ""
       },
-    }
-  ).then((response) => response.json());
+    }).then(response => response.json());
 
-  let networks = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/network`, {
-    method: "GET",
-    headers: {
-      "Authorization": session?.user?.access_token || ""
-    },
+    let usersCounts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/count`, {
+      method: "GET",
+      headers: {
+        "Authorization": session?.user?.access_token || ""
+      },
+    }).then(response => response.json());
 
-  }).then(response => response.json());
+    let activityList = await fetch(
+      `${process.env.NEXT_PUBLIC_BASEURL}/activity/list`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: session?.user?.access_token,
+        },
+      }
+    ).then((response) => response.json());
 
-  // console.log(networks,"==hjhkjh");
+    let networks = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/network`, {
+      method: "GET",
+      headers: {
+        "Authorization": session?.user?.access_token || ""
+      },
 
-  return {
-    props: {
-      session: session,
-      sessions: session,
-      provider: providers,
-      users: users?.data?.data || [],
-      networks: networks?.data || [],
-      activity: activityList?.data || [],
-      usersCounts : usersCounts
-    },
-  };
-  // if (session) {
+    }).then(response => response.json());
 
-  // }
-  // return {
-  //   redirect: { destination: "/" },
-  // };
+    return {
+      props: {
+        session: session,
+        sessions: session,
+        provider: providers,
+        users: users?.data?.data || [],
+        networks: networks?.data || [],
+        activity: activityList?.data || [],
+        usersCounts: usersCounts
+      },
+    };
+  }
+  else {
+    return {
+      redirect: { destination: "/login" },
+    };
+  }
+
 }

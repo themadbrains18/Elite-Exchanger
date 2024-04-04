@@ -24,22 +24,30 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const session = await getServerSession(context.req, context.res, authOptions);
     const providers = await getProviders();
 
-    let tokenList = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/token/admin`,
-        {
-            method: "GET",
-        }
-    ).then((response) => response.json());
+    if (session) {
+        let tokenList = await fetch(
+            `${process.env.NEXT_PUBLIC_BASEURL}/token/admin`,
+            {
+                method: "GET",
+            }
+        ).then((response) => response.json());
 
 
-    return {
-        props: {
-            session: session,
-            sessions: session,
-            provider: providers,
-            coinList: tokenList?.data || [],
-        },
-    };
+        return {
+            props: {
+                session: session,
+                sessions: session,
+                provider: providers,
+                coinList: tokenList?.data || [],
+            },
+        };
+    }
+    else {
+        return {
+            redirect: { destination: "/login" },
+        };
+    }
+
 
 }
 

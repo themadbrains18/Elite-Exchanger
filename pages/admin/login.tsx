@@ -25,16 +25,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       redirect: { destination: "/" },
     }
   }
-
   return {
     props: {
       providers,
       secretKey: process.env.SECRET_REQUEST_SECRETPASS
     },
   }
-  // else{
-  //   return {
-  //     redirect: { destination: "/login" },
-  //   }
-  // }
 }
