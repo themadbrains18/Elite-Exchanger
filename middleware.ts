@@ -1,9 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { getSession } from "next-auth/react";
-
-
-
 
 export const config = {
   matcher: [
@@ -49,17 +45,6 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
   const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""
     }`;
 
-  setTimeout(async () => {
-
-    console.log('----------herer');
-    
-    let userSession = await getSession();
-
-    console.log(userSession, '------------------user session');
-  }, 2000);
-
-
-
   // rewrites for app pages
   if (hostname == `admin.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     let session = await getToken({ req });
@@ -75,8 +60,6 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
     return NextResponse.rewrite(
       new URL(`/admin${path === "/" ? "" : path}`, req.url),
     );
-
-
   }
 
   // special case for `vercel.pub` domain
