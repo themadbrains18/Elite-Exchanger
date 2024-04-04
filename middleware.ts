@@ -25,7 +25,7 @@ const PUBLIC_FILE = /\.(.*)$/; // Files
 
 export default async function middleware(req: NextRequest, res: NextResponse) {
   const url = req.nextUrl;
-  
+
   // Skip public files
   if (PUBLIC_FILE.test(url.pathname) || url.pathname.includes('_next')) return;
 
@@ -49,27 +49,33 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
   const path = `${url.pathname}${searchParams.length > 0 ? `?${searchParams}` : ""
     }`;
 
-  let userSession = await getSession();  
+  setTimeout(async () => {
 
-  console.log(userSession,'------------------user session');
-  
+    console.log('----------herer');
+    
+    let userSession = await getSession();
+
+    console.log(userSession, '------------------user session');
+  }, 2000);
+
+
 
   // rewrites for app pages
   if (hostname == `admin.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     let session = await getToken({ req });
-    
-      console.log(session, path, ' ==== session available call ====')
-      let role: unknown = session?.role;
 
-      if (!session && !path.includes("/login")) {
-        return NextResponse.redirect(new URL("/login", req.url));
-      } else if (session && path == "/login") {
-        return NextResponse.redirect(new URL("/", req.url));
-      }
-      return NextResponse.rewrite(
-        new URL(`/admin${path === "/" ? "" : path}`, req.url),
-      );
-    
+    console.log(session, path, ' ==== session available call ====')
+    let role: unknown = session?.role;
+
+    if (!session && !path.includes("/login")) {
+      return NextResponse.redirect(new URL("/login", req.url));
+    } else if (session && path == "/login") {
+      return NextResponse.redirect(new URL("/", req.url));
+    }
+    return NextResponse.rewrite(
+      new URL(`/admin${path === "/" ? "" : path}`, req.url),
+    );
+
 
   }
 
