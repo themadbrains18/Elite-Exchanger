@@ -24,10 +24,10 @@ const DasboardLayout = (props: child) => {
             // })
         } else {
 
-            // signOut({
-            //     redirect: true,
-            //     callbackUrl: '/login'
-            // })
+            signOut({
+                redirect: true,
+                callbackUrl: '/login'
+            })
         }
 
     }, [])
