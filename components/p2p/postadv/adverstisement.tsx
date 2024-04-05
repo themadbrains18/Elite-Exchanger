@@ -29,6 +29,7 @@ const Adverstisement = (props: propsData) => {
   const [step1Data, setStep1Data] = useState(Object);
   const [step2Data, setStep2Data] = useState(Object);
   const [assetsBalance, setAssetsBalance] = useState(0.00);
+  const [loading, setLoading] = useState(false);
 
   const assets = props.tokenList;
   const cash = ["INR"];
@@ -63,61 +64,71 @@ const Adverstisement = (props: propsData) => {
   });
 
   const selectToken = async (item: any) => {
+    try {
+      setValue('token_id', item?.id);
+      clearErrors('token_id');
+      setLoading(true);
+      setValue('price', 0.0);
+      if (item?.tokenType === 'global') {
+        // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${item?.symbol}&tsyms=INR`, {
+        //   method: "GET",
+        // }).then(response => response.json());
 
-    setValue('token_id', item?.id);
-    clearErrors('token_id');
+        let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+          method: "POST",
+          headers: new Headers({
+            "content-type": "application/json",
+            "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+          }),
+          body: JSON.stringify({
+            currency: "INR",
+            code: item?.symbol === 'BTCB' ? 'BTC' : item?.symbol === 'BNBT' ? 'BNB' : item?.symbol,
+            meta: false
+          }),
+        });
+        let data = await responseData.json();
+        setLoading(false);
+        setInrPrice(data?.rate);
+        setValue('price', (data?.rate).toFixed(4));
+      }
+      else {
+        // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
+        //   method: "GET",
+        // }).then(response => response.json());
+        let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+          method: "POST",
+          headers: new Headers({
+            "content-type": "application/json",
+            "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+          }),
+          body: JSON.stringify({
+            currency: "INR",
+            code: "USDT",
+            meta: false
+          }),
+        });
+        let data = await responseData.json();
+        setLoading(false);
+        setInrPrice(item?.price * data?.rate);
+        let price: any = item?.price * data?.rate
+        setValue('price', price.toFixed(4));
+      }
 
-    if (item?.tokenType === 'global') {
-      // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${item?.symbol}&tsyms=INR`, {
-      //   method: "GET",
-      // }).then(response => response.json());
-
-      let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
-        method: "POST",
-        headers: new Headers({
-          "content-type": "application/json",
-          "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
-        }),
-        body: JSON.stringify({
-          currency: "INR",
-          code: item?.symbol === 'BTCB' ? 'BTC' : item?.symbol === 'BNBT' ? 'BNB' : item?.symbol,
-          meta: false
-        }),
-      });
-      let data = await responseData.json();
-
-      setInrPrice(data?.rate);
+      setSelectedAssets(item);
+      let balances = props?.assets?.filter((e: any) => {
+        return e.token_id === item?.id && e.walletTtype === 'main_wallet'
+      })
+      if (balances[0] !== undefined) {
+        setAssetsBalance(balances[0]?.balance);
+      }
+      else {
+        setAssetsBalance(0);
+      }
+    } catch (error: any) {
+      setLoading(false);
+      toast.error(error?.message);
     }
-    else {
-      // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
-      //   method: "GET",
-      // }).then(response => response.json());
-      let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
-        method: "POST",
-        headers: new Headers({
-          "content-type": "application/json",
-          "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
-        }),
-        body: JSON.stringify({
-          currency: "INR",
-          code: "USDT",
-          meta: false
-        }),
-      });
-      let data = await responseData.json();
-      setInrPrice(item?.price * data?.rate);
-    }
 
-    setSelectedAssets(item);
-    let balances = props?.assets?.filter((e: any) => {
-      return e.token_id === item?.id && e.walletTtype === 'main_wallet'
-    })
-    if (balances[0] !== undefined) {
-      setAssetsBalance(balances[0]?.balance);
-    }
-    else {
-      setAssetsBalance(0);
-    }
 
   }
 
@@ -240,7 +251,7 @@ const Adverstisement = (props: propsData) => {
                     type="button"
                   >
                     <div className="flex items-center mr-4 md:justify-unset justify-center">
-                      <input id="radio--btn-1" type="radio" value="" name="colored-radio-dd"  checked={show === 1 ? true : false} className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                      <input id="radio--btn-1" type="radio" value="" name="colored-radio-dd" checked={show === 1 ? true : false} className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                       <label
                         htmlFor="radio--btn-1"
                         className="
@@ -316,20 +327,23 @@ const Adverstisement = (props: propsData) => {
                 <div className="md:py-50 py-20">
                   <div className="flex items-center justify-between gap-2 pb-[15px] border-b border-grey-v-1 dark:border-opacity-20">
                     <p className="info-14-18 dark:!text-white">Your Price</p>
-                    <p className="sec-title md:!text-[18px] !text-[14px]">₹ {(inrPrice)?.toFixed(2)}</p>
+                    {loading === true ? <div className='loader relative w-[35px] z-[2] h-[35px] top-0 right-0 border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
+                      : <p className="sec-title md:!text-[18px] !text-[14px]">₹ {(inrPrice)?.toFixed(2)}</p>
+                    }
+
                   </div>
                   {/* <div className="flex items-center justify-between gap-2 pt-[15px] ">
                     <p className="info-14-18 dark:!text-white">Highest Order Price</p>
                     <p className="sec-title md:!text-[18px] !text-[14px]">₹ 79.29</p>
                   </div> */}
                   <div className="md:mt-30 mt-20">
-                    <p className="info-10-14">{show===1?"Fixed":"Floating"} (INR)</p>
+                    <p className="info-10-14">{show === 1 ? "Fixed" : "Floating"} (INR)</p>
                     <input type="number" step={0.000001} {...register('price', { required: true })} name="price" placeholder="Enter Amount" className="py-[14px] px-[15px] border rounded-5 border-grey-v-1 mt-[10px] w-full bg-[transparent] dark:border-opacity-20 outline-none info-16-18" />
                   </div>
                   {errors?.price && (
                     <p style={{ color: "#ff0000d1" }}>{errors?.price?.message}</p>
                   )}
-                  <p className="py-2 info-10-14 text-right">Bal. {assetsBalance}</p>
+                  <p className="py-2 info-10-14 text-right">Bal. {assetsBalance.toFixed(4)}</p>
                 </div>
 
                 <button
