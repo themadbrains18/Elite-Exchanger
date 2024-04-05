@@ -144,7 +144,17 @@ const KycAuth = (props: fixSection) => {
   const handleFileChange = async (e: any) => {
     try {
 
-      let file = e.target.files[0]
+      let file = e.target.files[0];
+      const fileSize = file.size / 1024 / 1024;
+
+      if (fileSize > 2) {
+        setError("idfront", {
+          type: "custom",
+          message: "File size upto 2 mb",
+        });
+        setEnableFront(false);
+        return;
+      }
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'my-uploads');
@@ -169,7 +179,7 @@ const KycAuth = (props: fixSection) => {
         });
         setEnableFront(false);
         return;
-    }
+      }
       setFromFrontImg(data.secure_url);
       setFrontImg(data.secure_url);
       setValue("idfront", data.secure_url);
@@ -197,7 +207,16 @@ const KycAuth = (props: fixSection) => {
   const handleBackChange = async (e: any) => {
 
     try {
-      let file = e.target.files[0]
+      let file = e.target.files[0];
+      const fileSize = file.size / 1024 / 1024;
+      if (fileSize > 2) {
+        setError("idback", {
+          type: "custom",
+          message: "File size upto 2 mb",
+        });
+        setEnableBack(false);
+        return;
+      }
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'my-uploads');
@@ -222,7 +241,7 @@ const KycAuth = (props: fixSection) => {
         });
         setEnableBack(false);
         return;
-    }
+      }
 
       setFromBackImg(data.secure_url);
       setBackImg(data.secure_url);
@@ -250,7 +269,16 @@ const KycAuth = (props: fixSection) => {
   const handleSelfieChange = async (e: any) => {
 
     try {
-      let file = e.target.files[0]
+      let file = e.target.files[0];
+      const fileSize = file.size / 1024 / 1024;
+      if (fileSize > 2) {
+        setError("statement", {
+          type: "custom",
+          message: "File size upto 2 mb",
+        });
+        setEnableStatement(false);
+        return;
+      }
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'my-uploads');
@@ -276,7 +304,7 @@ const KycAuth = (props: fixSection) => {
         });
         setEnableStatement(false);
         return;
-    }
+      }
       setFormSelfieImg(data.secure_url);
       setSelfieImg(data.secure_url)
       setValue("statement", data.secure_url);
@@ -683,7 +711,7 @@ const KycAuth = (props: fixSection) => {
                 <div className="max-w-full md:max-w-[30%] w-full">
                   <label htmlFor="docnumber" className="sm-text mb-[10px]">ID Card Number</label>
                   <input
-                  id="docnumber"
+                    id="docnumber"
                     type="text"
                     {...register("docnumber")}
                     placeholder="Enter ID number"
@@ -700,7 +728,7 @@ const KycAuth = (props: fixSection) => {
                     Full name on Identity
                   </label>
                   <input
-                  id="fname"
+                    id="fname"
                     type="text"
                     {...register("fname")}
                     // value="gjsg"
@@ -753,10 +781,10 @@ const KycAuth = (props: fixSection) => {
           <div className="flex md:flex-row flex-col gap-[30px] py-[30px] md:py-[50px] lg:px-0 px-20">
             <div className="w-full">
               <label htmlFor={`front${props?.num}`}
-              
-              
-              
-              className="sm-text ">Identity Document Front Side</label>
+
+
+
+                className="sm-text ">Identity Document Front Side</label>
 
               <div className="w-full relative min-h-[160px] hover:dark:bg-black-v-1 flex  mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
                 {enableFront &&
@@ -879,7 +907,7 @@ const KycAuth = (props: fixSection) => {
               <label className="sm-text ">A Selfie with your identity</label>
 
               <div className="w-full relative min-h-[133px]  flex mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
-              {enableStatement &&
+                {enableStatement &&
                   <>
                     <div className="bg-black  z-[1] duration-300 absolute top-0 left-0 h-full w-full opacity-80 visible"></div>
                     <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
