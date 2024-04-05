@@ -174,6 +174,8 @@ const Verification = (props: propsData) => {
                   checked={props.isEmail === true ? true : false}
                   name="colored-radio"
                   className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]"
+                  onChange={()=>{console.log("e");
+                  }}
                 />
                 <label
                   htmlFor={`custom-radio2`}

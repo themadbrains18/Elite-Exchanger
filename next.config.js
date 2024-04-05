@@ -12,6 +12,12 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'checkcryptoaddress.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
         hostname: 's2.coinmarketcap.com',
         port: '',
         pathname: '/**',

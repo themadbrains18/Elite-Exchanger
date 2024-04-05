@@ -352,7 +352,7 @@ const BuySellCard = (props: DynamicId) => {
                 })
                 setTotalAmount(0.0); setEstimateFee(0.00)
               }}>
-                <input id={`custom-radio${props.id}`} type="radio" value="limit" name="market_type" className="hidden w-5 h-5 max-w-full  bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                <input id={`custom-radio${props.id}`} data-testid="market_type" type="radio" value="limit" name="market_type" className="hidden w-5 h-5 max-w-full  bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                 <label htmlFor={`custom-radio${props.id}`}
                   className="custom-radio cursor-pointer py-5 px-[17px]  relative 
               flex gap-2 items-center pl-[60px] 
@@ -498,7 +498,7 @@ const BuySellCard = (props: DynamicId) => {
 
                 <div className="mt-5 flex gap-2 justify-between">
                   <div className="flex gap-2">
-                    <p className="sm-text dark:text-white">Total:</p>
+                    <p data-testid="total" className="sm-text dark:text-white">Total:</p>
                     {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
                     <p className="sm-text dark:text-white">{totalAmount.toFixed(6)}</p>
                   </div>

@@ -19,6 +19,6 @@
       "react": [ "./node_modules/@types/react" ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx","**/*.jsx","**/*.js"],
+  "exclude": ["node_modules","node_modules/yargs"]
 }
