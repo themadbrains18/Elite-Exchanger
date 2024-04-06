@@ -2,11 +2,7 @@ import Image from 'next/image';
 import React, { Fragment, useEffect, useState } from 'react'
 import IconsComponent from '../../snippets/icons';
 import { useRouter } from 'next/router';
-import Pusher from 'pusher-js';
-
-const pusher = new Pusher('b275b2f9e51725c09934', {
-  cluster: 'ap2'
-});
+import { useWebSocket } from '@/libs/WebSocketContext';
 
 const ChartBanner = () => {
 
@@ -17,26 +13,23 @@ const ChartBanner = () => {
   const router = useRouter();
   const { slug } = router.query;
 
+  const wbsocket = useWebSocket();
   useEffect(() => {
-    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
+    socket();
+    refreshTokenList();
+  }, [slug, wbsocket])
 
-    websocket.onopen = () => {
-      console.log('connected');
-    }
-
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data).data;
-      let eventDataType = JSON.parse(event.data).type;
-      if (eventDataType === "price") {
-        refreshTokenList()
+  const socket = () => {
+    if (wbsocket) {
+      wbsocket.onmessage = (event) => {
+        const data = JSON.parse(event.data).data;
+        let eventDataType = JSON.parse(event.data).type;
+        if (eventDataType === "price") {
+          refreshTokenList()
+        }
       }
     }
-    // var channel = pusher.subscribe('crypto-channel');
-    // channel.bind('price', function (data: any) {
-    //   refreshTokenList()
-    // });
-    refreshTokenList();
-  }, [slug])
+  }
 
   const refreshTokenList = async () => {
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {

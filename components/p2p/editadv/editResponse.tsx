@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
 import { useRouter } from "next/router";
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 const schema = yup.object().shape({
   condition: yup.string().optional().default(''),
@@ -21,20 +22,22 @@ interface activeSection {
   setStep: any;
   step1Data?: any;
   step2Data?: any;
-  editPost?:any;
+  editPost?: any;
 }
 
 const EditResponse = (props: activeSection) => {
-  const condition = [{name:"Complete KYC",value:"complete_kyc"}, {name:"Holding More Than 0.01 BTC",value:"min_btc"}];
+  const condition = [{ name: "Complete KYC", value: "complete_kyc" }, { name: "Holding More Than 0.01 BTC", value: "min_btc" }];
   // sconst status = ["Online Right Now", "Online, Manually later"]
 
   const { data: session } = useSession();
   const route = useRouter();
 
-  useEffect(()=>{
-    setValue('remarks',props?.editPost?.remarks);
-    setValue('auto_reply',props?.editPost?.auto_reply);
-  },[props?.editPost])
+  const wbsocket = useWebSocket();
+
+  useEffect(() => {
+    setValue('remarks', props?.editPost?.remarks);
+    setValue('auto_reply', props?.editPost?.auto_reply);
+  }, [props?.editPost])
 
   let {
     register,
@@ -62,7 +65,7 @@ const EditResponse = (props: activeSection) => {
     }
 
     let formData = {
-        "id" : props?.editPost?.id,
+      "id": props?.editPost?.id,
       "user_id": session?.user?.user_id,
       "token_id": props.step1Data?.token_id,
       "price": props.step1Data?.price,
@@ -75,8 +78,8 @@ const EditResponse = (props: activeSection) => {
       "status": false,
       "remarks": data?.remarks,
       "auto_reply": data?.auto_reply,
-      "complete_kyc":data?.condition==="complete_kyc"?true:false,
-      "min_btc": data?.min_btc=="min_btc"?true:false,
+      "complete_kyc": data?.condition === "complete_kyc" ? true : false,
+      "min_btc": data?.min_btc == "min_btc" ? true : false,
       "fundcode": '123456'
     }
 
@@ -96,12 +99,11 @@ const EditResponse = (props: activeSection) => {
     let res = await responseData.json();
 
     if (res.data.status === 200) {
-      const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-      let post = {
-        ws_type: 'post'
-      }
-      websocket.onopen = () => {
-        websocket.send(JSON.stringify(post));
+      if (wbsocket) {
+        let post = {
+          ws_type: 'post'
+        }
+        wbsocket.send(JSON.stringify(post));
       }
       toast.success(res.data.data.message);
       route.push('/p2p/my-advertisement');
@@ -173,7 +175,7 @@ const EditResponse = (props: activeSection) => {
                 {condition?.map((item, index) => {
                   return (
                     <div key={index} className="mb-10 md:mb-20 cursor-pointer">
-                      <input id={`radio${item}`} type="radio" {...register('condition')}  onChange={() => selectCondition(item.value)} value={item?.value} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                      <input id={`radio${item}`} type="radio" {...register('condition')} onChange={() => selectCondition(item.value)} value={item?.value} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                       <label
                         htmlFor={`radio${item}`}
                         className="

@@ -7,6 +7,7 @@ import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
+import { useWebSocket } from '@/libs/WebSocketContext';
 
 interface propsData {
   provider: any,
@@ -35,35 +36,35 @@ const P2pBuy = (props: propsData) => {
     post.user_p_method = payment_method;
   }
 
+  const wbsocket = useWebSocket();
+
   useEffect(() => {
-    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
+    socket();
+  }, [wbsocket])
 
-    websocket.onopen = () => {
-      console.log('connected');
-    }
-
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data).data;
-      let eventDataType = JSON.parse(event.data).type;
-      if (eventDataType === "post") {
-
-        for (const post of data) {
-          let payment_method: any = [];
-          for (const upid of post.p_method) {
-            post?.User?.user_payment_methods.filter((item: any) => {
-              if (item.id === upid?.upm_id) {
-                payment_method.push(item);
-              }
-            })
+  const socket=()=>{
+    if(wbsocket){
+      wbsocket.onmessage = (event) => {
+        const data = JSON.parse(event.data).data;
+        let eventDataType = JSON.parse(event.data).type;
+        if (eventDataType === "post") {
+          for (const post of data) {
+            let payment_method: any = [];
+            for (const upid of post.p_method) {
+              post?.User?.user_payment_methods.filter((item: any) => {
+                if (item.id === upid?.upm_id) {
+                  payment_method.push(item);
+                }
+              })
+            }
+            post.user_p_method = payment_method;
           }
-          post.user_p_method = payment_method;
+          setNewPosts(data);
         }
-
-        setNewPosts(data);
       }
     }
-
-  }, [])
+    
+  }
 
 
   return (

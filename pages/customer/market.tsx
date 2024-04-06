@@ -6,6 +6,7 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useWebSocket } from '@/libs/WebSocketContext'
 // import Pusher from 'pusher-js';
 
 // const pusher = new Pusher('b275b2f9e51725c09934', {
@@ -27,27 +28,23 @@ const Market = ({ session, coinList, assets, networks }: Session) => {
   const [userAssetsList, setUserAssetsList] = useState(assets);
   const [allCoins, setAllCoins] = useState(coinList);
 
+  const wbsocket = useWebSocket();
+  
   useEffect(() => {
-    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
+    socket();
+  }, [wbsocket])
 
-    websocket.onopen = () => {
-      console.log('connected');
-    }
-
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data).data;
-      let eventDataType = JSON.parse(event.data).type;
-      if (eventDataType === "price") {
-        refreshTokenList()
+  const socket=()=>{
+    if(wbsocket){
+      wbsocket.onmessage = (event) => {
+        const data = JSON.parse(event.data).data;
+        let eventDataType = JSON.parse(event.data).type;
+        if (eventDataType === "price") {
+          refreshTokenList()
+        }
       }
     }
-    
-    // var channel = pusher.subscribe('crypto-channel');
-    // channel.bind('price', function (data: any) {
-    //   refreshTokenList()
-    // });
-
-  }, [])
+  }
 
   const refreshTokenList = async () => {
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {

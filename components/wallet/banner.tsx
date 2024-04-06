@@ -45,7 +45,7 @@ const Banner = (props: propsData): any => {
   for (const ls of dataCoinWallet) {
     for (const dl of props.depositList) {
       if (dl.coinName.split('/')[1] === ls.symbol)
-      depositTotal = depositTotal + (parseFloat(dl.amount) * parseFloat(ls.price));
+        depositTotal = depositTotal + (parseFloat(dl.amount) * parseFloat(ls.price));
     }
   }
 
@@ -95,7 +95,7 @@ const Banner = (props: propsData): any => {
               </div>
               <div className="flex items-center gap-10">
                 <IconsComponent type="totalDepositBlue" hover={false} active={false} />
-                <p className="sm-text dark:!text-white">${depositTotal}</p>
+                <p className="sm-text dark:!text-white">${depositTotal.toFixed(6)}</p>
               </div>
             </div>
             <div className="flex items-center  justify-between gap-5 flex-wrap">
@@ -105,7 +105,7 @@ const Banner = (props: propsData): any => {
               </div>
               <div className="flex items-center gap-10">
                 <IconsComponent type="totalWithdrawBlue" hover={false} active={false} />
-                <p className="sm-text dark:!text-white">${withdrawTotal}</p>
+                <p className="sm-text dark:!text-white">${withdrawTotal.toFixed(6)}</p>
               </div>
             </div>
           </div>

@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmationModel from '@/components/snippets/confirmation';
 import AES from 'crypto-js/aes';
+import { useWebSocket } from '@/libs/WebSocketContext';
 
 interface propsData {
   positions?: any;
@@ -23,6 +24,8 @@ const PositionsTable = (props: propsData) => {
   const [active, setActive] = useState(false);
   const [show, setShow] = useState(false);
   const [positionId, setPositionId] = useState('');
+
+  const wbsocket = useWebSocket();
 
   const closePositionOrder = async (id: string) => {
     setPositionId(id);
@@ -50,13 +53,13 @@ const PositionsTable = (props: propsData) => {
       toast.error(closeReponse?.data?.message);
     }
     else {
-      const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-      let position = {
-        ws_type: 'position'
+      if (wbsocket) {
+        let position = {
+          ws_type: 'position'
+        }
+        wbsocket.send(JSON.stringify(position));
       }
-      websocket.onopen = () => {
-        websocket.send(JSON.stringify(position));
-      }
+
       toast.success(closeReponse?.data?.message);
       setActive(false);
       setShow(false);
@@ -78,12 +81,11 @@ const PositionsTable = (props: propsData) => {
     }).then(response => response.json());
 
     if (closeReponse?.data?.status === 200) {
-      const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-      let position = {
-        ws_type: 'position'
-      }
-      websocket.onopen = () => {
-        websocket.send(JSON.stringify(position));
+      if (wbsocket) {
+        let position = {
+          ws_type: 'position'
+        }
+        wbsocket.send(JSON.stringify(position));
       }
       toast.success('closed all position successfully!!.');
       setActive(false);

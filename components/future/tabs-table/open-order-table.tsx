@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ConfirmationModel from '@/components/snippets/confirmation';
 import moment from 'moment';
 import { AES } from 'crypto-js';
+import { useWebSocket } from '@/libs/WebSocketContext';
 
 interface propsData {
     openOrders?: any;
@@ -19,6 +20,8 @@ const OpenOrderTable = (props: propsData) => {
     const [show, setShow] = useState(false);
     const [positionId, setPositionId] = useState('');
 
+    const wbsocket = useWebSocket();
+
     const closeOpenOrder = async (id: string) => {
         setPositionId(id);
         setActive(true);
@@ -30,9 +33,9 @@ const OpenOrderTable = (props: propsData) => {
         const ciphertext = AES.encrypt(
             JSON.stringify(obj),
             `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
-          );
-          let record = encodeURIComponent(ciphertext.toString());
-        
+        );
+        let record = encodeURIComponent(ciphertext.toString());
+
         let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeopenorder`, {
             method: "POST",
             headers: {
@@ -46,12 +49,11 @@ const OpenOrderTable = (props: propsData) => {
             toast.error(closeReponse?.data?.message);
         }
         else {
-            const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-            let position = {
-                ws_type: 'position'
-            }
-            websocket.onopen = () => {
-                websocket.send(JSON.stringify(position));
+            if (wbsocket) {
+                let position = {
+                    ws_type: 'position'
+                }
+                wbsocket.send(JSON.stringify(position));
             }
             toast.success(closeReponse?.data?.message);
             setPositionId('');
@@ -162,7 +164,7 @@ const OpenOrderTable = (props: propsData) => {
                                             </div>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.qty>0 ?item?.qty?.toFixed(5): item?.qty?.toFixed(2)}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.qty > 0 ? item?.qty?.toFixed(5) : item?.qty?.toFixed(2)}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item?.type}</p>

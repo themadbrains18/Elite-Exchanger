@@ -13,6 +13,7 @@ import { signOut } from "next-auth/react";
 import Link from "next/link";
 import ConfirmBuy from "../confirmBuy";
 import Pusher from 'pusher-js';
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 const pusher = new Pusher('b275b2f9e51725c09934', {
   cluster: 'ap2'
@@ -49,6 +50,7 @@ const BuySellCard = (props: DynamicId) => {
   const router = useRouter()
   const [spotType, setSpotType] = useState('buy');
 
+  const wbsocket = useWebSocket();
   const list = props.coins;
 
   let secondList = props.coins?.filter((item: any) => {
@@ -74,32 +76,20 @@ const BuySellCard = (props: DynamicId) => {
     }
   }, [userAssets])
 
-  // useEffect(() => {
-  //   convertTotalAmount();
-  // }, [props.token]);
-
   const Socket = () => {
-    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
+    if (wbsocket) {
+      wbsocket.onmessage = (event) => {
+        const data = JSON.parse(event.data).data;
+        let eventDataType = JSON.parse(event.data).type;
 
-    websocket.onopen = () => {
-      console.log('connected');
-    }
-
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data).data;
-      let eventDataType = JSON.parse(event.data).type;
-
-      if (eventDataType === "market") {
-        if (props.session) {
-          getAssets();
+        if (eventDataType === "market") {
+          if (props.session) {
+            getAssets();
+          }
         }
       }
     }
-    // var channel = pusher.subscribe('crypto-channel');
-    // channel.bind('market', async function (data: any) {
-    //   // alert('---here market pusher');
-    //   getAssets();
-    // });
+
   };
 
   const setCurrencyName = (symbol: string, dropdown: number) => {
@@ -146,7 +136,7 @@ const BuySellCard = (props: DynamicId) => {
 
   const onHandleSubmit = async (data: any) => {
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
-    
+
     if (active1 === 1 && totalAmount > price) {
       toast.error('Insufficiant balance');
       return;
@@ -192,13 +182,11 @@ const BuySellCard = (props: DynamicId) => {
         setFirstCurrency('BLC');
         setSecondCurrency('USDT');
         setActive(false);
-
-        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-        let withdraw = {
-          ws_type: 'market',
-        }
-        websocket.onopen = () => {
-          websocket.send(JSON.stringify(withdraw));
+        if (wbsocket) {
+          let withdraw = {
+            ws_type: 'market',
+          }
+          wbsocket.send(JSON.stringify(withdraw));
         }
 
         /**
@@ -224,12 +212,11 @@ const BuySellCard = (props: DynamicId) => {
           }).then(response => response.json());
 
           if (executionReponse?.data?.message === undefined) {
-            const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-            let withdraw = {
-              ws_type: 'market',
-            }
-            websocket.onopen = () => {
-              websocket.send(JSON.stringify(withdraw));
+            if (wbsocket) {
+              let withdraw = {
+                ws_type: 'market',
+              }
+              wbsocket.send(JSON.stringify(withdraw));
             }
           }
 

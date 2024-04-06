@@ -11,6 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
 import { useSession } from "next-auth/react";
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 const schema = yup.object().shape({
   spend_amount: yup.number().positive().required('Please enter amount in INR').typeError('Please enter amount in INR'),
@@ -48,6 +49,7 @@ const BuySellExpress = (props: propsData) => {
   const route = useRouter();
 
   const router = useRouter();
+  const wbsocket = useWebSocket();
 
   useEffect(() => {
     getUsdtToInrPrice('USDT');
@@ -310,14 +312,14 @@ const BuySellExpress = (props: propsData) => {
 
       if (res.data.status === 200) {
         toast.success(res?.data?.data?.message);
-        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-        let buy = {
-          ws_type: 'buy',
-          sellerid: finalPost?.User?.id
+        if (wbsocket) {
+          let buy = {
+            ws_type: 'buy',
+            sellerid: finalPost?.User?.id
+          }
+          wbsocket.send(JSON.stringify(buy));
         }
-        websocket.onopen = () => {
-          websocket.send(JSON.stringify(buy));
-        }
+        
         setTimeout(() => {
           route.push(`/p2p/my-orders?buy=${res?.data?.data?.result?.id}`);
         }, 3000);
@@ -545,7 +547,7 @@ const BuySellExpress = (props: propsData) => {
                       step="any"
                       {...register('receive_amount')}
                       value={receiveAmount}
-                      onChange={(e:any) => {
+                      onChange={(e: any) => {
                         if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                           setReceivedAmount(e?.target?.value);
                         }
@@ -672,7 +674,7 @@ const BuySellExpress = (props: propsData) => {
                       step="any"
                       {...register('receive_amount')}
                       value={receiveAmount}
-                      onChange={(e:any) => {
+                      onChange={(e: any) => {
                         if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
                           setReceivedAmount((e?.target?.value));
                         }

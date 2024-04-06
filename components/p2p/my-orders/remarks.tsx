@@ -8,6 +8,7 @@ import TradingPasswordAds from '../postadv/tradingPasswordAds';
 import Successfull from '@/components/snippets/successfull';
 import CancelOrder from '@/components/snippets/cancelOrder';
 import { useRouter } from 'next/router';
+import { useWebSocket } from '@/libs/WebSocketContext';
 
 interface propsData {
     paymentMethod: any;
@@ -24,8 +25,8 @@ const Remarks = (props: propsData) => {
     const [active, setActive] = useState(false);
     const [active1, setActive1] = useState(false);
     const [show, setShow] = useState(false);
-    const [confirmation,  setConfirmation] = useState(false)
-    const router= useRouter();
+    const [confirmation, setConfirmation] = useState(false)
+    const router = useRouter();
 
     const Ref: any = useRef(null);
 
@@ -35,15 +36,11 @@ const Remarks = (props: propsData) => {
         "fundcode": ''
     });
 
-    // console.log(props.userOrder,'=========user order==========');
+    const wbsocket = useWebSocket();
 
     useEffect(() => {
-        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-        websocket.onopen = () => {
-            console.log('connected');
-        }
         orderTimeCalculation();
-    }, [props?.orderid, props.userOrder]);
+    }, [props?.orderid, props.userOrder, wbsocket]);
 
     const orderTimeCalculation = async () => {
         let deadline = new Date(props.userOrder?.createdAt);
@@ -128,14 +125,14 @@ const Remarks = (props: propsData) => {
 
             if (res.data.status === 200) {
                 props.getUserOrders();
-                const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-                let orderData = {
-                    ws_type: 'order',
-                    orderid: props.orderid
+                if (wbsocket) {
+                    let orderData = {
+                        ws_type: 'order',
+                        orderid: props.orderid
+                    }
+                    wbsocket.send(JSON.stringify(orderData));
                 }
-                websocket.onopen = () => {
-                    websocket.send(JSON.stringify(orderData));
-                }
+
                 if (Ref.current) clearInterval(Ref.current);
                 toast.success('Thanks for payment. Receiver release assets in short time.');
             }
@@ -177,15 +174,13 @@ const Remarks = (props: propsData) => {
             let res = await responseData.json();
 
             if (res.data.result) {
-                const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-                let orderData = {
-                    ws_type: 'order',
-                    orderid: props.orderid
+                if (wbsocket) {
+                    let orderData = {
+                        ws_type: 'order',
+                        orderid: props.orderid
+                    }
+                    wbsocket.send(JSON.stringify(orderData));
                 }
-                websocket.onopen = () => {
-                    websocket.send(JSON.stringify(orderData));
-                }
-                // toast.success(res.data.message);
                 props.getUserOrders();
                 return;
             }
@@ -240,15 +235,13 @@ const Remarks = (props: propsData) => {
                     setShow(false);
                     setActive(false);
                     setActive1(true);
-                    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-                    let orderData = {
-                        ws_type: 'order',
-                        orderid: props.orderid
+                    if (wbsocket) {
+                        let orderData = {
+                            ws_type: 'order',
+                            orderid: props.orderid
+                        }
+                        wbsocket.send(JSON.stringify(orderData));
                     }
-                    websocket.onopen = () => {
-                        websocket.send(JSON.stringify(orderData));
-                    }
-                    // toast.success(res?.data?.data?.message);
                     if (Ref.current) clearInterval(Ref.current);
                 }
                 else {
@@ -327,15 +320,15 @@ const Remarks = (props: propsData) => {
 
                     {
                         (props.userOrder?.status === 'isProcess' || props.userOrder?.status === 'isCompleted') && props.userOrder?.buy_user_id === session?.user?.user_id &&
-                        <button className={`solid-button2 max-w-full sm:max-w-[220px] w-full `} onClick={() => {setShow(true); setConfirmation(true) }}>
+                        <button className={`solid-button2 max-w-full sm:max-w-[220px] w-full `} onClick={() => { setShow(true); setConfirmation(true) }}>
                             Cancel Order
                         </button>
                     }
 
                     {
                         props.userOrder?.status === 'isCanceled' &&
-                        <button onClick={()=>{router.push('/p2p/buy')}} className={`solid-button2 cursor-pointer dark:bg-black-v-1 dark:text-primary max-w-full sm:max-w-[400px] w-full `}>
-                           Go back and place another order
+                        <button onClick={() => { router.push('/p2p/buy') }} className={`solid-button2 cursor-pointer dark:bg-black-v-1 dark:text-primary max-w-full sm:max-w-[400px] w-full `}>
+                            Go back and place another order
                         </button>
                     }
 
@@ -372,9 +365,9 @@ const Remarks = (props: propsData) => {
             }
             {
                 confirmation &&
-                <CancelOrder setShow={setShow} actionPerform={orderCancel} setEnable={setConfirmation}/>
+                <CancelOrder setShow={setShow} actionPerform={orderCancel} setEnable={setConfirmation} />
             }
-          
+
         </>
 
     )

@@ -2,6 +2,7 @@ import Image from 'next/image';
 import React, { Fragment, useEffect, useState } from 'react'
 import IconsComponent from '../snippets/icons';
 import { useRouter } from 'next/router';
+import { useWebSocket } from '@/libs/WebSocketContext';
 // import Pusher from 'pusher-js';
 
 // const pusher = new Pusher('b275b2f9e51725c09934', {
@@ -20,23 +21,23 @@ const ChartBanner = (props: propsData) => {
   const router = useRouter();
   const { slug } = router.query;
 
+  const wbsocket = useWebSocket();
   useEffect(() => {
-    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-
-    websocket.onopen = () => {
-      console.log('connected');
-    }
-
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data).data;
-      let eventDataType = JSON.parse(event.data).type;
-      if (eventDataType === "price") {
-        refreshTokenList()
-      }
-    }
-
+    socket();
     refreshTokenList();
   }, [slug])
+
+  const socket =()=>{
+    if(wbsocket){
+      wbsocket.onmessage = (event) => {
+        const data = JSON.parse(event.data).data;
+        let eventDataType = JSON.parse(event.data).type;
+        if (eventDataType === "price") {
+          refreshTokenList()
+        }
+      }
+    }
+  }
 
   const refreshTokenList = async () => {
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {

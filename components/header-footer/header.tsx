@@ -15,11 +15,7 @@ import SideBar from "../snippets/sideBar";
 import { useSession } from "next-auth/react";
 import IconsComponent from "../snippets/icons";
 import Notification from "../snippets/notification";
-// import Pusher from 'pusher-js';
-
-// const pusher = new Pusher('b275b2f9e51725c09934', {
-//   cluster: 'ap2'
-// });
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 interface propsData {
   session: any;
@@ -60,6 +56,8 @@ const Header = (props: propsData) => {
     },
   ];
 
+  const wbsocket = useWebSocket();
+
   useEffect(() => {
     if (session !== undefined && status === "authenticated") {
       getUserBasicDetail();
@@ -67,47 +65,23 @@ const Header = (props: propsData) => {
     }
     getTokenList();
     socket();
-    // var channel = pusher.subscribe('crypto-channel');
-    // channel.bind('p2p', function (data: any) {
-    //   if (data?.data?.sell_user_id === session?.user?.user_id) {
-    //     toast(
-    //       <div
-    //         style={{
-    //           height: "100%",
-    //           borderLeft: "5px solid green",
-    //           alignItems: "center",
-    //         }}
-    //       >
-    //         <span style={{ fontWeight: "bold", color: "#000" }}>P2p transaction notification</span>
-    //         {"  "}
-    //         <span style={{ marginLeft: 5 }}>Order is placed. Buyer is making the transfer to you</span>
-    //       </div>
-    //     );
-    //   }
-    // });
-
-  }, []);
+  }, [wbsocket]);
 
   const socket = () => {
-    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-
-    websocket.onopen = () => {
-      console.log("connected");
-    };
-
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data).data;
-      let eventDataType = JSON.parse(event.data).type;
-      if (eventDataType === "user_notify") {
-        getUserNotification();
-      }
-      if (eventDataType === "profile") {
-        if (data?.user_id === session?.user?.user_id) {
-          setUserDetail(data);
+    if (wbsocket) {
+      wbsocket.onmessage = (event) => {
+        const data = JSON.parse(event.data).data;
+        let eventDataType = JSON.parse(event.data).type;
+        if (eventDataType === "user_notify") {
+          getUserNotification();
         }
-      }
-
-    };
+        if (eventDataType === "profile") {
+          if (data?.user_id === session?.user?.user_id) {
+            setUserDetail(data);
+          }
+        }
+      };
+    }
   };
 
   const getUserNotification = async () => {
@@ -318,14 +292,14 @@ const Header = (props: propsData) => {
                         </p>
                         {props.session?.user?.kyc === 'approve' &&
                           <div className="flex justify-start text-center items-center gap-[3px]">
-                            <IconsComponent type="kycComplete" hover={false} active={false} width={14} height={14}/>
+                            <IconsComponent type="kycComplete" hover={false} active={false} width={14} height={14} />
                             <p className="top-label !text-gamma hidden xl:block">Verified</p>
                           </div>
 
                         }
                         {props.session?.user?.kyc !== 'approve' &&
                           <div className="flex justify-start text-center items-center gap-[3px]" >
-                            <IconsComponent type="kychold" hover={false} active={false} width={14} height={14}/>
+                            <IconsComponent type="kychold" hover={false} active={false} width={14} height={14} />
                             <p className="top-label !text-gamma hidden xl:block">Unverified</p>
                           </div>
 
