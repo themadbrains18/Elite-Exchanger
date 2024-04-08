@@ -157,20 +157,20 @@ const Header = (props: propsData) => {
                   {linkList.map((elem, index) => {
                     return (
 
-                      <li key={index + elem.name} className="relative group hover:pb-[20px] hover:mb-[-20px] ">
+                      <li key={index + elem?.name} className="relative group hover:pb-[20px] hover:mb-[-20px] ">
                         <Link
-                          data-testid={elem.name}
-                          href={elem.url}
+                          data-testid={elem?.name}
+                          href={elem?.url}
                           className="md-text flex items-center gap-[5px] dark:text-d-nav-primary text-nav-primary whitespace-nowrap group-hover:!text-primary"
                         >
-                          <span>{elem.name}</span>
+                          <span>{elem?.name}</span>
                           {
                             elem?.dropdown &&
                             <IconsComponent type="downArrow" chartPage={true} />
                           }
                         </Link>
 
-                        {elem?.dropdown && elem.name == 'Trades' &&
+                        {elem?.dropdown && elem?.name == 'Trades' &&
                           <div data-testid="trades-dropdown" className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px] border dark:border-[#25262a] border-[#e5e7eb]">
                             <ul>
                               {spotTrade?.map((item: any, nesIndex: any) => {
@@ -195,7 +195,7 @@ const Header = (props: propsData) => {
 
                           </div>
                         }
-                        {elem?.dropdown && elem.name == 'Derivatives' &&
+                        {elem?.dropdown && elem?.name == 'Derivatives' &&
                           <div className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px] border dark:border-[#25262a] border-[#e5e7eb]">
                             <ul>
                               {futureTrade?.map((item: any, nesIndex: any) => {
@@ -204,7 +204,7 @@ const Header = (props: propsData) => {
                                   <li key={nesIndex + Date.now()} className="mb-[10px]">
                                     <Link href={`/future/${symbol}${item?.futuretradepair?.usdt_symbol}`}>
                                       <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                        <Image src={`${item.image}`} width={30} height={30} alt="coins" className="min-w-[30px]" />
+                                        <Image src={`${item?.image}`} width={30} height={30} alt="coins" className="min-w-[30px]" />
                                         <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                           <p className="info-14-18 dark:text-white">{symbol}{item?.futuretradepair?.usdt_symbol}</p>
                                           <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.futuretradepair?.coin_symbol}{item?.futuretradepair?.usdt_symbol}</p>

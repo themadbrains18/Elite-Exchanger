@@ -10,14 +10,18 @@ import CodeNotRecieved from "../snippets/codeNotRecieved";
 
 interface propsData {
   formData?: any,
+  data?: any,
   api?: string,
   sendOtpRes?: any;
+  isEmail?: boolean;
+  isNumber?: boolean;
 }
 
 const SecurityCode = (props: propsData) => {
 
   const router = useRouter()
   const [fillOtp, setOtp] = useState('');
+  const [fillOtp2, setOtp2] = useState('');
   const [otpMessage, setOtpMessage] = useState('');
   const Ref: any = useRef(null);
   const [timeLeft, setTimer] = useState('');
@@ -28,6 +32,7 @@ const SecurityCode = (props: propsData) => {
   useEffect(() => {
 
     const inputElements = document.querySelectorAll(".input_wrapper input");
+    const inputElements2 = document.querySelectorAll(".input_wrapper2 input");
     inputElements?.forEach((ele, index) => {
       ele.addEventListener("keydown", (e: any) => {
         if (e.keyCode === 8 && e.target.value === "") {
@@ -49,10 +54,34 @@ const SecurityCode = (props: propsData) => {
         }
       });
     });
+    inputElements2?.forEach((ele, index) => {
+      ele.addEventListener("keydown", (e: any) => {
+        if (e.keyCode === 8 && e.target.value === "") {
+          (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
+        }
+      });
+      ele.addEventListener("input", (e: any) => {
+        const [first, ...rest] = e.target.value;
+        e.target.value = first ?? "";
+        const lastInputBox = index === inputElements.length - 1;
+        const didInsertContent = first !== undefined;
+        if (didInsertContent && !lastInputBox) {
+          // continue to input the rest of the string
+          (inputElements[index + 1] as HTMLElement).focus();
+          (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
+          inputElements[index + 1].dispatchEvent(new Event("input"));
+        } else {
+          setOtp2((inputElements[0] as HTMLInputElement).value + '' + (inputElements[1] as HTMLInputElement).value + '' + (inputElements[2] as HTMLInputElement).value + '' + (inputElements[3] as HTMLInputElement).value + '' + (inputElements[4] as HTMLInputElement).value + '' + (inputElements[5] as HTMLInputElement).value);
+        }
+      });
+    });
 
     orderTimeCalculation(props?.sendOtpRes);
 
   }, [])
+
+  console.log(props?.data);
+  
 
   const matchUserOtp = async () => {
     try {
@@ -243,10 +272,11 @@ const SecurityCode = (props: propsData) => {
             <div className="lg:hidden block">
               <Image src="/assets/register/loginmobile.svg" alt="forget" width={398} height={198} className="mx-auto" />
             </div>
-            <div className="mt-0 lg:mt-[180px] lg:p-0 p-5  max-w-[calc(100%-30px)] md:mx-0 mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
-              <h1 className="lg-heading text-center mb-5">Enter your security code</h1>
-              <p className="mb-5 text-center  lg:mb-[70px] md-text">We texted your code to {props.formData.username}</p>
-              <div className="flex gap-[10px] md:gap-[30px] justify-center items-center input_wrapper">
+            <div className="mt-0 lg:mt-[180px] lg:p-0 p-5  max-w-[calc(100%-30px)] md:mx-0 mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[460px] w-full">
+              <h1 className="lg-heading  mb-5">Enter your security code</h1>
+              {props.isEmail  && <div>
+              <p className="mb-5  md-text">We texted your code to {props.formData?.username!==null && props.formData?.username}</p>
+              <div className="flex gap-[10px] md:gap-[30px] justify-between items-center input_wrapper">
                 <input type="text" onKeyDown={(e)=>{handleKeyDown(e) }} data-testid={`otp-input-1`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
                 <input type="text" onKeyDown={(e)=>{handleKeyDown(e) }} data-testid={`otp-input-2`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
                 <input type="text" onKeyDown={(e)=>{handleKeyDown(e) }} data-testid={`otp-input-3`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code3" />
@@ -256,13 +286,37 @@ const SecurityCode = (props: propsData) => {
               </div>
               <p className="mb-5 text-center lg:mt-[20px] md-text" style={{ color: 'red' }}>{otpMessage}</p>
               <div className={`flex  ${enable === true ? '' : 'hidden'}`}>
-                <p className={`info-10-14 px-2 text-end lg:pl-[60px] pl-[30px] md-text`}>Your OTP will expire within </p>
+                <p className={`info-10-14 text-end  px-2 pl-0 md-text`}>Your OTP will expire within </p>
                 <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
               </div>
 
-              <p className={`info-10-14 text-end cursor-pointer lg:pr-[60px] pr-[30px] !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp() }}>
+              <p className={`info-10-14 text-end cursor-pointer  !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp() }}>
                 Resend Code
               </p>
+
+              </div>}
+
+             {props.data !==undefined && props.data?.number!==null && <div className="mt-[20px]">
+              <p className="mb-5  md-text">We texted your code to {props.data?.number!==null && props?.data?.number}</p>
+              <div className="flex gap-[10px] md:gap-[30px] justify-between items-center input_wrapper2">
+                <input type="text" onKeyDown={(e)=>{handleKeyDown(e) }} data-testid={`otp-input-11`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code21" />
+                <input type="text" onKeyDown={(e)=>{handleKeyDown(e) }} data-testid={`otp-input-22`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code22" />
+                <input type="text" onKeyDown={(e)=>{handleKeyDown(e) }} data-testid={`otp-input-33`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code23" />
+                <input type="text" onKeyDown={(e)=>{handleKeyDown(e) }} data-testid={`otp-input-44`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code24" />
+                <input type="text" onKeyDown={(e)=>{handleKeyDown(e) }} data-testid={`otp-input-55`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code25" />
+                <input type="text" onKeyDown={(e)=>{handleKeyDown(e) }} data-testid={`otp-input-66`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code26" />
+              </div>
+              <p className="mb-5 text-center lg:mt-[20px] md-text" style={{ color: 'red' }}>{otpMessage}</p>
+              <div className={`flex  ${enable === true ? '' : 'hidden'}`}>
+                <p className={`info-10-14 px-2 pl-0 text-end  md-text`}>Your OTP will expire within </p>
+                <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
+              </div>
+
+              <p className={`info-10-14 text-end cursor-pointer  !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp() }}>
+                Resend Code
+              </p>
+
+              </div>}
               <button disabled={btnDisabled} className="my-[30px] lg:mt-[50px] mb-[10px] solid-button w-full hover:bg-primary-800" onClick={() => {
                 matchUserOtp()
               }}>
@@ -273,7 +327,7 @@ const SecurityCode = (props: propsData) => {
                   </svg>
                 }Continue</button>
             </div>
-            <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] !text-primary `} onClick={() => { setPopup(true) }}>
+            <p className={`info-10-14 text-start cursor-pointer  inline-block !text-primary `} onClick={() => { setPopup(true) }}>
               Didn't receive the code?
             </p>
           </div>

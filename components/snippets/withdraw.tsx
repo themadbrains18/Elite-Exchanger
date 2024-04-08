@@ -436,11 +436,12 @@ const Withdraw = (props: activeSection) => {
               </div>
 
               <div className="mb-[15px] md:mb-5">
-                <label className="sm-text ">Destination Address</label>
-                <div className={`border border-grey-v-1 dark:border-opacity-[15%] mt-[10px] relative  gap-[15px] items-center ${addressVerified ? 'flex w-full' : 'block'} cursor-pointer rounded-5 p-[11px] md:p-[15px]`} onClick={() => { setShow(!show) }}>
-                  {/* <div className="flex justify-between items-center relative w-full" onClick={() => { setShow(!show) }}> */}
+                <label htmlFor="withdraw_wallet" className="sm-text ">Destination Address</label>
+                <div className={`border border-grey-v-1 dark:border-opacity-[15%] mt-[10px] relative  gap-[15px] items-center ${addressVerified?'flex w-full':'block'} cursor-pointer rounded-5 p-[11px] md:p-[15px]`} onClick={() => { setShow(!show) }}>
+                 {/* <div className="flex justify-between items-center relative w-full" onClick={() => { setShow(!show) }}> */}
                   <input
                     type="text"
+                    id="withdraw_wallet"
                     {...register("withdraw_wallet")}
                     name="withdraw_wallet"
                     placeholder="Enter Address"
@@ -476,10 +477,11 @@ const Withdraw = (props: activeSection) => {
                 </p> */}
               </div>
               <div className="">
-                <label className="sm-text ">Amount</label>
+                <label htmlFor="amount" className="sm-text ">Amount</label>
                 <div className="border border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px]">
                   <input
                     type="text"
+                    id="amount"
                     {...register("amount")}
                     name="amount"
                     placeholder="Enter Amount"
