@@ -18,7 +18,7 @@ import { useSearchParams } from 'next/navigation'
 
 const schema = yup.object().shape({
   username: yup.string()
-    .required('Email / Phone is required').matches(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})|([0-9]{10})+$/, 'Please enter valid email or phone number'),
+    .required('Email / Phone is required').matches(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})|([0-9]{10})+$/, 'Please enter valid email or phone number'),
   // .test('email_or_phone', 'Email / Phone is invalid', (value) => {
   //   return yupValidateEmail(value) || validatePhone(value);
   // }),
@@ -202,18 +202,18 @@ const SignUp = () => {
         step === 0 &&
 
         <section className="bg-primary-300 lg:dark:bg-black-v-1  lg:bg-bg-primary ">
-          <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none h-screen">
-            <div className="max-w-[1018px]  w-full lg:block hidden">
-              <Image src="/assets/register/register.png" width={1018} height={1100} alt="signup" className="object-cover h-full block" />
+          <div className="flex min-h-screen h-full gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none">
+            <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
+              <Image src="/assets/register/register.png" width={1018} height={1100} alt="signup" className="object-cover h-full block w-full" />
             </div>
-            <div className="max-w-[902px] w-full ">
-              <div className="py-[30px] lg:py-[40px]  max-w-[710px] w-full my-0 mx-auto pr-5 flex justify-end items-center cursor-pointer" onClick={() => { router.push("/") }}>
+            <div className="max-w-full lg:max-w-[50%] flex flex-col justify-center w-full  ">
+              <div className="py-[30px] lg:py-[40px]  max-w-[562px] w-full my-0 pr-5 flex justify-end items-center cursor-pointer" onClick={() => { router.push("/") }}>
                 <HeaderLogo />
               </div>
               <div className="lg:hidden block">
                 <Image src="/assets/register/loginmobile.svg" alt="register" width={398} height={198} className="mx-auto" />
               </div>
-              <div className="mt-0 lg:mt-[80px] lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto lg:mx-0 lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full lg:mb-0 mb-[10px]">
+              <div className="mt-0 lg:mt-[80px] max-[1023px]:!mx-auto lg:p-0 p-5  max-w-[calc(100%-30px)] lg:mx-0 lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full lg:mb-0 mb-[10px]">
                 <h1 className="lg-heading mb-5 lg:mb-[70px]">Create an account</h1>
 
                 {/**Form Start  */}
