@@ -256,7 +256,7 @@ const SecurityCode = (props: propsData) => {
     }
   
 };
-
+console.log(props?.isEmail,"==dsfhsk")              
 
   return (
     <>
@@ -295,9 +295,10 @@ const SecurityCode = (props: propsData) => {
               </p>
 
               </div>}
+              
 
-             {props.data !==undefined && props.data?.number!==null && <div className="mt-[20px]">
-              <p className="mb-5  md-text">We texted your code to {props.data?.number!==null && props?.data?.number}</p>
+             {(props?.isEmail == false || (props.data !==undefined && props.data?.number!==null) )&& <div className="mt-[20px]">
+              <p className="mb-5  md-text">We texted your code to {props?.isEmail == false ? props?.formData?.username : props.data?.number!==null && props?.data?.number}</p>
               <div className="flex gap-[10px] md:gap-[30px] justify-between items-center input_wrapper2">
                 <input type="text" onKeyDown={(e)=>{handleKeyDown(e) }} data-testid={`otp-input-11`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code21" />
                 <input type="text" onKeyDown={(e)=>{handleKeyDown(e) }} data-testid={`otp-input-22`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code22" />
