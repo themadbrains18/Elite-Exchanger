@@ -16,10 +16,10 @@ import { useForm } from "react-hook-form";
 
 const schema = yup.object().shape({
   username: yup.string()
-    .required('Email / Phone is required')
-    .test('email_or_phone', 'Email / Phone is invalid', (value) => {
-      return validateEmail(value) || validatePhone(value);
-    }),
+    .required('Email / Phone is required').matches(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})|([0-9]{10})+$/, 'Please enter valid email or phone number'),
+    // .test('email_or_phone', 'Email / Phone is invalid', (value) => {
+    //   return validateEmail(value) || validatePhone(value);
+    // }),
   password: yup.string().required('Password must be required'),
   confirmPassword: yup.string()
     .oneOf([yup.ref('password')], 'Passwords must match')
