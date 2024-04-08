@@ -16,7 +16,6 @@ import StrengthCheck from "../snippets/strengthCheck";
 
 import { useSearchParams } from 'next/navigation'
 
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 const schema = yup.object().shape({
   username: yup.string()
     .required('Email / Phone is required').matches(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})|([0-9]{10})+$/, 'Please enter valid email or phone number'),
@@ -36,14 +35,6 @@ const schema = yup.object().shape({
 
 const yupValidateEmail = (email: string | undefined) => {
   return yup.string().email().isValidSync(email)
-  // if(yup.string().email().matches(/^[^@\s]+@[^@\s,]*,/)){
-  //   return yup.string().email().isValidSync(email)
-  // }
-  var mailFormat: any = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})|([0-9]{10})+$/;
-  if (!mailFormat.test(email)) {
-    return;
-  }
-  return yup.string().email().matches(/^[^@\s]+@[^@\s,]*,/);
 };
 
 const validatePhone = (phone: string | undefined) => {
@@ -228,7 +219,7 @@ const SignUp = () => {
                 {/**Form Start  */}
                 <form onSubmit={handleSubmit(onHandleSubmit)}>
                   <div className="flex flex-col gap-[15px] lg:gap-10">
-                    <input type="text" placeholder="Enter Email / Phone Number" {...register('username')} name="username" className="input-cta" />
+                    <input type="text" placeholder="Enter Email / Phone Number" {...register('username')} autoComplete="nope" name="username" className="input-cta" />
                     {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
                     <div className="relative text-end">
                       <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
@@ -237,7 +228,7 @@ const SignUp = () => {
                       className="relative"
                     >
                       <input type={`${show === true ? "text" : "password"}`} {...register('password')}
-                        name="password" placeholder="Password" className="input-cta w-full password-input" onChange={(e: any) => setpswd(e.target.value)} />
+                        name="password" placeholder="Password" className="input-cta w-full password-input" autoComplete="new" onChange={(e: any) => setpswd(e.target.value)} />
                       <Image
                         data-testid="show-hide"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
