@@ -1,6 +1,7 @@
 import { BlobOptions } from "buffer";
 import { useState, Fragment, useEffect } from "react";
 import JsonViewer from "../json-viewer";
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 // npm i json-tree-viewer
 
@@ -9,9 +10,9 @@ interface scanner {
 }
 
 
-const objects : any[] = [
-  
-  {hello : 'hello'}
+const objects: any[] = [
+
+  { hello: 'hello' }
 ]
 
 
@@ -21,13 +22,15 @@ const Blocksetting = (props: scanner) => {
   const [reloadSoket, setReloadSoket] = useState<number>(0)
   const [blockRecord, setBlockrecords] = useState<any>([])
 
-  const [initBlock,setinitBlock]= useState(objects)
+  const [initBlock, setinitBlock] = useState(objects)
 
   const [chainId, setChainID] = useState<number>(97)
 
+  const wbsocket = useWebSocket();
+  
   useEffect(() => {
     try {
-      startWebsocket()
+      startWebsocket();
     } catch (error) {
       console.log("error === ", error);
     }
@@ -35,42 +38,55 @@ const Blocksetting = (props: scanner) => {
 
 
   function startWebsocket() {
-    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
+    if (wbsocket) {
+      wbsocket.onmessage = (event) => {
+        let receipt = JSON.parse(event.data)
+        setinitBlock(receipt?.data)
+        // setBlockrecords(JSON.parse(event.data))     
+      };
 
-    websocket.onopen = () => {
+      wbsocket.onerror = (error) => {
+        console.log(error, ' ----- console.error')
+      };
 
+      wbsocket.close = () => {
+        startWebsocket()
+        console.log("connection disconnect");
+      };
       setInterval(function () {
-           if(chainId === 0) return
-           websocket.send(JSON.stringify({ type: "subscribe", chainid : chainId }));
+        if (chainId === 0) return
+        wbsocket.send(JSON.stringify({ type: "subscribe", chainid: chainId }));
 
       }, 1000);
-    };
+    }
+    // const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
+    // websocket.onopen = () => {
+    //   setInterval(function () {
+    //     if (chainId === 0) return
+    //     websocket.send(JSON.stringify({ type: "subscribe", chainid: chainId }));
 
-    websocket.onmessage = (event) => {
-      let receipt = JSON.parse(event.data)
-      setinitBlock(receipt?.data)
-      // setBlockrecords(JSON.parse(event.data))     
-    };
+    //   }, 1000);
+    // };
 
-    websocket.onerror = (error) => {
-      console.log(error,' ----- console.error')
-    };
+    // websocket.onmessage = (event) => {
+    //   let receipt = JSON.parse(event.data)
+    //   setinitBlock(receipt?.data)
+    //   // setBlockrecords(JSON.parse(event.data))     
+    // };
 
-    websocket.close = () => {
-      startWebsocket()
-      console.log("connection disconnect");
-    };
+    // websocket.onerror = (error) => {
+    //   console.log(error, ' ----- console.error')
+    // };
+
+    // websocket.close = () => {
+    //   startWebsocket()
+    //   console.log("connection disconnect");
+    // };
   }
 
-  const startBlockScannerSocket = async (network: {id : string}) => {
-    
+  const startBlockScannerSocket = async (network: { id: string }) => {
     await fetch(`${process.env.NEXT_PUBLIC_CHAIN_SCANNER_ACTIVATION_URL}active/${network.id}`).then(res => res.json())
-
   };
-
-
-
-
 
   return (
     <>
@@ -79,7 +95,7 @@ const Blocksetting = (props: scanner) => {
       >
         <div className="max-[1023px] dark:bg-omega bg-white rounded-[10px]">
           <p className="sec-title lg:p-0 pl-20 pt-20">
-            BlockChain Block Scanning 
+            BlockChain Block Scanning
           </p>
 
           <div className=" mt-[24px] py-6 px-5  rounded-10 bg-white dark:bg-grey-v-4">
@@ -89,20 +105,19 @@ const Blocksetting = (props: scanner) => {
                   props.networks.map((network: any, index: number) => (
                     <Fragment key={network.id}>
                       <button
-                        className={`${
-                          active === true
-                            ? "admin-solid-button"
-                            : "admin-outline-button"
-                        }`}
+                        className={`${active === true
+                          ? "admin-solid-button"
+                          : "admin-outline-button"
+                          }`}
                         onClick={(e) => {
-                          if(network?.status === true) return false
+                          if (network?.status === true) return false
                           setActiveTab(index);
                         }}
                       >
-                        
-                        {network.fullname}  {blockRecord?.block?.map((item : any,index : number) =>{
-                         return (<Fragment key={item.chainId+`texting`+index}>
-                            {(item.chainId == network.chainId) ? item?.blockNumber : 0 }
+
+                        {network.fullname}  {blockRecord?.block?.map((item: any, index: number) => {
+                          return (<Fragment key={item.chainId + `texting` + index}>
+                            {(item.chainId == network.chainId) ? item?.blockNumber : 0}
                           </Fragment>)
                         })}
                       </button>
@@ -111,7 +126,7 @@ const Blocksetting = (props: scanner) => {
               </div>
             </div>
 
-            <div className="w-full"> 
+            <div className="w-full">
               {props.networks &&
                 props.networks.map((network: any, index: number) => (
                   <Fragment key={network.id}>
@@ -119,31 +134,31 @@ const Blocksetting = (props: scanner) => {
                       key={network.id + network.id}
                       className={`${activeTab === index ? "" : "hidden"}`}
                     >
-                      
-                      
+
+
                       {
-                      (network.status === true) ? (<>
+                        (network.status === true) ? (<>
 
-                        <JsonViewer array={initBlock} />
+                          <JsonViewer array={initBlock} />
 
-                      <button
-                        className="admin-solid-button bg-red-dark"
-                        onClick={() => {
-                          startBlockScannerSocket(network);
-                        }}
-                      >
-                        Stop Scanner
-                      </button>
+                          <button
+                            className="admin-solid-button bg-red-dark"
+                            onClick={() => {
+                              startBlockScannerSocket(network);
+                            }}
+                          >
+                            Stop Scanner
+                          </button>
 
-                      </>) : (<><button
-                        className="admin-solid-button"
-                        onClick={() => {
-                          startBlockScannerSocket(network);
-                        }}
-                      >
-                        Active Scanner
-                      </button></>)  }
-                      
+                        </>) : (<><button
+                          className="admin-solid-button"
+                          onClick={() => {
+                            startBlockScannerSocket(network);
+                          }}
+                        >
+                          Active Scanner
+                        </button></>)}
+
                     </div>
                   </Fragment>
                 ))}

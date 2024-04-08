@@ -4,6 +4,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react'
 import AES from 'crypto-js/aes';
 import { toast } from "react-toastify";
+import { useWebSocket } from '@/libs/WebSocketContext';
 
 interface propsData {
     sellerUser?: any;
@@ -18,29 +19,29 @@ const ChatBox = (props: propsData) => {
     const { status, data: session } = useSession();
     const [enableFront, setEnableFront] = useState(false);
 
+    const wbsocket = useWebSocket();
     useEffect(() => {
         getChatByOrderId();
+        socket();
+    }, [props.order?.id, wbsocket]);
 
-        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-
-        websocket.onopen = () => {
-            console.log('connected');
-        }
-
-        websocket.onmessage = (event) => {
-            const data = JSON.parse(event.data).data;
-            let eventDataType = JSON.parse(event.data).type;
-            if (eventDataType === "chat") {
-                if (data[0]?.orderid === props?.order?.id) {
-                    setOrderChat(data[0].chat);
-                    const el = document.getElementById('chat-feed');
-                    if (el) {
-                        el.scrollTop = el.scrollHeight;
+    const socket = () => {
+        if (wbsocket) {
+            wbsocket.onmessage = (event) => {
+                const data = JSON.parse(event.data).data;
+                let eventDataType = JSON.parse(event.data).type;
+                if (eventDataType === "chat") {
+                    if (data[0]?.orderid === props?.order?.id) {
+                        setOrderChat(data[0].chat);
+                        const el = document.getElementById('chat-feed');
+                        if (el) {
+                            el.scrollTop = el.scrollHeight;
+                        }
                     }
                 }
             }
         }
-    }, [props.order?.id]);
+    }
 
     const getChatByOrderId = async () => {
         try {
@@ -92,25 +93,23 @@ const ChatBox = (props: propsData) => {
 
                 if (res.data.status === 200) {
                     setMessage('');
-                    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-                    let chat = {
-                        ws_type: 'chat',
-                        orderid: props?.order?.id
-                    }
+                    if (wbsocket) {
+                        let chat = {
+                            ws_type: 'chat',
+                            orderid: props?.order?.id
+                        }
+                        let chat_notify = {
+                            ws_type: 'user_notify',
+                            user_id: props?.sellerUser?.id,
+                            type: 'chat',
+                            message: {
+                                message: `${message}`
+                            },
+                            url: `/p2p/my-orders?buy=${props?.order?.id}`
+                        }
 
-                    let chat_notify = {
-                        ws_type: 'user_notify',
-                        user_id: props?.sellerUser?.id,
-                        type: 'chat',
-                        message: {
-                            message: `${message}`
-                        },
-                        url: `/p2p/my-orders?buy=${props?.order?.id}`
-                    }
-
-                    websocket.onopen = () => {
-                        websocket.send(JSON.stringify(chat));
-                        websocket.send(JSON.stringify(chat_notify));
+                        wbsocket.send(JSON.stringify(chat));
+                        wbsocket.send(JSON.stringify(chat_notify));
                     }
                 }
             }
@@ -125,6 +124,12 @@ const ChatBox = (props: propsData) => {
         try {
 
             let file = e.target.files[0]
+            const fileSize = file.size / 1024 / 1024;
+
+            if (fileSize > 2) {
+                toast.warning('file size upto 2 mb');
+                return;
+            }
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', 'my-uploads');

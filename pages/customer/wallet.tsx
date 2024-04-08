@@ -11,11 +11,8 @@ import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
-import Pusher from 'pusher-js';
+import { useWebSocket } from '@/libs/WebSocketContext'
 
-const pusher = new Pusher('b275b2f9e51725c09934', {
-    cluster: 'ap2'
-});
 
 interface Session {
     session: {
@@ -39,27 +36,23 @@ const Wallet = (props: Session) => {
 
     const [allCoins, setAllCoins] = useState(props.coinList);
 
+    const wbsocket = useWebSocket();
+
     useEffect(() => {
-        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
+        socket();
+    }, [wbsocket])
 
-        websocket.onopen = () => {
-            console.log('connected');
-        }
-
-        websocket.onmessage = (event) => {
-            const data = JSON.parse(event.data).data;
-            let eventDataType = JSON.parse(event.data).type;
-            if (eventDataType === "price") {
-                refreshTokenList();
-                refreshData();
+    const socket = () => {
+        if (wbsocket) {
+            wbsocket.onmessage = (event) => {
+                const data = JSON.parse(event.data).data;
+                let eventDataType = JSON.parse(event.data).type;
+                if (eventDataType === "price") {
+                    refreshTokenList()
+                }
             }
         }
-        // var channel = pusher.subscribe('crypto-channel');
-        // channel.bind('price', function (data: any) {
-        //     refreshTokenList()
-        // });
-
-    }, [])
+    }
 
     const refreshTokenList = async () => {
         let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {

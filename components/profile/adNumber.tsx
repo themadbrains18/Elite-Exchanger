@@ -391,7 +391,7 @@ const AdNumber = (props: activeSection) => {
               <button className="solid-button px-[51px] w-full">Next</button>
             </div>
             <p
-              className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] mt-[10px] !text-primary `}
+              className={`info-10-14 text-start cursor-pointer  inline-block mt-[10px] !text-primary `}
               onClick={() => {
                 setPopup(true);
                 props.setShow(false);

@@ -134,7 +134,13 @@ const AddToken = (props: activeSection) => {
   const handleFileChange = async (e: any) => {
 
     try {
-      let file = e.target.files[0]
+      let file = e.target.files[0];
+      const fileSize = file.size / 1024 / 1024;
+
+      if (fileSize > 2) {
+        toast.warning('file size upto 2 mb');
+        return;
+      }
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'my-uploads');
@@ -144,7 +150,7 @@ const AddToken = (props: activeSection) => {
         body: formData
       }).then(r => r.json());
 
-      if (data.error!==undefined) {
+      if (data.error !== undefined) {
         // toast.error(data?.error?.message)
         setError("image", {
           type: "custom",

@@ -15,11 +15,7 @@ import SideBar from "../snippets/sideBar";
 import { useSession } from "next-auth/react";
 import IconsComponent from "../snippets/icons";
 import Notification from "../snippets/notification";
-// import Pusher from 'pusher-js';
-
-// const pusher = new Pusher('b275b2f9e51725c09934', {
-//   cluster: 'ap2'
-// });
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 interface propsData {
   session: any;
@@ -60,6 +56,8 @@ const Header = (props: propsData) => {
     },
   ];
 
+  const wbsocket = useWebSocket();
+
   useEffect(() => {
     if (session !== undefined && status === "authenticated") {
       getUserBasicDetail();
@@ -67,47 +65,23 @@ const Header = (props: propsData) => {
     }
     getTokenList();
     socket();
-    // var channel = pusher.subscribe('crypto-channel');
-    // channel.bind('p2p', function (data: any) {
-    //   if (data?.data?.sell_user_id === session?.user?.user_id) {
-    //     toast(
-    //       <div
-    //         style={{
-    //           height: "100%",
-    //           borderLeft: "5px solid green",
-    //           alignItems: "center",
-    //         }}
-    //       >
-    //         <span style={{ fontWeight: "bold", color: "#000" }}>P2p transaction notification</span>
-    //         {"  "}
-    //         <span style={{ marginLeft: 5 }}>Order is placed. Buyer is making the transfer to you</span>
-    //       </div>
-    //     );
-    //   }
-    // });
-
-  }, []);
+  }, [wbsocket]);
 
   const socket = () => {
-    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-
-    websocket.onopen = () => {
-      console.log("connected");
-    };
-
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data).data;
-      let eventDataType = JSON.parse(event.data).type;
-      if (eventDataType === "user_notify") {
-        getUserNotification();
-      }
-      if (eventDataType === "profile") {
-        if (data?.user_id === session?.user?.user_id) {
-          setUserDetail(data);
+    if (wbsocket) {
+      wbsocket.onmessage = (event) => {
+        const data = JSON.parse(event.data).data;
+        let eventDataType = JSON.parse(event.data).type;
+        if (eventDataType === "user_notify") {
+          getUserNotification();
         }
-      }
-
-    };
+        if (eventDataType === "profile") {
+          if (data?.user_id === session?.user?.user_id) {
+            setUserDetail(data);
+          }
+        }
+      };
+    }
   };
 
   const getUserNotification = async () => {
@@ -184,20 +158,20 @@ const Header = (props: propsData) => {
                   {linkList.map((elem, index) => {
                     return (
 
-                      <li key={index + elem.name} className="relative group hover:pb-[20px] hover:mb-[-20px] ">
+                      <li key={index + elem?.name} className="relative group hover:pb-[20px] hover:mb-[-20px] ">
                         <Link
-                          data-testid={elem.name}
-                          href={elem.url}
+                          data-testid={elem?.name}
+                          href={elem?.url}
                           className="md-text flex items-center gap-[5px] dark:text-d-nav-primary text-nav-primary whitespace-nowrap group-hover:!text-primary"
                         >
-                          <span>{elem.name}</span>
+                          <span>{elem?.name}</span>
                           {
                             elem?.dropdown &&
                             <IconsComponent type="downArrow" chartPage={true} />
                           }
                         </Link>
 
-                        {elem?.dropdown && elem.name == 'Trades' &&
+                        {elem?.dropdown && elem?.name == 'Trades' &&
                           <div data-testid="trades-dropdown" className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px] border dark:border-[#25262a] border-[#e5e7eb]">
                             <ul>
                               {spotTrade?.map((item: any, nesIndex: any) => {
@@ -222,7 +196,7 @@ const Header = (props: propsData) => {
 
                           </div>
                         }
-                        {elem?.dropdown && elem.name == 'Derivatives' &&
+                        {elem?.dropdown && elem?.name == 'Derivatives' &&
                           <div className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px] border dark:border-[#25262a] border-[#e5e7eb]">
                             <ul>
                               {futureTrade?.map((item: any, nesIndex: any) => {
@@ -231,7 +205,7 @@ const Header = (props: propsData) => {
                                   <li key={nesIndex + Date.now()} className="mb-[10px]">
                                     <Link href={`/future/${symbol}${item?.futuretradepair?.usdt_symbol}`}>
                                       <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                        <Image src={`${item.image}`} width={30} height={30} alt="coins" className="min-w-[30px]" />
+                                        <Image src={`${item?.image}`} width={30} height={30} alt="coins" className="min-w-[30px]" />
                                         <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                           <p className="info-14-18 dark:text-white">{symbol}{item?.futuretradepair?.usdt_symbol}</p>
                                           <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.futuretradepair?.coin_symbol}{item?.futuretradepair?.usdt_symbol}</p>
@@ -318,14 +292,14 @@ const Header = (props: propsData) => {
                         </p>
                         {props.session?.user?.kyc === 'approve' &&
                           <div className="flex justify-start text-center items-center gap-[3px]">
-                            <IconsComponent type="kycComplete" hover={false} active={false} width={14} height={14}/>
+                            <IconsComponent type="kycComplete" hover={false} active={false} width={14} height={14} />
                             <p className="top-label !text-gamma hidden xl:block">Verified</p>
                           </div>
 
                         }
                         {props.session?.user?.kyc !== 'approve' &&
                           <div className="flex justify-start text-center items-center gap-[3px]" >
-                            <IconsComponent type="kychold" hover={false} active={false} width={14} height={14}/>
+                            <IconsComponent type="kychold" hover={false} active={false} width={14} height={14} />
                             <p className="top-label !text-gamma hidden xl:block">Unverified</p>
                           </div>
 

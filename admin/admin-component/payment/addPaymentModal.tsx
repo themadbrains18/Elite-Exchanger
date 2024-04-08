@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { AES } from "crypto-js";
 
-const AddPaymentModal = (props:any) => {
+const AddPaymentModal = (props: any) => {
   const { mode } = useContext(Context);
   const schema = yup.object().shape({
     payment_method: yup.string().required("This field is required"),
@@ -78,6 +78,12 @@ const AddPaymentModal = (props:any) => {
   const handleFileChange = async (e: any) => {
     try {
       let file = e.target.files[0];
+      const fileSize = file.size / 1024 / 1024;
+
+      if (fileSize > 2) {
+        toast.warning('file size upto 2 mb');
+        return;
+      }
       const formData = new FormData();
       formData.append("file", file);
       formData.append("upload_preset", "my-uploads");
@@ -180,7 +186,7 @@ const AddPaymentModal = (props:any) => {
                 <svg
                   onClick={() => {
                     props.setOpen(false);
-                   
+
                   }}
                   enableBackground="new 0 0 60.963 60.842"
                   version="1.1"
@@ -361,7 +367,7 @@ const AddPaymentModal = (props:any) => {
             </div>
 
             <div className="flex justify-between items-center mt-4 gap-2">
-              <button type="button" className="outline-button w-full"  onClick={()=>{
+              <button type="button" className="outline-button w-full" onClick={() => {
                 props?.setOpen(false)
               }}>Cancel</button>
               <button type="submit" className="solid-button w-full">

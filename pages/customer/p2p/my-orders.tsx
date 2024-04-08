@@ -14,6 +14,7 @@ import { authOptions } from '../../api/auth/[...nextauth]';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Successfull from '@/components/snippets/successfull';
+import { useWebSocket } from '@/libs/WebSocketContext';
 
 interface propsData {
   userOrder?: any;
@@ -31,32 +32,32 @@ const MyOrders = (props: propsData) => {
   const [active1, setActive1] = useState(false);
   const [show, setShow] = useState(false);
 
-  // const { data: session } = useSession();
+  const wbsocket = useWebSocket();
 
   useEffect(() => {
-    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-
-    websocket.onopen = () => {
-      console.log('connected');
-    }
-
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data).data;
-      let eventDataType = JSON.parse(event.data).type;
-      if (eventDataType === "order") {
-        getOrderByOrderId(data?.id);
-        // setOrderDetail(data)
-      }
-
-      if (eventDataType === "buy") {
-        getUserOrders();
-      }
-    }
-
+    socket();
+    getUserOrders();
     if (orderId !== undefined && orderId !== '') {
       getOrderByOrderId(orderId);
     }
-  }, [orderId])
+  }, [orderId,active1, wbsocket]);
+
+  const socket = async () => {
+    if (wbsocket) {
+      wbsocket.onmessage = (event) => {
+        const data = JSON.parse(event.data).data;
+        let eventDataType = JSON.parse(event.data).type;
+        if (eventDataType === "order") {
+          getOrderByOrderId(data?.id);
+          // setOrderDetail(data)
+        }
+        if (eventDataType === "buy") {
+          getUserOrders();
+        }
+      }
+    }
+
+  }
 
   const getOrderByOrderId = async (orderid: any) => {
     let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {

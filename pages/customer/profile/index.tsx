@@ -7,6 +7,7 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useWebSocket } from '@/libs/WebSocketContext'
 
 interface propsData {
   session: {
@@ -16,41 +17,40 @@ interface propsData {
   userDetail: any,
   kycInfo: any,
   referalList: any,
-  activity:any,
+  activity: any,
 }
 
 const Profile = (props: propsData) => {
 
   const [userProfile, setUserProfile] = useState(props.userDetail);
-
+  const wbsocket = useWebSocket();
   useEffect(() => {
-    const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
+    socket();
+  }, [wbsocket]);
 
-    websocket.onopen = () => {
-      console.log("connected");
-    };
+  const socket = () => {
+    if (wbsocket) {
+      wbsocket.onmessage = (event) => {
+        const data = JSON.parse(event.data).data;
+        let eventDataType = JSON.parse(event.data).type;
 
-    websocket.onmessage = (event) => {
-      const data = JSON.parse(event.data).data;
-      let eventDataType = JSON.parse(event.data).type;
-
-      if (eventDataType === "profile") {
-        if (data?.user_id === props?.session?.user?.user_id) {
-          setUserProfile(data);
+        if (eventDataType === "profile") {
+          if (data?.user_id === props?.session?.user?.user_id) {
+            setUserProfile(data);
+          }
         }
-      }
-    };
-
-  }, []);
+      };
+    }
+  }
 
   return (
     <>
       <ToastContainer />
       <SideBarLayout userDetail={userProfile} kycInfo={props.kycInfo} referalList={props.referalList} activity={props?.activity}>
         <Dashboard fixed={false} session={props.session} userDetail={props.userDetail} />
-        
+
       </SideBarLayout>
-      
+
     </>
   )
 }
@@ -61,7 +61,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders()
-  
+
   if (session) {
 
     let profileDashboard = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/dashboard?userid=${session?.user?.user_id}`, {
@@ -101,7 +101,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         userDetail: profileDashboard?.data || null,
         kycInfo: kycInfo?.data?.result || [],
         referalList: referalList?.data || [],
-        activity:activity?.data || []
+        activity: activity?.data || []
       },
     };
   }

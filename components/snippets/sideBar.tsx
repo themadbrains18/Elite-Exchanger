@@ -83,7 +83,13 @@ const SideBar = (props: profileSec) => {
 
         // const file = await readFile(e.target.files[0]);
         try {
-            let file = e.target.files[0]
+            let file = e.target.files[0];
+            const fileSize = file.size / 1024 / 1024;
+            if (fileSize > 2) {
+                toast.error("File Size upto 2 mb.")
+                setEnableDP(false);
+                return;
+            }
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', 'my-uploads');

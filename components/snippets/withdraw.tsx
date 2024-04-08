@@ -15,6 +15,7 @@ import Verification from "./verification";
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
 import CountrylistDropdown from "./country-list-dropdown";
 import IconsComponent from "./icons";
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 const schema = yup.object().shape({
   networkId: yup.string().optional().default(""),
@@ -63,6 +64,9 @@ const Withdraw = (props: activeSection) => {
   const [addressVerified, setAddressVerified] = useState(false);
   const [addressList, setAddressList] = useState([]);
   const [show, setShow] = useState(false);
+
+  const wbsocket = useWebSocket();
+
   let {
     register,
     setValue,
@@ -77,9 +81,9 @@ const Withdraw = (props: activeSection) => {
     resolver: yupResolver(schema),
   });
 
-  useEffect(()=>{
+  useEffect(() => {
     getAllWhitelistAddress()
-  },[])
+  }, [])
 
   const list = props?.networks.filter((item: any) => {
     if (process.env.NEXT_PUBLIC_APPLICATION_MODE === "dev") {
@@ -89,9 +93,9 @@ const Withdraw = (props: activeSection) => {
     }
   });
 
-  const onAddressChange= async (address:string,network:{id:string,fullname:string, symbol:string})=>{
+  const onAddressChange = async (address: string, network: { id: string, fullname: string, symbol: string }) => {
     setSelectedNetwork(network?.id)
-    setValue('withdraw_wallet',address)
+    setValue('withdraw_wallet', address)
     setSelectedNetworkValue(network?.fullname)
 
     var raw = JSON.stringify({
@@ -99,14 +103,14 @@ const Withdraw = (props: activeSection) => {
       "currency": network?.symbol.toLowerCase()
     });
 
-    let validAddress = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/verified`,{
+    let validAddress = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/verified`, {
       method: "POST",
       body: raw,
     }).then((response) => response.json());
 
     // let isValid = await validAddress.json();
-    
-    console.log(validAddress,"===isValid");
+
+    console.log(validAddress, "===isValid");
     setAddressVerified(validAddress?.data?.data?.isValid);
   }
 
@@ -116,12 +120,12 @@ const Withdraw = (props: activeSection) => {
       let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list`, {
         method: "GET",
         headers: {
-            "Authorization": session?.user?.access_token
+          "Authorization": session?.user?.access_token
         },
-    }).then(response => response.json());
+      }).then(response => response.json());
 
-      console.log(address.data,'-----address data');
-     let res= address?.data.filter((item:any)=>item?.status===true)
+      console.log(address.data, '-----address data');
+      let res = address?.data.filter((item: any) => item?.status === true)
       setAddressList(res);
     } catch (error) {
 
@@ -131,7 +135,7 @@ const Withdraw = (props: activeSection) => {
   const getNetworkDetail = (network: any) => {
     setSelectedNetwork(network?.id);
     clearErrors("networkId");
-    
+
   };
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
@@ -324,21 +328,21 @@ const Withdraw = (props: activeSection) => {
 
       if (response.data.status === 200) {
         toast.success("Withdraw request sent successfully");
-        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-        let withdraw = {
-          ws_type: 'user_withdraw',
-          user_id: props?.session?.user?.user_id,
-          type: 'withdraw',
-          message: {
-            message: `You've successfully withdrawn ${response?.data?.data?.amount} ${response?.data?.data?.symbol} from your account. 
+        if (wbsocket) {
+          let withdraw = {
+            ws_type: 'user_withdraw',
+            user_id: props?.session?.user?.user_id,
+            type: 'withdraw',
+            message: {
+              message: `You've successfully withdrawn ${response?.data?.data?.amount} ${response?.data?.data?.symbol} from your account. 
           Your withdrawal address: ${response?.data?.data?.withdraw_wallet}  
           Token: ${response?.data?.data?.symbol}`
-          },
-          data: response?.data?.data
+            },
+            data: response?.data?.data
+          }
+          wbsocket.send(JSON.stringify(withdraw));
         }
-        websocket.onopen = () => {
-          websocket.send(JSON.stringify(withdraw));
-        }
+
         setTimeout(() => {
           reset();
           props.setShow1(false);
@@ -442,13 +446,13 @@ const Withdraw = (props: activeSection) => {
                     name="withdraw_wallet"
                     placeholder="Enter Address"
                     className="outline-none max-w-full  sm-text w-full bg-[transparent]"
-                    
-                  />
-                  
 
-                 {/* </div> */}
-                 {show && addressList.length >0 && 
-                  <CountrylistDropdown  data={addressList} address={true} show={show} onCountryChange={onAddressChange}/>
+                  />
+
+
+                  {/* </div> */}
+                  {show && addressList.length > 0 &&
+                    <CountrylistDropdown data={addressList} address={true} show={show} onCountryChange={onAddressChange} />
                   }
                   {/* <Image
                     src="/assets/payment/reenter.svg"

@@ -329,10 +329,10 @@ const WalletList = (props: propsData): any => {
                             </div>
                           </td>
                           <td>
-                            <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance.toFixed(8)}</p>
+                            <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance.toFixed(6)}</p>
                           </td>
                           <td className="lg:text-start text-end">
-                            <p className="info-14-18 dark:text-white">${item.token !== null ? item?.token?.price.toFixed(8) : item?.global_token?.price.toFixed(8)}</p>
+                            <p className="info-14-18 dark:text-white">${item.token !== null ? item?.token?.price.toFixed(6) : item?.global_token?.price.toFixed(6)}</p>
                           </td>
                           {/* <td className="max-[1023px]:hidden">
                             <p className="info-14-18 dark:text-white">${(item.token !== null ? item?.token?.price * item?.balance : item?.global_token?.price * item?.balance).toFixed(2)}</p>

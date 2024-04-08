@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 
 import AES from 'crypto-js/aes';
 import moment from "moment";
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 const schema = yup.object().shape({
   fName: yup.string().required('this field is required'),
@@ -28,10 +29,11 @@ interface fixSection {
 const Dashboard = (props: fixSection) => {
   const [editable, setEditable] = useState(false);
 
-  let { register, setValue,getValues, handleSubmit, watch, setError, formState: { errors } } = useForm({
+  let { register, setValue, getValues, handleSubmit, watch, setError, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   });
 
+  const wbsocket = useWebSocket();
 
   useEffect(() => {
     if (props.userDetail) {
@@ -60,13 +62,12 @@ const Dashboard = (props: fixSection) => {
 
     if (response?.data?.status === 200) {
       setEditable(false);
-      const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-      let profile = {
-        ws_type: 'profile',
-        user_id: props?.session?.user?.user_id,
-      }
-      websocket.onopen = () => {
-        websocket.send(JSON.stringify(profile));
+      if (wbsocket) {
+        let profile = {
+          ws_type: 'profile',
+          user_id: props?.session?.user?.user_id,
+        }
+        wbsocket.send(JSON.stringify(profile));
       }
     }
     else {
@@ -114,7 +115,7 @@ const Dashboard = (props: fixSection) => {
             </div>
           </div>
           <div className="py-[30px] md:py-[50px]">
-            
+
             <form onSubmit={handleSubmit(onHandleSubmit)}>
               <div className="mt-[30px] ">
                 <div className="flex md:flex-row flex-col gap-[30px]">
@@ -177,52 +178,52 @@ const Dashboard = (props: fixSection) => {
                   </div>
                 </div>
                 <div className="mt-5 flex md:flex-row flex-col gap-[30px]">
-                <div className=" w-full">
-                  <p className="sm-text mb-[10px]">Email</p>
-                  <div className="cursor-not-allowed">
-                    <div className="relative pointer-events-none">
-                      <input
-                        id="dashEmail"
-                        name="dashEmail"
-                        type="email"
-                        value={props.session?.user?.email}
-                        placeholder="AllieGrater12345644@gmail.com"
-                        className={`sm-text input-cta2 w-full cursor-not-allowed focus:outline-none focus:border-none`}
-                      />
-                      <Image
-                        src="/assets/profile/mail.svg"
-                        alt="mail"
-                        width={22}
-                        height={22}
-                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                      />
+                  <div className=" w-full">
+                    <p className="sm-text mb-[10px]">Email</p>
+                    <div className="cursor-not-allowed">
+                      <div className="relative pointer-events-none">
+                        <input
+                          id="dashEmail"
+                          name="dashEmail"
+                          type="email"
+                          value={props.session?.user?.email}
+                          placeholder="AllieGrater12345644@gmail.com"
+                          className={`sm-text input-cta2 w-full cursor-not-allowed focus:outline-none focus:border-none`}
+                        />
+                        <Image
+                          src="/assets/profile/mail.svg"
+                          alt="mail"
+                          width={22}
+                          height={22}
+                          className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className=" w-full">
+                    <p className="sm-text mb-[10px]">Phone Number</p>
+                    <div className="cursor-not-allowed">
+                      <div className="relative pointer-events-none">
+                        <input
+                          id="dashNumber"
+                          name="dashNumber"
+                          type="number"
+                          value={props.session?.user?.number}
+                          placeholder="Enter phone number"
+                          className={`sm-text input-cta2 w-full cursor-not-allowed`}
+                          readOnly
+                        />
+                        <Image
+                          src="/assets/profile/phone.svg"
+                          alt="phone"
+                          width={22}
+                          height={22}
+                          className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div className=" w-full">
-                  <p className="sm-text mb-[10px]">Phone Number</p>
-                  <div className="cursor-not-allowed">
-                    <div className="relative pointer-events-none">
-                      <input
-                        id="dashNumber"
-                        name="dashNumber"
-                        type="number"
-                        value={props.session?.user?.number}
-                        placeholder="Enter phone number"
-                        className={`sm-text input-cta2 w-full cursor-not-allowed`}
-                        readOnly
-                      />
-                      <Image
-                        src="/assets/profile/phone.svg"
-                        alt="phone"
-                        width={22}
-                        height={22}
-                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
               </div>
               {editable && (
                 <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-between pt-5 md:pt-[30px]">

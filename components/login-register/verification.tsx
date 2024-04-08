@@ -12,9 +12,11 @@ interface propsData {
   step: number;
   setStep: Function;
   isEmail?: boolean;
+  isNumber?: boolean;
   formData?: any;
   api: string;
   setSendOtpRes?: any;
+  data?: any;
 }
 
 const Verification = (props: propsData) => {
@@ -98,6 +100,8 @@ const Verification = (props: propsData) => {
 
           <div className="mt-0 lg:mt-[140px] lg:p-0 p-5  max-w-[calc(100%-30px)] md:mx-0 mx-auto md:mb-0 mb-[10px]  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
             <h1 className="lg-heading mb-5">Let’s Confirm it’s really you</h1>
+            
+          { props?.isNumber &&
             <div className="flex flex-col gap-[15px] lg:gap-5 mb-[30px]">
               {/* <div className="flex items-center mr-4">
                 <input id="custom-radio" type="radio" value="" name="colored-radio" className="w-5 h-5  bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
@@ -119,29 +123,29 @@ const Verification = (props: propsData) => {
                 />
                 <label
                   htmlFor={`custom-radio`}
-                  className="
-                        custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
-                        cursor-pointer
-                        after:dark:bg-omega
-                        after:bg-white
-                        after:left-[0px]
-                        after:w-[20px] 
-                        after:h-[20px]
-                        after:rounded-[50%] 
-                        after:border after:border-beta
-                        after:absolute
+                  // className="
+                  //       custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
+                  //       cursor-pointer
+                  //       after:dark:bg-omega
+                  //       after:bg-white
+                  //       after:left-[0px]
+                  //       after:w-[20px] 
+                  //       after:h-[20px]
+                  //       after:rounded-[50%] 
+                  //       after:border after:border-beta
+                  //       after:absolute
 
-                        before:dark:bg-[transparent]
-                        before:bg-white
-                        before:left-[5px]
+                  //       before:dark:bg-[transparent]
+                  //       before:bg-white
+                  //       before:left-[5px]
             
-                        before:w-[10px] 
-                        before:h-[10px]
-                        before:rounded-[50%] 
-                        before:absolute
-                        before:z-[1]
+                  //       before:w-[10px] 
+                  //       before:h-[10px]
+                  //       before:rounded-[50%] 
+                  //       before:absolute
+                  //       before:z-[1]
                         
-                        "
+                  //       "
                 >
                   <p className="ml-2 md-text"> Get the code by text message</p>
                 </label>
@@ -153,16 +157,11 @@ const Verification = (props: propsData) => {
                 placeholder="Enter Phone Number "
                 className="input-cta"
                 disabled={true}
-                value={props.isEmail === false ? props.formData.username : ""}
+                value={props.isEmail === false ? props.formData.username : props?.data?.number}
               />
-            </div>
-            <div className="flex flex-col gap-[15px] lg:gap-5">
-              {/* <div className="flex items-center mr-4">
-                <input id="custom-radio2" type="radio" value="" name="colored-radio" className="w-5 h-5 text-primary-500  bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
-                <label htmlFor="custom-radio2" className="ml-2 md-text">
-                Get the code by email at
-                </label>
-              </div> */}
+            </div>}
+
+           { props?.isEmail && <div className="flex flex-col gap-[15px] lg:gap-5">
               <div
                 className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`}
               >
@@ -179,29 +178,29 @@ const Verification = (props: propsData) => {
                 />
                 <label
                   htmlFor={`custom-radio2`}
-                  className="
-                      custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
-                      cursor-pointer
-                      after:dark:bg-omega
-                      after:bg-white
-                      after:left-[0px]
-                      after:w-[20px] 
-                      after:h-[20px]
-                      after:rounded-[50%] 
-                      after:border after:border-beta
-                      after:absolute
+                  // className="
+                  //     custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
+                  //     cursor-pointer
+                  //     after:dark:bg-omega
+                  //     after:bg-white
+                  //     after:left-[0px]
+                  //     after:w-[20px] 
+                  //     after:h-[20px]
+                  //     after:rounded-[50%] 
+                  //     after:border after:border-beta
+                  //     after:absolute
 
-                      before:dark:bg-[transparent]
-                      before:bg-white
-                      before:left-[5px]
+                  //     before:dark:bg-[transparent]
+                  //     before:bg-white
+                  //     before:left-[5px]
           
-                      before:w-[10px] 
-                      before:h-[10px]
-                      before:rounded-[50%] 
-                      before:absolute
-                      before:z-[1]
+                  //     before:w-[10px] 
+                  //     before:h-[10px]
+                  //     before:rounded-[50%] 
+                  //     before:absolute
+                  //     before:z-[1]
                       
-                      "
+                  //     "
                 >
                   <p className="ml-2 md-text"> Get the code by email at</p>
                 </label>
@@ -211,9 +210,9 @@ const Verification = (props: propsData) => {
                 placeholder="Enter Email "
                 className="input-cta"
                 disabled={true}
-                value={props.isEmail === true ? props.formData.username : ""}
+                value={props.isEmail === true ? props.formData.username : props?.data?.email}
               />
-            </div>
+            </div>}
             <button disabled={btnDisabled}
               className="my-[30px] lg:my-[50px] solid-button w-full"
               onClick={() => {

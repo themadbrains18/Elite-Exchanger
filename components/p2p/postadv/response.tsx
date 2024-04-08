@@ -9,6 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
 import { useRouter } from "next/router";
 import TradingPasswordAds from "./tradingPasswordAds";
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 const schema = yup.object().shape({
   condition: yup.string().optional().default(''),
@@ -25,7 +26,7 @@ interface activeSection {
 }
 
 const Response = (props: activeSection) => {
-  const condition = [{name:"Complete KYC",value:"complete_kyc"}, {name:"Holding More Than 0.01 BTC",value:"min_btc"}];
+  const condition = [{ name: "Complete KYC", value: "complete_kyc" }, { name: "Holding More Than 0.01 BTC", value: "min_btc" }];
   // const status = ["Online Right Now", "Online, Manually later"]
 
   const [show, setShow] = useState(false);
@@ -51,6 +52,7 @@ const Response = (props: activeSection) => {
 
   const { data: session } = useSession();
   const route = useRouter();
+  const wbsocket = useWebSocket();
 
   let {
     register,
@@ -71,7 +73,7 @@ const Response = (props: activeSection) => {
   const onHandleSubmit = async (data: any) => {
 
     // console.log(data.condition);
-    
+
     let p_method = [];
 
     for (const pm of props?.step2Data?.p_method) {
@@ -92,8 +94,8 @@ const Response = (props: activeSection) => {
       "status": false,
       "remarks": data?.remarks,
       "auto_reply": data?.auto_reply,
-      "complete_kyc":data.condition==="complete_kyc"?true:false,
-      "min_btc": data?.min_btc=="min_btc"?true:false,
+      "complete_kyc": data.condition === "complete_kyc" ? true : false,
+      "min_btc": data?.min_btc == "min_btc" ? true : false,
       "fundcode": ''
     }
 
@@ -149,13 +151,13 @@ const Response = (props: activeSection) => {
       let res = await responseData.json();
 
       if (res.data.status === 200) {
-        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-        let post = {
-          ws_type: 'post'
+        if (wbsocket) {
+          let post = {
+            ws_type: 'post'
+          }
+          wbsocket.send(JSON.stringify(post));
         }
-        websocket.onopen = () => {
-          websocket.send(JSON.stringify(post));
-        }
+
         toast.success(res.data.data.message);
         setActive(false);
         setShow(false);

@@ -12,6 +12,7 @@ import TradeConfirmPopupModal from "./popups/trade-confirm-modal";
 import OrderPreferenceModal from "../snippets/orderPreferenceModal";
 import PositionModal from "../snippets/positionModal";
 import ConfirmationModel from "../snippets/confirmation";
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 interface fullWidth {
   fullWidth?: boolean;
@@ -74,6 +75,8 @@ const BuySell = (props: fullWidth) => {
   const [shortConfirm, setShortConfirm] = useState(false);
   const [active, setActive] = useState(false);
 
+  const wbsocket = useWebSocket();
+
   let openOrderObj = {
     position_id: "--",
     user_id: session?.user?.user_id,
@@ -109,7 +112,6 @@ const BuySell = (props: fullWidth) => {
 
   useEffect(() => {
     // setSymbol('USDT');
-
     let futureAssets = props?.assets?.filter((item: any) => {
       return item.walletTtype === "future_wallet";
     });
@@ -507,13 +509,13 @@ const BuySell = (props: fullWidth) => {
           ).then((response) => response.json());
         }
 
-        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-        let position = {
-          ws_type: "position",
-        };
-        websocket.onopen = () => {
-          websocket.send(JSON.stringify(position));
-        };
+        if (wbsocket) {
+          let position = {
+            ws_type: "position",
+          };
+          wbsocket.send(JSON.stringify(position));
+        }
+        
         toast.success(reponse?.data?.data?.message, {
           position: toast.POSITION.TOP_CENTER
         });
@@ -673,13 +675,12 @@ const BuySell = (props: fullWidth) => {
         );
         setButtonStyle(false);
       } else {
-        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-        let position = {
-          ws_type: "position",
-        };
-        websocket.onopen = () => {
-          websocket.send(JSON.stringify(position));
-        };
+        if (wbsocket) {
+          let position = {
+            ws_type: "position",
+          };
+          wbsocket.send(JSON.stringify(position));
+        }
         toast.success(reponse?.data?.data?.message, {
           position: toast.POSITION.TOP_CENTER
         });

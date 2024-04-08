@@ -302,7 +302,7 @@ const GoogleAuth = (props: activeSection) => {
           }}>Cancel</button>
           <button className="solid-button px-[51px] w-full" onClick={() => { confirmUserOtp() }}>Confirm</button>
         </div>
-        <p className={`info-10-14 text-start cursor-pointer lg:pr-[60px] pr-[30px] !text-primary mt-[10px]`} onClick={() => { setPopup(true); props.setShow(false); }}>
+        <p className={`info-10-14 text-start cursor-pointer  inline-block !text-primary mt-[10px]`} onClick={() => { setPopup(true); props.setShow(false); }}>
           Didn't receive the code?
         </p>
       </div>

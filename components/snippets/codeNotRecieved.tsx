@@ -13,7 +13,7 @@ const CodeNotRecieved = (props: changeProps) => {
   const [active, setActive] = useState(1);
 
   const closePopup = () => {
-    props?.setShow(true);
+    props?.setShow &&   props?.setShow(true);
     props.setEnable(0);
     
   };
@@ -36,7 +36,7 @@ const CodeNotRecieved = (props: changeProps) => {
           </p>
           <svg
             onClick={() => {
-              props?.setShow(true);
+              props?.setShow &&   props?.setShow(true);
               props.setEnable(0);
               
             }}
@@ -120,7 +120,7 @@ const CodeNotRecieved = (props: changeProps) => {
           <button
             className="solid-button w-full"
             onClick={() => {
-              props?.setShow(true);
+              props?.setShow &&    props?.setShow(true);
               props.setEnable(0);
               
             }}

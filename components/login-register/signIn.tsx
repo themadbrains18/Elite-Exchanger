@@ -46,6 +46,8 @@ const SignIn = (Props: loginType) => {
   const [show, setShow] = useState(false);
   const [step, setStep] = useState(0);
   const [isEmail, setIsEmail] = useState(false);
+  const [isNumber, setIsNumber] = useState(false);
+  const [data, setData] = useState({})
   const [formData, setFormData] = useState({ username: '', password: '' });
   const router = useRouter();
   const [btnDisabled, setBtnDisabled] = useState(false);
@@ -106,7 +108,12 @@ const SignIn = (Props: loginType) => {
 
       let res = await responseData.json();
 
+      console.log(res.data,"==login");
+      
+
       if (res.data.status === 200) {
+        setData(res?.data?.data?.login)
+        setIsNumber(res?.data?.data?.login?.number!==null?true:false)
         setBtnDisabled(false);
         setStep(1);
         setFormData(data);
@@ -227,13 +234,13 @@ const SignIn = (Props: loginType) => {
       {
         step === 1 &&
         <span data-testid="verification-modal">
-          <Verification  step={step} setStep={setStep} isEmail={isEmail} formData={formData} api='login' setSendOtpRes={setSendOtpRes}/>
+          <Verification  step={step} setStep={setStep} isEmail={isEmail} isNumber={isNumber} formData={formData} data={data} api='login' setSendOtpRes={setSendOtpRes}/>
 
         </span>
       }
       {
         step === 2 &&
-        <SecurityCode formData={formData} api='login' sendOtpRes={sendOtpRes} />
+        <SecurityCode formData={formData} api='login' data={data} isEmail={isEmail} isNumber={isNumber} sendOtpRes={sendOtpRes} />
       }
     </>
   );

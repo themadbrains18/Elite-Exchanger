@@ -18,12 +18,7 @@ import SwapModal from '@/components/future/popups/swap-modal';
 import ChartSec from '@/components/chart/chart-sec';
 import TransferModal from '@/components/future/popups/transfer-modal';
 import TradingFeeMadal from '@/components/future/popups/trading-fee-madal';
-
-import Pusher from 'pusher-js';
-
-const pusher = new Pusher('b275b2f9e51725c09934', {
-    cluster: 'ap2'
-});
+import { useWebSocket } from '@/libs/WebSocketContext';
 
 
 interface Session {
@@ -59,7 +54,7 @@ const FutureTrading = (props: Session) => {
     const [positionRecord, setPositionRecord] = useState([]);
 
     const [rewardsTotalPoint, setRewardsTotalPoint] = useState(props?.totalPoint);
-
+    const wbsocket = useWebSocket();
     useEffect(() => {
         socket();
         let ccurrentToken = props.coinList.filter((item: any) => {
@@ -73,49 +68,34 @@ const FutureTrading = (props: Session) => {
         getCoinHLOCData();
         getPositionOrderBook();
 
-    }, [props?.serverSlug]);
+    }, [props?.serverSlug, wbsocket]);
 
 
     const socket = () => {
+        if (wbsocket) {
+            wbsocket.onmessage = async (event) => {
+                const data = JSON.parse(event.data).data;
+                let eventDataType = JSON.parse(event.data).type;
 
-        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
+                if (eventDataType === "price") {
+                    await refreshTokenList();
+                    getUserFuturePositionData();
+                    getUserOpenOrderData();
+                    getUserFuturePositionHistoryData();
+                    getUserFutureOpenOrderHistoryData();
+                }
 
-        websocket.onopen = () => {
-            console.log('connected');
-        }
-
-        websocket.onmessage = async (event) => {
-            const data = JSON.parse(event.data).data;
-            let eventDataType = JSON.parse(event.data).type;
-
-            // if (eventDataType === "price") {
-            //     await refreshTokenList();
-            //     getUserFuturePositionData();
-            //     getUserOpenOrderData();
-            //     getUserFuturePositionHistoryData();
-            //     getUserFutureOpenOrderHistoryData();
-            // }
-
-            if (eventDataType === 'position') {
-                refreshWalletAssets();
-                getUserFuturePositionData();
-                getUserOpenOrderData();
-                getUserFuturePositionHistoryData();
-                getUserFutureOpenOrderHistoryData();
-                getCoinHLOCData();
-                getPositionOrderBook();
+                if (eventDataType === 'position') {
+                    refreshWalletAssets();
+                    getUserFuturePositionData();
+                    getUserOpenOrderData();
+                    getUserFuturePositionHistoryData();
+                    getUserFutureOpenOrderHistoryData();
+                    getCoinHLOCData();
+                    getPositionOrderBook();
+                }
             }
         }
-
-        var channel = pusher.subscribe('crypto-channel');
-        channel.bind('price', async function (data: any) {
-            await refreshTokenList();
-            getUserFuturePositionData();
-            getUserOpenOrderData();
-            getUserFuturePositionHistoryData();
-            getUserFutureOpenOrderHistoryData();
-        });
-
     }
 
     // ===================================== //

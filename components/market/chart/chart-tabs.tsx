@@ -7,6 +7,7 @@ import ConfirmationModel from "../../snippets/confirmation";
 import { useSession } from "next-auth/react";
 import AES from "crypto-js/aes";
 import moment from "moment";
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 interface propsData {
   coinsList: any;
@@ -33,6 +34,8 @@ const ChartTabs = (props: propsData) => {
   );
   const [title, setTitle] = useState("Cancel Order");
   const [orderId, setOrderId] = useState("");
+
+  const wbsocket = useWebSocket();
 
   let data = props.coinsList; //token list
 
@@ -128,15 +131,13 @@ const ChartTabs = (props: propsData) => {
         setActive(false);
         setShow(false);
         setOrderId("");
-        const websocket = new WebSocket(`${process.env.NEXT_PUBLIC_WS_URL}`);
-        let withdraw = {
-          ws_type: "market",
-        };
-        websocket.onopen = () => {
-          websocket.send(JSON.stringify(withdraw));
-        };
-      } else {
-      }
+        if (wbsocket) {
+          let withdraw = {
+            ws_type: "market",
+          };
+          wbsocket.send(JSON.stringify(withdraw));
+        }
+      } 
 
     } catch (error) {
 
