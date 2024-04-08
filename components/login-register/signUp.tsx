@@ -114,7 +114,7 @@ const SignUp = () => {
       }
       else {
         setBtnDisabled(false);
-        toast.error(userExist.data.data);
+        toast.error(userExist?.data?.data?.message!==undefined ?userExist?.data?.data?.message:userExist?.data?.data);
       }
     } catch (error) {
       setBtnDisabled(false);
