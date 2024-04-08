@@ -136,7 +136,6 @@ const Header = (props: propsData) => {
     SetFutureTrade(future);
   }
 
-
   return (
     <>
       {/* <ToastContainer limit={1} /> */}
@@ -271,7 +270,7 @@ const Header = (props: propsData) => {
                       <div data-testid="user-icon">
                         <Image
                           src={
-                            userDetail === null || userDetail?.messgae !== undefined
+                            userDetail === null || userDetail?.messgae !== undefined || userDetail?.image === null
                               ? `${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`
                               :
                               userDetail?.image
