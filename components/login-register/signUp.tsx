@@ -312,7 +312,7 @@ console.log(error);
       }
       {
         step === 2 &&
-        <SecurityCode formData={formData} api='register' sendOtpRes={sendOtpRes} />
+        <SecurityCode formData={formData} isEmail={isEmail} api='register' sendOtpRes={sendOtpRes} />
       }
     </>
   );
