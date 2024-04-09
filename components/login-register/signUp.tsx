@@ -18,7 +18,7 @@ import { useSearchParams } from 'next/navigation'
 
 const schema = yup.object().shape({
   username: yup.string()
-    .required('Email / Phone is required').matches(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})|([0-9]{10})+$/, 'Please enter valid email or phone number'),
+    .required('Email / Phone is required').matches(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})|([0-9]{10})+$/, 'Please enter valid email(letters, number and period(.)) or phone number '),
   // .test('email_or_phone', 'Email / Phone is invalid', (value) => {
   //   return yupValidateEmail(value) || validatePhone(value);
   // }),
@@ -84,7 +84,7 @@ const SignUp = () => {
   //   ).isValidSync(phone);
   // };
 
-  const onHandleSubmit = async (data: any, e:any) => {
+  const onHandleSubmit = async (data: any, e: any) => {
     try {
       e.preventDefault();
       setBtnDisabled(true);
@@ -118,7 +118,7 @@ const SignUp = () => {
         setValue('password', '');
         setValue('confirmPassword', '');
         setValue('refeer_code', '');
-        toast.error(userExist?.data?.data?.message!==undefined ?userExist?.data?.data?.message:userExist?.data?.data);
+        toast.error(userExist?.data?.data?.message !== undefined ? userExist?.data?.data?.message : userExist?.data?.data);
       }
     } catch (error) {
       setBtnDisabled(false);
@@ -128,27 +128,33 @@ const SignUp = () => {
   }
 
   const generatePassword = () => {
-    let charset = "";
+    // let charset = "";
     let newPassword = "";
 
-    if (useSymbols) charset += "!@#$%^&*()";
-    if (useNumbers) charset += "0123456789";
-    if (useLowerCase) charset += "abcdefghijklmnopqrstuvwxyz";
-    if (useUpperCase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    // if (useSymbols) charset += "!@#$%^&*()";
+    // if (useNumbers) charset += "0123456789";
+    // if (useLowerCase) charset += "abcdefghijklmnopqrstuvwxyz";
+    // if (useUpperCase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+    // for (let i = 0; i < passwordLength; i++) {
+    //   let choice = random(0, 3);
+    //   if (useLowerCase && choice === 0) {
+    //     newPassword += randomLower();
+    //   } else if (useUpperCase && choice === 1) {
+    //     newPassword += randomUpper();
+    //   } else if (useSymbols && choice === 2) {
+    //     newPassword += randomSymbol();
+    //   } else if (useNumbers && choice === 3) {
+    //     newPassword += random(0, 9);
+    //   } else {
+    //     i--;
+    //   }
+    // }
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[];:<>,.?/";
+    
     for (let i = 0; i < passwordLength; i++) {
-      let choice = random(0, 3);
-      if (useLowerCase && choice === 0) {
-        newPassword += randomLower();
-      } else if (useUpperCase && choice === 1) {
-        newPassword += randomUpper();
-      } else if (useSymbols && choice === 2) {
-        newPassword += randomSymbol();
-      } else if (useNumbers && choice === 3) {
-        newPassword += random(0, 9);
-      } else {
-        i--;
-      }
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      newPassword += charset[randomIndex];
     }
 
     setpswd(newPassword);
@@ -193,7 +199,7 @@ const SignUp = () => {
       setValue('refeer_code', queryParams);
     }
 
-  }, [errors,queryParams])
+  }, [errors, queryParams])
 
   return (
     <>
