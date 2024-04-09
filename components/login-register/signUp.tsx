@@ -206,10 +206,10 @@ const SignUp = () => {
                       <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
                     </div>
                     <div
-                      className="relative flex justify-between gap-2 items-center input-cta"
+                      className="relative flex justify-between gap-2 items-center input-cta" onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}}
                     >
                       <input type={`${show === true ? "text" : "password"}`} {...register('password')}
-                        name="password" placeholder="Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta dark:shadow-[inset_0_50px_0_#121318] shadow-[inset_0_50px_0_#e2f2ff]" maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)} onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}} />
+                        name="password" placeholder="Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta dark:shadow-[inset_0_50px_0_#121318] shadow-[inset_0_50px_0_#e2f2ff]" maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)}  />
                       <Image
                         data-testid="show-hide"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
