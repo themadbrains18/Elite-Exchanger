@@ -266,19 +266,20 @@ const SecurityCode = (props: propsData) => {
 
   return (
     <>
-      <section className="bg-primary-300 lg:dark:bg-black-v-1 h-screen xl:h-full  lg:bg-bg-primary ">
-        <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none h-screen">
-          <div className="max-w-[1018px]  w-full lg:block hidden">
-            <Image src="/assets/register/register.png" width={1018} height={1100} alt="signup" className="object-cover h-full block" />
+      <section className="bg-primary-300 lg:dark:bg-black-v-1 xl:h-full  lg:bg-bg-primary ">
+        <div className="flex min-h-screen h-full gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
+          <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
+            <Image src="/assets/register/register.png" width={1018} height={1100} alt="signup" className="object-cover h-full block w-full" />
           </div>
-          <div className="max-w-[902px] w-full ">
-            <div className="py-[30px] lg:py-[40px]  max-w-[710px] w-full my-0 mx-auto pr-5 flex justify-end items-center cursor-pointer" onClick={() => { router.push("/") }}>
+          <div className="max-w-full lg:max-w-[50%] flex flex-col justify-center w-full ">
+            <div className="max-w-[460px] w-full] max-[1023px]:mx-auto">
+            <div className="py-[30px] lg:py-[40px]  max-w-[460px] w-full my-0 pr-5 flex justify-end items-center cursor-pointer" onClick={() => { router.push("/") }}>
               <HeaderLogo />
             </div>
             <div className="lg:hidden block">
               <Image src="/assets/register/loginmobile.svg" alt="forget" width={398} height={198} className="mx-auto" />
             </div>
-            <div className="mt-0 lg:mt-[180px] lg:p-0 p-5  max-w-[calc(100%-30px)] md:mx-0 mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[460px] w-full">
+            <div className="mt-0 lg:mt-[180px]  max-[1023px]:!mx-auto lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[460px] w-full">
               <h1 className="lg-heading  mb-5">Enter your security code</h1>
               {props.isEmail  && <div>
               <p className="mb-5  md-text">We texted your code to {props.formData?.username!==null && props.formData?.username}</p>
@@ -334,9 +335,10 @@ const SecurityCode = (props: propsData) => {
                   </svg>
                 }Continue</button>
             </div>
-            <p className={`info-10-14 text-start cursor-pointer  inline-block !text-primary `} onClick={() => { setPopup(true) }}>
+            <p className={`info-10-14 text-start cursor-pointer max-[1023px]:px-[20px] inline-block !text-primary `} onClick={() => { setPopup(true) }}>
               Didn't receive the code?
             </p>
+            </div>
           </div>
         </div>
       </section>

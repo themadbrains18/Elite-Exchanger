@@ -72,19 +72,19 @@ const Verification = (props: propsData) => {
 
   return (
     <section className="bg-primary-300 lg:dark:bg-black-v-1 h-full  lg:bg-bg-primary ">
-      <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none h-screen">
-        <div className="max-w-[1018px]  w-full lg:block hidden">
+      <div className="h-full min-h-screen  flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
+        <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
           <Image
             src="/assets/register/register.png"
             width={1018}
             height={1100}
             alt="signup"
-            className="object-cover h-full block"
+            className="object-cover h-full block w-full"
           />
         </div>
-        <div className="max-w-[902px] w-full h-screen">
+        <div className="max-w-full lg:max-w-[50%] flex flex-col justify-center w-full">
           <div
-            className="py-[30px] lg:py-[40px]  max-w-[710px] w-full my-0 mx-auto pr-5 flex justify-end items-center cursor-pointer"
+            className="py-[30px] lg:py-[40px]  max-w-[562px] w-full my-0 pr-5 flex justify-end items-center cursor-pointer"
             onClick={() => {
               router.push("/");
             }}
@@ -101,7 +101,7 @@ const Verification = (props: propsData) => {
             />
           </div>
 
-          <div className="mt-0 lg:mt-[140px] lg:p-0 p-5  max-w-[calc(100%-30px)] md:mx-0 mx-auto md:mb-0 mb-[10px]  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
+          <div className="mt-0 lg:mt-[140px] max-[1023px]:!mx-auto p-5  max-w-[calc(100%-30px)] md:mb-0 mb-[10px]  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
             <h1 className="lg-heading mb-5">Let’s Confirm it’s really you</h1>
             
           { (props?.isNumber || !props?.isEmail) &&

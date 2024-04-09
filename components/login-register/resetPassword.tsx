@@ -17,7 +17,7 @@ import ReEnterpass from "./re-enterpass";
 const schema = yup.object().shape({
   username: yup
     .string()
-    .required("Email / Phone is required").matches(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})|([0-9]{10})+$/, 'Please enter valid email or phone number'),
+    .required("Email / Phone is required").matches(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})|([0-9]{10})+$/, 'Please enter valid email or phone number'),
     // .test("email_or_phone", "Email / Phone is invalid", (value) => {
     //   return validateEmail(value) || validatePhone(value);
     // }),
@@ -136,25 +136,27 @@ const ResetPassword = () => {
     <>
       <ToastContainer />
       {step === 0 && (
-        <section className="bg-primary-300 lg:dark:bg-black-v-1 h-screen xl:h-full  lg:bg-bg-primary ">
-          <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none h-screen">
-            <div className="max-w-[848px]  w-full lg:block hidden">
+        <section className="bg-primary-300 lg:dark:bg-black-v-1  lg:bg-bg-primary ">
+          <div className="flex min-h-screen h-full gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
+            <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
               <Image
                 src="/assets/register/forget.png"
                 width={848}
                 height={631}
                 alt="signup"
-                className="object-cover h-screen xl:h-full block"
+                className="object-cover h-screen block w-full"
               />
             </div>
-            <div className="max-w-[902px] w-full ">
-              <div
-                className="py-[30px] lg:py-[40px]  max-w-[710px] w-full my-0 mx-auto pr-5 flex justify-end items-center cursor-pointer"
+            <div className="max-w-full lg:max-w-[50%] flex flex-col justify-center w-full">
+              <div className="max-w-[562px] w-full mx-auto">
+                <div
+                className="py-[30px] lg:py-[40px]  max-w-[562px] w-full my-0  pr-5 flex justify-end items-center cursor-pointer"
                 onClick={() => {
                   router.push("/");
                 }}
               >
                 <HeaderLogo />
+              </div>
               </div>
               <div className="lg:hidden block">
                 <Image
@@ -183,46 +185,12 @@ const ResetPassword = () => {
                     {errors.username && (
                       <p style={{ color: "red" }}>{errors.username.message}</p>
                     )}
-                    {/* <div className="relative text-end">
-                      <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
-                    </div>
-                    <div
-                      className="relative"
-                    >
-                      <input type={`${show === true ? "text" : "password"}`} {...register('new_password')} name="new_password" placeholder="Password" className="input-cta w-full" onChange={(e: any) => setpswd(e.target.value)} />
-                      <Image
-                        src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
-                        alt="eyeicon"
-                        width={24}
-                        height={24}
-                        onClick={() => {
-                          setShow(!show);
-                        }}
-                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                      />
-                    </div>
-                    <StrengthCheck password={pswd} />
-                    {errors.new_password && <p style={{ color: 'red' }}>{errors.new_password.message}</p>}
-                    <div className="relative">
-                      <input type={`${show1 === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
-                      <Image
-                        src={`/assets/register/${show1 === true ? "show.svg" : "hide.svg"}`}
-                        alt="eyeicon2"
-                        width={24}
-                        height={24}
-                        onClick={() => {
-                          setShow1(!show1);
-                        }}
-                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                      />
-                    </div>
-                    {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword.message}</p>} */}
                   </div>
                   <button
                     type="submit"
                     className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-800"
                   >
-                    Reset Password
+                   Send OTP
                   </button>
                 </form>
                 {/**Form End  */}
@@ -232,16 +200,6 @@ const ResetPassword = () => {
         </section>
       )}
        
-      {/* {step === 1 && (
-        <Verification
-          step={step}
-          setStep={setStep}
-          api="forget"
-          isEmail={isEmail}
-          formData={formData}
-          setSendOtpRes={setSendOtpRes}
-        />
-      )} */}
       {step === 2 && <SecurityCode formData={formData} api="forget"  isEmail={isEmail} sendOtpRes={sendOtpRes} setStep={setStep}/>}
       {step === 3 && <ReEnterpass formData={formData} api="forget"  isEmail={isEmail} sendOtpRes={sendOtpRes} setStep={setStep}/>}
     </>
