@@ -105,6 +105,7 @@ const SecurityCode = (props: propsData) => {
         setTimeout(() => {
           setOtpMessage('');
         }, 3000);
+        setBtnDisabled(false);
         return;
       }
       setOtpMessage('');
