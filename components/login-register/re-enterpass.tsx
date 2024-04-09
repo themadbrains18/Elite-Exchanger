@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import Context from "../contexts/context";
 import Image from "next/image";
 import HeaderLogo from "../svg-snippets/headerLogo";
-import Verification from "./verification";
-import SecurityCode from "./securityCode";
 import { useRouter } from "next/router";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,14 +12,13 @@ import StrengthCheck from "../snippets/strengthCheck";
 import ConfirmationModel from "../snippets/confirmation";
 
 const schema = yup.object().shape({
-
   new_password: yup.string().min(8).max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter")
     .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
     .matches(/\d/, "Password must have a number")
     .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character")
     .matches(/^\S*$/, "White Spaces are not allowed"),
   confirmPassword: yup.string()
-    .oneOf([yup.ref('new_password')], 'Passwords must match'),
+    .oneOf([yup.ref('new_password'),''], 'Passwords must match'),
 });
 
 interface propsData {
@@ -37,25 +34,14 @@ interface propsData {
 const ReEnterpass = (props: propsData) => {
 
   const { mode } = useContext(Context);
-  const [step, setStep] = useState(0);
   const router = useRouter();
-  const [isEmail, setIsEmail] = useState(false);
   const [formData, setFormData] = useState({ username: "" });
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [show, setShow] = useState(false);
-  const [show1, setShow1] = useState(false);
-  const [sendOtpRes, setSendOtpRes] = useState<any>();
-
   const [layout, setLayout] = useState(false)
   const [pswd, setpswd] = useState('');
   const [confirmation, setConfirmation] = useState(false)
-  // auto generate password
   const [passwordLength, setPasswordLength] = useState(18);
-  const [useSymbols, setUseSymbols] = useState(true);
-  const [useNumbers, setUseNumbers] = useState(true);
-  const [useLowerCase, setUseLowerCase] = useState(true);
-  const [useUpperCase, setUseUpperCase] = useState(true);
-
 
   let {
     register,
@@ -68,52 +54,39 @@ const ReEnterpass = (props: propsData) => {
     resolver: yupResolver(schema),
   });
 
-  const generatePassword = () => {
-    let charset = "";
-    let newPassword = "";
+  const generatePassword = async () => {
+    const lowercaseCharset = "abcdefghijklmnopqrstuvwxyz";
+    const uppercaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numberCharset = "0123456789";
+    const specialCharset = "!@#$%^&*()_+{};:<>,.?";
 
-    if (useSymbols) charset += "!@#$%^&*()";
-    if (useNumbers) charset += "0123456789";
-    if (useLowerCase) charset += "abcdefghijklmnopqrstuvwxyz";
-    if (useUpperCase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    for (let i = 0; i < passwordLength; i++) {
-      let choice = random(0, 3);
-      if (useLowerCase && choice === 0) {
-        newPassword += randomLower();
-      } else if (useUpperCase && choice === 1) {
-        newPassword += randomUpper();
-      } else if (useSymbols && choice === 2) {
-        newPassword += randomSymbol();
-      } else if (useNumbers && choice === 3) {
-        newPassword += random(0, 9);
-      } else {
-        i--;
-      }
+    // Function to randomly select a character from a given charset
+    function getRandomCharacter(charset: string) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      return charset[randomIndex];
     }
+    let password = "";
+    // Include at least one character from each charset
+    password += await getRandomCharacter(lowercaseCharset);
+    password += await getRandomCharacter(uppercaseCharset);
+    password += await getRandomCharacter(numberCharset);
+    password += await getRandomCharacter(specialCharset);
 
-    setpswd(newPassword);
-    setValue('new_password', newPassword);
-    setValue('confirmPassword', newPassword);
+    // Fill the rest of the password with random characters
+    const remainingLength = passwordLength - 4; // Subtract 4 for the characters already added
+    for (let i = 0; i < remainingLength; i++) {
+      const randomCharset = [lowercaseCharset, uppercaseCharset, numberCharset, specialCharset][Math.floor(Math.random() * 4)];
+      password += await getRandomCharacter(randomCharset);
+    }
+    // Shuffle the password to randomize the character order
+    password = password.split('').sort(() => Math.random() - 0.5).join('');
+    setpswd(password);
+    setValue('new_password', password);
+    setValue('confirmPassword', password);
   };
 
-  const random = (min = 0, max = 1) => {
-    return Math.floor(Math.random() * (max + 1 - min) + min);
-  };
-
-  const randomLower = () => {
-    return String.fromCharCode(random(97, 122));
-  };
-
-  const randomUpper = () => {
-    return String.fromCharCode(random(65, 90));
-  };
-
-  const randomSymbol = () => {
-    const symbols = "~*$%@#^&!?*'-=/,.{}()[]<>";
-    return symbols[random(0, symbols.length - 1)];
-  };
   const confirmOtp = async () => {
+    toast.dismiss();
     setConfirmation(false)
     setLayout(false)
     setBtnDisabled(true);
@@ -135,15 +108,11 @@ const ReEnterpass = (props: propsData) => {
     let res = await responseData.json();
 
     if (res?.data?.status === 200) {
-
       toast.success(res?.data?.message);
-  
-
-      setTimeout(()=>{
+      setTimeout(() => {
         router.push("/login");
-      } ,1000)
+      }, 1000)
 
-      // setConfirmation(true)
     } else {
       toast.error(res.data.message);
       setBtnDisabled(false);
@@ -154,19 +123,14 @@ const ReEnterpass = (props: propsData) => {
     try {
       setLayout(true)
       setConfirmation(true)
-
-      console.log(props?.formData);
-
       data.otp = props?.formData?.otp;
       data.type = "forget";
       data.step = 4;
       data.username = props?.formData?.username
-
       setFormData(data)
-
-
     } catch (error) { }
   };
+
   useEffect(() => {
     setTimeout(() => {
       if (errors.new_password) {
@@ -179,6 +143,7 @@ const ReEnterpass = (props: propsData) => {
     }, 3000);
 
   }, [errors]);
+
   return (
     <>
       <ToastContainer />
@@ -225,7 +190,7 @@ const ReEnterpass = (props: propsData) => {
                 <div
                   className="relative"
                 >
-                  <input type={`${show === true ? "text" : "password"}`} {...register('new_password')} name="new_password" placeholder="Password" className="input-cta w-full" onChange={(e: any) => setpswd(e.target.value)} />
+                  <input type={`${show === true ? "text" : "password"}`} {...register('new_password')} name="new_password" maxLength={32} placeholder="Password" className="input-cta w-full" onChange={(e: any) => setpswd(e.target.value)} />
                   <Image
                     src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
                     alt="eyeicon"
@@ -240,14 +205,14 @@ const ReEnterpass = (props: propsData) => {
                 <StrengthCheck password={pswd} />
                 {errors.new_password && <p style={{ color: 'red' }}>{errors.new_password.message}</p>}
                 <div className="relative">
-                  <input type={`${show1 === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
+                  <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
                   <Image
-                    src={`/assets/register/${show1 === true ? "show.svg" : "hide.svg"}`}
+                    src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
                     alt="eyeicon2"
                     width={24}
                     height={24}
                     onClick={() => {
-                      setShow1(!show1);
+                      setShow(!show);
                     }}
                     className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                   />

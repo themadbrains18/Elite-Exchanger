@@ -17,9 +17,9 @@ import { useForm } from "react-hook-form";
 const schema = yup.object().shape({
   username: yup.string()
     .required('Email / Phone is required').matches(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})|([0-9]{10})+$/, 'Please enter valid email or phone number'),
-    // .test('email_or_phone', 'Email / Phone is invalid', (value) => {
-    //   return validateEmail(value) || validatePhone(value);
-    // }),
+  // .test('email_or_phone', 'Email / Phone is invalid', (value) => {
+  //   return validateEmail(value) || validatePhone(value);
+  // }),
   password: yup.string().required('Password must be required'),
   confirmPassword: yup.string()
     .oneOf([yup.ref('password')], 'Passwords must match')
@@ -53,7 +53,7 @@ const SignIn = (Props: loginType) => {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
 
-  let { register, setValue, handleSubmit, watch, setError,clearErrors, formState: { errors } } = useForm({
+  let { register, setValue, handleSubmit, watch, setError, clearErrors, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -70,10 +70,11 @@ const SignIn = (Props: loginType) => {
       }
     }, 3000);
 
-  }, [errors])
+  }, [errors]);
 
   const onHandleSubmit = async (data: any) => {
     try {
+      toast.dismiss();
       let isEmailExist = await validateEmail(data.username);
       data.otp = "string";
       data.step = 1;
@@ -108,12 +109,9 @@ const SignIn = (Props: loginType) => {
 
       let res = await responseData.json();
 
-      console.log(res.data,"==login");
-      
-
       if (res.data.status === 200) {
-        setData(res?.data?.data?.login)
-        setIsNumber(res?.data?.data?.login?.number!==null?true:false)
+        setData(res?.data?.data?.login);
+        setIsNumber(res?.data?.data?.login?.number !== null ? true : false)
         setBtnDisabled(false);
         setStep(1);
         setFormData(data);
@@ -123,7 +121,7 @@ const SignIn = (Props: loginType) => {
         setBtnDisabled(false);
       }
     } catch (error) {
-
+      toast.dismiss();
     }
   }
 
@@ -157,7 +155,7 @@ const SignIn = (Props: loginType) => {
                       <input type={`${show === true ? "text" : "password"}`} placeholder="Password" {...register('password')} name="password" className="input-cta w-full" />
 
                       <Image
-                      data-testid="show-hide"
+                        data-testid="show-hide"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
                         alt="eyeicon"
                         width={24}
@@ -234,7 +232,7 @@ const SignIn = (Props: loginType) => {
       {
         step === 1 &&
         <span data-testid="verification-modal">
-          <Verification  step={step} setStep={setStep} isEmail={isEmail} isNumber={isNumber} formData={formData} data={data} api='login' setSendOtpRes={setSendOtpRes}/>
+          <Verification step={step} setStep={setStep} isEmail={isEmail} isNumber={isNumber} formData={formData} data={data} api='login' setSendOtpRes={setSendOtpRes} />
 
         </span>
       }

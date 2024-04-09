@@ -33,18 +33,6 @@ const schema = yup.object().shape({
   agree: yup.bool().oneOf([true], "You must accept the terms and conditions")
 });
 
-// const yupValidateEmail = (email: string | undefined) => {
-//   return yup.string().email().isValidSync(email)
-// };
-
-// const validatePhone = (phone: string | undefined) => {
-//   return yup.number().integer().positive().test(
-//     (phone) => {
-//       return (phone && phone.toString().length >= 10 && phone.toString().length <= 14) ? true : false;
-//     }
-//   ).isValidSync(phone);
-// };
-
 const SignUp = () => {
   const { mode } = useContext(Context);
   const [show, setShow] = useState(false);
@@ -88,6 +76,7 @@ const SignUp = () => {
 
   const onHandleSubmit = async (data: any, e: any) => {
     try {
+      toast.dismiss();
       e.preventDefault();
       setBtnDisabled(true);
       let isEmailExist = await validateEmail(data.username);
@@ -111,6 +100,7 @@ const SignUp = () => {
 
       if (userExist.data.status === 200) {
         setBtnDisabled(false);
+        toast.dismiss();
         setStep(1);
         setFormData(data);
       }
@@ -125,61 +115,45 @@ const SignUp = () => {
     } catch (error) {
       setBtnDisabled(false);
       console.log(error);
-
     }
   }
 
-  const generatePassword = () => {
-    // let charset = "";
-    let newPassword = "";
-
-    // if (useSymbols) charset += "!@#$%^&*()";
-    // if (useNumbers) charset += "0123456789";
-    // if (useLowerCase) charset += "abcdefghijklmnopqrstuvwxyz";
-    // if (useUpperCase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    // for (let i = 0; i < passwordLength; i++) {
-    //   let choice = random(0, 3);
-    //   if (useLowerCase && choice === 0) {
-    //     newPassword += randomLower();
-    //   } else if (useUpperCase && choice === 1) {
-    //     newPassword += randomUpper();
-    //   } else if (useSymbols && choice === 2) {
-    //     newPassword += randomSymbol();
-    //   } else if (useNumbers && choice === 3) {
-    //     newPassword += random(0, 9);
-    //   } else {
-    //     i--;
-    //   }
-    // }
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[];:<>,.?/";
+  const generatePassword = async() => {
     
-    for (let i = 0; i < passwordLength; i++) {
+    const lowercaseCharset = "abcdefghijklmnopqrstuvwxyz";
+    const uppercaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numberCharset = "0123456789";
+    const specialCharset = "!@#$%^&*()_+{};:<>,.?";
+
+    // Function to randomly select a character from a given charset
+    function getRandomCharacter(charset:string) {
       const randomIndex = Math.floor(Math.random() * charset.length);
-      newPassword += charset[randomIndex];
+      return charset[randomIndex];
     }
 
-    setpswd(newPassword);
-    setValue('password', newPassword);
-    setValue('confirmPassword', newPassword);
+    let password = "";
+
+    // Include at least one character from each charset
+    password += await getRandomCharacter(lowercaseCharset);
+    password += await getRandomCharacter(uppercaseCharset);
+    password += await getRandomCharacter(numberCharset);
+    password += await getRandomCharacter(specialCharset);
+
+    // Fill the rest of the password with random characters
+    const remainingLength = passwordLength - 4; // Subtract 4 for the characters already added
+    for (let i = 0; i < remainingLength; i++) {
+      const randomCharset = [lowercaseCharset, uppercaseCharset, numberCharset, specialCharset][Math.floor(Math.random() * 4)];
+      password += await getRandomCharacter(randomCharset);
+    }
+
+    // Shuffle the password to randomize the character order
+    password = password.split('').sort(() => Math.random() - 0.5).join('');
+
+    setpswd(password);
+    setValue('password', password);
+    setValue('confirmPassword', password);
   };
 
-  const random = (min = 0, max = 1) => {
-    return Math.floor(Math.random() * (max + 1 - min) + min);
-  };
-
-  const randomLower = () => {
-    return String.fromCharCode(random(97, 122));
-  };
-
-  const randomUpper = () => {
-    return String.fromCharCode(random(65, 90));
-  };
-
-  const randomSymbol = () => {
-    const symbols = "~*$%@#^&!?*'-=/,.{}()[]<>";
-    return symbols[random(0, symbols.length - 1)];
-  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -253,15 +227,15 @@ const SignUp = () => {
                     {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
 
                     <div className="relative">
-                      <input type={`${show1 === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
+                      <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
                       <Image
                         data-testid="show-hide2"
-                        src={`/assets/register/${show1 === true ? "show.svg" : "hide.svg"}`}
+                        src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
                         alt="eyeicon"
                         width={24}
                         height={24}
                         onClick={() => {
-                          setShow1(!show1);
+                          setShow(!show);
                         }}
                         className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                       />
