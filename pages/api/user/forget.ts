@@ -28,8 +28,8 @@ router
         `${process.env.NEXT_PUBLIC_APIURL}/user/forget`,
         JSON.parse(formData),
         token
-      );
-      return res.status(200).send({ status: 200, data });
+      );      
+      return res.status(200).send({ data });
     } catch (error: any) {
       throw new Error(error.message);
     }
