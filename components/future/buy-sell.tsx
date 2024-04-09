@@ -471,7 +471,7 @@ const BuySell = (props: fullWidth) => {
           reponse?.data?.data?.message !== undefined
             ? reponse?.data?.data?.message
             : reponse?.data?.data, {
-          position: toast.POSITION.TOP_CENTER
+          position: 'top-center'
         }
         );
         setButtonStyle(false);
@@ -517,7 +517,7 @@ const BuySell = (props: fullWidth) => {
         }
         
         toast.success(reponse?.data?.data?.message, {
-          position: toast.POSITION.TOP_CENTER
+           position: 'top-center'
         });
         setButtonStyle(false);
         setEntryPrice(0);
@@ -670,7 +670,7 @@ const BuySell = (props: fullWidth) => {
           reponse?.data?.data?.message !== undefined
             ? reponse?.data?.data?.message
             : reponse?.data?.data, {
-          position: toast.POSITION.TOP_CENTER
+              position: 'top-center'
         }
         );
         setButtonStyle(false);
@@ -682,7 +682,7 @@ const BuySell = (props: fullWidth) => {
           wbsocket.send(JSON.stringify(position));
         }
         toast.success(reponse?.data?.data?.message, {
-          position: toast.POSITION.TOP_CENTER
+          position: 'top-center'
         });
         setButtonStyle(false);
         props?.refreshWalletAssets();

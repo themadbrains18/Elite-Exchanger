@@ -228,7 +228,7 @@ const PositionModal = (props: propsData) => {
               onClick={(e) => {
                 if (props?.positions?.length > 0 || props?.openOrders?.length > 0) {
                   toast.error('It is not allowed to switch between one-way mode and hedge mode while holding positions', {
-                    position: toast.POSITION.TOP_CENTER
+                    position: 'top-center'
                   })
                   props?.setIsShow(false);
                   return;

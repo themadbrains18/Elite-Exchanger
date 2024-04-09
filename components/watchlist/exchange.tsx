@@ -78,20 +78,20 @@ const Exchange = (props: DynamicId): any => {
 
     if (firstCurrency === '') {
       toast.error('Please select first currency from list', {
-        position: toast.POSITION.TOP_CENTER
+        position: 'top-center'
       });
       return;
     }
     if (secondCurrency === '') {
       toast.error('Please select second currency from list', {
-        position: toast.POSITION.TOP_CENTER
+        position: 'top-center'
       });
       return;
     }
 
     if (amount === 0 || amount === null || amount === undefined) {
       toast.error('Please add amount that use want to convert', {
-        position: toast.POSITION.TOP_CENTER
+        position: 'top-center'
       });
       return;
     }
@@ -205,13 +205,13 @@ const Exchange = (props: DynamicId): any => {
           setIsConvert(false);
           props.refreshData();
           toast.success('Your request successfully!!.', {
-            position: toast.POSITION.TOP_CENTER
+            position: 'top-center'
           });
         }
         else {
           setBtnDisabled2(false);
           toast.error(res.data.data, {
-            position: toast.POSITION.TOP_CENTER
+            position: 'top-center'
           });
           setIsConvert(false)
           setAmount(0);

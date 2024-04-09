@@ -205,7 +205,7 @@ const Historytrade = (props: propsData) => {
 
       if (res.data.result) {
         toast.success(res?.data?.message, {
-          position: toast.POSITION.TOP_CENTER
+          position: 'top-center'
         });
         setTimeout(() => {
           setFinalBtnenable(false);
@@ -252,7 +252,7 @@ const Historytrade = (props: propsData) => {
 
       if (res.data.result) {
         toast.success(res?.data?.message, {
-          position: toast.POSITION.TOP_CENTER
+          position: 'top-center'
         });
         setEnable(0);
         setTimeout(() => {
@@ -262,7 +262,7 @@ const Historytrade = (props: propsData) => {
       }
       else {
         toast.error(res?.data?.message, {
-          position: toast.POSITION.TOP_CENTER
+          position: 'top-center'
         });
         setFinalBtnenable(false);
       }
