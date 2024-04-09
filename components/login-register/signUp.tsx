@@ -224,6 +224,7 @@ const SignUp = () => {
                     {checker && 
                       <StrengthCheck2 password={pswd} />}
                     </div>
+                    <StrengthCheck password={pswd} />
                     {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
 
                     <div className="relative">

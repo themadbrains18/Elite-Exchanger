@@ -158,10 +158,10 @@ const ReEnterpass = (props: propsData) => {
               width={848}
               height={631}
               alt="signup"
-              className="object-cover h-screen xl:h-full block"
+              className="object-cover h-screen xl:h-full block w-full"
             />
           </div>
-          <div className="max-w-[902px] w-full ">
+          <div className="max-w-full lg:max-w-[50%] w-full ">
             <div
               className="py-[30px] lg:py-[40px]  max-w-[710px] w-full my-0 mx-auto pr-5 flex justify-end items-center cursor-pointer"
               onClick={() => {
@@ -210,7 +210,7 @@ const ReEnterpass = (props: propsData) => {
                     {checker && 
                       <StrengthCheck2 password={pswd} />}
                     </div>
-               
+                    <StrengthCheck password={pswd} />
                 {errors.new_password && <p style={{ color: 'red' }}>{errors.new_password.message}</p>}
                 <div className="relative mt-[10px]">
                   <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
