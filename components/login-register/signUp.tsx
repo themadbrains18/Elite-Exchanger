@@ -47,11 +47,6 @@ const SignUp = () => {
 
   // auto generate password
   const [passwordLength, setPasswordLength] = useState(18);
-  const [useSymbols, setUseSymbols] = useState(true);
-  const [useNumbers, setUseNumbers] = useState(true);
-  const [useLowerCase, setUseLowerCase] = useState(true);
-  const [useUpperCase, setUseUpperCase] = useState(true);
-
   const queryParams = searchParams.get('r');
   const referLink = searchParams.get('e');
 
@@ -74,6 +69,7 @@ const SignUp = () => {
 
   const onHandleSubmit = async (data: any, e: any) => {
     try {
+      toast.dismiss();
       e.preventDefault();
       setBtnDisabled(true);
       let isEmailExist = await validateEmail(data.username);
@@ -112,11 +108,10 @@ const SignUp = () => {
     } catch (error) {
       setBtnDisabled(false);
       console.log(error);
-
     }
   }
 
-  const generatePassword = () => {
+  const generatePassword = async() => {
     
     const lowercaseCharset = "abcdefghijklmnopqrstuvwxyz";
     const uppercaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -132,16 +127,16 @@ const SignUp = () => {
     let password = "";
 
     // Include at least one character from each charset
-    password += getRandomCharacter(lowercaseCharset);
-    password += getRandomCharacter(uppercaseCharset);
-    password += getRandomCharacter(numberCharset);
-    password += getRandomCharacter(specialCharset);
+    password += await getRandomCharacter(lowercaseCharset);
+    password += await getRandomCharacter(uppercaseCharset);
+    password += await getRandomCharacter(numberCharset);
+    password += await getRandomCharacter(specialCharset);
 
     // Fill the rest of the password with random characters
     const remainingLength = passwordLength - 4; // Subtract 4 for the characters already added
     for (let i = 0; i < remainingLength; i++) {
       const randomCharset = [lowercaseCharset, uppercaseCharset, numberCharset, specialCharset][Math.floor(Math.random() * 4)];
-      password += getRandomCharacter(randomCharset);
+      password += await getRandomCharacter(randomCharset);
     }
 
     // Shuffle the password to randomize the character order
@@ -152,22 +147,6 @@ const SignUp = () => {
     setValue('confirmPassword', password);
   };
 
-  const random = (min = 0, max = 1) => {
-    return Math.floor(Math.random() * (max + 1 - min) + min);
-  };
-
-  const randomLower = () => {
-    return String.fromCharCode(random(97, 122));
-  };
-
-  const randomUpper = () => {
-    return String.fromCharCode(random(65, 90));
-  };
-
-  const randomSymbol = () => {
-    const symbols = "~*$%@#^&!?*'-=/,.{}()[]<>";
-    return symbols[random(0, symbols.length - 1)];
-  };
 
   useEffect(() => {
     setTimeout(() => {

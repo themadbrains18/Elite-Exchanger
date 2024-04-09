@@ -51,11 +51,6 @@ const ReEnterpass = (props: propsData) => {
   const [confirmation, setConfirmation] = useState(false)
   // auto generate password
   const [passwordLength, setPasswordLength] = useState(18);
-  const [useSymbols, setUseSymbols] = useState(true);
-  const [useNumbers, setUseNumbers] = useState(true);
-  const [useLowerCase, setUseLowerCase] = useState(true);
-  const [useUpperCase, setUseUpperCase] = useState(true);
-
 
   let {
     register,
@@ -68,51 +63,41 @@ const ReEnterpass = (props: propsData) => {
     resolver: yupResolver(schema),
   });
 
-  const generatePassword = () => {
-    let charset = "";
-    let newPassword = "";
+  const generatePassword = async() => {
+    const lowercaseCharset = "abcdefghijklmnopqrstuvwxyz";
+    const uppercaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numberCharset = "0123456789";
+    const specialCharset = "!@#$%^&*()_+{}[];:<>,.?/";
 
-    if (useSymbols) charset += "!@#$%^&*()";
-    if (useNumbers) charset += "0123456789";
-    if (useLowerCase) charset += "abcdefghijklmnopqrstuvwxyz";
-    if (useUpperCase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    for (let i = 0; i < passwordLength; i++) {
-      let choice = random(0, 3);
-      if (useLowerCase && choice === 0) {
-        newPassword += randomLower();
-      } else if (useUpperCase && choice === 1) {
-        newPassword += randomUpper();
-      } else if (useSymbols && choice === 2) {
-        newPassword += randomSymbol();
-      } else if (useNumbers && choice === 3) {
-        newPassword += random(0, 9);
-      } else {
-        i--;
-      }
+    // Function to randomly select a character from a given charset
+    function getRandomCharacter(charset: string) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      return charset[randomIndex];
     }
 
-    setpswd(newPassword);
-    setValue('new_password', newPassword);
-    setValue('confirmPassword', newPassword);
+    let password = "";
+
+    // Include at least one character from each charset
+    password += await getRandomCharacter(lowercaseCharset);
+    password += await getRandomCharacter(uppercaseCharset);
+    password += await getRandomCharacter(numberCharset);
+    password += await getRandomCharacter(specialCharset);
+
+    // Fill the rest of the password with random characters
+    const remainingLength = passwordLength - 4; // Subtract 4 for the characters already added
+    for (let i = 0; i < remainingLength; i++) {
+      const randomCharset = [lowercaseCharset, uppercaseCharset, numberCharset, specialCharset][Math.floor(Math.random() * 4)];
+      password += await getRandomCharacter(randomCharset);
+    }
+
+    // Shuffle the password to randomize the character order
+    password = password.split('').sort(() => Math.random() - 0.5).join('');
+
+    setpswd(password);
+    setValue('new_password', password);
+    setValue('confirmPassword', password);
   };
 
-  const random = (min = 0, max = 1) => {
-    return Math.floor(Math.random() * (max + 1 - min) + min);
-  };
-
-  const randomLower = () => {
-    return String.fromCharCode(random(97, 122));
-  };
-
-  const randomUpper = () => {
-    return String.fromCharCode(random(65, 90));
-  };
-
-  const randomSymbol = () => {
-    const symbols = "~*$%@#^&!?*'-=/,.{}()[]<>";
-    return symbols[random(0, symbols.length - 1)];
-  };
   const confirmOtp = async () => {
     setConfirmation(false)
     setLayout(false)
@@ -137,11 +122,11 @@ const ReEnterpass = (props: propsData) => {
     if (res?.data?.status === 200) {
 
       toast.success(res?.data?.message);
-  
 
-      setTimeout(()=>{
+
+      setTimeout(() => {
         router.push("/login");
-      } ,1000)
+      }, 1000)
 
       // setConfirmation(true)
     } else {

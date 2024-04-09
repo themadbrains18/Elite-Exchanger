@@ -90,6 +90,7 @@ const SecurityCode = (props: propsData) => {
 
   const matchUserOtp = async () => {
     try {
+      toast.dismiss();
       setBtnDisabled(true);
       if(reqCount >= 3){
         toast.error('Too many try with wrong code. Please request a new verification code.', {position:"top-center"});
@@ -138,8 +139,7 @@ const SecurityCode = (props: propsData) => {
       }
       else {
         setBtnDisabled(false);
-        setOtpMessage(response.data.message !== undefined ? response.data.message : response.data.data);
-        // toast.error(response.data.message !== undefined ? response.data.message : response.data.data);
+        toast.error(response.data.message !== undefined ? response.data.message : response.data.data);
         setReqCount(reqCount+1);
       }
 
