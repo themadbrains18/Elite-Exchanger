@@ -4,7 +4,7 @@ import React from 'react'
 const Forget = () => {
   return (
     <>
-    <ResetPassword />
+      <ResetPassword />
     </>
   )
 }

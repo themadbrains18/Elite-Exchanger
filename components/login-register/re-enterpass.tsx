@@ -21,7 +21,7 @@ const schema = yup.object().shape({
     .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character")
     .matches(/^\S*$/, "White Spaces are not allowed"),
   confirmPassword: yup.string()
-    .oneOf([yup.ref('new_password')], 'Passwords must match'),
+    .oneOf([yup.ref('new_password'),''], 'Passwords must match'),
 });
 
 interface propsData {
@@ -52,6 +52,7 @@ const ReEnterpass = (props: propsData) => {
   // auto generate password
   const [passwordLength, setPasswordLength] = useState(18);
 
+
   let {
     register,
     setValue,
@@ -63,7 +64,7 @@ const ReEnterpass = (props: propsData) => {
     resolver: yupResolver(schema),
   });
 
-  const generatePassword = async() => {
+  const generatePassword = async () => {
     const lowercaseCharset = "abcdefghijklmnopqrstuvwxyz";
     const uppercaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const numberCharset = "0123456789";
@@ -99,6 +100,7 @@ const ReEnterpass = (props: propsData) => {
   };
 
   const confirmOtp = async () => {
+    toast.dismiss();
     setConfirmation(false)
     setLayout(false)
     setBtnDisabled(true);
@@ -122,8 +124,6 @@ const ReEnterpass = (props: propsData) => {
     if (res?.data?.status === 200) {
 
       toast.success(res?.data?.message);
-
-
       setTimeout(() => {
         router.push("/login");
       }, 1000)
@@ -210,7 +210,7 @@ const ReEnterpass = (props: propsData) => {
                 <div
                   className="relative"
                 >
-                  <input type={`${show === true ? "text" : "password"}`} {...register('new_password')} name="new_password" placeholder="Password" className="input-cta w-full" onChange={(e: any) => setpswd(e.target.value)} />
+                  <input type={`${show === true ? "text" : "password"}`} {...register('new_password')} name="new_password" maxLength={32} placeholder="Password" className="input-cta w-full" onChange={(e: any) => setpswd(e.target.value)} />
                   <Image
                     src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
                     alt="eyeicon"
@@ -225,14 +225,14 @@ const ReEnterpass = (props: propsData) => {
                 <StrengthCheck password={pswd} />
                 {errors.new_password && <p style={{ color: 'red' }}>{errors.new_password.message}</p>}
                 <div className="relative">
-                  <input type={`${show1 === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
+                  <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
                   <Image
-                    src={`/assets/register/${show1 === true ? "show.svg" : "hide.svg"}`}
+                    src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
                     alt="eyeicon2"
                     width={24}
                     height={24}
                     onClick={() => {
-                      setShow1(!show1);
+                      setShow(!show);
                     }}
                     className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                   />

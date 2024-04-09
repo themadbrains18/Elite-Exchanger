@@ -84,7 +84,7 @@ const SecurityCode = (props: propsData) => {
       });
     });
 
-    
+
 
   }, [])
 
@@ -92,8 +92,8 @@ const SecurityCode = (props: propsData) => {
     try {
       toast.dismiss();
       setBtnDisabled(true);
-      if(reqCount >= 3){
-        toast.error('Too many try with wrong code. Please request a new verification code.', {position:"top-center"});
+      if (reqCount >= 3) {
+        toast.error('Too many try with wrong code. Please request a new verification code.', { position: "top-center" });
         setTimeout(() => {
           router.reload()
         }, 4000);
@@ -112,7 +112,7 @@ const SecurityCode = (props: propsData) => {
       setOtpMessage('');
       const ciphertext = AES.encrypt(JSON.stringify(props.formData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record = encodeURIComponent(ciphertext.toString());
-      
+
       let response = await fetch(`/api/user/${props.api}`, {
         method: "POST",
         headers: {
@@ -131,7 +131,7 @@ const SecurityCode = (props: propsData) => {
           router.push('/login');
         }
         else if (props.api === 'forget') {
-      props?.setStep!==undefined && props?.setStep(3)
+          props?.setStep !== undefined && props?.setStep(3)
           // setSuccessModal(true)
           // toast.success(response?.data?.message);
           // router.push('/login');
@@ -140,7 +140,7 @@ const SecurityCode = (props: propsData) => {
       else {
         setBtnDisabled(false);
         toast.error(response.data.message !== undefined ? response.data.message : response.data.data);
-        setReqCount(reqCount+1);
+        setReqCount(reqCount + 1);
       }
 
     } catch (error) {
@@ -149,7 +149,7 @@ const SecurityCode = (props: propsData) => {
   }
 
   const orderTimeCalculation = async (otpRes: any) => {
-      
+
     setEnable(true);
     let deadline = new Date(otpRes?.expire);
 
@@ -183,7 +183,7 @@ const SecurityCode = (props: propsData) => {
         (minutes > 9 ? minutes : '0' + minutes) + ':'
         + (seconds > 9 ? seconds : '0' + seconds)
       )
-  
+
     }
     else {
       if (Ref.current) clearInterval(Ref.current);
@@ -205,8 +205,6 @@ const SecurityCode = (props: propsData) => {
       total, minutes, seconds
     };
   }
-
-  
 
   const sendOtp = async () => {
     try {
@@ -235,7 +233,7 @@ const SecurityCode = (props: propsData) => {
       ).then((response) => response.json());
 
       if (props?.api === "forget") {
-        if (userExist.data?.otp !==undefined) {
+        if (userExist.data?.otp !== undefined) {
           toast.success(userExist?.data?.message);
           orderTimeCalculation(userExist?.data?.otp);
         } else {

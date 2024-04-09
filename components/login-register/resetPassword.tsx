@@ -50,9 +50,6 @@ const validatePhone = (phone: string | undefined) => {
 
 };
 
-
-
-
 const ResetPassword = () => {
   const { mode } = useContext(Context);
   const [step, setStep] = useState(0);
@@ -80,7 +77,7 @@ const ResetPassword = () => {
   const onHandleSubmit = async (data: any) => {
     try {
       let isEmailExist = await validateEmail(data.username);
-
+      toast.dismiss();
       setIsEmail(isEmailExist);
       data.otp = "";
       data.type = "forget";
