@@ -27,23 +27,22 @@ const schema = yup.object().shape({
     .matches(/\d/, "Password must have a number")
     .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character")
     .matches(/^\S*$/, "White Spaces are not allowed"),
-  confirmPassword: yup.string()
-    .oneOf([yup.ref('password')], 'Passwords must match'),
+  confirmPassword: yup.string().oneOf([yup.ref('password'), ''], 'Passwords must match').required('Confirm Password is required'),
   refeer_code: yup.string().optional(),
   agree: yup.bool().oneOf([true], "You must accept the terms and conditions")
 });
 
-const yupValidateEmail = (email: string | undefined) => {
-  return yup.string().email().isValidSync(email)
-};
+// const yupValidateEmail = (email: string | undefined) => {
+//   return yup.string().email().isValidSync(email)
+// };
 
-const validatePhone = (phone: string | undefined) => {
-  return yup.number().integer().positive().test(
-    (phone) => {
-      return (phone && phone.toString().length >= 10 && phone.toString().length <= 14) ? true : false;
-    }
-  ).isValidSync(phone);
-};
+// const validatePhone = (phone: string | undefined) => {
+//   return yup.number().integer().positive().test(
+//     (phone) => {
+//       return (phone && phone.toString().length >= 10 && phone.toString().length <= 14) ? true : false;
+//     }
+//   ).isValidSync(phone);
+// };
 
 const SignUp = () => {
   const { mode } = useContext(Context);
@@ -85,8 +84,9 @@ const SignUp = () => {
   //   ).isValidSync(phone);
   // };
 
-  const onHandleSubmit = async (data: any) => {
+  const onHandleSubmit = async (data: any, e:any) => {
     try {
+      e.preventDefault();
       setBtnDisabled(true);
       let isEmailExist = await validateEmail(data.username);
 
@@ -114,6 +114,10 @@ const SignUp = () => {
       }
       else {
         setBtnDisabled(false);
+        setpswd('');
+        setValue('password', '');
+        setValue('confirmPassword', '');
+        setValue('refeer_code', '');
         toast.error(userExist?.data?.data?.message!==undefined ?userExist?.data?.data?.message:userExist?.data?.data);
       }
     } catch (error) {
@@ -122,14 +126,6 @@ const SignUp = () => {
 
     }
   }
-
-  useEffect(() => {
-    if (queryParams) {
-      setValue('refeer_code', queryParams);
-    }
-  }, [queryParams]);
-
-
 
   const generatePassword = () => {
     let charset = "";
@@ -193,14 +189,17 @@ const SignUp = () => {
       }
     }, 3000);
 
-  }, [errors])
+    if (queryParams) {
+      setValue('refeer_code', queryParams);
+    }
+
+  }, [errors,queryParams])
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer limit={1} />
       {
         step === 0 &&
-
         <section className="bg-primary-300 lg:dark:bg-black-v-1  lg:bg-bg-primary ">
           <div className="flex min-h-screen h-full gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none">
             <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">

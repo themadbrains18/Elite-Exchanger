@@ -24,9 +24,6 @@ const Verification = (props: propsData) => {
   const router = useRouter();
   const [btnDisabled, setBtnDisabled] = useState(false);
 
-  console.log(props.isEmail,'---------is email');
-  console.log(props.isNumber,'---------is isNumber');
-  
   const sendOtp = async () => {
     try {
       props.formData.step = 2;

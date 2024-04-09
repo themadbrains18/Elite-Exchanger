@@ -129,7 +129,7 @@ const SignIn = (Props: loginType) => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer limit={1} />
       {
         step === 0 &&
         <section className="bg-primary-300 lg:dark:bg-black-v-1  lg:bg-bg-primary ">

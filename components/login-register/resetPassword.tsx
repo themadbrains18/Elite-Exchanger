@@ -189,7 +189,7 @@ const ResetPassword = () => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer limit={1}/>
       {step === 0 && (
         <section className="bg-primary-300 lg:dark:bg-black-v-1  lg:bg-bg-primary ">
           <div className="flex min-h-screen h-full gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
