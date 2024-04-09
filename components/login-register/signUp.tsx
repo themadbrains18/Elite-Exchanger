@@ -129,7 +129,7 @@ const SignUp = () => {
 
   const generatePassword = () => {
     // let charset = "";
-    let newPassword = "";
+
 
     // if (useSymbols) charset += "!@#$%^&*()";
     // if (useNumbers) charset += "0123456789";
@@ -151,10 +151,33 @@ const SignUp = () => {
     //   }
     // }
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[];:<>,.?/";
-    
+    let newPassword = "";
+    const types = ['lowercase', 'uppercase', 'number', 'special'];
+
     for (let i = 0; i < passwordLength; i++) {
-      const randomIndex = Math.floor(Math.random() * charset.length);
-      newPassword += charset[randomIndex];
+      // Randomly select a character type
+      const type = types[Math.floor(Math.random() * types.length)];
+
+      // Depending on the selected type, choose characters accordingly
+      let selectedCharset: any;
+      switch (type) {
+        case 'lowercase':
+          selectedCharset = "abcdefghijklmnopqrstuvwxyz";
+          break;
+        case 'uppercase':
+          selectedCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+          break;
+        case 'number':
+          selectedCharset = "0123456789";
+          break;
+        case 'special':
+          selectedCharset = "!@#$%^&*()_+{}[];:<>,.?/";
+          break;
+      }
+
+      // Randomly select a character from the selected charset
+      const randomIndex = Math.floor(Math.random() * selectedCharset.length);
+      newPassword += selectedCharset[randomIndex];
     }
 
     setpswd(newPassword);
@@ -250,15 +273,15 @@ const SignUp = () => {
                     {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
 
                     <div className="relative">
-                      <input type={`${show1 === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
+                      <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
                       <Image
                         data-testid="show-hide2"
-                        src={`/assets/register/${show1 === true ? "show.svg" : "hide.svg"}`}
+                        src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
                         alt="eyeicon"
                         width={24}
                         height={24}
                         onClick={() => {
-                          setShow1(!show1);
+                          setShow(!show);
                         }}
                         className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                       />
