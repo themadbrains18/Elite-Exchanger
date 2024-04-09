@@ -11,6 +11,7 @@ import { toast, ToastContainer } from "react-toastify";
 import StrengthCheck from "../snippets/strengthCheck";
 import ConfirmationModel from "../snippets/confirmation";
 import StrengthCheck2 from "../snippets/strengthCheck2";
+import ResetSuccessful from "../snippets/resetSuccessful";
 
 
 const schema = yup.object().shape({
@@ -45,6 +46,7 @@ const ReEnterpass = (props: propsData) => {
   const [confirmation, setConfirmation] = useState(false)
   const [passwordLength, setPasswordLength] = useState(18);
   const [checker,setChecker] = useState(false)
+  const [successModal, setSuccessModal] = useState(false);
 
   let {
     register,
@@ -111,10 +113,8 @@ const ReEnterpass = (props: propsData) => {
     let res = await responseData.json();
 
     if (res?.data?.status === 200) {
-      toast.success(res?.data?.message);
-      setTimeout(() => {
-        router.push("/login");
-      }, 1000)
+      setSuccessModal(true)
+  
 
     } else {
       toast.error(res.data.message);
@@ -152,7 +152,7 @@ const ReEnterpass = (props: propsData) => {
       <ToastContainer />
       <section className="bg-primary-300 lg:dark:bg-black-v-1 h-screen xl:h-full  lg:bg-bg-primary ">
         <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none h-screen">
-          <div className="max-w-[848px]  w-full lg:block hidden">
+          <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
             <Image
               src="/assets/register/forget.png"
               width={848}
@@ -181,7 +181,7 @@ const ReEnterpass = (props: propsData) => {
             </div>
             <div className="mt-0 lg:mt-[200px] lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
               <h1 className="lg-heading mb-5">Password Recovery</h1>
-              <p className="mb-5  lg:mb-[70px] md-text">
+              <p className="mb-5  lg:mb-[20px] md-text">
                 Enter your email/number to recover your password
               </p>
               {/**Form Start  */}
@@ -192,9 +192,10 @@ const ReEnterpass = (props: propsData) => {
                 </div>
                 <div
                       className="relative flex justify-between gap-2 items-center input-cta"
+                      onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}}
                     >
                       <input type={`${show === true ? "text" : "password"}`} {...register('new_password')}
-                        name="new_password" placeholder="New Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta dark:shadow-[inset_0_50px_0_#121318] shadow-[inset_0_50px_0_#e2f2ff]" maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)} onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}} />
+                        name="new_password" placeholder="New Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta dark:shadow-[inset_0_50px_0_#121318] shadow-[inset_0_50px_0_#e2f2ff]" maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)}  />
                       <Image
                         data-testid="show-hide"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
@@ -246,6 +247,10 @@ const ReEnterpass = (props: propsData) => {
       {
         confirmation &&
         <ConfirmationModel title="Reset Password" message="After reset password, Withdrawal will be restricted for 24 hours." actionPerform={confirmOtp} show={layout} setShow={setLayout} setActive={setConfirmation} />
+      }
+       {
+        successModal &&
+        <ResetSuccessful />
       }
     </>
   )

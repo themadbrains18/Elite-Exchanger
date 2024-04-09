@@ -29,7 +29,7 @@ const SecurityCode = (props: propsData) => {
   const [enable, setEnable] = useState(false);
   const [popup, setPopup] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(false);
-  const [successModal, setSuccessModal] = useState(false);
+  
 
   const [reqCount, setReqCount] = useState(0);
 
@@ -356,10 +356,7 @@ const SecurityCode = (props: propsData) => {
         popup &&
         <CodeNotRecieved setEnable={setPopup} />
       }
-      {
-        successModal &&
-        <ResetSuccessful />
-      }
+     
     </>
   );
 };
