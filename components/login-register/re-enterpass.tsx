@@ -10,6 +10,8 @@ import { AES } from "crypto-js";
 import { toast, ToastContainer } from "react-toastify";
 import StrengthCheck from "../snippets/strengthCheck";
 import ConfirmationModel from "../snippets/confirmation";
+import StrengthCheck2 from "../snippets/strengthCheck2";
+
 
 const schema = yup.object().shape({
   new_password: yup.string().min(8).max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter")
@@ -42,6 +44,7 @@ const ReEnterpass = (props: propsData) => {
   const [pswd, setpswd] = useState('');
   const [confirmation, setConfirmation] = useState(false)
   const [passwordLength, setPasswordLength] = useState(18);
+  const [checker,setChecker] = useState(false)
 
   let {
     register,
@@ -188,23 +191,27 @@ const ReEnterpass = (props: propsData) => {
                   <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
                 </div>
                 <div
-                  className="relative"
-                >
-                  <input type={`${show === true ? "text" : "password"}`} {...register('new_password')} name="new_password" maxLength={32} placeholder="Password" className="input-cta w-full" onChange={(e: any) => setpswd(e.target.value)} />
-                  <Image
-                    src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
-                    alt="eyeicon"
-                    width={24}
-                    height={24}
-                    onClick={() => {
-                      setShow(!show);
-                    }}
-                    className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                  />
-                </div>
-                <StrengthCheck password={pswd} />
+                      className="relative flex justify-between gap-2 items-center input-cta"
+                    >
+                      <input type={`${show === true ? "text" : "password"}`} {...register('new_password')}
+                        name="new_password" placeholder="New Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta dark:shadow-[inset_0_50px_0_#121318] shadow-[inset_0_50px_0_#e2f2ff]" maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)} onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}} />
+                      <Image
+                        data-testid="show-hide"
+                        src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
+                        alt="eyeicon"
+                        width={24}
+                        height={24}
+                        onClick={() => {
+                          setShow(!show);
+                        }}  
+                        className="cursor-pointer "
+                      />
+                    {checker && 
+                      <StrengthCheck2 password={pswd} />}
+                    </div>
+               
                 {errors.new_password && <p style={{ color: 'red' }}>{errors.new_password.message}</p>}
-                <div className="relative">
+                <div className="relative mt-[10px]">
                   <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
                   <Image
                     src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
