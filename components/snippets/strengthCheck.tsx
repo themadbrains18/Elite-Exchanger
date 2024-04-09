@@ -6,9 +6,14 @@ const StrengthCheck = (props: propsData) => {
     const atLeastOneUppercase = /[A-Z]/g; // capital letters from A to Z
     const atLeastOneLowercase = /[a-z]/g; // small letters from a to z
     const atLeastOneNumeric = /[0-9]/g; // numbers from 0 to 9
-    const atLeastOneSpecialChar = /[#?!@$%^&*-]/g; // any of the special characters within the square brackets
+    const atLeastOneSpecialChar = /[!@#$%^&*()_+{};:<>,.?0]/g; // any of the special characters within the square brackets
     const eightCharsOrMore = /.{8,}/g; // eight characters or more
 
+    // console.log(props.password.match(atLeastOneUppercase),'----upper');
+    // console.log(props.password.match(atLeastOneLowercase),'----lower');
+    // console.log(props.password.match(atLeastOneNumeric),'-------number');
+    // console.log(props.password.match(atLeastOneSpecialChar),'-----special');
+    
     const passwordTracker = {
         uppercase: props.password.match(atLeastOneUppercase),
         lowercase: props.password.match(atLeastOneLowercase),
@@ -16,7 +21,7 @@ const StrengthCheck = (props: propsData) => {
         specialChar: props.password.match(atLeastOneSpecialChar),
         eightCharsOrGreater: props.password.match(eightCharsOrMore),
     }
-
+    
     const passwordStrength = Object.values(passwordTracker).filter(value => value).length;
 
     return (

@@ -116,7 +116,7 @@ const SignUp = () => {
     const lowercaseCharset = "abcdefghijklmnopqrstuvwxyz";
     const uppercaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const numberCharset = "0123456789";
-    const specialCharset = "!@#$%^&*()_+{}[];:<>,.?/";
+    const specialCharset = "!@#$%^&*()_+{};:<>,.?";
 
     // Function to randomly select a character from a given charset
     function getRandomCharacter(charset:string) {

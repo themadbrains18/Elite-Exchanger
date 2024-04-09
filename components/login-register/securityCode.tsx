@@ -84,8 +84,6 @@ const SecurityCode = (props: propsData) => {
       });
     });
 
-
-
   }, [])
 
   const matchUserOtp = async () => {
