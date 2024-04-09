@@ -2,8 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import Context from "../contexts/context";
 import Image from "next/image";
 import HeaderLogo from "../svg-snippets/headerLogo";
-import Verification from "./verification";
-import SecurityCode from "./securityCode";
 import { useRouter } from "next/router";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -14,7 +12,6 @@ import StrengthCheck from "../snippets/strengthCheck";
 import ConfirmationModel from "../snippets/confirmation";
 
 const schema = yup.object().shape({
-
   new_password: yup.string().min(8).max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter")
     .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
     .matches(/\d/, "Password must have a number")
@@ -37,21 +34,14 @@ interface propsData {
 const ReEnterpass = (props: propsData) => {
 
   const { mode } = useContext(Context);
-  const [step, setStep] = useState(0);
   const router = useRouter();
-  const [isEmail, setIsEmail] = useState(false);
   const [formData, setFormData] = useState({ username: "" });
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [show, setShow] = useState(false);
-  const [show1, setShow1] = useState(false);
-  const [sendOtpRes, setSendOtpRes] = useState<any>();
-
   const [layout, setLayout] = useState(false)
   const [pswd, setpswd] = useState('');
   const [confirmation, setConfirmation] = useState(false)
-  // auto generate password
   const [passwordLength, setPasswordLength] = useState(18);
-
 
   let {
     register,
@@ -75,9 +65,7 @@ const ReEnterpass = (props: propsData) => {
       const randomIndex = Math.floor(Math.random() * charset.length);
       return charset[randomIndex];
     }
-
     let password = "";
-
     // Include at least one character from each charset
     password += await getRandomCharacter(lowercaseCharset);
     password += await getRandomCharacter(uppercaseCharset);
@@ -90,10 +78,8 @@ const ReEnterpass = (props: propsData) => {
       const randomCharset = [lowercaseCharset, uppercaseCharset, numberCharset, specialCharset][Math.floor(Math.random() * 4)];
       password += await getRandomCharacter(randomCharset);
     }
-
     // Shuffle the password to randomize the character order
     password = password.split('').sort(() => Math.random() - 0.5).join('');
-
     setpswd(password);
     setValue('new_password', password);
     setValue('confirmPassword', password);
@@ -122,13 +108,11 @@ const ReEnterpass = (props: propsData) => {
     let res = await responseData.json();
 
     if (res?.data?.status === 200) {
-
       toast.success(res?.data?.message);
       setTimeout(() => {
         router.push("/login");
       }, 1000)
 
-      // setConfirmation(true)
     } else {
       toast.error(res.data.message);
       setBtnDisabled(false);
@@ -139,19 +123,14 @@ const ReEnterpass = (props: propsData) => {
     try {
       setLayout(true)
       setConfirmation(true)
-
-      console.log(props?.formData);
-
       data.otp = props?.formData?.otp;
       data.type = "forget";
       data.step = 4;
       data.username = props?.formData?.username
-
       setFormData(data)
-
-
     } catch (error) { }
   };
+
   useEffect(() => {
     setTimeout(() => {
       if (errors.new_password) {
@@ -164,6 +143,7 @@ const ReEnterpass = (props: propsData) => {
     }, 3000);
 
   }, [errors]);
+
   return (
     <>
       <ToastContainer />

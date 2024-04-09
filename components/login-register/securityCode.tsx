@@ -127,8 +127,10 @@ const SecurityCode = (props: propsData) => {
           signIn("credentials", response?.data?.data.user);
         }
         else if (props.api === 'register') {
-          toast.success('Otp Matched');
-          router.push('/login');
+          toast.success('You are register successfully and it redirect to login page in short time and login to access your account.',{position:'top-center'});
+          setTimeout(() => {
+            router.push('/login');
+          }, 5000);
         }
         else if (props.api === 'forget') {
           props?.setStep !== undefined && props?.setStep(3)
