@@ -32,18 +32,6 @@ const schema = yup.object().shape({
   agree: yup.bool().oneOf([true], "You must accept the terms and conditions")
 });
 
-// const yupValidateEmail = (email: string | undefined) => {
-//   return yup.string().email().isValidSync(email)
-// };
-
-// const validatePhone = (phone: string | undefined) => {
-//   return yup.number().integer().positive().test(
-//     (phone) => {
-//       return (phone && phone.toString().length >= 10 && phone.toString().length <= 14) ? true : false;
-//     }
-//   ).isValidSync(phone);
-// };
-
 const SignUp = () => {
   const { mode } = useContext(Context);
   const [show, setShow] = useState(false);
@@ -129,8 +117,6 @@ const SignUp = () => {
 
   const generatePassword = () => {
     // let charset = "";
-
-
     // if (useSymbols) charset += "!@#$%^&*()";
     // if (useNumbers) charset += "0123456789";
     // if (useLowerCase) charset += "abcdefghijklmnopqrstuvwxyz";
@@ -150,39 +136,38 @@ const SignUp = () => {
     //     i--;
     //   }
     // }
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[];:<>,.?/";
-    let newPassword = "";
-    const types = ['lowercase', 'uppercase', 'number', 'special'];
+    const lowercaseCharset = "abcdefghijklmnopqrstuvwxyz";
+    const uppercaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const numberCharset = "0123456789";
+    const specialCharset = "!@#$%^&*()_+{}[];:<>,.?/";
 
-    for (let i = 0; i < passwordLength; i++) {
-      // Randomly select a character type
-      const type = types[Math.floor(Math.random() * types.length)];
-
-      // Depending on the selected type, choose characters accordingly
-      let selectedCharset: any;
-      switch (type) {
-        case 'lowercase':
-          selectedCharset = "abcdefghijklmnopqrstuvwxyz";
-          break;
-        case 'uppercase':
-          selectedCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-          break;
-        case 'number':
-          selectedCharset = "0123456789";
-          break;
-        case 'special':
-          selectedCharset = "!@#$%^&*()_+{}[];:<>,.?/";
-          break;
-      }
-
-      // Randomly select a character from the selected charset
-      const randomIndex = Math.floor(Math.random() * selectedCharset.length);
-      newPassword += selectedCharset[randomIndex];
+    // Function to randomly select a character from a given charset
+    function getRandomCharacter(charset:string) {
+      const randomIndex = Math.floor(Math.random() * charset.length);
+      return charset[randomIndex];
     }
 
-    setpswd(newPassword);
-    setValue('password', newPassword);
-    setValue('confirmPassword', newPassword);
+    let password = "";
+
+    // Include at least one character from each charset
+    password += getRandomCharacter(lowercaseCharset);
+    password += getRandomCharacter(uppercaseCharset);
+    password += getRandomCharacter(numberCharset);
+    password += getRandomCharacter(specialCharset);
+
+    // Fill the rest of the password with random characters
+    const remainingLength = passwordLength - 4; // Subtract 4 for the characters already added
+    for (let i = 0; i < remainingLength; i++) {
+      const randomCharset = [lowercaseCharset, uppercaseCharset, numberCharset, specialCharset][Math.floor(Math.random() * 4)];
+      password += getRandomCharacter(randomCharset);
+    }
+
+    // Shuffle the password to randomize the character order
+    password = password.split('').sort(() => Math.random() - 0.5).join('');
+
+    setpswd(password);
+    setValue('password', password);
+    setValue('confirmPassword', password);
   };
 
   const random = (min = 0, max = 1) => {
