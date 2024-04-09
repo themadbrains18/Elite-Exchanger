@@ -15,6 +15,7 @@ import AES from 'crypto-js/aes';
 import StrengthCheck from "../snippets/strengthCheck";
 
 import { useSearchParams } from 'next/navigation'
+import StrengthCheck2 from "../snippets/strengthCheck2";
 
 const schema = yup.object().shape({
   username: yup.string()
@@ -64,6 +65,7 @@ const SignUp = () => {
   const [useLowerCase, setUseLowerCase] = useState(true);
   const [useUpperCase, setUseUpperCase] = useState(true);
 
+  const [checker,setChecker] = useState(false)
   const queryParams = searchParams.get('r');
   const referLink = searchParams.get('e');
 
@@ -222,18 +224,18 @@ const SignUp = () => {
                 <h1 className="lg-heading mb-5 lg:mb-[70px]">Create an account</h1>
 
                 {/**Form Start  */}
-                <form onSubmit={handleSubmit(onHandleSubmit)}>
+                <form onSubmit={handleSubmit(onHandleSubmit)}  autoComplete="new-password">
                   <div className="flex flex-col gap-[15px] lg:gap-10">
-                    <input type="text" placeholder="Enter Email / Phone Number" {...register('username')} autoComplete="nope" name="username" className="input-cta" />
+                    <input type="text"  autoComplete="new-password"  placeholder="Enter Email / Phone Number" {...register('username')}  name="username" className="input-cta" />
                     {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
                     <div className="relative text-end">
                       <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
                     </div>
                     <div
-                      className="relative"
+                      className="relative flex justify-between gap-2 items-center input-cta"
                     >
                       <input type={`${show === true ? "text" : "password"}`} {...register('password')}
-                        name="password" placeholder="Password" className="input-cta w-full password-input" autoComplete="new" onChange={(e: any) => setpswd(e.target.value)} />
+                        name="password" placeholder="Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta dark:shadow-[inset_0_50px_0_#121318] shadow-[inset_0_50px_0_#e2f2ff]" autoComplete="off" onChange={(e: any) => setpswd(e.target.value)} onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}} />
                       <Image
                         data-testid="show-hide"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
@@ -242,11 +244,12 @@ const SignUp = () => {
                         height={24}
                         onClick={() => {
                           setShow(!show);
-                        }}
-                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                        }}  
+                        className="cursor-pointer "
                       />
+                    {checker && 
+                      <StrengthCheck2 password={pswd} />}
                     </div>
-                    <StrengthCheck password={pswd} />
                     {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
 
                     <div className="relative">

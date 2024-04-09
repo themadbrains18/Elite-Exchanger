@@ -631,3 +631,8 @@ input[name="colored-radio"].contactform:checked + .custom-radio{
   @apply: bg-green-400;
   background-color: #68D391;
 }
+/* Change Autocomplete styles in Chrome*/
+input:-webkit-autofill {
+  -webkit-text-fill-color: #9295a6;
+  -webkit-box-shadow: 0 0 0px 1000px #e2f2ff inset;
+}
