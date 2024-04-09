@@ -12,6 +12,7 @@ interface propsData {
   formData?: any,
   data?: any,
   api?: string,
+  setStep?: Function | undefined,
   sendOtpRes?: any;
   isEmail?: boolean;
   isNumber?: boolean;
@@ -58,6 +59,8 @@ const SecurityCode = (props: propsData) => {
         }
       });
     });
+    orderTimeCalculation(props?.sendOtpRes);
+
     inputElements2?.forEach((ele, index) => {
       ele.addEventListener("keydown", (e: any) => {
         if (e.keyCode === 8 && e.target.value === "") {
@@ -81,7 +84,7 @@ const SecurityCode = (props: propsData) => {
       });
     });
 
-    orderTimeCalculation(props?.sendOtpRes);
+    
 
   }, [])
 
@@ -126,7 +129,8 @@ const SecurityCode = (props: propsData) => {
           router.push('/login');
         }
         else if (props.api === 'forget') {
-          setSuccessModal(true)
+      props?.setStep!==undefined && props?.setStep(3)
+          // setSuccessModal(true)
           // toast.success(response?.data?.message);
           // router.push('/login');
         }
@@ -144,13 +148,13 @@ const SecurityCode = (props: propsData) => {
   }
 
   const orderTimeCalculation = async (otpRes: any) => {
+      
     setEnable(true);
     let deadline = new Date(otpRes?.expire);
 
     deadline.setMinutes(deadline.getMinutes());
     deadline.setSeconds(deadline.getSeconds() + 1);
     let currentTime = new Date();
-
     if (currentTime < deadline) {
       if (Ref.current) clearInterval(Ref.current);
       const timer = setInterval(() => {
@@ -178,6 +182,7 @@ const SecurityCode = (props: propsData) => {
         (minutes > 9 ? minutes : '0' + minutes) + ':'
         + (seconds > 9 ? seconds : '0' + seconds)
       )
+  
     }
     else {
       if (Ref.current) clearInterval(Ref.current);
@@ -199,6 +204,8 @@ const SecurityCode = (props: propsData) => {
       total, minutes, seconds
     };
   }
+
+  
 
   const sendOtp = async () => {
     try {
@@ -227,7 +234,7 @@ const SecurityCode = (props: propsData) => {
       ).then((response) => response.json());
 
       if (props?.api === "forget") {
-        if (userExist.status === 200) {
+        if (userExist.data?.otp !==undefined) {
           toast.success(userExist?.data?.message);
           orderTimeCalculation(userExist?.data?.otp);
         } else {
