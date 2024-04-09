@@ -209,7 +209,7 @@ const SignUp = () => {
                       className="relative flex justify-between gap-2 items-center input-cta"
                     >
                       <input type={`${show === true ? "text" : "password"}`} {...register('password')}
-                        name="password" placeholder="Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta dark:shadow-[inset_0_50px_0_#121318] shadow-[inset_0_50px_0_#e2f2ff]" autoComplete="off" onChange={(e: any) => setpswd(e.target.value)} onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}} />
+                        name="password" placeholder="Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta dark:shadow-[inset_0_50px_0_#121318] shadow-[inset_0_50px_0_#e2f2ff]" maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)} onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}} />
                       <Image
                         data-testid="show-hide"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
