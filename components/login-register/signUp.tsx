@@ -97,6 +97,7 @@ const SignUp = () => {
 
       if (userExist.data.status === 200) {
         setBtnDisabled(false);
+        toast.dismiss();
         setStep(1);
         setFormData(data);
       }
@@ -116,26 +117,7 @@ const SignUp = () => {
   }
 
   const generatePassword = () => {
-    // let charset = "";
-    // if (useSymbols) charset += "!@#$%^&*()";
-    // if (useNumbers) charset += "0123456789";
-    // if (useLowerCase) charset += "abcdefghijklmnopqrstuvwxyz";
-    // if (useUpperCase) charset += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    // for (let i = 0; i < passwordLength; i++) {
-    //   let choice = random(0, 3);
-    //   if (useLowerCase && choice === 0) {
-    //     newPassword += randomLower();
-    //   } else if (useUpperCase && choice === 1) {
-    //     newPassword += randomUpper();
-    //   } else if (useSymbols && choice === 2) {
-    //     newPassword += randomSymbol();
-    //   } else if (useNumbers && choice === 3) {
-    //     newPassword += random(0, 9);
-    //   } else {
-    //     i--;
-    //   }
-    // }
+    
     const lowercaseCharset = "abcdefghijklmnopqrstuvwxyz";
     const uppercaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const numberCharset = "0123456789";
@@ -240,8 +222,8 @@ const SignUp = () => {
                     <div
                       className="relative"
                     >
-                      <input type={`${show === true ? "text" : "password"}`} {...register('password')}
-                        name="password" placeholder="Password" className="input-cta w-full password-input" autoComplete="new" onChange={(e: any) => setpswd(e.target.value)} />
+                      <input type={`${show === true ? "text" : "password"}`} {...register('password')} 
+                        name="password" placeholder="Password" className="input-cta w-full password-input" maxLength={32} autoComplete="new" onChange={(e: any) => setpswd(e.target.value)} />
                       <Image
                         data-testid="show-hide"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
@@ -258,7 +240,7 @@ const SignUp = () => {
                     {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
 
                     <div className="relative">
-                      <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" className="input-cta w-full" />
+                      <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
                       <Image
                         data-testid="show-hide2"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
