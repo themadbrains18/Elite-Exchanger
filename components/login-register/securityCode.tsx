@@ -125,7 +125,7 @@ const SecurityCode = (props: propsData) => {
           signIn("credentials", response?.data?.data.user);
         }
         else if (props.api === 'register') {
-          toast.success('You are register successfully and it redirect to login page in short time and login to access your account.',{position:'top-center'});
+          toast.success('You are register successfully and it redirect to login page in short time and login to access your account.', { position: 'top-center' });
           setTimeout(() => {
             router.push('/login');
           }, 5000);
@@ -279,9 +279,9 @@ const SecurityCode = (props: propsData) => {
       <section className="bg-primary-300 lg:dark:bg-black-v-1 xl:h-full  lg:bg-bg-primary ">
         <div className="flex min-h-screen h-full gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
           <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
-            <Image src="/assets/register/register.png" width={1018} height={1100} alt="signup" className="object-cover h-full block w-full" />
+            <Image src={props.api === 'forget' ? '/assets/register/forget.png' : "/assets/register/register.png"} width={1018} height={1100} alt="signup" className="object-cover h-screen block w-full" />
           </div>
-          <div className="max-w-full lg:max-w-[50%] flex flex-col justify-center w-full ">
+          <div className={`max-w-full lg:max-w-[50%] flex flex-col justify-center w-full ${props.api === 'forget' ? 'items-center' : ''}`}>
             <div className="max-w-[460px] w-full] max-[1023px]:mx-auto">
               <div className="py-[30px] lg:py-[40px]  max-w-[460px] w-full my-0 pr-5 flex justify-end items-center cursor-pointer" onClick={() => { router.push("/") }}>
                 <HeaderLogo />
