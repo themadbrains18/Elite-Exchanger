@@ -29,12 +29,19 @@ const SecurityCode = (props: propsData) => {
   const [enable, setEnable] = useState(false);
   const [popup, setPopup] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(false);
-  
+  const [emailSplit, setEmailSplit]= useState('');
 
   const [reqCount, setReqCount] = useState(0);
 
   useEffect(() => {
 
+    if(props.isEmail && props.formData?.username !== null){
+      console.log(props.formData?.username,'--------------props.formData?.username');
+      
+      let str = props.formData?.username.split('@');
+      let substring = str[0].substring(0, 3);
+      setEmailSplit(substring+'****@'+str[1])
+    }
     const inputElements = document.querySelectorAll(".input_wrapper input");
     const inputElements2 = document.querySelectorAll(".input_wrapper2 input");
     inputElements?.forEach((ele, index) => {
@@ -169,7 +176,6 @@ const SecurityCode = (props: propsData) => {
     }
   }
 
-
   /**
    * calculate time left for order to payment pay by buyer
    * @param e 
@@ -273,7 +279,7 @@ const SecurityCode = (props: propsData) => {
     }
 
   };
-
+  
   return (
     <>
       <section className="bg-primary-300 lg:dark:bg-black-v-1 xl:h-full  lg:bg-bg-primary ">
@@ -292,7 +298,7 @@ const SecurityCode = (props: propsData) => {
               <div className="mt-0 lg:mt-[180px]  max-[1023px]:!mx-auto lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[460px] w-full">
                 <h1 className="lg-heading  mb-5">Enter your security code</h1>
                 {props.isEmail && <div>
-                  <p className="mb-5  md-text">We texted your code to {props.formData?.username !== null && props.formData?.username}</p>
+                  <p className="mb-5  md-text">We texted your code to {props.formData?.username !== null && emailSplit}</p>
                   <div className="flex gap-[10px] md:gap-[30px] justify-between items-center input_wrapper">
                     <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-1`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
                     <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-2`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
