@@ -6,7 +6,7 @@ const StrengthCheck2 = ((props: propsData) => {
   const atLeastOneUppercase = /[A-Z]/g; // capital letters from A to Z
   const atLeastOneLowercase = /[a-z]/g; // small letters from a to z
   const atLeastOneNumeric = /[0-9]/g; // numbers from 0 to 9
-  const atLeastOneSpecialChar = /[#?!@$%^&*-]/g; // any of the special characters within the square brackets
+  const atLeastOneSpecialChar = /[!@#$%^&*()_+{};:<>,.?0]/g; // any of the special characters within the square brackets
   const eightCharsOrMore = /.{8,}/g; // eight characters or more
 
   const passwordTracker = {

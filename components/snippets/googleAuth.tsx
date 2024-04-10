@@ -279,49 +279,49 @@ const GoogleAuth = (props: activeSection) => {
             />
           </svg>
         </div>
-        <div className="flex flex-col mt-[25px] mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
+        <div className="flex flex-col mt-[25px] mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative ">
           <label className="sm-text">A verification code will be sent to {props?.session?.user?.email.split("@")[0].substring(0, 3)}***@{props?.session?.user?.email.split("@")[1]}</label>
           <div>
-            <div className="flex gap-[10px] justify-center items-center input_wrapper2 relative">
+            <div className="flex gap-[10px] justify-between items-center input_wrapper2 relative">
               <input
                 type="text"
                 autoComplete="off"
-                className={`block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none `}
+                className={`block px-2 font-noto md:px-5  w-40 md:w-[46px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none `}
                 name="code1"
               />
               <input
                 type="text"
                 autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary  `}
+                className={`block px-2 font-noto md:px-5 w-40 md:w-[46px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary  `}
                 name="code2"
               />
               <input
                 type="text"
                 autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary `}
+                className={`block px-2 font-noto md:px-5 w-40 md:w-[46px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary `}
                 name="code3"
               />
               <input
                 type="text"
                 autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary  `}
+                className={`block px-2 font-noto md:px-5 w-40 md:w-[46px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid   text-center  rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary  `}
                 name="code4"
               />
               <input
                 type="text"
                 autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary`}
+                className={`block px-2 font-noto md:px-5 w-40 md:w-[46px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary`}
                 name="code5"
               />
               <input
                 type="text"
                 autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary `}
+                className={`block px-2 font-noto md:px-5 w-40 md:w-[46px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary `}
                 name="code6"
               />
               {/* {errors.otp && <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.otp.message}</p>} */}
             </div>
-            <p className="mb-5 text-center lg:mt-[20px] md-text" style={{ color: 'red' }}>{otpMessage}</p>
+            <p className={` text-center lg:mt-[20px] md-text ${otpMessage===''?'hidden':''}`} style={{ color: 'red' }}>{otpMessage}</p>
           </div>
           <div className={`flex  ${showTime === true ? '' : 'hidden'}`}>
             <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>
@@ -330,7 +330,7 @@ const GoogleAuth = (props: activeSection) => {
           {isOtp === false &&
             <div className="text-end">
               <button
-                className="info-10-14 text-end cursor-pointer hover:text-primary"
+                className="info-10-14 text-end cursor-pointer !text-primary"
                 onClick={() => {sendOtp(); }}
                 disabled={isOtp}
               >
