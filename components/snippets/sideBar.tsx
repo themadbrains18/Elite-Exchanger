@@ -27,6 +27,7 @@ const SideBar = (props: profileSec) => {
     const { status, data: session } = useSession();
 
     const [duserName, setduserName] = useState('');
+    const [demail, setdemail] = useState('');
 
     let data = [
         {
@@ -170,15 +171,20 @@ const SideBar = (props: profileSec) => {
     };
 
     useEffect(() => {
-        if (props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.uName !== null) {
-            setduserName(props.profileInfo?.uName[0].toUpperCase() + props.profileInfo?.uName.slice(1));
+        if (props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.dName !== null) {
+            setduserName(props.profileInfo?.dName[0].toUpperCase() + props.profileInfo?.dName.slice(1));
         }
-        else {
-            let str = session?.user?.email.split('@');
-            let substring = str[0].substring(0, 3);
-            setduserName(substring + '****@' + str[1])
+        if (session) {
+            if (session?.user?.email !== null && session?.user?.email !== "") {
+                let str = session?.user?.email.split('@');
+                let substring = str[0].substring(0, 3);
+                setdemail(substring + '****@' + str[1])
+            }
+            else if (session?.user?.number !== null && session?.user?.number !== "") {
+                setdemail(session?.user?.number)
+            }
         }
-    }, []);
+    }, [props.profileInfo]);
 
     return (
         <>
@@ -236,8 +242,8 @@ const SideBar = (props: profileSec) => {
                                     </label>
                                 </div>
                             </div>
-                            {/* <p className='sec-title text-center'>{props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.fName !== null ? props.profileInfo?.fName + ' ' + props.profileInfo?.lName : session?.user?.name}</p> */}
-                            <p className='info-14-18 text-center mt-[5px]'>{duserName}</p>
+                            <p className='sec-title text-center'>{duserName}</p>
+                            <p className='info-14-18 text-center mt-[5px]'>{demail}</p>
 
                         </div>
                     }

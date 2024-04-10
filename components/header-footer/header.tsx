@@ -31,6 +31,8 @@ const Header = (props: propsData) => {
   const { status, data: session } = useSession();
   let [showMenu, setShowMenu] = useState(false);
 
+  const [duserName, setduserName] = useState('');
+
   const linkList = [
     {
       name: "Buy Crypto",
@@ -65,6 +67,8 @@ const Header = (props: propsData) => {
     }
     getTokenList();
     socket();
+
+
   }, [wbsocket]);
 
   const socket = () => {
@@ -78,6 +82,17 @@ const Header = (props: propsData) => {
         if (eventDataType === "profile") {
           if (data?.user_id === session?.user?.user_id) {
             setUserDetail(data);
+            if (data && data?.dName !== null) {
+              setduserName(data?.dName);
+            }
+            else if (session?.user?.email !== null && session?.user?.email !== "") {
+              let str = session?.user?.email.split('@');
+              let substring = str[0].substring(0, 3);
+              setduserName(substring + '****@' + str[1])
+            }
+            else if (session?.user?.number !== null && session?.user?.number !== "") {
+              setduserName(session?.user?.number)
+            }
           }
         }
       };
@@ -113,6 +128,18 @@ const Header = (props: propsData) => {
 
     if (profileDashboard) {
       setUserDetail(profileDashboard?.data);
+
+      if (profileDashboard?.data && profileDashboard?.data?.dName !== null) {
+        setduserName(profileDashboard?.data?.dName);
+      }
+      else if (session?.user?.email !== null && session?.user?.email !== "") {
+        let str = session?.user?.email.split('@');
+        let substring = str[0].substring(0, 3);
+        setduserName(substring + '****@' + str[1])
+      }
+      else if (session?.user?.number !== null && session?.user?.number !== "") {
+        setduserName(session?.user?.number)
+      }
     }
   };
 
@@ -284,10 +311,7 @@ const Header = (props: propsData) => {
                       </div>
                       <div>
                         <p id="username" data-testid="username" className="nav-text-lg !text-gamma hidden xl:block">
-                          {userDetail === null || userDetail?.messgae !== undefined
-                            ? props.session?.user?.name
-                            : userDetail?.dName}
-
+                          {userDetail !== null && duserName}
                         </p>
                         {props.session?.user?.kyc === 'approve' &&
                           <div className="flex justify-start text-center items-center gap-[3px]">

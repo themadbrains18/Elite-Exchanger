@@ -13,8 +13,8 @@ import { useWebSocket } from "@/libs/WebSocketContext";
 const schema = yup.object().shape({
   fName: yup.string().optional(),
   lName: yup.string().optional(),
-  dName: yup.string().min(4).max(20).required('this field is required'),
-  uName: yup.string().min(4).max(20).required('this field is required'),
+  dName: yup.string().min(4).max(20).required('this field is required').matches(/^([a-zA-Z0-9_\-])+$/, 'Please enter only(letters, number and period(-))'),
+  uName: yup.string().min(4).max(20).required('this field is required').matches(/^([a-zA-Z0-9_\-])+$/, 'Please enter only(letters, number and period(-))'),
 });
 
 interface fixSection {
