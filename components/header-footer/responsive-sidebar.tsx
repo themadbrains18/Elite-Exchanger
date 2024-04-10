@@ -26,6 +26,23 @@ const ResponsiveSidebar = (props: defaultStates) => {
   const router = useRouter();
 
   const [profileImg, setProfileImg] = useState('');
+  const [duserName, setduserName] = useState('');
+  const [demail, setdemail] = useState('');
+
+  useEffect(() => {
+    if (props.userDetail && props?.userDetail?.messgae === undefined && props.userDetail?.dName !== null) {
+      setduserName(props.userDetail?.dName[0].toUpperCase() + props.userDetail?.dName.slice(1));
+    }
+    if (session?.user?.email !== null && session?.user?.email !== "") {
+      let str = session?.user?.email.split('@');
+      let substring = str[0].substring(0, 3);
+      setdemail(substring + '****@' + str[1])
+    }
+    else if (session?.user?.number !== null && session?.user?.number !== "") {
+      setdemail(session?.user?.number)
+    }
+
+  }, [props.userDetail]);
 
   const ResponsivelinkList = [
 
@@ -109,12 +126,6 @@ const ResponsiveSidebar = (props: defaultStates) => {
 
   };
 
-
-
-  // useEffect(()=>{
-
-  // },[])
-
   function setDropdownHeight(e: any) {
     // console.log(e.currentTarget);
     // set false to nav menu when click on nested items in dropdown
@@ -162,18 +173,18 @@ const ResponsiveSidebar = (props: defaultStates) => {
             }
           </div>
           <div>
-            <p className='nav-text-lg'>{props.userDetail !== null && props.userDetail?.messgae === undefined && props.userDetail?.fName !== null ? (props.userDetail?.fName + ' ' + props.userDetail?.lName) : props?.session?.user?.name}</p>
-            <p className='nav-text-lg !text-gamma '>{props.userDetail !== null && props.userDetail?.messgae === undefined && props.userDetail?.dName !== null ? (props?.userDetail?.dName) : props?.session?.user?.email}</p>
+            <p className='nav-text-lg'>{duserName}</p>
+            <p className='nav-text-lg !text-gamma '>{demail}</p>
             {props.session?.user?.kyc === 'approve' &&
               <div className="flex justify-start text-center items-center gap-[3px]">
-                <IconsComponent type="kycComplete" hover={false} active={false} />
+                <IconsComponent type="kycComplete" hover={false} active={false} width={14} height={14}/>
                 <p className="top-label">Verified</p>
               </div>
 
             }
             {props.session?.user?.kyc !== 'approve' &&
               <div className="flex justify-start text-center items-center gap-[3px]" >
-                <IconsComponent type="kychold" hover={false} active={false} />
+                <IconsComponent type="kychold" hover={false} active={false} width={14} height={14}/>
                 <p className="top-label">Unverified</p>
               </div>
 
