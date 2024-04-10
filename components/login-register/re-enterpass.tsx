@@ -91,7 +91,6 @@ const ReEnterpass = (props: propsData) => {
   };
 
   const confirmOtp = async () => {
-    toast.dismiss();
     setConfirmation(false)
     setLayout(false)
     setBtnDisabled(true);
@@ -114,11 +113,11 @@ const ReEnterpass = (props: propsData) => {
 
     if (res?.data?.status === 200) {
       setSuccessModal(true)
-  
-
     } else {
-      toast.error(res.data.message);
-      setBtnDisabled(false);
+      toast.error(res.data.message,{autoClose:2500});
+      setTimeout(() => {
+        setBtnDisabled(false);  
+      }, 3000);
     }
   }
 
@@ -229,7 +228,7 @@ const ReEnterpass = (props: propsData) => {
 
                 <button
                   type="submit" disabled={btnDisabled}
-                  className="my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-800"
+                  className={`my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-800 ${btnDisabled === true ? 'cursor-not-allowed':''}`}
                 >
                   {btnDisabled &&
                     <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

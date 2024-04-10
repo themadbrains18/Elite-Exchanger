@@ -214,7 +214,7 @@ const Verification = (props: propsData) => {
               />
             </div>}
             <button disabled={btnDisabled}
-              className="my-[30px] lg:my-[50px] solid-button w-full"
+              className={`my-[30px] lg:my-[50px] solid-button w-full ${btnDisabled === true ? 'cursor-not-allowed ':''}`}
               onClick={() => {
                 sendOtp();
               }}

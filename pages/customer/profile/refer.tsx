@@ -21,7 +21,7 @@ interface propsData {
 const Refer = (props: propsData) => {
   return (
     <SideBarLayout userDetail={props.userDetail} referalList={props.referalList} eventList={props.eventList} rewardsList={props.rewardsList}>
-      <ToastContainer />
+      <ToastContainer limit={1} />
       <Referal session={props.session} referalList={props.referalList} eventList={props.eventList} rewardsList={props.rewardsList} />
     </SideBarLayout>
   )

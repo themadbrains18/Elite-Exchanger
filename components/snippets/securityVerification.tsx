@@ -39,7 +39,8 @@ const SecurityVerification = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [fillOtp, setOtp] = useState("");
   const { status, data: session } = useSession()
-
+  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [showpswd, setShowPswd] = useState(false);
   const [qrImg, setImage] = useState('');
 
   const [secret, setSecret] = useState(props?.session?.user?.secret !== undefined && JSON.parse(props?.session?.user?.secret));
@@ -68,6 +69,7 @@ const SecurityVerification = (props: activeSection) => {
 
   const onHandleSubmit = async (data: any) => {
     try {
+      setBtnDisabled(true)
       let username =
         props.session?.user.email !== "null"
           ? props.session?.user.email
@@ -109,7 +111,12 @@ const SecurityVerification = (props: activeSection) => {
             props?.setEnable(0);
           }, 1000)
         } else {
-          toast.error(response.data.data);
+          toast.error(response.data.data, { autoClose: 2000 });
+
+          setTimeout(() => {
+            setBtnDisabled(false)
+          }, 3000)
+
         }
       }
       else {
@@ -203,7 +210,7 @@ const SecurityVerification = (props: activeSection) => {
                     document.body.appendChild(input)
                     input.select()
                     document.execCommand('copy')
-                    document.body.removeChild(input) 
+                    document.body.removeChild(input)
                     toast.success('copy to clipboard')
                   }}>Copy</button>
                 </div>
@@ -214,7 +221,9 @@ const SecurityVerification = (props: activeSection) => {
               <label className="sm-text">GA 6 Digit Security Code</label>
               <input
                 type="text"
+                maxLength={6}
                 placeholder="Enter text"
+                id="code"
                 className={`sm-text input-cta2 w-full  ${errors.code && 'border-1 border-[#ff0000]'}`}
                 {...register("code")}
               />
@@ -225,12 +234,25 @@ const SecurityVerification = (props: activeSection) => {
 
             <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
               <label className="sm-text">Account Password</label>
-              <input
-                type="password"
-                placeholder="Re-Enter password"
-                className={`sm-text input-cta2 w-full ${errors.password && 'border-1 border-[#ff0000]'}`}
-                {...register("password")}
-              />
+              <div className={` relative `}>
+                <input
+                  type={showpswd === true ? "text" : "password"}
+                  placeholder="Re-Enter password"
+                  maxLength={32}
+                  className={`sm-text w-full  input-cta2`}
+                  {...register("password")}
+                />
+                <Image
+                  src={`/assets/register/${showpswd === true ? "show.svg" : "hide.svg"}`}
+                  alt="eyeicon"
+                  width={24}
+                  height={24}
+                  onClick={() => {
+                    setShowPswd(!showpswd);
+                  }}
+                  className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                />
+              </div>
               {errors.password && (
                 <p style={{ color: "red" }} className="absolute top-[100%] text-[10px] md:text-[12px]">{errors.password.message}</p>
               )}
@@ -246,8 +268,14 @@ const SecurityVerification = (props: activeSection) => {
             >
               Cancel
             </button>
-            <button type="submit" className="solid-button px-[51px] w-full">
-              Finish Setup
+            <button disabled={btnDisabled} type="submit" className={`solid-button px-[51px] w-full ${btnDisabled === true ? "cursor-not-allowed !px-[30px]" : ""}`}>
+              {btnDisabled &&
+                <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
+                  <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />
+                </svg>
+              }
+              Finish Setup 
             </button>
           </div>
         </form>

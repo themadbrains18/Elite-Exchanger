@@ -723,7 +723,7 @@ const SecuritySettings = (props: fixSection) => {
                 <button
                 disabled={btnDisabled}
                   type="submit"
-                  className="solid-button px-[23px] md:px-[51px]"
+                  className={`solid-button px-[23px] md:px-[51px] ${btnDisabled === true?"cursor-not-allowed":''}`}
                 >
                   {btnDisabled &&
                     <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

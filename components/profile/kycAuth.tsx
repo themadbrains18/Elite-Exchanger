@@ -46,10 +46,10 @@ const schema = yup
   .object()
   .shape({
     country: yup.string().required("Please select Country"),
-    fname: yup.string().required("Please enter same name as on document"),
+    fname: yup.string().min(4).max(30).required("Please enter same name as on document").matches(/^([a-zA-Z]+(\s[a-zA-Z]+))+$/, 'Please enter only(letters, space)'),
     // lname: yup.string().required("This field is required"),
     doctype: yup.string().required("Please select Document type"),
-    docnumber: yup.string().required("Please enter valid document number"),
+    docnumber: yup.string().max(30).required("Please enter valid document number"),
     dob: yup
       .date()
       .transform(function (value, originalValue) {
@@ -343,7 +343,6 @@ const KycAuth = (props: fixSection) => {
       // formData.append("userid", session?.user?.user_id);
       // formData.append("username", session?.user?.email);
       // formData.append("dob", data?.dob.toString());
-
       const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record = encodeURIComponent(ciphertext.toString());
 
@@ -378,12 +377,13 @@ const KycAuth = (props: fixSection) => {
           }
           else {
             router.reload()
-
           }
         }
         else {
-          toast.error(result.data.data + " you auto redirect to login page");
-          setBtnDisabled(false);
+          toast.error(result?.data?.data?.messaage !== undefined ? result?.data?.data?.messaage : result?.data?.data, { autoClose: 2500 });
+          setTimeout(() => {
+            setBtnDisabled(false);
+          }, 3000);
         }
       } else {
         toast.error('Your session is expired. Its auto redirect to login page');
@@ -391,7 +391,6 @@ const KycAuth = (props: fixSection) => {
         setTimeout(() => {
           signOut();
         }, 4000);
-
       }
 
     } catch (error) {
@@ -714,7 +713,7 @@ const KycAuth = (props: fixSection) => {
                     id="docnumber"
                     type="text"
                     {...register("docnumber")}
-                    placeholder="Enter ID number"
+                    placeholder="Enter ID number" maxLength={30}
                     className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"
                   />
                   {errors.docnumber && (
@@ -732,7 +731,7 @@ const KycAuth = (props: fixSection) => {
                     type="text"
                     {...register("fname")}
                     // value="gjsg"
-                    placeholder="Enter user name"
+                    placeholder="Enter user name" maxLength={30} min={4}
                     className="sm-text input-cta2 w-full  focus:bg-primary-100 dark:focus:bg-[transparent]"
                   />
                   {errors?.fname && (

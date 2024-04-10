@@ -24,6 +24,7 @@ const Referal = (props: fixSection) => {
   const [referProgamTask, setReferProgramTask] = useState();
   const [taskShow, setTaskShow] = useState(false);
   const router = useRouter();
+  const [btnDisabled, setBtnDisabled] = useState(false);
 
   let referalSteps = [
     {
@@ -39,6 +40,34 @@ const Referal = (props: fixSection) => {
       text: "Receive 100 USDT trading fee rebate voucher each",
     },
   ];
+
+  const copyCode = () => {
+    setBtnDisabled(true);
+    const input = document.createElement('textarea')
+    input.value = props?.session?.user?.refer_code
+    document.body.appendChild(input)
+    input.select()
+    document.execCommand('copy')
+    document.body.removeChild(input)
+    toast.success('copy to clipboard', { autoClose: 2500 });
+    setTimeout(() => {
+      setBtnDisabled(false);
+    }, 3000);
+  }
+
+  const copyLink = () => {
+    setBtnDisabled(true);
+    const input = document.createElement('textarea')
+    input.value = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}`
+    document.body.appendChild(input)
+    input.select()
+    document.execCommand('copy')
+    document.body.removeChild(input)
+    toast.success('copy to clipboard', { autoClose: 2500 });
+    setTimeout(() => {
+      setBtnDisabled(false);
+    }, 3000);
+  }
 
   return (
     <>
@@ -147,15 +176,9 @@ const Referal = (props: fixSection) => {
                 <label className="sm-text">Lite Referral ID</label>
                 <div className="mt-[5px] lg:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
                   <p className="sec-text text-gamma">{props?.session?.user?.refer_code}</p>
-                  <button className="solid-button py-2 sec-text font-normal" onClick={() => {
+                  <button disabled={btnDisabled} className={`solid-button py-2 sec-text font-normal ${btnDisabled === true ? 'cursor-not-allowed opacity-70':''}`} onClick={() => {
                     // navigator.clipboard.writeText(props?.session?.user?.refer_code);
-                    const input = document.createElement('textarea')
-                    input.value = props?.session?.user?.refer_code
-                    document.body.appendChild(input)
-                    input.select()
-                    document.execCommand('copy')
-                    document.body.removeChild(input)
-                    toast.success('copy to clipboard')
+                    btnDisabled === false ? copyCode() : '';
                   }}>
                     Copy
                   </button>
@@ -165,15 +188,9 @@ const Referal = (props: fixSection) => {
                 <label className="sm-text mb-[10px]">Lite Referral Link</label>
                 <div className="mt-[5px] lg:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
                   <p className="sec-text text-gamma">{`http://...?r=${props?.session?.user?.refer_code}`}</p>
-                  <button className="solid-button py-2 sec-text font-normal" onClick={() => {
+                  <button disabled={btnDisabled} className={`solid-button py-2 sec-text font-normal ${btnDisabled === true ? 'cursor-not-allowed opacity-70':''}`} onClick={() => {
                     // navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}`);
-                    const input = document.createElement('textarea')
-                    input.value = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}`
-                    document.body.appendChild(input)
-                    input.select()
-                    document.execCommand('copy')
-                    document.body.removeChild(input) 
-                    toast.success('copy to clipboard')
+                    btnDisabled === false ? copyLink() : '';
                   }}>
                     Copy
                   </button>
