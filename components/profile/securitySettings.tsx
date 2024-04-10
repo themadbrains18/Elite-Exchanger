@@ -686,19 +686,19 @@ const SecuritySettings = (props: fixSection) => {
                       <p className="sm-text mb-[10px]">Re-enter password</p>
                       <div className="relative">
                         <input
-                          type={`${showconfirm === true ? "text" : "password"}`}
+                          type={`${showpswd === true ? "text" : "password"}`}
                           {...register("confirmPassword")}
                           placeholder="Re-Enter password"
                           className="sm-text input-cta2 w-full"
                           maxLength={32}
                         />
                         <Image
-                          src={`/assets/register/${showconfirm === true ? "show.svg" : "hide.svg"}`}
+                          src={`/assets/register/${showpswd === true ? "show.svg" : "hide.svg"}`}
                           alt="eyeicon"
                           width={24}
                           height={24}
                           onClick={() => {
-                            setShowconfirm(!showconfirm);
+                            setShowPswd(!showconfirm);
                           }}
                           className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                         />

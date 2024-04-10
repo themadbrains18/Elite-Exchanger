@@ -221,7 +221,7 @@ const SecurityVerification = (props: activeSection) => {
                   <p className="sec-text text-ellipsis overflow-hidden">{secret?.base32}</p>
                   <button type="button" className={`solid-button py-2 sec-text font-normal ${btnDisabledCopy === true?'cursor-not-allowed':''}`} onClick={() => {
                     // navigator.clipboard.writeText(secret?.base32);
-                    btnDisabledCopy === false ? copyCode : ''
+                    btnDisabledCopy === false ? copyCode() : ''
                   }}>Copy</button>
                 </div>
               </div>
