@@ -27,6 +27,8 @@ const GoogleAuth = (props: activeSection) => {
   const [enable, setEnable] = useState(false);
   const [timeLeft, setTimer] = useState('');
   const [fillOtp, setOtp] = useState("");
+  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [otpMessage, setOtpMessage] = useState('');
   const Ref: any = useRef(null);
 
   useEffect(() => {
@@ -158,6 +160,18 @@ const GoogleAuth = (props: activeSection) => {
 
   const confirmUserOtp = async () => {
     try {
+      toast.dismiss();
+      setBtnDisabled(true);
+
+      if (fillOtp === '') {
+        setOtpMessage('Please enter One-Time password to authenticate.');
+        setTimeout(() => {
+          setOtpMessage('');
+        }, 3000);
+        setBtnDisabled(false);
+        return;
+      }
+
       let obj = {};
       let username = props.session?.user.email !== "null"
         ? props.session?.user.email
@@ -189,9 +203,13 @@ const GoogleAuth = (props: activeSection) => {
         })
         setTimer('');
         setActive(true);
+        setBtnDisabled(false);
       }
       else {
+
         toast.error(response?.data?.data);
+        setBtnDisabled(false);
+
       }
     } catch (error) {
       console.log(error);
@@ -237,7 +255,8 @@ const GoogleAuth = (props: activeSection) => {
           </svg>
         </div>
         <div className="flex flex-col mt-[25px] mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
-          <label className="sm-text">A verification code will be sent to {props?.session?.user?.email.split("@")[0].substring(0, 3)}***@****</label>
+          <label className="sm-text">A verification code will be sent to {props?.session?.user?.email.split("@")[0].substring(0, 3)}***@{props?.session?.user?.email.split("@")[1]}</label>
+         <div>
           <div className="flex gap-[10px] justify-center items-center input_wrapper2 relative">
             <input
               type="text"
@@ -277,6 +296,8 @@ const GoogleAuth = (props: activeSection) => {
             />
             {/* {errors.otp && <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.otp.message}</p>} */}
           </div>
+          <p className="mb-5 text-center lg:mt-[20px] md-text" style={{ color: 'red' }}>{otpMessage}</p>
+          </div>
           <div className={`flex  ${enable === true ? '' : 'hidden'}`}>
             <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>
             <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
@@ -300,7 +321,12 @@ const GoogleAuth = (props: activeSection) => {
             props.setShow(false);
             props?.setEnable(0)
           }}>Cancel</button>
-          <button className="solid-button px-[51px] w-full" onClick={() => { confirmUserOtp() }}>Confirm</button>
+          <button className="solid-button px-[51px] w-full" onClick={() => { confirmUserOtp() }}>{btnDisabled &&
+                    <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
+                      <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />
+                    </svg>
+                  }Confirm</button>
         </div>
         <p className={`info-10-14 text-start cursor-pointer  inline-block !text-primary mt-[10px]`} onClick={() => { setPopup(true); props.setShow(false); }}>
           Didn't receive the code?
