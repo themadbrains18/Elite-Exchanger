@@ -33,14 +33,17 @@ const ResponsiveSidebar = (props: defaultStates) => {
     if (props.userDetail && props?.userDetail?.messgae === undefined && props.userDetail?.dName !== null) {
       setduserName(props.userDetail?.dName[0].toUpperCase() + props.userDetail?.dName.slice(1));
     }
-    if (session?.user?.email !== null && session?.user?.email !== "") {
-      let str = session?.user?.email.split('@');
-      let substring = str[0].substring(0, 3);
-      setdemail(substring + '****@' + str[1])
+    if (session) {
+      if (session?.user?.email !== null && session?.user?.email !== "") {
+        let str = session?.user?.email.split('@');
+        let substring = str[0].substring(0, 3);
+        setdemail(substring + '****@' + str[1])
+      }
+      else if (session?.user?.number !== null && session?.user?.number !== "") {
+        setdemail(session?.user?.number)
+      }
     }
-    else if (session?.user?.number !== null && session?.user?.number !== "") {
-      setdemail(session?.user?.number)
-    }
+
 
   }, [props.userDetail]);
 
@@ -177,14 +180,14 @@ const ResponsiveSidebar = (props: defaultStates) => {
             <p className='nav-text-lg !text-gamma '>{demail}</p>
             {props.session?.user?.kyc === 'approve' &&
               <div className="flex justify-start text-center items-center gap-[3px]">
-                <IconsComponent type="kycComplete" hover={false} active={false} width={14} height={14}/>
+                <IconsComponent type="kycComplete" hover={false} active={false} width={14} height={14} />
                 <p className="top-label">Verified</p>
               </div>
 
             }
             {props.session?.user?.kyc !== 'approve' &&
               <div className="flex justify-start text-center items-center gap-[3px]" >
-                <IconsComponent type="kychold" hover={false} active={false} width={14} height={14}/>
+                <IconsComponent type="kychold" hover={false} active={false} width={14} height={14} />
                 <p className="top-label">Unverified</p>
               </div>
 

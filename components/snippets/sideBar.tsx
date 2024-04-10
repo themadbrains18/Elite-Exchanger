@@ -174,15 +174,16 @@ const SideBar = (props: profileSec) => {
         if (props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.dName !== null) {
             setduserName(props.profileInfo?.dName[0].toUpperCase() + props.profileInfo?.dName.slice(1));
         }
-        if (session?.user?.email !== null && session?.user?.email !== "") {
-            let str = session?.user?.email.split('@');
-            let substring = str[0].substring(0, 3);
-            setdemail(substring + '****@' + str[1])
+        if (session) {
+            if (session?.user?.email !== null && session?.user?.email !== "") {
+                let str = session?.user?.email.split('@');
+                let substring = str[0].substring(0, 3);
+                setdemail(substring + '****@' + str[1])
+            }
+            else if (session?.user?.number !== null && session?.user?.number !== "") {
+                setdemail(session?.user?.number)
+            }
         }
-        else if (session?.user?.number !== null && session?.user?.number !== "") {
-            setdemail(session?.user?.number)
-        }
-
     }, [props.profileInfo]);
 
     return (
