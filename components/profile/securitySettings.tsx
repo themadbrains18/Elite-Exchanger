@@ -173,7 +173,6 @@ const SecuritySettings = (props: fixSection) => {
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
     try {
-      toast.dismiss()
       let username =
         props.session?.user.email !== "null"
           ? props.session?.user.email

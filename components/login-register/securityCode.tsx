@@ -29,17 +29,17 @@ const SecurityCode = (props: propsData) => {
   const [enable, setEnable] = useState(false);
   const [popup, setPopup] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(false);
-  const [emailSplit, setEmailSplit]= useState('');
+  const [emailSplit, setEmailSplit] = useState('');
 
   const [reqCount, setReqCount] = useState(0);
 
   useEffect(() => {
 
-    if(props.isEmail && props.formData?.username !== null){
-      
+    if (props.isEmail && props.formData?.username !== null) {
+
       let str = props.formData?.username.split('@');
       let substring = str[0].substring(0, 3);
-      setEmailSplit(substring+'****@'+str[1])
+      setEmailSplit(substring + '****@' + str[1])
     }
     const inputElements = document.querySelectorAll(".input_wrapper input");
     const inputElements2 = document.querySelectorAll(".input_wrapper2 input");
@@ -94,7 +94,6 @@ const SecurityCode = (props: propsData) => {
 
   const matchUserOtp = async () => {
     try {
-      toast.dismiss();
       setBtnDisabled(true);
       if (reqCount >= 3) {
         toast.error('Too many try with wrong code. Please request a new verification code.', { position: "top-center" });
@@ -144,11 +143,12 @@ const SecurityCode = (props: propsData) => {
         }
       }
       else {
-        setBtnDisabled(false);
-        toast.error(response.data.message !== undefined ? response.data.message : response.data.data);
-        setReqCount(reqCount + 1);
+        toast.error(response.data.message !== undefined ? response.data.message : response.data.data, { autoClose: 2500 });
+        setTimeout(() => {
+          setBtnDisabled(false);
+          setReqCount(reqCount + 1);
+        }, 3000);
       }
-
     } catch (error) {
       console.log(error);
     }
@@ -278,7 +278,7 @@ const SecurityCode = (props: propsData) => {
     }
 
   };
-  
+
   return (
     <>
       <section className="bg-primary-300 lg:dark:bg-black-v-1 xl:h-full  lg:bg-bg-primary ">
@@ -340,8 +340,8 @@ const SecurityCode = (props: propsData) => {
                   </p>
 
                 </div>}
-                <button disabled={btnDisabled} className="my-[30px] lg:mt-[50px] mb-[10px] solid-button w-full hover:bg-primary-800" onClick={() => {
-                  matchUserOtp()
+                <button disabled={btnDisabled} className={`my-[30px] lg:mt-[50px] mb-[10px] solid-button w-full hover:bg-primary-800 ${btnDisabled === true ? 'cursor-not-allowed ':''}`} onClick={() => {
+                  btnDisabled === false ? matchUserOtp() : ''
                 }}>
                   {btnDisabled &&
                     <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -361,7 +361,7 @@ const SecurityCode = (props: propsData) => {
         popup &&
         <CodeNotRecieved setEnable={setPopup} />
       }
-     
+
     </>
   );
 };

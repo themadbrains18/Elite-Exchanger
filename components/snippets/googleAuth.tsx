@@ -160,7 +160,6 @@ const GoogleAuth = (props: activeSection) => {
 
   const confirmUserOtp = async () => {
     try {
-      toast.dismiss();
       setBtnDisabled(true);
 
       if (fillOtp === '') {
