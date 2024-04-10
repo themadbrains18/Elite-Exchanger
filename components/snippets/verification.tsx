@@ -182,7 +182,7 @@ const Verification = (props: activeSection) => {
         </div>
 
         <div className="py-30 md:py-40">
-          <div className="flex flex-col  gap-20">
+        {props.session?.user?.email !== "null" && <div className="flex flex-col  gap-20">
             <label className="sm-text">
               {props?.type === "email"
                 ? "Enter Email Verification Code"
@@ -235,7 +235,60 @@ const Verification = (props: activeSection) => {
             <p className={`info-10-14 text-end cursor-pointer !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => props?.snedOtpToUser()}>
               Resend Code
             </p>
-          </div>
+          </div>}
+         {props.session?.user?.number !== "null" && <div className="flex flex-col mt-[20px] gap-20">
+            <label className="sm-text">
+              
+               Enter SMS Verification Code
+            </label>
+            <div className="flex gap-10 justify-center items-center input_wrapper">
+              <input
+                type="text"
+                autoComplete="off"
+                className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                name="code11"
+              />
+              <input
+                type="text"
+                autoComplete="off"
+                className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                name="code12"
+              />
+              <input
+                type="text"
+                autoComplete="off"
+                className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                name="code13"
+              />
+              <input
+                type="text"
+                autoComplete="off"
+                className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                name="code14"
+              />
+              <input
+                type="text"
+                autoComplete="off"
+                className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                name="code15"
+              />
+              <input
+                type="text"
+                autoComplete="off"
+                className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                name="code16"
+
+              />
+            </div>
+            <div className={`flex  ${enable === true ? '' : 'hidden'}`}>
+              <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>
+              <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
+            </div>
+
+            <p className={`info-10-14 text-end cursor-pointer !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => props?.snedOtpToUser()}>
+              Resend Code
+            </p>
+          </div>}
         </div>
         {props.finalBtnenable !== undefined ? <button
           disabled={props.finalBtnenable}

@@ -73,8 +73,9 @@ const ConfirmPopup = (props: activeSection) => {
           </div>
           <div className="flex flex-col gap-[15px] lg:gap-5">
             <div className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`} >
-              <input id={`custom-radio2`} type="radio" value="" name="colored-radio" disabled={props.session?.user?.email !== "null" ? true : false} checked={props.session?.user?.email !== "null" ? true : false} className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
-              <label htmlFor={`custom-radio2`} className="
+              {/* <input id={`custom-radio2`} type="radio" value="" name="colored-radio" disabled={props.session?.user?.email !== "null" ? true : false} checked={props.session?.user?.email !== "null" ? true : false} className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" /> */}
+              {/* <label htmlFor={`custom-radio2`}
+               className="
                 custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
                 cursor-pointer
                 after:dark:bg-omega
@@ -97,8 +98,9 @@ const ConfirmPopup = (props: activeSection) => {
                 before:z-[1]
                 
                 ">
-                <p className="ml-2 md-text"> Get the code by email at</p>
-              </label>
+                
+              </label> */}
+              <p className="ml-2 md-text"> Get the code by email at</p>
             </div>
             <input type="email" placeholder="Enter Email " className="input-cta2 bg-primary-100" disabled={true} value={props.session?.user?.email !== "null" ? props.session?.user?.email : ''} />
           </div>
