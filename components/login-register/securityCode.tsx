@@ -36,7 +36,6 @@ const SecurityCode = (props: propsData) => {
   useEffect(() => {
 
     if(props.isEmail && props.formData?.username !== null){
-      console.log(props.formData?.username,'--------------props.formData?.username');
       
       let str = props.formData?.username.split('@');
       let substring = str[0].substring(0, 3);

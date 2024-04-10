@@ -11,10 +11,10 @@ import moment from "moment";
 import { useWebSocket } from "@/libs/WebSocketContext";
 
 const schema = yup.object().shape({
-  fName: yup.string().required('this field is required'),
-  lName: yup.string().required('this field is required'),
-  dName: yup.string().required('this field is required'),
-  uName: yup.string().required('this field is required'),
+  fName: yup.string().optional(),
+  lName: yup.string().optional(),
+  dName: yup.string().min(4).max(20).required('this field is required'),
+  uName: yup.string().min(4).max(20).required('this field is required'),
 });
 
 interface fixSection {
@@ -126,11 +126,11 @@ const Dashboard = (props: fixSection) => {
                         type="text"
                         {...register('fName')} name="fName"
                         placeholder={editable ? "Enter first name" : "Enter first name"}
-                        defaultValue={getValues('fName')}
+                        defaultValue={getValues('fName')} minLength={4} maxLength={20}
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />
                     </div>
-                    {errors.fName && <p style={{ color: 'red' }}>{errors.fName.message}</p>}
+                    {/* {errors.fName && <p style={{ color: 'red' }}>{errors.fName.message}</p>} */}
                   </div>
                   <div className=" w-full">
                     <p className="sm-text mb-[10px]">Last Name</p>
@@ -139,11 +139,11 @@ const Dashboard = (props: fixSection) => {
                         type="text"
                         {...register('lName')} name="lName"
                         placeholder={editable ? "Enter Last name" : "Enter Last name"}
-                        defaultValue={getValues('lName')}
+                        defaultValue={getValues('lName')} minLength={4} maxLength={20}
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />
                     </div>
-                    {errors.lName && <p style={{ color: 'red' }}>{errors.lName.message}</p>}
+                    {/* {errors.lName && <p style={{ color: 'red' }}>{errors.lName.message}</p>} */}
                   </div>
                 </div>
                 <div className="mt-5 flex gap-[30px] md:flex-row flex-col">
@@ -155,7 +155,7 @@ const Dashboard = (props: fixSection) => {
                           type="text"
                           {...register('dName')} name="dName"
                           placeholder={editable ? "Enter display name" : "Enter display name"}
-                          defaultValue={getValues('dName')}
+                          defaultValue={getValues('dName')} minLength={4} maxLength={20}
                           className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
 
                         />
@@ -170,7 +170,7 @@ const Dashboard = (props: fixSection) => {
                         type="text"
                         {...register('uName')} name="uName"
                         placeholder={editable ? "Enter user name" : "Enter user name"}
-                        defaultValue={getValues('uName')}
+                        defaultValue={getValues('uName')} minLength={4} maxLength={20}
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />
                     </div>

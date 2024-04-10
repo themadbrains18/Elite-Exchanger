@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import IconsComponent from './icons';
 import Link from 'next/link';
 import MainResponsivePage from '../profile/responsive/main';
@@ -25,6 +25,8 @@ const SideBar = (props: profileSec) => {
     const router = useRouter()
     const [enableDp, setEnableDP] = useState(false);
     const { status, data: session } = useSession();
+
+    const [duserName, setduserName] = useState('');
 
     let data = [
         {
@@ -59,17 +61,17 @@ const SideBar = (props: profileSec) => {
         },
 
     ]
-    const readFile = (file: any) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
+    // const readFile = (file: any) => {
+    //     return new Promise((resolve, reject) => {
+    //         const reader = new FileReader();
+    //         reader.readAsDataURL(file);
 
-            reader.onload = () => {
-                resolve(reader.result);
-            };
-            reader.onerror = reject;
-        });
-    };
+    //         reader.onload = () => {
+    //             resolve(reader.result);
+    //         };
+    //         reader.onerror = reject;
+    //     });
+    // };
 
     const handleProfiledpChange = async (e: any) => {
 
@@ -166,6 +168,18 @@ const SideBar = (props: profileSec) => {
         // }
 
     };
+
+    useEffect(() => {
+        if (props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.uName !== null) {
+            setduserName(props.profileInfo?.uName[0].toUpperCase() + props.profileInfo?.uName.slice(1));
+        }
+        else {
+            let str = session?.user?.email.split('@');
+            let substring = str[0].substring(0, 3);
+            setduserName(substring + '****@' + str[1])
+        }
+    }, []);
+
     return (
         <>
             <div className='max-w-full lg:max-w-[352px] rounded-10 w-full bg-white dark:bg-d-bg-primary shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px]' >
@@ -222,8 +236,8 @@ const SideBar = (props: profileSec) => {
                                     </label>
                                 </div>
                             </div>
-                            <p className='sec-title text-center'>{props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.fName !== null ? props.profileInfo?.fName + ' ' + props.profileInfo?.lName : session?.user?.name}</p>
-                            <p className='info-14-18 text-center mt-[5px]'>{props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.uName !== null ? props.profileInfo?.uName[0].toUpperCase() + props.profileInfo?.uName.slice(1) : session?.user?.email}</p>
+                            {/* <p className='sec-title text-center'>{props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.fName !== null ? props.profileInfo?.fName + ' ' + props.profileInfo?.lName : session?.user?.name}</p> */}
+                            <p className='info-14-18 text-center mt-[5px]'>{duserName}</p>
 
                         </div>
                     }
