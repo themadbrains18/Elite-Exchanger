@@ -335,7 +335,7 @@ const SecurityCode = (props: propsData) => {
                     <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
                   </div>
 
-                  <p className={`info-10-14 text-end cursor-pointer  !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp() }}>
+                  <p className={`info-10-14 text-end cursor-pointer  !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp(); setReqCount(0); }}>
                     Resend Code
                   </p>
 
