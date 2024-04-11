@@ -213,6 +213,7 @@ const SecurityCode = (props: propsData) => {
 
   const sendOtp = async () => {
     try {
+      setReqCount(0);
       const inputElements = document.querySelectorAll(".input_wrapper input");
       inputElements?.forEach((ele, index) => {
         (inputElements[index] as HTMLInputElement).value = ""
@@ -335,12 +336,12 @@ const SecurityCode = (props: propsData) => {
                     <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
                   </div>
 
-                  <p className={`info-10-14 text-end cursor-pointer  !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp(); setReqCount(0); }}>
+                  <p className={`info-10-14 text-end cursor-pointer  !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp(); }}>
                     Resend Code
                   </p>
 
                 </div>}
-                <button disabled={btnDisabled} className={`my-[30px] lg:mt-[50px] mb-[10px] solid-button w-full hover:bg-primary-800 ${btnDisabled === true ? 'cursor-not-allowed ':''}`} onClick={() => {
+                <button disabled={btnDisabled} className={`my-[30px] lg:mt-[50px] mb-[10px] solid-button w-full hover:bg-primary-800 ${btnDisabled === true ? 'cursor-not-allowed ' : ''}`} onClick={() => {
                   btnDisabled === false ? matchUserOtp() : ''
                 }}>
                   {btnDisabled &&

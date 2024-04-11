@@ -187,7 +187,7 @@ const SecuritySettings = (props: fixSection) => {
         otp: "string",
         step: 1
       };
-      if (status === "authenticated") {
+      if (session !== undefined && session?.user !== undefined) {
         const ciphertext = AES.encrypt(
           JSON.stringify(obj),
           `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`

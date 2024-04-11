@@ -36,7 +36,7 @@ const Whitelist = (props: activeSection) => {
         whitelist: props?.session?.user?.whitelist === true? false:true
       }
 
-      if (status === "authenticated") {
+      if (session !== undefined && session?.user !== undefined) {
         const ciphertext = AES.encrypt(
           JSON.stringify(obj),
           `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`

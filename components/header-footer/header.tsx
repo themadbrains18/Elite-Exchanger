@@ -61,13 +61,12 @@ const Header = (props: propsData) => {
   const wbsocket = useWebSocket();
 
   useEffect(() => {
-    if (session !== undefined && status === "authenticated") {
+    if (session !== undefined && session?.user !== undefined) {
       getUserBasicDetail();
       getUserNotification();
     }
     getTokenList();
     socket();
-
 
   }, [wbsocket]);
 
@@ -107,7 +106,7 @@ const Header = (props: propsData) => {
       },
     }).then(response => response.json());
 
-    if (profileDashboard) {
+    if (profileDashboard && profileDashboard?.data!==null) {
       let data = profileDashboard?.data?.filter((item: any) => {
         return item?.status === 0 || item?.status === false
       })

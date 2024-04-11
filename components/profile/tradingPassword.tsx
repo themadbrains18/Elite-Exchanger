@@ -57,7 +57,7 @@ const TradingPassword = (props: activeSection) => {
   const { mode } = useContext(Context)
   const [enable, setEnable] = useState(1)
   const [formData, setFormData] = useState<UserSubmitForm | null>();
-  const { status } = useSession()
+  const { status, data:session } = useSession()
   const [sendOtpRes, setSendOtpRes] = useState<any>();
   const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
@@ -103,7 +103,7 @@ const TradingPassword = (props: activeSection) => {
 
       }
 
-      if (status === "authenticated") {
+      if (session !== undefined && session?.user !== undefined) {
         const ciphertext = AES.encrypt(
           JSON.stringify(obj),
           `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`

@@ -33,7 +33,7 @@ const AntiPhishingCode = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [enable, setEnable] = useState(1);
   const [formData, setFormData] = useState<UserSubmitForm | null>();
-  const { status } = useSession();
+  const { status, data:session } = useSession();
   const [sendOtpRes, setSendOtpRes] = useState<any>();
 
   let {
@@ -73,7 +73,7 @@ const AntiPhishingCode = (props: activeSection) => {
         otp: "string",
       };
 
-      if (status === "authenticated") {
+      if (session !== undefined && session?.user !== undefined) {
         const ciphertext = AES.encrypt(
           JSON.stringify(obj),
           `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
