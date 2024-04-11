@@ -21,7 +21,6 @@ router
             let formData =  AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
             
             let token = req.headers.authorization;
-            console.log(formData,'======formData');
             
             let data = await postData(`${process.env.NEXT_PUBLIC_APIURL}/address/create`, JSON.parse(formData),token);
             return res.status(data.status).send({data});
