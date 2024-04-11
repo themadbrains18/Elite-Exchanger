@@ -65,7 +65,7 @@ const ConfirmPopup = (props: activeSection) => {
           {props.session?.user?.email !== "null"  && <div className="flex flex-col gap-[15px] lg:gap-5">
            <div className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`} >
          
-                <p className="ml-2 md-text"> Get the code by email at d</p>
+                <p className="ml-2 md-text"> Get the code by email at </p>
             </div>
             <input type="email" placeholder="Enter Email " className="input-cta2 bg-primary-100" disabled={true} value={props.session?.user?.email !== "null" ? props.session?.user?.email : ''} />
           </div>}

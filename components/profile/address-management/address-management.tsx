@@ -21,10 +21,10 @@ const AddressManagement = (props: fixSection) => {
   const [data, setData] = useState([]);
   const [list, setList] = useState([]);
 
-  useEffect(()=>{
-  getAllNetworks()
-  getAllWhitelistAddress()
-  },[])
+  useEffect(() => {
+    getAllNetworks()
+    getAllWhitelistAddress()
+  }, [])
 
 
   const getAllNetworks = async () => {
@@ -47,9 +47,9 @@ const AddressManagement = (props: fixSection) => {
       let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list`, {
         method: "GET",
         headers: {
-            "Authorization": session?.user?.access_token
+          "Authorization": session?.user?.access_token
         },
-    }).then(response => response.json());
+      }).then(response => response.json());
 
       // console.log(address.data,'-----address data');
       setList(address?.data);
@@ -86,7 +86,7 @@ const AddressManagement = (props: fixSection) => {
 
     }
   };
-  
+
 
   return (
     <>
@@ -105,10 +105,10 @@ const AddressManagement = (props: fixSection) => {
         <div className="flex gap-5 justify-between mb-[40px]">
           <p className="sec-title">Address Management</p>
           <div className="flex gap-2 items-center">
-            <button onClick={()=>{
-                setActive(true)
+            <button onClick={() => {
+              setActive(true)
             }} className=" solid-button w-full hover:bg-primary-800">
-            Add address
+              Add address
             </button>
           </div>
         </div>
@@ -119,7 +119,7 @@ const AddressManagement = (props: fixSection) => {
                 <th className="lg:sticky bg-white dark:bg-d-bg-primary py-5">
                   <div className="flex ">
                     <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">
-                    Address label
+                      Address label
                     </p>
                     <Image
                       src="/assets/history/uparrow.svg"
@@ -132,7 +132,7 @@ const AddressManagement = (props: fixSection) => {
                 <th className=" py-5">
                   <div className="flex">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                    Whitelist
+                      Whitelist
                     </p>
                     <Image
                       src="/assets/history/uparrow.svg"
@@ -145,7 +145,7 @@ const AddressManagement = (props: fixSection) => {
                 <th className=" py-5">
                   <div className="flex">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                    Address
+                      Address
                     </p>
                     <Image
                       src="/assets/history/uparrow.svg"
@@ -158,7 +158,7 @@ const AddressManagement = (props: fixSection) => {
                 <th className=" py-5">
                   <div className="flex">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                    Network
+                      Network
                     </p>
                     <Image
                       src="/assets/history/uparrow.svg"
@@ -168,7 +168,7 @@ const AddressManagement = (props: fixSection) => {
                     />
                   </div>
                 </th>
-           
+
               </tr>
             </thead>
             <tbody>
@@ -185,7 +185,7 @@ const AddressManagement = (props: fixSection) => {
                         </div>
                       </td>
                       <td className="">
-                        <p className={`info-14-18 dark:text-white ${item?.status===true?'text-dark-green':'text-red-dark'}`}>{item?.status===true?"Active":"Inactive"}</p>
+                        <p className={`info-14-18 dark:text-white ${item?.status === true ? 'text-dark-green' : 'text-red-dark'}`}>{item?.status === true ? "Active" : "Inactive"}</p>
                       </td>
 
                       <td className="">
@@ -195,20 +195,20 @@ const AddressManagement = (props: fixSection) => {
                       </td>
                       <td className="">
                         <p className="info-14-18 dark:text-white">
-                     {item.network.fullname}
+                          {item.network.fullname}
                         </p>
                       </td>
 
                       <td> <button
-                            onClick={() => updateStatus(item)}
-                            className={`admin-outline-button ${item?.status == false
-                              ? "dark:text-[#66BB6A] text-[#0BB783] !border-[#0bb78380] dark:!border-[#66bb6a1f]"
-                              : "dark:text-[#F44336] text-[#F64E60] !border-[#f64e6080] dark:!border-[#f443361f]"
-                              } !px-[10px] !py-[4px] whitespace-nowrap	`}
-                          >
-                            {item?.status == false ? "Activate " : "Inactivate"}
-                          </button></td>
-                    
+                        onClick={() => updateStatus(item)}
+                        className={`admin-outline-button ${item?.status == false
+                          ? "dark:text-[#66BB6A] text-[#0BB783] !border-[#0bb78380] dark:!border-[#66bb6a1f]"
+                          : "dark:text-[#F44336] text-[#F64E60] !border-[#f64e6080] dark:!border-[#f443361f]"
+                          } !px-[10px] !py-[4px] whitespace-nowrap	`}
+                      >
+                        {item?.status == false ? "Activate " : "Inactivate"}
+                      </button></td>
+
                     </tr>
                   </>
                 );
@@ -218,8 +218,8 @@ const AddressManagement = (props: fixSection) => {
         </div>
       </section>
       {
-active &&
-<AddAddress active={active} setActive={setActive} networks={data} session={session} refreshData={getAllWhitelistAddress}/>
+        active &&
+        <AddAddress active={active} setActive={setActive} networks={data} session={session} refreshData={getAllWhitelistAddress} />
       }
     </>
   );

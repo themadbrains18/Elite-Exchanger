@@ -27,13 +27,13 @@ const Whitelist = (props: activeSection) => {
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
 
-  
+
   const handleSubmit = async () => {
     try {
       // console.log(session);
 
       let obj = {
-        whitelist: props?.session?.user?.whitelist === true? false:true
+        whitelist: props?.session?.user?.whitelist === true ? false : true
       }
 
       if (session !== undefined && session?.user !== undefined) {
@@ -55,14 +55,14 @@ const Whitelist = (props: activeSection) => {
           }
         );
         let res = await userExist.json();
-// console.log(res);
+        // console.log(res);
 
         if (res.status === 200) {
           setActive(true)
           props?.setWhitelist(res?.data?.result?.whitelist)
         } else {
           toast.error(res.data.message);
-       
+
         }
       } else {
         toast.error("Your session is expired. Its auto redirect to login page");
@@ -83,7 +83,7 @@ const Whitelist = (props: activeSection) => {
       <ToastContainer />
       {
         active ?
-          <WhitelistSuccessful setEnable={props?.setEnable} setActive={setActive} setShow={props?.setShow} whitelist={props?.whitelist}/>
+          <WhitelistSuccessful setEnable={props?.setEnable} setActive={setActive} setShow={props?.setShow} whitelist={props?.whitelist} />
           : <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-20 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
             <div className="flex item-center justify-center mb-6">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" fill="none" className="w-[40px]">
@@ -93,11 +93,11 @@ const Whitelist = (props: activeSection) => {
                 </linearGradient><linearGradient id="general-warning_svg__paint1_linear_22059_28207" x1="77" y1="48" x2="19" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#F0B90B"></stop>
                     <stop offset="1" stop-color="#F8D33A"></stop></linearGradient></defs></svg>
             </div>
-            <p className="sec-title text-center mb-5">{props?.whitelist===false?"Enable":"Disable"} Whitelist</p>
+            <p className="sec-title text-center mb-5">{props?.whitelist === false ? "Enable" : "Disable"} Whitelist</p>
 
             <div className="mx-2 mb-6">
 
-              <p className="sm-text text-center">Once this function is {props?.whitelist===false?"enabled":"disabled"}, your account will only  {props?.whitelist===false?"not able":"able"} to withdraw to addresses on your whitelist.</p>
+              <p className="sm-text text-center">Once this function is {props?.whitelist === false ? "enabled" : "disabled"}, your account will only  {props?.whitelist === false ? "not able" : "able"} to withdraw to addresses on your whitelist.</p>
             </div>
             <div className="flex justify-between items-center gap-2">
 
@@ -115,10 +115,10 @@ const Whitelist = (props: activeSection) => {
                 className="solid-button w-full"
                 onClick={() => {
                   handleSubmit()
-                 
+
                 }}
               >
-                {props?.whitelist===false?"Enable":"Disable"}
+                {props?.whitelist === false ? "Enable" : "Disable"}
               </button>
             </div>
           </div>

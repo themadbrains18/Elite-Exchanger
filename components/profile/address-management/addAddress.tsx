@@ -98,9 +98,9 @@ const AddAddress = (props: activeSection) => {
       data.username = username
       data.otp = "string";
       data.step = 1;
-      
 
-      if (status === 'authenticated') {
+
+      if (session !== null && session?.user !== undefined) {
         const ciphertext = AES.encrypt(
           JSON.stringify(data),
           `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
@@ -239,7 +239,7 @@ const AddAddress = (props: activeSection) => {
 
       if (response.data.status === 200) {
         toast.success("whitelist address created successfully");
-       
+
         setTimeout(() => {
           reset();
           props.setActive(false);

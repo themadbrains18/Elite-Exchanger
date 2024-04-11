@@ -46,9 +46,7 @@ const schema2 = yup.object().shape({
   }),
   new_password: yup
     .string()
-    .min(6)
-    .max(6)
-    .required("New password is required"),
+    .required("This field is required").min(8).max(32),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref("new_password")], "Passwords must match"),
@@ -57,7 +55,7 @@ const TradingPassword = (props: activeSection) => {
   const { mode } = useContext(Context)
   const [enable, setEnable] = useState(1)
   const [formData, setFormData] = useState<UserSubmitForm | null>();
-  const { status, data:session } = useSession()
+  const { status, data: session } = useSession()
   const [sendOtpRes, setSendOtpRes] = useState<any>();
   const [showOld, setShowOld] = useState(false);
   const [showNew, setShowNew] = useState(false);
@@ -145,8 +143,6 @@ const TradingPassword = (props: activeSection) => {
       let username = props.session?.user.email !== 'null' ? props.session?.user.email : props.session?.user?.number
 
       let obj;
-
-
       if ((props?.session?.user?.tradingPassword !== null && props.tradePassword === true)) {
         obj = {
           username: username,
@@ -269,7 +265,19 @@ const TradingPassword = (props: activeSection) => {
     else {
       setValue('exist_password', true);
     }
-  }, []);
+
+    setTimeout(() => {
+      if (errors.old_password) {
+        clearErrors('old_password');
+      }
+      if (errors.new_password) {
+        clearErrors('new_password');
+      }
+      if (errors.confirmPassword) {
+        clearErrors('confirmPassword');
+      }
+    }, 3000);
+  }, [errors]);
 
   const closePopup = () => {
     props?.setShow(false);
@@ -333,6 +341,9 @@ const TradingPassword = (props: activeSection) => {
                       <input
                         type={`${showOld === true ? "text" : "password"}`}
                         {...register("old_password")}
+                        name='old_password'
+                        minLength={8}
+                        maxLength={32}
                         placeholder="Enter Old password"
                         className="sm-text input-cta2 w-full"
                       />
@@ -361,6 +372,8 @@ const TradingPassword = (props: activeSection) => {
                     <input
                       type={`${showNew === true ? "text" : "password"}`}
                       {...register("new_password")}
+                      name='new_password'
+                      maxLength={32}
                       placeholder="Enter new password"
                       className="sm-text input-cta2 w-full"
                     />
@@ -387,18 +400,21 @@ const TradingPassword = (props: activeSection) => {
                   <p className="sm-text mb-[10px]">Re-enter Trading password</p>
                   <div className='relative'>
                     <input
-                      type={`${showConfirm === true ? "text" : "password"}`}
+                      type={`${showNew === true ? "text" : "password"}`}
                       {...register("confirmPassword")}
+                      name='confirmPassword'
+                      minLength={8}
+                      maxLength={32}
                       placeholder="Re-Enter password"
                       className="sm-text input-cta2 w-full"
                     />
                     <Image
-                      src={`/assets/register/${showConfirm === true ? "show.svg" : "hide.svg"}`}
+                      src={`/assets/register/${showNew === true ? "show.svg" : "hide.svg"}`}
                       alt="eyeicon"
                       width={24}
                       height={24}
                       onClick={() => {
-                        setShowConfirm(!showConfirm);
+                        setShowNew(!showNew);
                       }}
                       className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                     />

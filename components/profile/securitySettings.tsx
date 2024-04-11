@@ -825,7 +825,7 @@ const SecuritySettings = (props: fixSection) => {
       )}
       {
         successModal &&
-        <ResetSuccessful />
+        <ResetSuccessful setSuccessModal={setSuccessModal} />
       }
       {
         confirmation &&

@@ -250,7 +250,7 @@ const GoogleAuth = (props: activeSection) => {
 
   return (
     <div ref={wrapperRef}>
-      <div className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
+      <div className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[600px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
         <div className="flex items-center justify-between">
           <p className="sec-title" style={{ fontSize: '18px' }}>Set Up Google Two-Factor Authentication</p>
           <svg
@@ -282,41 +282,41 @@ const GoogleAuth = (props: activeSection) => {
         <div className="flex flex-col mt-[25px] mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative ">
           <label className="sm-text">A verification code will be sent to {props?.session?.user?.email.split("@")[0].substring(0, 3)}***@{props?.session?.user?.email.split("@")[1]}</label>
           <div>
-            <div className="flex gap-[10px] justify-between items-center input_wrapper2 relative">
+            <div className="flex gap-[15px] justify-between items-center input_wrapper2 relative">
               <input
                 type="text"
                 autoComplete="off"
-                className={`block px-2 font-noto md:px-5  w-40 md:w-[46px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none `}
+                className={`block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none `}
                 name="code1"
               />
               <input
                 type="text"
                 autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[46px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary  `}
+                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary  `}
                 name="code2"
               />
               <input
                 type="text"
                 autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[46px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary `}
+                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary `}
                 name="code3"
               />
               <input
                 type="text"
                 autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[46px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid   text-center  rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary  `}
+                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid   text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary  `}
                 name="code4"
               />
               <input
                 type="text"
                 autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[46px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary`}
+                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary`}
                 name="code5"
               />
               <input
                 type="text"
                 autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[46px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary `}
+                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary `}
                 name="code6"
               />
               {/* {errors.otp && <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.otp.message}</p>} */}

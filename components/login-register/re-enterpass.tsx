@@ -249,7 +249,7 @@ const ReEnterpass = (props: propsData) => {
       }
        {
         successModal &&
-        <ResetSuccessful />
+        <ResetSuccessful setSuccessModal={setSuccessModal}/>
       }
     </>
   )

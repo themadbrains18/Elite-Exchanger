@@ -26,8 +26,8 @@ const EmailChangeAlert = (props: changeProps) => {
             </div>
             <p className='text-[16px] md:text-[20px] dark:text-white leading-4 md:leading-5 text-center mb-2'>Are You Sure You Want to Change Your Email Address?</p>
             <ul className='px-[6px] list-disc list-inside mt-6'>
-                <li className='text-[14px] leading-[22px] text-d-body-primary'>Withdrawals and P2P transactions will be disabled for 24 hours after changing your email verification to ensure the safety of your assets.</li>
-                <li className='text-[14px] leading-[22px] text-d-body-primary'>The old email address cannot be used to re-register for 30 days after updating it.</li>
+                <li className='text-[14px] leading-[22px] text-d-body-primary list-outside'>Withdrawals and P2P transactions will be disabled for 24 hours after changing your email verification to ensure the safety of your assets.</li>
+                <li className='text-[14px] leading-[22px] text-d-body-primary list-outside'>The old email address cannot be used to re-register for 30 days after updating it.</li>
             </ul>
             <div className="flex items-center gap-10 mt-6">
                 <button
