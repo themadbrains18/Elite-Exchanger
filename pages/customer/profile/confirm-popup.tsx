@@ -42,7 +42,7 @@ const ConfirmPopup = (props: activeSection) => {
         <div className=" lg:p-0 p-5  max-w-[calc(100%-30px)] md:mx-0 mx-auto md:mb-0 mb-[10px]  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
           <div className="flex flex-col gap-[15px] lg:gap-5 mb-[30px]">
             <div className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`} >
-              <input id={`custom-radio`} type="radio" value="" name="colored-radio" disabled={props.session?.user?.number === 'null' ? true : false} checked={props.session?.user?.number === 'null' ? false : true} className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+              {/* <input id={`custom-radio`} type="radio" value="" name="colored-radio" disabled={props.session?.user?.number === 'null' ? true : false} checked={props.session?.user?.number === 'null' ? false : true} className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
               <label htmlFor={`custom-radio`} className="
                 custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
                 cursor-pointer
@@ -65,9 +65,10 @@ const ConfirmPopup = (props: activeSection) => {
                 before:absolute
                 before:z-[1]
                 
-                ">
-                <p className="ml-2 md-text">  Get the code by text message</p>
-              </label>
+                "> 
+                
+              </label>*/}
+              <p className="ml-2 md-text">  Get the code by text message</p>
             </div>
             <input type="email" placeholder="Enter Number " className="input-cta2 bg-primary-100" disabled={true} value={props.session?.user?.number !== "null" ? props.session?.user?.number : ' '} />
           </div>

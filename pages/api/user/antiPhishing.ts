@@ -10,7 +10,7 @@ const router = createRouter<NextApiRequest, NextApiResponse>();
 
 export const config = {
     api: {
-      bodyParser: true,
+        bodyParser: true,
     },
 }
 
@@ -18,16 +18,16 @@ export const config = {
 router
     // Use express middleware in next-connect with expressWrapper function
     .put(async (req, res) => {
-        try {         
+        try {
 
             const decodedStr = decodeURIComponent(req.body);
-            
-            let formData =  AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
+
+            let formData = AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
             let token = req.headers.authorization;
-            
-            let data = await putData(`${process.env.NEXT_PUBLIC_APIURL}/user/anti-phishing`, JSON.parse(formData),token);
-             return res.status(200).send({status:200, data}  );
-            
+
+            let data = await putData(`${process.env.NEXT_PUBLIC_APIURL}/user/anti-phishing`, JSON.parse(formData), token);
+            return res.status(200).send({ data });
+
         } catch (error: any) {
             throw new Error(error.message)
         }

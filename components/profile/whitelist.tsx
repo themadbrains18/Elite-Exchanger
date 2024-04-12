@@ -97,7 +97,7 @@ const Whitelist = (props: activeSection) => {
 
             <div className="mx-2 mb-6">
 
-              <p className="sm-text text-center">Once this function is {props?.whitelist === false ? "enabled" : "disabled"}, your account will only  {props?.whitelist === false ? "not able" : "able"} to withdraw to addresses on your whitelist.</p>
+              <p className="sm-text text-center">Once this function is {props?.whitelist === false ? "enabled" : "disabled"}, your account will   {props?.whitelist === false ? "only able" : "not able"} to withdraw to addresses on your whitelist.</p>
             </div>
             <div className="flex justify-between items-center gap-2">
 
