@@ -698,7 +698,7 @@ const SecuritySettings = (props: fixSection) => {
                           width={24}
                           height={24}
                           onClick={() => {
-                            setShowPswd(!showconfirm);
+                            setShowPswd(!showpswd);
                           }}
                           className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                         />

@@ -48,7 +48,7 @@ const schema2 = yup.object().shape({
     .string()
     .required("This field is required").min(8).max(32) .notOneOf([yup.ref('old_password')], 'New password must be different from the old password'),
   confirmPassword: yup
-    .string()
+    .string().required("This field is required")
     .oneOf([yup.ref("new_password")], "Passwords must match"),
 });
 const TradingPassword = (props: activeSection) => {
@@ -254,14 +254,14 @@ const TradingPassword = (props: activeSection) => {
         }
       ).then((response) => response.json());
       if (response.data.result) {
-        toast.success(response.data.message);
+        toast.success(response.data.message,{autoClose:2000});
         setTimeout(() => {
           setEnable(1);
           props.setEnable(0);
           props.setTradePassword(true);
           props.setShow(false);
           setDisabled(false);
-        }, 1000);
+        }, 3000);
       } else {
         toast.error(response.data.message,{autoClose:2000});
         setTimeout(()=>{

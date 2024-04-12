@@ -24,10 +24,10 @@ type UserSubmitForm = {
 
 const schema2 = yup.object().shape({
   antiphishing: yup
-    .string()
+    .string().required("Antiphishing code is required")
     .min(4)
     .max(20)
-    .required("Antiphishing is required"),
+    .matches(/^([a-zA-Z0-9_/_])+$/, 'Please enter valid code(letters, number)').typeError('Please Enter 4-20 character'),
 });
 const AntiPhishingCode = (props: activeSection) => {
   const { mode } = useContext(Context);
@@ -49,6 +49,12 @@ const AntiPhishingCode = (props: activeSection) => {
   } = useForm({
     resolver: yupResolver(schema2),
   });
+
+  useEffect(()=>{
+    setTimeout(() => {
+      clearErrors('antiphishing');
+    }, 2500);
+  },[errors]);
 
   const onHandleSubmit = async (data: any) => {
     try {
@@ -93,14 +99,16 @@ const AntiPhishingCode = (props: activeSection) => {
         );
         let res = await userExist.json();
 
-        if (res.status === 200) {
+        if (res?.data?.otp !== undefined) {
           toast.success(res?.data?.message);
-
           setTimeout(() => {
             setEnable(2);
             setSendOtpRes(res?.data?.otp);
             props?.setShow(true);
           }, 1000);
+        }
+        else{
+          toast.error(res?.data?.message);
         }
       } else {
         toast.error("Your session is expired. Its auto redirect to login page");
@@ -145,13 +153,13 @@ const AntiPhishingCode = (props: activeSection) => {
         }
       ).then((response) => response.json());
       if (response.data.result) {
-        toast.success(response.data.message);
+        toast.success(response.data.message,{autoClose:2000});
         props.setAntiFishingCode(true);
         setTimeout(() => {
           setEnable(1);
           props.setEnable(0);
           props.setShow(false);
-        }, 1000);
+        }, 3000);
       } else {
         toast.error(response.data.message);
       }
@@ -215,6 +223,7 @@ const AntiPhishingCode = (props: activeSection) => {
                     <input
                       type="text"
                       {...register("antiphishing")}
+                      maxLength={20}
                       placeholder="Anti-Phishing Code"
                       className="sm-text input-cta2 w-full"
                     />
@@ -226,7 +235,7 @@ const AntiPhishingCode = (props: activeSection) => {
                     ${errors.antiphishing ? "text-red-dark" : "text-[#b7bdc6]"} text-[16px] mt-[5px]`
                   }
                 >
-                  Please enter 4-20 characters.
+                  {errors?.antiphishing?.message}
                 </p>
               </div>
             </div>

@@ -140,7 +140,6 @@ const Verification = (props: activeSection) => {
       props.finalOtpVerification(fillOtp);
       setOtp('');
       setTimeout(() => {
-
         const inputElements = document.querySelectorAll(".input_wrapper input");
         inputElements.forEach((ele, index) => {
           (inputElements[index] as HTMLInputElement).value = ""
