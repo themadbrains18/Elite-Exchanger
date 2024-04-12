@@ -162,7 +162,7 @@ const TradingPassword = (props: activeSection) => {
         "pmObject": pmObject
       }
 
-      console.log(obj,'-----last submit');
+      // console.log(obj,'-----last submit');
       
 
       const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();

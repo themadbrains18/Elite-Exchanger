@@ -303,7 +303,6 @@ const TradingPassword = (props: activeSection) => {
   clickOutSidePopupClose({ wrapperRef, closePopup });
 
 
-  console.log(enable,"===enable");
   
 
   return (
