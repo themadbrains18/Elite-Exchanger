@@ -1,7 +1,8 @@
+import Context from '@/components/contexts/context';
 import clickOutSidePopupClose from '@/components/snippets/clickOutSidePopupClose';
 import { AES } from 'crypto-js';
 import { signOut, useSession } from 'next-auth/react';
-import React, { useRef, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -17,6 +18,7 @@ interface activeSection {
 const ConfirmPopup = (props: activeSection) => {
   const { status } = useSession()
   const [btnDisabled, setBtnDisabled] = useState(false);
+  const {mode} = useContext(Context)
 
   const sendOtp = async () => {
     try {
@@ -54,6 +56,36 @@ const ConfirmPopup = (props: activeSection) => {
       {/* <ToastContainer position="top-right" /> */}
 
       <div ref={wrapperRef} className='fixed top-[50%] z-[9] left-[50%] translate-x-[-50%] translate-y-[-50%] lg:bg-white lg:dark:bg-d-bg-primary lg:p-40 max-w-[557px] w-full rounded-10'>
+      <div className="flex items-center justify-end ">
+        
+            <svg
+              onClick={() => {
+                props?.setShow(false);
+                props.setEnable(0);
+                //   props.setActive(0);
+              }}
+              enableBackground="new 0 0 60.963 60.842"
+              version="1.1"
+              id="Layer_1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlnsXlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 60.963 60.842"
+              xmlSpace="preserve"
+              className="max-w-[18px] cursor-pointer w-full"
+            >
+              <path
+                fill={mode === "dark" ? "#fff" : "#9295A6"}
+                d="M59.595,52.861L37.094,30.359L59.473,7.98c1.825-1.826,1.825-4.786,0-6.611
+                            c-1.826-1.825-4.785-1.825-6.611,0L30.483,23.748L8.105,1.369c-1.826-1.825-4.785-1.825-6.611,0c-1.826,1.826-1.826,4.786,0,6.611
+                            l22.378,22.379L1.369,52.861c-1.826,1.826-1.826,4.785,0,6.611c0.913,0.913,2.109,1.369,3.306,1.369s2.393-0.456,3.306-1.369
+                            l22.502-22.502l22.501,22.502c0.913,0.913,2.109,1.369,3.306,1.369s2.393-0.456,3.306-1.369
+                            C61.42,57.647,61.42,54.687,59.595,52.861z"
+              />
+            </svg>
+          </div>
+       
         <div className=" lg:p-0 p-5  max-w-[calc(100%-30px)] md:mx-0 mx-auto md:mb-0 mb-[10px]  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
         {props.session?.user?.number !== "null"  &&   <div className="flex flex-col gap-[15px] lg:gap-5 mb-[30px]">
            <div className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`} >
