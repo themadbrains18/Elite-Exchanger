@@ -7,6 +7,7 @@ import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import AddAddress from "./addAddress";
+import { Tooltip } from "react-tooltip";
 
 interface fixSection {
   showActivity?: boolean;
@@ -172,7 +173,7 @@ const AddressManagement = (props: fixSection) => {
               </tr>
             </thead>
             <tbody>
-              {list?.map((item: any, index: any) => {
+              {list.length > 0 && list?.map((item: any, index: any) => {
                 return (
                   <>
                     <tr>
@@ -189,9 +190,13 @@ const AddressManagement = (props: fixSection) => {
                       </td>
 
                       <td className="">
-                        <p className="info-14-18 dark:text-white">
-                          {item.address}
+                        <p id="my-anchor-element" className="info-14-18 dark:text-white cursor-pointer">
+                          {item?.address.slice(0, 8)}${'*'.repeat(5)}${item?.address.slice(-8)}
                         </p>
+                        <Tooltip
+                          anchorSelect="#my-anchor-element"
+                          content={item?.address}
+                        />
                       </td>
                       <td className="">
                         <p className="info-14-18 dark:text-white">
