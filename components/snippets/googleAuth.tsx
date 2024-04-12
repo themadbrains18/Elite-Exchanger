@@ -250,6 +250,8 @@ const GoogleAuth = (props: activeSection) => {
 
   return (
     <div ref={wrapperRef}>
+       {
+        !active ?
       <div className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[600px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${popup===false  ?"opacity-100":"opacity-0"}
       }`}>
         <div className="flex items-center justify-between">
@@ -369,10 +371,8 @@ const GoogleAuth = (props: activeSection) => {
             Didn't receive the code?
           </p>
         </div>
-       
     
-      {
-        active &&
+     :
         <SecurityVerification setShow={props?.setShow} setEnable={props.setEnable} setActive={setActive} session={props?.session} setGoogleAuth={props.setGoogleAuth} sendOtp={sendOtp} />
       }
       {
