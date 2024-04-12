@@ -84,21 +84,18 @@ const TradingPassword = (props: activeSection) => {
 
   const onHandleSubmit = async (data: any) => {
     try {
-      setDisabled(true);
+      
       let username =
         props.session?.user.email !== "null"
           ? props.session?.user.email
           : props.session?.user?.number;
       let obj;
-
-
       if ((props?.session?.user?.tradingPassword !== null && props.tradePassword === false)) {
         if (data?.old_password === data?.new_password) {
           setError("new_password", {
             type: "custom",
             message: `New password must be different from the old password`,
           });
-          setDisabled(false);
           return;
         }
         obj = {
@@ -119,6 +116,7 @@ const TradingPassword = (props: activeSection) => {
 
       }
 
+      setDisabled(true);
       if (session !== undefined && session?.user !== undefined) {
         const ciphertext = AES.encrypt(
           JSON.stringify(obj),
