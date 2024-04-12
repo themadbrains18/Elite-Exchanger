@@ -677,7 +677,7 @@ const KycAuth = (props: fixSection) => {
         >
           <div className="flex items-center gap-5 justify-between">
             <p data-testid="kyc-auth" className="sec-title lg:px-0 px-20 pt-20">KYC Verification </p>
-            <div className="py-[13px] px-[15px] border dark:border-opacity-[15%]  border-grey-v-1 items-center rounded-5 hidden md:flex gap-[10px]">
+            {/* <div className="py-[13px] px-[15px] border dark:border-opacity-[15%]  border-grey-v-1 items-center rounded-5 hidden md:flex gap-[10px]">
               <Image
                 src="/assets/profile/edit.svg"
                 width={24}
@@ -685,7 +685,7 @@ const KycAuth = (props: fixSection) => {
                 alt="edit"
               />
               <p className="nav-text-sm">Edit</p>
-            </div>
+            </div> */}
           </div>
           <div className="py-[30px] md:py-[50px] lg:px-0 px-20">
             <div className="relative">
