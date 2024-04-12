@@ -33,7 +33,7 @@ const GoogleAuth = (props: activeSection) => {
   const [reqCount, setReqCount] = useState(0);
   const [isOtp, setIsOtp] = useState(false);
   const [showTime, setShowTime] = useState(false);
-  
+
   useEffect(() => {
     // QRCode.toDataURL(secret.otpauth_url, (err, image_data: any) => {
     //   setImage(image_data);
@@ -277,98 +277,100 @@ const GoogleAuth = (props: activeSection) => {
                             l22.378,22.379L1.369,52.861c-1.826,1.826-1.826,4.785,0,6.611c0.913,0.913,2.109,1.369,3.306,1.369s2.393-0.456,3.306-1.369
                             l22.502-22.502l22.501,22.502c0.913,0.913,2.109,1.369,3.306,1.369s2.393-0.456,3.306-1.369
                             C61.42,57.647,61.42,54.687,59.595,52.861z"
-            />
-          </svg>
-        </div>
-        <div className="flex flex-col mt-[25px] mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative ">
-          <label className="sm-text">A verification code will be sent to {props?.session?.user?.email.split("@")[0].substring(0, 3)}***@{props?.session?.user?.email.split("@")[1]}</label>
-          <div>
-            <div className="flex gap-[15px] justify-between items-center input_wrapper2 relative">
-              <input
-                type="text"
-                autoComplete="off"
-                className={`block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none `}
-                name="code1"
               />
-              <input
-                type="text"
-                autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary  `}
-                name="code2"
-              />
-              <input
-                type="text"
-                autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary `}
-                name="code3"
-              />
-              <input
-                type="text"
-                autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid   text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary  `}
-                name="code4"
-              />
-              <input
-                type="text"
-                autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary`}
-                name="code5"
-              />
-              <input
-                type="text"
-                autoComplete="off"
-                className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary `}
-                name="code6"
-              />
-              {/* {errors.otp && <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.otp.message}</p>} */}
-            </div>
-            <p className={` text-center lg:mt-[20px] md-text ${otpMessage===''?'hidden':''}`} style={{ color: 'red' }}>{otpMessage}</p>
-          </div>
-          <div className={`flex  ${showTime === true ? '' : 'hidden'}`}>
-            <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>
-            <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
-          </div>
-          {isOtp === false &&
-            <div className="text-end">
-              <button
-                className="info-10-14 text-end cursor-pointer !text-primary"
-                onClick={() => {sendOtp(); }}
-                disabled={isOtp}
-              >
-                Send SMS
-              </button>
-            </div>
-          }
-          {enable === false &&
-            <div className="text-end">
-              <button
-                className="info-10-14 text-end cursor-pointer hover:text-primary"
-                onClick={() => sendOtp()}
-                disabled={enable}
-              >
-                Resend SMS
-              </button>
-            </div>
-          }
-
-          {/* <p className={`info-14-18 !text-primary-700 text-end cursor-pointer ${enable === true ? 'hidden' : ''}`} onClick={() => sendOtp()}>Resend SMS</p> */}
-        </div>
-        <div className="flex gap-[20px]">
-          <button className="solid-button2 w-full " onClick={() => {
-            props.setShow(false);
-            props?.setEnable(0)
-          }}>Cancel</button>
-          <button disabled={btnDisabled} className={`solid-button px-[51px] w-full ${btnDisabled === true ? 'cursor-not-allowed' : ""}`} onClick={() => { btnDisabled === false ? confirmUserOtp() : '' }}>{btnDisabled &&
-            <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
-              <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />
             </svg>
-          }Confirm</button>
+          </div>
+          <div className="flex flex-col mt-[25px] mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative ">
+            <label className="sm-text">A verification code will be sent to {props?.session?.user?.email.split("@")[0].substring(0, 3)}***@{props?.session?.user?.email.split("@")[1]}</label>
+            <div>
+              <div className="flex gap-[15px] justify-between items-center input_wrapper2 relative">
+                <input
+                  type="text"
+                  autoComplete="off"
+                  className={`block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none `}
+                  name="code1"
+                />
+                <input
+                  type="text"
+                  autoComplete="off"
+                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary  `}
+                  name="code2"
+                />
+                <input
+                  type="text"
+                  autoComplete="off"
+                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary `}
+                  name="code3"
+                />
+                <input
+                  type="text"
+                  autoComplete="off"
+                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid   text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary  `}
+                  name="code4"
+                />
+                <input
+                  type="text"
+                  autoComplete="off"
+                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary`}
+                  name="code5"
+                />
+                <input
+                  type="text"
+                  autoComplete="off"
+                  className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary `}
+                  name="code6"
+                />
+                {/* {errors.otp && <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.otp.message}</p>} */}
+              </div>
+              <p className={` text-center lg:mt-[20px] md-text ${otpMessage === '' ? 'hidden' : ''}`} style={{ color: 'red' }}>{otpMessage}</p>
+            </div>
+            <div className={`flex  ${showTime === true ? '' : 'hidden'}`}>
+              <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>
+              <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
+            </div>
+            {isOtp === false &&
+              <div className="text-end">
+                <button
+                  className="info-10-14 text-end cursor-pointer !text-primary"
+                  onClick={() => { sendOtp(); }}
+                  disabled={isOtp}
+                >
+                  Send SMS
+                </button>
+              </div>
+            }
+            {enable === false &&
+              <div className="text-end">
+                <button
+                  className="info-10-14 text-end cursor-pointer hover:text-primary"
+                  onClick={() => sendOtp()}
+                  disabled={enable}
+                >
+                  Resend SMS
+                </button>
+              </div>
+            }
+
+            {/* <p className={`info-14-18 !text-primary-700 text-end cursor-pointer ${enable === true ? 'hidden' : ''}`} onClick={() => sendOtp()}>Resend SMS</p> */}
+          </div>
+          <div className="flex gap-[20px]">
+            <button className="solid-button2 w-full " onClick={() => {
+              props.setShow(false);
+              props?.setEnable(0)
+            }}>Cancel</button>
+            <button disabled={btnDisabled} className={`solid-button px-[51px] w-full ${btnDisabled === true ? 'cursor-not-allowed' : ""}`} onClick={() => { btnDisabled === false ? confirmUserOtp() : '' }}>{btnDisabled &&
+              <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
+                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />
+              </svg>
+            }Confirm</button>
+          </div>
+          <p className={`info-10-14 text-start cursor-pointer  inline-block !text-primary mt-[10px]`} onClick={() => { setPopup(true);  }}>
+            Didn't receive the code?
+          </p>
         </div>
-        <p className={`info-10-14 text-start cursor-pointer  inline-block !text-primary mt-[10px]`} onClick={() => { setPopup(true); }}>
-          Didn't receive the code?
-        </p>
-      </div>
+       
+    
       {
         active &&
         <SecurityVerification setShow={props?.setShow} setEnable={props.setEnable} setActive={setActive} session={props?.session} setGoogleAuth={props.setGoogleAuth} sendOtp={sendOtp} />
