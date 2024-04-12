@@ -32,7 +32,7 @@ const Verification = (props: activeSection) => {
 
   useEffect(() => {
     orderTimeCalculation();
-    const inputElements = document.querySelectorAll(".input_wrapper input");
+    const inputElements = document.querySelectorAll(".input_wrapper3 input");
 
     inputElements?.forEach((ele, index) => {
       ele.addEventListener("keydown", (e: any) => {
@@ -72,7 +72,7 @@ const Verification = (props: activeSection) => {
 
   const orderTimeCalculation = async () => {
     setEnable(true);
-    
+
     let deadline = new Date(props?.sendOtpRes?.expire);
 
     deadline.setMinutes(deadline.getMinutes());
@@ -89,7 +89,7 @@ const Verification = (props: activeSection) => {
     else if (currentTime > deadline) {
       setEnable(false);
       setDisabled(false);
-      const inputElements = document.querySelectorAll(".input_wrapper input");
+      const inputElements = document.querySelectorAll(".input_wrapper3 input");
       inputElements?.forEach((ele, index) => {
         (inputElements[index] as HTMLInputElement).value = ""
       });
@@ -111,7 +111,7 @@ const Verification = (props: activeSection) => {
       if (Ref.current) clearInterval(Ref.current);
       setEnable(false);
       setDisabled(false);
-      const inputElements = document.querySelectorAll(".input_wrapper input");
+      const inputElements = document.querySelectorAll(".input_wrapper3 input");
       inputElements?.forEach((ele, index) => {
         (inputElements[index] as HTMLInputElement).value = ""
       });
@@ -206,43 +206,42 @@ const Verification = (props: activeSection) => {
                   : "Enter SMS Verification Code"}
               </label>
               <div>
-                <div className="flex gap-10 justify-center items-center input_wrapper">
+                <div className="flex gap-10 justify-center items-center input_wrapper3">
                   <input
                     type="text"
                     autoComplete="off"
-                    className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                    className={`block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none `}
                     name="code1"
                   />
                   <input
                     type="text"
                     autoComplete="off"
-                    className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                    className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary  `}
                     name="code2"
                   />
                   <input
                     type="text"
                     autoComplete="off"
-                    className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                    className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary `}
                     name="code3"
                   />
                   <input
                     type="text"
                     autoComplete="off"
-                    className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                    className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid   text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary  `}
                     name="code4"
                   />
                   <input
                     type="text"
                     autoComplete="off"
-                    className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                    className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary`}
                     name="code5"
                   />
                   <input
                     type="text"
                     autoComplete="off"
-                    className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                    className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary `}
                     name="code6"
-
                   />
                 </div>
                 <p className="mb-5 text-center lg:mt-[20px] md-text" style={{ color: 'red' }}>{otpMessage}</p>
@@ -252,7 +251,7 @@ const Verification = (props: activeSection) => {
                 <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
               </div>
 
-              <p className={`info-10-14 text-end cursor-pointer !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => {props?.snedOtpToUser()}}>
+              <p className={`info-10-14 text-end cursor-pointer !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => { props?.snedOtpToUser() }}>
                 Resend Code
               </p>
             </div>}
