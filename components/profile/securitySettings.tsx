@@ -648,10 +648,10 @@ const SecuritySettings = (props: fixSection) => {
                       <div className="flex justify-between">
                         <p className="sm-text mb-[10px]">New Password</p>
                         <div className="relative text-end">
-                          <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
+                          <button type="button" className="!text-primary text-[14px]" onClick={() => generatePassword()}>Generate Password</button>
                         </div>
                       </div>
-                      <div className='relative input-cta2 flex justify-between gap-3 items-center' onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}}>
+                      <div className='relative input-cta2 flex justify-between gap-3 items-center mb-[10px]' onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}}>
                         <input
                           type={`${showpswd === true ? "text" : "password"}`}
                           {...register("new_password")}
