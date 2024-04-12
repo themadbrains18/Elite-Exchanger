@@ -16,8 +16,8 @@ import clickOutSidePopupClose from "../../snippets/clickOutSidePopupClose";
 
 const schema = yup.object().shape({
   networkId: yup.string().optional().default(""),
-  label: yup.string().required("This field is required"),
-  address: yup.string().required("This field is required"),
+  label: yup.string().required("This field is required").max(20),
+  address: yup.string().required("This field is required").max(50),
 });
 
 interface activeSection {
@@ -85,6 +85,7 @@ const AddAddress = (props: activeSection) => {
           type: "custom",
           message: "Please select network",
         });
+        return;
       } else {
         data.networkId = selectedNetwork;
         clearErrors("networkId");
@@ -98,7 +99,6 @@ const AddAddress = (props: activeSection) => {
       data.username = username
       data.otp = "string";
       data.step = 1;
-
 
       if (session !== null && session?.user !== undefined) {
         const ciphertext = AES.encrypt(
@@ -128,10 +128,10 @@ const AddAddress = (props: activeSection) => {
           }, 1000);
         }
         else {
-          setDisable(false);
-          toast.error(response?.data?.data);
-          if (response?.data?.data === 'Unuthorized User') {
-          }
+          toast.error(response?.data?.data, { autoClose: 2000 });
+          setTimeout(() => {
+            setDisable(false);
+          }, 3000);
         }
       }
       else {
@@ -140,7 +140,6 @@ const AddAddress = (props: activeSection) => {
         setTimeout(() => {
           signOut();
         }, 4000);
-
       }
 
     } catch (error) {
@@ -183,7 +182,6 @@ const AddAddress = (props: activeSection) => {
         ).then((response) => response.json());
 
         if (response?.data?.status === 200) {
-
           toast.success(response?.data?.data?.message);
           setSendOtpRes(response?.data?.data?.otp);
           setTimeout(() => {
@@ -262,7 +260,7 @@ const AddAddress = (props: activeSection) => {
 
   return (
     <>
-      <ToastContainer position="top-right" />
+      <ToastContainer position="top-right" limit={1} />
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80`}
       ></div>
@@ -304,6 +302,7 @@ const AddAddress = (props: activeSection) => {
                     type="text"
                     {...register("label")}
                     name="label"
+                    maxLength={20}
                     placeholder="Enter Address Label"
                     className="outline-none max-w-[355px] sm-text w-full bg-[transparent]"
                   />
@@ -338,6 +337,7 @@ const AddAddress = (props: activeSection) => {
                     type="text"
                     {...register("address")}
                     name="address"
+                    maxLength={50}
                     placeholder="Enter Address"
                     className="outline-none max-w-[355px] sm-text w-full bg-[transparent]"
                   />
@@ -358,7 +358,7 @@ const AddAddress = (props: activeSection) => {
             </div>
             <div className="flex justify-between gap-3">
               <button type="button" className="solid-button2 w-full" onClick={() => { props?.setActive(false) }}>Cancel</button>
-              <button type="submit" disabled={disable} className={`solid-button w-full flex items-center justify-center ${disable === true ? 'opacity-50 cursor-not-allowed' : ''}`}>
+              <button disabled={disable} className={`solid-button w-full flex items-center justify-center ${disable === true ? 'opacity-50 cursor-not-allowed' : ''}`}>
                 {disable === true &&
                   <svg className="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
                     viewBox="0 0 24 24">
@@ -368,10 +368,7 @@ const AddAddress = (props: activeSection) => {
                     </path>
                   </svg>
                 }
-                {disable === false &&
-                  <>Save</>
-                }
-
+                Save
               </button>
             </div>
           </form>
