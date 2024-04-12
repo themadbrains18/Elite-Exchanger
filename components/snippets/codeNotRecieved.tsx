@@ -37,7 +37,7 @@ const CodeNotRecieved = (props: changeProps) => {
           <svg
             onClick={() => {
               // props?.setShow &&   props?.setShow(true);
-              props.setEnable(0);
+              props.setEnable(false);
             }}
             enableBackground="new 0 0 60.963 60.842"
             version="1.1"
@@ -120,7 +120,7 @@ const CodeNotRecieved = (props: changeProps) => {
             className="solid-button w-full"
             onClick={() => {
               props?.setShow &&    props?.setShow(true);
-              props.setEnable(0);
+              props.setEnable(false);
               
             }}
           >

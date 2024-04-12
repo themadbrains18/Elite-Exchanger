@@ -131,7 +131,7 @@ const BothVerificationOptions = (props: activeSection) => {
         </form>
       </div>
       {
-      popup &&
+      popup === true &&
       <CodeNotRecieved setEnable={setPopup}/>
     }
     </>

@@ -359,7 +359,7 @@ const SecurityCode = (props: propsData) => {
         </div>
       </section>
       {
-        popup &&
+        popup === true &&
         <CodeNotRecieved setEnable={setPopup} />
       }
 

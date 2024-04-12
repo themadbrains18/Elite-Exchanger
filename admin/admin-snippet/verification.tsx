@@ -224,7 +224,7 @@ const Verification = (props: activeSection) => {
       </div>
 
       {
-      popup &&
+      popup === true &&
       <CodeNotRecieved setEnable={setPopup}/>
     }
     </>
