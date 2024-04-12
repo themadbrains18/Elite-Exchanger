@@ -364,7 +364,7 @@ const GoogleAuth = (props: activeSection) => {
             </svg>
           }Confirm</button>
         </div>
-        <p className={`info-10-14 text-start cursor-pointer  inline-block !text-primary mt-[10px]`} onClick={() => { setPopup(true); props.setShow(false); }}>
+        <p className={`info-10-14 text-start cursor-pointer  inline-block !text-primary mt-[10px]`} onClick={() => { setPopup(true); }}>
           Didn't receive the code?
         </p>
       </div>
@@ -374,7 +374,7 @@ const GoogleAuth = (props: activeSection) => {
       }
       {
         popup &&
-        <CodeNotRecieved setEnable={setPopup} setShow={props?.setShow} />
+        <CodeNotRecieved setEnable={setPopup} />
       }
     </div>
   );

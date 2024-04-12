@@ -571,7 +571,7 @@ const AdNumber = (props: activeSection) => {
               sendSessionOtp={sendSessionOtp}
             />
           )}
-          {popup && <CodeNotRecieved setEnable={setPopup} />}
+          {popup === true && <CodeNotRecieved setEnable={setPopup} />}
         </div>
       )}
 

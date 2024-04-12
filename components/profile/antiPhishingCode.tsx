@@ -249,7 +249,7 @@ const AntiPhishingCode = (props: activeSection) => {
       {enable === 2 && (
         <Verification
           setShow={props?.setShow}
-          setEnable={setEnable}
+          setEnable={props?.setEnable}
           type="email"
           data={formData}
           session={props?.session}

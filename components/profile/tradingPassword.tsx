@@ -85,7 +85,7 @@ const TradingPassword = (props: activeSection) => {
       let obj;
       
 
-      if ((props?.session?.user?.tradingPassword !== null && props.tradePassword === false)) {
+      if ((props?.session?.user?.tradingPassword !== null && props.tradePassword === true)) {
         obj = {
           username: username,
           old_password: data?.old_password,
@@ -476,7 +476,7 @@ const TradingPassword = (props: activeSection) => {
       {enable === 2 && (
         <Verification
           setShow={props?.setShow}
-          setEnable={setEnable}
+          setEnable={props?.setEnable}
           type="email"
           data={formData}
           session={props?.session}

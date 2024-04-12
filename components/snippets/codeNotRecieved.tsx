@@ -23,7 +23,7 @@ const CodeNotRecieved = (props: changeProps) => {
   return (
     <>
       <div
-        className={`bg-black  z-[20] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible
+        className={`bg-black  z-[20] duration-300 fixed top-0 left-0 h-full w-full opacity-50 visible
           }`}
       ></div>
       <div
