@@ -381,6 +381,7 @@ const AddAddress = (props: activeSection) => {
       {enable === 2 && (
         <ConfirmPopup
           setEnable={setEnable}
+          setShow={props.setActive}
           type="number"
           data={formData}
           session={props?.session}

@@ -251,7 +251,7 @@ const AntiPhishingCode = (props: activeSection) => {
       )}
       {enable === 4 && (
         <ConfirmPopup
-          setEnable={setEnable}
+          setEnable={props?.setEnable}
           setShow={props?.setShow}
           type="number"
           data={formData}
