@@ -93,7 +93,7 @@ const Verification = (props: activeSection) => {
       inputElements?.forEach((ele, index) => {
         (inputElements[index] as HTMLInputElement).value = ""
       });
-      setOtp('');
+      // setOtp('');
     }
   }
 
@@ -115,7 +115,7 @@ const Verification = (props: activeSection) => {
       inputElements?.forEach((ele, index) => {
         (inputElements[index] as HTMLInputElement).value = ""
       });
-      setOtp('');
+      // setOtp('');
     }
   }
 
@@ -256,7 +256,7 @@ const Verification = (props: activeSection) => {
                 Resend Code
               </p>
             </div>}
-            {props.session?.user?.number !== "null" && <div className="flex flex-col mt-[20px] gap-20">
+            {/* {props.session?.user?.number !== "null" && <div className="flex flex-col mt-[20px] gap-20">
               <label className="sm-text">
 
                 Enter SMS Verification Code
@@ -308,7 +308,7 @@ const Verification = (props: activeSection) => {
               <p className={`info-10-14 text-end cursor-pointer !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => props?.snedOtpToUser()}>
                 Resend Code
               </p>
-            </div>}
+            </div>} */}
           </div>
           {props.finalBtnenable !== undefined ? <button
             disabled={props.finalBtnenable}
