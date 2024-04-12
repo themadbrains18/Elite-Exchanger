@@ -32,9 +32,12 @@ const Verification = (props: activeSection) => {
 
   useEffect(() => {
     orderTimeCalculation();
+    console.log("=====================calling");
+    
     const inputElements = document.querySelectorAll(".input_wrapper3 input");
-
     inputElements?.forEach((ele, index) => {
+      console.log('----------herer 2');
+      
       ele.addEventListener("keydown", (e: any) => {
         if (e.keyCode === 8 && e.target.value === "") {
           (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
