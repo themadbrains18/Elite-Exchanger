@@ -119,6 +119,7 @@ const GoogleAuth = (props: activeSection) => {
 
   const orderTimeCalculation = async (expireTime: any) => {
     setEnable(true);
+    setOtp('');
     let deadline = new Date(expireTime);
 
     deadline.setMinutes(deadline.getMinutes());

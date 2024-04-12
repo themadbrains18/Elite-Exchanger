@@ -72,7 +72,7 @@ const Verification = (props: activeSection) => {
 
   const orderTimeCalculation = async () => {
     setEnable(true);
-
+    setOtp('');
     let deadline = new Date(props?.sendOtpRes?.expire);
 
     deadline.setMinutes(deadline.getMinutes());
