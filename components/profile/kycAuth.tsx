@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useRef, useState } from "react";
 import IconsComponent from "../snippets/icons";
 import FiliterSelectMenu from "../snippets/filter-select-menu";
 import CountrylistDropdown from "../snippets/country-list-dropdown";
@@ -46,10 +46,10 @@ const schema = yup
   .object()
   .shape({
     country: yup.string().required("Please select Country"),
-    fname: yup.string().min(4).max(30).required("Please enter same name as on document").matches(/^([a-zA-Z]+(\s[a-zA-Z]+))+$/, 'Please enter only(letters, space)'),
+    fname: yup.string().required("Full name must be required").min(4, 'Must be greater than 4 charater').max(30).matches(/^([a-zA-Z]+([a-zA-Z]+))+$/, 'Please enter only(letters)'),
     // lname: yup.string().required("This field is required"),
     doctype: yup.string().required("Please select Document type"),
-    docnumber: yup.string().max(30).required("Please enter valid document number"),
+    docnumber: yup.string().required("Please enter valid Document number").min(6).max(30),
     dob: yup
       .date()
       .transform(function (value, originalValue) {
@@ -59,9 +59,8 @@ const schema = yup
         return originalValue;
       })
       .typeError("please enter a valid date")
-      .required()
-      .min("1950-11-13", "Please enter valid date of birth")
-      .max("2020-01-01", "Please enter valid date of birth"),
+      .required('DOB is required field')
+    ,
     idfront: yup.mixed().required("Please upload front side of  document"),
     idback: yup.mixed().required("Please upload back side of  document"),
     statement: yup.mixed().required("Please upload bank statement"),
@@ -91,12 +90,18 @@ const KycAuth = (props: fixSection) => {
   const [enableBack, setEnableBack] = useState(false);
   const [enableStatement, setEnableStatement] = useState(false);
 
+  const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
   const router = useRouter()
 
+  const [dragActive, setDragActive] = useState<boolean>(false);
+  const inputRef = useRef<any>(null);
+  const [files, setFiles] = useState<any>([]);
+
   const list = [
-    { fullname: "Driving License" },
-    { fullname: "Voter Id" },
     { fullname: "Aadhar Card" },
+    { fullname: "Driving License" },
+    { fullname: "Passport" },
+    { fullname: "Voter Id" }
   ];
 
   const [startDate, setStartDate] = useState(new Date());
@@ -115,38 +120,138 @@ const KycAuth = (props: fixSection) => {
     resolver: yupResolver(schema),
   });
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (errors.doctype) {
+        clearErrors('doctype')
+      }
+      if (errors.docnumber) {
+        clearErrors('docnumber')
+      }
+      if (errors.fname) {
+        clearErrors('fname')
+      }
+      if (errors.dob) {
+        clearErrors('dob')
+      }
+      if (errors.country) {
+        clearErrors('country')
+      }
+      if (errors.idfront) {
+        clearErrors('idfront')
+      }
+      if (errors.idback) {
+        clearErrors('idback')
+      }
+      if (errors.statement) {
+        clearErrors('statement')
+      }
+    }, 3000);
+
+    // frontImageDragDrop();
+  }, [errors])
+
+  async function handleDrop(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFileChange(e.dataTransfer.files[0]);
+    }
+  }
+
+  async function handleDropBack(e:any){
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]){
+      handleBackChange(e.dataTransfer.files[0]);
+    }
+  }
+
+  async function handleDropStatement(e:any){
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]){
+      handleSelfieChange(e.dataTransfer.files[0]);
+    }
+  }
+
+  function handleDragLeave(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+  }
+
+  function handleDragOver(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(true);
+  }
+
+  function handleDragEnter(e: any) {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(true);
+  }
+
   const getDocumentDetail = (document: any) => {
     setValue("doctype", document?.fullname);
     clearErrors("doctype");
   };
+
   const getCountryChange = (country: any) => {
     setValue("country", country);
     clearErrors("country");
   };
+
   const handleDate = (date: any) => {
+
+    let deadline = new Date(date);
+    deadline.setFullYear(deadline.getFullYear() + 18);
+    let currentTime = new Date();
+
+    if (currentTime < deadline) {
+      setError("dob", {
+        type: "custom",
+        message: "Please ensure your date of birth should be greater than 18 years.",
+      });
+      return;
+    }
     setValue("dob", date);
     setStartDate(date);
     clearErrors("dob");
   };
 
-  const readFile = (file: any) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
+  // const readFile = (file: any) => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
 
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-      reader.onerror = reject;
-    });
-  };
+  //     reader.onload = () => {
+  //       resolve(reader.result);
+  //     };
+  //     reader.onerror = reject;
+  //   });
+  // };
 
-  const handleFileChange = async (e: any) => {
+  const handleFileChange = async (file: any) => {
     try {
 
-      let file = e.target.files[0];
+      // let file = e.target.files[0];
       const fileSize = file.size / 1024 / 1024;
 
+      const fileType = file['type'];
+      if (!validImageTypes.includes(fileType)) {
+        // invalid file type code goes here.
+        setError("idfront", {
+          type: "custom",
+          message: "invalid file type, upload only (png, jpg,jpeg)",
+        });
+        setEnableFront(false);
+        return;
+      }
       if (fileSize > 2) {
         setError("idfront", {
           type: "custom",
@@ -204,11 +309,21 @@ const KycAuth = (props: fixSection) => {
 
   };
 
-  const handleBackChange = async (e: any) => {
+  const handleBackChange = async (file: any) => {
 
     try {
-      let file = e.target.files[0];
+      // let file = e.target.files[0];
       const fileSize = file.size / 1024 / 1024;
+      const fileType = file['type'];
+      if (!validImageTypes.includes(fileType)) {
+        // invalid file type code goes here.
+        setError("idback", {
+          type: "custom",
+          message: "invalid file type, upload only (png, jpg,jpeg)",
+        });
+        setEnableBack(false);
+        return;
+      }
       if (fileSize > 2) {
         setError("idback", {
           type: "custom",
@@ -266,11 +381,21 @@ const KycAuth = (props: fixSection) => {
 
   };
 
-  const handleSelfieChange = async (e: any) => {
+  const handleSelfieChange = async (file: any) => {
 
     try {
-      let file = e.target.files[0];
+      // let file = e.target.files[0];
       const fileSize = file.size / 1024 / 1024;
+      const fileType = file['type'];
+      if (!validImageTypes.includes(fileType)) {
+        // invalid file type code goes here.
+        setError("statement", {
+          type: "custom",
+          message: "invalid file type, upload only (png, jpg,jpeg)",
+        });
+        setEnableStatement(false);
+        return;
+      }
       if (fileSize > 2) {
         setError("statement", {
           type: "custom",
@@ -665,9 +790,9 @@ const KycAuth = (props: fixSection) => {
             <div className="text-center">
               <p className="sec-title">KYC Verification</p>
             </div>
-            <div>
+            {/* <div>
               <IconsComponent type="editIcon" hover={false} active={false} />
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -708,7 +833,7 @@ const KycAuth = (props: fixSection) => {
             <div className="mt-[30px]">
               <div className="flex gap-[30px] md:flex-row flex-col">
                 <div className="max-w-full md:max-w-[30%] w-full">
-                  <label htmlFor="docnumber" className="sm-text mb-[10px]">ID Card Number</label>
+                  <label htmlFor="docnumber" className="sm-text mb-[10px]">Document Number</label>
                   <input
                     id="docnumber"
                     type="text"
@@ -731,7 +856,7 @@ const KycAuth = (props: fixSection) => {
                     type="text"
                     {...register("fname")}
                     // value="gjsg"
-                    placeholder="Enter user name" maxLength={30} min={4}
+                    placeholder="Enter full name" maxLength={30} min={4}
                     className="sm-text input-cta2 w-full  focus:bg-primary-100 dark:focus:bg-[transparent]"
                   />
                   {errors?.fname && (
@@ -753,6 +878,7 @@ const KycAuth = (props: fixSection) => {
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"
+                    placeholderText="Please select DOB"
                     className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"
                   />
                   {errors?.dob && (
@@ -779,12 +905,7 @@ const KycAuth = (props: fixSection) => {
 
           <div className="flex md:flex-row flex-col gap-[30px] py-[30px] md:py-[50px] lg:px-0 px-20">
             <div className="w-full">
-              <label htmlFor={`front${props?.num}`}
-
-
-
-                className="sm-text ">Identity Document Front Side</label>
-
+              <label htmlFor={`front${props?.num}`} className="sm-text ">Identity Document Front Side</label>
               <div className="w-full relative min-h-[160px] hover:dark:bg-black-v-1 flex  mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
                 {enableFront &&
                   <>
@@ -793,17 +914,23 @@ const KycAuth = (props: fixSection) => {
                   </>
                 }
 
-                <div className="m-auto ">
+                <div className={`m-auto ${dragActive ? "bg-blue-400" : "bg-blue-100"
+                  }`} id="dropZone" draggable="true" onDragEnter={handleDragEnter}
+                  onSubmit={(e) => e.preventDefault()}
+                  onDrop={handleDrop}
+                  onDragLeave={handleDragLeave}
+                  onDragOver={handleDragOver}>
                   <input
                     type="file"
                     placeholder="Type Here...."
                     id={`front${props?.num}`}
                     name="front"
+                    ref={inputRef}
                     autoComplete="off"
                     className={`hidden`}
                     disabled={(enableBack === true || enableStatement === true) ? true : false}
-                    onChange={(e) => {
-                      handleFileChange(e);
+                    onChange={(e:any) => {
+                      handleFileChange(e.target.files[0]);
                     }}
                   />
                   <label
@@ -816,7 +943,7 @@ const KycAuth = (props: fixSection) => {
                         <span className="text-primary">Browse</span>
                       </p>
                       <p className="info-12  text-center !text-[#808A9A]">
-                        Maximum size of image 1MB
+                        Maximum size of image 2MB(jpg,jpeg,png)
                       </p>
                     </div>
 
@@ -853,7 +980,11 @@ const KycAuth = (props: fixSection) => {
                     <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
                   </>
                 }
-                <div className="m-auto ">
+                <div className="m-auto " draggable="true" onDragEnter={handleDragEnter}
+                  onSubmit={(e) => e.preventDefault()}
+                  onDrop={handleDropBack}
+                  onDragLeave={handleDragLeave}
+                  onDragOver={handleDragOver}>
                   <input
                     type="file"
                     placeholder="Type Here...."
@@ -862,8 +993,8 @@ const KycAuth = (props: fixSection) => {
                     autoComplete="off"
                     className={`hidden`}
                     disabled={(enableFront === true || enableStatement === true) ? true : false}
-                    onChange={(e) => {
-                      handleBackChange(e);
+                    onChange={(e:any) => {
+                      handleBackChange(e.target.files[0]);
                     }}
                   />
                   <label
@@ -876,7 +1007,7 @@ const KycAuth = (props: fixSection) => {
                         <span className="text-primary">Browse</span>
                       </p>
                       <p className="info-12  text-center !text-[#808A9A]">
-                        Maximum size of image 1MB
+                        Maximum size of image 2MB(jpg,jpeg,png)
                       </p>
                     </div>
                     <div
@@ -912,7 +1043,12 @@ const KycAuth = (props: fixSection) => {
                     <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
                   </>
                 }
-                <div className="m-auto ">
+                
+                <div className="m-auto " onDragEnter={handleDragEnter}
+                  onSubmit={(e) => e.preventDefault()}
+                  onDrop={handleDropStatement}
+                  onDragLeave={handleDragLeave}
+                  onDragOver={handleDragOver}>
                   <input
                     type="file"
                     placeholder="Type Here...."
@@ -921,8 +1057,8 @@ const KycAuth = (props: fixSection) => {
                     autoComplete="off"
                     className={`hidden `}
                     disabled={(enableBack === true || enableFront === true) ? true : false}
-                    onChange={(e) => {
-                      handleSelfieChange(e);
+                    onChange={(e:any) => {
+                      handleSelfieChange(e.target.files[0]);
                     }}
                   />
 
@@ -940,7 +1076,7 @@ const KycAuth = (props: fixSection) => {
                       />
                       <p className="info-12 text-center  mb-2">
                         Please, make sure that every detail of the ID document
-                        is clearly visible.{" "}
+                        is clearly visible (jpg,jpeg,png).{" "}
                         <span className="text-primary">Browse</span>
                       </p>
                     </div>

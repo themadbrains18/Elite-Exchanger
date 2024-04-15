@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import IconsComponent from './icons';
 import Image from 'next/image';
+import clickOutSidePopupClose from './clickOutSidePopupClose';
 
 interface dataList {
   data: any;
@@ -40,12 +41,18 @@ const CountrylistDropdown = (props: dataList) => {
     })
   }, [])
 
+  const closePopup = () => {
+    setShow(false);
+  }
+  const wrapperRef = useRef(null);
+  clickOutSidePopupClose({ wrapperRef, closePopup });
+
   return (
     <>
       <div className={`${props?.address?'absolute left-0 bottom-0 lg:max-w-full':'relative lg:max-w-[300px]'} max-w-full  w-full`}>
         {/* top dropdown input */}
         {props?.placeholder !== undefined && <div className='rounded-[5px] py-[13px] px-[15px] dark:bg-black-v-1  bg-bg-secondary '>
-          <div className="coin-dropdown-country flex items-center gap-10 cursor-pointer justify-between" onClick={() => { setShow(!show) }}>
+          <div  className="coin-dropdown-country flex items-center gap-10 cursor-pointer justify-between" onClick={() => { setShow(!show) }}>
             {props?.placeholder !== undefined && <div onClick={(e) => { e.stopPropagation }}>
               <input type="text" id='paymentMethod' className="sm-text dark:!text-d-nav-secondary  !text-banner-text dark:bg-black-v-1  bg-bg-secondary  max-w-none placeholder:text-disable-clr pr-0 outline-none bg-transparent w-full  cursor-pointer "
                 placeholder={`${props.placeholder}`} readOnly value={text} />
@@ -57,7 +64,7 @@ const CountrylistDropdown = (props: dataList) => {
         </div>}
 
         {/* dropdown */}
-        <div className={`absolute z-[1] shadow-lg max-h-[250px] overflow-y-auto shadow-[#0000000d] left-0 right-0 dark:bg-black-v-1 bg-white border border-grey-v-1 dark:border-[#ccced94d] rounded-10 p-[15px] duration-300 ${show ? "top-[calc(100%+7px)] opacity-1 visible" : "top-[calc(100%+17px)] opacity-0 invisible"}`}>
+        <div ref={wrapperRef} className={`absolute z-[1] shadow-lg max-h-[250px] overflow-y-auto shadow-[#0000000d] left-0 right-0 dark:bg-black-v-1 bg-white border border-grey-v-1 dark:border-[#ccced94d] rounded-10 p-[15px] pt-[0px] duration-300 ${show ? "top-[calc(100%+7px)] opacity-1 visible" : "top-[calc(100%+17px)] opacity-0 invisible"}`}>
           <div className='bg-white dark:bg-d-bg-primary rounded-[5px] sticky top-0'>
             <div className='border rounded-5 flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-full w-full py-[8px] px-[10px] '>
               <Image src="/assets/history/search.svg" alt='error' width={15} height={15} />
