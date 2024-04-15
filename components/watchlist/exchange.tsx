@@ -121,12 +121,12 @@ const Exchange = (props: DynamicId): any => {
 
       let priceData2 = await priceData.json();
 
-      if (firstMannual === true && priceData2?.data?.rate === undefined) {
-        currentPrice = selectedToken?.price * priceData2?.data?.rate;
+      if (firstMannual === true && priceData2?.rate === undefined) {
+        currentPrice = selectedToken?.price * priceData2?.rate;
         conversionPrice = amount * currentPrice;
       }
       else if (secondMannual === true) {
-        currentPrice = priceData2?.data?.rate / selectedSecondToken?.price;
+        currentPrice = priceData2?.rate / selectedSecondToken?.price;
 
         // console.log(`1 ${firstCurrency} of ${priceData?.data['USDT']} USDT`);
 
@@ -139,8 +139,8 @@ const Exchange = (props: DynamicId): any => {
         conversionPrice = amount * currentPrice;
       }
       else if (firstMannual === false && secondMannual === false) {
-        currentPrice = priceData2?.data?.rate;
-        conversionPrice = amount * priceData2?.data?.rate;
+        currentPrice = priceData2?.rate;
+        conversionPrice = amount * priceData2?.rate;
       }
     }
     else {
