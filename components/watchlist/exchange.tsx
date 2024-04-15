@@ -75,24 +75,34 @@ const Exchange = (props: DynamicId): any => {
   }
 
   const priceConversion = async () => {
-
+    setBtnDisabled(true)
     if (firstCurrency === '') {
       toast.error('Please select first currency from list', {
-        position: 'top-center'
+        position: 'top-center',
+        autoClose:2000
       });
+      setTimeout(() => {
+        setBtnDisabled(false)
+      }, 3000);
       return;
     }
     if (secondCurrency === '') {
       toast.error('Please select second currency from list', {
-        position: 'top-center'
+        autoClose:2000
       });
+      setTimeout(() => {
+        setBtnDisabled(false)
+      }, 3000);
       return;
     }
 
     if (amount === 0 || amount === null || amount === undefined) {
       toast.error('Please add amount that use want to convert', {
-        position: 'top-center'
+        autoClose:2000
       });
+      setTimeout(() => {
+        setBtnDisabled(false)
+      }, 3000);
       return;
     }
 
@@ -102,7 +112,7 @@ const Exchange = (props: DynamicId): any => {
     let receivedBalance = 0;
 
     if (firstMannual === false || secondMannual === false) {
-      setBtnDisabled(true)
+      
       // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/exchange?fsym=${firstMannual === true ? 'USDT' : firstCurrency}&tsyms=${secondMannual === true ? 'USDT' : secondCurrency}`, {
       //   method: "GET"
       // }).then(response => response.json());
@@ -305,7 +315,7 @@ const Exchange = (props: DynamicId): any => {
         }Preview</button>
           :
           <div className="flex gap-[18px]">
-            <button className=" solid-button w-full bg-grey-v-2 !text-primary" onClick={() => setIsConvert(false)}>Cancel</button>
+            <button className=" solid-button w-full bg-grey-v-2 !text-primary" onClick={() => {setIsConvert(false); setAmount(0); setReceivedAmount(0)}}>Cancel</button>
             <button className=" solid-button w-full" disabled={btnDisabled2} onClick={() => sendConvertRequest()}>{btnDisabled2 &&
               <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
