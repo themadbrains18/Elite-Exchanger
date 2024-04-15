@@ -270,7 +270,7 @@ const Exchange = (props: DynamicId): any => {
         <div className="py-50">
           <div className="flex gap-[18px]">
             <Image src="/assets/market/walletpayment.svg" alt="wallet2" width={24} height={24} />
-            <p className="md-text w-full">${selectedToken?.avail_bal}</p>
+            <p className="md-text w-full">${selectedToken?.avail_bal?.toFixed(6)}</p>
             <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} />
             {props.coinList && props.coinList.map((item: any) => {
               if (item.symbol === selectedToken?.symbol) {
