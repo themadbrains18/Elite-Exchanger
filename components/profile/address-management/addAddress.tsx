@@ -13,8 +13,10 @@ import { useSession } from "next-auth/react";
 import ConfirmPopup from "@/pages/customer/profile/confirm-popup";
 import Verification from "../../snippets/verification";
 import clickOutSidePopupClose from "../../snippets/clickOutSidePopupClose";
+import FilterSelectMenuWithCoin from "@/components/snippets/filter-select-menu-with-coin";
 
 const schema = yup.object().shape({
+  tokenID: yup.string().optional().default(""),
   networkId: yup.string().optional().default(""),
   label: yup.string().required("This field is required").max(20),
   address: yup.string().required("This field is required").max(50),
@@ -24,11 +26,13 @@ interface activeSection {
   setActive: Function;
   refreshData: Function;
   networks: any;
+  token: any;
   active: any;
   session: any;
 }
 
 type UserSubmitForm = {
+  tokenID: string;
   networkId: string;
   address: string;
   label: string;
@@ -41,6 +45,7 @@ type UserSubmitForm = {
 const AddAddress = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [selectedNetwork, setSelectedNetwork] = useState("");
+  const [selectedCoin, setSelectedCoin] = useState("");
   const { data: session, status } = useSession();
   const [formData, setFormData] = useState<UserSubmitForm | null>();
   const [enable, setEnable] = useState(1);
@@ -77,9 +82,23 @@ const AddAddress = (props: activeSection) => {
     setSelectedNetwork(network?.id);
     clearErrors("networkId");
   };
+  const filterNetworkListByCoin = (token: any) => {
+    setSelectedCoin(token?.id);
+    clearErrors("tokenID");
+  };
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
     try {
+      if (selectedCoin === "") {
+        setError("tokenID", {
+          type: "custom",
+          message: "Please select Coin",
+        });
+        return;
+      } else {
+        data.tokenID = selectedCoin;
+        clearErrors("tokenID");
+      }
       if (selectedNetwork === "") {
         setError("networkId", {
           type: "custom",
@@ -99,6 +118,9 @@ const AddAddress = (props: activeSection) => {
       data.username = username
       data.otp = "string";
       data.step = 1;
+
+      console.log(data,"==data");
+      
 
       if (session !== null && session?.user !== undefined) {
         const ciphertext = AES.encrypt(
@@ -156,6 +178,7 @@ const AddAddress = (props: activeSection) => {
         username: username,
         address: formData?.address,
         networkId: formData?.networkId,
+        tokenID: formData?.tokenID,
         user_id: formData?.user_id,
         label: formData?.label,
         status: formData?.status,
@@ -212,6 +235,7 @@ const AddAddress = (props: activeSection) => {
         username: username,
         address: formData?.address,
         networkId: formData?.networkId,
+        tokenID: formData?.tokenID,
         user_id: formData?.user_id,
         label: formData?.label,
         status: formData?.status,
@@ -316,6 +340,22 @@ const AddAddress = (props: activeSection) => {
                   Valid Address
                 </p> */}
               </div>
+
+              {
+        props?.token &&
+        <div className="relative max-w-full  w-full mt-20">
+            <label className="sm-text mb-[10px] block">Coin</label>
+          <FilterSelectMenuWithCoin
+            data={props?.token}
+            border={true}
+            dropdown={1}
+            filterNetworkListByCoin={filterNetworkListByCoin}
+          />
+          {errors.tokenID && (
+                  <p style={{ color: "red" }}>{errors.tokenID.message}</p>
+                )}
+        </div>
+      }
               <div className="my-20">
                 <label className="sm-text mb-[10px] block">Network</label>
                 <FiliterSelectMenu

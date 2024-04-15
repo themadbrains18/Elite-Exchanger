@@ -78,7 +78,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
               </div>
 
               {/* dropdown */}
-              <div className={`absolute max-h-[250px] overflow-y-auto z-[1] shadow-lg shadow-[#0000000d] left-0 right-0 dark:bg-black-v-1 bg-white border border-grey-v-1 dark:border-[#ccced94d] rounded-10 p-[15px] duration-300 ${show ? "top-[calc(100%+7px)] opacity-1 visible" : "top-[calc(100%+17px)] opacity-0 invisible"}`}>
+              <div className={`absolute max-h-[250px] overflow-y-auto z-[1] shadow-lg shadow-[#0000000d] left-0 right-0 dark:bg-black-v-1 bg-white border border-grey-v-1 dark:border-[#ccced94d] rounded-10 p-[15px] pt-[1px] duration-300 ${show ? "top-[calc(100%+7px)] opacity-1 visible" : "top-[calc(100%+17px)] opacity-0 invisible"}`}>
                 <div className='bg-white dark:bg-d-bg-primary rounded-[5px] sticky top-0'>
                   <div className='border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-full w-full py-[8px] px-[10px] ' onClick={(e)=>{e.stopPropagation()}}>
                     <Image src="/assets/history/search.svg" alt='error' width={15} height={15} />

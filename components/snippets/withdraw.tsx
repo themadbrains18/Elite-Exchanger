@@ -537,6 +537,7 @@ const Withdraw = (props: activeSection) => {
       {enable === 2 && (
         <ConfirmPopup
           setEnable={setEnable}
+          setShow={props.setShow1}
           type="number"
           data={formData}
           session={props?.session}

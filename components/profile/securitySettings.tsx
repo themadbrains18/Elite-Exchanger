@@ -564,8 +564,13 @@ const SecuritySettings = (props: fixSection) => {
                         <button
                           className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${ whitelist===false  ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
                           onClick={() => {
+                            if (googleAuth === true) {
                             setEnable(index + 1);
                             setShow(true);
+                            }
+                            else {
+                              toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again', { position: 'top-center' })
+                            }
                           }}
                         >
                           { whitelist===false
@@ -575,7 +580,7 @@ const SecuritySettings = (props: fixSection) => {
                       )
                         :
                         <button
-                          className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${props?.session?.user?.antiphishing === null ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
+                          className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${props?.session?.user?.antiphishing === null && antiFishingCode === false ? 'bg-primary text-white' : 'bg-grey-v-2 !text-primary'} `}
                           onClick={() => {
                             if (googleAuth === true) {
                               setEnable(index + 1);
