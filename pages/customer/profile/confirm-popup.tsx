@@ -38,7 +38,7 @@ const ConfirmPopup = (props: activeSection) => {
   }
 
   const closePopup = () => {
-    props?.setShow(false);
+    props.setShow !==undefined &&  props?.setShow(false);
     props?.setEnable(0);
   }
   const wrapperRef = useRef(null);
@@ -55,7 +55,8 @@ const ConfirmPopup = (props: activeSection) => {
       
             <svg
               onClick={() => {
-                props.setShow(false);
+                props.setShow !==undefined &&  props?.setShow(false);
+                props?.setEnable!==undefined &&  props?.setEnable(0);
               }}
               enableBackground="new 0 0 60.963 60.842"
               version="1.1"

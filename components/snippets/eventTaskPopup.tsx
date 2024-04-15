@@ -214,10 +214,10 @@ const EventTaskPopup = (props: activeSection) => {
       clickOutSidePopupClose({ wrapperRef, closePopup });
 
     return (
-        <div ref={wrapperRef} className="fixed max-h-[calc(100%-124px)] overscroll-none	 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] p-[24px] rounded-[10px] bg-white  z-[99] max-w-[calc(100%-36px)] xl:max-w-[1065px] w-full overflow-auto">
+        <div ref={wrapperRef} className="fixed max-h-[calc(100%-124px)] overscroll-none	 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] p-[24px] rounded-[10px]  bg-white dark:bg-d-bg-primary  z-[99] max-w-[calc(100%-36px)] xl:max-w-[1065px] w-full overflow-auto">
             <div className="flex items-center justify-between mb-[20px]">
 
-                <h3 className="sm-heading ">Task Rewards History ({(props?.referProgamTask?.User?.id)?.substring(1, 7)})</h3>
+                <h3 className="sm-heading dark:!text-white !text-[#000]">Task Rewards History ({(props?.referProgamTask?.User?.id)?.substring(1, 7)})</h3>
                 <svg
                     onClick={() => {
                         props.setTaskShow(false);
@@ -248,7 +248,7 @@ const EventTaskPopup = (props: activeSection) => {
             </div>
 
             {/* card style 1 */}
-            <div className="px-[24px] py-[8px] bg-[#f5f7fa] rounded-[8px] flex relative overflow-hidden gap-[24px] min-w-[1000px] mb-[24px]">
+            <div className="px-[24px] py-[8px] dark:bg-[#000] bg-[#f5f7fa] rounded-[8px] flex relative overflow-hidden gap-[24px] min-w-[1000px] mb-[24px]">
                 <div className="max-w-[30%] w-full flex items-center">
                     <div className="max-w-[50%] w-full">
                         <h3 className="md-heading text-primary">10 USDT</h3>
@@ -270,10 +270,10 @@ const EventTaskPopup = (props: activeSection) => {
                         </svg>
                     </div>
                 </div>
-                <div className="max-w-[70%] w-full bg-white px-[24px] py-[16px]  rounded-[8px] min-h-[126px] relative flex items-center mr-[-16px]">
+                <div className="max-w-[70%] w-full  bg-white dark:bg-d-bg-primary  px-[24px] py-[16px]  rounded-[8px] min-h-[126px] relative flex items-center mr-[-16px]">
                     <div className='w-full'>
                         <div className='flex items-center justify-between gap-[15px]'>
-                            <h4 className="sm-heading">Deposit ≥ {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100} USDT</h4>
+                            <h4 className="sm-heading !text-[#000] dark:!text-[#fff] ">Deposit ≥ {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100} USDT</h4>
                             {depositEnable &&
                                 <button className='text-primary underline' onClick={() => handleRewardsRequest()}>Claim Now</button>
                             }
@@ -289,7 +289,7 @@ const EventTaskPopup = (props: activeSection) => {
             </div>
 
             {/* card style 2 */}
-            <div className="px-[24px] py-[8px] bg-[#f5f7fa] rounded-[8px] flex relative overflow-hidden gap-[24px] min-w-[1000px] mb-[24px]">
+            <div className="px-[24px] py-[8px] dark:bg-[#000] bg-[#f5f7fa] rounded-[8px] flex relative overflow-hidden gap-[24px] min-w-[1000px] mb-[24px]">
                 <div className="max-w-[30%] w-full flex items-center">
                     <div className="max-w-[70%] w-full">
                         <h3 className="md-heading text-primary">{props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.amount : 20} USDT</h3>
@@ -311,7 +311,7 @@ const EventTaskPopup = (props: activeSection) => {
                         </svg>
                     </div>
                 </div>
-                <div className="max-w-[70%] w-full bg-white px-[24px] py-[16px]  rounded-[8px] min-h-[126px] relative flex items-center mr-[-16px] after:absolute after:top-[50%] after:left-[50%]  after:translate-x-[-50%] after:translate-y-[-50%] after:w-[2px] after:h-full after:bg-[#f5f7fa]">
+                <div className="max-w-[70%] w-full  bg-white dark:bg-d-bg-primary  px-[24px] py-[16px]  rounded-[8px] min-h-[126px] relative flex items-center mr-[-16px] after:absolute after:top-[50%] after:left-[50%]  after:translate-x-[-50%] after:translate-y-[-50%] after:w-[2px] after:h-full after:bg-[#f5f7fa]">
                     <div className='flex flex-col w-full'>
                         {depsoitTradeEnable &&
                             <button className='text-primary underline text-end mb-[20px]'>Claim Now</button>
@@ -319,15 +319,15 @@ const EventTaskPopup = (props: activeSection) => {
                         <div className="grid grid-cols-[1fr_auto_1fr] gap-[24px] w-full relative  items-end">
                             <div>
 
-                                <h4 className="sm-heading">Deposit ≥ {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100} USDT</h4>
+                                <h4 className="sm-heading !text-[#000] dark:!text-[#fff] ">Deposit ≥ {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100} USDT</h4>
                                 <div className="bg-[#f5f7fa] rounded-[8px] h-[8px] w-full mt-[20px] relative">
                                     <div style={{ width: depositPercentage.toFixed(2) + '%' }} className={`bg-primary absolute top-0 left-0  h-full  rounded-[8px]`}></div>
                                 </div>
-                                <p className="info-14 mt-[8px]">{depositAmount} / {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100} USDT</p>
+                                <p className="info-14 mt-[8px] ">{depositAmount} / {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100} USDT</p>
                             </div>
                             <div className="relative z-[1]">
                                 <p className="w-[50px] flex h-[50px] rounded-full bg-[#f5f7fa] ">
-                                    <span className="m-auto opacity-[0.3]">AND</span>
+                                    <span className="m-auto">AND</span>
                                 </p>
                             </div>
                             <div>
