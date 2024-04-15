@@ -159,7 +159,7 @@ const Exchange = (props: DynamicId): any => {
     // user_convert_history form data
     let history = [];
     let spendObj = { token_id: selectedToken.id, type: 'Consumption', amount: amount, fee: 0, balance: spendBalance };
-    let receivedObj = { token_id: selectedSecondToken.id, type: 'Gain', amount: conversionPrice.toFixed(8), fee: 0, balance: receivedBalance.toFixed(8) };
+    let receivedObj = { token_id: selectedSecondToken.id, type: 'Gain', amount: conversionPrice?.toFixed(8), fee: 0, balance: receivedBalance?.toFixed(8) };
 
     history.push(spendObj);
     history.push(receivedObj);
@@ -167,13 +167,13 @@ const Exchange = (props: DynamicId): any => {
     // user_convert form data
     let convertPayload = {
       converted: amount + ` ${firstCurrency}`,
-      received: conversionPrice.toFixed(8) + ` ${secondCurrency}`,
+      received: conversionPrice?.toFixed(8) + ` ${secondCurrency}`,
       fees: 0,
-      conversion_rate: `1 ${firstCurrency} = ${currentPrice.toFixed(8)} ${secondCurrency}`,
+      conversion_rate: `1 ${firstCurrency} = ${currentPrice?.toFixed(8)} ${secondCurrency}`,
       consumption_token_id: selectedToken?.id,
       gain_token_id: selectedSecondToken?.id,
       consumption_amount: amount,
-      gain_amount: parseFloat(conversionPrice.toFixed(8))
+      gain_amount: parseFloat(conversionPrice?.toFixed(8))
     };
     setRequestBody({ convert: convertPayload, history: history });
     setIsConvert(true);
@@ -271,7 +271,7 @@ const Exchange = (props: DynamicId): any => {
           <div className=" rounded-5 p-[10px] justify-between flex border items-center border-grey-v-1 dark:border-opacity-[15%] relative">
             <div className="">
               <p className="sm-text dark:text-white">Buy For ({secondCurrency})</p>
-              <input type="number" value={receiveAmount > 0 ? receiveAmount.toFixed(8) : 0} readOnly placeholder="$0" className="bg-[transparent] md-text outline-none border-l px-[5px] mt-[10px] border-h-primary" />
+              <input type="number" value={receiveAmount > 0 ? receiveAmount?.toFixed(8) : 0} readOnly placeholder="$0" className="bg-[transparent] md-text outline-none border-l px-[5px] mt-[10px] border-h-primary" />
             </div>
             <div>
               <FilterSelectMenuWithCoin data={list} border={false} dropdown={2} setCurrencyName={setCurrencyName} />
