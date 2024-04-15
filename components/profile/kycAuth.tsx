@@ -46,10 +46,10 @@ const schema = yup
   .object()
   .shape({
     country: yup.string().required("Please select Country"),
-    fname: yup.string().required("Full name must be required").min(4, 'Must be greater than 4 charater').max(30).matches(/^([a-zA-Z]+([a-zA-Z]+))+$/, 'Please enter only(letters)'),
+    fname: yup.string().required("Full name must be required").min(4, 'Must be greater than 4 charater').max(30).matches(/^([a-zA-Z])+([\s*\S+\s+\S+\sa-zA-Z])+$/, 'Please enter only(letters)'),
     // lname: yup.string().required("This field is required"),
     doctype: yup.string().required("Please select Document type"),
-    docnumber: yup.string().required("Please enter valid Document number").min(6).max(30),
+    docnumber: yup.string().required("Please enter valid Document number").min(6,"Document Number must equal to identity number").max(30),
     dob: yup
       .date()
       .transform(function (value, originalValue) {
@@ -120,36 +120,36 @@ const KycAuth = (props: fixSection) => {
     resolver: yupResolver(schema),
   });
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (errors.doctype) {
-        clearErrors('doctype')
-      }
-      if (errors.docnumber) {
-        clearErrors('docnumber')
-      }
-      if (errors.fname) {
-        clearErrors('fname')
-      }
-      if (errors.dob) {
-        clearErrors('dob')
-      }
-      if (errors.country) {
-        clearErrors('country')
-      }
-      if (errors.idfront) {
-        clearErrors('idfront')
-      }
-      if (errors.idback) {
-        clearErrors('idback')
-      }
-      if (errors.statement) {
-        clearErrors('statement')
-      }
-    }, 3000);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (errors.doctype) {
+  //       clearErrors('doctype')
+  //     }
+  //     if (errors.docnumber) {
+  //       clearErrors('docnumber')
+  //     }
+  //     if (errors.fname) {
+  //       clearErrors('fname')
+  //     }
+  //     if (errors.dob) {
+  //       clearErrors('dob')
+  //     }
+  //     if (errors.country) {
+  //       clearErrors('country')
+  //     }
+  //     if (errors.idfront) {
+  //       clearErrors('idfront')
+  //     }
+  //     if (errors.idback) {
+  //       clearErrors('idback')
+  //     }
+  //     if (errors.statement) {
+  //       clearErrors('statement')
+  //     }
+  //   }, 3000);
 
-    // frontImageDragDrop();
-  }, [errors])
+  //   // frontImageDragDrop();
+  // }, [errors])
 
   async function handleDrop(e: any) {
     e.preventDefault();
@@ -160,20 +160,20 @@ const KycAuth = (props: fixSection) => {
     }
   }
 
-  async function handleDropBack(e:any){
+  async function handleDropBack(e: any) {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]){
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleBackChange(e.dataTransfer.files[0]);
     }
   }
 
-  async function handleDropStatement(e:any){
+  async function handleDropStatement(e: any) {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]){
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleSelfieChange(e.dataTransfer.files[0]);
     }
   }
@@ -929,7 +929,7 @@ const KycAuth = (props: fixSection) => {
                     autoComplete="off"
                     className={`hidden`}
                     disabled={(enableBack === true || enableStatement === true) ? true : false}
-                    onChange={(e:any) => {
+                    onChange={(e: any) => {
                       handleFileChange(e.target.files[0]);
                     }}
                   />
@@ -993,7 +993,7 @@ const KycAuth = (props: fixSection) => {
                     autoComplete="off"
                     className={`hidden`}
                     disabled={(enableFront === true || enableStatement === true) ? true : false}
-                    onChange={(e:any) => {
+                    onChange={(e: any) => {
                       handleBackChange(e.target.files[0]);
                     }}
                   />
@@ -1043,7 +1043,7 @@ const KycAuth = (props: fixSection) => {
                     <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
                   </>
                 }
-                
+
                 <div className="m-auto " onDragEnter={handleDragEnter}
                   onSubmit={(e) => e.preventDefault()}
                   onDrop={handleDropStatement}
@@ -1057,7 +1057,7 @@ const KycAuth = (props: fixSection) => {
                     autoComplete="off"
                     className={`hidden `}
                     disabled={(enableBack === true || enableFront === true) ? true : false}
-                    onChange={(e:any) => {
+                    onChange={(e: any) => {
                       handleSelfieChange(e.target.files[0]);
                     }}
                   />
