@@ -45,13 +45,14 @@ type UserSubmitForm = {
 const AddAddress = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [selectedNetwork, setSelectedNetwork] = useState("");
-  const [selectedCoin, setSelectedCoin] = useState("");
+  const [selectedCoin, setSelectedCoin] = useState();
   const { data: session, status } = useSession();
   const [formData, setFormData] = useState<UserSubmitForm | null>();
   const [enable, setEnable] = useState(1);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
   const [disable, setDisable] = useState(false);
   const [addressVerified, setAddressVerified] = useState(false);
+  const [unSelectCoinError, setUnSelectCoinError] = useState('');
 
   let {
     register,
@@ -85,6 +86,7 @@ const AddAddress = (props: activeSection) => {
   const filterNetworkListByCoin = (token: any) => {
     setSelectedCoin(token?.id);
     clearErrors("tokenID");
+    setUnSelectCoinError("")
   };
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
@@ -96,8 +98,11 @@ const AddAddress = (props: activeSection) => {
         });
         return;
       } else {
-        data.tokenID = selectedCoin;
-        clearErrors("tokenID");
+        if(selectedCoin!==undefined){
+          data.tokenID = selectedCoin;
+          clearErrors("tokenID");
+          setUnSelectCoinError("")
+        }
       }
       if (selectedNetwork === "") {
         setError("networkId", {
@@ -351,9 +356,7 @@ const AddAddress = (props: activeSection) => {
             dropdown={1}
             filterNetworkListByCoin={filterNetworkListByCoin}
           />
-          {errors.tokenID && (
-                  <p style={{ color: "red" }}>{errors.tokenID.message}</p>
-                )}
+          {unSelectCoinError!=="" && <p style={{ color: "#ff0000d1" }}>{unSelectCoinError}</p>}
         </div>
       }
               <div className="my-20">
@@ -364,6 +367,7 @@ const AddAddress = (props: activeSection) => {
                   auto={false}
                   widthFull={true}
                   onNetworkChange={getNetworkDetail}
+                  depositToken={selectedCoin} setUnSelectCoinError={setUnSelectCoinError}
                 />
                 {errors.networkId && (
                   <p style={{ color: "red" }}>{errors.networkId.message}</p>
