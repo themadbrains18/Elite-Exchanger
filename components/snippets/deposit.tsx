@@ -24,16 +24,18 @@ const Deposit = (props: activeSection) => {
   const [depositToken, setDepositToken] = useState(props?.token);
   const { SVG } = useQRCode();
   const { mode } = useContext(Context);
+  const [btnDisabledCopy, setBtnDisabledCopy] = useState(false);
+  const [unSelectCoinError, setUnSelectCoinError] = useState('');
 
   useLayoutEffect(() => {
     filterNetworkListByCoin(props.token);
   }, []);
 
-  const closePopup=()=>{
+  const closePopup = () => {
     props.setShow1(0);
   }
   const wrapperRef = useRef(null);
-  clickOutSidePopupClose({wrapperRef, closePopup});
+  clickOutSidePopupClose({ wrapperRef, closePopup });
 
   const filterNetworkListByCoin = async (token: any) => {
     let networks: any = [];
@@ -53,6 +55,7 @@ const Deposit = (props: activeSection) => {
     }
     setDepositToken(token);
     setNetworkList(networks);
+    setUnSelectCoinError('');
   }
 
   const getAddress = async (network: any) => {
@@ -71,7 +74,20 @@ const Deposit = (props: activeSection) => {
     }
   }
 
-  
+  const copyCode = () => {
+    setBtnDisabledCopy(true);
+    const input = document.createElement('textarea')
+    input.value = address
+    document.body.appendChild(input)
+    input.select()
+    document.execCommand('copy')
+    document.body.removeChild(input)
+    toast.success('copy to clipboard',{autoClose:2000});
+    setTimeout(() => {
+      setBtnDisabledCopy(false);
+    }, 3000);
+  }
+
 
   return (
     <div ref={wrapperRef} className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
@@ -111,10 +127,11 @@ const Deposit = (props: activeSection) => {
             dropdown={1}
             filterNetworkListByCoin={filterNetworkListByCoin}
           />
+          {unSelectCoinError!=="" && <p style={{ color: "#ff0000d1" }}>{unSelectCoinError}</p>}
         </div>
       }
       <div className="mt-20">
-        <FiliterSelectMenu data={list} placeholder="Select Network type" auto={true} widthFull={true} onNetworkChange={getAddress} />
+        <FiliterSelectMenu data={list} placeholder="Select Network type" auto={true} widthFull={true} onNetworkChange={getAddress} depositToken={depositToken} setUnSelectCoinError={setUnSelectCoinError}/>
       </div>
 
       <div className="py-30 md:py-10">
@@ -146,20 +163,14 @@ const Deposit = (props: activeSection) => {
             <button className={`solid-button py-2 sec-text font-normal ${address === '' ? 'cursor-not-allowed' : 'cursor-pointer'} `}
               disabled={address === '' ? true : false} onClick={() => {
                 // navigator.clipboard.writeText(address);
-                const input = document.createElement('textarea')
-                input.value = address
-                document.body.appendChild(input)
-                input.select()
-                document.execCommand('copy')
-                document.body.removeChild(input)
-                toast.success('copy to clipboard')
+                btnDisabledCopy === false ? copyCode() : ''
               }}>Copy</button>
           </div>
         </div>
-        <div className="flex items-center justify-between pt-5 md:pt-30">
+        {/* <div className="flex items-center justify-between pt-5 md:pt-30">
           <p className="nav-text-sm"> Minimum Deposit Amount</p>
           <p className="nav-text-sm"> {depositToken?.minimum_deposit}</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

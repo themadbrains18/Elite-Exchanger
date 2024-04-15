@@ -10,9 +10,19 @@ export const clickOutSidePopupClose = (props: propsData) => {
          * Alert if clicked on outside of element
          */
         function handleClickOutside(event: any) {
-            if (props.wrapperRef.current && !props.wrapperRef.current.contains(event.target)) {
-                props.closePopup();
+            let toastConter = document.querySelectorAll('.Toastify__toast-container');
+            // && !toastConter.contains(event.target)
+            if (toastConter.length > 1) {
+                if (props.wrapperRef.current && !props.wrapperRef.current.contains(event.target) && toastConter[1].contains(event.target) === false) {
+                    props.closePopup();
+                }
             }
+            else {
+                if (props.wrapperRef.current && !props.wrapperRef.current.contains(event.target)) {
+                    props.closePopup();
+                }
+            }
+
         }
         // Bind the event listener
         document.addEventListener("mousedown", handleClickOutside);

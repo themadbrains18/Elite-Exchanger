@@ -103,7 +103,7 @@ const Wallet = (props: Session) => {
 
     return (
         <div>
-            <ToastContainer />
+            <ToastContainer limit={1}/>
             <div className=" bg-light-v-1 py-[20px] md:py-[80px] dark:bg-black-v-1">
                 <div className="container flex gap-30 flex-wrap">
                     <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
