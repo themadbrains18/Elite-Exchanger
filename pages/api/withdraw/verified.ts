@@ -18,7 +18,7 @@ router
     .post(async (req, res) => {
         try {
 
-            console.log(req.body, "==req.body");
+            // console.log(req.body, "==req.body");
 
             let responseData = await fetch(`https://checkcryptoaddress.com/api/check-address`, {
                 method: "POST",
@@ -28,7 +28,7 @@ router
                 redirect: 'follow',
                 body: req.body
             });
-            console.log(responseData,"==responseData");
+            // console.log(responseData,"==responseData");
             
             let data = await responseData.json();
 

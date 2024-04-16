@@ -30,7 +30,7 @@ router
             let formData =  AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
 
             let token = req.headers.authorization;
-            console.log(formData,'--------------formData');
+            // console.log(formData,'--------------formData');
             
             let data = await postData(`${process.env.NEXT_PUBLIC_APIURL}/kyc/create`, JSON.parse(formData), token);
             

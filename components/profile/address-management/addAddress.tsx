@@ -124,7 +124,7 @@ const AddAddress = (props: activeSection) => {
       data.otp = "string";
       data.step = 1;
 
-      console.log(data,"==data");
+      // console.log(data,"==data");
       
 
       if (session !== null && session?.user !== undefined) {

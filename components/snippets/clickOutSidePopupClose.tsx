@@ -12,17 +12,18 @@ export const clickOutSidePopupClose = (props: propsData) => {
         function handleClickOutside(event: any) {
             let toastConter = document.querySelectorAll('.Toastify__toast-container');
             // && !toastConter.contains(event.target)
-            if (toastConter.length > 1) {
-                if (props.wrapperRef.current && !props.wrapperRef.current.contains(event.target) && toastConter[1].contains(event.target) === false) {
-                    props.closePopup();
+            let toast = [];
+            for(const t of toastConter){
+                if(t.contains(event.target)){
+                    toast.push(t);
                 }
             }
-            else {
+            
+            if (toast.length === 0 ) {
                 if (props.wrapperRef.current && !props.wrapperRef.current.contains(event.target)) {
                     props.closePopup();
                 }
             }
-
         }
         // Bind the event listener
         document.addEventListener("mousedown", handleClickOutside);
