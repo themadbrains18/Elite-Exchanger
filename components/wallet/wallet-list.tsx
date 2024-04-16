@@ -244,14 +244,14 @@ const WalletList = (props: propsData): any => {
             </div>
             <div className="hidden md:flex items-center gap-[15px]">
 
-              <div className="p-[5px] flex gap-[10px] items-center">
+              {/* <div className="p-[5px] flex gap-[10px] items-center">
                 <IconsComponent type="calender" hover={false} active={false} />
                 <p className="nav-text-sm">Month</p>
                 <Image src="/assets/profile/downarrow.svg" width={24} height={24} alt="arrow" />
               </div>
               <button className="cursor-pointer">
                 <IconsComponent type="dots" hover={false} active={false} />
-              </button>
+              </button> */}
 
             </div>
           </div>
