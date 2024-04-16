@@ -102,7 +102,9 @@ const AntiPhishingCode = (props: activeSection) => {
         if (res?.data?.otp !== undefined) {
           toast.success(res?.data?.message);
           setTimeout(() => {
-            setEnable(2);
+            if(enable !==2){
+              setEnable(2);
+            }
             setSendOtpRes(res?.data?.otp);
             props?.setShow(true);
           }, 1000);
