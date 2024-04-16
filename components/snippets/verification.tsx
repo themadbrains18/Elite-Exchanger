@@ -31,13 +31,9 @@ const Verification = (props: activeSection) => {
   const [otpMessage, setOtpMessage] = useState('');
 
   useEffect(() => {
-    orderTimeCalculation();
-    // console.log("=====================calling");
     
     const inputElements = document.querySelectorAll(".input_wrapper3 input");
     inputElements?.forEach((ele, index) => {
-      // console.log('----------herer 2');()
-      
       ele.addEventListener("keydown", (e: any) => {
         if (e.keyCode === 8 && e.target.value === "") {
           (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
@@ -69,7 +65,8 @@ const Verification = (props: activeSection) => {
         }
       });
     });
-
+    orderTimeCalculation();
+    // console.log("=====================calling");
 
   }, [props?.sendOtpRes]);
 
@@ -92,10 +89,10 @@ const Verification = (props: activeSection) => {
     else if (currentTime > deadline) {
       setEnable(false);
       setDisabled(false);
-      // const inputElements = document.querySelectorAll(".input_wrapper3 input");
-      // inputElements?.forEach((ele, index) => {
-      //   (inputElements[index] as HTMLInputElement).value = ""
-      // });
+      const inputElements = document.querySelectorAll(".input_wrapper3 input");
+      inputElements?.forEach((ele, index) => {
+        (inputElements[index] as HTMLInputElement).value = ""
+      });
     }
   }
 
@@ -113,10 +110,10 @@ const Verification = (props: activeSection) => {
       if (Ref.current) clearInterval(Ref.current);
       setEnable(false);
       setDisabled(false);
-      // const inputElements = document.querySelectorAll(".input_wrapper3 input");
-      // inputElements?.forEach((ele, index) => {
-      //   (inputElements[index] as HTMLInputElement).value = ""
-      // });
+      const inputElements = document.querySelectorAll(".input_wrapper3 input");
+      inputElements?.forEach((ele, index) => {
+        (inputElements[index] as HTMLInputElement).value = ""
+      });
     }
   }
 
@@ -207,7 +204,7 @@ const Verification = (props: activeSection) => {
                   : "Enter SMS Verification Code"}
               </label>
               <div>
-                <div className="flex gap-10 justify-center items-center input_wrapper3">
+                <div className="flex gap-10 justify-center items-center input_wrapper3 relative">
                   <input
                     type="text"
                     autoComplete="off"
