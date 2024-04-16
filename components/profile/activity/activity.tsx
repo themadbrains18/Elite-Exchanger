@@ -153,6 +153,19 @@ const Activity = (props: fixSection) => {
                 <th className=" py-5">
                   <div className="flex">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
+                      State
+                    </p>
+                    <Image
+                      src="/assets/history/uparrow.svg"
+                      width={15}
+                      height={15}
+                      alt="uparrow"
+                    />
+                  </div>
+                </th>
+                <th className=" py-5">
+                  <div className="flex justify-end">
+                    <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
                       Date / Time
                     </p>
                     <Image
@@ -202,7 +215,12 @@ const Activity = (props: fixSection) => {
                       </td>
                       <td className="">
                         <p className="info-14-18 dark:text-white">
-                          {moment(item.lastLogin).format("YYYY-MM-DD HH:mm:ss A")}
+                          {item.region}
+                        </p>
+                      </td>
+                      <td className="">
+                        <p className="info-14-18 dark:text-white text-end">
+                          {moment(item.loginTime).format("YYYY-MM-DD HH:mm:ss A")}
                         </p>
                       </td>
                       {/* <td className=" !text-end">
