@@ -28,6 +28,7 @@ const SideBar = (props: profileSec) => {
 
     const [duserName, setduserName] = useState('');
     const [demail, setdemail] = useState('');
+    const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
 
     let data = [
         {
@@ -88,6 +89,13 @@ const SideBar = (props: profileSec) => {
         try {
             let file = e.target.files[0];
             const fileSize = file.size / 1024 / 1024;
+            const fileType = file['type'];
+            if (!validImageTypes.includes(fileType)) {
+                // invalid file type code goes here.
+                toast.error("invalid file type, upload only (png, jpg,jpeg)")
+                setEnableDP(false);
+                return;
+            }
             if (fileSize > 2) {
                 toast.error("File Size upto 2 mb.")
                 setEnableDP(false);
