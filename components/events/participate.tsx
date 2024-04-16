@@ -3,6 +3,7 @@ import ReferPopup from "../snippets/referPopup";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
+import { ToastContainer } from "react-toastify";
 
 interface propsData {
   eventData?: any;
@@ -19,6 +20,7 @@ const Participate = (props: propsData) => {
 
   return (
     <>
+    <ToastContainer />
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"
           }`}

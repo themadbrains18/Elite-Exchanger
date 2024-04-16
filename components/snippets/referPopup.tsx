@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import Context from '../contexts/context';
 import Image from 'next/image';
 import IconsComponent from './icons';
@@ -15,6 +15,8 @@ interface activeSection {
 
 const ReferPopup = (props: activeSection) => {
   const { mode } = useContext(Context);
+  const [disable,setDisabled] = useState(false) 
+  const [disable2,setDisabled2] = useState(false) 
   // let icons=['whatsapp','fb','twitter','download','telegram','instagram'];
   let icons = [
     {
@@ -85,15 +87,19 @@ const ReferPopup = (props: activeSection) => {
           <label className="sm-text">Lite Referral ID</label>
           <div className="mt-[5px] lg:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
             <p className="sec-text text-gamma">{props?.session?.user?.refer_code}</p>
-            <button className="solid-button py-2 sec-text font-normal" onClick={() => {
+            <button className={`solid-button py-2 sec-text font-normal ${disable && "cursor-not-allowed"}`} disabled={disable} onClick={() => {
               // navigator.clipboard.writeText(props?.session?.user?.refer_code);
+              setDisabled(true)
               const input = document.createElement('textarea')
               input.value = props?.session?.user?.refer_code
               document.body.appendChild(input)
               input.select()
               document.execCommand('copy')
               document.body.removeChild(input)
-              toast.success('copy to clipboard')
+              toast.success('copy to clipboard', {autoClose:2000})
+              setTimeout(()=>{
+                setDisabled(false)
+              },3000)
             }}>
               Copy
             </button>
@@ -103,15 +109,19 @@ const ReferPopup = (props: activeSection) => {
           <label className="sm-text mb-[10px]">Lite Referral Link</label>
           <div className="mt-[5px] lg:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
             <p className="sec-text text-gamma">{`http://...?r=${props?.session?.user?.refer_code}&e=${props.referEvent}`}</p>
-            <button className="solid-button py-2 sec-text font-normal" onClick={() => {
+            <button className={`solid-button py-2 sec-text font-normal ${disable2 && "cursor-not-allowed"}`} disabled={disable2} onClick={() => {
               // navigator.clipboard.writeText(`${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}&e=${props.referEvent}`);
+              setDisabled2(true)
               const input = document.createElement('textarea')
               input.value = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}&e=${props.referEvent}`
               document.body.appendChild(input)
               input.select()
               document.execCommand('copy')
               document.body.removeChild(input)
-              toast.success('copy to clipboard')
+              toast.success('copy to clipboard', {autoClose:2000})
+              setTimeout(()=>{
+                setDisabled2(false)
+              },3000)
             }}>
               Copy
             </button>
