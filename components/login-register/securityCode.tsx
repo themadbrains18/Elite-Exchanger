@@ -113,7 +113,7 @@ const SecurityCode = (props: propsData) => {
         return;
       }
       setOtpMessage('');
-      if (props.api === 'login'){
+      if (props.api === 'login') {
         var locationData: any;
         let ipInfoData = await fetch('https://ipapi.co/json/');
         locationData = await ipInfoData.json();
@@ -136,7 +136,8 @@ const SecurityCode = (props: propsData) => {
       if (response.data.status === 200) {
 
         if (props.api === 'login') {
-          signIn("credentials", response?.data?.data.user);
+          await signIn("credentials", response?.data?.data.user);
+          router.push('/profile');
         }
         else if (props.api === 'register') {
           toast.success('You are register successfully and it redirect to login page in short time and login to access your account.', { position: 'top-center' });
