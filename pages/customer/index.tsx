@@ -43,7 +43,7 @@ export default function Home({ session, coinList }: Session) {
     fetch('https://ipapi.co/json/')
       .then(response => response.json())
       .then(data => {
-        console.log(`IP: ${data.ip}, Location: ${data.city}, ${data.region}, ${data.country}`);
+        console.log(`IP: ${data.ip}, Location: ${data}`);
       })
       .catch(error => console.error('Error:', error));
   }, [wbsocket])
