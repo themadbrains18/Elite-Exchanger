@@ -65,65 +65,8 @@ const AntiPhishingCode = (props: activeSection) => {
     }
   };
 
-  const snedOtpToUser = async () => {
-    try {
-      let username =
-        props.session?.user.email !== "null"
-          ? props.session?.user.email
-          : props.session?.user?.number;
-
-      let obj = {
-        username: username,
-        antiphishing: formData?.antiphishing,
-        otp: "string",
-      };
-
-      if (session !== undefined && session?.user !== undefined) {
-        const ciphertext = AES.encrypt(
-          JSON.stringify(obj),
-          `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
-        );
-        let record = encodeURIComponent(ciphertext.toString());
-
-        let userExist = await fetch(
-          `${process.env.NEXT_PUBLIC_BASEURL}/user/antiPhishing`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: props?.session?.user?.access_token,
-            },
-            body: JSON.stringify(record),
-          }
-        );
-        let res = await userExist.json();
-
-        if (res?.data?.otp !== undefined) {
-          toast.success(res?.data?.message);
-          setTimeout(() => {
-            if(enable !==2){
-              setEnable(2);
-            }
-            setSendOtpRes(res?.data?.otp);
-            props?.setShow(true);
-          }, 1000);
-        }
-        else{
-          toast.error(res?.data?.message);
-        }
-      } else {
-        toast.error("Your session is expired. Its auto redirect to login page");
-        setTimeout(() => {
-          signOut();
-        }, 1000);
-      }
-    } catch (error) { }
-  };
-
   const finalOtpVerification = async (otp: any) => {
     try {
-      // console.log(otp, "==otp");
-
       let username =
         props.session?.user.email !== "null"
           ? props.session?.user.email

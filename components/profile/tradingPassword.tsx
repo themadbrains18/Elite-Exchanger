@@ -10,6 +10,8 @@ import { signOut, useSession } from 'next-auth/react';
 import Verification from '../snippets/verification';
 import Image from "next/image";
 import clickOutSidePopupClose from '../snippets/clickOutSidePopupClose';
+import ConfirmPopupNew from '../snippets/confirm-popup-new';
+import VerificationNew from '../snippets/verificationNew';
 
 interface activeSection {
   setShow?: any;
@@ -157,69 +159,6 @@ const TradingPassword = (props: activeSection) => {
       console.log(error, "security settings");
     }
   };
-
-  const snedOtpToUser = async () => {
-    try {
-
-      setDisabled(true);
-      let username = props.session?.user.email !== 'null' ? props.session?.user.email : props.session?.user?.number
-
-      let obj;
-      if ((props?.session?.user?.tradingPassword !== null && props.tradePassword === true)) {
-        obj = {
-          username: username,
-          old_password: formData?.old_password,
-          new_password: formData?.new_password,
-          otp: "string",
-          step: 2
-        }
-      }
-      else {
-        obj = {
-          username: username,
-          new_password: formData?.new_password,
-          otp: "string",
-          step: 2
-        }
-      }
-
-      if (status === 'authenticated') {
-        const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
-        let record = encodeURIComponent(ciphertext.toString());
-
-        let userExist = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/tradePassword`, {
-          method: "PUT",
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": props?.session?.user?.access_token
-          },
-          body: JSON.stringify(record)
-        })
-        let res = await userExist.json();
-
-        if (res.status === 200) {
-          toast.success(res?.data?.message);
-
-          setTimeout(() => {
-            setEnable(2);
-            setSendOtpRes(res?.data?.otp);
-            props?.setShow(true)
-            setDisabled(true);
-          }, 1000)
-
-        }
-      }
-      else {
-        toast.error('Your session is expired. Its auto redirect to login page');
-        setTimeout(() => {
-          signOut();
-        }, 1000);
-
-      }
-    } catch (error) {
-
-    }
-  }
 
   const finalOtpVerification = async (otp: any) => {
     try {
@@ -483,25 +422,24 @@ const TradingPassword = (props: activeSection) => {
         </div>
       }
       {enable === 2 && (
-        <Verification
+        <VerificationNew
           setShow={props?.setShow}
-          setEnable={props?.setEnable}
+          setEnable={setEnable}
+          parentSetEnable={props.setEnable}
           type="email"
           data={formData}
           session={props?.session}
           finalOtpVerification={finalOtpVerification}
-          snedOtpToUser={snedOtpToUser}
-          sendOtpRes={sendOtpRes}
         />
       )}
       {enable === 4 && (
-        <ConfirmPopup
-          setEnable={props?.setEnable}
+        <ConfirmPopupNew
+          setEnable={setEnable}
           setShow={props?.setShow}
+          parentSetEnable={props.setEnable}
           type="number"
           data={formData}
           session={props?.session}
-          snedOtpToUser={snedOtpToUser}
         />
       )}
     </>

@@ -71,6 +71,19 @@ const AdNumber = (props: activeSection) => {
   const [otpMessage, setOtpMessage] = useState('');
   const [secondExpireTime, setSecondExpireTime] = useState();
 
+  let {
+    register,
+    setValue,
+    handleSubmit,
+    getValues,
+    watch,
+    setError,
+    clearErrors,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
   useEffect(() => {
     const inputElements = document.querySelectorAll(".input_wrapper input");
     inputElements.forEach((ele, index) => {
@@ -106,20 +119,15 @@ const AdNumber = (props: activeSection) => {
         }
       });
     });
-  }, [!show]);
 
-  let {
-    register,
-    setValue,
-    handleSubmit,
-    getValues,
-    watch,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
+    setTimeout(() => {
+      if(errors.uname){
+        clearErrors('uname');
+      }
+    }, 3000);
+  }, [!show, errors]);
+
+  
 
   const sendOtp = async () => {
     try {
@@ -210,6 +218,9 @@ const AdNumber = (props: activeSection) => {
           message: `This field is required`,
         });
         setDisabled(false);
+        setTimeout(() => {
+          clearErrors('uname')
+        }, 3000);
         return;
       }
     } catch (error) {
