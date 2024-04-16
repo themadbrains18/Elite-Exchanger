@@ -173,7 +173,7 @@ const AddressManagement = (props: fixSection) => {
 
   return (
     <>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <section className="lg:p-40 p-[15px] bg-white dark:bg-d-bg-primary rounded-10">
         <div
           className="mb-5 flex gap-2 cursor-pointer"

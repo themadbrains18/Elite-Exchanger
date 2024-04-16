@@ -80,7 +80,7 @@ const Whitelist = (props: activeSection) => {
   return (
     <>
 
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       {
         active ?
           <WhitelistSuccessful setEnable={props?.setEnable} setActive={setActive} setShow={props?.setShow} whitelist={props?.whitelist} />

@@ -19,7 +19,7 @@ router.put(async (req, res) => {
 
         const decodedStr = decodeURIComponent(req.body);
         let formData = AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
-console.log(formData,"=formData");
+// console.log(formData,"=formData");
 
         let data = await putData(`${process.env.NEXT_PUBLIC_APIURL}/site/edit`, JSON.parse(formData), token);
         return res.status(200).send({ data });

@@ -110,7 +110,7 @@ const Withdraw = (props: activeSection) => {
 
     // let isValid = await validAddress.json();
 
-    console.log(validAddress, "===isValid");
+    // console.log(validAddress, "===isValid");
     setAddressVerified(validAddress?.data?.data?.isValid);
   }
 
@@ -124,7 +124,7 @@ const Withdraw = (props: activeSection) => {
         },
       }).then(response => response.json());
 
-      console.log(address.data, '-----address data');
+      // console.log(address.data, '-----address data');
       let res = address?.data.filter((item: any) => item?.status === true)
       setAddressList(res);
     } catch (error) {

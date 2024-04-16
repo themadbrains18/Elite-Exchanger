@@ -26,17 +26,17 @@ const Verification = (props: activeSection) => {
   const Ref: any = useRef(null);
   const [timeLeft, setTimer] = useState('');
   const [enable, setEnable] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const [popup, setPopup] = useState(false);
-  const [disabled, setDisabled] = useState(false)
   const [otpMessage, setOtpMessage] = useState('');
 
   useEffect(() => {
     orderTimeCalculation();
-    console.log("=====================calling");
+    // console.log("=====================calling");
     
     const inputElements = document.querySelectorAll(".input_wrapper3 input");
     inputElements?.forEach((ele, index) => {
-      console.log('----------herer 2');
+      // console.log('----------herer 2');()
       
       ele.addEventListener("keydown", (e: any) => {
         if (e.keyCode === 8 && e.target.value === "") {
