@@ -113,6 +113,15 @@ const SecurityCode = (props: propsData) => {
         return;
       }
       setOtpMessage('');
+      if (props.api === 'login'){
+        var locationData: any;
+        let ipInfoData = await fetch('https://ipapi.co/json/');
+        locationData = await ipInfoData.json();
+        props.formData.ip = locationData?.ip
+        props.formData.location = locationData?.country_name
+        props.formData.region = locationData?.region
+      }
+
       const ciphertext = AES.encrypt(JSON.stringify(props.formData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record = encodeURIComponent(ciphertext.toString());
 
