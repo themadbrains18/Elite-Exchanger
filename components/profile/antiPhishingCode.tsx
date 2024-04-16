@@ -5,9 +5,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { AES } from "crypto-js";
 import { ToastContainer, toast } from "react-toastify";
-import ConfirmPopup from "@/admin/admin-snippet/confirm-popup";
+import ConfirmPopupNew from "../snippets/confirm-popup-new";
 import { signOut, useSession } from "next-auth/react";
-import Verification from "../snippets/verification";
+import VerificationNew from "../snippets/verificationNew";
 import Image from "next/image";
 import clickOutSidePopupClose from "../snippets/clickOutSidePopupClose";
 
@@ -58,7 +58,6 @@ const AntiPhishingCode = (props: activeSection) => {
 
   const onHandleSubmit = async (data: any) => {
     try {
-      
       setEnable(4);
       setFormData(data);
     } catch (error) {
@@ -249,25 +248,24 @@ const AntiPhishingCode = (props: activeSection) => {
         </div>
       )}
       {enable === 2 && (
-        <Verification
+        <VerificationNew
           setShow={props?.setShow}
-          setEnable={props?.setEnable}
+          setEnable={setEnable}
+          parentSetEnable={props.setEnable}
           type="email"
           data={formData}
           session={props?.session}
           finalOtpVerification={finalOtpVerification}
-          snedOtpToUser={snedOtpToUser}
-          sendOtpRes={sendOtpRes}
         />
       )}
       {enable === 4 && (
-        <ConfirmPopup
-          setEnable={props?.setEnable}
+        <ConfirmPopupNew
+          setEnable={setEnable}
           setShow={props?.setShow}
+          parentSetEnable={props.setEnable}
           type="number"
           data={formData}
           session={props?.session}
-          snedOtpToUser={snedOtpToUser}
         />
       )}
     </>
