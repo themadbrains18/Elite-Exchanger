@@ -248,7 +248,7 @@ const EventTaskPopup = (props: activeSection) => {
             </div>
 
             {/* card style 1 */}
-            <div className="px-[24px] py-[8px] dark:bg-[#000] bg-[#f5f7fa] rounded-[8px] flex relative overflow-hidden gap-[24px] min-w-[1000px] mb-[24px]">
+            <div className="px-[24px] py-[8px] dark:bg-[#000] bg-[#c5cad3] rounded-[8px] flex relative overflow-hidden gap-[24px] min-w-[1000px] mb-[24px]">
                 <div className="max-w-[30%] w-full flex items-center">
                     <div className="max-w-[50%] w-full">
                         <h3 className="md-heading text-primary">10 USDT</h3>
@@ -279,7 +279,7 @@ const EventTaskPopup = (props: activeSection) => {
                             }
                             {/* <button className='text-primary underline' onClick={() => handleRewardsRequest()}>Claim Now</button> */}
                         </div>
-                        <div className="bg-[#f5f7fa] rounded-[8px] h-[8px] w-full mt-[20px] relative">
+                        <div className="bg-[#c5cad3] rounded-[8px] h-[8px] w-full mt-[20px] relative">
 
                             <div style={{ width: depositPercentage.toFixed(2) + '%' }} className={`bg-primary absolute top-0 left-0 h-full  rounded-[8px]`}></div>
                         </div>
@@ -289,7 +289,7 @@ const EventTaskPopup = (props: activeSection) => {
             </div>
 
             {/* card style 2 */}
-            <div className="px-[24px] py-[8px] dark:bg-[#000] bg-[#f5f7fa] rounded-[8px] flex relative overflow-hidden gap-[24px] min-w-[1000px] mb-[24px]">
+            <div className="px-[24px] py-[8px] dark:bg-[#000] bg-[#c5cad3] rounded-[8px] flex relative overflow-hidden gap-[24px] min-w-[1000px] mb-[24px]">
                 <div className="max-w-[30%] w-full flex items-center">
                     <div className="max-w-[70%] w-full">
                         <h3 className="md-heading text-primary">{props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.amount : 20} USDT</h3>
@@ -311,7 +311,7 @@ const EventTaskPopup = (props: activeSection) => {
                         </svg>
                     </div>
                 </div>
-                <div className="max-w-[70%] w-full  bg-white dark:bg-d-bg-primary  px-[24px] py-[16px]  rounded-[8px] min-h-[126px] relative flex items-center mr-[-16px] after:absolute after:top-[50%] after:left-[50%]  after:translate-x-[-50%] after:translate-y-[-50%] after:w-[2px] after:h-full after:bg-[#f5f7fa]">
+                <div className="max-w-[70%] w-full  bg-white dark:bg-d-bg-primary  px-[24px] py-[16px]  rounded-[8px] min-h-[126px] relative flex items-center mr-[-16px] after:absolute after:top-[50%] after:left-[50%]  after:translate-x-[-50%] after:translate-y-[-50%] after:w-[2px] after:h-full after:bg-[#c5cad3]">
                     <div className='flex flex-col w-full'>
                         {depsoitTradeEnable &&
                             <button className='text-primary underline text-end mb-[20px]'>Claim Now</button>
@@ -320,19 +320,19 @@ const EventTaskPopup = (props: activeSection) => {
                             <div>
 
                                 <h4 className="sm-heading !text-[#000] dark:!text-[#fff] ">Deposit ≥ {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100} USDT</h4>
-                                <div className="bg-[#f5f7fa] rounded-[8px] h-[8px] w-full mt-[20px] relative">
+                                <div className="bg-[#c5cad3] rounded-[8px] h-[8px] w-full mt-[20px] relative">
                                     <div style={{ width: depositPercentage.toFixed(2) + '%' }} className={`bg-primary absolute top-0 left-0  h-full  rounded-[8px]`}></div>
                                 </div>
                                 <p className="info-14 mt-[8px] ">{depositAmount} / {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.deposit : 100} USDT</p>
                             </div>
                             <div className="relative z-[1]">
-                                <p className="w-[50px] flex h-[50px] rounded-full bg-[#f5f7fa] ">
+                                <p className="w-[50px] flex h-[50px] rounded-full bg-[#c5cad3] ">
                                     <span className="m-auto">AND</span>
                                 </p>
                             </div>
                             <div>
                                 <h4 className="sm-heading">Trade ≥ {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.trade : 500} USDT</h4>
-                                <div className="bg-[#f5f7fa] rounded-[8px] h-[8px] w-full mt-[20px] relative">
+                                <div className="bg-[#c5cad3] rounded-[8px] h-[8px] w-full mt-[20px] relative">
                                     <div style={{ width: tradePercentage.toFixed(2) + '%' }} className={`bg-primary absolute top-0 left-0 h-full  rounded-[8px]`}></div>
                                 </div>
                                 <p className="info-14 mt-[8px]">{tradeAmount} / {props?.referProgamTask?.refer_program_invite !== null ? props?.referProgamTask?.refer_program_invite?.trade : 500} USDT</p>

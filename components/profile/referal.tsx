@@ -242,9 +242,9 @@ const Referal = (props: fixSection) => {
                 <tbody>
                   {referList && referList.length > 0 && referList.map((item: any, index: number) => {
                     return <tr key={index}>
-                      <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{(item?.User?.id)?.substring(1, 7)}</td>
+                      <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{(item?.referral_user)?.substring(0, 6)}</td>
                       <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{moment(item?.createdAt)?.format('YYYY-MM-DD HH:mm:ss')}</td>
-                      <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white hidden md:block">{item?.refer_code}</td>
+                      <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white hidden md:block">{(item?.user_id)?.substring(0, 6)}</td>
                       <td className="text-left py-10 md:py-20 sm-text !text-[#52c41a]">Register</td>
                       <td className="text-left py-10 md:py-20 sm-text !text-[#52c41a] cursor-pointer max-[767px]:text-end " onClick={() => { setReferProgramTask(item); setTaskShow(true); }}>view</td>
                     </tr>
@@ -374,7 +374,7 @@ const Referal = (props: fixSection) => {
                           height={104}
                         />
                         <p className="sm-text">
-                          Log in to view your referral history.
+                          No record found
                         </p>
                       </div>
                     </td>
