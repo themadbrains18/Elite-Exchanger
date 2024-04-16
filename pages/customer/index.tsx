@@ -40,12 +40,12 @@ export default function Home({ session, coinList }: Session) {
 
   useEffect(() => {
     socket();
-    fetch('https://ipapi.co/json/')
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-      })
-      .catch(error => console.error('Error:', error));
+    // fetch('https://ipapi.co/json/')
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //   })
+    //   .catch(error => console.error('Error:', error));
   }, [wbsocket])
 
   const socket = () => {
