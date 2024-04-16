@@ -92,11 +92,10 @@ const Verification = (props: activeSection) => {
     else if (currentTime > deadline) {
       setEnable(false);
       setDisabled(false);
-      const inputElements = document.querySelectorAll(".input_wrapper3 input");
-      inputElements?.forEach((ele, index) => {
-        (inputElements[index] as HTMLInputElement).value = ""
-      });
-      // setOtp('');
+      // const inputElements = document.querySelectorAll(".input_wrapper3 input");
+      // inputElements?.forEach((ele, index) => {
+      //   (inputElements[index] as HTMLInputElement).value = ""
+      // });
     }
   }
 
@@ -114,11 +113,10 @@ const Verification = (props: activeSection) => {
       if (Ref.current) clearInterval(Ref.current);
       setEnable(false);
       setDisabled(false);
-      const inputElements = document.querySelectorAll(".input_wrapper3 input");
-      inputElements?.forEach((ele, index) => {
-        (inputElements[index] as HTMLInputElement).value = ""
-      });
-      // setOtp('');
+      // const inputElements = document.querySelectorAll(".input_wrapper3 input");
+      // inputElements?.forEach((ele, index) => {
+      //   (inputElements[index] as HTMLInputElement).value = ""
+      // });
     }
   }
 
