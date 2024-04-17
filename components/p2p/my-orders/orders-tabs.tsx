@@ -10,10 +10,6 @@ interface propsData {
 const OrdersTabs = (props: propsData) => {
     const [active, setActive] = useState(1);
 
-    
-    // all type data
- 
-
     return (
         <>
             <div className="flex gap-5 md:gap-30 w-full lg:w-auto  mt-30 md:mt-40">

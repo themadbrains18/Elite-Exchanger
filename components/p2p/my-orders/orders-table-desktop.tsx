@@ -38,7 +38,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
-            let userAllOrderList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/orderlist?userid=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
+            let userAllOrderList:any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/status?userid=${session?.user?.user_id}&status=${props?.active===1?"all":props?.active===2?"isProcess":props?.active===3?"isReleased":props?.active===4?"isCanceled":"all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
                 method: "GET",
                 headers: {
                   "Authorization": session?.user?.access_token
@@ -46,24 +46,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
               }).then(response => response.json());
 
               setTotal(userAllOrderList?.data?.total)
-              const AllTypedata = userAllOrderList?.data?.data;
-
-              // pending orders
-              const pendingOrder = userAllOrderList?.data?.data?.filter((item: any) => {
-                  return item.status === 'isProcess'
-              })
-              // compeleted orders
-              const CompletedOrder =userAllOrderList?.data?.data?.filter((item: any) => {
-                  return item.status === 'isReleased'
-              })
-              // canceled orders
-              //  'isCompleted', 'isCanceled', 'isReleased'
-              const CanceledOrder = userAllOrderList?.data?.data?.filter((item: any) => {
-                  return item.status === 'isCanceled'
-              })
-
-            setList(props?.active===1 ? AllTypedata : props?.active===2 ? pendingOrder :props?.active ===3 ? CompletedOrder : props?.active=== 4 ? CanceledOrder : []);
-           
+            setList(userAllOrderList?.data?.data);
 
         } catch (error) {
             console.log("error in get token list", error);
