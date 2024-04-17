@@ -28,7 +28,7 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:7000)
   let hostname = req.headers
     .get("host")!
-    .replace(`.${process.env.NEXT_PUBLIC_APP_DOMAIN}`, `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
+    .replace(`.${process.env.NEXT_PUBLIC_APP_HOSTNAME}`, `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
   // special case for Vercel preview deployment URLs
   if (
@@ -40,7 +40,7 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
   }
 
 
-  console.log(hostname,'--------------------hostname');
+  // console.log(hostname,'--------------------hostname');
 
   const searchParams = req.nextUrl.searchParams.toString();
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
@@ -70,10 +70,10 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
       "https://vercel.com/blog/platforms-starter-kit",
     );
   }
-  console.log(path,"==path");
+  // console.log(path,"==path");
   // rewrite root application to `/home` folder
   if (
-    hostname === process.env.NEXT_PUBLIC_APP_DOMAIN ||
+    hostname === process.env.NEXT_PUBLIC_APP_HOSTNAME ||
     hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
   ) {
     
