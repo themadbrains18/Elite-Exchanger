@@ -4,7 +4,8 @@ import clickOutSidePopupClose from "./clickOutSidePopupClose";
 import Image from "next/image";
 
 interface activeSection {
-  setActive: Function;
+  setActive?: Function;
+  setActive1?: Function;
   setShow: Function;
   type: string;
 }
@@ -13,7 +14,9 @@ const Successfull = (props: activeSection) => {
   const { mode } = useContext(Context);
 
   const closePopup = () => {
-    props.setShow(false), props.setActive(0);
+    props.setShow(false), 
+    props.setActive!==undefined &&  props.setActive(0);
+    props.setActive1!==undefined &&  props.setActive1(false);
   };
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
@@ -38,7 +41,8 @@ const Successfull = (props: activeSection) => {
           </p>
           <svg
             onClick={() => {
-              props.setShow(false), props.setActive(0);
+              props.setShow(false), props.setActive!==undefined &&  props.setActive(0);
+              props.setActive1!==undefined &&  props.setActive1(false);
             }}
             enableBackground="new 0 0 60.963 60.842"
             version="1.1"
@@ -76,7 +80,8 @@ const Successfull = (props: activeSection) => {
           <button
             className="solid-button w-full"
             onClick={() => {
-              props?.setActive(0);
+              props.setActive!==undefined &&  props.setActive(0);
+              props.setActive1!==undefined &&  props.setActive1(false);
               props.setShow(false);
             }}
           >
@@ -87,7 +92,8 @@ const Successfull = (props: activeSection) => {
             <button
               className="solid-button w-full"
               onClick={() => {
-                props?.setActive(0);
+                props.setActive!==undefined &&  props.setActive(0);
+                props.setActive1!==undefined &&  props.setActive1(false);
                 props.setShow(false);
               }}
             >
@@ -96,7 +102,8 @@ const Successfull = (props: activeSection) => {
             <button
               className="solid-button w-full"
               onClick={() => {
-                props?.setActive(0);
+                props.setActive!==undefined &&  props.setActive(0);
+                props.setActive1!==undefined &&  props.setActive1(false);
                 props.setShow(false);
               }}
             >

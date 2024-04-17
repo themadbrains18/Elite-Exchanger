@@ -24,7 +24,7 @@ const P2pBuy = (props: propsData) => {
   const [selectedPost, setSelectedPost] = useState(Object);
   const [newPosts, setNewPosts] = useState([]);
 
-  for (const post of props?.posts) {
+  for (const post of props?.posts?.data) {
     let payment_method: any = [];
     for (const upid of post.p_method) {
       post?.User?.user_payment_methods.filter((item: any) => {
@@ -88,9 +88,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     method: "GET"
   }).then(response => response.json());
 
-  let allPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/buy`, {
+  let allPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/buy?itemOffset=0&itemsPerPage=20`, {
     method: "GET",
   }).then(response => response.json());
+
 
   // masterpayment
   let masterPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/masterpayment`, {

@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { Fragment, useContext, useState } from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import ReactPaginate from "react-paginate";
 import IconsComponent from '../../snippets/icons';
 import Context from "../../contexts/context";
@@ -18,19 +18,52 @@ const BuyTableDesktop = (props: activeSection) => {
   const [itemOffset, setItemOffset] = useState(0);
 
   const { status, data: session } = useSession();
+  const [list, setList] = useState([])
 
   let data = props?.posts || [];
 
-  let itemsPerPage = 10;
-  const endOffset = itemOffset + itemsPerPage;
-  const currentItems = data?.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(data?.length / itemsPerPage);
+  let itemsPerPage = 20;
+
+  
+  useEffect(() => {
+    getAllPosts(itemOffset);
+  }, [itemOffset]);
+
+
+  const getAllPosts = async (itemOffset: number) => {
+    try {
+      if (itemOffset === undefined) {
+        itemOffset = 0;
+      }
+      let posts = await fetch(
+        `/api/p2p/buy?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
+        {
+          method: "GET",
+          headers: {
+            "Authorization": session?.user?.access_token
+          },
+        }
+      ).then((response) => response.json());
+
+
+      setList(posts?.data?.data);
+
+    } catch (error) {
+      console.log("error in get token list", error);
+
+    }
+  };
+
+  // const endOffset = itemOffset + itemsPerPage;
+  // const currentItems = data?.data?.slice(itemOffset, endOffset);
+  const pageCount = Math.ceil(data.totalLength / itemsPerPage);
 
   const handlePageClick = async (event: any) => {
-    const newOffset = (event.selected * itemsPerPage) % data.length;
+    const newOffset = (event.selected * itemsPerPage) % data.totalLength;
     setItemOffset(newOffset);
 
   };
+
 
   return (
     <>
@@ -83,9 +116,7 @@ const BuyTableDesktop = (props: activeSection) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems?.map((item: any, index: number) => {
-
-              // console.log(item, '========post list');
+            {list.length>0 && list?.map((item: any, index: number) => {
               if (session?.user?.user_id !== item?.user_id) {
                 const profileImg = item?.user?.profile && item?.user?.profile?.image !== null ? `${item?.user?.profile?.image}` : `/assets/orders/user1.png`;
                 const userName = item?.user?.profile && item?.user?.profile?.dName !== null ? item?.user?.profile?.dName : item?.user?.user_kyc?.fname;
@@ -152,7 +183,7 @@ const BuyTableDesktop = (props: activeSection) => {
 
             })}
 
-            {currentItems.length === 0 &&
+            {list.length === 0 &&
               <tr>
                 <td colSpan={7}>
                   <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>

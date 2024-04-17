@@ -33,7 +33,7 @@ const CountrylistDropdown = (props: dataList) => {
       let targetEl = evt?.target?.parentNode?.parentElement; // clicked element
       // console.log(targetEl,"======")
       if (evt?.target.nodeName === 'svg') {
-        targetEl = evt?.target?.parentNode.parentNode
+        targetEl = evt?.target?.parentNode?.parentNode
       }
       // if (targetEl.classList.contains('coin-dropdown-country') === false) {
       //   setShow(false);
