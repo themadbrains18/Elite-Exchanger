@@ -113,7 +113,7 @@ const MyOrders = (props: propsData) => {
               </div>
               {
                 active1 &&
-                <Successfull setShow={setShow} setActive={setActive1} type="release" />
+                <Successfull setShow={setShow} setActive1={setActive1} type="release" />
               }
             </>
             :

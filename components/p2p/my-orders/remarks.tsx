@@ -137,7 +137,7 @@ const Remarks = (props: propsData) => {
                 toast.success('Thanks for payment. Receiver release assets in short time.');
             }
             else {
-                toast.error(res.data.data);
+                toast.error(res.data.data, {autoClose:2000} );
                 return;
             }
         }
@@ -245,7 +245,7 @@ const Remarks = (props: propsData) => {
                     if (Ref.current) clearInterval(Ref.current);
                 }
                 else {
-                    toast.error(res?.data?.data);
+                    toast.error(res?.data?.data,{autoClose:2000});
                     return;
                 }
             }
@@ -361,7 +361,7 @@ const Remarks = (props: propsData) => {
             }
             {
                 active1 &&
-                <Successfull setShow={setShow} setActive={setActive1} type="release" />
+                <Successfull setShow={setShow} setActive1={setActive1} type="release" />
             }
             {
                 confirmation &&
