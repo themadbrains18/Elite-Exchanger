@@ -31,7 +31,7 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:7000)
   let hostname = req.headers
     .get("host")!
-    .replace(`.${process.env.NEXT_PUBLIC_APP_HOSTNAME}`, `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
+    .replace(`.${process.env.NEXT_PUBLIC_APP_DOMAIN}`, `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
   // Redirect HTTP to HTTPS
   // if (req.headers.get("x-forwarded-proto") !== "https" && process.env.NEXT_PUBLIC_DEVELOPMENT !=="local") {
@@ -79,7 +79,7 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
   console.log(path,"==path");
   // rewrite root application to `/home` folder
   if (
-    hostname === process.env.NEXT_PUBLIC_APP_HOSTNAME ||
+    hostname === process.env.NEXT_PUBLIC_APP_DOMAIN ||
     hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
   ) {
     console.log(hostname,'--------------------hostname');
