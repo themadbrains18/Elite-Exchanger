@@ -37,13 +37,19 @@ export default function Home({ session, coinList }: Session) {
   const [allCoins, setAllCoins] = useState(coinList);
 
   const wbsocket = useWebSocket();
-  
+
   useEffect(() => {
     socket();
+    // fetch('https://ipapi.co/json/')
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     console.log(data);
+    //   })
+    //   .catch(error => console.error('Error:', error));
   }, [wbsocket])
 
-  const socket=()=>{
-    if(wbsocket){
+  const socket = () => {
+    if (wbsocket) {
       wbsocket.onmessage = (event) => {
         const data = JSON.parse(event.data).data;
         let eventDataType = JSON.parse(event.data).type;

@@ -42,25 +42,19 @@ router.post(async (req, res) => {
     // Access different properties of the user agent object
     const browser = userAgent.toAgent();
     const os = userAgent.os.toString();
-    var locationData: any;
+    // var locationData: any;
 
-    let ip = await fetch("https://api.ipgeolocation.io/getip");
-    
-    let ipAddress = await ip.json();
-    // console.log(await ipAddress.ip,'---------get ip');
-    let ipInfoData = await fetch(`https://api.ipgeolocation.io/ipgeo?ip=${ipAddress?.ip}&apiKey=7d5fe611c25341e098d44f283185d665`);
-    // .then((response) => response.text())
-    // .then((result) => {locationData = JSON.parse(result) })
-    // .catch((error) => console.error(error));
-    
-    // .then(response => response.json())
-    // .then(data => {
-    //   locationData = data
-    // });
-    // console.log(await ipInfoData.json(),'-------------ipInfoData');
-    locationData = await ipInfoData.json();
-    // return 
+    // let ipInfoData = await fetch('https://ipapi.co/json/');
 
+    // let ip = await fetch("https://api.ipgeolocation.io/getip");
+    
+    // let ipAddress = await ip.json();
+    // let ipInfoData = await fetch(`https://api.ipgeolocation.io/ipgeo?ip=${ipAddress?.ip}&apiKey=7d5fe611c25341e098d44f283185d665`);
+    
+    // locationData = await ipInfoData.json();
+
+    // console.log(locationData)
+    
     const decodedStr = decodeURIComponent(req.body);
     let formData = AES.decrypt(
       decodedStr,
@@ -71,10 +65,9 @@ router.post(async (req, res) => {
     formdata.deviceType = device
     formdata.os = os
     formdata.browser = browser
-    formdata.ip = locationData?.ip
-    formdata.location = locationData?.country_name
-    formdata.region = locationData?.state_prov
-
+    // formdata.ip = locationData?.ip
+    // formdata.location = locationData?.country_name
+    // formdata.region = locationData?.region
 
     let token = "";
     let data = await postData(

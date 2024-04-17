@@ -5,9 +5,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { AES } from "crypto-js";
 import { ToastContainer, toast } from "react-toastify";
-import ConfirmPopup from "@/admin/admin-snippet/confirm-popup";
+import ConfirmPopupNew from "../snippets/confirm-popup-new";
 import { signOut, useSession } from "next-auth/react";
-import Verification from "../snippets/verification";
+import VerificationNew from "../snippets/verificationNew";
 import Image from "next/image";
 import clickOutSidePopupClose from "../snippets/clickOutSidePopupClose";
 
@@ -58,7 +58,6 @@ const AntiPhishingCode = (props: activeSection) => {
 
   const onHandleSubmit = async (data: any) => {
     try {
-      
       setEnable(4);
       setFormData(data);
     } catch (error) {
@@ -66,65 +65,8 @@ const AntiPhishingCode = (props: activeSection) => {
     }
   };
 
-  const snedOtpToUser = async () => {
-    try {
-      let username =
-        props.session?.user.email !== "null"
-          ? props.session?.user.email
-          : props.session?.user?.number;
-
-      let obj = {
-        username: username,
-        antiphishing: formData?.antiphishing,
-        otp: "string",
-      };
-
-      if (session !== undefined && session?.user !== undefined) {
-        const ciphertext = AES.encrypt(
-          JSON.stringify(obj),
-          `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
-        );
-        let record = encodeURIComponent(ciphertext.toString());
-
-        let userExist = await fetch(
-          `${process.env.NEXT_PUBLIC_BASEURL}/user/antiPhishing`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: props?.session?.user?.access_token,
-            },
-            body: JSON.stringify(record),
-          }
-        );
-        let res = await userExist.json();
-
-        if (res?.data?.otp !== undefined) {
-          toast.success(res?.data?.message);
-          setTimeout(() => {
-            if(enable !==2){
-              setEnable(2);
-            }
-            setSendOtpRes(res?.data?.otp);
-            props?.setShow(true);
-          }, 1000);
-        }
-        else{
-          toast.error(res?.data?.message);
-        }
-      } else {
-        toast.error("Your session is expired. Its auto redirect to login page");
-        setTimeout(() => {
-          signOut();
-        }, 1000);
-      }
-    } catch (error) { }
-  };
-
   const finalOtpVerification = async (otp: any) => {
     try {
-      // console.log(otp, "==otp");
-
       let username =
         props.session?.user.email !== "null"
           ? props.session?.user.email
@@ -249,25 +191,24 @@ const AntiPhishingCode = (props: activeSection) => {
         </div>
       )}
       {enable === 2 && (
-        <Verification
+        <VerificationNew
           setShow={props?.setShow}
-          setEnable={props?.setEnable}
+          setEnable={setEnable}
+          parentSetEnable={props.setEnable}
           type="email"
           data={formData}
           session={props?.session}
           finalOtpVerification={finalOtpVerification}
-          snedOtpToUser={snedOtpToUser}
-          sendOtpRes={sendOtpRes}
         />
       )}
       {enable === 4 && (
-        <ConfirmPopup
-          setEnable={props?.setEnable}
+        <ConfirmPopupNew
+          setEnable={setEnable}
           setShow={props?.setShow}
+          parentSetEnable={props.setEnable}
           type="number"
           data={formData}
           session={props?.session}
-          snedOtpToUser={snedOtpToUser}
         />
       )}
     </>
