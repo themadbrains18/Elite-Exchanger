@@ -80,8 +80,11 @@ const CountrylistDropdown = (props: dataList) => {
               )
             })} */}
 
+            {props?.address && 
+              <li className='cursor-default flex items-center gap-10 p-10 py-[6px] hover:bg-grey dark:hover:bg-d-bg-primary rounded-[5px]'>
+                <p className={`sm-text rounded-[5px] dark:!text-d-nav-secondary   !text-banner-text`}>Address Book</p></li>
+            }
             {props?.address && props?.data?.map((item: any, index: number) => {
-
               return (
                 <>
                   <li key={index} onClick={() => {props?.onCountryChange(item?.address, item?.network); setText(item.address); setShow(false) }} className='cursor-pointer  flex items-center gap-10 p-10 py-[6px] hover:bg-grey dark:hover:bg-d-bg-primary rounded-[5px]'>

@@ -18,13 +18,13 @@ import IconsComponent from "./icons";
 import { useWebSocket } from "@/libs/WebSocketContext";
 
 const schema = yup.object().shape({
-  networkId: yup.string().optional().default(""),
+  networkId: yup.string().required('This field is required'),
   withdraw_wallet: yup.string().required("This field is required"),
   amount: yup
     .number()
     .positive()
     .required("This field is required")
-    .typeError("Enter value must be number and positive value"),
+    .typeError("This field is required"),
 });
 
 interface activeSection {
@@ -82,8 +82,20 @@ const Withdraw = (props: activeSection) => {
   });
 
   useEffect(() => {
-    getAllWhitelistAddress()
-  }, [])
+    getAllWhitelistAddress();
+    setTimeout(() => {
+      if (errors.amount) {
+        clearErrors('amount')
+      }
+      if (errors.networkId) {
+        clearErrors('networkId')
+      }
+      if (errors.withdraw_wallet) {
+        clearErrors('withdraw_wallet')
+      }
+    }, 3000);
+
+  }, [errors])
 
   const list = props?.networks.filter((item: any) => {
     if (process.env.NEXT_PUBLIC_APPLICATION_MODE === "dev") {
@@ -132,29 +144,52 @@ const Withdraw = (props: activeSection) => {
     }
   }
 
-  const getNetworkDetail = (network: any) => {
+  const getNetworkDetail = async (network: any) => {
     setSelectedNetwork(network?.id);
+    setValue('networkId', network?.id);
     clearErrors("networkId");
+    let walletAddress = getValues('withdraw_wallet');
+    if (walletAddress !== null && walletAddress !== "") {
+      var raw = JSON.stringify({
+        "address": walletAddress,
+        "currency": network?.symbol.toLowerCase()
+      });
+
+      let validAddress = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/verified`, {
+        method: "POST",
+        body: raw,
+      }).then((response) => response.json());
+
+      setAddressVerified(validAddress?.data?.data?.isValid);
+    }
 
   };
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
     try {
 
-      if (selectedNetwork === "") {
-        setError("networkId", {
-          type: "custom",
-          message: "Please select network",
-        });
-      } else {
-        data.networkId = selectedNetwork;
-        clearErrors("networkId");
-      }
+      // if (selectedNetwork === "") {
+      //   setError("networkId", {
+      //     type: "custom",
+      //     message: "Please select network",
+      //   });
+      //   setTimeout(() => {
+      //     clearErrors('networkId')
+      //   }, 3000);
+      //   return
+      // } 
+      // else {
+      //   data.networkId = selectedNetwork;
+      //   clearErrors("networkId");
+      // }
       if (data.amount > props.selectedCoinBalance) {
         setError("amount", {
           type: "custom",
           message: "Insufficient balance.",
         });
+        setTimeout(() => {
+          clearErrors('amount')
+        }, 3000);
         return;
       }
 
@@ -163,6 +198,9 @@ const Withdraw = (props: activeSection) => {
           type: "custom",
           message: "Please enter amount more than your transaction fee.",
         });
+        setTimeout(() => {
+          clearErrors('amount')
+        }, 3000);
         return;
       }
       setDisable(true);
@@ -204,24 +242,22 @@ const Withdraw = (props: activeSection) => {
             setFormData(data);
             setDisable(false);
             setEnable(2);
-          }, 1000);
+          }, 2000);
         }
         else {
-          setDisable(false);
-          toast.error(response?.data?.data);
-          if (response?.data?.data === 'Unuthorized User') {
-          }
+          toast.error(response?.data?.data, { autoClose: 2000 });
+          setTimeout(() => {
+            setDisable(false);
+          }, 3000);
         }
       }
       else {
-        setDisable(false);
-        toast.error('Your session is expired. Its auto redirect to login page');
+        toast.error('Your session is expired. Its auto redirect to login page', { autoClose: 2000 });
         setTimeout(() => {
+          setDisable(false);
           signOut();
         }, 4000);
-
       }
-
     } catch (error) {
       console.log(error);
       setDisable(false);
@@ -365,7 +401,7 @@ const Withdraw = (props: activeSection) => {
 
   return (
     <>
-      <ToastContainer position="top-right" />
+      <ToastContainer position="top-right" limit={1} />
       {enable === 1 && (
         <div ref={wrapperRef} className="max-h-[614px] lg:max-h-fit overflow-y-auto max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <div className="flex items-center justify-between pb-[10px] md:pb-[15px] border-b border-grey-v-2 dark:border-opacity-[15%] dark:border-beta">
@@ -427,6 +463,7 @@ const Withdraw = (props: activeSection) => {
                   placeholder="Select Network type"
                   auto={false}
                   widthFull={true}
+                  {...register('networkId')}
                   value={selectedNetworkValue}
                   onNetworkChange={getNetworkDetail}
                 />
@@ -437,16 +474,16 @@ const Withdraw = (props: activeSection) => {
 
               <div className="mb-[15px] md:mb-5">
                 <label htmlFor="withdraw_wallet" className="sm-text ">Destination Address</label>
-                <div className={`border border-grey-v-1 dark:border-opacity-[15%] mt-[10px] relative  gap-[15px] items-center ${addressVerified?'flex w-full':'block'} cursor-pointer rounded-5 p-[11px] md:p-[15px]`} onClick={() => { setShow(!show) }}>
-                 {/* <div className="flex justify-between items-center relative w-full" onClick={() => { setShow(!show) }}> */}
+                <div className={`border border-grey-v-1 dark:border-opacity-[15%] mt-[10px] relative  gap-[15px] items-center ${addressVerified ? 'flex w-full' : 'block'} cursor-pointer rounded-5 p-[11px] md:p-[15px]`} onClick={() => { setShow(!show) }}>
+                  {/* <div className="flex justify-between items-center relative w-full" onClick={() => { setShow(!show) }}> */}
                   <input
                     type="text"
                     id="withdraw_wallet"
                     {...register("withdraw_wallet")}
                     name="withdraw_wallet"
                     placeholder="Enter Address"
-                    className="outline-none max-w-full  sm-text w-full bg-[transparent]"
-
+                    className={`outline-none max-w-full  sm-text w-full bg-[transparent] ${session?.user?.whitelist === true ? 'cursor-pointer' : ''}`}
+                    readOnly={session?.user?.whitelist}
                   />
 
 
