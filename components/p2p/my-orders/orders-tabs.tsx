@@ -10,22 +10,9 @@ interface propsData {
 const OrdersTabs = (props: propsData) => {
     const [active, setActive] = useState(1);
 
+    
     // all type data
-    const AllTypedata = props.orderList;
-
-    // pending orders
-    const pendingOrder = props.orderList.filter((item: any) => {
-        return item.status === 'isProcess'
-    })
-    // compeleted orders
-    const CompletedOrder = props.orderList.filter((item: any) => {
-        return item.status === 'isReleased'
-    })
-    // canceled orders
-    //  'isCompleted', 'isCanceled', 'isReleased'
-    const CanceledOrder = props.orderList.filter((item: any) => {
-        return item.status === 'isCanceled'
-    })
+ 
 
     return (
         <>
@@ -65,16 +52,16 @@ const OrdersTabs = (props: propsData) => {
             </div>
 
             {/* Table Data */}
-            {
-                active === 1 &&
                 <div>
                     <div className='md:block hidden'>
-                        <OrdersTableDesktop data={AllTypedata} setOrderId={props.setOrderId} />
+                        <OrdersTableDesktop active={active} setOrderId={props.setOrderId} />
                     </div>
                     <div className='md:hidden'>
-                        <OrdersTableMobile data={AllTypedata} setOrderId={props.setOrderId} />
+                        <OrdersTableMobile active={active} setOrderId={props.setOrderId} />
                     </div>
                 </div>
+            {/* {
+                active === 1 &&
             }
             {
                 active === 2 &&
@@ -108,7 +95,7 @@ const OrdersTabs = (props: propsData) => {
                         <OrdersTableMobile data={CanceledOrder} setOrderId={props.setOrderId} />
                     </div>
                 </div>
-            }
+            } */}
         </>
     )
 }

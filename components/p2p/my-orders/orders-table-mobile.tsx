@@ -1,14 +1,80 @@
 import Image from 'next/image';
-import React, { Fragment } from 'react'
+import React, { Fragment, useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
+import Context from '@/components/contexts/context';
+import { useSession } from 'next-auth/react';
+import ReactPaginate from 'react-paginate';
 
 interface dataTypes {
-    data: any;
+    active: any;
     setOrderId?: any;
 }
 const OrdersTableMobile = (props: dataTypes) => {
     
     const route = useRouter();
+    const { mode } = useContext(Context);
+
+    const [itemOffset, setItemOffset] = useState(0);
+
+    const { status, data: session } = useSession();
+    const [list, setList] = useState([])
+    const [total, setTotal] = useState(0)
+
+
+    let itemsPerPage = 20;
+
+
+    useEffect(() => {
+        getAllOrders(itemOffset);
+    }, [itemOffset, props?.active]);
+
+
+    const getAllOrders = async (itemOffset: number) => {
+        try {
+            console.log("=here");
+            
+            if (itemOffset === undefined) {
+                itemOffset = 0;
+            }
+            let userAllOrderList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/orderlist?userid=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
+                method: "GET",
+                headers: {
+                  "Authorization": session?.user?.access_token
+                },
+              }).then(response => response.json());
+
+              setTotal(userAllOrderList?.data?.total)
+              const AllTypedata = userAllOrderList?.data?.data;
+
+              // pending orders
+              const pendingOrder = userAllOrderList?.data?.data?.filter((item: any) => {
+                  return item.status === 'isProcess'
+              })
+              // compeleted orders
+              const CompletedOrder =userAllOrderList?.data?.data?.filter((item: any) => {
+                  return item.status === 'isReleased'
+              })
+              // canceled orders
+              //  'isCompleted', 'isCanceled', 'isReleased'
+              const CanceledOrder = userAllOrderList?.data?.data?.filter((item: any) => {
+                  return item.status === 'isCanceled'
+              })
+
+            setList(props?.active===1 ? AllTypedata : props?.active===2 ? pendingOrder :props?.active ===3 ? CompletedOrder : props?.active=== 4 ? CanceledOrder : []);
+           
+
+        } catch (error) {
+            console.log("error in get token list", error);
+
+        }
+    };
+    const pageCount = Math.ceil(total / itemsPerPage);
+
+    const handlePageClick = async (event: any) => {
+        const newOffset = (event.selected * itemsPerPage) % total;
+        setItemOffset(newOffset);
+
+    };
 
     function formatDate(date: Date) {
         const options: {} = {
@@ -27,7 +93,7 @@ const OrdersTableMobile = (props: dataTypes) => {
 
             <div>
                 {
-                    props.data.map((item: any, ind: number) => {
+                   list.length>0 && list?.map((item: any, ind: number) => {
                         return (
                             <Fragment key={ind}>
                                 <div className='grid grid-cols-2 py-[15px] border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2' onClick={() => {
@@ -66,6 +132,29 @@ const OrdersTableMobile = (props: dataTypes) => {
 
             </div>
 
+            {list.length === 0 &&
+                <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
+                    <Image
+                        src="/assets/refer/empty.svg"
+                        alt="emplty table"
+                        width={107}
+                        height={104}
+                    />
+                    <p > No Record Found </p>
+                </div>
+            }
+            <div className="flex pt-[25px] items-center justify-end">
+                <ReactPaginate
+                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                    breakLabel="..."
+                    nextLabel=">"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={5}
+                    marginPagesDisplayed={2}
+                    pageCount={pageCount}
+                    previousLabel="<"
+                    renderOnZeroPageCount={null} />
+            </div>
         </>
     )
 }

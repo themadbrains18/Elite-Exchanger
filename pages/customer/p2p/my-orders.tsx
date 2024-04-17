@@ -83,7 +83,7 @@ const MyOrders = (props: propsData) => {
   }
 
   const getUserOrders = async () => {
-    let userAllOrderList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/orderlist?userid=${props.session?.user?.user_id}`, {
+    let userAllOrderList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/orderlist?userid=${props.session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
       method: "GET",
       headers: {
         "Authorization": props.session?.user?.access_token
@@ -146,13 +146,16 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       }).then(response => response.json());
     }
 
-    let userAllOrderList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/orderlist?userid=${session?.user?.user_id}`, {
+    let userAllOrderList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/orderlist?userid=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token
       },
     }).then(response => response.json());
 
+
+
+    
 
     return {
       props: {
