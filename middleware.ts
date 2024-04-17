@@ -25,20 +25,11 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
   // Skip public files
   if (PUBLIC_FILE.test(url.pathname) || url.pathname.includes('_next')) return;
 
-
-  
-
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:7000)
   let hostname = req.headers
     .get("host")!
     .replace(`.${process.env.NEXT_PUBLIC_APP_DOMAIN}`, `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
 
-  // Redirect HTTP to HTTPS
-  // if (req.headers.get("x-forwarded-proto") !== "https" && process.env.NEXT_PUBLIC_DEVELOPMENT !=="local") {
-  //   hostname = "https://" +req.headers
-  //   .get("host")!
-  //   .replace(`.${process.env.NEXT_PUBLIC_APP_HOSTNAME}`, `.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`);
-  // }
   // special case for Vercel preview deployment URLs
   if (
     hostname.includes("---") &&
@@ -47,6 +38,9 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
     hostname = `${hostname.split("---")[0]}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN
       }`;
   }
+
+
+  console.log(hostname,'--------------------hostname');
 
   const searchParams = req.nextUrl.searchParams.toString();
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
@@ -82,7 +76,7 @@ export default async function middleware(req: NextRequest, res: NextResponse) {
     hostname === process.env.NEXT_PUBLIC_APP_DOMAIN ||
     hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN
   ) {
-    console.log(hostname,'--------------------hostname');
+    
     return NextResponse.rewrite(
       new URL(`/customer${path === "/" ? "" : path}`, req.url),
     );
