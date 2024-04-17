@@ -18,6 +18,7 @@ declare module "next-auth" {
       role:string;
       createdAt:string;
       pwdupdatedAt:string;
+      whitelist:boolean;
     } & DefaultSession["user"]
   }
 }

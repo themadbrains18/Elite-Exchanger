@@ -45,8 +45,8 @@ const FiliterSelectMenu = (props: dataList) => {
       <div className={`relative max-w-full ${props.widthFull ? 'max-w-full' : 'lg:max-w-[300px]'} w-full ${props.auto && 'mx-auto'}`}>
         {/* top dropdown input */}
         <div className={`border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[${props.type === 'express' ? '15px' : '8px'}] px-[15px]`} onClick={() => {
-          if(props.onNetworkChange && props.depositToken === undefined){
-            props.setUnSelectCoinError('Please select any coin first')
+          if(props.onNetworkChange && props.depositToken === undefined && props?.setUnSelectCoinError!==undefined){
+            props?.setUnSelectCoinError('Please select any coin first')
             return
           }
           else{

@@ -9,6 +9,7 @@ interface propsData {
     fullWidth?: boolean;
     filterAsset?: any;
     Spot?:string;
+    setCoinDefaultValue?:Function;
 }
 const SelectDropdown = (props: propsData) => {
     const [showDrop, setShowDrop] = useState(false);
@@ -16,7 +17,13 @@ const SelectDropdown = (props: propsData) => {
         let itemText = e.currentTarget.innerHTML;
         let parent = e.currentTarget.closest(".dropdown-parent1");
         let input = parent?.querySelector(".inputText");
-        input.innerHTML = itemText;
+        // input.innerHTML = itemText;
+        if(props?.setCoinDefaultValue !==undefined){
+            props.setCoinDefaultValue(itemText)
+        }
+        else{
+            input.innerHTML = itemText;
+        }
         if (props.filterAsset !== undefined) {
             props?.filterAsset(itemText,props?.Spot);
         }

@@ -3,8 +3,17 @@ import IconsComponent from "@/components/snippets/icons";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import SelectDropdown from "../snippet/select-dropdown";
 import { useSession } from "next-auth/react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import clickOutSidePopupClose from "@/components/snippets/clickOutSidePopupClose";
+
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+
+const schema = yup.object().shape({
+  amount: yup.number().positive('Amount must be positive number').required('This field is required').typeError('This field is required'),
+  token_id: yup.string().required('This field is required'),
+});
 
 interface showPopup {
   popupMode?: number;
@@ -22,8 +31,25 @@ const TransferModal = (props: showPopup) => {
   const [future, setFuture] = useState("Futures");
   const [userAsset, setUserAsset] = useState(Object);
   const [selectedCoin, setSelectedCoin] = useState("");
-  const [isError, setIsError] = useState(false);
+  // const [isError, setIsError] = useState(false);
   const [amount, setAmount] = useState(0);
+  const [btnDisabled, setBtnDisabled] = useState(false);
+  const [coinDefaultValue, setCoinDefaultValue] = useState('Select Token')
+
+  let {
+    register,
+    setValue,
+    handleSubmit,
+    watch,
+    reset,
+    setError,
+    getValues,
+    clearErrors,
+    formState,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema)
+  });
 
   function setValues() {
     if (Spot == "Spot") {
@@ -48,10 +74,17 @@ const TransferModal = (props: showPopup) => {
         );
       }
     });
-
     setCoinList(coins);
-    // filterAsset(selectedCoin, Spot === "Spot" ? "Futures" : "Spot");
-  }, [props?.assets]);
+
+    setTimeout(() => {
+      if (errors.amount) {
+        clearErrors('amount')
+      }
+      if (errors.token_id) {
+        clearErrors('token_id')
+      }
+    }, 3000);
+  }, [props?.assets, errors]);
 
   const filterAsset = (symbol: string, type: string) => {
     if (type == "Spot") {
@@ -60,6 +93,8 @@ const TransferModal = (props: showPopup) => {
         return item?.walletTtype === "main_wallet" && token?.symbol === symbol;
       });
       setUserAsset(asset[0]);
+      setValue('token_id', asset[0]?.token_id);
+      clearErrors('token_id')
     } else {
       let asset = props?.assets?.filter((item: any) => {
         let token = item?.token !== null ? item?.token : item?.global_token;
@@ -68,15 +103,21 @@ const TransferModal = (props: showPopup) => {
         );
       });
       setUserAsset(asset[0]);
+      setValue('token_id', asset[0]?.token_id);
+      clearErrors('token_id')
     }
 
     setSelectedCoin(symbol);
   };
 
-  const transferToWallet = async () => {
+  const onHandleSubmit = async (data: any) => {
     try {
-      if (amount === 0 || amount < 0) {
-        toast.error("Transfer amount must be positive number");
+
+      if (data?.amount > userAsset?.balance) {
+        setError("amount", {
+          type: "custom",
+          message: `Insufficiant balance`,
+        });
         return;
       }
 
@@ -84,10 +125,11 @@ const TransferModal = (props: showPopup) => {
         user_id: session?.user?.user_id,
         from: Spot === "Spot" ? "main_wallet" : "future_wallet",
         to: future === "Futures" ? "future_wallet" : "main_wallet",
-        token_id: userAsset?.token_id,
-        balance: amount,
+        token_id: data?.token_id,
+        balance: data?.amount,
       };
 
+      setBtnDisabled(true);
       let assetReponse = await fetch(
         `${process.env.NEXT_PUBLIC_BASEURL}/transfer`,
         {
@@ -101,23 +143,33 @@ const TransferModal = (props: showPopup) => {
       ).then((response) => response.json());
 
       if (assetReponse?.data?.status === 200) {
-        toast.success(assetReponse?.data.data.message);
-        props?.refreshWalletAssets();
-        props.setOverlay(false);
-        props.setPopupMode(0);
-        setAmount(0);
+        toast.success(assetReponse?.data.data.message, { autoClose: 2000 });
+        setValue('amount', 0);
+        setValue('token_id', '');
+        setCoinDefaultValue('Select Token');
+        setSelectedCoin('');
+        setUserAsset(null);
+        setTimeout(() => {
+          props?.refreshWalletAssets();
+          props.setOverlay(false);
+          props.setPopupMode(0);
+          setBtnDisabled(false);
+        }, 3000);
+
       } else {
+        toast.error(assetReponse?.data?.data?.message !== undefined ? assetReponse?.data?.data?.message : assetReponse?.data?.data, { autoClose: 2000 });
+        setTimeout(() => {
+          setBtnDisabled(false);
+        }, 3000);
       }
-      toast.error(assetReponse?.data.data);
     } catch (error) {
       console.log("error in transfer modal", error);
-
     }
   };
 
   const closePopup = () => {
     props.setOverlay(false);
-            props.setPopupMode(0);
+    props.setPopupMode(0);
   }
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
@@ -125,8 +177,8 @@ const TransferModal = (props: showPopup) => {
   return (
     <div ref={wrapperRef}
       className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[550px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.popupMode === 3
-          ? "top-[50%] opacity-1 visible"
-          : "top-[52%] opacity-0 invisible"
+        ? "top-[50%] opacity-1 visible"
+        : "top-[52%] opacity-0 invisible"
         } left-[50%] translate-x-[-50%] translate-y-[-50%]`}
     >
       <div className="flex items-center justify-between mb-[20px]">
@@ -179,55 +231,63 @@ const TransferModal = (props: showPopup) => {
           </div>
         </div>
       </div>
-      <div className="flex items-center justify-between px-[12px] py-[12px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[25px] relative">
-        <SelectDropdown
-          list={coinList}
-          defaultValue="Select Token"
-          fullWidth={true}
-          whiteColor={true}
-          filterAsset={filterAsset}
-          Spot={Spot}
-        />
-      </div>
-      <div className="flex items-center bg-[#e5ecf0] dark:bg-[#373d4e] p-[11px] mt-[25px] rounded-[5px] dark:text-white text-black justify-between">
-        <input
-          type="number"
-          value={amount}
-          className="outline-none  bg-[#e5ecf0] dark:bg-[#373d4e]"
-          placeholder="Minumun transfer limit 0.01 USDT"
-          onChange={(e) => {
-            setAmount(parseFloat(e.target.value));
-            if (parseFloat(e.target.value) > userAsset?.balance) {
-              setIsError(true);
-            } else {
-              setIsError(false);
-            }
-          }}
-        />
-        <p className="top-label dark:!text-primary cursor-pointer" onClick={()=>setAmount(userAsset !== undefined && userAsset !== null ? userAsset?.balance?.toFixed(8) : 0)}>All</p>
-      </div>
-      <p
-        className={`top-label !text-[16px] mt-[15px] ${isError === true ? "visible" : "hidden"
-          }`}
-        style={{ color: "red" }}
-      >
-        Insufficiant Balance
-      </p>
-      <p className="top-label !text-[16px] mt-[15px]">
-        Available{" "}
-        {userAsset !== undefined && userAsset !== null ? userAsset?.balance?.toFixed(8) : 0}{" "}
-        {selectedCoin}
-      </p>
-      <button
-        disabled={status === "unauthenticated" ? true : false || isError}
-        onClick={transferToWallet}
-        className={`border bg-primary hover:bg-primary-800 text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px] ${isError === true || status === "unauthenticated"
+      <form onSubmit={handleSubmit(onHandleSubmit)}>
+        <div className="flex items-center justify-between px-[12px] py-[12px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[25px] relative">
+          <SelectDropdown
+            list={coinList}
+            defaultValue={coinDefaultValue}
+            setCoinDefaultValue={setCoinDefaultValue}
+            fullWidth={true}
+            whiteColor={true}
+            filterAsset={filterAsset}
+            Spot={Spot}
+            {...register('token_id')}
+          />
+        </div>
+        {errors?.token_id && (
+          <p style={{ color: "#ff0000d1" }}>{errors?.token_id?.message}</p>
+        )}
+        <div className="flex items-center bg-[#e5ecf0] dark:bg-[#373d4e] p-[11px] mt-[25px] rounded-[5px] dark:text-white text-black justify-between">
+          <input
+            type="number"
+            step={0.000001}
+            {...register('amount')}
+            name="amount"
+            className="outline-none  bg-[#e5ecf0] dark:bg-[#373d4e]"
+            placeholder="0"
+            onChange={(e: any) => {
+              const value = e.target.value;
+              if (/^\d*\.?\d{0,6}$/.test(value)) {
+                setAmount(value);
+              }
+            }}
+          />
+          <p className="top-label dark:!text-primary cursor-pointer" onClick={() => setValue('amount', userAsset !== undefined && userAsset !== null ? userAsset?.balance?.toFixed(6) : 0)}>All</p>
+        </div>
+        {errors?.amount && (
+          <p style={{ color: "#ff0000d1" }}>{errors?.amount?.message}</p>
+        )}
+
+        <p className="top-label !text-[16px] mt-[15px]">
+          Available{" "}
+          {userAsset !== undefined && userAsset !== null ? userAsset?.balance?.toFixed(6) : 0}{" "}
+          {selectedCoin}
+        </p>
+        <button
+          disabled={status === "unauthenticated" ? true : false || btnDisabled}
+          className={`border bg-primary hover:bg-primary-800 text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px] ${status === "unauthenticated" || btnDisabled === true
             ? "cursor-not-allowed opacity-50"
             : ""
-          }`}
-      >
-        Transfer
-      </button>
+            }`}
+        >{btnDisabled &&
+          <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
+            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />
+          </svg>
+          }
+          Transfer
+        </button>
+      </form>
     </div>
   );
 };
