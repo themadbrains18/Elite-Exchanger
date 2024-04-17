@@ -137,7 +137,6 @@ const SecurityCode = (props: propsData) => {
 
         if (props.api === 'login') {
           await signIn("credentials", response?.data?.data.user);
-          router.push('/profile');
         }
         else if (props.api === 'register') {
           toast.success('You are register successfully and it redirect to login page in short time and login to access your account.', { position: 'top-center' });
