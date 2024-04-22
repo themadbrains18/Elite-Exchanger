@@ -13,8 +13,9 @@ export const config = {
 router
     .get(async (req, res) => {
         try {
+            const {itemOffset, itemsPerPage} = req.query
             let token = req.headers.authorization;
-            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/withdraw/history/${req.query.user_id}`, token);
+            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/withdraw/history/${req.query.user_id}/${itemOffset}/${itemsPerPage}`, token);
 
             return res.status(200).send({ data });
         } catch (error: any) {

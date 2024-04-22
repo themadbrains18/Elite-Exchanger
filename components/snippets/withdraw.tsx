@@ -33,7 +33,7 @@ interface activeSection {
   session: any;
   token: any;
   selectedCoinBalance: number;
-  refreshData: any;
+  refreshData?: any;
 }
 
 type UserSubmitForm = {

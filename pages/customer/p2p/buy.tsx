@@ -24,17 +24,7 @@ const P2pBuy = (props: propsData) => {
   const [selectedPost, setSelectedPost] = useState(Object);
   const [newPosts, setNewPosts] = useState([]);
 
-  for (const post of props?.posts?.data) {
-    let payment_method: any = [];
-    for (const upid of post.p_method) {
-      post?.User?.user_payment_methods.filter((item: any) => {
-        if (item.id === upid?.upm_id) {
-          payment_method.push(item);
-        }
-      })
-    }
-    post.user_p_method = payment_method;
-  }
+
 
   const wbsocket = useWebSocket();
 
@@ -44,6 +34,7 @@ const P2pBuy = (props: propsData) => {
 
   const socket=()=>{
     if(wbsocket){
+      
       wbsocket.onmessage = (event) => {
         const data = JSON.parse(event.data).data;
         let eventDataType = JSON.parse(event.data).type;
@@ -91,6 +82,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   let allPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/buy?itemOffset=0&itemsPerPage=20`, {
     method: "GET",
   }).then(response => response.json());
+
 
 
   // masterpayment

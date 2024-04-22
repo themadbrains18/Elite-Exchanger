@@ -33,11 +33,10 @@ const OrdersTableDesktop = (props: dataTypes) => {
 
     const getAllOrders = async (itemOffset: number) => {
         try {
-            console.log("=here");
-            
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
+            setItemOffset(0)
             let userAllOrderList:any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/status?userid=${session?.user?.user_id}&status=${props?.active===1?"all":props?.active===2?"isProcess":props?.active===3?"isReleased":props?.active===4?"isCanceled":"all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
                 method: "GET",
                 headers: {

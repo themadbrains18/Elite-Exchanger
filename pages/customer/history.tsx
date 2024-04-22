@@ -14,31 +14,14 @@ interface propsData {
   },
   provider: any,
   coinList: any,
-  trades: any,
-  withdraws: any,
-  deposits: any,
-  convertHistory: any,
-  stakingHistory: any
 }
 
 const TradeHistory = (props: propsData) => {
 
-  const [stakingList, setStakingList] = useState(props.stakingHistory);
-
-  const refreshStakingData = async () => {
-    let userStakingHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/staking/history`, {
-      method: "GET",
-      headers: {
-        "Authorization": props?.session?.user?.access_token
-      },
-    }).then(response => response.json());
-
-    setStakingList(userStakingHistory?.data);
-  }
 
   return (
 
-    <Historytrade tradeHistory={props.trades} withdraws={props.withdraws} deposits={props.deposits} convertHistory={props.convertHistory} stakingHistory={stakingList} refreshStakingData={refreshStakingData} />
+    <Historytrade />
   )
 }
 
@@ -55,60 +38,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   if (session) {
 
-    let tradeHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/history/trade?userid=${session?.user?.user_id}`, {
-      method: "GET",
-      headers: {
-        "Authorization": session?.user?.access_token
-      },
-    }).then(response => response.json());
-
-    if (tradeHistory?.data?.message !== undefined) {
-      tradeHistory = [];
-    }
-    else {
-      tradeHistory = tradeHistory?.data;
-    }
-
-    let withdraws = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/list?user_id=${session?.user?.user_id}`, {
-      method: "GET",
-      headers: {
-        "Authorization": session?.user?.access_token
-      },
-    }).then(response => response.json());
-
-    let deposits = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${session?.user?.user_id}`, {
-      method: "GET",
-      headers: {
-        "Authorization": session?.user?.access_token
-      },
-    }).then(response => response.json());
-
-    let userConvertHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/converthistory`, {
-      method: "GET",
-      headers: {
-        "Authorization": session?.user?.access_token
-      },
-    }).then(response => response.json());
-
-
-    let userStakingHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/staking/history`, {
-      method: "GET",
-      headers: {
-        "Authorization": session?.user?.access_token
-      },
-    }).then(response => response.json());
-
     return {
       props: {
         session: session,
         sessions: session,
         provider: providers,
         coinList: tokenList?.data || [],
-        trades: tradeHistory || [],
-        withdraws: withdraws?.data || [],
-        deposits: deposits?.data || [],
-        convertHistory: userConvertHistory?.data || [],
-        stakingHistory: userStakingHistory?.data || []
       },
     };
   }

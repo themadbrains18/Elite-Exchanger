@@ -25,7 +25,7 @@ interface activeSection {
     session: any;
     token: any;
     selectedCoinBalance: number;
-    refreshData: any;
+    refreshData?: any;
 }
 
 const StakingModel = (props: activeSection) => {

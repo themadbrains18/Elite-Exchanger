@@ -29,14 +29,13 @@ interface Session {
 
 const Wallet = (props: Session) => {
 
-    const [userWithdrawList, setUserWithdrawList] = useState(props.withdrawList);
-    const [userDepositList, setUserDepositList] = useState(props.depositList);
+
     const [userAssetsList, setUserAssetsList] = useState(props.assets);
-    const [userConvertList, setUserConvertList] = useState(props.convertList);
 
     const [allCoins, setAllCoins] = useState(props.coinList);
 
     const wbsocket = useWebSocket();
+    
 
     useEffect(() => {
         socket();
@@ -64,24 +63,8 @@ const Wallet = (props: Session) => {
 
     const refreshData = async () => {
         if (props.session) {
-            let withdraws = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/list?user_id=${props.session?.user?.user_id}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": props.session?.user?.access_token
-                },
-            }).then(response => response.json());
-
-            setUserWithdrawList(withdraws?.data);
-            let deposits = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${props.session?.user?.user_id}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": props.session?.user?.access_token
-                },
-            }).then(response => response.json());
-
-            setUserDepositList(deposits?.data);
-
-            let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${props.session?.user?.user_id}`, {
+         
+            let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${props.session?.user?.user_id}`, {
                 method: "GET",
                 headers: {
                     "Authorization": props.session?.user?.access_token
@@ -90,14 +73,7 @@ const Wallet = (props: Session) => {
 
             setUserAssetsList(userAssets);
 
-            let newConvertList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/convertlist`, {
-                method: "GET",
-                headers: {
-                    "Authorization": props.session?.user?.access_token
-                },
-            }).then(response => response.json());
-
-            setUserConvertList(newConvertList?.data);
+       
         }
     }
 
@@ -107,12 +83,12 @@ const Wallet = (props: Session) => {
             <div className=" bg-light-v-1 py-[20px] md:py-[80px] dark:bg-black-v-1">
                 <div className="container flex gap-30 flex-wrap">
                     <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
-                        <Banner coinList={allCoins} networks={props?.networks} session={props.session} assets={userAssetsList} withdrawList={userWithdrawList} depositList={userDepositList} />
-                        <WalletList coinList={allCoins} networks={props?.networks} session={props.session} withdrawList={userWithdrawList} depositList={userDepositList} assets={userAssetsList} refreshData={refreshData} userConvertList={userConvertList} />
+                        <Banner coinList={allCoins} networks={props?.networks} session={props.session} assets={userAssetsList?.data?.totalAmount} withdrawList={props.withdrawList} depositList={props.depositList} />
+                        <WalletList coinList={allCoins} networks={props?.networks} session={props.session}   />
                     </div>
                     <div className="lg:max-w-[432px] w-full md:block hidden">
                         <div className="lg:block hidden ">
-                            <Exchange id={0} coinList={allCoins} assets={userAssetsList} refreshData={refreshData} />
+                            <Exchange id={0} coinList={allCoins} assets={userAssetsList?.data?.data} refreshData={refreshData} />
                         </div>
                     </div>
                 </div>
@@ -141,32 +117,27 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     if (session) {
 
-        let withdraws = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw?user_id=${session?.user?.user_id}`, {
+        let withdraws = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/list?user_id=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
             method: "GET",
             headers: {
                 "Authorization": session?.user?.access_token
             },
         }).then(response => response.json());
-        let deposits = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${session?.user?.user_id}`, {
-            method: "GET",
-            headers: {
-                "Authorization": session?.user?.access_token
-            },
-        }).then(response => response.json());
-
-        let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${session?.user?.user_id}`, {
+        let deposits = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
             method: "GET",
             headers: {
                 "Authorization": session?.user?.access_token
             },
         }).then(response => response.json());
 
-        let userConvertList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/convertlist`, {
+        let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
             method: "GET",
             headers: {
                 "Authorization": session?.user?.access_token
             },
         }).then(response => response.json());
+
+    
 
 
         return {
@@ -176,10 +147,9 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
                 sessions: session,
                 coinList: tokenList?.data || [],
                 networks: networkList?.data || [],
-                withdrawList: withdraws?.data || [],
-                depositList: deposits?.data || [],
-                assets: userAssets || [],
-                convertList: userConvertList?.data || [],
+                withdrawList: withdraws?.data?.totalAmount || 0.00,
+                depositList: deposits?.data?.totalAmount || 0.00,
+                assets: userAssets || [] ,
             },
         };
     }

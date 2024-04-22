@@ -9,15 +9,24 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from 'next/router';
 import Context from "../../contexts/context";
+import ReactPaginate from 'react-paginate';
 
 interface dataTypes {
-    data: any;
-    updatePublishedPsot?: any;
+
+    firstCurrency?: string;
+    paymentId?: string;
+    startDate?: string;
+    userPaymentMethod?: any;
+    selectedToken?: any;
     active?: any;
 }
 const DesktopTable = (props: dataTypes) => {
     const { mode } = useContext(Context);
-    const [postList, setPostList] = useState(props.data);
+    const [postList, setPostList] = useState([]);
+    const [itemOffset, setItemOffset] = useState(0);
+    const [total, setTotal] = useState(0)
+
+    let itemsPerPage = 2;
     const [postId, setPostId] = useState('');
     const [active, setActive] = useState(0);
     const [show, setShow] = useState(false);
@@ -28,10 +37,94 @@ const DesktopTable = (props: dataTypes) => {
 
     const route = useRouter();
 
-    useEffect(()=>{
-        setPostList(props.data);
-    },[props.data])
-    
+    useEffect(() => {
+        getAds(itemOffset);
+    }, [props.active, itemOffset, props?.firstCurrency, props?.paymentId, props?.startDate])
+
+
+    const getAds = async (itemOffset: number) => {
+        try {
+
+            if (itemOffset === undefined) {
+                itemOffset = 0;
+            }
+            let userAllOrderList: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/advertisement?status=${props?.active === 1 ? true : props?.active === 2 ? false : "all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": session?.user?.access_token
+                },
+            }).then(response => response.json());
+
+            setTotal(userAllOrderList?.data?.totalLength)
+            setPostList(userAllOrderList?.data?.data);
+
+            for (const post of userAllOrderList?.data?.data) {
+                let payment_method: any = [];
+                for (const upid of post.p_method) {
+                    props.userPaymentMethod.filter((item: any) => {
+                        if (item.id === upid?.upm_id) {
+                            payment_method.push(item);
+
+                        }
+                    })
+                }
+                post.user_p_method = payment_method;
+            }
+            let postData = [];
+                let filterRecord = userAllOrderList?.data?.data;
+                if (props?.firstCurrency !== '') {
+                    
+                    postData = filterRecord.filter((item: any) => {
+                        return props?.selectedToken?.id === item?.token_id
+                    });
+                  
+                }
+                else{
+                    postData= filterRecord
+                }
+             
+                if (props?.paymentId !== '') {
+                    let filter_posts=[]
+                    for (const post of postData) {
+                        for (const upid of post.user_p_method) {
+                            if (props?.paymentId === upid?.pmid) {
+                                filter_posts.push(post);
+                            }
+                        }
+                    }
+                    postData = filter_posts;
+                }
+                else{
+                    postData= filterRecord
+                }          
+
+                if (props?.startDate !== null && props?.startDate !== undefined) {
+                    let filter_posts=[]
+                    filter_posts = postData.filter((item: any) => {
+                        let postDate = moment(item?.createdAt).format('LL');
+                        let compareDate = moment(props?.startDate).format('LL');
+                        if (compareDate === postDate) {
+                            return item
+                        }
+                    });
+                    postData = filter_posts;
+                }
+              
+                setPostList(postData)
+              
+        } catch (error) {
+            console.log("error in get token list", error);
+
+        }
+    };
+    const pageCount = Math.ceil(total / itemsPerPage);
+
+    const handlePageClick = async (event: any) => {
+        const newOffset = (event.selected * itemsPerPage) % total;
+        setItemOffset(newOffset);
+
+    };
+
 
     const actionPerform = async () => {
 
@@ -74,46 +167,46 @@ const DesktopTable = (props: dataTypes) => {
     }
 
     const updateAdsStatus = async (postid: string) => {
-        
-            if (status === 'authenticated') {
-                let obj = {
-                    post_id: postid,
-                    user_id: session?.user?.user_id
-                }
 
-                const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-                let record = encodeURIComponent(ciphertext.toString());
-
-                let putResponse: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/editadvertisement`, {
-                    method: "PUT",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": session?.user?.access_token
-                    },
-                    body: JSON.stringify(record)
-                }).then(response => response.json());
-
-                if (putResponse?.data) {
-
-                    let remainingPost = postList.filter((item: any) => {
-                        return item.id !== putResponse?.data?.result?.id
-                    })
-                    props.updatePublishedPsot(putResponse?.data?.result);
-                    toast.success(`Post ${putResponse?.data?.result?.status=== true?"Active":"Inactive"}  successfully`)
-                    setPostList(remainingPost);
-                    setActive(0);
-                    setShow(false);
-                }
-                else {
-                    toast.error(putResponse?.data)
-                }
+        if (status === 'authenticated') {
+            let obj = {
+                post_id: postid,
+                user_id: session?.user?.user_id
             }
-            else if (status === 'unauthenticated') {
-                toast.error('Unauthorized user!!')
+
+            const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+            let record = encodeURIComponent(ciphertext.toString());
+
+            let putResponse: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/editadvertisement`, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": session?.user?.access_token
+                },
+                body: JSON.stringify(record)
+            }).then(response => response.json());
+
+            if (putResponse?.data) {
+
+                let remainingPost = postList.filter((item: any) => {
+                    return item.id !== putResponse?.data?.result?.id
+                })
+                getAds(0)
+                toast.success(`Post ${putResponse?.data?.result?.status === true ? "Active" : "Inactive"}  successfully`)
+                setPostList(remainingPost);
+                setActive(0);
+                setShow(false);
             }
-        
+            else {
+                toast.error(putResponse?.data)
+            }
+        }
+        else if (status === 'unauthenticated') {
+            toast.error('Unauthorized user!!')
+        }
+
     }
-    
+
 
     return (
         <>
@@ -176,12 +269,12 @@ const DesktopTable = (props: dataTypes) => {
                     </thead>
                     <tbody>
                         {
-                            postList.map((item: any, ind: any) => {
+                            postList && postList.length > 0 && postList?.map((item: any, ind: any) => {
                                 return (
                                     <Fragment key={ind}>
                                         <tr>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className={`info-14-18 !text-buy`}>BUY</p>
@@ -190,7 +283,7 @@ const DesktopTable = (props: dataTypes) => {
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.price} INR</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity} {item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
@@ -198,7 +291,7 @@ const DesktopTable = (props: dataTypes) => {
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <div className='flex items-center gap-10'>
                                                     {
-                                                        item.user_p_method.map((elem: any, ind: any) => {
+                                                        item?.user_p_method?.map((elem: any, ind: any) => {
                                                             return (
                                                                 <Fragment key={ind}>
                                                                     <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />
@@ -208,17 +301,17 @@ const DesktopTable = (props: dataTypes) => {
                                                     }
                                                 </div>
                                             </td>
-                                             <td className="bg-white dark:bg-d-bg-primary py-5 cursor-pointer">
-                                                    {/* {item?.status === true ? 'Active' : 'InActive'} */}
+                                            <td className="bg-white dark:bg-d-bg-primary py-5 cursor-pointer">
+                                                {/* {item?.status === true ? 'Active' : 'InActive'} */}
 
-                                                    <div className="flex items-center justify-start w-full" >
-                                                        <label htmlFor={item?.id} className="flex items-center cursor-pointer">
-                                                            <input type="checkbox" id={item?.id} className="sr-only peer" checked={item?.status}  onChange={() => { (props.active === undefined || props.active !== 3) && updateAdsStatus(item?.id) }} />
-                                                            <div className={`block relative bg-[#CCCED9] w-[50px] h-[25px] p-1 rounded-full before:absolute before:top-[3px] before:bg-blue-600 before:w-[19px] before:h-[19px] before:p-1 before:rounded-full before:transition-all before:duration-500 before:left-1 peer-checked:before:left-[27px] before:bg-white peer-checked:!bg-primary peer-checked:before:!bg-white `} ></div>
-                                                        </label>
-                                                    </div>
+                                                <div className="flex items-center justify-start w-full" >
+                                                    <label htmlFor={item?.id} className="flex items-center cursor-pointer">
+                                                        <input type="checkbox" id={item?.id} className="sr-only peer" checked={item?.status} onChange={() => { (props.active === undefined || props.active !== 3) && updateAdsStatus(item?.id) }} />
+                                                        <div className={`block relative bg-[#CCCED9] w-[50px] h-[25px] p-1 rounded-full before:absolute before:top-[3px] before:bg-blue-600 before:w-[19px] before:h-[19px] before:p-1 before:rounded-full before:transition-all before:duration-500 before:left-1 peer-checked:before:left-[27px] before:bg-white peer-checked:!bg-primary peer-checked:before:!bg-white `} ></div>
+                                                    </label>
+                                                </div>
                                             </td>
-                                  
+
                                             {(props.active === undefined || props.active !== 3) &&
                                                 <td>
                                                     <div className='flex items-center gap-10'>
@@ -240,7 +333,7 @@ const DesktopTable = (props: dataTypes) => {
                             })
                         }
 
-                        {postList.length === 0 &&
+                        {postList && postList?.length === 0 &&
                             <tr>
                                 <td colSpan={8}>
                                     <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
@@ -258,6 +351,18 @@ const DesktopTable = (props: dataTypes) => {
                         }
                     </tbody>
                 </table>
+            </div>
+            <div className="flex pt-[25px] items-center justify-end">
+                <ReactPaginate
+                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                    breakLabel="..."
+                    nextLabel=">"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={5}
+                    marginPagesDisplayed={2}
+                    pageCount={pageCount}
+                    previousLabel="<"
+                    renderOnZeroPageCount={null} />
             </div>
             {active === 1 &&
                 <ConfirmationModel setActive={setActive} setShow={setShow} title={title} message={message} show={show} actionPerform={actionPerform} />

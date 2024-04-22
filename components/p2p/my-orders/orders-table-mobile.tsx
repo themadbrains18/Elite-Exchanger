@@ -73,7 +73,6 @@ const OrdersTableMobile = (props: dataTypes) => {
 
     return (
         <>
-{console.log(list,"==list")}
             <div>
                 {
                    list.length>0 && list?.map((item: any, ind: number) => {

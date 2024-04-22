@@ -7,7 +7,7 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
 
 interface propsData {
-  posts?: any;
+  // posts?: any;
   masterPayMethod?: any;
   userPaymentMethod?: any;
   coinList?:any;
@@ -15,30 +15,10 @@ interface propsData {
 
 const MyAdvertisement = (props: propsData) => {
 
-  for (const post of props?.posts) {
-    let payment_method: any = [];
-    for (const upid of post.p_method) {
-      props.userPaymentMethod.filter((item: any) => {
-        if (item.id === upid?.upm_id) {
-          payment_method.push(item);
-
-        }
-      })
-    }
-    post.user_p_method = payment_method;
-  }
-
-  let publishedData = props?.posts.filter((item: any) => {
-    return item.status === true;
-  })
-
-  let unpublishedData = props?.posts.filter((item: any) => {
-    return item.status === false;
-  })
 
   return (
     <P2pLayout>
-      <AdvertisementTabs posts={props?.posts} published={publishedData} unpublished={unpublishedData} userPaymentMethod={props.userPaymentMethod} coinList={props?.coinList} masterPayMethod={props.masterPayMethod}/>
+      <AdvertisementTabs userPaymentMethod={props.userPaymentMethod} coinList={props?.coinList} masterPayMethod={props.masterPayMethod}/>
     </P2pLayout>
 
   )
@@ -65,12 +45,12 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   if (session) {
 
-    let userPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/advertisement`, {
-      method: "GET",
-      headers: {
-        "Authorization": session?.user?.access_token
-      },
-    }).then(response => response.json());
+    // let userPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/advertisement?itemOffset=0&itemsPerPage=20`, {
+    //   method: "GET",
+    //   headers: {
+    //     "Authorization": session?.user?.access_token
+    //   },
+    // }).then(response => response.json());
 
     let userPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod`, {
       method: "GET",
@@ -83,7 +63,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       props: {
         providers: providers,
         sessions: session,
-        posts: userPosts?.data || [],
+        // posts: userPosts?.data || [],
         masterPayMethod: masterPaymentMethod?.data || [],
         userPaymentMethod: userPaymentMethod?.data || [],
         coinList: tokenList?.data || [],

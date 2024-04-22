@@ -32,9 +32,9 @@ const OrderBook = (props: propsData) => {
                 <>
                     {/* tab content */}
                     <div className='p-10 bg-grey dark:bg-black-v-1 rounded-[5px] flex items-center gap-10'>
-                        <button className={`solid-button py-[10px] ${show === 1 ? "dark:bg-primary  dark:!text-white" : "dark:bg-d-bg-primary bg-grey !text-gamma"}  rounded-[5px]`} onClick={() => { setShow(1) }}>All</button>
-                        <button className={`solid-button py-[10px] ${show === 2 ? "dark:bg-primary  dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"}  rounded-[5px]`} onClick={() => { setShow(2) }}>Asks</button>
-                        <button className={`solid-button py-[10px] ${show === 3 ? "dark:bg-primary  dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} rounded-[5px]`} onClick={() => { setShow(3) }}>Bids</button>
+                        <button className={`solid-button py-[10px] ${show === 1 ? "dark:bg-primary  dark:!text-white" : "dark:bg-d-bg-primary bg-grey !text-gamma"}  hover:!text-white rounded-[5px]`} onClick={() => { setShow(1) }}>All</button>
+                        <button className={`solid-button py-[10px] ${show === 2 ? "dark:bg-primary  dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(2) }}>Asks</button>
+                        <button className={`solid-button py-[10px] ${show === 3 ? "dark:bg-primary  dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(3) }}>Bids</button>
                     </div>
                     {
                         show === 1 &&

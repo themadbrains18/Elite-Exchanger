@@ -18,8 +18,8 @@ export const config = {
 router.get(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         let token = '';
-        
-        let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/post/all`, token);
+        let {itemOffset,itemsPerPage}= req.query;
+        let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/post/all/${itemOffset}/${itemsPerPage}`, token);
 
         return res.status(200).send({ data });
     } catch (error: any) {

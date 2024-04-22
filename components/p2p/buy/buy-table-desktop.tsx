@@ -8,7 +8,6 @@ import { useSession } from 'next-auth/react';
 
 interface activeSection {
   setShow1: any;
-  posts?: any;
   setSelectedPost?: any;
 }
 
@@ -18,13 +17,13 @@ const BuyTableDesktop = (props: activeSection) => {
   const [itemOffset, setItemOffset] = useState(0);
 
   const { status, data: session } = useSession();
-  const [list, setList] = useState([])
+  const [list, setList] = useState<any[]>([])
+  const [total, setTotal] = useState(0)
 
-  let data = props?.posts || [];
 
-  let itemsPerPage = 20;
+  let itemsPerPage = 2;
 
-  
+
   useEffect(() => {
     getAllPosts(itemOffset);
   }, [itemOffset]);
@@ -44,24 +43,43 @@ const BuyTableDesktop = (props: activeSection) => {
           },
         }
       ).then((response) => response.json());
-
-
       setList(posts?.data?.data);
 
+      let length = posts?.data?.totalLength
+      posts?.data?.data?.map((item: any, index: number) => {
+        if (session?.user?.user_id !== item?.user_id) {
+          length -= 1
+        }
+      })
+      
+      setTotal(length)
     } catch (error) {
       console.log("error in get token list", error);
 
     }
   };
 
+  for (const post of list) {
+    let payment_method: any = [];
+    for (const upid of post?.p_method) {
+      post?.User?.user_payment_methods.filter((item: any) => {
+        if (item.id === upid?.upm_id) {
+          payment_method.push(item);
+        }
+      })
+    }
+    post.user_p_method = payment_method;
+  }
+
   // const endOffset = itemOffset + itemsPerPage;
   // const currentItems = data?.data?.slice(itemOffset, endOffset);
-  const pageCount = Math.ceil(data.totalLength / itemsPerPage);
+  const pageCount = Math.ceil(total / itemsPerPage);
 
   const handlePageClick = async (event: any) => {
-    const newOffset = (event.selected * itemsPerPage) % data.totalLength;
-    setItemOffset(newOffset);
+    console.log(event.selected * itemsPerPage);
 
+    const newOffset = (event.selected * itemsPerPage) % total;
+    setItemOffset(newOffset);
   };
 
 
@@ -116,7 +134,7 @@ const BuyTableDesktop = (props: activeSection) => {
             </tr>
           </thead>
           <tbody>
-            {list.length>0 && list?.map((item: any, index: number) => {
+            {list.length > 0 && list?.map((item: any, index: number) => {
               if (session?.user?.user_id !== item?.user_id) {
                 const profileImg = item?.user?.profile && item?.user?.profile?.image !== null ? `${item?.user?.profile?.image}` : `/assets/orders/user1.png`;
                 const userName = item?.user?.profile && item?.user?.profile?.dName !== null ? item?.user?.profile?.dName : item?.user?.user_kyc?.fname;

@@ -226,7 +226,7 @@ const ChartBanner = (props: propsData) => {
                         <IconsComponent type={ele.titleIcon} hover={false} active={false} />
                         <p className='info-10-14 !text-gamma'>{ele.cardTitle}</p>
                       </div>
-                      <p className="md-text !font-bold">{ele.cardPrice}</p>
+                      <p className="md-text md:text-[14px] text-[12px] !font-bold">{ele.cardPrice}</p>
                       {/* <div className={` items-center gap-[10px] flex`}>
                         <p className={`footer-text-secondary !text-[12px] lg:!text-[16px] !text-buy`}>{ele.cardLowHigh}</p>
                         <IconsComponent type="high" active={false} hover={false} />

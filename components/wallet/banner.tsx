@@ -10,7 +10,7 @@ interface propsData {
   assets: any;
   coinList: any;
   withdrawList: any;
-  depositList: any
+  depositList: any;
   networks: any
   session: any
 }
@@ -20,34 +20,7 @@ const Banner = (props: propsData): any => {
   const [show1, setShow1] = useState(0);
 
   let dataCoinWallet = props.coinList;
-
-  let totalBalanceUsdt = 0.00;
-  let withdrawTotal = 0.00;
-  let depositTotal = 0.00;
-
-  for (const ls of dataCoinWallet) {
-    ls.avail_bal = 0.00;
-    for (const as of props?.assets) {
-      if (as.token_id === ls.id && as.balance > 0) {
-        ls.avail_bal = as.balance;
-        totalBalanceUsdt = totalBalanceUsdt + (as.balance * ls?.price)
-      }
-    }
-  }
-
-  for (const ls of dataCoinWallet) {
-    for (const wl of props.withdrawList) {
-      if (wl.tokenID === ls.id)
-        withdrawTotal = withdrawTotal + (parseFloat(wl.amount) * parseFloat(ls.price));
-    }
-  }
-
-  for (const ls of dataCoinWallet) {
-    for (const dl of props.depositList) {
-      if (dl.coinName.split('/')[1] === ls.symbol)
-        depositTotal = depositTotal + (parseFloat(dl.amount) * parseFloat(ls.price));
-    }
-  }
+  
 
   return (
     <>
@@ -72,7 +45,7 @@ const Banner = (props: propsData): any => {
             <div className="mt-30 flex gap-10">
               <p className="md-heading dark:text-white">
                 {
-                  show == true ? <span> ${totalBalanceUsdt.toFixed(4)}</span> : <span>$*********</span>
+                  show == true ? <span> ${props?.assets.toFixed(4)}</span> : <span>$*********</span>
                 }
               </p>
               <div className="p-[5px] bg-primary-100 dark:bg-black-v-1 rounded flex gap-[10px] items-center cursor-pointer" onClick={() => { setShow(!show) }}>
@@ -95,7 +68,7 @@ const Banner = (props: propsData): any => {
               </div>
               <div className="flex items-center gap-10">
                 <IconsComponent type="totalDepositBlue" hover={false} active={false} />
-                <p className="sm-text dark:!text-white">${depositTotal.toFixed(6)}</p>
+                <p className="sm-text dark:!text-white">${props?.depositList?.toFixed(6)}</p>
               </div>
             </div>
             <div className="flex items-center  justify-between gap-5 flex-wrap">
@@ -105,7 +78,7 @@ const Banner = (props: propsData): any => {
               </div>
               <div className="flex items-center gap-10">
                 <IconsComponent type="totalWithdrawBlue" hover={false} active={false} />
-                <p className="sm-text dark:!text-white">${withdrawTotal.toFixed(6)}</p>
+                <p className="sm-text dark:!text-white">${props?.withdrawList?.toFixed(6)}</p>
               </div>
             </div>
           </div>

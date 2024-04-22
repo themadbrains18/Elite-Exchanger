@@ -14,9 +14,10 @@ export const config = {
 
 router.get(async (req, res) => {
     try {
+        const {itemOffset, itemsPerPage} = req.query
         let token = req.headers.authorization;
 
-        let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/convert/history`, token);
+        let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/convert/history/${itemOffset}/${itemsPerPage}`, token);
         return res.status(200).send({ data });
 
     } catch (error: any) {

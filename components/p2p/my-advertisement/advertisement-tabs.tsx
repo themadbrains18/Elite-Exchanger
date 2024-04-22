@@ -32,37 +32,8 @@ const AdvertisementTabs = (props: propsData) => {
 
     const [startDate, setStartDate] = useState();
 
-    const updatePublishedPsot = (data: any) => {
-        let payment_method: any = [];
-        for (const upid of data.p_method) {
-            props.userPaymentMethod.filter((item: any) => {
-                if (item.id === upid?.upm_id) {
-                    payment_method.push(item);
-                }
-            })
-        }
-        data.user_p_method = payment_method;
-
-        if (data?.status === true) {
-            setPublishedData((prev: any) => [...prev, data]);
-            setUnpublishedData(unpublishedData.filter((item: any) => item.id !== data?.id));
-        }
-        else {
-            setUnpublishedData((prev: any) => [...prev, data]);
-            setPublishedData(publishedData.filter((item: any) => item.id !== data?.id));
-        }
-
-        let hisposts = adsHistory.filter((item: any) => {
-            if (item?.id === data?.id) {
-                item.status = data?.status;
-            }
-            return item;
-        })
-
-        setAdsHistory(hisposts);
-    }
-
     const setCurrencyName = (symbol: string, dropdown: number) => {
+        
         if (dropdown === 1) {
             setFirstCurrency(symbol);
             let token = props?.coinList?.filter((item: any) => {
@@ -70,156 +41,156 @@ const AdvertisementTabs = (props: propsData) => {
             });
             setSelectedToken(token[0]);
 
-            let postData = [];
-            let filterRecord = props.published;
-            if (active === 2) {
-                filterRecord = props.unpublished;
-            }
-            if (active === 3) {
-                filterRecord = props?.posts;
-            }
+            // let postData = [];
+            // let filterRecord = props.published;
+            // if (active === 2) {
+            //     filterRecord = props.unpublished;
+            // }
+            // if (active === 3) {
+            //     filterRecord = props?.posts;
+            // }
 
-            let filter_posts = filterRecord.filter((item: any) => {
-                return token[0]?.id === item?.token_id
-            });
-            if (paymentId !== '') {
-                for (const post of filter_posts) {
-                    for (const upid of post.user_p_method) {
-                        if (paymentId === upid?.pmid) {
-                            postData.push(post);
-                        }
-                    }
-                }
-            }
-            else {
-                postData = filter_posts;
-            }
+            // let filter_posts = filterRecord.filter((item: any) => {
+            //     return token[0]?.id === item?.token_id
+            // });
+            // if (paymentId !== '') {
+            //     for (const post of filter_posts) {
+            //         for (const upid of post.user_p_method) {
+            //             if (paymentId === upid?.pmid) {
+            //                 postData.push(post);
+            //             }
+            //         }
+            //     }
+            // }
+            // else {
+            //     postData = filter_posts;
+            // }
 
-            if(startDate !==null && startDate !==undefined){
-                postData = postData.filter((item: any) => {
-                    let postDate = moment(item?.createdAt).format('LL');
-                    let compareDate = moment(startDate).format('LL');
-                    if(compareDate  === postDate){
-                        return item
-                    }  
-                });
-            }
+            // if(startDate !==null && startDate !==undefined){
+            //     postData = postData.filter((item: any) => {
+            //         let postDate = moment(item?.createdAt).format('LL');
+            //         let compareDate = moment(startDate).format('LL');
+            //         if(compareDate  === postDate){
+            //             return item
+            //         }  
+            //     });
+            // }
 
-            if (active === 1) {
-                setPublishedData(postData);
-            }
-            if (active === 2) {
-                setUnpublishedData(postData);
-            }
-            if (active === 3) {
-                setAdsHistory(postData);
-            }
+            // if (active === 1) {
+            //     setPublishedData(postData);
+            // }
+            // if (active === 2) {
+            //     setUnpublishedData(postData);
+            // }
+            // if (active === 3) {
+            //     setAdsHistory(postData);
+            // }
         }
     }
 
     const onPaymentMethodChange = (id: any) => {
 
-        let filter_posts = [];
-        let filterRecord = props.published;
-        if (active === 2) {
-            filterRecord = props.unpublished;
-        }
-        if (active === 3) {
-            filterRecord = props?.posts;
-        }
+        // let filter_posts = [];
+        // let filterRecord = props.published;
+        // if (active === 2) {
+        //     filterRecord = props.unpublished;
+        // }
+        // if (active === 3) {
+        //     filterRecord = props?.posts;
+        // }
 
 
-        for (const post of filterRecord) {
-            for (const upid of post.user_p_method) {
-                if (id === upid?.pmid) {
-                    filter_posts.push(post);
-                }
-            }
-        }
-        if (firstCurrency !== '') {
-            filter_posts = filter_posts.filter((item: any) => {
-                return selectedToken?.id === item?.token_id
-            });
-        }
+        // for (const post of filterRecord) {
+        //     for (const upid of post.user_p_method) {
+        //         if (id === upid?.pmid) {
+        //             filter_posts.push(post);
+        //         }
+        //     }
+        // }
+        // if (firstCurrency !== '') {
+        //     filter_posts = filter_posts.filter((item: any) => {
+        //         return selectedToken?.id === item?.token_id
+        //     });
+        // }
         setPaymentId(id);
 
-        if(startDate !==null && startDate !==undefined){
-            filter_posts = filter_posts.filter((item: any) => {
-                let postDate = moment(item?.createdAt).format('LL');
-                let compareDate = moment(startDate).format('LL');
-                if(compareDate  === postDate){
-                    return item
-                }  
-            });
-        }
+        // if(startDate !==null && startDate !==undefined){
+        //     filter_posts = filter_posts.filter((item: any) => {
+        //         let postDate = moment(item?.createdAt).format('LL');
+        //         let compareDate = moment(startDate).format('LL');
+        //         if(compareDate  === postDate){
+        //             return item
+        //         }  
+        //     });
+        // }
         
-        if (active === 1) {
-            setPublishedData(filter_posts);
-        }
-        if (active === 2) {
-            setUnpublishedData(filter_posts);
-        }
-        if (active === 3) {
-            setAdsHistory(filter_posts);
-        }
+        // if (active === 1) {
+        //     setPublishedData(filter_posts);
+        // }
+        // if (active === 2) {
+        //     setUnpublishedData(filter_posts);
+        // }
+        // if (active === 3) {
+        //     setAdsHistory(filter_posts);
+        // }
     }
 
     const handleDate = (date: any) => {
         setStartDate(date);
-        let filter_posts = [];
-        let filterRecord = props.published;
-        if (active === 2) {
-            filterRecord = props.unpublished;
-        }
-        if (active === 3) {
-            filterRecord = props?.posts;
-        }
+        // let filter_posts = [];
+        // let filterRecord = props.published;
+        // if (active === 2) {
+        //     filterRecord = props.unpublished;
+        // }
+        // if (active === 3) {
+        //     filterRecord = props?.posts;
+        // }
 
-        if (paymentId !== '') {
-            for (const post of filterRecord) {
-                for (const upid of post.user_p_method) {
-                    if (paymentId === upid?.pmid) {
-                        filter_posts.push(post);
-                    }
-                }
-            }
-        }
+        // if (paymentId !== '') {
+        //     for (const post of filterRecord) {
+        //         for (const upid of post.user_p_method) {
+        //             if (paymentId === upid?.pmid) {
+        //                 filter_posts.push(post);
+        //             }
+        //         }
+        //     }
+        // }
 
-        if (firstCurrency !== '') {
-            filter_posts = filter_posts.filter((item: any) => {
-                return selectedToken?.id === item?.token_id
-            });
-        }
+        // if (firstCurrency !== '') {
+        //     filter_posts = filter_posts.filter((item: any) => {
+        //         return selectedToken?.id === item?.token_id
+        //     });
+        // }
 
         
-        if(filter_posts.length > 0){
-            filter_posts = filter_posts.filter((item: any) => {
-                let postDate = moment(item?.createdAt).format('LL');
-                let compareDate = moment(date).format('LL');
-                if(compareDate  === postDate){
-                    return item
-                }  
-            });
-        }
-        else{
-            filter_posts = filterRecord.filter((item: any) => {
-                let postDate = moment(item?.createdAt).format('LL');
-                let compareDate = moment(date).format('LL');
-                if(compareDate  === postDate){
-                    return item
-                }                
-            });
-        }
+        // if(filter_posts.length > 0){
+        //     filter_posts = filter_posts.filter((item: any) => {
+        //         let postDate = moment(item?.createdAt).format('LL');
+        //         let compareDate = moment(date).format('LL');
+        //         if(compareDate  === postDate){
+        //             return item
+        //         }  
+        //     });
+        // }
+        // else{
+        //     filter_posts = filterRecord.filter((item: any) => {
+        //         let postDate = moment(item?.createdAt).format('LL');
+        //         let compareDate = moment(date).format('LL');
+        //         if(compareDate  === postDate){
+        //             return item
+        //         }                
+        //     });
+        // }
 
-        if (active === 1) {
-            setPublishedData(filter_posts);
-        }
-        if (active === 2) {
-            setUnpublishedData(filter_posts);
-        }
-        if (active === 3) {
-            setAdsHistory(filter_posts);
-        }
+        // if (active === 1) {
+        //     setPublishedData(filter_posts);
+        // }
+        // if (active === 2) {
+        //     setUnpublishedData(filter_posts);
+        // }
+        // if (active === 3) {
+        //     setAdsHistory(filter_posts);
+        // }
     };
 
     return (
@@ -278,20 +249,19 @@ const AdvertisementTabs = (props: propsData) => {
             </div>
 
             {/* Table Data */}
-            {
-                active === 1 &&
+            {/* {
+                active === 1 && */}
                 <div>
                     <div className='md:block hidden'>
-                        <DesktopTable data={publishedData} updatePublishedPsot={updatePublishedPsot} />
+                        <DesktopTable active={active} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate}/>
                     </div>
                     <div className='md:hidden'>
-                        <MobileTable data={publishedData} updatePublishedPsot={updatePublishedPsot}/>
+                        <MobileTable active={active} userPaymentMethod={props?.userPaymentMethod}/>
                     </div>
                 </div>
-
+{/* 
             }
 
-            {/* Table Data */}
             {
                 active === 2 &&
                 <div>
@@ -304,7 +274,7 @@ const AdvertisementTabs = (props: propsData) => {
                 </div>
 
             }
-            {/* Table Data */}
+
             {
                 active === 3 &&
                 <div>
@@ -316,7 +286,7 @@ const AdvertisementTabs = (props: propsData) => {
                     </div>
                 </div>
 
-            }
+            } */}
         </>
     )
 }
