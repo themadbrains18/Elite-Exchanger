@@ -91,7 +91,7 @@ const BuyTableMobile = (props: activeSection) => {
 
 
                                     <div className=' flex items-center justify-end'>
-                                        <button className="info-14-18 text-buy px-[20px] py-[9px] rounded-[4px]   bg-green" onClick={() => { props.setShow1(true); props.setSelectedPost(item); }}>buy</button>
+                                        <button className="info-14-18 text-buy px-[20px] py-[9px] rounded-[4px]   bg-green" onClick={() => { props.setShow1(true); props.setSelectedPost(item); }}>Buy</button>
                                     </div>
                                     <div className='mt-[12px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Price:</p>
@@ -106,7 +106,7 @@ const BuyTableMobile = (props: activeSection) => {
                                         <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{Number(item?.quantity).toFixed(4)} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                     </div>
                                     <div className='mt-[12px]'>
-                                        <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Available:</p>
+                                        <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Payment Method:</p>
                                         <div className='flex items-center gap-10 mt-[5px]'>
                                             {
                                                 payment_method?.map((elem: any, ind: any) => {

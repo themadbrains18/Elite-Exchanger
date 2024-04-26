@@ -92,9 +92,9 @@ const OrderBookMobile = (props: propsData) => {
 
                                 {/* table content */}
                                 <div>
-                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any) => {
-                                        if (item.order_type === 'buy') {
-                                            return <div className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
+                                    {props?.allTradeHistory && props?.allTradeHistory?.length > 0 && props?.allTradeHistory.map((item: any, index:number) => {
+                                        if (item?.order_type === 'buy') {
+                                            return <div key={Date.now()+index} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
                                                 <p className='info-12 z-[2] !text-buy'>$ {item?.limit_usdt}</p>
                                                 <p className='info-12 text-end z-[2] '>{item?.token_amount}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
@@ -102,7 +102,7 @@ const OrderBookMobile = (props: propsData) => {
                                         }
                                     })}
 
-                                    {props.BuyTrade && props.BuyTrade.length === 0 &&
+                                    {props?.BuyTrade && props?.BuyTrade?.length === 0 &&
                                         <div className={` flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                                             <Image
                                                 src="/assets/refer/empty.svg"
@@ -129,16 +129,16 @@ const OrderBookMobile = (props: propsData) => {
                                 </div>
                                 {/* table content */}
                                 <div>
-                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any) => {
-                                        if (item.order_type === 'sell') {
-                                            return <div className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
+                                    {props?.allTradeHistory && props?.allTradeHistory?.length > 0 && props?.allTradeHistory.map((item: any, index:number) => {
+                                        if (item?.order_type === 'sell') {
+                                            return <div key={Date.now()+index} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
                                                 <p className='info-12 z-[2] !text-sell'>$ {item?.limit_usdt}</p>
                                                 <p className='info-12 text-end z-[2] '>{item?.token_amount}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
                                             </div>
                                         }
                                     })}
-                                    {props.sellTrade && props.sellTrade.length === 0 &&
+                                    {props?.sellTrade && props?.sellTrade?.length === 0 &&
                                         <div className={` flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                                             <Image
                                                 src="/assets/refer/empty.svg"
@@ -171,16 +171,16 @@ const OrderBookMobile = (props: propsData) => {
                             </div>
                             {/* table content */}
                             <div>
-                                {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any) => {
+                                {props?.allTradeHistory && props?.allTradeHistory?.length > 0 && props?.allTradeHistory.map((item: any, index:number) => {
                                     if (item.order_type === 'buy') {
-                                        return <div className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
+                                        return <div key={Date.now()+index} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
                                             <p className='info-12 z-[2] !text-buy'>$ {item?.limit_usdt}</p>
                                             <p className='info-12 text-end z-[2] '>{item?.token_amount}</p>
                                             <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
                                         </div>
                                     }
                                     else {
-                                        return <div className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
+                                        return <div key={Date.now()+index+'33'} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
                                             <p className='info-12 z-[2] !text-sell'>$ {item?.limit_usdt}</p>
                                             <p className='info-12 text-end z-[2] '>{item?.token_amount}</p>
                                             <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
@@ -188,7 +188,7 @@ const OrderBookMobile = (props: propsData) => {
                                     }
                                 })}
 
-                                {props.allTradeHistory && props.allTradeHistory.length === 0 &&
+                                {props?.allTradeHistory && props?.allTradeHistory?.length === 0 &&
                                     <div className={` flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                                         <Image
                                             src="/assets/refer/empty.svg"

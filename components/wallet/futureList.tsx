@@ -44,25 +44,22 @@ const FutureList = (props:propsData) => {
     }, [itemOffset, props?.filter])
 
     async function getFutureWalletData() {
-        let spotHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+        let spotHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets/type?type=future_wallet&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
             method: "GET",
             headers: {
                 "Authorization": session?.user?.access_token
             },
         }).then(response => response.json());
 
-        let res = spotHistory?.data?.data?.filter((item: any) => {
-            return item.walletTtype === 'future_wallet'
-        });
-        setTotal(spotHistory?.data?.total)
+        setTotal(spotHistory?.data?.totalLength)
         if (props?.filter !== "") {
-            let data = res.filter((item: any) => {
+            let data = spotHistory?.data?.data.filter((item: any) => {
               return item?.token !== null ? item?.token?.symbol.toLowerCase().includes(props?.filter.toLowerCase()) : item?.global_token?.symbol.toLowerCase().includes(props?.filter.toLowerCase());
             })
             setCurrentItems(data);
           }
           else {
-            setCurrentItems(res);
+            setCurrentItems(spotHistory?.data?.data);
       
           }
 
@@ -116,7 +113,7 @@ const FutureList = (props:propsData) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems && currentItems.length > 0 && currentItems?.map((item: any, index: number) => {
+                        {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: number) => {
                             // ================================
                             // Trade button enable or disable
                             // ================================
@@ -171,7 +168,7 @@ const FutureList = (props:propsData) => {
 
                         })}
 
-                        {currentItems && currentItems.length === 0 &&
+                        {currentItems && currentItems?.length === 0 &&
                             <tr>
                                 <td colSpan={5}>
                                     <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
@@ -213,7 +210,7 @@ const FutureList = (props:propsData) => {
 
                     {/* table content */}
                     <div className="">
-                        {currentItems && currentItems.length > 0 && currentItems?.map((item: any, index: number) => {
+                        {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: number) => {
                             // ================================
                             // Trade button enable or disable
                             // ================================
@@ -281,7 +278,7 @@ const FutureList = (props:propsData) => {
                 </div>
             </div>
             <div className="flex pt-[25px] items-center justify-between">
-                <p className="info-12 md:footer-text !text-gamma">{currentItems.length} assets</p>
+                <p className="info-12 md:footer-text !text-gamma">{currentItems?.length} assets</p>
                 <ReactPaginate
                     className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
                         }`}

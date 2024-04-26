@@ -183,7 +183,7 @@ const DepositTable = (props:propsData) => {
                   </table>
                 </div>
                 <div className="flex pt-[25px] items-center justify-between">
-                  <p className="info-12 md:footer-text !text-gamma">{currentItems.length} assets</p>
+                  <p className="info-12 md:footer-text !text-gamma">{currentItems?.length} assets</p>
 
                   <ReactPaginate
                     className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}

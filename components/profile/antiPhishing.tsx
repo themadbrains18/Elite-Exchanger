@@ -8,7 +8,7 @@ interface activeSection {
   setEnable: Function;
   setShow: Function;
   session?: any;
-  setAntiFishingCode?:Function;
+  setAntiFishingCode?: Function;
 }
 
 const AntiPhishing = (props: activeSection) => {
@@ -65,12 +65,13 @@ const AntiPhishing = (props: activeSection) => {
                   className="css-94sbqg"
                 >
                   <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
+                    fillRule="evenodd"
+                    clipRule="evenodd"
                     d="M12 21a9 9 0 100-18 9 9 0 000 18zm-1.25-5.5V18h2.5v-2.5h-2.5zm0-9.5v7h2.5V6h-2.5z"
                     fill="#EF4444"
-                  ></path>
+                  />
                 </svg>
+
 
               </div>
               <p className="text-[14px] dark:text-white">

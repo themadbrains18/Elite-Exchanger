@@ -70,7 +70,7 @@ const TopGainers = (props: propsData) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems.length > 0 && currentItems?.map((item: any, index: any) => {
+                        {currentItems?.length > 0 && currentItems?.map((item: any, index: any) => {
                             return (
                                 <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer">
 
@@ -108,7 +108,7 @@ const TopGainers = (props: propsData) => {
                                 </tr>
                             );
                         })}
-                        {currentItems.length === 0 &&
+                        {currentItems?.length === 0 &&
                             <tr>
                                 <td colSpan={6}>
                                     <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>

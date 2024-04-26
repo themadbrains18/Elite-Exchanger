@@ -91,7 +91,7 @@ const ConvertList = () => {
           </tr>
         </thead>
         <tbody>
-          {currentItems && currentItems.length > 0 && currentItems?.map((item: any, index: number) => {
+          {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: number) => {
             return (
               <tr key={index} className="rounded-5 group ">
                 <td className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
@@ -120,7 +120,7 @@ const ConvertList = () => {
 
           })}
 
-          {currentItems.length === 0 &&
+          {currentItems?.length === 0 &&
             <tr>
               <td colSpan={5}>
                 <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
@@ -162,7 +162,7 @@ const ConvertList = () => {
 
         {/* table content */}
         <div className="">
-          {currentItems && currentItems.length > 0 && currentItems?.map((item: any, index: number) => {
+          {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: number) => {
             return (
               <div key={index} className="rounded-5 group grid grid-cols-3  gap-x-[10px]  items-center">
                 <div className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
@@ -182,7 +182,7 @@ const ConvertList = () => {
               </div>
             );
           })}
-          {currentItems && currentItems.length === 0 &&
+          {currentItems && currentItems?.length === 0 &&
             <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
               <Image
                 src="/assets/refer/empty.svg"

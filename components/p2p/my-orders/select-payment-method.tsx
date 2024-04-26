@@ -10,14 +10,14 @@ interface propsData {
 const SlectPaymentMethod = (props: propsData) => {
 
     const showOpt = (e: any) => {
-        let parent = e.currentTarget.closest(".parent");
-        let nextSiblibg = parent.nextElementSibling;
-        let nextSiblibgHeight = nextSiblibg.scrollHeight;
-        parent.classList.toggle("show");
-        if (parent.classList.contains("show")) {
-            nextSiblibg.setAttribute("style", `height:${nextSiblibgHeight}px;`);
+        let parent = e?.currentTarget?.closest(".parent");
+        let nextSiblibg = parent?.nextElementSibling;
+        let nextSiblibgHeight = nextSiblibg?.scrollHeight;
+        parent?.classList?.toggle("show");
+        if (parent?.classList?.contains("show")) {
+            nextSiblibg?.setAttribute("style", `height:${nextSiblibgHeight}px;`);
         } else {
-            nextSiblibg.removeAttribute("style");
+            nextSiblibg?.removeAttribute("style");
         }
     }
 
@@ -49,15 +49,15 @@ const SlectPaymentMethod = (props: propsData) => {
 
             {/* payment methods */}
             {
-                payment_method && payment_method.length > 0 && payment_method.map((elem: any, ind: any) => {
+                payment_method && payment_method?.length > 0 && payment_method?.map((elem: any, ind: any) => {
                     return (
-                        <div>
+                        <div key={ind}>
                             <div className='parent flex items-center gap-10 justify-between py-20 '>
                                 <div className="flex items-center mr-4 ">
-                                    {props.userOrder.p_method !== '' &&
-                                        <input id={`radio-${elem?.id}`} type="radio" checked={(props.userOrder.p_method !== '' && props.userOrder.p_method === elem?.id) ? true : false} disabled={(props.userOrder.p_method !== '' && props.userOrder.p_method !== elem?.id) ? true : false} value="" onChange={() => props.setPaymentMethod(elem?.id)} name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                                    {props?.userOrder?.p_method !== '' &&
+                                        <input id={`radio-${elem?.id}`} type="radio" checked={(props?.userOrder?.p_method !== '' && props?.userOrder?.p_method === elem?.id) ? true : false} disabled={(props?.userOrder?.p_method !== '' && props?.userOrder?.p_method !== elem?.id) ? true : false} value="" onChange={() => props?.setPaymentMethod(elem?.id)} name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                                     }
-                                    {props.userOrder.p_method === '' &&
+                                    {props?.userOrder?.p_method === '' &&
                                         <input id={`radio-${elem?.id}`} type="radio" value="" onChange={() => props.setPaymentMethod(elem?.id)} name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                                     }
                                     <label htmlFor={`radio-${elem?.id}`} className="
@@ -85,9 +85,9 @@ const SlectPaymentMethod = (props: propsData) => {
                                         flex items-center gap-10
                                         ">
                                         <Fragment key={ind}>
-                                            <Image src={`${elem.master_payment_method.icon}`} alt='error' width={28} height={28} />
+                                            <Image src={`${elem?.master_payment_method?.icon}`} alt='error' width={28} height={28} />
                                         </Fragment>
-                                        <span className='text-banner-text'>{elem.master_payment_method?.payment_method}</span>
+                                        <span className='text-banner-text'>{elem?.master_payment_method?.payment_method}</span>
                                     </label>
                                     {/* <p className='info-14-18 !text-banner-heading dark:!text-white md:block hidden'>( BankName@{elem.master_payment_method?.payment_method} )</p> */}
                                 </div>

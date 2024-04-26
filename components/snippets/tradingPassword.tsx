@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
 import { useSession } from "next-auth/react";
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
+import Image from "next/image";
 
 interface activeSection {
   setActive: Function,
@@ -18,7 +19,7 @@ const TradingPassword = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [passCode, setPassCode] = useState("");
   const [fillOtp, setOtp] = useState("");
-
+    const [showNew, setShowNew] = useState(false);
   const { status, data: session } = useSession();
   const [timeLeft, setTimer] = useState('');
   const [enable, setEnable] = useState(false);
@@ -289,18 +290,39 @@ const TradingPassword = (props: activeSection) => {
           <div className="py-30 md:py-40">
             <div className="flex flex-col mb-[15px] md:mb-30 gap-20">
               <label className="sm-text">Enter Trading Password</label>
-              <div className="flex gap-10 justify-center items-center input_wrapper">
+              {/* <div className="flex gap-10 justify-center items-center input_wrapper">
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code3" />
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code4" />
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code5" />
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code6" onChange={(e) => { console.log(e) }} />
-              </div>
+              </div> */}
+               <div className='relative'>
+                            <input
+                                type={`${showNew === true ? "text" : "password"}`}
+                                name='new_password'
+                                maxLength={32}
+                                placeholder="Enter new password"
+                                className="sm-text input-cta2 w-full"
+                                onChange={(e)=>{setPassCode(e.target.value)}}
+                            />
+                            <Image
+                                src={`/assets/register/${showNew === true ? "show.svg" : "hide.svg"}`}
+                                alt="eyeicon"
+                                width={24}
+                                height={24}
+                                onClick={() => {
+                                    setShowNew(!showNew);
+                                }}
+                                className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                            />
+                        </div>
             </div>
+          
             <div className="flex flex-col mb-[15px] md:mb-30 gap-20">
               <label className="sm-text">Enter Code Verification Code</label>
-              <div className="flex gap-10 justify-center items-center input_wrapper2">
+              <div className="flex gap-10 justify-between md:justify-center items-center input_wrapper2">
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code3" />

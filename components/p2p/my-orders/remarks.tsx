@@ -264,7 +264,7 @@ const Remarks = (props: propsData) => {
             {/* <ToastContainer /> */}
             <div className='p-[15px] md:p-[40px] md:pb-20 border dark:border-opacity-[15%] border-grey-v-1 rounded-10 mt-30'>
                 {
-                    props.userOrder?.status !== 'isCanceled' &&
+                    props?.userOrder?.status !== 'isCanceled' &&
                     <>
                         <div className='border-b dark:border-opacity-[15%] border-grey-v-1 md:pb-30 pb-[15px] md:mb-30 mb-[15px]'>
                             <p className="text-[19px] md:text-[23px]  leading-7 font-medium   dark:!text-white  !text-h-primary">Remarks</p>
@@ -283,19 +283,19 @@ const Remarks = (props: propsData) => {
                     </>
                 }
                 {
-                    props.userOrder?.status === 'isProcess' &&
+                    props?.userOrder?.status === 'isProcess' &&
                     <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please Complete Your Payment within <span className='dark:text-white text-black'>{timeLeft}</span> you need to pay<span className='dark:text-white text-black'> {props?.userOrder?.spend_amount} INR.</span></p>
                 }
                 {
-                    props.userOrder?.status === 'isCompleted' &&
+                    props?.userOrder?.status === 'isCompleted' &&
                     <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The Payment is done. Please wait for the seller to release the crypto</p>
                 }
                 {
-                    props.userOrder?.status === 'isReleased' &&
+                    props?.userOrder?.status === 'isReleased' &&
                     <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The seller has release the crypto please not to check.</p>
                 }
                 {
-                    props.userOrder?.status === 'isCanceled' &&
+                    props?.userOrder?.status === 'isCanceled' &&
                     <>
                         <div className='inline-flex items-center gap-[7px] px-10 py-[8px] bg-[#FAFAFA] md:mb-30 mb-[15px] dark:bg-orange rounded-[4px]'>
                             <div className='min-w-[24px]'>
@@ -308,7 +308,7 @@ const Remarks = (props: propsData) => {
                 }
 
                 {
-                    props.userOrder?.status !== 'isCanceled' &&
+                    props?.userOrder?.status !== 'isCanceled' &&
                     <p className='nav-text-sm'>
                         <span className='text-black dark:text-white'>Notice: </span>
                         Please Do Not leave sensitive character while transferring funds
@@ -319,37 +319,37 @@ const Remarks = (props: propsData) => {
                 <div className='flex items-center sm:gap-30 gap-[15px] md:mt-50 mt-30 md:flex-row flex-col'>
 
                     {
-                        (props.userOrder?.status === 'isProcess' || props.userOrder?.status === 'isCompleted') && props.userOrder?.buy_user_id === session?.user?.user_id &&
+                        (props?.userOrder?.status === 'isProcess' || props?.userOrder?.status === 'isCompleted') && props?.userOrder?.buy_user_id === session?.user?.user_id &&
                         <button className={`solid-button2 max-w-full sm:max-w-[220px] w-full `} onClick={() => { setShow(true); setConfirmation(true) }}>
                             Cancel Order
                         </button>
                     }
 
                     {
-                        props.userOrder?.status === 'isCanceled' &&
+                        props?.userOrder?.status === 'isCanceled' &&
                         <button onClick={() => { router.push('/p2p/buy') }} className={`solid-button2 cursor-pointer dark:bg-black-v-1 dark:text-primary max-w-full sm:max-w-[400px] w-full `}>
                             Go back and place another order
                         </button>
                     }
 
                     {
-                        props.userOrder?.status === 'isProcess' && props.userOrder?.buy_user_id === session?.user?.user_id &&
+                        props?.userOrder?.status === 'isProcess' && props?.userOrder?.buy_user_id === session?.user?.user_id &&
                         <button className='solid-button max-w-full sm:max-w-[220px] w-full' onClick={() => { updatePaymentMethod() }}>Mark as Paid</button>
                     }
                     {
-                        props.userOrder?.status === 'isCompleted' && props.userOrder?.buy_user_id === session?.user?.user_id &&
+                        props?.userOrder?.status === 'isCompleted' && props?.userOrder?.buy_user_id === session?.user?.user_id &&
                         <button className='solid-button max-w-full sm:max-w-[220px] w-full'>I Have Paid</button>
                     }
                     {
-                        props.userOrder?.status === 'isProcess' && props.userOrder?.sell_user_id === session?.user?.user_id &&
+                        props?.userOrder?.status === 'isProcess' && props?.userOrder?.sell_user_id === session?.user?.user_id &&
                         <button className='solid-button max-w-full sm:max-w-[220px] w-full' >Payment under process</button>
                     }
                     {
-                        props.userOrder?.status === 'isCompleted' && props.userOrder?.sell_user_id === session?.user?.user_id &&
+                        props?.userOrder?.status === 'isCompleted' && props?.userOrder?.sell_user_id === session?.user?.user_id &&
                         <button className='solid-button max-w-full sm:max-w-[220px] w-full' onClick={() => { orderReleased() }}>Release Crypto</button>
                     }
                     {
-                        props.userOrder?.status === 'isReleased' &&
+                        props?.userOrder?.status === 'isReleased' &&
                         <button className='solid-button max-w-full sm:max-w-[220px] w-full cursor-auto'>Order Completed</button>
                     }
 

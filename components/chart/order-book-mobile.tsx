@@ -77,8 +77,8 @@ const OrderBookMobile = (props: propsData) => {
                     {/* order book buy or sell in flex */}
                     {
                         active1Mobile === 1 &&
-                        <div className='flex gap-20'>
-                            <div className='max-w-[50%] w-full'>
+                        <div className='flex md:flex-row flex-col gap-20'>
+                            <div className='max-w-full md:max-w-[50%] w-full'>
                                 {/* table head */}
                                 <div className='grid grid-cols-2 gap-10 mb-[15px]'>
                                     <div className="flex ">
@@ -93,9 +93,9 @@ const OrderBookMobile = (props: propsData) => {
 
                                 {/* table content */}
                                 <div>
-                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any) => {
+                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any, index:number) => {
                                         if (item.order_type === 'buy') {
-                                            return <div className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
+                                            return <div key={index+Date.now()} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
                                                 <p className='info-12 z-[2] !text-buy'>$ {item?.limit_usdt}</p>
                                                 <p className='info-12 text-end z-[2] '>{item?.token_amount}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
@@ -116,7 +116,7 @@ const OrderBookMobile = (props: propsData) => {
                                     }
                                 </div>
                             </div>
-                            <div className='max-w-[50%] w-full'>
+                            <div className='max-w-full md:max-w-[50%] w-full'>
                                 {/* table head */}
                                 <div className='grid grid-cols-2 gap-10 mb-[15px]'>
                                     <div className="flex ">
@@ -130,11 +130,11 @@ const OrderBookMobile = (props: propsData) => {
                                 </div>
                                 {/* table content */}
                                 <div>
-                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any) => {
+                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any, index:number) => {
                                         if (item.order_type === 'sell') {
-                                            return <div className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
+                                            return <div key={Date.now()+index} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
                                                 <p className='info-12 z-[2] !text-sell'>$ {item?.limit_usdt}</p>
-                                                <p className='info-12 text-end z-[2] '>{item?.token_amount}</p>
+                                                <p className='info-12 text-end z-[2] '>{item?.token_amount.toFixed(6)}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
                                             </div>
                                         }
@@ -172,16 +172,16 @@ const OrderBookMobile = (props: propsData) => {
                             </div>
                             {/* table content */}
                             <div>
-                                {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any) => {
+                                {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any,index:number) => {
                                     if (item.order_type === 'buy') {
-                                        return <div className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
+                                        return <div key={Date.now()+index} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
                                             <p className='info-12 z-[2] !text-buy'>$ {item?.limit_usdt}</p>
                                             <p className='info-12 text-end z-[2] '>{item?.token_amount}</p>
                                             <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
                                         </div>
                                     }
                                     else {
-                                        return <div className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
+                                        return <div key={Date.now()+index+'22'} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
                                             <p className='info-12 z-[2] !text-sell'>$ {item?.limit_usdt}</p>
                                             <p className='info-12 text-end z-[2] '>{item?.token_amount}</p>
                                             <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>

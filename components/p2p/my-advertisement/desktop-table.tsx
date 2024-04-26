@@ -70,7 +70,7 @@ const DesktopTable = (props: dataTypes) => {
                 }
                 post.user_p_method = payment_method;
             }
-            let postData = [];
+            let postData:any = [];
                 let filterRecord = userAllOrderList?.data?.data;
                 if (props?.firstCurrency !== '') {
                     
@@ -79,11 +79,8 @@ const DesktopTable = (props: dataTypes) => {
                     });
                   
                 }
-                else{
-                    postData= filterRecord
-                }
              
-                if (props?.paymentId !== '') {
+               else if (props?.paymentId !== '') {
                     let filter_posts=[]
                     for (const post of postData) {
                         for (const upid of post.user_p_method) {
@@ -94,11 +91,9 @@ const DesktopTable = (props: dataTypes) => {
                     }
                     postData = filter_posts;
                 }
-                else{
-                    postData= filterRecord
-                }          
+                   
 
-                if (props?.startDate !== null && props?.startDate !== undefined) {
+                else if (props?.startDate !== null && props?.startDate !== undefined) {
                     let filter_posts=[]
                     filter_posts = postData.filter((item: any) => {
                         let postDate = moment(item?.createdAt).format('LL');
@@ -108,6 +103,9 @@ const DesktopTable = (props: dataTypes) => {
                         }
                     });
                     postData = filter_posts;
+                }
+                else{
+                    postData= filterRecord
                 }
               
                 setPostList(postData)

@@ -6,7 +6,7 @@ import clickOutSidePopupClose from "../snippets/clickOutSidePopupClose";
 interface activeSection {
     setEnable: Function;
     setShow: Function;
-    actionPerform:Function;
+    actionPerform: Function;
 }
 
 const CancelOrder = (props: activeSection) => {
@@ -20,9 +20,9 @@ const CancelOrder = (props: activeSection) => {
 
     return (
         <>
-        <div
-        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible`}
-      ></div>
+            <div
+                className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible`}
+            ></div>
             <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-20 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
                 <div className="flex items-center justify-between ">
                     <p className="sec-title">Confirm Order cancellation</p>
@@ -61,12 +61,13 @@ const CancelOrder = (props: activeSection) => {
                                 className="css-94sbqg"
                             >
                                 <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
+                                    fillRule="evenodd"
+                                    clipRule="evenodd"
                                     d="M12 21a9 9 0 100-18 9 9 0 000 18zm-1.25-5.5V18h2.5v-2.5h-2.5zm0-9.5v7h2.5V6h-2.5z"
                                     fill="#EF4444"
-                                ></path>
+                                />
                             </svg>
+
 
                         </div>
                         <p className="text-[14px] dark:text-white">

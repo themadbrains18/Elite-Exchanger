@@ -86,12 +86,49 @@ const Whitelist = (props: activeSection) => {
           <WhitelistSuccessful setEnable={props?.setEnable} setActive={setActive} setShow={props?.setShow} whitelist={props?.whitelist} />
           : <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-20 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
             <div className="flex item-center justify-center mb-6">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" fill="none" className="w-[40px]">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M88 48c0 22.091-17.909 40-40 40S8 70.091 8 48 25.909 8 48 8s40 17.909 40 40z" fill="#5367FF"></path>
-                <path d="M48 19c16.016 0 29 12.984 29 29S64.016 77 48 77 19 64.016 19 48s12.984-29 29-29z" fill="#5367FF"></path>
-                <path d="M45 66h6v-6h-6v6zM51 54V30h-6v24h6z" fill="#14151A"></path><defs><linearGradient id="general-warning_svg__paint0_linear_22059_28207" x1="8" y1="48" x2="102.5" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#F0B90B" stop-opacity="0"></stop><stop offset="1" stop-color="#F0B90B"></stop>
-                </linearGradient><linearGradient id="general-warning_svg__paint1_linear_22059_28207" x1="77" y1="48" x2="19" y2="48" gradientUnits="userSpaceOnUse"><stop stop-color="#F0B90B"></stop>
-                    <stop offset="1" stop-color="#F8D33A"></stop></linearGradient></defs></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 96 96"
+                fill="none"
+                className="w-[40px]"
+              >
+                <path
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                  d="M88 48c0 22.091-17.909 40-40 40S8 70.091 8 48 25.909 8 48 8s40 17.909 40 40z"
+                  fill="#5367FF"
+                />
+                <path
+                  d="M48 19c16.016 0 29 12.984 29 29S64.016 77 48 77 19 64.016 19 48s12.984-29 29-29z"
+                  fill="#5367FF"
+                />
+                <path d="M45 66h6v-6h-6v6zM51 54V30h-6v24h6z" fill="#14151A" />
+                <defs>
+                  <linearGradient
+                    id="general-warning_svg__paint0_linear_22059_28207"
+                    x1={8}
+                    y1={48}
+                    x2="102.5"
+                    y2={48}
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop stopColor="#F0B90B" stopOpacity={0} />
+                    <stop offset={1} stopColor="#F0B90B" />
+                  </linearGradient>
+                  <linearGradient
+                    id="general-warning_svg__paint1_linear_22059_28207"
+                    x1={77}
+                    y1={48}
+                    x2={19}
+                    y2={48}
+                    gradientUnits="userSpaceOnUse"
+                  >
+                    <stop stopColor="#F0B90B" />
+                    <stop offset={1} stopColor="#F8D33A" />
+                  </linearGradient>
+                </defs>
+              </svg>
+
             </div>
             <p className="sec-title text-center mb-5">{props?.whitelist === false ? "Enable" : "Disable"} Whitelist</p>
 

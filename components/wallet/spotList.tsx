@@ -41,25 +41,23 @@ const SpotList = (props: propsData): any => {
 
 
   async function getSpotData() {
-    let spotHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+    let spotHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets/type?type=main_wallet&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token
       },
     }).then(response => response.json());
 
-    let res = spotHistory?.data?.data?.filter((item: any) => {
-      return item.walletTtype === 'main_wallet'
-    });
-    setTotal(spotHistory?.data?.total)
+ 
+    setTotal(spotHistory?.data?.totalLength)
     if (props?.filter !== "") {
-      let data = res.filter((item: any) => {
+      let data = spotHistory?.data?.data.filter((item: any) => {
         return item?.token !== null ? item?.token?.symbol.toLowerCase().includes(props?.filter.toLowerCase()) : item?.global_token?.symbol.toLowerCase().includes(props?.filter.toLowerCase());
       })
       setCurrentItems(data);
     }
     else {
-      setCurrentItems(res);
+      setCurrentItems(spotHistory?.data?.data);
 
     }
 
@@ -119,7 +117,7 @@ const SpotList = (props: propsData): any => {
             </tr>
           </thead>
           <tbody>
-            {currentItems && currentItems.length > 0 && currentItems?.map((item: any, index: number) => {
+            {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: number) => {
               // ===================================
               // Stacking button enable or disable
               // ===================================
@@ -223,7 +221,7 @@ const SpotList = (props: propsData): any => {
 
             })}
 
-            {currentItems && currentItems.length === 0 &&
+            {currentItems && currentItems?.length === 0 &&
               <tr>
                 <td colSpan={5}>
                   <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
@@ -266,7 +264,7 @@ const SpotList = (props: propsData): any => {
 
           {/* table content */}
           <div className="">
-            {currentItems && currentItems.length > 0 && currentItems?.map((item: any, index: number) => {
+            {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: number) => {
               // ===================================
               // Stacking button enable or disable
               // ===================================
@@ -359,7 +357,7 @@ const SpotList = (props: propsData): any => {
                 </div>
               );
             })}
-            {currentItems && currentItems.length === 0 &&
+            {currentItems && currentItems?.length === 0 &&
               <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                 <Image
                   src="/assets/refer/empty.svg"

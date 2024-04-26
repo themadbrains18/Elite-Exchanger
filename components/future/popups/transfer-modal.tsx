@@ -64,6 +64,7 @@ const TransferModal = (props: showPopup) => {
   }
 
   useEffect(() => {
+    
     let coins: any = [];
     props?.assets?.filter((item: any) => {
       if (item?.walletTtype === "main_wallet") {

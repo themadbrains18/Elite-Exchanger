@@ -115,7 +115,7 @@ const NewListing = (props: propsData) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems.length > 0 &&
+            {currentItems?.length > 0 &&
               currentItems?.map((item: any, index: any) => {
                 return (
                   <tr
@@ -208,7 +208,7 @@ const NewListing = (props: propsData) => {
                   </tr>
                 );
               })}
-            {currentItems.length === 0 && (
+            {currentItems?.length === 0 && (
               <tr>
                 <td colSpan={6}>
                   <div

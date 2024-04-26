@@ -99,7 +99,7 @@ const MyOrders = (props: propsData) => {
       <ToastContainer limit={1} />
       <P2pLayout>
         {
-          (props.userOrder !== null)
+          (props?.userOrder !== null)
             ?
             <>
 

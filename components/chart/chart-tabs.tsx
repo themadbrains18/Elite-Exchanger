@@ -324,7 +324,7 @@ const ChartTabs = (props: propsData) => {
                         </td>
                         <td>
                           <p className="info-14-18 dark:text-white  max-[767px]:text-end">
-                            ${item.price}
+                            ${item.price.toFixed(6)}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden">

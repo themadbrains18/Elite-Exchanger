@@ -67,7 +67,7 @@ const TradingPasswordAds = (props: activeSection) => {
         <>
             <ToastContainer />
             <div
-                className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show ? "opacity-80 visible" : "opacity-0 invisible"
+                className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props?.show ? "opacity-80 visible" : "opacity-0 invisible"
                     }`}
             ></div>
             <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">

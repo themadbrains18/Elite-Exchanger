@@ -93,7 +93,7 @@ const WithdrawList = (props: propsData) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems && currentItems.length > 0 && currentItems?.map((item: any, index: number) => {
+            {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: number) => {
               return (
                 <tr key={index} className="rounded-5 group dark:hover:bg-black-v-1 hover:bg-[#FEF2F2] cursor-pointer">
                   <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1  lg:sticky left-0 bg-white dark:bg-d-bg-primary">

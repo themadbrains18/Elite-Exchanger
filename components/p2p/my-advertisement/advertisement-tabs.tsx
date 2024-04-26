@@ -256,7 +256,7 @@ const AdvertisementTabs = (props: propsData) => {
                         <DesktopTable active={active} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate}/>
                     </div>
                     <div className='md:hidden'>
-                        <MobileTable active={active} userPaymentMethod={props?.userPaymentMethod}/>
+                        <MobileTable active={active} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate}/>
                     </div>
                 </div>
 {/* 

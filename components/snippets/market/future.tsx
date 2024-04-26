@@ -80,7 +80,7 @@ const Future = (props: propsData) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems.length > 0 && currentItems?.map((item: any, index: any) => {
+                        {currentItems?.length > 0 && currentItems?.map((item: any, index: any) => {
                             let marketPrice = item?.token !== null ? item?.token?.price.toFixed(5) : item?.global_token?.price.toFixed(5);
 
                             let change = ((marketPrice - item?.hloc?.open) / item?.hloc?.open) * 100;
@@ -128,7 +128,7 @@ const Future = (props: propsData) => {
                                 </tr>
                             );
                         })}
-                        {currentItems.length === 0 &&
+                        {currentItems?.length === 0 &&
                             <tr>
                                 <td colSpan={6}>
                                     <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
