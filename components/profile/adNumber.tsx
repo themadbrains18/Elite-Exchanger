@@ -21,7 +21,7 @@ import CodeNotRecieved from "../snippets/codeNotRecieved";
 const schema = yup.object().shape({
   uname: yup
     .string()
-    .required("Email / Phone is required").matches(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})+$/, 'Please enter valid email(letters, number and period(.))')
+    .required("Email / Phone is required").matches(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})+$/, "Please enter valid email(letters, number and period('.'))")
   // .test("email_or_phone", "Email / Phone is invalid", (value) => {
   //   return validateEmail(value) || validatePhone(value);
   // }),
@@ -138,7 +138,7 @@ const AdNumber = (props: activeSection) => {
         if (isValidEmail === null) {
           setError("uname", {
             type: "custom",
-            message: `Please enter valid email(letters, number and period(.))`,
+            message: `Please enter valid email(letters, number and period('.'))`,
           });
           setTimeout(() => {
             clearErrors('uname');

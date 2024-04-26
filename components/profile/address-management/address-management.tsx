@@ -11,6 +11,7 @@ import { Tooltip } from "react-tooltip";
 import ConfirmationModel from "@/components/snippets/confirmation";
 import { useQRCode } from "next-qrcode";
 import clickOutSidePopupClose from "@/components/snippets/clickOutSidePopupClose";
+import ReactPaginate from "react-paginate";
 
 interface fixSection {
   showActivity?: boolean;
@@ -20,7 +21,6 @@ interface fixSection {
 const AddressManagement = (props: fixSection) => {
   const [active, setActive] = useState(false);
   const { mode } = useContext(Context);
-  const [itemOffset, setItemOffset] = useState(0);
   const { status, data: session } = useSession()
   const [data, setData] = useState([]);
   const [tokens, setTokens] = useState([]);
@@ -34,12 +34,16 @@ const AddressManagement = (props: fixSection) => {
   const [showSVG, setShowSVG] = useState(false);
   const [btnDisabledCopy, setBtnDisabledCopy] = useState(false);
   const { SVG } = useQRCode();
+  const [itemOffset, setItemOffset] = useState(0);
+  const [total, setTotal] = useState(0)
+
+  let itemsPerPage = 10;
 
   useEffect(() => {
     getAllNetworks()
     getAllTokens()
-    getAllWhitelistAddress()
-  }, [])
+    getAllWhitelistAddress(itemOffset)
+  }, [itemOffset])
 
 
   const getAllNetworks = async () => {
@@ -69,9 +73,9 @@ const AddressManagement = (props: fixSection) => {
 
     }
   }
-  const getAllWhitelistAddress = async () => {
+  const getAllWhitelistAddress = async (itemOffset: number) => {
     try {
-      let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list`, {
+      let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
         method: "GET",
         headers: {
           "Authorization": session?.user?.access_token
@@ -79,11 +83,20 @@ const AddressManagement = (props: fixSection) => {
       }).then(response => response.json());
 
       // console.log(address.data,'-----address data');
-      setList(address?.data);
+      setTotal(address?.data?.totalLength)
+      setList(address?.data?.data);
     } catch (error) {
 
     }
   }
+
+  const pageCount = Math.ceil(total / itemsPerPage);
+
+  const handlePageClick = async (event: any) => {
+      const newOffset = (event.selected * itemsPerPage) % total;
+      setItemOffset(newOffset);
+
+  };
 
   const updateStatus = async (data: any) => {
     try {
@@ -105,7 +118,7 @@ const AddressManagement = (props: fixSection) => {
       // console.log(responseStatus, "==responseStatus");
 
       if (responseStatus) {
-        getAllWhitelistAddress();
+        getAllWhitelistAddress(0);
       }
 
     } catch (error) {
@@ -135,7 +148,7 @@ const AddressManagement = (props: fixSection) => {
 
       if (postResponse?.data) {
         toast.success('Address delted successfully', { autoClose: 2000 });
-        getAllWhitelistAddress();
+        getAllWhitelistAddress(0);
         setConfirm(0);
         setShow(false);
       }
@@ -322,7 +335,7 @@ const AddressManagement = (props: fixSection) => {
 
                               className="cursor-pointer"
                             >
-                              <g clip-path="url(#clip0_6686_27482)">
+                              <g clipPath="url(#clip0_6686_27482)">
                                 <path d="M3.11161 5.25445H5.25447V3.11159H3.11161V5.25445ZM13.9598 8.46875H15.0312V11.817H13.9598V10.7455H12.8884V9.54019H11.8169V8.46875H12.8884V9.54019H13.9598V8.46875ZM10.7455 10.7455H12.8884V12.8884H13.9598V13.9598H15.0313V15.0313H12.8884V13.9598H11.817V11.817H10.7455V12.8884H9.5402V13.9599H10.7455V15.0313H8.46877V8.4688H10.7455V9.54023H9.5402V11.817H10.7455V10.7456V10.7455ZM0.96875 15.0312H7.39731V8.46875H0.96875V15.0312ZM2.04019 9.54017H6.32589V13.9598H2.04019V9.54017ZM3.11161 12.8884H5.25447V10.7455H3.11161V12.8884ZM8.46875 0.96875V7.39731H15.0312V0.96875H8.46875ZM13.9598 6.32589H9.54016V2.04019H13.9598V6.32589ZM0.96875 7.39731H7.39731V0.96875H0.96875V7.39731ZM2.04019 2.04019H6.32589V6.32589H2.04019V2.04019ZM12.8884 3.11161H10.7455V5.25447H12.8884V3.11161Z" fill={mode === "dark" ? "white" : "black"}></path>
                               </g>
                               <defs>
@@ -394,6 +407,18 @@ const AddressManagement = (props: fixSection) => {
             </tbody>
           </table>
         </div>
+        <div className="flex pt-[25px] items-center justify-end">
+                <ReactPaginate
+                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                    breakLabel="..."
+                    nextLabel=">"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={5}
+                    marginPagesDisplayed={2}
+                    pageCount={pageCount}
+                    previousLabel="<"
+                    renderOnZeroPageCount={null} />
+            </div>
       </section>
       {
         active &&

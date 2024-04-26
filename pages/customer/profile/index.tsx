@@ -85,7 +85,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     }).then(response => response.json());
 
-    let activity = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/activity?userid=${session?.user?.user_id}`, {
+    let activity = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/activity?userid=${session?.user?.user_id}&itemOffset=0&itemsPerPage=10`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token

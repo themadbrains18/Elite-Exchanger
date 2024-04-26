@@ -5,6 +5,7 @@ import moment from "moment";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
 import { ToastContainer, toast } from "react-toastify";
 
 interface fixSection {
@@ -14,8 +15,10 @@ interface fixSection {
 }
 const Activity = (props: fixSection) => {
   const [active, setActive] = useState(1);
-  const { mode } = useContext(Context);
+  const { mode } = useContext(Context); 
   const [itemOffset, setItemOffset] = useState(0);
+  const [total, setTotal] = useState(0)
+  let itemsPerPage = 10;
   const { data: session } = useSession()
   const [data, setData] = useState([]);
 
@@ -50,12 +53,12 @@ const Activity = (props: fixSection) => {
 
   useEffect(() => {
     // setData(props?.activity);
-    getActivityData();
-  }, []);
+    getActivityData(itemOffset);
+  }, [itemOffset]);
 
-  const getActivityData = async () => {
+  const getActivityData = async (itemOffset: number) => {
     try {
-      let activity = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/activity?userid=${session?.user?.user_id}`, {
+      let activity = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/activity?userid=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
         method: "GET",
         headers: {
           "Authorization": session?.user?.access_token
@@ -63,11 +66,20 @@ const Activity = (props: fixSection) => {
       }).then(response => response.json());
 
       // console.log(activity.data,'-----activity data');
-      setData(activity?.data);
+      setTotal(activity?.data?.totalLength)
+      setData(activity?.data?.data);
     } catch (error) {
 
     }
   }
+
+  const pageCount = Math.ceil(total / itemsPerPage);
+
+  const handlePageClick = async (event: any) => {
+      const newOffset = (event.selected * itemsPerPage) % total;
+      setItemOffset(newOffset);
+
+  };
 
   return (
     <>
@@ -235,6 +247,18 @@ const Activity = (props: fixSection) => {
             </tbody>
           </table>
         </div>
+        <div className="flex pt-[25px] items-center justify-end">
+                <ReactPaginate
+                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                    breakLabel="..."
+                    nextLabel=">"
+                    onPageChange={handlePageClick}
+                    pageRangeDisplayed={5}
+                    marginPagesDisplayed={2}
+                    pageCount={pageCount}
+                    previousLabel="<"
+                    renderOnZeroPageCount={null} />
+            </div>
       </section>
     </>
   );

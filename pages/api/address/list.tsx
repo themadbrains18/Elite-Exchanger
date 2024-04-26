@@ -14,7 +14,8 @@ router
     .get(async (req, res) => {
         try {
             let token = req.headers.authorization;
-            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/address/list`, token);
+            let {itemOffset,itemsPerPage}= req.query;
+            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/address/list/${itemOffset}/${itemsPerPage}`, token);
 
             return res.status(200).send({ data });
         } catch (error: any) {
