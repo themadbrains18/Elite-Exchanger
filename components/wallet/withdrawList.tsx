@@ -17,7 +17,7 @@ const WithdrawList = (props: propsData) => {
   const { mode } = useContext(Context)
   const { status, data: session } = useSession();
   const [currentPage, setCurrentPage] = useState(0);
-  let itemsPerPage = 2;
+  let itemsPerPage = 10;
 
   useEffect(() => {
     getWithdrawData()

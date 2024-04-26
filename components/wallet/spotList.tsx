@@ -32,7 +32,7 @@ const SpotList = (props: propsData): any => {
   const [currentPage, setCurrentPage] = useState(0);
   const router = useRouter();
 
-  let itemsPerPage = 2;
+  let itemsPerPage = 10;
 
   useEffect(() => {
     getSpotData()

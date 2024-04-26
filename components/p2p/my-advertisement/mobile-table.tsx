@@ -22,7 +22,7 @@ const MobileTable = (props: dataTypes) => {
     const {mode} = useContext(Context)
     const route = useRouter();
     const [postList, setPostList] = useState([]);
-    let itemsPerPage = 2;
+    let itemsPerPage = 10;
     const [itemOffset, setItemOffset] = useState(0);
     const [total, setTotal] = useState(0)
     const [postId, setPostId] = useState('');

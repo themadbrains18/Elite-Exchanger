@@ -14,6 +14,7 @@ interface propsData {
   coinList: any,
   networks: any,
   assets: any,
+  sessions: any,
   posts?: any,
   masterPayMethod?: any;
 }
@@ -29,10 +30,10 @@ const P2pBuy = (props: propsData) => {
   const wbsocket = useWebSocket();
 
   useEffect(() => {
-    socket();
+    socket(props?.sessions?.user?.user_id);
   }, [wbsocket])
 
-  const socket=()=>{
+  const socket=(user_id:string | undefined)=>{
     if(wbsocket){
       
       wbsocket.onmessage = (event) => {
@@ -53,8 +54,11 @@ const P2pBuy = (props: propsData) => {
           setNewPosts(data);
         }
       }
+
+      const limit = 20;
+          const offset = 0;
+          wbsocket.send(JSON.stringify({ ws_type: "post", user_id, limit, offset }));
     }
-    
   }
 
 
@@ -79,7 +83,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     method: "GET"
   }).then(response => response.json());
 
-  let allPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/buy?itemOffset=0&itemsPerPage=20`, {
+  let allPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/buy?user_id=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
     method: "GET",
   }).then(response => response.json());
 

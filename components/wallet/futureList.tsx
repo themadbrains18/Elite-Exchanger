@@ -25,7 +25,7 @@ const FutureList = (props:propsData) => {
     const [selectedCoinBalance, setSelectedCoinBalance] = useState(0.00);
     const router = useRouter();
 
-    let itemsPerPage = 2;
+    let itemsPerPage = 10;
 
     const setHeight = (e: any) => {
         let parent = e.currentTarget.closest(".iconParent");

@@ -26,7 +26,7 @@ const DesktopTable = (props: dataTypes) => {
     const [itemOffset, setItemOffset] = useState(0);
     const [total, setTotal] = useState(0)
 
-    let itemsPerPage = 2;
+    let itemsPerPage = 10;
     const [postId, setPostId] = useState('');
     const [active, setActive] = useState(0);
     const [show, setShow] = useState(false);
@@ -57,6 +57,8 @@ const DesktopTable = (props: dataTypes) => {
 
             setTotal(userAllOrderList?.data?.totalLength)
             setPostList(userAllOrderList?.data?.data);
+        
+            
 
             for (const post of userAllOrderList?.data?.data) {
                 let payment_method: any = [];

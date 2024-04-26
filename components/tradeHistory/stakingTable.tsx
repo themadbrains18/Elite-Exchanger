@@ -27,7 +27,7 @@ const StakingTable = () => {
     const [selectedStake, setSelectedStake] = useState(Object);
     const { mode } = useContext(Context)
   
-    let itemsPerPage = 2;
+    let itemsPerPage = 10;
   
     useEffect(()=>{    
       getStakingData()

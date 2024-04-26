@@ -23,7 +23,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
     const [total, setTotal] = useState(0)
 
 
-    let itemsPerPage = 20;
+    let itemsPerPage = 10;
 
 
     useEffect(() => {

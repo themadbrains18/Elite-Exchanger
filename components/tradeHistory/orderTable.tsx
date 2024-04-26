@@ -16,7 +16,7 @@ const OrderTable = (props:propsData) => {
   const [total,setTotal] = useState(0)
   const { mode } = useContext(Context)
 
-  let itemsPerPage = 2;
+  let itemsPerPage = 10;
 
   useEffect(()=>{    
     getOrders()

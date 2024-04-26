@@ -5,10 +5,15 @@ import IconsComponent from '../../snippets/icons';
 import Context from "../../contexts/context";
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
+import { useWebSocket } from '@/libs/WebSocketContext';
 
 interface activeSection {
   setShow1: any;
   setSelectedPost?: any;
+  paymentId?: string;
+  selectedToken?: any;
+  firstCurrency?: string;
+  
 }
 
 const BuyTableDesktop = (props: activeSection) => {
@@ -21,12 +26,13 @@ const BuyTableDesktop = (props: activeSection) => {
   const [total, setTotal] = useState(0)
 
 
-  let itemsPerPage = 2;
+  let itemsPerPage = 10;
 
 
   useEffect(() => {
     getAllPosts(itemOffset);
-  }, [itemOffset]);
+  }, [itemOffset,props?.firstCurrency, props?.paymentId]);
+
 
 
   const getAllPosts = async (itemOffset: number) => {
@@ -35,7 +41,7 @@ const BuyTableDesktop = (props: activeSection) => {
         itemOffset = 0;
       }
       let posts = await fetch(
-        `/api/p2p/buy?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
+        `/api/p2p/buy?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
         {
           method: "GET",
           headers: {
@@ -45,14 +51,42 @@ const BuyTableDesktop = (props: activeSection) => {
       ).then((response) => response.json());
       setList(posts?.data?.data);
 
-      let length = posts?.data?.totalLength
-      posts?.data?.data?.map((item: any, index: number) => {
-        if (session?.user?.user_id !== item?.user_id) {
-          length -= 1
+      for (const post of posts?.data?.data) {
+        let payment_method: any = [];
+        for (const upid of post.p_method) {
+          post?.user?.user_payment_methods.filter((item: any) => {
+            if (item.id === upid?.upm_id) {
+              payment_method.push(item);
+            }
+          })
         }
-      })
-      
-      setTotal(length)
+        post.user_p_method = payment_method;
+    }
+
+      let postData = [];
+      let filter_posts = posts?.data?.data;
+      if (props?.firstCurrency !== "") {
+        filter_posts = posts?.data?.data.filter((item: any) => {
+          return props?.selectedToken?.id === item?.token_id;
+        });
+        postData = filter_posts;
+      }
+      else if (props?.paymentId !== "") {
+        for (const post of filter_posts) {
+          for (const upid of post.user_p_method) {
+            if (props?.paymentId === upid?.pmid) {
+              postData.push(post);
+            }
+          }
+        }
+      } else {
+        postData = filter_posts;
+      }
+      setList(postData)
+
+
+
+      setTotal(posts?.data?.totalLength)
     } catch (error) {
       console.log("error in get token list", error);
 

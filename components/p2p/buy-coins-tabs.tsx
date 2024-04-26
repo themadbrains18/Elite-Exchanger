@@ -13,10 +13,8 @@ interface activeSection {
 }
 
 const BuyCoinsTabs = (props: activeSection) => {
-  const [active, setActive] = useState(1);
   const [firstCurrency, setFirstCurrency] = useState("");
   const [selectedToken, setSelectedToken] = useState(Object);
-  const [posts, setPosts] = useState(props?.posts);
   const [listWithCoin, setListWithCoin] = useState(props.coinList);
   const [paymentId, setPaymentId] = useState("");
 
@@ -30,49 +28,28 @@ const BuyCoinsTabs = (props: activeSection) => {
         return item.symbol === symbol;
       });
       setSelectedToken(token[0]);
-
-      let postData = [];
-      let filter_posts = props?.posts.filter((item: any) => {
-        return token[0]?.id === item?.token_id;
-      });
-
-      if (paymentId !== "") {
-        for (const post of filter_posts) {
-          for (const upid of post.user_p_method) {
-            if (paymentId === upid?.pmid) {
-              postData.push(post);
-            }
-          }
-        }
-      } else {
-        postData = filter_posts;
-      }
-
-      setPosts(postData);
     }
   };
 
   const onPaymentMethodChange = (id: any) => {
-    let filter_posts:any = [];
     // console.log(id,"==id");
-    
-    for (const post of props?.posts) {
-      for (const upid of post.user.user_payment_methods) {
-        if (id === upid?.pmid) {
-            filter_posts.push(post);
-        }
-      }
-    }
-    filter_posts=[...new Set(filter_posts)]
 
-    if (firstCurrency !== "") {
-      filter_posts = filter_posts.filter((item: any) => {
-        return selectedToken?.id === item?.token_id;
-      });
-    }
+    // for (const post of props?.posts) {
+    //   for (const upid of post.user.user_payment_methods) {
+    //     if (id === upid?.pmid) {
+    //       filter_posts.push(post);
+    //     }
+    //   }
+    // }
+    // filter_posts = [...new Set(filter_posts)]
+
+    // if (firstCurrency !== "") {
+    //   filter_posts = filter_posts.filter((item: any) => {
+    //     return selectedToken?.id === item?.token_id;
+    //   });
+    // }
     setPaymentId(id);
 
-    setPosts(filter_posts);
   };
 
   return (
@@ -107,12 +84,17 @@ const BuyCoinsTabs = (props: activeSection) => {
         <div className="md:block hidden">
           <BuyTableDesktop
             setShow1={props.setShow1}
-            posts={posts}
+            paymentId={paymentId}
+            selectedToken={selectedToken}
+            firstCurrency={firstCurrency}
             setSelectedPost={props.setSelectedPost}
           />
         </div>
         <div className="md:hidden">
-          <BuyTableMobile setShow1={props.setShow1} posts={posts} setSelectedPost={props.setSelectedPost}/>
+          <BuyTableMobile setShow1={props.setShow1}
+            paymentId={paymentId}
+            selectedToken={selectedToken}
+            firstCurrency={firstCurrency} setSelectedPost={props.setSelectedPost} />
         </div>
       </div>
 
