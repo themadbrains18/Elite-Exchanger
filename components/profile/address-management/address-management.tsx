@@ -304,7 +304,7 @@ const AddressManagement = (props: fixSection) => {
               {list.length > 0 && list?.map((item: any, index: any) => {
                 return (
                   <>
-                    <tr>
+                    <tr key={index+item?.label}>
                       <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky bg-white dark:bg-d-bg-primary">
                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                           {/* <Image src={`/assets/security/${item.image}`} width={30} height={30} alt="coins" /> */}

@@ -188,6 +188,8 @@ const TradingPassword = (props: activeSection) => {
         props.setActive(3);
       }
       else {
+        console.log(res,"=res");
+        
         toast.error(res?.data?.data);
       }
     } catch (error) {

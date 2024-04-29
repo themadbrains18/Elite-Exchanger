@@ -146,7 +146,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       }).then(response => response.json());
     }
 
-    let userAllOrderList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/orderlist?userid=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
+    let userAllOrderList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/orderlist?userid=${session?.user?.user_id}&itemOffset=0&itemsPerPage=10`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token

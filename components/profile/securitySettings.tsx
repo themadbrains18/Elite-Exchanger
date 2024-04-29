@@ -467,7 +467,7 @@ const SecuritySettings = (props: fixSection) => {
                         </div>
                         {item.Add != false && (
                           <div
-                            className="py-[8px] cursor-pointer pl-[10px] pr-[10px] pl-1 md:flex gap-[8px] items-center border rounded-5 border-grey-v-1 dark:border-opacity-[15%] max-w-fit w-full"
+                            className="py-[8px] cursor-pointer pl-[10px] pr-[10px] pl-1 md:flex gap-[8px] items-center border rounded-5 border-grey-v-1 text-center dark:border-opacity-[15%] max-w-full md:max-w-fit w-full"
                             onClick={() => {
                               // console.log(props?.session?.user, '==========props?.session?.user');
                               if (googleAuth === true) {

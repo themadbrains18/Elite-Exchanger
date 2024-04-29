@@ -56,7 +56,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     }).then(response => response.json());
 
-    let userPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/advertisement`, {
+    let userPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/all`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token

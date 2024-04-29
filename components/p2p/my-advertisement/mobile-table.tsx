@@ -32,7 +32,7 @@ const MobileTable = (props: dataTypes) => {
 
     useEffect(() => {
         getAds(itemOffset);
-    }, [props.active, itemOffset])
+    }, [props.active, itemOffset, props?.firstCurrency, props?.paymentId, props?.startDate])
 
     const getAds = async (itemOffset: number) => {
         try {
@@ -64,39 +64,44 @@ const MobileTable = (props: dataTypes) => {
             }
             let postData:any = [];
             let filterRecord = userAllOrderList?.data?.data;
-            if (props?.firstCurrency !== '') {
+            postData= filterRecord
+                if (props?.firstCurrency !== '') {
                     
-                postData = filterRecord.filter((item: any) => {
-                    return props?.selectedToken?.id === item?.token_id
-                }) 
-            }
-           else if (props?.paymentId !== '') {
-                let filter_posts=[]
-                for (const post of postData) {
-                    for (const upid of post.user_p_method) {
-                        if (props?.paymentId === upid?.pmid) {
-                            filter_posts.push(post);
+                    filterRecord = filterRecord.filter((item: any) => {
+                        return props?.selectedToken?.id === item?.token_id
+                    });
+                  postData = filterRecord;
+                }
+             
+                if (props?.paymentId !== '') {
+                    
+                    let filter_posts=[]
+                    for (const post of filterRecord) {
+                        for (const upid of post.user_p_method) {
+                            if (props?.paymentId === upid?.pmid) {
+                                filter_posts.push(post);
+                            }
                         }
                     }
+                    postData = filter_posts;
                 }
-                postData = filter_posts;
-           }
-            else if (props?.startDate !== null && props?.startDate !== undefined) {
-                let filter_posts=[]
-                filter_posts = postData.filter((item: any) => {
-                    let postDate = moment(item?.createdAt).format('LL');
-                    let compareDate = moment(props?.startDate).format('LL');
-                    if (compareDate === postDate) {
-                        return item
-                    }
-                });
-                postData = filter_posts;
-            }
-            else{
-                postData= filterRecord
-            }
-          
-            setPostList(postData)
+                   
+                 if (props?.startDate !== null && props?.startDate !== undefined) {
+                    let filter_posts=[]
+                    filter_posts = filterRecord.filter((item: any) => {
+                        let postDate = moment(item?.createdAt).format('LL');
+                        let compareDate = moment(props?.startDate).format('LL');
+                        if (compareDate === postDate) {
+                            return item
+                        }
+                    });
+                    postData = filter_posts;
+                }
+            
+                
+             
+              
+                setPostList(postData)
         } catch (error) {
             console.log("error in get token list", error);
 

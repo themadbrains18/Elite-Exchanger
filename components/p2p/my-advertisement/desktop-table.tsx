@@ -44,6 +44,8 @@ const DesktopTable = (props: dataTypes) => {
 
     const getAds = async (itemOffset: number) => {
         try {
+            // console.log("called");
+            
 
             if (itemOffset === undefined) {
                 itemOffset = 0;
@@ -72,19 +74,22 @@ const DesktopTable = (props: dataTypes) => {
                 }
                 post.user_p_method = payment_method;
             }
+
             let postData:any = [];
-                let filterRecord = userAllOrderList?.data?.data;
+            let filterRecord = userAllOrderList?.data?.data;
+            postData= filterRecord
                 if (props?.firstCurrency !== '') {
                     
-                    postData = filterRecord.filter((item: any) => {
+                    filterRecord = filterRecord.filter((item: any) => {
                         return props?.selectedToken?.id === item?.token_id
                     });
-                  
+                  postData = filterRecord;
                 }
              
-               else if (props?.paymentId !== '') {
+                if (props?.paymentId !== '') {
+                    
                     let filter_posts=[]
-                    for (const post of postData) {
+                    for (const post of filterRecord) {
                         for (const upid of post.user_p_method) {
                             if (props?.paymentId === upid?.pmid) {
                                 filter_posts.push(post);
@@ -94,10 +99,9 @@ const DesktopTable = (props: dataTypes) => {
                     postData = filter_posts;
                 }
                    
-
-                else if (props?.startDate !== null && props?.startDate !== undefined) {
+                 if (props?.startDate !== null && props?.startDate !== undefined) {
                     let filter_posts=[]
-                    filter_posts = postData.filter((item: any) => {
+                    filter_posts = filterRecord.filter((item: any) => {
                         let postDate = moment(item?.createdAt).format('LL');
                         let compareDate = moment(props?.startDate).format('LL');
                         if (compareDate === postDate) {
@@ -106,9 +110,9 @@ const DesktopTable = (props: dataTypes) => {
                     });
                     postData = filter_posts;
                 }
-                else{
-                    postData= filterRecord
-                }
+            
+                
+             
               
                 setPostList(postData)
               

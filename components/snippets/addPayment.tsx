@@ -47,6 +47,8 @@ const AddPayment = (props: activeSection) => {
     let fieldsItem = props.masterPayMethod.filter((item: any) => {
       return item?.id === id;
     })
+    console.log(fieldsItem,"==fieldsItem");
+    
     setPaymentFields(fieldsItem[0]?.fields);
     setValue('selectPayment', fieldsItem[0]);
   }
@@ -94,6 +96,7 @@ const AddPayment = (props: activeSection) => {
   };
 
   const onHandleSubmit = (data: any) => {
+console.log(data.qr_code?.length, typeof data.qr_code,"==data");
 
     if (data?.phonenumber?.length < 10) {
       toast.error("Number contain 10 digits");
@@ -109,11 +112,18 @@ const AddPayment = (props: activeSection) => {
         toast.error("This Number is already added.");
         return;
       }
+      console.log(qrCode,"==qrCode");
+      
 
       let pmid = data?.selectPayment?.id;
       let pm_name = data?.selectPayment?.payment_method;
       let master_method = data?.selectPayment;
-      data.qr_code = qrCode;
+      if (qrCode !== "notValid" || data?.qr_code?.length>0 ) {
+        data.qr_code = qrCode;
+      }
+      else{
+       delete data.qr_code
+      }
 
       delete data.selectPayment;
 

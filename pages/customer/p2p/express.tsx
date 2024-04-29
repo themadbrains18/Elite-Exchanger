@@ -36,8 +36,11 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     method: "GET"
   }).then(response => response.json());
 
-  let allPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/buy`, {
+  let allPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/all`, {
     method: "GET",
+    headers: {
+      "Authorization": session?.user?.access_token
+    },
   }).then(response => response.json());
 
   let masterPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/masterpayment`, {

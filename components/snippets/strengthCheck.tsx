@@ -28,14 +28,14 @@ const StrengthCheck = (props: propsData) => {
         <>
             <div>
                 <div className="flex justify-between gap-[20px] items-center">
-                    <div className="password-strength-meter" style={{
+                    <div className={`password-strength-meter rounded-[3px] h-[5px]`} style={{
                         width: `${(passwordStrength / 5) * 100}%`,
                         backgroundColor: `${['red', 'orange', '#03a2cc', '#03a2cc', '#0ce052']
                         [passwordStrength - 1] || ''
                             }`,
-                        display: 'block',
-                        borderRadius: '3px',
-                        height: '5px'
+                        // display: 'block',
+                        // borderRadius: '3px',
+                        // height: '5px'
                     }}></div>
                     <div className="sm-text text-gamma dark:text-white">
                         {['Too Weak', 'Medium', 'Average', 'Good', 'Strong']
