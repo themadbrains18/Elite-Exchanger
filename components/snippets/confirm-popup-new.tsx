@@ -61,6 +61,7 @@ const ConfirmPopupNew = (props: activeSection) => {
             onClick={() => {
               props?.setShow(false);
               props.setEnable(0);
+              props.parentSetEnable(0);
               //   props.setActive(0);
             }}
             enableBackground="new 0 0 60.963 60.842"

@@ -301,7 +301,7 @@ const AddressManagement = (props: fixSection) => {
               </tr>
             </thead>
             <tbody>
-              {list.length > 0 && list?.map((item: any, index: any) => {
+              {list && list.length > 0 && list?.map((item: any, index: any) => {
                 return (
                   <>
                     <tr key={index+item?.label}>

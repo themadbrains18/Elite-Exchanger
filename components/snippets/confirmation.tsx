@@ -27,21 +27,22 @@ const ConfirmationModel = (props: activeSection) => {
         try {
 
             setBtnDisabled(true)
-
-            if (status === 'authenticated') {
-                props.actionPerform();
-                setTimeout(() => {
-                    setBtnDisabled(false)
-
-                }, 3000)
-            }
-            else {
-                toast.error('Your session is expired. Its auto redirect to login page');
-                setTimeout(() => {
-                    signOut();
-                }, 4000);
-
-            }
+            props.actionPerform();
+            setTimeout(() => {
+                setBtnDisabled(false)
+            }, 3000)
+            // if (session) {
+            //     props.actionPerform();
+            //     setTimeout(() => {
+            //         setBtnDisabled(false)
+            //     }, 3000)
+            // }
+            // else {
+            //     toast.error('Your session is expired. Its auto redirect to login page');
+            //     setTimeout(() => {
+            //         signOut();
+            //     }, 4000);
+            // }
         } catch (error) {
             console.log(error);
         }
