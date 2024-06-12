@@ -33,7 +33,6 @@ const Verification = (props: activeSection) => {
   useEffect(() => {
     
     const inputElements = document.querySelectorAll(".input_wrapper3 input");
-    console.log(inputElements,'-------------input Elements');
     
     inputElements?.forEach((ele, index) => {
       ele.addEventListener("keydown", (e: any) => {

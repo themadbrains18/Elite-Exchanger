@@ -16,7 +16,7 @@ interface activeSection {
     session: any;
     finalOtpVerification?: any;
     finalBtnenable?: any;
-    parentSetEnable?:any;
+    parentSetEnable?: any;
 }
 
 const VerificationNew = (props: activeSection) => {
@@ -31,6 +31,7 @@ const VerificationNew = (props: activeSection) => {
     const { status, data: session } = useSession();
     const [isOtp, setIsOtp] = useState(false);
     const [showTime, setShowTime] = useState(false);
+    const [optEnable, setOtpEnable] = useState(false);
 
     useEffect(() => {
 
@@ -68,7 +69,7 @@ const VerificationNew = (props: activeSection) => {
                 }
             });
         });
-        
+
     }, []);
 
     const snedOtpToUser = async () => {
@@ -83,9 +84,10 @@ const VerificationNew = (props: activeSection) => {
                 antiphishing: props?.data?.antiphishing,
                 otp: "string",
             };
+            setOtpEnable(true);
 
             if (session !== undefined && session?.user !== undefined) {
-                
+
                 const ciphertext = AES.encrypt(
                     JSON.stringify(obj),
                     `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
@@ -113,7 +115,10 @@ const VerificationNew = (props: activeSection) => {
                     setIsOtp(true);
                 }
                 else {
-                    toast.error(res?.data?.message);
+                    toast.error(res?.data?.message, { autoClose: 2000 });
+                    setTimeout(() => {
+                        setOtpEnable(false);
+                    }, 3000)
                 }
             } else {
                 toast.error("Your session is expired. Its auto redirect to login page");
@@ -121,7 +126,16 @@ const VerificationNew = (props: activeSection) => {
                     signOut();
                 }, 1000);
             }
-        } catch (error) { }
+        } catch (error: any) {
+            toast.error(error, { autoClose: 2000 });
+            setTimeout(() => {
+                setOtpEnable(false);
+            }, 3000)
+        }finally{
+            setTimeout(() => {
+                setOtpEnable(false);
+            }, 3000)
+        }
     };
 
     const orderTimeCalculation = async (expireTime: any) => {
@@ -198,7 +212,7 @@ const VerificationNew = (props: activeSection) => {
             }
 
             props.finalOtpVerification(fillOtp);
-            
+
             // setTimeout(() => {
             //     const inputElements = document.querySelectorAll(".input_wrapper input");
             //     inputElements.forEach((ele, index) => {
@@ -306,10 +320,10 @@ const VerificationNew = (props: activeSection) => {
                                 <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>
                                 <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
                             </div>
-                            {isOtp === false && 
-                                <p className={`info-10-14 text-end cursor-pointer !text-primary-700`} onClick={() => { snedOtpToUser() }}>
-                                Send Code
-                            </p>
+                            {isOtp === false &&
+                                <p className={`info-10-14 text-end  !text-primary-700 ${optEnable === true ? 'cursor-not-allowed opacity-25' : 'cursor-pointer'}`} onClick={() => { optEnable === false ? snedOtpToUser() : '' }}>
+                                    Send Code
+                                </p>
                             }
                             <p className={`info-10-14 text-end cursor-pointer !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => { snedOtpToUser() }}>
                                 Resend Code

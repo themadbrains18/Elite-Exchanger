@@ -1,6 +1,7 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { useEffect, useState } from 'react';
+import Router from 'next/router';
 import Context from '../components/contexts/context';
 import Header from '../components/header-footer/header';
 import Preference from '../components/sidebars/preference';
@@ -8,10 +9,18 @@ import { useRouter } from 'next/router';
 import Footer from '@/components/header-footer/footer';
 import { SessionProvider } from 'next-auth/react';
 import { WebSocketProvider } from '@/libs/WebSocketContext';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css'; // This line imports nprogress styles
 
 interface ModeProps {
   mode: string;
 }
+
+NProgress.configure({ showSpinner: false }); // You can configure it here
+
+Router.events.on('routeChangeStart', () => NProgress.start());
+Router.events.on('routeChangeComplete', () => NProgress.done());
+Router.events.on('routeChangeError', () => NProgress.done());
 
 export default function App({ Component, pageProps: { sessions, ...pageProps } }: AppProps) {
   const [mode, setMode] = useState<string>('dark');

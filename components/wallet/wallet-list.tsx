@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useEffect, useState } from "react";
 import IconsComponent from "../snippets/icons";
 import Image from "next/image";
 import SpotList from "./spotList";
@@ -6,6 +6,7 @@ import FutureList from "./futureList";
 import DepositList from "./depositList";
 import WithdrawList from "./withdrawList";
 import ConvertList from "./convertList";
+import { useSession } from "next-auth/react";
 
 interface propsData {
   coinList: any,
@@ -19,9 +20,13 @@ const WalletList = (props: propsData): any => {
   const [active1, setActive1] = useState(1);
   const [filter, setFilter] = useState('');
 
+  const { data: session } = useSession();
+
   const filterData = async (e: any) => {
-    setFilter(e.target.value)
-  }
+    if (session?.user.email !== e.target.value){
+      setFilter(e.target.value);
+    }
+  };
 
 
   return (
@@ -37,7 +42,7 @@ const WalletList = (props: propsData): any => {
             </div>
             <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[331px] w-full py-[13px] px-[10px] ">
               <Image src="/assets/history/search.svg" alt="search" width={24} height={24} />
-              <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" onChange={(e) => filterData(e)} />
+              <input name="searchList" type="text" placeholder="Search" autoComplete="off" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" onChange={filterData} />
             </div>
           </div>
 
@@ -59,37 +64,37 @@ const WalletList = (props: propsData): any => {
                 Convert Record
               </button>
             </div>
-      
+
           </div>
           {
             active1 === 1 &&
             <>
-           <SpotList networks={props.networks} filter={filter} />
+              <SpotList networks={props.networks} filter={filter} />
             </>
           }
 
           {
             active1 === 2 &&
-          <DepositList filter={filter} />
+            <DepositList filter={filter} />
           }
 
           {
             active1 === 3 &&
-         <WithdrawList filter={filter} />
+            <WithdrawList filter={filter} />
           }
 
           {
             active1 === 4 &&
-           <FutureList filter={filter} />
+            <FutureList filter={filter} />
           }
           {
             active1 === 5 &&
-         <ConvertList  />
+            <ConvertList />
           }
         </div>
       </section>
-    
-    
+
+
     </>
   );
 };

@@ -75,7 +75,8 @@ const AddressManagement = (props: fixSection) => {
   }
   const getAllWhitelistAddress = async (itemOffset: number) => {
     try {
-      let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+
+      let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list?itemOffset=${itemOffset === undefined ? 0 : itemOffset}&itemsPerPage=${itemsPerPage}`, {
         method: "GET",
         headers: {
           "Authorization": session?.user?.access_token
@@ -93,8 +94,8 @@ const AddressManagement = (props: fixSection) => {
   const pageCount = Math.ceil(total / itemsPerPage);
 
   const handlePageClick = async (event: any) => {
-      const newOffset = (event.selected * itemsPerPage) % total;
-      setItemOffset(newOffset);
+    const newOffset = (event.selected * itemsPerPage) % total;
+    setItemOffset(newOffset);
 
   };
 
@@ -304,7 +305,7 @@ const AddressManagement = (props: fixSection) => {
               {list && list.length > 0 && list?.map((item: any, index: any) => {
                 return (
                   <>
-                    <tr key={index+item?.label}>
+                    <tr key={index + item?.label}>
                       <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky bg-white dark:bg-d-bg-primary">
                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                           {/* <Image src={`/assets/security/${item.image}`} width={30} height={30} alt="coins" /> */}
@@ -363,7 +364,7 @@ const AddressManagement = (props: fixSection) => {
                               }}
                             />
                           )}
-                          // style={{ backgroundColor: , }}
+                        // style={{ backgroundColor: , }}
                         />
                         <Tooltip anchorSelect="#my-anchor-element" content={item?.address} />
                       </td>
@@ -408,17 +409,17 @@ const AddressManagement = (props: fixSection) => {
           </table>
         </div>
         <div className="flex pt-[25px] items-center justify-end">
-                <ReactPaginate
-                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-                    breakLabel="..."
-                    nextLabel=">"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    marginPagesDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel="<"
-                    renderOnZeroPageCount={null} />
-            </div>
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null} />
+        </div>
       </section>
       {
         active &&
