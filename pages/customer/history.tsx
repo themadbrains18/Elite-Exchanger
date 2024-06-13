@@ -21,7 +21,7 @@ const TradeHistory = (props: propsData) => {
 
   return (
 
-    <Historytrade />
+    <Historytrade coinList={props.coinList}/>
   )
 }
 
