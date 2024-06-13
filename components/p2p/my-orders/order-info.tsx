@@ -5,7 +5,6 @@ interface propsData {
 }
 
 const OrderInfo = (props: propsData) => {
-    console.log(props?.userOrder,"=props?.userOrder");
     
     return (
         <div className='p-[15px] md:p-[40px] border dark:border-opacity-[15%] border-grey-v-1 rounded-10 '>

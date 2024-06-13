@@ -397,7 +397,7 @@ const Withdraw = (props: activeSection) => {
     props?.setShow1(false);
   }
   const wrapperRef = useRef(null);
-  clickOutSidePopupClose({ wrapperRef, closePopup });
+  clickOutSidePopupClose({ wrapperRef, closePopup });  
 
   return (
     <>
@@ -438,7 +438,7 @@ const Withdraw = (props: activeSection) => {
                 <div className="border border-grey-v-1 dark:border-opacity-[15%] mt-[10px]  gap-[15px] items-center flex justify-between rounded-5 p-[11px] md:p-[15px]">
                   <div className="flex gap-2 ">
                     <Image
-                      src="/assets/history/coin.svg"
+                      src={props?.token?.image ? props?.token?.image:"/assets/history/coin.svg"}
                       width={25}
                       height={25}
                       alt="coins"
