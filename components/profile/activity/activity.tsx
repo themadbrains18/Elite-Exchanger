@@ -22,6 +22,14 @@ const Activity = (props: fixSection) => {
   const { data: session } = useSession()
   const [data, setData] = useState([]);
 
+  let pageCount = Math.ceil(total / itemsPerPage);
+
+  const handlePageClick = async (event: any) => {
+      const newOffset = (event.selected * itemsPerPage) % total;
+      setItemOffset(newOffset);
+
+  };
+
   const clearActivity = async () => {
 
     let obj = {
@@ -47,6 +55,7 @@ const Activity = (props: fixSection) => {
     if (response) {
       toast.success(response?.data),
       setData([]);
+      setTotal(0)
     }
 
   };
@@ -73,13 +82,7 @@ const Activity = (props: fixSection) => {
     }
   }
 
-  const pageCount = Math.ceil(total / itemsPerPage);
 
-  const handlePageClick = async (event: any) => {
-      const newOffset = (event.selected * itemsPerPage) % total;
-      setItemOffset(newOffset);
-
-  };
 
   return (
     <>

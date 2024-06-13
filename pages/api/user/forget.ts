@@ -17,7 +17,11 @@ router
   // Use express middleware in next-connect with expressWrapper function
   .post(async (req, res) => {
     try {
+      console.log("==hii");
+      
       const decodedStr = decodeURIComponent(req.body);
+      console.log(decodedStr,"===decodedStr");
+      
       let formData = AES.decrypt(
         decodedStr,
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`

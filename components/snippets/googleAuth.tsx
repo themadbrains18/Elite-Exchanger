@@ -338,7 +338,7 @@ const GoogleAuth = (props: activeSection) => {
                   onClick={() => { sendOtp(); }}
                   disabled={isOtp}
                 >
-                  Send SMS
+                  Send OTP
                 </button>
               </div>
             }

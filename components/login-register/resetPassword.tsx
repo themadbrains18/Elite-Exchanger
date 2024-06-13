@@ -42,14 +42,19 @@ const ResetPassword = () => {
     resolver: yupResolver(schema),
   });
 
+  
+
   const onHandleSubmit = async (data: any) => {
     try {
+      
       let isEmailExist = await validateEmail(data.username);
       setIsEmail(isEmailExist);
+
       data.otp = "";
       data.type = "forget";
       data.step = 1;
       setBtnDisabled(true);
+
       const ciphertext = AES.encrypt(
         JSON.stringify(data),
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
@@ -61,9 +66,10 @@ const ResetPassword = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(record),
+        body:JSON.stringify(record),
       });
       let res = await responseData.json();
+
       if (res?.data?.otp !== undefined) {
         toast.success(res?.data?.message);
         setSendOtpRes(res?.data?.otp);

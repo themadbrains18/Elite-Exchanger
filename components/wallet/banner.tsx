@@ -20,7 +20,7 @@ const Banner = (props: propsData): any => {
   const [show1, setShow1] = useState(0);
 
   let dataCoinWallet = props.coinList;
-  
+  const star='*'
 
   return (
     <>
@@ -45,7 +45,7 @@ const Banner = (props: propsData): any => {
             <div className="mt-30 flex gap-10">
               <p className="md-heading dark:text-white">
                 {
-                  show == true ? <span> ${props?.assets.toFixed(4)}</span> : <span>$*********</span>
+                  show == true ? <span> ${props?.assets.toFixed(4)}</span> :  <span>{'$' + star.repeat(props.assets.toFixed(4).length)}</span>
                 }
               </p>
               <div className="p-[5px] bg-primary-100 dark:bg-black-v-1 rounded flex gap-[10px] items-center cursor-pointer" onClick={() => { setShow(!show) }}>

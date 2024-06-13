@@ -41,7 +41,7 @@ const FutureList = (props:propsData) => {
     useEffect(() => {
         getFutureWalletData()
 
-    }, [itemOffset, props?.filter])
+    }, [itemOffset, props?.filter,popupMode])
 
     async function getFutureWalletData() {
         let spotHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets/type?type=future_wallet&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {

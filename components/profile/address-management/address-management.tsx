@@ -433,7 +433,7 @@ const AddressManagement = (props: fixSection) => {
           <div
             className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80`}
           ></div>
-          <div ref={wrapperRef} className="fixed rounded-10 bg-white dark:bg-omega p-[20px] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] max-h-[200px] h-full z-[10] max-w-[400px] w-full ">
+          <div ref={wrapperRef} className="fixed rounded-10 bg-white dark:bg-omega p-[20px] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] max-h-[220px] h-full z-[10] max-w-[400px] w-full ">
 
             <div className="flex items-center justify-end">
 

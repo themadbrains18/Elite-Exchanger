@@ -104,14 +104,14 @@ const Dashboard = (props: fixSection) => {
         <div className="max-[1023px] lg:p-0 p-20 dark:bg-omega bg-white rounded-[10px]">
           <div className="flex items-center gap-5 justify-between">
             <p className="sec-title">My Profile</p>
-            <div className="py-[13px] px-[15px] border dark:border-opacity-[15%] border-grey-v-1 items-center rounded-5 hidden md:flex gap-[10px] cursor-pointer" onClick={() => { setEditable(true) }}>
+            <div className="py-[13px] px-[15px] border dark:border-opacity-[15%] border-grey-v-1 items-center rounded-5 hidden md:flex gap-[10px] cursor-pointer solid-button" onClick={() => { setEditable(true) }}>
               <Image
                 src="/assets/profile/edit.svg"
                 width={24}
                 height={24}
                 alt="edit"
               />
-              <p className="nav-text-sm">Edit</p>
+              <p className="">Edit</p>
             </div>
           </div>
           <div className="py-[30px] md:py-[50px]">

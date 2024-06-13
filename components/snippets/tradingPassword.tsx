@@ -337,7 +337,7 @@ const TradingPassword = (props: activeSection) => {
                 <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
               </div>
               <div>
-                <p className={`info-10-14 text-end cursor-pointer ${enable === true ? 'hidden' : ''}`} onClick={sendOtp}>Send Code</p>
+                <p className={`info-10-14 text-end cursor-pointer ${enable === true ? 'hidden' : ''}`} onClick={sendOtp}>Send OTP</p>
               </div>
               
             </div>

@@ -322,8 +322,8 @@ const SecurityCode = (props: propsData) => {
                     <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
                   </div>
 
-                  <p className={`info-10-14 text-end cursor-pointer  !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp() }}>
-                    Resend Code
+                  <p className={`info-10-14 text-end cursor-pointer  !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp() }}>
+                    Resend OTP
                   </p>
 
                 </div>}
@@ -345,8 +345,8 @@ const SecurityCode = (props: propsData) => {
                     <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
                   </div>
 
-                  <p className={`info-10-14 text-end cursor-pointer  !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp(); }}>
-                    Resend Code
+                  <p className={`info-10-14 text-end cursor-pointer  !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp(); }}>
+                    Resend OTP
                   </p>
 
                 </div>}

@@ -228,7 +228,7 @@ const Password = (props: activeSection) => {
                 name="code6"
               />
             </div>
-            <p className="info-10-14 text-end">Resend OTP</p>
+            <p className="info-10-14 text-end !text-primary">Resend OTP</p>
           </div>
           <div className="flex flex-col  gap-20">
             <label className="sm-text mb-[6px]">Enter Account Password</label>

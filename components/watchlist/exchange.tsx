@@ -262,8 +262,9 @@ const Exchange = (props: DynamicId): any => {
           setAmount(0);
           setReceivedAmount(0);
           setIsConvert(false);
+          reset()
           props.refreshData();
-          toast.success('Your coin conversion request has been send successfully!!.', {
+          toast.success('Your coin conversion request has been sent successfully!!.', {
             position: 'top-center'
           });
         }
@@ -293,6 +294,7 @@ const Exchange = (props: DynamicId): any => {
     }
   }
 
+  
   return (
     <>
       <div className="p-20 md:p-40 rounded-10 bg-white dark:bg-d-bg-primary">
@@ -304,19 +306,20 @@ const Exchange = (props: DynamicId): any => {
 
         <div className="flex gap-[18px] py-5">
           <Image src="/assets/market/walletpayment.svg" alt="wallet2" width={24} height={24} />
-          <p className="md-text w-full">${selectedToken?.avail_bal?.toFixed(6)}</p>
+          <p className="md-text w-full">${selectedToken?.avail_bal?.toFixed(6) || '0.00'}</p>
           <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} />
-          {props.coinList && props.coinList.map((item: any) => {
+          {props.coinList && props.coinList?.map((item: any) => {
             if (item.symbol === selectedToken?.symbol) {
-              return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? item?.price?.toFixed(5) : '0.00'}</p>
+              return <p className="md-text">${(selectedToken !== undefined && selectedToken?.price !== undefined) ? item?.price?.toFixed(5) : '0.00'}</p>
             }
+          
           })}
         </div>
 
         <form onSubmit={handleSubmit(onHandleSubmit)}>
           <div className="mt-20 rounded-5 p-[10px] justify-between flex border items-center border-grey-v-1 dark:border-opacity-[15%] relative">
             <div className="">
-              <p className="sm-text dark:text-white">Quantity({firstCurrency})</p>
+              <p className="sm-text dark:text-white">Quantity</p>
               <input type="number" placeholder="$0" step={0.000001} {...register('spend_amount')} name="spend_amount" onChange={(e: any) => {
                 // setAmount(parseFloat(e.target?.value));
                 
@@ -342,7 +345,7 @@ const Exchange = (props: DynamicId): any => {
 
           <div className=" rounded-5 p-[10px] justify-between flex border items-center border-grey-v-1 dark:border-opacity-[15%] relative">
             <div className="">
-              <p className="sm-text dark:text-white">Buy For ({secondCurrency})</p>
+              <p className="sm-text dark:text-white">Buy For </p>
               <input type="number" value={receiveAmount > 0 ? receiveAmount?.toFixed(8) : ''} readOnly placeholder="$0" className="bg-[transparent] md-text outline-none border-l px-[5px] mt-[10px] border-h-primary" />
             </div>
             <div>
@@ -354,7 +357,7 @@ const Exchange = (props: DynamicId): any => {
           )}
 
           <div className="mt-5 mb-5">
-            <p className="sm-text dark:text-white">No extra fees</p>
+            <p className="sm-text dark:text-white">No conversion fees</p>
           </div>
 
           {isConvert === false ? <button type="submit" className={` solid-button w-full ${btnDisabled === true ? 'cursor-not-allowed ' : ''}`} disabled={btnDisabled}>{btnDisabled &&

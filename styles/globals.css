@@ -290,15 +290,15 @@ input[type=date]::-webkit-calendar-picker-indicator {
 }
 /** history pagination **/
 .history_pagination{
-@apply flex gap-[5px] md:gap-5
+@apply flex 
 
 }
 
 .history_pagination li {
-  @apply info-14-18 w-7 md:w-30 h-7 md:h-30 flex items-center justify-center
+  @apply info-14-18 w-7 md:w-20 h-7 md:h-20 flex items-center justify-center
 }
 .history_pagination li.previous {
-  @apply w-30 h-30 border border-primary text-primary rounded-5 flex
+  @apply w-20 h-20 border border-primary text-primary rounded-5 flex
 }
 .history_pagination li.previous a {
   @apply  ml-[3px]

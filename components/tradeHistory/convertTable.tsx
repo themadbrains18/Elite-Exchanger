@@ -58,25 +58,25 @@ const ConvertTable = () => {
             </th>
             <th className=" py-5">
               <div className="hidden md:flex">
-                <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Date</p>
+                <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Date & Time</p>
                 <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
               </div>
             </th>
             <th className=" py-5">
               <div className=" md:flex">
-                <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Amount</p>
+                <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Converted Amount</p>
                 <Image className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
               </div>
             </th>
-            <th className=" py-5">
+            {/* <th className=" py-5">
               <div className="hidden md:flex">
                 <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Fee</p>
                 <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
               </div>
-            </th>
+            </th> */}
             <th className=" py-5">
               <div className="hidden md:flex">
-                <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Balance</p>
+                <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Total Balance</p>
                 <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
               </div>
             </th>
@@ -104,9 +104,9 @@ const ConvertTable = () => {
                 <td>
                   <p className={`info-14-18 ${item?.type === 'Gain' ? '!text-dark-green' : '!text-red-dark'} md:block `}>{item?.amount}</p>
                 </td>
-                <td>
+                {/* <td>
                   <p className="info-14-18 dark:text-white md:block hidden">{item.fees}</p>
-                </td>
+                </td> */}
                 <td>
                   <p className="info-14-18 dark:text-white md:block hidden">{item?.balance}</p>
                 </td>

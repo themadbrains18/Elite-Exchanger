@@ -151,7 +151,7 @@ const TransferModal = (props: showPopup) => {
         setSelectedCoin('');
         setUserAsset(null);
         setTimeout(() => {
-          props?.refreshWalletAssets();
+          props?.refreshWalletAssets &&  props?.refreshWalletAssets();
           props.setOverlay(false);
           props.setPopupMode(0);
           setBtnDisabled(false);

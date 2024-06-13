@@ -23,7 +23,7 @@ const Successfull = (props: activeSection) => {
   return (
     <>
       <div
-        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-30 visible`}
+        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible`}
       ></div>
       <div
         ref={wrapperRef}

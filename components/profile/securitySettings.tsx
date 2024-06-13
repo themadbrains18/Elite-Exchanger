@@ -650,11 +650,9 @@ const SecuritySettings = (props: fixSection) => {
                       )}
                       <div className="mt-5 flex gap-[30px] md:flex-row flex-col">
                         <div className=" w-full">
-                          <div className="flex justify-between">
-                            <p className="sm-text mb-[10px]">New Password</p>
-                            <div className="relative text-end">
-                              <button type="button" className="!text-primary text-[14px]" onClick={() => generatePassword()}>Generate Password</button>
-                            </div>
+                          <div className="flex justify-between mb-[10px]">
+                            <p className="sm-text ">New Password</p>
+                              <button type="button" className="!text-primary text-[14px] " onClick={() => generatePassword()}>Generate Password</button>
                           </div>
                           <div className='relative input-cta2 flex justify-between gap-3 items-center mb-[10px]' onFocus={() => { setChecker(true) }} onBlur={() => { setChecker(false) }}>
                             <input
@@ -719,8 +717,7 @@ const SecuritySettings = (props: fixSection) => {
                       </div>
                     </div>
                   </div>
-                  <div className="h-[1px] w-full bg-grey-v-2 dark:bg-opacity-[15%]"></div>
-                  <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-end pt-5 md:pt-[30px] lg:px-0 px-20">
+                  <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-end  lg:px-0 px-20">
                     {/* <p className="sm-text">
                   To ensure your account is well protected, please use 8 or more
                   characters with a mix of letters, numbers & symbols.

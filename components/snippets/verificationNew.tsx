@@ -321,12 +321,12 @@ const VerificationNew = (props: activeSection) => {
                                 <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
                             </div>
                             {isOtp === false &&
-                                <p className={`info-10-14 text-end  !text-primary-700 ${optEnable === true ? 'cursor-not-allowed opacity-25' : 'cursor-pointer'}`} onClick={() => { optEnable === false ? snedOtpToUser() : '' }}>
-                                    Send Code
+                                <p className={`info-10-14 text-end  !text-primary ${optEnable === true ? 'cursor-not-allowed opacity-25' : 'cursor-pointer'}`} onClick={() => { optEnable === false ? snedOtpToUser() : '' }}>
+                                    Send OTP
                                 </p>
                             }
-                            <p className={`info-10-14 text-end cursor-pointer !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => { snedOtpToUser() }}>
-                                Resend Code
+                            <p className={`info-10-14 text-end cursor-pointer !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { snedOtpToUser() }}>
+                                Resend OTP
                             </p>
                         </div>}
 

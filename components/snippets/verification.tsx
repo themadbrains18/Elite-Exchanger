@@ -250,8 +250,8 @@ const Verification = (props: activeSection) => {
                 <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
               </div>
 
-              <p className={`info-10-14 text-end cursor-pointer !text-primary-700 ${enable === true ? 'hidden' : ''}`} onClick={() => { props?.snedOtpToUser() }}>
-                Resend Code
+              <p className={`info-10-14 text-end cursor-pointer !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { props?.snedOtpToUser() }}>
+                Resend OTP
               </p>
             </div>}
             {/* {props.session?.user?.number !== "null" && <div className="flex flex-col mt-[20px] gap-20">

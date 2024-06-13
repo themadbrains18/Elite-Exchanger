@@ -105,8 +105,8 @@ const PinLock = (props: activeSection) => {
                   name="code4"
                 />
               </div>
-              <p className="info-10-14 text-end cursor-pointer !text-primary-700">
-                Resend Code
+              <p className="info-10-14 text-end cursor-pointer !text-primary">
+                Resend OTP
               </p>
             </div>
           </div>

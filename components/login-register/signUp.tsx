@@ -187,7 +187,7 @@ const SignUp = () => {
             <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
               <Image src="/assets/register/register.png" width={1018} height={1100} alt="signup" className="object-cover h-full block w-full" />
             </div>
-            <div className="max-w-full lg:max-w-[50%] flex flex-col justify-center w-full  ">
+            <div className="max-w-full lg:max-w-[50%] flex flex-col justify-center w-full  mb-5">
               <div className="py-[30px] lg:py-[40px]  max-w-[562px] w-full my-0 pr-5 flex justify-end items-center cursor-pointer" onClick={() => { router.push("/") }}>
                 <HeaderLogo />
               </div>
@@ -244,8 +244,8 @@ const SignUp = () => {
                     {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword.message}</p>}
                     <input type="text" {...register('refeer_code')} disabled={queryParams !== null ? true : false} placeholder="Referal Code(Optional)" className="input-cta" />
                   </div>
-                  <div className="flex mt-[30px] gap-5">
-                    <input type="checkbox" id="checkbox" {...register('agree')} />
+                  <div className="flex mt-[30px] gap-[10px] items-start">
+                    <input type="checkbox" id="checkbox" {...register('agree')} className="mt-[3px]"/>
                     <label htmlFor="checkbox" className=" cursor-pointer sm-text text-[14px] md:text-[16px] text-gamma dark:text-white ">
                       By Register i agree that i’m 18 years of age or older, ot the{" "}
                       <Link href="#" className="!text-primary">

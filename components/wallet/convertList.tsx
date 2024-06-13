@@ -60,13 +60,13 @@ const ConvertList = () => {
             <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">
               <th className="lg:sticky left-0 bg-white dark:bg-d-bg-primary py-5">
                 <div className="flex ">
-                  <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">Conversion Time</p>
+                  <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">Date & Time</p>
                   <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
               <th className=" py-5">
                 <div className="flex  lg:justify-start justify-center ">
-                  <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Converted</p>
+                  <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Spent</p>
                   <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
@@ -78,7 +78,7 @@ const ConvertList = () => {
               </th>
               <th className="py-5 max-[1023px]:hidden ">
                 <div className="flex">
-                  <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Fees</p>
+                  <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Transaction Fees</p>
                   <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
@@ -98,21 +98,21 @@ const ConvertList = () => {
                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
                       {/* <Image src={`${item.createdAt}`} width={30} height={30} alt="coins" /> */}
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                        <p className="info-14-18 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
+                        <p className="info-14 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.converted}</p>
+                    <p className="info-14 dark:text-white  lg:text-start text-center">{item?.converted}</p>
                   </td>
                   <td className="lg:text-start text-end">
-                    <p className="info-14-18 dark:text-white">{item?.received}</p>
+                    <p className="info-14 dark:text-white">{item?.received}</p>
                   </td>
                   <td className="max-[1023px]:hidden">
-                    <p className="info-14-18 dark:text-white">Zero Transaction fees</p>
+                    <p className="info-14 dark:text-white">0 Trans fee</p>
                   </td>
                   <td className="max-[1023px]:hidden">
-                    <p className="info-14-18 dark:text-white">{item?.conversion_rate}</p>
+                    <p className="info-14 dark:text-white">{item?.conversion_rate}</p>
                   </td>
 
                 </tr>
