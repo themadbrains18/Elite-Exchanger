@@ -200,11 +200,11 @@ const Exchange = (props: DynamicId): any => {
 
     // get current balance of user
     for (const as of props?.assets) {
-      if (as.token_id === selectedToken.id && as.balance > 0) {
+      if (as.token_id === selectedToken.id && as.balance > 0 && as.walletTtype === "main_wallet") {
         spendBalance = as.balance - data.spend_amount;
       }
       else {
-        if (as.token_id === selectedSecondToken.id && as.balance > 0) {
+        if (as.token_id === selectedSecondToken.id && as.balance > 0 && as.walletTtype === "main_wallet") {
           receivedBalance = as.balance + conversionPrice;
         }
         else {
@@ -294,7 +294,7 @@ const Exchange = (props: DynamicId): any => {
     }
   }
 
-  
+
   return (
     <>
       <div className="p-20 md:p-40 rounded-10 bg-white dark:bg-d-bg-primary">
@@ -312,7 +312,7 @@ const Exchange = (props: DynamicId): any => {
             if (item.symbol === selectedToken?.symbol) {
               return <p className="md-text">${(selectedToken !== undefined && selectedToken?.price !== undefined) ? item?.price?.toFixed(5) : '0.00'}</p>
             }
-          
+
           })}
         </div>
 
@@ -322,7 +322,7 @@ const Exchange = (props: DynamicId): any => {
               <p className="sm-text dark:text-white">Quantity</p>
               <input type="number" placeholder="$0" step={0.000001} {...register('spend_amount')} name="spend_amount" onChange={(e: any) => {
                 // setAmount(parseFloat(e.target?.value));
-                
+
                 const value = e.target.value;
                 if (/^\d*\.?\d{0,6}$/.test(value)) {
                   setAmount(value);
