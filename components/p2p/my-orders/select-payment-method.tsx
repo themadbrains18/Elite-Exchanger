@@ -50,8 +50,6 @@ const SlectPaymentMethod = (props: propsData) => {
             {/* payment methods */}
             {
                 payment_method && payment_method?.length > 0 && payment_method?.map((elem: any, ind: any) => {
-                    console.log(elem,"==elem");
-                    
                     return (
                         <div key={ind}>
                             <div className='parent flex items-center gap-10 justify-between py-20 '>

@@ -12,6 +12,7 @@ import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useWebSocket } from '@/libs/WebSocketContext'
+import { useRouter } from 'next/navigation'
 
 
 interface Session {
@@ -35,7 +36,7 @@ const Wallet = (props: Session) => {
     const [allCoins, setAllCoins] = useState(props.coinList);
 
     const wbsocket = useWebSocket();
-    
+    const router = useRouter()
 
     useEffect(() => {
         socket();
@@ -61,8 +62,9 @@ const Wallet = (props: Session) => {
         setAllCoins(tokenList?.data);
     }
 
-    const refreshData = async () => {
+    const refreshData = async () => {        
         if (props.session) {
+            router?.refresh()
          
             let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${props.session?.user?.user_id}`, {
                 method: "GET",

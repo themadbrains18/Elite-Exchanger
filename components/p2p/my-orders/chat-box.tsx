@@ -1,26 +1,35 @@
 import IconsComponent from '@/components/snippets/icons';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import AES from 'crypto-js/aes';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 import { useWebSocket } from '@/libs/WebSocketContext';
 
-interface propsData {
+interface PropsData {
     sellerUser?: any;
     order?: any;
 }
+interface ChatMessage {
+    from: string;
+    to: string;
+    message: string;
+    createdAt: string;
+}
 
-const ChatBox = (props: propsData) => {
-    const [show, setShow] = useState(false)
-    const [orderChat, setOrderChat] = useState([]);
+interface GroupedMessages {
+    [date: string]: ChatMessage[];
+}
+
+const ChatBox = (props: PropsData) => {
+    const [show, setShow] = useState(false);
+    const [orderChat, setOrderChat] = useState<any[]>([]);
     const [message, setMessage] = useState('');
-
+    const [groupedMessages, setGroupedMessages] = useState<GroupedMessages>({});
     const { status, data: session } = useSession();
     const [enableFront, setEnableFront] = useState(false);
-
-    
     const wbsocket = useWebSocket();
+
     useEffect(() => {
         getChatByOrderId();
         socket();
@@ -30,233 +39,232 @@ const ChatBox = (props: propsData) => {
         if (wbsocket) {
             wbsocket.onmessage = (event) => {
                 const data = JSON.parse(event.data).data;
-                let eventDataType = JSON.parse(event.data).type;
-                if (eventDataType === "chat") {
-                    if (data[0]?.orderid === props?.order?.id) {
-                        setOrderChat(data[0].chat);
-                        const el = document.getElementById('chat-feed');
-                        if (el) {
-                            el.scrollTop = el.scrollHeight;
-                        }
+                const eventDataType = JSON.parse(event.data).type;
+                if (eventDataType === 'chat' && data[0]?.orderid === props?.order?.id) {
+                    setOrderChat(data[0].chat);
+                    groupMessages(data[0].chat);
+                    const el = document.getElementById('chat-feed');
+                    if (el) {
+                        el.scrollTop = el.scrollHeight;
                     }
                 }
-            }
+            };
         }
-    }
+    };
 
     const getChatByOrderId = async () => {
         try {
-            let orderChat = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/chat?orderid=${props?.order?.id}`, {
-                method: "GET",
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/chat?orderid=${props?.order?.id}`, {
+                method: 'GET',
                 headers: {
-                    "Authorization": session?.user?.access_token
+                    'Authorization': session?.user?.access_token
                 },
-            }).then(response => response.json());
-
-            setOrderChat(orderChat?.data[0]?.chat);
-            const el = document.getElementById('chat-feed');
-            if (el) {
-                el.scrollTop = el.scrollHeight;
-            }
-
+            });
+            const orderChat = await response.json();
+            setOrderChat(orderChat?.data[0]?.chat || []);
+            groupMessages(orderChat?.data[0]?.chat || []);
         } catch (error) {
-            console.log(error);
-
+            console.error(error);
         }
-    }
+    };
+
+    const groupMessages = (messages: ChatMessage[]) => {
+        const grouped: GroupedMessages = {};
+        const todayDate = new Date().toDateString();
+
+        messages.forEach((message) => {
+            const createdAt = new Date(message.createdAt).toDateString();
+            let date = createdAt === 'Invalid Date' ? todayDate : createdAt;
+            if (date === todayDate) {
+                date = 'Today';
+            }
+            if (!grouped[date]) {
+                grouped[date] = [];
+            }
+            grouped[date].push(message);
+        });
+
+        const sortedGrouped = Object.keys(grouped)
+            .sort((a, b) => (a === 'Today' ? 1 : b === 'Today' ? -1 : new Date(a).getTime() - new Date(b).getTime()))
+            .reduce((acc, key) => {
+                acc[key] = grouped[key];
+                return acc;
+            }, {} as GroupedMessages);
+
+        setGroupedMessages(sortedGrouped);
+    };
 
     const sendMessage = async (msg: string) => {
         try {
-            let obj = {
-                "post_id": props.order?.post_id,
-                "sell_user_id": props.order?.sell_user_id,
-                "buy_user_id": props.order?.buy_user_id,
-                "from": session?.user?.user_id,
-                "to": props?.sellerUser?.id,
-                "orderid": props.order?.id,
-                "chat": msg
-            }
-
             if (msg !== '') {
-                const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-                let record = encodeURIComponent(ciphertext.toString());
+                const obj = {
+                    post_id: props.order?.post_id,
+                    sell_user_id: props.order?.sell_user_id,
+                    buy_user_id: props.order?.buy_user_id,
+                    from: session?.user?.user_id,
+                    to: props?.sellerUser?.id,
+                    orderid: props.order?.id,
+                    chat: msg
+                };
 
-                let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/chat`, {
-                    method: "POST",
+                const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+                const record = encodeURIComponent(ciphertext);
+
+                const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/chat`, {
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        "Authorization": session?.user?.access_token
+                        'Authorization': session?.user?.access_token
                     },
                     body: JSON.stringify(record)
-                })
+                });
 
-                let res = await responseData.json();
+                const res = await response.json();
 
                 if (res.data.status === 200) {
                     setMessage('');
                     if (wbsocket) {
-                        let chat = {
+                        const chat = {
                             ws_type: 'chat',
                             orderid: props?.order?.id
-                        }
-                        let chat_notify = {
+                        };
+                        const chat_notify = {
                             ws_type: 'user_notify',
                             user_id: props?.sellerUser?.id,
                             type: 'chat',
                             message: {
-                                message: `${message}`
+                                message: `${msg}`
                             },
                             url: `/p2p/my-orders?buy=${props?.order?.id}`
-                        }
+                        };
 
                         wbsocket.send(JSON.stringify(chat));
                         wbsocket.send(JSON.stringify(chat_notify));
                     }
                 }
             }
-
         } catch (error) {
-
+            console.error(error);
         }
-
-    }
+    };
 
     const handleFileChange = async (e: any) => {
         try {
-
-            let file = e.target.files[0]
+            const file = e.target.files[0];
             const fileSize = file.size / 1024 / 1024;
 
             if (fileSize > 2) {
-                toast.warning('file size upto 2 mb');
+                toast.warning('File size up to 2 MB');
                 return;
             }
+
             const formData = new FormData();
             formData.append('file', file);
             formData.append('upload_preset', 'my-uploads');
             setEnableFront(true);
+
             const data = await fetch(`${process.env.NEXT_PUBLIC_FILEUPLOAD_URL}`, {
                 method: 'POST',
                 body: formData
-            }).then(r => r.json());
+            }).then((r) => r.json());
 
-            if (data.error !== undefined) {
+            if (data.error) {
                 setEnableFront(false);
-                toast.error(data?.error?.message);
+                toast.error(data.error.message);
                 return;
             }
+
             if (data.format === 'pdf') {
                 setEnableFront(false);
-                toast.error('Unsupported pdf file');
+                toast.error('Unsupported PDF file');
                 return;
             }
-            // setMessage(data.secure_url);
+
             sendMessage(data.secure_url);
             setEnableFront(false);
-
         } catch (error) {
             console.error(error);
         }
     };
 
     const handleKeyDown = (event: any) => {
-        if (event.key === "Enter") {
+        if (event.key === 'Enter') {
             sendMessage(message);
         }
     };
 
-    const profileImg = props?.sellerUser?.profile && props?.sellerUser?.profile?.image !== null ? props?.sellerUser?.profile?.image : `${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`;
+    const profileImg = props?.sellerUser?.profile?.image ?? `${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`;
 
     return (
         <>
-            <div className={`bg-black  z-[8] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"}`}></div>
-
-            <div className={`${show == true ? 'max-[1200px]:opacity-1 max-[1200px]:visible' : 'max-[1200px]:opacity-0 max-[1200px]:invisible'} duration-300 max-w-[25%] w-full  max-[1200px]:z-[8] max-[1200px]:max-w-[345px] max-[1200px]:bottom-[105px] max-[1200px]:left-[50%] max-[1200px]:translate-x-[-50%]  max-[1200px]:fixed rounded-[10px] overflow-hidden dark:bg-black-v-1 bg-[#F9FAFA] border dark:border-opacity-[15%] border-grey-v-1 `}>
-
-                {/* about user */}
-                <div className="flex items-center gap-[20px] grow-[1.6] p-[14px] pb-[30px] dark:bg-[url(/assets/order/chat-head-bg-dark.png)]  bg-[url(/assets/order/chat-head-bg.png)] no-reapeat bg-cover bg-bottom">
+            <div className={`bg-black z-[8] duration-300 fixed top-0 left-0 h-full w-full ${show ? 'opacity-80 visible' : 'opacity-0 invisible'}`}></div>
+            <div className={`${show ? 'max-[1200px]:opacity-1 max-[1200px]:visible' : 'max-[1200px]:opacity-0 max-[1200px]:invisible'} duration-300 max-w-[25%] w-full max-[1200px]:z-[8] max-[1200px]:max-w-[345px] max-[1200px]:bottom-[105px] max-[1200px]:left-[50%] max-[1200px]:translate-x-[-50%] max-[1200px]:fixed rounded-[10px] overflow-hidden dark:bg-black-v-1 bg-[#F9FAFA] border dark:border-opacity-[15%] border-grey-v-1`}>
+                <div className="flex items-center gap-[20px] grow-[1.6] p-[14px] pb-[30px] dark:bg-[url(/assets/order/chat-head-bg-dark.png)] bg-[url(/assets/order/chat-head-bg.png)] no-reapeat bg-cover bg-bottom">
                     <div className="w-[44px] h-[44px] rounded-full bg-[#e8f6f7] dark:bg-[#8ed0d9] border border-white flex relative">
-                        <Image src={profileImg} alt='error' width={44} height={44} className="rounded-full" />
-                        <div className='absolute bottom-0 right-[-5px]'>
-                            <IconsComponent type='activeStatus' hover={false} active={false} />
+                        <Image src={profileImg} alt="error" width={44} height={44} className="rounded-full" />
+                        <div className="absolute bottom-0 right-[-5px]">
+                            <IconsComponent type="activeStatus" hover={false} active={false} />
                         </div>
                     </div>
-                    <div className="">
-                        <p className="info-14 !text-start !text-white">{props?.sellerUser?.profile?.fName !== undefined ? props?.sellerUser?.profile?.dName : props?.sellerUser?.user_kyc?.fname}</p>
+                    <div>
+                        <p className="info-14 !text-start !text-white">{props?.sellerUser?.profile?.fName || props?.sellerUser?.user_kyc?.fname}</p>
                         <p className="info-12 !text-start !text-white">Online</p>
                     </div>
                 </div>
-                {/* chat component */}
+                <div id="chat-feed" className="p-[14px] max-h-[300px] h-full overflow-x-auto flex flex-col gap-[10px] chatContainor  scroll-smooth">
+                    {Object.entries(groupedMessages).map(([date, messages]) => (
+                        <React.Fragment key={date}>
+                            <div className='relative'>
 
-                <div id='chat-feed' className="p-[14px] max-h-[300px] h-full overflow-x-auto flex flex-col	gap-[10px] chatContainor  relative scroll-smooth" >
-                    <div className='border-t  dark:border-opacity-[15%] border-grey-v-1'></div>
-                    <p className='nav-text-sm absolute top-[4px] dark:bg-black-v-1  bg-[#F9FAFA] dark:text-white  z-[2] left-[50%] translate-x-[-50%]'>Today</p>
-                    <div>
-                        {orderChat && orderChat.map((item: any) => {
-                            if (item?.from === session?.user?.user_id) {
-                                return <div className="left gap-[4px]">
-                                    <div className="mt-[4px] p-[10px] ml-[auto] rounded-lg min-w-[60px] max-w-fit w-full dark:bg-[#232530] bg-primary-600 bottom-right">
-                                        {(item?.message).includes('https://') === true &&
-                                            <Image src={item?.message} alt='error' width={100} height={100} />
-                                        }
-                                        {(item?.message).includes('https://') === false &&
-                                            <p className="info-12 text-white ">{item?.message}</p>
-                                        }
-                                    </div>
-                                </div>
-                            }
-                            else {
-                                return <div className="right flex items-start gap-[4px]">
-                                    {/* <div>
-                                        <Image src="/assets/order/user.png" alt='error' width={20} height={20} />
-                                    </div> */}
-                                    <div>
-                                        <div className="mt-[4px] mr-[auto] p-[10px] rounded-lg min-w-[60px] max-w-fit w-full dark:bg-omega bg-[#F1F2F4] bottom-left">
-                                            {(item?.message).includes('https://') === true &&
-                                                <Image src={item?.message} alt='error' width={100} height={100} />
-                                            }
-                                            {(item?.message).includes('https://') === false &&
-                                                <p className="info-12 text-white ">{item?.message}</p>
-                                            }
+                            <div className="border-t dark:border-opacity-[15%] border-grey-v-1"></div>
+                            <p className="nav-text-sm  dark:bg-black-v-1 bg-[#F9FAFA] dark:text-white z-[2] left-[50%] -translate-x-1/2 top-[50%] -translate-y-1/2 absolute">{date !== 'Invalid Date' ? date : 'Today'}</p>
+                            </div>
+                            <div>
+                                {messages && messages?.map((item: any) => (
+                                    <div key={item.id} className={item.from === session?.user?.user_id ? 'left gap-[4px]' : 'right flex items-start gap-[4px]'}>
+                                        <div className="mt-[4px] p-[10px] ml-[auto] rounded-lg min-w-[60px] max-w-fit w-full dark:bg-[#232530] bg-primary-600 bottom-right">
+                                            {item.message.includes('https://') ? (
+                                                <Image src={item.message} alt="error" width={100} height={100} />
+                                            ) : (
+                                                <p className="info-12 text-white">{item.message}</p>
+                                            )}
                                         </div>
                                     </div>
-                                </div>
-                            }
-                        })}
-
-
-                    </div>
+                                ))}
+                            </div>
+                        </React.Fragment>
+                    ))}
                 </div>
-
-                {/* send messsage */}
                 <div className="border-t border-[#cccccc7d] p-[16px] py-[24px] dark:bg-omega">
                     <div className="flex items-center gap-[15px]">
-                        <input type="text" onChange={(e) => setMessage(e.target?.value)} onKeyDown={(e) => { handleKeyDown(e) }} value={message} className="border-0 w-full outline-none info-12 dark:!bg-omega !bg-[#F9FAFA] dark:!text-white !text-black" placeholder="input messsage..." />
+                        <input
+                            type="text"
+                            onChange={(e) => setMessage(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            value={message}
+                            className="border-0 w-full outline-none info-12 dark:!bg-omega !bg-[#F9FAFA] dark:!text-white !text-black"
+                            placeholder="Input message..."
+                        />
                         <div>
-                            <input type="file" className="hidden" id="fileUpload" onChange={(e) => {
-                                handleFileChange(e);
-                            }} />
-                            <label htmlFor="fileUpload" className="cursor-pointer group" >
-                                <IconsComponent type='fileUpload' hover={false} active={false} />
+                            <input type="file" className="hidden" id="fileUpload" onChange={handleFileChange} />
+                            <label htmlFor="fileUpload" className="cursor-pointer group">
+                                <IconsComponent type="fileUpload" hover={false} active={false} />
                             </label>
                         </div>
-                        <button className="cta group " onClick={() => sendMessage(message)} >
-                            <IconsComponent type='sendIcon' hover={true} active={message !== "" ? true : false} />
+                        <button className="cta group" onClick={() => sendMessage(message)}>
+                            <IconsComponent type="sendIcon" hover={true} active={message !== ''} />
                         </button>
                     </div>
                 </div>
             </div>
-            <div className='max-[1200px]:block hidden fixed bottom-[15px] z-[7] translate-y-[-50%] right-[10px] z-[8] rounded-[8px] bg-primary-400 flex w-[50px] h-[50px] p-[10px] cursor-pointer' onClick={() => { setShow(!show) }}>
-                {
-                    show === true ?
-
-                        <IconsComponent type='Whiteclose' hover={false} active={false} />
-                        :
-                        <IconsComponent type='chatIcon' hover={false} active={false} />
-                }
+            <div
+                className="max-[1200px]:block hidden fixed bottom-[15px] z-[7] translate-y-[-50%] right-[10px] rounded-[8px] bg-primary-400 flex w-[50px] h-[50px] p-[10px] cursor-pointer"
+                onClick={() => setShow(!show)}
+            >
+                {show ? <IconsComponent type="Whiteclose" hover={false} active={false} /> : <IconsComponent type="chatIcon" hover={false} active={false} />}
             </div>
         </>
-    )
-}
+    );
+};
 
 export default ChatBox;

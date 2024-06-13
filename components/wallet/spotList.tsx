@@ -37,7 +37,7 @@ const SpotList = (props: propsData): any => {
   useEffect(() => {
     getSpotData()
 
-  }, [itemOffset,props?.filter,popupMode])
+  }, [itemOffset, props?.filter, popupMode])
 
 
   async function getSpotData() {
@@ -48,7 +48,7 @@ const SpotList = (props: propsData): any => {
       },
     }).then(response => response.json());
 
- 
+
     setTotal(spotHistory?.data?.totalLength)
     if (props?.filter !== "") {
       let data = spotHistory?.data?.data.filter((item: any) => {
