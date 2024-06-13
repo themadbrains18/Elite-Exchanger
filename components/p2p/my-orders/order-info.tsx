@@ -5,6 +5,8 @@ interface propsData {
 }
 
 const OrderInfo = (props: propsData) => {
+    console.log(props?.userOrder,"=props?.userOrder");
+    
     return (
         <div className='p-[15px] md:p-[40px] border dark:border-opacity-[15%] border-grey-v-1 rounded-10 '>
             <div className='border-b dark:border-opacity-[15%] border-grey-v-1 md:mb-30 mb-20 md:pb-30 pb-[15px] '>
@@ -30,7 +32,7 @@ const OrderInfo = (props: propsData) => {
                 </div>
                 <div className='grid grid-cols-2 gap-20'>
                     <p className='info-14-18 !text-banner-heading dark:!text-white'>Provider</p>
-                    <p className='info-16-18 md:!text-[16px] !text-[14px]  dark:!text-white !text-body-primary'>{props?.userOrder?.user_post?.User?.profile?.fName !==undefined ? props?.userOrder?.user_post?.User?.profile?.dName : props?.userOrder?.user_post?.User?.user_kyc?.fname}</p>
+                    <p className='info-16-18 md:!text-[16px] !text-[14px]  dark:!text-white !text-body-primary'>{props?.userOrder?.user_post?.user?.profile?.fName !==undefined ? props?.userOrder?.user_post?.user?.profile?.dName : props?.userOrder?.user_post?.user?.user_kyc?.fname}</p>
                 </div>
             </div>
 

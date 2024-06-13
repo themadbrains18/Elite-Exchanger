@@ -87,6 +87,7 @@ const AddPayment = (props: activeSection) => {
         setEnableFront(false);
         return;
       }
+      
       setQrCode(data.secure_url);
       setEnableFront(false);
 
@@ -96,7 +97,7 @@ const AddPayment = (props: activeSection) => {
   };
 
   const onHandleSubmit = (data: any) => {
-console.log(data.qr_code?.length, typeof data.qr_code,"==data");
+console.log(data.qr_code?.length, typeof data.qr_code, data?.qr_code,"==data");
 
     if (data?.phonenumber?.length < 10) {
       toast.error("Number contain 10 digits");
@@ -124,7 +125,7 @@ console.log(data.qr_code?.length, typeof data.qr_code,"==data");
       else{
        delete data.qr_code
       }
-
+  
       delete data.selectPayment;
 
       let obj = {
@@ -133,6 +134,7 @@ console.log(data.qr_code?.length, typeof data.qr_code,"==data");
         pmObject: data,
         master_method: master_method
       }
+console.log(obj,"==obj");
 
       props.setFormMethod(obj);
       props.setActive(2);

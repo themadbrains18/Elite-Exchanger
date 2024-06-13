@@ -98,6 +98,8 @@ const TradingPassword = (props: activeSection) => {
       let pmid = props?.formMethod?.pmid;
       let pm_name = props?.formMethod?.pm_name;
 
+      
+
       let pmObject: any = props?.formMethod?.pmObject;
       pmObject['passcode'] = passCode;
 
@@ -111,6 +113,7 @@ const TradingPassword = (props: activeSection) => {
         "otp": "",
         "pmObject": pmObject
       }
+
 
       const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
       let record = encodeURIComponent(ciphertext.toString());
@@ -148,6 +151,7 @@ const TradingPassword = (props: activeSection) => {
 
       let pmid = props?.formMethod?.pmid;
       let pm_name = props?.formMethod?.pm_name;
+      console.log(props?.formMethod,"==props?.formMethod");
 
       let pmObject: any = props?.formMethod?.pmObject;
       pmObject['passcode'] = passCode;

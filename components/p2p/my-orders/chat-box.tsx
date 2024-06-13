@@ -19,6 +19,7 @@ const ChatBox = (props: propsData) => {
     const { status, data: session } = useSession();
     const [enableFront, setEnableFront] = useState(false);
 
+    
     const wbsocket = useWebSocket();
     useEffect(() => {
         getChatByOrderId();
@@ -235,7 +236,7 @@ const ChatBox = (props: propsData) => {
                             <input type="file" className="hidden" id="fileUpload" onChange={(e) => {
                                 handleFileChange(e);
                             }} />
-                            <label htmlFor="fileUpload" className="cursor-pointer" >
+                            <label htmlFor="fileUpload" className="cursor-pointer group" >
                                 <IconsComponent type='fileUpload' hover={false} active={false} />
                             </label>
                         </div>

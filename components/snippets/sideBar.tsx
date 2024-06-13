@@ -259,8 +259,6 @@ const SideBar = (props: profileSec) => {
                     <div className='hidden lg:block'>
                         {
                             data?.map((item, index) => {
-                                console.log(router?.pathname,item?.link)
-                                
 
                                 return (
                                     <Link href={item?.link} key={index} className={`${(router?.pathname === item?.link || router?.pathname.endsWith(item?.link)) && 'dark:bg-black-v-1 bg-primary-100'} rounded-[5px]  flex gap-[10px]  w-full cursor-pointer mb-[15px] items-center group md:mb-[10px] 
