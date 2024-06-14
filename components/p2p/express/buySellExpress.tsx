@@ -54,9 +54,9 @@ const BuySellExpress = (props: propsData) => {
   useEffect(() => {
     getUsdtToInrPrice('USDT');
     getFilterAsset('');
+    setCurrencyName('USDT',2);
   }, []);
 
-  
 
   let {
     register,
@@ -247,8 +247,6 @@ const BuySellExpress = (props: propsData) => {
     setAmount(0);
     setReceivedAmount(0);
     setPaymentMethod('');
-    setValue('spend_amount', 0);
-    setValue('receive_amount', 0);
     setValue('p_method', '');
   };
 
@@ -511,7 +509,6 @@ const BuySellExpress = (props: propsData) => {
                         }
                       }}
                       name="spend_amount"
-                      value={amount}
                       className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text "
                     />
                   </div>
@@ -548,7 +545,6 @@ const BuySellExpress = (props: propsData) => {
                       placeholder="$0"
                       step="any"
                       {...register('receive_amount')}
-                      value={receiveAmount}
                       onChange={(e: any) => {
                         if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                           setReceivedAmount(e?.target?.value);
@@ -638,7 +634,6 @@ const BuySellExpress = (props: propsData) => {
                         clearErrors('receive_amount');
                       }}
                       name="spend_amount"
-                      value={amount}
                       className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text "
                     />
                   </div>
@@ -675,7 +670,6 @@ const BuySellExpress = (props: propsData) => {
                       placeholder="$0"
                       step="any"
                       {...register('receive_amount')}
-                      value={receiveAmount}
                       onChange={(e: any) => {
                         if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
                           setReceivedAmount((e?.target?.value));
