@@ -22,6 +22,7 @@ interface showPopup {
   overlay?: boolean;
   assets?: any;
   refreshWalletAssets?: any;
+  wallet_type: string
 }
 const TransferModal = (props: showPopup) => {
   const { status, data: session } = useSession();
@@ -64,10 +65,10 @@ const TransferModal = (props: showPopup) => {
   }
 
   useEffect(() => {
-    
+
     let coins: any = [];
     props?.assets?.filter((item: any) => {
-      if (item?.walletTtype === "main_wallet") {
+      if (item?.walletTtype === props.wallet_type) {
         coins.push(
           item?.token !== null
             ? item?.token?.symbol
@@ -91,7 +92,7 @@ const TransferModal = (props: showPopup) => {
     if (type == "Spot") {
       let asset = props?.assets?.filter((item: any) => {
         let token = item?.token !== null ? item?.token : item?.global_token;
-        return item?.walletTtype === "main_wallet" && token?.symbol === symbol;
+        return item?.walletTtype === props.wallet_type && token?.symbol === symbol;
       });
       setUserAsset(asset[0]);
       setValue('token_id', asset[0]?.token_id);
@@ -151,7 +152,7 @@ const TransferModal = (props: showPopup) => {
         setSelectedCoin('');
         setUserAsset(null);
         setTimeout(() => {
-          props?.refreshWalletAssets &&  props?.refreshWalletAssets();
+          props?.refreshWalletAssets && props?.refreshWalletAssets();
           props.setOverlay(false);
           props.setPopupMode(0);
           setBtnDisabled(false);

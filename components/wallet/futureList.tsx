@@ -9,10 +9,10 @@ import TransferModal from '../future/popups/transfer-modal';
 
 
 interface propsData {
-    filter:string;
-  }
+    filter: string;
+}
 
-const FutureList = (props:propsData) => {
+const FutureList = (props: propsData) => {
     const [currentItems, setCurrentItems] = useState([]);
     const [itemOffset, setItemOffset] = useState(0);
     const [total, setTotal] = useState(0)
@@ -41,7 +41,7 @@ const FutureList = (props:propsData) => {
     useEffect(() => {
         getFutureWalletData()
 
-    }, [itemOffset, props?.filter,popupMode])
+    }, [itemOffset, props?.filter, popupMode])
 
     async function getFutureWalletData() {
         let spotHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets/type?type=future_wallet&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
@@ -54,14 +54,14 @@ const FutureList = (props:propsData) => {
         setTotal(spotHistory?.data?.totalLength)
         if (props?.filter !== "") {
             let data = spotHistory?.data?.data.filter((item: any) => {
-              return item?.token !== null ? item?.token?.symbol.toLowerCase().includes(props?.filter.toLowerCase()) : item?.global_token?.symbol.toLowerCase().includes(props?.filter.toLowerCase());
+                return item?.token !== null ? item?.token?.symbol.toLowerCase().includes(props?.filter.toLowerCase()) : item?.global_token?.symbol.toLowerCase().includes(props?.filter.toLowerCase());
             })
             setCurrentItems(data);
-          }
-          else {
+        }
+        else {
             setCurrentItems(spotHistory?.data?.data);
-      
-          }
+
+        }
 
     }
 
@@ -297,7 +297,7 @@ const FutureList = (props:propsData) => {
                 show1 === 4 &&
                 <>
                     <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-                    <TransferModal setOverlay={setShow1} setPopupMode={setPopupMode} popupMode={popupMode} assets={currentItems} />
+                    <TransferModal setOverlay={setShow1} setPopupMode={setPopupMode} popupMode={popupMode} assets={currentItems} wallet_type="future_wallet"/>
                 </>
             }
         </>
