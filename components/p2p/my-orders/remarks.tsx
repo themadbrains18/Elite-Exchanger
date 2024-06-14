@@ -341,7 +341,7 @@ const Remarks = (props: propsData) => {
                     }
                     {
                         props?.userOrder?.status === 'isProcess' && props?.userOrder?.sell_user_id === session?.user?.user_id &&
-                        <button className='solid-button max-w-full  w-full' >Payment under process</button>
+                        <button className='solid-button max-w-fit  w-full' >Payment under process</button>
                     }
                     {
                         props?.userOrder?.status === 'isCompleted' && props?.userOrder?.sell_user_id === session?.user?.user_id &&

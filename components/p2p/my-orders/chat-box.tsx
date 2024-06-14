@@ -221,13 +221,13 @@ const ChatBox = (props: PropsData) => {
                 </div>
                 <div id="chat-feed" className="p-[14px] max-h-[300px] h-full overflow-x-auto flex flex-col gap-[10px] chatContainor  scroll-smooth">
 
-                    <div className='left gap-[4px]' >
+                   {(props?.order?.user_post?.auto_reply!=="" && props?.order?.user_post?.auto_reply !== null) && <div className='left gap-[4px]' >
                         <div className="mt-[4px] p-[10px] ml-[auto] rounded-lg min-w-[60px] max-w-fit w-full dark:bg-[#232530] bg-primary-600 bottom-right">
 
                             <p className="info-12 text-white">{props?.order?.user_post?.auto_reply}</p>
 
                         </div>
-                    </div>
+                    </div>}
 
                     {Object.entries(groupedMessages).map(([date, messages]) => (
                         <React.Fragment key={date}>
