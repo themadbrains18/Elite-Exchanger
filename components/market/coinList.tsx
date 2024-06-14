@@ -11,6 +11,7 @@ interface propsData {
   coins: any,
   networks:any,  
   session:any,  
+  filterCoins:any
 
 }
 
@@ -102,11 +103,12 @@ const CoinList = (props: propsData) => {
   }
 
 
+
   return (
     <section className="mt-30">
       <div className="p-20 md:p-40 rounded-10  bg-white dark:bg-d-bg-primary">
         <div className="flex justify-between max-[1350px]:gap-20 max-[1350px]:flex-wrap mb-[20px]">
-          <div className="overflow-auto flex gap-30 max-[1200px]:flex-wrap ">
+          <div className="overflow-auto flex gap-30 max-[1200px]:flex-wrap justify-between items-center">
 
             <div className="flex  gap-[25px]  w-max">
               {tabsData.map((item, ind) => {
@@ -120,6 +122,10 @@ const CoinList = (props: propsData) => {
               })}
             </div>
           </div>
+            <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[331px] w-full py-[13px] px-[10px] ">
+          <Image src="/assets/history/search.svg" alt="search" width={24} height={24} />
+          <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" onChange={(e)=>props?.filterCoins(e)}/>
+        </div>
           {/* <div className="flex items-center gap-5">
             <div className="p-[5px] flex gap-[10px] items-center">
               <p className="nav-text-sm">Show 10</p>

@@ -234,14 +234,14 @@ const AdvertisementTabs = (props: propsData) => {
                     </div>
                     <div className=' max-w-full md:max-w-[20%] w-full'>
                         <DatePicker
-                            placeholderText="Select date"
+                            placeholderText={'Please select a date'} 
                             selected={startDate}
                             onChange={(date: any) => handleDate(date)}
                             peekNextMonth
                             showMonthDropdown
                             showYearDropdown
                             dropdownMode="select"
-                            className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"
+                            className="sm-text input-cta2 w-full border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] bg-[transparent] h-[43px]"
                         />
                         {/* <input type="date" className='md:w-fit w-full border w-full border-grey-v-1 dark:border-[#ccced94d] dark:bg-d-bg-primary  dark:!text-white  bg-transparent rounded-[5px] py-[8px] px-[15px]' /> */}
                     </div>

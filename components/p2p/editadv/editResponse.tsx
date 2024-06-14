@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -31,12 +31,18 @@ const EditResponse = (props: activeSection) => {
 
   const { data: session } = useSession();
   const route = useRouter();
+  const [disable, setDisable] = useState(false);
 
   const wbsocket = useWebSocket();
 
   useEffect(() => {
     setValue('remarks', props?.editPost?.remarks);
     setValue('auto_reply', props?.editPost?.auto_reply);
+    if (props?.editPost?.complete_kyc) {
+      setValue('condition', 'complete_kyc');
+    } else if (props?.editPost?.min_btc) {
+      setValue('condition', 'min_btc');
+    }
   }, [props?.editPost])
 
   let {
@@ -56,60 +62,74 @@ const EditResponse = (props: activeSection) => {
   });
 
   const onHandleSubmit = async (data: any) => {
+    try {
+      setDisable(true);
 
-    let p_method = [];
+      let p_method = [];
 
-    for (const pm of props?.step2Data?.p_method) {
-      let obj = { "upm_id": pm };
-      p_method.push(obj);
-    }
-
-    let formData = {
-      "id": props?.editPost?.id,
-      "user_id": session?.user?.user_id,
-      "token_id": props.step1Data?.token_id,
-      "price": props.step1Data?.price,
-      "quantity": props.step2Data?.quantity,
-      "min_limit": props.step2Data?.min_limit,
-      "max_limit": props.step2Data?.max_limit,
-      "p_method": p_method,
-      "payment_time": props.step2Data?.payment_time,
-      "condition": data?.condition,
-      "status": false,
-      "remarks": data?.remarks,
-      "auto_reply": data?.auto_reply,
-      "complete_kyc": data?.condition === "complete_kyc" ? true : false,
-      "min_btc": data?.min_btc == "min_btc" ? true : false,
-      "fundcode": '123456'
-    }
-
-    const ciphertext = AES.encrypt(JSON.stringify(formData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-    let record = encodeURIComponent(ciphertext.toString());
-
-    let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/editadvertisement`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": session?.user?.access_token
-      },
-      body: JSON.stringify(record)
-    })
-
-    let res = await responseData.json();
-
-    if (res.data.status === 200) {
-      if (wbsocket) {
-        let post = {
-          ws_type: 'post'
-        }
-        wbsocket.send(JSON.stringify(post));
+      for (const pm of props?.step2Data?.p_method) {
+        let obj = { "upm_id": pm };
+        p_method.push(obj);
       }
-      toast.success(res.data.data.message);
-      route.push('/p2p/my-advertisement');
-    }
-    else {
-      toast.error(res.data.data);
+
+      let formData = {
+        "id": props?.editPost?.id,
+        "user_id": session?.user?.user_id,
+        "token_id": props.step1Data?.token_id,
+        "price": props.step1Data?.price,
+        "quantity": props.step2Data?.quantity,
+        "min_limit": props.step2Data?.min_limit,
+        "max_limit": props.step2Data?.max_limit,
+        "p_method": p_method,
+        "payment_time": props.step2Data?.payment_time,
+        "condition": data?.condition,
+        "status": false,
+        "remarks": data?.remarks,
+        "auto_reply": data?.auto_reply,
+        "complete_kyc": data?.condition === "complete_kyc" ? true : false,
+        "min_btc": data?.min_btc == "min_btc" ? true : false,
+        "fundcode": '123456'
+      }
+
+      const ciphertext = AES.encrypt(JSON.stringify(formData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+      let record = encodeURIComponent(ciphertext.toString());
+
+      let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/editadvertisement`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": session?.user?.access_token
+        },
+        body: JSON.stringify(record)
+      })
+
+      let res = await responseData.json();
+
+      if (res.data.status === 200) {
+        if (wbsocket) {
+          let post = {
+            ws_type: 'post'
+          }
+          wbsocket.send(JSON.stringify(post));
+        }
+        toast.success("Post Ad update successfully",{autoClose:2000});
+        setTimeout(()=>{
+          setDisable(false);
+        },3000)
+
+        route.push('/p2p/my-advertisement');
+      }
+      else {
+        toast.error(res.data.data,{autoClose:2000});
+        setTimeout(()=>{
+          setDisable(false);
+        },3000)
+
+      }
+    } catch (error) {
+      console.log(error, "=errorin ad post");
+      setDisable(false);
     }
 
     // var formData = new FormData();
@@ -175,7 +195,7 @@ const EditResponse = (props: activeSection) => {
                 {condition?.map((item, index) => {
                   return (
                     <div key={index} className="mb-10 md:mb-20 cursor-pointer">
-                      <input id={`radio${item}`} type="radio" {...register('condition')} onChange={() => selectCondition(item.value)} value={item?.value} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                      <input id={`radio${item}`} type="radio" {...register('condition')}  onChange={() => selectCondition(item.value)} value={item?.value} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                       <label
                         htmlFor={`radio${item}`}
                         className="
@@ -271,7 +291,21 @@ const EditResponse = (props: activeSection) => {
             >
               Previous
             </button>
-            <button className="solid-button max-w-[220px] w-full">Post</button>
+            <button disabled={disable} className={`solid-button max-w-[220px] text-center w-full ${disable === true ? 'opacity-50 cursor-not-allowed' : ''}`}>
+              {disable === true &&
+                <svg className="w-5 h-5 mx-auto text-white animate-spin " xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path className="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                  </path>
+                </svg>
+              }
+              {disable === false &&
+                <>Post</>
+              }
+
+            </button>
           </div>
         </div>
       </form>

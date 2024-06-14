@@ -30,6 +30,8 @@ const Remarks = (props: propsData) => {
 
     const Ref: any = useRef(null);
 
+    
+
     const [finalFormData, setFinalFormData] = useState({
         "order_id": "",
         "user_id": "",
@@ -137,7 +139,7 @@ const Remarks = (props: propsData) => {
                 toast.success('Thanks for payment. Receiver release assets in short time.');
             }
             else {
-                toast.error(res.data.data, {autoClose:2000} );
+                toast.error(res.data.data, { autoClose: 2000 });
                 return;
             }
         }
@@ -245,7 +247,7 @@ const Remarks = (props: propsData) => {
                     if (Ref.current) clearInterval(Ref.current);
                 }
                 else {
-                    toast.error(res?.data?.data,{autoClose:2000});
+                    toast.error(res?.data?.data, { autoClose: 2000 });
                     return;
                 }
             }
@@ -271,20 +273,17 @@ const Remarks = (props: propsData) => {
                         </div>
                         <p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You Can Pay Me On ( Paytm / Phone pe / Google pay )</p>
                         <p className='nav-text-sm md:mb-30 mb-20'>
-                            But I must explain to you how all this mistaken
-                            idea of denouncing pleasure and praising pain was
-                            born and I will give you a complete account of the
-                            system, and expound the actual teachings of the great
-                            explorer of the truth, the master-builder of human happiness.
-                            No one rejects, dislikes, or avoids pleasure itself, because
-                            it is pleasure, but because those who do not know how to pursue
-                            pleasure rationally encounter consequences that are extremely painful.
+                            {props?.userOrder?.user_post?.remarks !== "" ? props?.userOrder?.user_post?.remarks : "Please use an account under your name  to make the transfer. If the paying account and your personal information do not match, the seller may request a refund or cancel the order."}
                         </p>
                     </>
                 }
                 {
                     props?.userOrder?.status === 'isProcess' &&
-                    <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please Complete Your Payment within <span className='dark:text-white text-black'>{timeLeft}</span> you need to pay<span className='dark:text-white text-black'> {props?.userOrder?.spend_amount} INR.</span></p>
+                    (props?.userOrder?.buy_user_id === session?.user?.user_id ?
+                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please Complete Your Payment within <span className='dark:text-white text-black'>{timeLeft}</span> you need to pay<span className='dark:text-white text-black'> {props?.userOrder?.spend_amount} INR.</span></p>
+                        :
+                        <p className='dark:!text-[#96969A] !text-ban}ner-text mb-20 sec-text'> Payment completed within <span className='dark:text-white text-black'>{timeLeft}</span></p>
+                    )
                 }
                 {
                     props?.userOrder?.status === 'isCompleted' &&
@@ -342,7 +341,7 @@ const Remarks = (props: propsData) => {
                     }
                     {
                         props?.userOrder?.status === 'isProcess' && props?.userOrder?.sell_user_id === session?.user?.user_id &&
-                        <button className='solid-button max-w-full sm:max-w-[220px] w-full' >Payment under process</button>
+                        <button className='solid-button max-w-full  w-full' >Payment under process</button>
                     }
                     {
                         props?.userOrder?.status === 'isCompleted' && props?.userOrder?.sell_user_id === session?.user?.user_id &&
