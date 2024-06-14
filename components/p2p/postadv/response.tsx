@@ -31,6 +31,7 @@ const Response = (props: activeSection) => {
 
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(false);
+  const [disable, setDisable] = useState(false);
 
   const [finalFormData, setFinalFormData] = useState({
     "user_id": "",
@@ -71,37 +72,42 @@ const Response = (props: activeSection) => {
   });
 
   const onHandleSubmit = async (data: any) => {
+    try {
+      setDisable(true)
+      let p_method = [];
 
+      for (const pm of props?.step2Data?.p_method) {
+        let obj = { "upm_id": pm };
+        p_method.push(obj);
+      }
+
+      let formData = {
+        "user_id": session?.user?.user_id,
+        "token_id": props.step1Data?.token_id,
+        "price": props.step1Data?.price,
+        "quantity": props.step2Data?.quantity,
+        "min_limit": props.step2Data?.min_limit,
+        "max_limit": props.step2Data?.max_limit,
+        "p_method": p_method,
+        "payment_time": props.step2Data?.payment_time,
+        "condition": data?.condition,
+        "status": false,
+        "remarks": data?.remarks,
+        "auto_reply": data?.auto_reply,
+        "complete_kyc": data.condition === "complete_kyc" ? true : false,
+        "min_btc": data?.min_btc == "min_btc" ? true : false,
+        "fundcode": ''
+      }
+
+      setFinalFormData(formData);
+      setActive(true);
+      setShow(true);
+
+    } catch (error) {
+      console.log(error, "-error");
+
+    }
     // console.log(data.condition);
-
-    let p_method = [];
-
-    for (const pm of props?.step2Data?.p_method) {
-      let obj = { "upm_id": pm };
-      p_method.push(obj);
-    }
-
-    let formData = {
-      "user_id": session?.user?.user_id,
-      "token_id": props.step1Data?.token_id,
-      "price": props.step1Data?.price,
-      "quantity": props.step2Data?.quantity,
-      "min_limit": props.step2Data?.min_limit,
-      "max_limit": props.step2Data?.max_limit,
-      "p_method": p_method,
-      "payment_time": props.step2Data?.payment_time,
-      "condition": data?.condition,
-      "status": false,
-      "remarks": data?.remarks,
-      "auto_reply": data?.auto_reply,
-      "complete_kyc": data.condition === "complete_kyc" ? true : false,
-      "min_btc": data?.min_btc == "min_btc" ? true : false,
-      "fundcode": ''
-    }
-
-    setFinalFormData(formData);
-    setActive(true);
-    setShow(true);
 
     // var formData = new FormData();
     // formData.append("user_id", session?.user?.user_id);
@@ -132,7 +138,7 @@ const Response = (props: activeSection) => {
 
   const finalSubmitAds = async (pass: string) => {
     try {
-
+      setDisable(true)
       finalFormData.fundcode = pass;
 
       const ciphertext = AES.encrypt(JSON.stringify(finalFormData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
@@ -158,9 +164,12 @@ const Response = (props: activeSection) => {
           wbsocket.send(JSON.stringify(post));
         }
 
-        toast.success(res.data.data.message);
+        toast.success(res.data.data.message, { autoClose: 2000 });
         setActive(false);
         setShow(false);
+        setTimeout(() => {
+          setDisable(false)
+        }, 3000)
         route.push('/p2p/my-advertisement');
       }
       else {
@@ -303,7 +312,21 @@ const Response = (props: activeSection) => {
             >
               Previous
             </button>
-            <button className="solid-button max-w-[220px] w-full">Post</button>
+            <button disabled={disable} className={`solid-button max-w-[220px] w-full text-center ${disable === true ? 'opacity-50 cursor-not-allowed' : ''}`}>
+              {disable === true &&
+                <svg className="w-5 h-5 mx-auto text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path className="opacity-75" fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                  </path>
+                </svg>
+              }
+              {disable === false &&
+                <>Post</>
+              }
+
+            </button>
           </div>
         </div>
 

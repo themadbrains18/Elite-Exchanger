@@ -21,12 +21,7 @@ const MarketCoin = (props: propsData) => {
   const cardData = props.bannerCoinList;
 
 
-  const filterCoins = (e:any)=>{
-    let records = props.allCoins.filter((item:any)=>{
-      return item.symbol.toLowerCase().includes(e.target.value.toLowerCase());
-    }) 
-    props.setCoins(records);
-  }
+
 
   return (
     <div className="p-20 md:p-40 rounded-10  bg-white dark:bg-d-bg-primary">
@@ -34,10 +29,7 @@ const MarketCoin = (props: propsData) => {
         <div>
           <p className="text-[23px] leading-7 font-medium mb-2 md:mb-[10px] dark:text-white">Market Coins</p>
         </div>
-        <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[331px] w-full py-[13px] px-[10px] ">
-          <Image src="/assets/history/search.svg" alt="search" width={24} height={24} />
-          <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" onChange={(e)=>filterCoins(e)}/>
-        </div>
+        
       </div>
       <div className="mt-30 md:mt-50">
         <Swiper

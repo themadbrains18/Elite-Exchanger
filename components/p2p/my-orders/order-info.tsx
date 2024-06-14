@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react';
 import React from 'react'
 
 interface propsData {
@@ -5,6 +6,8 @@ interface propsData {
 }
 
 const OrderInfo = (props: propsData) => {
+    const { status, data: session } = useSession();
+
     
     return (
         <div className='p-[15px] md:p-[40px] border dark:border-opacity-[15%] border-grey-v-1 rounded-10 '>
@@ -14,7 +17,7 @@ const OrderInfo = (props: propsData) => {
             </div>
             <div className='max-w-[783px] w-full'>
                 <div className='grid grid-cols-2 gap-20  mb-[42px]'>
-                    <p className='info-14-18 !text-banner-heading !text-[#232530] dark:!text-white'>Buy Order</p>
+                    <p className='info-14-18 !text-banner-heading !text-[#232530] dark:!text-white'>{props?.userOrder?.buy_user_id !== session?.user?.user_id ?"Sell" :"Buy"} Order</p>
                     <p className='info-16-18 md:!text-[16px] !text-[14px]  dark:!text-white !text-[#232530]'>{props?.userOrder?.quantity?.toFixed(4)} {props?.userOrder?.receive_currency}</p>
                 </div>
                 <div className='grid grid-cols-2 gap-20  mb-[42px]'>

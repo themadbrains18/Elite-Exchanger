@@ -21,13 +21,20 @@ const Marketpage = (props: propsData) => {
   useEffect(()=>{
     setCoins(props.coinList)
   },[props.coinList]);
+
+  const filterCoins = (e:any)=>{
+    let records = props.coinList.filter((item:any)=>{
+      return item.symbol.toLowerCase().includes(e.target.value.toLowerCase());
+    }) 
+    setCoins(records)
+  }
   
   return (
     <section className=" bg-light-v-1 py-[20px] md:py-[80px]  dark:bg-black-v-1">
       <div className="container flex flex-wrap gap-30">
         <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
           <MarketCoin bannerCoinList={marketCoinList} setCoins={setCoins} allCoins={props.coinList}/>
-          <CoinList coins={coins} networks={props?.networks} session={props.session}/>
+          <CoinList coins={coins} networks={props?.networks} session={props.session} filterCoins={filterCoins}/>
         </div>
         <div className="lg:max-w-[432px] w-full md:block hidden">
           <div className="lg:block hidden ">

@@ -112,14 +112,15 @@ const Historytrade = (props: propsData) => {
                     selected={startDate}
                     onChange={(date: any) => handleStartDate(date)}
                     peekNextMonth
+                    placeholderText={'Please select a date'} 
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"
-                    className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"
+                    className="sm-text input-cta2 max-w-[200px] w-full border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] bg-[transparent] h-[41px]"
                   />
                 </div>
                 <div className="relative p-[5px] flex items-center gap-[10px] cursor-pointer">
-                  <Image src="/assets/history/filter.svg" width={24} height={24} alt="filter" />
+                  {/* <Image src="/assets/history/filter.svg" width={24} height={24} alt="filter" /> */}
                   <FilterSelectMenuWithCoin
                     data={props.coinList}
                     border={true}

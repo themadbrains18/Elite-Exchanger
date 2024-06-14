@@ -35,6 +35,10 @@ const ChatBox = (props: PropsData) => {
         socket();
     }, [props.order?.id, wbsocket]);
 
+
+
+
+
     const socket = () => {
         if (wbsocket) {
             wbsocket.onmessage = (event) => {
@@ -63,6 +67,8 @@ const ChatBox = (props: PropsData) => {
             const orderChat = await response.json();
             setOrderChat(orderChat?.data[0]?.chat || []);
             groupMessages(orderChat?.data[0]?.chat || []);
+
+
         } catch (error) {
             console.error(error);
         }
@@ -193,6 +199,8 @@ const ChatBox = (props: PropsData) => {
         }
     };
 
+    console.log(props?.order);
+
     const profileImg = props?.sellerUser?.profile?.image ?? `${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`;
 
     return (
@@ -201,7 +209,7 @@ const ChatBox = (props: PropsData) => {
             <div className={`${show ? 'max-[1200px]:opacity-1 max-[1200px]:visible' : 'max-[1200px]:opacity-0 max-[1200px]:invisible'} duration-300 max-w-[25%] w-full max-[1200px]:z-[8] max-[1200px]:max-w-[345px] max-[1200px]:bottom-[105px] max-[1200px]:left-[50%] max-[1200px]:translate-x-[-50%] max-[1200px]:fixed rounded-[10px] overflow-hidden dark:bg-black-v-1 bg-[#F9FAFA] border dark:border-opacity-[15%] border-grey-v-1`}>
                 <div className="flex items-center gap-[20px] grow-[1.6] p-[14px] pb-[30px] dark:bg-[url(/assets/order/chat-head-bg-dark.png)] bg-[url(/assets/order/chat-head-bg.png)] no-reapeat bg-cover bg-bottom">
                     <div className="w-[44px] h-[44px] rounded-full bg-[#e8f6f7] dark:bg-[#8ed0d9] border border-white flex relative">
-                        <Image src={profileImg} alt="error" width={44} height={44} className="rounded-full" />
+                        <Image src={profileImg} alt="error" width={44} height={44} className="rounded-full object-cover object-top" />
                         <div className="absolute bottom-0 right-[-5px]">
                             <IconsComponent type="activeStatus" hover={false} active={false} />
                         </div>
@@ -212,13 +220,23 @@ const ChatBox = (props: PropsData) => {
                     </div>
                 </div>
                 <div id="chat-feed" className="p-[14px] max-h-[300px] h-full overflow-x-auto flex flex-col gap-[10px] chatContainor  scroll-smooth">
+
+                    <div className='left gap-[4px]' >
+                        <div className="mt-[4px] p-[10px] ml-[auto] rounded-lg min-w-[60px] max-w-fit w-full dark:bg-[#232530] bg-primary-600 bottom-right">
+
+                            <p className="info-12 text-white">{props?.order?.user_post?.auto_reply}</p>
+
+                        </div>
+                    </div>
+
                     {Object.entries(groupedMessages).map(([date, messages]) => (
                         <React.Fragment key={date}>
                             <div className='relative'>
 
-                            <div className="border-t dark:border-opacity-[15%] border-grey-v-1"></div>
-                            <p className="nav-text-sm  dark:bg-black-v-1 bg-[#F9FAFA] dark:text-white z-[2] left-[50%] -translate-x-1/2 top-[50%] -translate-y-1/2 absolute">{date !== 'Invalid Date' ? date : 'Today'}</p>
+                                <div className="border-t dark:border-opacity-[15%] border-grey-v-1"></div>
+                                <p className="nav-text-sm  dark:bg-black-v-1 bg-[#F9FAFA] dark:text-white z-[2] left-[50%] -translate-x-1/2 top-[50%] -translate-y-1/2 absolute">{date !== 'Invalid Date' ? date : 'Today'}</p>
                             </div>
+
                             <div>
                                 {messages && messages?.map((item: any) => (
                                     <div key={item.id} className={item.from === session?.user?.user_id ? 'left gap-[4px]' : 'right flex items-start gap-[4px]'}>

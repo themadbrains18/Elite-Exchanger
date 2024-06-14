@@ -98,7 +98,7 @@ const ConvertList = () => {
                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
                       {/* <Image src={`${item.createdAt}`} width={30} height={30} alt="coins" /> */}
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                        <p className="info-14 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
+                        <p className="info-14 dark:text-white whitespace-nowrap">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
                       </div>
                     </div>
                   </td>
