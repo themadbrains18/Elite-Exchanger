@@ -70,7 +70,6 @@ const BuySellCard = (props: DynamicId) => {
       setCurrencyName(props.slug, 1);
       setPriceOnChangeType(spotType, '');
     }
-
     Socket();
     convertTotalAmount();
     let radioCta = document.querySelector(".custom-radio") as HTMLInputElement | null;
@@ -79,6 +78,7 @@ const BuySellCard = (props: DynamicId) => {
       prevSibling.click();
     }
   }, [userAssets])
+
 
   // useEffect(() => {
   //   convertTotalAmount();
@@ -203,7 +203,7 @@ const BuySellCard = (props: DynamicId) => {
           }
           wbsocket.send(JSON.stringify(withdraw));
         }
-        
+
 
         /**
          * After order create here is partial execution request send to auto execute
@@ -234,7 +234,7 @@ const BuySellCard = (props: DynamicId) => {
               }
               wbsocket.send(JSON.stringify(withdraw));
             }
-            
+
           }
 
           reset({
@@ -314,7 +314,6 @@ const BuySellCard = (props: DynamicId) => {
     }
   }
 
-
   return (
     <>
       <div className="p-20 md:p-20 rounded-10  bg-white dark:bg-d-bg-primary">
@@ -326,6 +325,9 @@ const BuySellCard = (props: DynamicId) => {
             })
             setSpotType('buy');
             setTotalAmount(0.0); setEstimateFee(0.00)
+            if (show === 2) {
+              setValue('limit_usdt', props?.token?.price.toFixed(5))
+            }
           }}>
             Buy
           </button>
@@ -335,7 +337,10 @@ const BuySellCard = (props: DynamicId) => {
               token_amount: 0.00,
             })
             setSpotType('sell');
-            setTotalAmount(0.0); setEstimateFee(0.00)
+            setTotalAmount(0.0); setEstimateFee(0.00);
+            if (show === 2) {
+              setValue('limit_usdt', props?.token?.price.toFixed(5))
+            }
           }}>
             Sell
           </button>
@@ -460,7 +465,7 @@ const BuySellCard = (props: DynamicId) => {
 
                     <div className="">
                       <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
-                      <input type="number" placeholder="$0" step="0.000000" value={limitInputValue} {...register('limit_usdt', {
+                      <input type="number" placeholder="$0" step="0.000000" {...register('limit_usdt', {
                         onChange: (e) => { { convertTotalAmount(); checkInput(e, 'limit') } }
                       })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
                     </div>
@@ -476,7 +481,7 @@ const BuySellCard = (props: DynamicId) => {
                 <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
                   <div className="">
                     <p className="sm-text dark:text-white">Quantity({firstCurrency})</p>
-                    <input type="number" placeholder="0" step={0.000001} value={tokenInputValue} {...register('token_amount', {
+                    <input type="number" placeholder="0" step={0.000001} {...register('token_amount', {
                       onChange: (e) => { { convertTotalAmount(); checkInput(e, 'max') } }
                     })} name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text " />
                   </div>
@@ -514,10 +519,7 @@ const BuySellCard = (props: DynamicId) => {
                 </div>
               </>
             }
-
-
           </div>
-
           {((show === 1 && props.token?.tradepair?.limit_trade === true) || show === 2) &&
             <>
               {props?.session ?
@@ -527,8 +529,6 @@ const BuySellCard = (props: DynamicId) => {
               }
             </>
           }
-
-
         </form>
       </div>
       {

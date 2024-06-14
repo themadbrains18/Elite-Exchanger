@@ -57,15 +57,13 @@ const BuySellCard = (props: DynamicId) => {
     return item.symbol === 'USDT'
   })
 
-  let { register, setValue, getValues, handleSubmit, watch, reset, setError, formState: { errors } } = useForm({
+  let { register, setValue, getValues, handleSubmit, clearErrors, watch, reset, setError, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
   });
 
   useEffect(() => {
-    if (props.slug) {
-      setCurrencyName(props.slug, 1);
-      setPriceOnChangeType(spotType, '');
-    }
+    setCurrencyName('USDT', 2);
+    setPriceOnChangeType(spotType, '');
 
     Socket();
     convertTotalAmount();
@@ -94,6 +92,7 @@ const BuySellCard = (props: DynamicId) => {
 
   const setCurrencyName = (symbol: string, dropdown: number) => {
     if (dropdown === 1) {
+      clearErrors('token_amount');
       setFirstCurrency(symbol);
 
       let token = list.filter((item: any) => {
@@ -101,8 +100,15 @@ const BuySellCard = (props: DynamicId) => {
       });
 
       if (token.length > 0) {
+        setValue('limit_usdt', token[0].price)
         setSelectedToken(token[0]);
         setPriceOnChangeType(active1 === 1 ? 'buy' : 'sell', symbol);
+        let qty: any = getValues('token_amount');
+        let totalAmount = qty * token[0].price;
+        let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(8) : (token[0].price * qty * 0.00075).toFixed(8);
+
+        setEstimateFee(fee);
+        setTotalAmount(totalAmount);
       }
 
       if (userAssets.message !== undefined) {
@@ -137,6 +143,10 @@ const BuySellCard = (props: DynamicId) => {
   const onHandleSubmit = async (data: any) => {
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
 
+    if (firstCurrency === '') {
+      setError('token_amount', { type: 'custom', message: 'Please select coin that you want to buy' });
+      return
+    }
     if (active1 === 1 && totalAmount > price) {
       toast.error('Insufficiant balance');
       return;
@@ -163,6 +173,7 @@ const BuySellCard = (props: DynamicId) => {
     setObjData(obj)
     setActive(true)
   }
+
   const actionPerform = async () => {
     try {
       const ciphertext = AES.encrypt(JSON.stringify(objData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
@@ -262,8 +273,8 @@ const BuySellCard = (props: DynamicId) => {
     }
     else {
       let qty: any = getValues('token_amount');
-      let totalAmount = qty * props?.token?.price;
-      let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(8) : (props?.token?.price * qty * 0.00075).toFixed(8);
+      let totalAmount = qty * selectedToken?.price;
+      let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(8) : (selectedToken?.price * qty * 0.00075).toFixed(8);
 
       setEstimateFee(fee);
       setTotalAmount(totalAmount);
@@ -371,7 +382,7 @@ const BuySellCard = (props: DynamicId) => {
                   token_amount: 0.00,
                 })
                 setTotalAmount(0.0); setEstimateFee(0.00)
-                setValue('limit_usdt', props?.token?.price)
+                setValue('limit_usdt', 1)
               }}>
                 <input id={`custom-radio2${props.id}`} type="radio" value="market" name="market_type" className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                 <label htmlFor={`custom-radio2${props.id}`} className="
@@ -499,7 +510,7 @@ const BuySellCard = (props: DynamicId) => {
       </div>
       {
         active &&
-        <ConfirmBuy setActive={setActive} setShow={setShow} price={props?.token?.price} active1={active1} secondCurrency={secondCurrency} selectedToken={selectedToken?.symbol} actionPerform={actionPerform} objData={objData} />
+        <ConfirmBuy setActive={setActive} setShow={setShow} price={selectedToken?.price} active1={active1} secondCurrency={secondCurrency} selectedToken={selectedToken?.symbol} actionPerform={actionPerform} objData={objData} />
       }
     </>
   )
