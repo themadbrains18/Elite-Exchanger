@@ -403,6 +403,13 @@ input[name="colored-radio"].contactform:checked + .custom-radio{
 .chatContainor::-webkit-scrollbar{
   display: none;
 }
+.left > div {
+  margin: 0 0 4px;
+}
+.left > div.bottom-right {
+  border-bottom-right-radius: 6px;
+  border-bottom-left-radius: 0;
+}
 .position-fixed{
   display: none;
 }

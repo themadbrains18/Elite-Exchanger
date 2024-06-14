@@ -137,21 +137,20 @@ const Adverstisement = (props: propsData) => {
   }
 
   const onHandleSubmit = (data: any) => {
-    setStep1Data(data);
-    setStep(2);
-    // if (assetsBalance > getValues('price')) {
-    //   setStep1Data(data);
-    //   setStep(2);
-    // }
-    // else {
-    //   toast.error('Insufficiant Balance')
-    // }
-
+    // setStep1Data(data);
+    // setStep(2);
+    if (assetsBalance > 0) {
+      setStep1Data(data);
+      setStep(2);
+    }
+    else {
+      toast.error('Insufficiant Balance')
+    }
   }
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer limit={1}/>
       {step == 1 && (
         <div className="mt-30 md:mt-40">
           <p className="sec-title">Set Type And Price</p>
@@ -160,7 +159,7 @@ const Adverstisement = (props: propsData) => {
 
               <div className="max-w-[1048px] w-full">
                 <div className=" md:p-40 border border-grey-v-1 dark:border-opacity-20 rounded-[6px]">
-                  <p className="p-[15px] sec-title w-full md:pb-30 border-b border-grey-v-2 dark:border-opacity-20">Asset</p>
+                  <p className="p-[15px] sec-title w-full md:pb-30 border-b border-grey-v-2 dark:border-opacity-20">All Coins</p>
                   <div className="mt-20 mb-20 md:mb-0 md:mt-30 grid grid-cols-3 md:flex flex-wrap gap-x-10 gap-y-30 md:gap-20 p-10 md:p-0">
                     {assets?.map((item: any, index: any) => {
                       return (
