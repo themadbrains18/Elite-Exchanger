@@ -322,6 +322,9 @@ const BuySellCard = (props: DynamicId) => {
             })
             setSpotType('buy');
             setTotalAmount(0.0); setEstimateFee(0.00)
+            if(show === 2 && selectedToken?.price){
+              setValue('limit_usdt', selectedToken?.price.toFixed(5))
+            }
           }}>
             Buy
           </button>
@@ -332,6 +335,9 @@ const BuySellCard = (props: DynamicId) => {
             })
             setSpotType('sell');
             setTotalAmount(0.0); setEstimateFee(0.00)
+            if(show === 2 && selectedToken?.price){
+              setValue('limit_usdt', selectedToken?.price.toFixed(5))
+            }
           }}>
             Sell
           </button>
