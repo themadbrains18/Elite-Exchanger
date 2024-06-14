@@ -80,10 +80,6 @@ const SecuritySettings = (props: fixSection) => {
 
   // auto generate password
   const [passwordLength, setPasswordLength] = useState(18);
-  const [useSymbols, setUseSymbols] = useState(true);
-  const [useNumbers, setUseNumbers] = useState(true);
-  const [useLowerCase, setUseLowerCase] = useState(true);
-  const [useUpperCase, setUseUpperCase] = useState(true);
 
   const [showOldPswd, setShowOldPswd] = useState(false);
   const [showpswd, setShowPswd] = useState(false);

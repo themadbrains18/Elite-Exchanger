@@ -295,10 +295,10 @@ input[type=date]::-webkit-calendar-picker-indicator {
 }
 
 .history_pagination li {
-  @apply info-14-18 w-7 md:w-20 h-7 md:h-20 flex items-center justify-center
+  @apply info-14-18 w-7 md:w-[25px] h-7 md:h-[25px] flex items-center  justify-center
 }
 .history_pagination li.previous {
-  @apply w-20 h-20 border border-primary text-primary rounded-5 flex
+  @apply w-[25px] h-[25px] border border-primary text-primary rounded-5 flex
 }
 .history_pagination li.previous a {
   @apply  ml-[3px]

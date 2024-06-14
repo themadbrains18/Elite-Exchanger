@@ -166,7 +166,7 @@ const PaymentMethod = (props: activeSection) => {
       }
 
       if (paymentMethodRelation.length > 0) {
-        toast.warning('you can`t remove this payment method because it related to your ads. In case you first edit your ads then remove payment method.');
+        toast.warning('you can`t remove this payment method because it related to your ads. In case you first change payment method in ad then remove payment method.', { autoClose: 2000 });
         return;
       }
 
@@ -209,7 +209,7 @@ const PaymentMethod = (props: activeSection) => {
 
 return (
   <>
-    <ToastContainer />
+    <ToastContainer position="top-center"/>
     <div
       className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"
         }`}

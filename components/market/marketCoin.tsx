@@ -7,7 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 
-import { Pagination } from "swiper/modules";
+import { Autoplay, Pagination } from "swiper/modules";
 import IconsComponent from "../snippets/icons";
 import Link from "next/link";
 
@@ -42,7 +42,8 @@ const MarketCoin = (props: propsData) => {
       <div className="mt-30 md:mt-50">
         <Swiper
           pagination={true}
-          modules={[Pagination]}
+          autoplay={true}
+          modules={[Pagination, Autoplay]}
           breakpoints={{
 
             320: {

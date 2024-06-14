@@ -27,8 +27,8 @@ interface activeSection {
 const BuyPopup = (props: activeSection) => {
   const { mode } = useContext(Context);
   const route = useRouter();
-  const [receiveAmount, setReceiveAmount] = useState(0);
-  const [spendAmount, setSpendAmount] = useState(0)
+  const [receiveAmount, setReceiveAmount] = useState();
+  const [spendAmount, setSpendAmount] = useState()
   const [btnDisabled, setBtnDisabled] = useState(false);
   const { status, data: session } = useSession();
   const wbsocket = useWebSocket();
@@ -174,25 +174,25 @@ const BuyPopup = (props: activeSection) => {
               </div>
               <div className="mt-30 md:mt-50 grid md:grid-cols-1 grid-cols-2">
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
-                  <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Available</p>
+                  <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Available :</p>
                   <p className="sm-text w-full">{props?.selectedPost?.quantity} {props?.selectedPost?.token !== null ? props?.selectedPost?.token?.symbol : props?.selectedPost?.global_token?.symbol}</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
-                  <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Limit</p>
+                  <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Limit :</p>
                   <p className="sm-text w-full">{props?.selectedPost?.min_limit} INR ~ {props?.selectedPost?.max_limit} INR</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
-                  <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Price</p>
+                  <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Market Price :</p>
                   <p className="sm-text w-full">{props?.selectedPost?.price} INR</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
-                  <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Payment Method</p>
-                  <div className="w-full flex gap-10">
+                  <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Payment Methods :</p>
+                  <div className="w-full flex ">
                     {
                       props?.selectedPost?.user?.user_payment_methods && props?.selectedPost?.user?.user_payment_methods.map((elem: any, ind: any) => {
                         return (
                           <Fragment key={ind}>
-                            <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />
+                            <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className="ml-[-10px]"/>
                           </Fragment>
                         )
                       })
@@ -209,7 +209,7 @@ const BuyPopup = (props: activeSection) => {
                 <div className="border mt-[10px] border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px] ">
                   <div className="flex items-center ">
                     <div className="max-w-full md:max-w-[315px] w-full">
-                      <input type="number" step={0.000001} id="spendamount" {...register('spend_amount')} name="spend_amount" value={spendAmount} onChange={(e: any) => {
+                      <input type="number" step={0.000001} id="spendamount" {...register('spend_amount')}  name="spend_amount" value={spendAmount} onChange={(e: any) => {
                         if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
                           setSpendAmount(e?.target?.value);
                         }
@@ -219,7 +219,7 @@ const BuyPopup = (props: activeSection) => {
                         setValue('receive_amount', receiveAmount.toFixed(6));
                         clearErrors('spend_amount')
                         clearErrors('receive_amount')
-                      }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full  dark:text-white" placeholder="Enter the ammount" />
+                      }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full  dark:text-white" placeholder="0" />
                     </div>
                     <div className="pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d]  flex gap-[5px] items-center">
                       <Image src={`/assets/currencies/3d/inr.png`} alt="error" width={20} height={20} />
@@ -244,7 +244,7 @@ const BuyPopup = (props: activeSection) => {
                         setValue('spend_amount', spendAmount.toFixed(2));
                         clearErrors('spend_amount')
                         clearErrors('receive_amount')
-                      }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full dark:text-white" placeholder="Your ammount in USDT" />
+                      }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full dark:text-white" placeholder="0" />
                     </div>
                     <div className="pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] flex gap-[5px] items-center">
                       <Image src={props?.selectedPost?.token !== null ? props?.selectedPost?.token?.image : props?.selectedPost?.global_token?.image} alt="error" width={20} height={20} />
