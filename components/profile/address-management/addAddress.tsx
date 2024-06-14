@@ -433,7 +433,7 @@ const AddAddress = (props: activeSection) => {
       {enable === 3 && (
         <Verification
           setEnable={setEnable}
-          type="number"
+          type="email"
           data={formData}
           session={props?.session}
           finalOtpVerification={finalOtpVerification}
