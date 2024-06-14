@@ -1,24 +1,47 @@
 import Image from "next/image";
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
-import { signOut, useSession } from "next-auth/react";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import DatePicker from "react-datepicker";
 
 import OrderTable from "./orderTable";
 import DepositTable from "./depositTable";
 import WithdrawTable from "./withdrawTable";
 import ConvertTable from "./convertTable";
 import StakingTable from "./stakingTable";
+import FilterSelectMenuWithCoin from "../snippets/filter-select-menu-with-coin";
 
-
-const Historytrade = () => {
+interface propsData {
+  coinList: any,
+}
+const Historytrade = (props: propsData) => {
   const [active, setActive] = useState(1);
 
   const [filter, setFilter] = useState("")
-
+  const [firstCurrency, setFirstCurrency] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [symbol, setSymbol] = useState('')
 
   const filterData = async (e: any) => {
     setFilter(e.target.value)
+  }
+
+  const setCurrencyName = (symbol: string, dropdown: number) => {
+    setSymbol(symbol);
+    let token = props?.coinList?.filter((item: any) => {
+      return item.symbol === symbol;
+    });
+
+    setFirstCurrency(token[0].id);
+  };
+  const handleStartDate = (date: any) => {
+    setStartDate(date);
+  };
+
+  const clearAll=()=>{
+    setStartDate(new Date());
+    setFirstCurrency('');
+    setSymbol('')
   }
 
   return (
@@ -85,35 +108,48 @@ const Historytrade = () => {
                 <div className="p-[5px] flex items-center gap-[10px] cursor-pointer">
                   <Image src="/assets/history/calender.svg" width={24} height={24} alt="calender" />
                   <p className="nav-text-sm">Month</p>
-                  <Image src="/assets/profile/downarrow.svg" width={24} height={24} alt="dropdown" />
+                  <DatePicker
+                    selected={startDate}
+                    onChange={(date: any) => handleStartDate(date)}
+                    peekNextMonth
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                    className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"
+                  />
                 </div>
-                <div className="p-[5px] flex items-center gap-[10px] cursor-pointer">
+                <div className="relative p-[5px] flex items-center gap-[10px] cursor-pointer">
                   <Image src="/assets/history/filter.svg" width={24} height={24} alt="filter" />
-                  <p className="nav-text-sm">Filter</p>
-                  <Image src="/assets/profile/downarrow.svg" width={24} height={24} alt="dropdown" />
+                  <FilterSelectMenuWithCoin
+                    data={props.coinList}
+                    border={true}
+                    dropdown={1}
+                    value={symbol}
+                    setCurrencyName={setCurrencyName}
+                  />
                 </div>
-                <Image src="/assets/history/dots.svg" width={24} height={24} alt="dots" className="cursor-pointer" />
+                <div className="p-[5px] flex items-center gap-[10px] cursor-pointer" onClick={clearAll}><p className="nav-text-sm">Clear All</p></div>
               </div>
             </div>
             {active === 1 && (
-             <OrderTable filter={filter}/>
+              <OrderTable filter={filter} date={startDate} coin={firstCurrency}/>
             )}
             {active === 2 && (
-           <DepositTable filter={filter}/>
+              <DepositTable filter={filter} date={startDate} coin={symbol}/>
             )}
             {active === 3 && (
-            <WithdrawTable filter={filter}/>
+              <WithdrawTable filter={filter} date={startDate} coin={firstCurrency}/>
             )}
             {/* {active === 4 && (
          <ConvertTable />
             )} */}
             {active === 5 && (
-            <StakingTable />
+              <StakingTable />
             )}
           </div>
         </div>
 
-       
+
       </section>
     </>
 
