@@ -20,8 +20,8 @@ const pusher = new Pusher('b275b2f9e51725c09934', {
 });
 
 const schema = yup.object().shape({
-  token_amount: yup.number().positive().required('Please enter quantity').typeError('Please enter quantity').default(0),
-  limit_usdt: yup.number().positive().required('Please enter limit amount').typeError('Please enter limit amount').default(0),
+  token_amount: yup.number().positive().required('Please enter quantity').typeError('Please enter quantity'),
+  limit_usdt: yup.number().positive().required('Please enter limit amount').typeError('Please enter limit amount'),
   // market_type:yup.string().optional().default('limit')
 });
 

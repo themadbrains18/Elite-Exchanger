@@ -93,16 +93,19 @@ const BuyTableDesktop = (props: activeSection) => {
     }
   };
 
-  for (const post of list) {
-    let payment_method: any = [];
-    for (const upid of post?.p_method) {
-      post?.User?.user_payment_methods.filter((item: any) => {
-        if (item.id === upid?.upm_id) {
-          payment_method.push(item);
-        }
-      })
-    }
-    post.user_p_method = payment_method;
+  if(list?.length>0 ) {
+    
+    for (const post of list) {
+     let payment_method: any = [];
+     for (const upid of post?.p_method) {
+       post?.User?.user_payment_methods.filter((item: any) => {
+         if (item.id === upid?.upm_id) {
+           payment_method.push(item);
+         }
+       })
+     }
+     post.user_p_method = payment_method;
+   }
   }
 
   // const endOffset = itemOffset + itemsPerPage;
@@ -168,7 +171,7 @@ const BuyTableDesktop = (props: activeSection) => {
             </tr>
           </thead>
           <tbody>
-            {list.length > 0 && list?.map((item: any, index: number) => {
+            {list?.length > 0 && list?.map((item: any, index: number) => {
               if (session?.user?.user_id !== item?.user_id) {
                 const profileImg = item?.user?.profile && item?.user?.profile?.image !== null ? `${item?.user?.profile?.image}` : `/assets/orders/user1.png`;
                 const userName = item?.user?.profile && item?.user?.profile?.dName !== null ? item?.user?.profile?.dName : item?.user?.user_kyc?.fname;
@@ -192,7 +195,7 @@ const BuyTableDesktop = (props: activeSection) => {
 
                     <td className="group-hover:bg-[#FAFAFA] dark:group-hover:bg-black-v-1 bg-white dark:bg-d-bg-primary">
                       <div className="flex gap-2 py-[10px] md:py-[15px] items-center px-0 md:px-[5px] ">
-                        <Image src={profileImg} width={30} height={30} alt="coins" className="rounded-full" />
+                        <Image src={profileImg} width={30} height={30} alt="coins" className="rounded-full w-[40px] h-[40px] object-cover object-top" />
                         <div>
                           <p className="info-14-18 text-black dark:text-white">{userName}</p>
                           <p className="sm-text dark:text-white">{item?.orders}</p>
@@ -213,12 +216,12 @@ const BuyTableDesktop = (props: activeSection) => {
                     </td>
 
                     <td>
-                      <div className='flex items-center gap-10'>
+                      <div className='flex items-center '>
                         {
                           payment_method?.map((elem: any, ind: any) => {
                             return (
                               <Fragment key={ind}>
-                                <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />
+                                <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className='ml-[-10px]'/>
                               </Fragment>
                             )
                           })
@@ -235,7 +238,7 @@ const BuyTableDesktop = (props: activeSection) => {
 
             })}
 
-            {list.length === 0 &&
+            {list?.length === 0 &&
               <tr>
                 <td colSpan={7}>
                   <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>

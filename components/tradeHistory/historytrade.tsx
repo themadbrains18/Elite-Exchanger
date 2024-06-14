@@ -87,14 +87,14 @@ const Historytrade = (props: propsData) => {
                 >
                   Wallet Withdraw History
                 </button>
-                <button
+                {/* <button
                   className={`pb-[15px] md:pb-30 nav-text-sm md:nav-text-lg border-b-2 border-[transparent] whitespace-nowrap ${active === 4 && "border-primary !text-primary"}`}
                   onClick={() => {
                     setActive(4);
                   }}
                 >
                   Convert History
-                </button>
+                </button> */}
                 <button
                   className={`pb-[15px] md:pb-30 nav-text-sm md:nav-text-lg border-b-2 border-[transparent] whitespace-nowrap ${active === 5 && "border-primary !text-primary"}`}
                   onClick={() => {
@@ -140,9 +140,9 @@ const Historytrade = (props: propsData) => {
             {active === 3 && (
               <WithdrawTable filter={filter} date={startDate} coin={firstCurrency}/>
             )}
-            {active === 4 && (
-              <ConvertTable date={startDate} coin={firstCurrency} />
-            )}
+            {/* {active === 4 && (
+         <ConvertTable />
+            )} */}
             {active === 5 && (
               <StakingTable />
             )}

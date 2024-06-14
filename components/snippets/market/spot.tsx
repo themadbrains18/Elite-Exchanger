@@ -75,7 +75,8 @@ const Spot = (props: propsData) => {
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Deposit</p>
+                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Action</p>
+                                    <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                         </tr>

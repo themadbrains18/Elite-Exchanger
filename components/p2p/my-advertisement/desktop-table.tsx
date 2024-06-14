@@ -239,13 +239,13 @@ const DesktopTable = (props: dataTypes) => {
                             </th>
                             <th className="bg-white dark:bg-d-bg-primary py-5">
                                 <div className="flex ">
-                                    <p className="nav-text-sm">Remaining</p>
+                                    <p className="nav-text-sm">Remaining Qty.</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="bg-white dark:bg-d-bg-primary py-5">
                                 <div className="flex ">
-                                    <p className="nav-text-sm">Create Time  </p>
+                                    <p className="nav-text-sm">Date & Time  </p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
@@ -293,12 +293,12 @@ const DesktopTable = (props: dataTypes) => {
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <div className='flex items-center gap-10'>
+                                                <div className='flex items-center '>
                                                     {
                                                         item?.user_p_method?.map((elem: any, ind: any) => {
                                                             return (
                                                                 <Fragment key={ind}>
-                                                                    <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} />
+                                                                    <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className='ml-[-10px]'/>
                                                                 </Fragment>
                                                             )
                                                         })
