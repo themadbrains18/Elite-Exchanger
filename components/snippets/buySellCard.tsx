@@ -194,7 +194,7 @@ const BuySellCard = (props: DynamicId) => {
 
       if (reponse.data.status === 200) {
         toast.success(reponse.data?.data?.message);
-        setFirstCurrency('BLC');
+        setFirstCurrency('BTCB');
         setSecondCurrency('USDT');
         setActive(false);
         if (wbsocket) {
