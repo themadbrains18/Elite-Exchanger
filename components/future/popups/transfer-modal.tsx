@@ -22,7 +22,7 @@ interface showPopup {
   overlay?: boolean;
   assets?: any;
   refreshWalletAssets?: any;
-  wallet_type: string
+  wallet_type?: string
 }
 const TransferModal = (props: showPopup) => {
   const { status, data: session } = useSession();
