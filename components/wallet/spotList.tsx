@@ -15,6 +15,7 @@ import WithdrawAuthenticationModelPopup from './withdrawAuthentication';
 interface propsData {
   networks: any;
   filter: string;
+  refreshData?:Function
 }
 
 const SpotList = (props: propsData): any => {
@@ -401,7 +402,7 @@ const SpotList = (props: propsData): any => {
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
 
-          <Withdraw setShow1={setShow1} networks={props.networks} session={session} token={selectedCoin} selectedCoinBalance={selectedCoinBalance} />
+          <Withdraw setShow1={setShow1} networks={props.networks} session={session} token={selectedCoin} selectedCoinBalance={selectedCoinBalance} refreshData={props?.refreshData}/>
 
         </>
       }
@@ -409,7 +410,7 @@ const SpotList = (props: propsData): any => {
         show1 === 3 &&
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-          <StakingModel setShow1={setShow1} session={session} token={selectedCoin} selectedCoinBalance={selectedCoinBalance} />
+          <StakingModel setShow1={setShow1} session={session} token={selectedCoin} selectedCoinBalance={selectedCoinBalance} refreshData={props?.refreshData}/>
         </>
       }
       {

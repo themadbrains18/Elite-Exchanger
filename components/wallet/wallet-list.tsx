@@ -12,6 +12,7 @@ interface propsData {
   coinList: any,
   networks: any,
   session: any,
+  refreshData?:Function
 
 }
 
@@ -71,7 +72,7 @@ const WalletList = (props: propsData): any => {
           {
             active1 === 1 &&
             <>
-              <SpotList networks={props.networks} filter={filter} />
+              <SpotList networks={props.networks} filter={filter} refreshData={props?.refreshData}/>
             </>
           }
 
