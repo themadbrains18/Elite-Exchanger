@@ -35,6 +35,7 @@ const MarketCoin = (props: propsData) => {
         <Swiper
           pagination={true}
           autoplay={true}
+          loop={true}
           modules={[Pagination, Autoplay]}
           breakpoints={{
 

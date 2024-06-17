@@ -40,10 +40,12 @@ const WalletList = (props: propsData): any => {
                 <IconsComponent type="dots" hover={false} active={false} />
               </button>
             </div>
+            <form autoComplete="off">
             <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[331px] w-full py-[13px] px-[10px] ">
               <Image src="/assets/history/search.svg" alt="search" width={24} height={24} />
-              <input name="searchList" type="search" placeholder="Search"  className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" onChange={filterData} />
+              <input  type="search" placeholder="Search" autoComplete="Search" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" onChange={filterData} />
             </div>
+            </form>
           </div>
 
           <div className="flex items-center gap-[25px] justify-between mt-[51px]">

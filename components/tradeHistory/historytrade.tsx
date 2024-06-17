@@ -116,7 +116,7 @@ const Historytrade = (props: propsData) => {
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"
-                    className="sm-text input-cta2 max-w-[200px] w-full border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] bg-[transparent] h-[41px]"
+                    className="sm-text input-cta2 max-w-[200px] w-full border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] !bg-[transparent] h-[41px]"
                   />
                 </div>
                 <div className="relative p-[5px] flex items-center gap-[10px] cursor-pointer">

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../contexts/context";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -21,6 +21,7 @@ interface activeSection {
 const ConfirmBuy = (props: activeSection) => {
   const { mode } = useContext(Context);
   const { status, data: session } = useSession();
+  const [disable, setDisable] = useState(false)
   const route = useRouter();
 
   const closePopup = () => {
@@ -105,9 +106,11 @@ const ConfirmBuy = (props: activeSection) => {
           </div>
           <div className="flex items-center gap-10 mt-[20px]">
             <button
-              className="solid-button w-full px-[20px] py-[15px]"
+            disabled={disable}
+              className={`solid-button w-full px-[20px] py-[15px] ${disable ?'cursor-not-allowed  opacity-50':''}`}
               onClick={() => {
                 props.actionPerform();
+                setDisable(true)
               }}
             >
               {props?.active1 === 1 ? "Buy" : " Sell"}
