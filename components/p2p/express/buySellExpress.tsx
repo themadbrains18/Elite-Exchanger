@@ -280,9 +280,10 @@ const BuySellExpress = (props: propsData) => {
     }
 
     if (status === 'authenticated') {
+      
       let obj = {
         post_id: finalPost?.id,
-        sell_user_id: finalPost?.User?.id,
+        sell_user_id: finalPost?.user?.id,
         buy_user_id: session?.user?.user_id,
         token_id: finalPost?.token_id,
         price: finalPost?.price,
@@ -290,7 +291,7 @@ const BuySellExpress = (props: propsData) => {
         spend_amount: data?.spend_amount,
         receive_amount: data?.receive_amount,
         spend_currency: 'INR',
-        receive_currency: finalPost?.token?.symbol,
+        receive_currency: finalPost?.token!==null? finalPost?.token?.symbol:finalPost?.global_token?.symbol,
         p_method: '',
         type: 'buy',
         status: 'isProcess'
@@ -383,10 +384,10 @@ const BuySellExpress = (props: propsData) => {
               message: `Please enter spend amount more than minimum amount ${post.min_limit} `,
             });
           }
-          else if (spendAmount > 0 && spendAmount > parseFloat(post.min_limit)) {
-            setValue('spend_amount', 0);
-            setValue('receive_amount', 0);
-          }
+          // else if (spendAmount > 0 && spendAmount > parseFloat(post.min_limit)) {
+          //   setValue('spend_amount', 0);
+          //   setValue('receive_amount', 0);
+          // }
           break;
         }
         else {
