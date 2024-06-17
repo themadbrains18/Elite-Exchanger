@@ -103,6 +103,7 @@ const BuySellCard = (props: DynamicId) => {
         return item.symbol === symbol && item?.tradepair !== null
       });
 
+
       if (token.length > 0) {
         setValue('limit_usdt', token[0].price)
         setSelectedToken(token[0]);
@@ -114,6 +115,8 @@ const BuySellCard = (props: DynamicId) => {
         setEstimateFee(fee);
         setTotalAmount(totalAmount);
       }
+      console.log(selectedToken,"==selectedToken");
+      
 
       if (userAssets.message !== undefined) {
         signOut();
@@ -141,7 +144,6 @@ const BuySellCard = (props: DynamicId) => {
       let selectAssets = userAssets.filter((item: any) => {
         return item.token_id === token[0].id && item?.walletTtype === "main_wallet"
       });
-      console.log(selectAssets,"==selectAssets");
       
 
       if (selectAssets.length > 0) {
@@ -163,6 +165,14 @@ const BuySellCard = (props: DynamicId) => {
     }
     else if (active1 === 2 && data.token_amount > price) {
       toast.error('Insufficiant balance');
+      return;
+    }
+    
+    if (selectedToken?.tradepair?.maxTrade < data.token_amount) {
+      setError("token_amount", {
+        type: "custom",
+        message: "you can trade less than max amount " + selectedToken?.tradepair?.maxTrade,
+      });
       return;
     }
 
@@ -502,12 +512,18 @@ const BuySellCard = (props: DynamicId) => {
                   </div>
                 </div>
                 {errors.token_amount && <p style={{ color: 'red' }}>{errors?.token_amount?.message}</p>}
-
-                <div className="mt-5 flex gap-2">
+                <div className="mt-5 flex gap-2 justify-between">
+                <div className=" flex gap-2">
                   <p className="sm-text dark:text-white">Total:</p>
                   {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
                   <p className="sm-text dark:text-white">{totalAmount}</p>
 
+                </div>
+                <div className="flex gap-2">
+                    <p className="sm-text dark:text-white">Max Trade:</p>
+                    {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
+                    <p className="sm-text dark:text-white">{selectedToken?.tradepair?.maxTrade}</p>
+                  </div>
                 </div>
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">Est. Fee:</p>
