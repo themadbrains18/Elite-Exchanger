@@ -51,7 +51,9 @@ const BuySellCard = (props: DynamicId) => {
   const [spotType, setSpotType] = useState('buy');
 
   const wbsocket = useWebSocket();
-  const list = props.coins;
+  const list = props.coins.filter((item:any)=>{
+    return item.symbol!=='USDT' && item?.tradepair !== null
+  });
 
   let secondList = props.coins?.filter((item: any) => {
     return item.symbol === 'USDT'
