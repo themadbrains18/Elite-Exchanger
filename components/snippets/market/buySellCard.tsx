@@ -51,7 +51,9 @@ const BuySellCard = (props: DynamicId) => {
   const [spotType, setSpotType] = useState('buy');
 
   const wbsocket = useWebSocket();
-  const list = props.coins.filter((item:any)=>{
+  const list = props.coins;
+
+  const qtylist = props.coins.filter((item:any)=>{
     return item.symbol!=='USDT' && item?.tradepair !== null
   });
 
@@ -126,15 +128,21 @@ const BuySellCard = (props: DynamicId) => {
   const setPriceOnChangeType = (type: string, symbol: string) => {
 
     setPrice(0.00);
+    // console.log(list,"==list");
+    
     let token = list.filter((item: any) => {
       return item.symbol === (type === 'buy' ? 'USDT' : symbol === '' ? firstCurrency : symbol)
     });
+    // console.log(token,"==token");
+    
 
     if (token.length > 0) {
       // get assets balance
       let selectAssets = userAssets.filter((item: any) => {
         return item.token_id === token[0].id && item?.walletTtype === "main_wallet"
       });
+      console.log(selectAssets,"==selectAssets");
+      
 
       if (selectAssets.length > 0) {
         setPrice(selectAssets[0].balance);
@@ -489,7 +497,7 @@ const BuySellCard = (props: DynamicId) => {
                           <Image src={`${props?.token?.image !== undefined ? props?.token?.image : '/assets/home/coinLogo.png'}`} alt="error" width={20} height={20} />
                           <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text`}>{props?.token?.fullName}</p>
                         </div> :
-                        <FilterSelectMenuWithCoin data={list} border={false} setCurrencyName={setCurrencyName} dropdown={1} />
+                        <FilterSelectMenuWithCoin data={qtylist} border={false} setCurrencyName={setCurrencyName} dropdown={1} />
                     }
                   </div>
                 </div>
