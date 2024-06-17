@@ -78,6 +78,11 @@ const TransferModal = (props: showPopup) => {
     });
     setCoinList(coins);
 
+    if(props?.wallet_type==="future_wallet"){
+      setFuture("Spot");
+      setSpot("Futures");
+    }
+
     setTimeout(() => {
       if (errors.amount) {
         clearErrors('amount')
@@ -86,7 +91,7 @@ const TransferModal = (props: showPopup) => {
         clearErrors('token_id')
       }
     }, 3000);
-  }, [props?.assets, errors]);
+  }, [props?.assets, errors,props?.wallet_type]);
 
   const filterAsset = (symbol: string, type: string) => {
     if (type == "Spot") {
@@ -175,6 +180,8 @@ const TransferModal = (props: showPopup) => {
   }
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
+
+
 
   return (
     <div ref={wrapperRef}

@@ -192,6 +192,7 @@ const BuySellCard = (props: DynamicId) => {
         toast.success(reponse.data?.data?.message);
         setFirstCurrency('BTCB');
         setSecondCurrency('USDT');
+        setEstimateFee(0)
         setActive(false);
         if (wbsocket) {
           let withdraw = {
