@@ -125,7 +125,7 @@ const Exchange = (props: DynamicId): any => {
         return;
       }
 
-      if (selectedToken?.tradepair?.maxTrade < data.spend_amount) {
+      if (selectedToken?.tradepair && selectedToken?.tradepair?.maxTrade < data.spend_amount) {
         setError("spend_amount", {
           type: "custom",
           message: `You can exchange maximum of ${selectedToken?.tradepair?.maxTrade} this amount`,
