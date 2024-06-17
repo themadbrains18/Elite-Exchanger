@@ -17,7 +17,7 @@ const NotificationsList = (props: propsData) => {
       <div className="container ">
         <div className="p-5 md:p-40 rounded-10  bg-white dark:bg-d-bg-primary">
           <div className="flex justify-between gap-5 mb-[26px] md:mb-40">
-            <p className="sec-title">Trade History</p>
+            <p className="sec-title">Notification</p>
             <Image
               src="/assets/history/dots.svg"
               width={24}
