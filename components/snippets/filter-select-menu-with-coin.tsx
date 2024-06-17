@@ -58,7 +58,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
   useEffect(() => {
     if (props.value === '') {
       setText('Select');
-      setImage('Coin.svg');
+      setImage('/assets/history/Coin.svg');
     }
 
   }, [props.value])
