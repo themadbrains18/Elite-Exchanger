@@ -238,10 +238,12 @@ const BuySellCard = (props: DynamicId) => {
           }
 
           reset({
-            limit_usdt: 0.00,
+            limit_usdt: props?.token?.price.toFixed(5),
             token_amount: 0.00,
           })
+          setEstimateFee(0.00)
           setTotalAmount(0.0)
+          
         }, 2000);
 
 
