@@ -181,6 +181,12 @@ const TransferModal = (props: showPopup) => {
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
 
+  // Prevent Enter key from submitting the form
+  const preventEnterSubmit = (e: any) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+  };
 
 
   return (
@@ -240,7 +246,7 @@ const TransferModal = (props: showPopup) => {
           </div>
         </div>
       </div>
-      <form onSubmit={handleSubmit(onHandleSubmit)}>
+      <form onSubmit={handleSubmit(onHandleSubmit)}   onKeyDown={preventEnterSubmit}>
         <div className="flex items-center justify-between px-[12px] py-[12px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[25px] relative">
           <SelectDropdown
             list={coinList}
