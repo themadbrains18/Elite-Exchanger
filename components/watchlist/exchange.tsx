@@ -116,126 +116,110 @@ const Exchange = (props: DynamicId): any => {
 
   const onHandleSubmit = async (data: any) => {
 
-    if (selectedToken?.avail_bal < data.spend_amount) {
-      setError("spend_amount", {
-        type: "custom",
-        message: `Insufficiant balance`,
-      });
-      return;
-    }
-    // if (firstCurrency === '') {
-    //   toast.error('Please select first currency from list', {
-    //     position: 'top-center',
-    //     autoClose: 2000
-    //   });
-    //   setTimeout(() => {
-    //     setBtnDisabled(false)
-    //   }, 3000);
-    //   return;
-    // }
-
-    // if (secondCurrency === '') {
-    //   toast.error('Please select second currency from list', {
-    //     autoClose: 2000
-    //   });
-    //   setTimeout(() => {
-    //     setBtnDisabled(false)
-    //   }, 3000);
-    //   return;
-    // }
-
-    // if (amount === 0 || amount === null || amount === undefined) {
-    //   toast.error('Please add amount that use want to convert', {
-    //     autoClose: 2000
-    //   });
-    //   setTimeout(() => {
-    //     setBtnDisabled(false)
-    //   }, 3000);
-    //   return;
-    // }
-
-    setBtnDisabled(true);
-    let conversionPrice = 0;
-    let currentPrice = 0;
-    let spendBalance = 0;
-    let receivedBalance = 0;
-
-    if (firstMannual === false || secondMannual === false) {
-      let priceData = await fetch("https://api.livecoinwatch.com/coins/single", {
-        method: "POST",
-        headers: new Headers({
-          "content-type": "application/json",
-          "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
-        }),
-        body: JSON.stringify({
-          currency: secondCurrency === 'BTCB' ? 'BTC' : secondCurrency === 'BNBT' ? 'BNB' : secondCurrency,
-          code: firstCurrency === 'BTCB' ? 'BTC' : firstCurrency === 'BNBT' ? 'BNB' : firstCurrency,
-          meta: false
-        }),
-      });
-
-      let priceData2 = await priceData.json();
-
-      if (firstMannual === true && priceData2?.rate === undefined) {
-        currentPrice = selectedToken?.price * priceData2?.rate;
-        conversionPrice = data.spend_amount * currentPrice;
+    try {
+      if (selectedToken?.avail_bal < data.spend_amount) {
+        setError("spend_amount", {
+          type: "custom",
+          message: `Insufficiant balance`,
+        });
+        return;
       }
-      else if (secondMannual === true) {
-        currentPrice = priceData2?.rate / selectedSecondToken?.price;
-        conversionPrice = data.spend_amount * currentPrice;
-      }
-      else if (firstMannual === false && secondMannual === false) {
-        currentPrice = priceData2?.rate;
-        conversionPrice = data.spend_amount * priceData2?.rate;
-      }
-    }
-    else {
-      currentPrice = selectedToken?.price / selectedSecondToken?.price;
-      conversionPrice = data.spend_amount * currentPrice;
-    }
 
-    setReceivedAmount(conversionPrice);
-    setBtnDisabled(false)
-    // return;
+      if (selectedToken?.tradepair?.maxTrade < data.spend_amount) {
+        setError("spend_amount", {
+          type: "custom",
+          message: `You can exchange maximum of ${selectedToken?.tradepair?.maxTrade} this amount`,
+        });
+        return;
+      }
 
-    // get current balance of user
-    for (const as of props?.assets) {
-      if (as.token_id === selectedToken.id && as.balance > 0 && as.walletTtype === "main_wallet") {
-        spendBalance = as.balance - data.spend_amount;
+
+      setBtnDisabled(true);
+      let conversionPrice = 0;
+      let currentPrice = 0;
+      let spendBalance = 0;
+      let receivedBalance = 0;
+
+      if (firstMannual === false || secondMannual === false) {
+        let priceData = await fetch("https://api.livecoinwatch.com/coins/single", {
+          method: "POST",
+          headers: new Headers({
+            "content-type": "application/json",
+            "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+          }),
+          body: JSON.stringify({
+            currency: secondCurrency === 'BTCB' ? 'BTC' : secondCurrency === 'BNBT' ? 'BNB' : secondCurrency,
+            code: firstCurrency === 'BTCB' ? 'BTC' : firstCurrency === 'BNBT' ? 'BNB' : firstCurrency,
+            meta: false
+          }),
+        });
+
+        let priceData2 = await priceData.json();
+
+        if (firstMannual === true && priceData2?.rate === undefined) {
+          currentPrice = selectedToken?.price * priceData2?.rate;
+          conversionPrice = data.spend_amount * currentPrice;
+        }
+        else if (secondMannual === true) {
+          currentPrice = priceData2?.rate / selectedSecondToken?.price;
+          conversionPrice = data.spend_amount * currentPrice;
+        }
+        else if (firstMannual === false && secondMannual === false) {
+          currentPrice = priceData2?.rate;
+          conversionPrice = data.spend_amount * priceData2?.rate;
+        }
       }
       else {
-        if (as.token_id === selectedSecondToken.id && as.balance > 0 && as.walletTtype === "main_wallet") {
-          receivedBalance = as.balance + conversionPrice;
+        currentPrice = selectedToken?.price / selectedSecondToken?.price;
+        conversionPrice = data.spend_amount * currentPrice;
+      }
+
+      setReceivedAmount(conversionPrice);
+      setBtnDisabled(false)
+      // return;
+
+      // get current balance of user
+      for (const as of props?.assets) {
+        if (as.token_id === selectedToken.id && as.balance > 0 && as.walletTtype === "main_wallet") {
+          spendBalance = as.balance - data.spend_amount;
         }
         else {
-          if (receivedBalance === 0) {
-            receivedBalance = conversionPrice;
+          if (as.token_id === selectedSecondToken.id && as.balance > 0 && as.walletTtype === "main_wallet") {
+            receivedBalance = as.balance + conversionPrice;
+          }
+          else {
+            if (receivedBalance === 0) {
+              receivedBalance = conversionPrice;
+            }
           }
         }
       }
+
+      // user_convert_history form data
+      let history = [];
+      let spendObj = { token_id: selectedToken.id, type: 'Consumption', amount: amount, fee: 0, balance: spendBalance };
+      let receivedObj = { token_id: selectedSecondToken.id, type: 'Gain', amount: conversionPrice?.toFixed(8), fee: 0, balance: receivedBalance?.toFixed(8) };
+
+      history.push(spendObj);
+      history.push(receivedObj);
+
+      // user_convert form data
+      let convertPayload = {
+        converted: data.spend_amount + ` ${firstCurrency}`,
+        received: conversionPrice?.toFixed(8) + ` ${secondCurrency}`,
+        fees: 0,
+        conversion_rate: `1 ${firstCurrency} = ${currentPrice?.toFixed(8)} ${secondCurrency}`,
+        consumption_token_id: selectedToken?.id,
+        gain_token_id: selectedSecondToken?.id,
+        consumption_amount: data.spend_amount,
+        gain_amount: parseFloat(conversionPrice?.toFixed(8))
+      };
+      setRequestBody({ convert: convertPayload, history: history });
+      setIsConvert(true);
+    } catch (error) {
+      console.log(error);
+
     }
-
-    // user_convert_history form data
-    let history = [];
-    let spendObj = { token_id: selectedToken.id, type: 'Consumption', amount: amount, fee: 0, balance: spendBalance };
-    let receivedObj = { token_id: selectedSecondToken.id, type: 'Gain', amount: conversionPrice?.toFixed(8), fee: 0, balance: receivedBalance?.toFixed(8) };
-
-    history.push(spendObj);
-    history.push(receivedObj);
-
-    // user_convert form data
-    let convertPayload = {
-      converted: data.spend_amount + ` ${firstCurrency}`,
-      received: conversionPrice?.toFixed(8) + ` ${secondCurrency}`,
-      fees: 0,
-      conversion_rate: `1 ${firstCurrency} = ${currentPrice?.toFixed(8)} ${secondCurrency}`,
-      consumption_token_id: selectedToken?.id,
-      gain_token_id: selectedSecondToken?.id,
-      consumption_amount: data.spend_amount,
-      gain_amount: parseFloat(conversionPrice?.toFixed(8))
-    };
-    setRequestBody({ convert: convertPayload, history: history });
-    setIsConvert(true);
   }
 
   const sendConvertRequest = async () => {
