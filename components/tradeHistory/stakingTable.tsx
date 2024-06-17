@@ -406,7 +406,7 @@ const StakingTable = () => {
           <Verification
             setEnable={setEnable}
             setShow={setShow}
-            type="number"
+            type="email"
             data={formData}
             session={session}
             finalOtpVerification={finalOtpVerification}
