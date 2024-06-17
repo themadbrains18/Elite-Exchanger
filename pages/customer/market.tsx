@@ -57,7 +57,7 @@ const Market = ({ session, coinList, assets, networks }: Session) => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer limit={1} />
       <Marketpage coinList={allCoins} session={session} assets={userAssetsList} networks={networks} />
     </>
   )
