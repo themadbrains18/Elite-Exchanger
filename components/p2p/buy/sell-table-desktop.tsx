@@ -4,6 +4,7 @@ import ReactPaginate from "react-paginate";
 import IconsComponent from '../../snippets/icons';
 import Context from "../../contexts/context";
 import Link from 'next/link';
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
 interface activeSection {
   setShow1: any;
@@ -192,15 +193,15 @@ const SellTableDesktop = (props: activeSection) => {
                   <td>
                     <p className="info-14-18 dark:text-white  "> {isNaN(Number(item.pricePerCoin))
                       ? 'Invalid number'
-                      : new Intl.NumberFormat().format(Number(item.pricePerCoin))}</p>
+                      : currencyFormatter(Number(item.pricePerCoin))}</p>
                   </td>
 
                   <td>
-                    <p className="info-14-18 dark:text-white  ">{new Intl.NumberFormat().format(Number(item.limit))}</p>
+                    <p className="info-14-18 dark:text-white  ">{currencyFormatter(Number(item.limit))}</p>
                   </td>
 
                   <td>
-                    <p className="info-14-18 dark:text-white  ">{new Intl.NumberFormat().format(Number(item.Available))}</p>
+                    <p className="info-14-18 dark:text-white  ">{currencyFormatter(Number(item.Available))}</p>
                   </td>
 
                   <td>

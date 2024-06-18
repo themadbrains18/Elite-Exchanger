@@ -6,6 +6,7 @@ import Context from "../../contexts/context";
 import { useRouter } from "next/router";
 
 import Deposit from "../deposit";
+import { currencyFormatter } from "./buySellCard";
 
 interface propsData {
     coins: any,
@@ -108,17 +109,17 @@ const Future = (props: propsData) => {
                                         </div>
                                     </td>
                                     <td>
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">${new Intl.NumberFormat().format(marketPrice)}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">${currencyFormatter(marketPrice)}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{change?.toFixed(4)}</p>
                                     </td>
 
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${new Intl.NumberFormat().format(item?.hloc?.low?.toFixed(4))}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(item?.hloc?.low?.toFixed(4))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${new Intl.NumberFormat().format(item?.hloc?.high?.toFixed(4))}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(item?.hloc?.high?.toFixed(4))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">

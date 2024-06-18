@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
 import { useSession } from "next-auth/react";
 import { useWebSocket } from "@/libs/WebSocketContext";
+import { currencyFormatter } from "@/components/snippets/market/buySellCard";
 
 const schema = yup.object().shape({
   spend_amount: yup.number().positive().required('Please enter amount in INR').typeError('Please enter amount in INR'),
@@ -57,6 +58,7 @@ const BuySellExpress = (props: propsData) => {
     setCurrencyName('USDT',2);
     if(active1){
       reset()
+      setSecondCurrency("USDT")
     }
   }, [active1]);
 
@@ -581,7 +583,7 @@ const BuySellExpress = (props: propsData) => {
 
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">
-                    Estimated price: 1 {secondCurrency} = {Number(usdtToInr)?.toFixed(2)} INR
+                    Estimated price: 1 {secondCurrency} = {currencyFormatter(Number(Number(usdtToInr)?.toFixed(2)))} INR
                   </p>
                 </div>
                 <div className="mt-5 flex gap-2">
@@ -612,7 +614,7 @@ const BuySellExpress = (props: propsData) => {
               <div className="py-20">
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">
-                    Available Balance: {filterAsset !== undefined ? filterAsset?.balance : '0.0'}
+                    Available Balance: {filterAsset !== undefined ?currencyFormatter(filterAsset?.balance) : '0.0'}
                   </p>
                 </div>
                 {/* First Currency Inputs */}
@@ -705,7 +707,7 @@ const BuySellExpress = (props: propsData) => {
 
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">
-                    Estimated price: 1 {secondCurrency} = {Number(usdtToInr)?.toFixed(2)} INR
+                    Estimated price: 1 {secondCurrency} = {currencyFormatter(Number(Number(usdtToInr)?.toFixed(2)))} INR
                   </p>
                 </div>
 

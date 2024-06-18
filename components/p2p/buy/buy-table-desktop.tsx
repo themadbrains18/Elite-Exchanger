@@ -6,6 +6,7 @@ import Context from "../../contexts/context";
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useWebSocket } from '@/libs/WebSocketContext';
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
 interface activeSection {
   setShow1: any;
@@ -204,11 +205,11 @@ const BuyTableDesktop = (props: activeSection) => {
                     </td>
 
                     <td>
-                      <p className="info-14-18 dark:text-white  ">{new Intl.NumberFormat().format(item?.price)} INR</p>
+                      <p className="info-14-18 dark:text-white  ">{currencyFormatter(item?.price)} INR</p>
                     </td>
 
                     <td>
-                      <p className="info-14-18 dark:text-white  ">{`${new Intl.NumberFormat().format(item?.min_limit)} ~ ${new Intl.NumberFormat().format(item?.max_limit)} INR`}</p>
+                      <p className="info-14-18 dark:text-white  ">{`${currencyFormatter(item?.min_limit)} ~ ${currencyFormatter(item?.max_limit)} INR`}</p>
                     </td>
 
                     <td>

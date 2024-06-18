@@ -35,6 +35,22 @@ interface DynamicId {
   getUserOpenOrder?: any;
   getUserTradeHistory?: any;
 }
+
+export function currencyFormatter(amount:any) {
+  // Ensure the amount is a number
+  const number = Number(amount);
+  
+  // Split the number into integer and decimal parts
+  const [integerPart, decimalPart] = number.toString().split('.');
+
+  // Format the integer part using toLocaleString
+  const formattedInteger = Number(integerPart).toLocaleString('en-IN');
+
+  // Combine the formatted integer part and the decimal part
+  return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger;
+}
+
+
 const BuySellCard = (props: DynamicId) => {
   const [active1, setActive1] = useState(1);
   const [active, setActive] = useState(false);
@@ -454,7 +470,7 @@ const BuySellCard = (props: DynamicId) => {
                 <div className="mt-5 flex gap-[18px] items-center">
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
                   {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
-                  <p className="md-text w-full">{price.toFixed(6)}({active1 === 1 ? 'USDT' : firstCurrency})</p>
+                  <p className="md-text w-full">{currencyFormatter(Number(price.toFixed(6)))}({active1 === 1 ? 'USDT' : firstCurrency})</p>
 
                   <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className="min-w-[24px]" alt="wallet2" width={24} height={24} />
                   {router.pathname.includes("/chart") && <p className="md-text">
@@ -468,7 +484,7 @@ const BuySellCard = (props: DynamicId) => {
 
                   {router.pathname.includes("/market") && props.coins && props.coins.map((item: any) => {
                     if (item.symbol === selectedToken?.symbol) {
-                      return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? item?.price?.toFixed(6) : '0.00'}</p>
+                      return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? currencyFormatter(item?.price?.toFixed(6)): '0.00'}</p>
                     }
                   })}
                 </div>

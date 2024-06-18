@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Context from '@/components/contexts/context';
 import { useSession } from 'next-auth/react';
 import ReactPaginate from 'react-paginate';
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
 interface dataTypes {
     active: any;
@@ -92,11 +93,11 @@ const OrdersTableMobile = (props: dataTypes) => {
                                     </div>
                                     <div className='mt-[15px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Amount</p>
-                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{new Intl.NumberFormat().format(item.spend_amount)}</p>
+                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(item.spend_amount)}</p>
                                     </div>
                                     <div className='text-end mt-[15px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Price</p>
-                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{new Intl.NumberFormat().format(item.price)}</p>
+                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(item.price)}</p>
                                     </div>
                                     <div className='mt-[15px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Qty</p>

@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import IconsComponent from '../../snippets/icons';
 import Image from 'next/image';
 import Context from "../../contexts/context";
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
 interface propsData {
     slug?: any;
@@ -95,8 +96,8 @@ const OrderBookMobile = (props: propsData) => {
                                     {props?.allTradeHistory && props?.allTradeHistory?.length > 0 && props?.allTradeHistory.map((item: any, index:number) => {
                                         if (item?.order_type === 'buy') {
                                             return <div key={Date.now()+index} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
-                                                <p className='info-12 z-[2] !text-buy'>$ {new Intl.NumberFormat().format(item?.limit_usdt)}</p>
-                                                <p className='info-12 text-end z-[2] '>{new Intl.NumberFormat().format(item?.token_amount)}</p>
+                                                <p className='info-12 z-[2] !text-buy'>$ {currencyFormatter(item?.limit_usdt)}</p>
+                                                <p className='info-12 text-end z-[2] '>{currencyFormatter(item?.token_amount)}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
                                             </div>
                                         }
@@ -132,8 +133,8 @@ const OrderBookMobile = (props: propsData) => {
                                     {props?.allTradeHistory && props?.allTradeHistory?.length > 0 && props?.allTradeHistory.map((item: any, index:number) => {
                                         if (item?.order_type === 'sell') {
                                             return <div key={Date.now()+index} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
-                                                <p className='info-12 z-[2] !text-sell'>$ {new Intl.NumberFormat().format(item?.limit_usdt)}</p>
-                                                <p className='info-12 text-end z-[2] '>{new Intl.NumberFormat().format(item?.token_amount)}</p>
+                                                <p className='info-12 z-[2] !text-sell'>$ {currencyFormatter(item?.limit_usdt)}</p>
+                                                <p className='info-12 text-end z-[2] '>{currencyFormatter(item?.token_amount)}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
                                             </div>
                                         }
@@ -174,15 +175,15 @@ const OrderBookMobile = (props: propsData) => {
                                 {props?.allTradeHistory && props?.allTradeHistory?.length > 0 && props?.allTradeHistory.map((item: any, index:number) => {
                                     if (item.order_type === 'buy') {
                                         return <div key={Date.now()+index} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
-                                            <p className='info-12 z-[2] !text-buy'>$ {new Intl.NumberFormat().format(item?.limit_usdt)}</p>
-                                            <p className='info-12 text-end z-[2] '>{new Intl.NumberFormat().format(item?.token_amount)}</p>
+                                            <p className='info-12 z-[2] !text-buy'>$ {currencyFormatter(item?.limit_usdt)}</p>
+                                            <p className='info-12 text-end z-[2] '>{currencyFormatter(item?.token_amount)}</p>
                                             <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
                                         </div>
                                     }
                                     else {
                                         return <div key={Date.now()+index+'33'} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
-                                            <p className='info-12 z-[2] !text-sell'>$ {new Intl.NumberFormat().format(item?.limit_usdt)}</p>
-                                            <p className='info-12 text-end z-[2] '>{new Intl.NumberFormat().format(item?.token_amount)}</p>
+                                            <p className='info-12 z-[2] !text-sell'>$ {currencyFormatter(item?.limit_usdt)}</p>
+                                            <p className='info-12 text-end z-[2] '>{currencyFormatter(item?.token_amount)}</p>
                                             <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
                                         </div>
                                     }
@@ -205,7 +206,7 @@ const OrderBookMobile = (props: propsData) => {
                 </div>
 
                 <div>
-                    <button type='button' className='solid-button w-full bg-buy mt-20'>$ {new Intl.NumberFormat().format(props?.token?.price.toFixed(4))}</button>
+                    <button type='button' className='solid-button w-full bg-buy mt-20'>$ {currencyFormatter(props?.token?.price.toFixed(4))}</button>
                 </div>
 
 

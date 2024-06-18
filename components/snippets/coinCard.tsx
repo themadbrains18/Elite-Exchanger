@@ -3,6 +3,7 @@ import Image from 'next/image'
 import ChartImage from './chart-image';
 import IconsComponent from './icons';
 import Link from 'next/link';
+import { currencyFormatter } from './market/buySellCard';
 
 interface cardData{
     coinCardData: any 
@@ -22,7 +23,7 @@ const CoinCard = (props:cardData) => {
                         </div>
 
                         <div className='coinCard_Cost flex items-center gap-[10px]'>
-                            <h2 className="md-heading md:!text-[23px] !font-bold dark:text-white">${new Intl.NumberFormat().format(props.coinCardData.price?.toFixed(5))}</h2>
+                            <h2 className="md-heading md:!text-[23px] !font-bold dark:text-white">${currencyFormatter(props.coinCardData.price?.toFixed(5))}</h2>
                             <div className={`flex items-center gap-[4px] `}>
                                 <p className={`footer-text-secondary  ${props.coinCardData.status == "high" ? "!text-[#03A66D]":"!text-[#DC2626]" }`}>+{props.coinCardData.change24h}</p>
                                 <IconsComponent type={props.coinCardData.status} active={false} hover={false}/>

@@ -1,4 +1,5 @@
 import Context from '@/components/contexts/context';
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import moment from 'moment';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -120,10 +121,10 @@ const OrdersTableDesktop = (props: dataTypes) => {
                                                 <p className={`info-14-18   ${(item?.status === "isCompleted" || item?.status === "isReleased") && "!text-buy"}  ${item?.status === "isProcess" && "!text-body-primary"} ${item?.status === "isCanceled" && "!text-cancel"}`}>{item.status === "isProcess" ? "In Process" : item.status === "isReleased" ? "Released" : item.status === "isCompleted" ? "Completed" : "Canceled"}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{new Intl.NumberFormat().format(item?.spend_amount)}</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(item?.spend_amount)}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{new Intl.NumberFormat().format(item?.price)}</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(item?.price)}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{item?.quantity?.toFixed(8)}</p>

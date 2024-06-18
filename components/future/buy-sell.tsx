@@ -13,6 +13,7 @@ import OrderPreferenceModal from "../snippets/orderPreferenceModal";
 import PositionModal from "../snippets/positionModal";
 import ConfirmationModel from "../snippets/confirmation";
 import { useWebSocket } from "@/libs/WebSocketContext";
+import { currencyFormatter } from "../snippets/market/buySellCard";
 
 interface fullWidth {
   fullWidth?: boolean;
@@ -880,7 +881,7 @@ const BuySell = (props: fullWidth) => {
               </div>
             </div>
             <p className="!text-sell">{entryPriceValidate}</p>
-            <p className="top-label mt-[5px]">Current Price : {new Intl.NumberFormat().format(marketPrice)}</p>
+            <p className="top-label mt-[5px]">Current Price : {currencyFormatter(marketPrice)}</p>
           </>
         )}
         {(showNes === 1 || showNes === 2) && (

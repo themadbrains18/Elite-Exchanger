@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate';
 import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
+import { currencyFormatter } from '../snippets/market/buySellCard';
 
 
 interface propsData {
@@ -102,7 +103,7 @@ const DepositList = (props:propsData) => {
                     </div>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white  lg:text-start text-end">{new Intl.NumberFormat().format(item?.amount)}</p>
+                    <p className="info-14-18 dark:text-white  lg:text-start text-end">{currencyFormatter(item?.amount)}</p>
                   </td>
                   <td className="max-[1023px]:hidden">
                     <p className="info-14-18 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>

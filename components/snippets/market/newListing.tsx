@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import Context from "../../contexts/context";
 import { useRouter } from "next/router";
 import Deposit from "../deposit";
+import { currencyFormatter } from "./buySellCard";
 
 interface propsData {
   coins: any;
@@ -153,7 +154,7 @@ const NewListing = (props: propsData) => {
                     </td>
                     <td>
                       <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">
-                        ${new Intl.NumberFormat().format(item.price.toFixed(5))}
+                        ${currencyFormatter(item.price.toFixed(5))}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">
@@ -165,7 +166,7 @@ const NewListing = (props: propsData) => {
                               : "!text-[#DC2626]"
                           }`}
                         >
-                          {new Intl.NumberFormat().format(item.circulatingSupply)}
+                          {currencyFormatter(item.circulatingSupply)}
                         </p>
                         <IconsComponent
                           type={item.status}
@@ -177,12 +178,12 @@ const NewListing = (props: propsData) => {
 
                     <td className="max-[1023px]:hidden">
                       <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
-                        ${new Intl.NumberFormat().format(item.totalSupply)}
+                        ${currencyFormatter(item.totalSupply)}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">
                       <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
-                        ${new Intl.NumberFormat().format(item.maxSupply)}
+                        ${currencyFormatter(item.maxSupply)}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">
