@@ -213,6 +213,7 @@ const BuySellCard = (props: DynamicId) => {
             "user_id": props.session.user.user_id,
             "token_id": selectedToken?.id,
             "order_type": active1 === 1 ? 'buy' : 'sell',
+            "market_type": show === 1? 'limit' : 'market'
           }
 
           const ciphertext = AES.encrypt(JSON.stringify(partialObj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
