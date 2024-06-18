@@ -141,9 +141,6 @@ const Adverstisement = (props: propsData) => {
     // setStep(2);
     if (assetsBalance > 0) {
       data.price_type = show === 1 ? 'fixed' : 'floating';
-
-      console.log(data,'==============post data first step=============');
-      
       setStep1Data(data);
       setStep(2);
     }
@@ -290,7 +287,8 @@ const Adverstisement = (props: propsData) => {
                     className={`info-14-18   max-[767px]:w-full max-[767px]:max-w-full after:block after:top-full  after:h-[2px] after:w-[0%] after:bg-primary cursor-pointer after:transition-all after:ease-linear after:duration-500 ${show === 2 && "border-primary after:w-[100%] after:bottom !text-primary"}`}
                     onClick={() => {
                       setShow(2);
-                      let currentPrice = (selectedAssets?.price * inrPrice).toFixed(2)
+                      // selectToken(selectedAssets);
+                      let currentPrice = (inrPrice).toFixed(2)
                       setValue('price', parseFloat(currentPrice))
                     }}
                     type="button"

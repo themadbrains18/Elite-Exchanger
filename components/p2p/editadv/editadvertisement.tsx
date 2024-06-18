@@ -311,7 +311,7 @@ const EditAdverstisement = (props: propsData) => {
                       }`}
                     onClick={() => {
                       setShow(2);
-                      let currentPrice = (selectedAssets?.price * inrPrice).toFixed(2)
+                      let currentPrice = (inrPrice).toFixed(2)
                       setValue('price', parseFloat(currentPrice))
                     }}
                     type="button"
