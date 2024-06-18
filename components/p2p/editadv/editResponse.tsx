@@ -77,6 +77,7 @@ const EditResponse = (props: activeSection) => {
         "user_id": session?.user?.user_id,
         "token_id": props.step1Data?.token_id,
         "price": props.step1Data?.price,
+        "price_type":props.step1Data?.price_type,
         "quantity": props.step2Data?.quantity,
         "min_limit": props.step2Data?.min_limit,
         "max_limit": props.step2Data?.max_limit,

@@ -13,3 +13,8 @@ export const getValidSubdomain = (host?: string | null) => {
     }
     return subdomain;
 };
+
+export const truncateNumber = (num: number, decimals: number) => {
+    const factor = Math.pow(10, decimals);
+    return (num >= 0 ? Math.floor(num * factor) : Math.ceil(num * factor)) / factor;
+}
