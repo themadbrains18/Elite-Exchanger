@@ -158,7 +158,7 @@ const ChartBanner = (props: propsData) => {
                       </svg>
                     </div>
                     <div className='flex items-center gap-[20px] lg:max-w-[50%] lg:justify-start justify-between mt-[15px]'>
-                      <p className="info-14-18 dark:text-white">${currentToken?.price!==undefined? currentToken?.price?.toFixed(5):'0.0'}</p>
+                      <p className="info-14-18 dark:text-white">${currentToken?.price!==undefined? new Intl.NumberFormat().format(currentToken?.price?.toFixed(5)):'0.0'}</p>
                       {/* <h4 className='md-heading dark:text-white'>${`${currentToken?.price?.toFixed(5)}`}</h4> */}
                       <div className={` items-center gap-[10px] flex`}>
                         <p className={`footer-text-secondary ${Number(props?.hlocData?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(props?.hlocData?.changeRate) > 0 ? '+' : ''}{props?.hlocData?.changeRate !== undefined ? (Number(props?.hlocData?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
@@ -190,8 +190,8 @@ const ChartBanner = (props: propsData) => {
                   <div className='w-[40%] h-[5px] rounded-[5px] bg-primary'></div>
                 </div>
                 <div className='flex items-center justify-between'>
-                  <p className="info-10-14 !text-gamma">Low : ${props?.hlocData?.changeRate !== undefined ? props?.hlocData?.low : 0.0}</p>
-                  <p className="info-10-14 !text-gamma">High : ${props?.hlocData?.changeRate !== undefined ? props?.hlocData?.high : 0.0}</p>
+                  <p className="info-10-14 !text-gamma">Low : ${props?.hlocData?.changeRate !== undefined ? new Intl.NumberFormat().format(props?.hlocData?.low ): 0.0}</p>
+                  <p className="info-10-14 !text-gamma">High : ${props?.hlocData?.changeRate !== undefined ? new Intl.NumberFormat().format(props?.hlocData?.high) : 0.0}</p>
                 </div>
               </div>
 

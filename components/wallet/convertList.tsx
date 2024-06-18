@@ -103,10 +103,10 @@ const ConvertList = () => {
                     </div>
                   </td>
                   <td>
-                    <p className="info-14 dark:text-white  lg:text-start text-center">{item?.converted}</p>
+                    <p className="info-14 dark:text-white  lg:text-start text-center">{new Intl.NumberFormat().format(item?.converted)}</p>
                   </td>
                   <td className="lg:text-start text-end">
-                    <p className="info-14 dark:text-white">{item?.received}</p>
+                    <p className="info-14 dark:text-white">{new Intl.NumberFormat().format(item?.received)}</p>
                   </td>
                   <td className="max-[1023px]:hidden">
                     <p className="info-14 dark:text-white">0 Trans fee</p>

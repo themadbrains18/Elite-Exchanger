@@ -324,15 +324,15 @@ const ChartTabs = (props: propsData) => {
                         </td>
                         <td>
                           <p className="info-14-18 dark:text-white  max-[767px]:text-end">
-                            ${item.price.toFixed(6)}
+                            ${new Intl.NumberFormat().format(item.price.toFixed(6))}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden">
                           <div className={` items-center gap-[10px] flex`}>
                             <p
-                              className={`footer-text-secondary  `}
+                              className={` info-14-18 dark:text-white`}
                             >
-                              {item.volume && item.volume}
+                              {item.volume && new Intl.NumberFormat().format(item.volume)}
                             </p>
                             <IconsComponent
                               type={item.status}
@@ -344,12 +344,12 @@ const ChartTabs = (props: propsData) => {
 
                         <td className="max-[1023px]:hidden">
                           <p className="info-14-18 dark:text-white">
-                            ${item.totalSupply && item.totalSupply}
+                            ${item.totalSupply && new Intl.NumberFormat().format(item.totalSupply)}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden">
                           <p className="info-14-18 dark:text-white">
-                            ${item.maxSupply && item.maxSupply}
+                            ${item.maxSupply && new Intl.NumberFormat().format(item.maxSupply) || 0}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden ">
@@ -552,19 +552,19 @@ const ChartTabs = (props: propsData) => {
                           <td className="max-[1023px]:hidden">
                             <div className={` items-center gap-[10px] flex`}>
                               <p className={`info-14-18 dark:text-white`}>
-                                {item?.token_amount?.toFixed(5)}
+                                {new Intl.NumberFormat().format(item?.token_amount?.toFixed(5))}
                               </p>
                             </div>
                           </td>
 
                           <td className="max-[1023px]:hidden">
                             <p className="info-14-18 dark:text-white">
-                              ${item?.limit_usdt}
+                              ${new Intl.NumberFormat().format(item?.limit_usdt)}
                             </p>
                           </td>
                           <td className="max-[1023px]:hidden">
                             <p className="info-14-18 dark:text-white">
-                              ${item.volume_usdt.toFixed(5)}
+                              ${new Intl.NumberFormat().format(item.volume_usdt.toFixed(5))}
                             </p>
                           </td>
                           <td className="max-[1023px]:hidden">
@@ -815,7 +815,7 @@ const ChartTabs = (props: propsData) => {
                               <p className="info-14-18 dark:text-white">
                                 {item.market_type}
                               </p>
-                              <p className="info-10">{item.token_amount.toFixed(4)}</p>
+                              <p className="info-10">{new Intl.NumberFormat().format(item.token_amount.toFixed(4))}</p>
                             </div>
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
@@ -831,17 +831,17 @@ const ChartTabs = (props: propsData) => {
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                              {item?.limit_usdt?.toFixed(2)}
+                              {new Intl.NumberFormat().format(item?.limit_usdt?.toFixed(2))}
                             </p>
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                              ${item.volume_usdt?.toFixed(6)}
+                              ${new Intl.NumberFormat().format(item.volume_usdt?.toFixed(6))}
                             </p>
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                              ${item.token_amount?.toFixed(6)}
+                              ${new Intl.NumberFormat().format(item.token_amount?.toFixed(6))}
                             </p>
                           </div>
 
@@ -964,7 +964,7 @@ const ChartTabs = (props: propsData) => {
                                     <p className="info-14-18 dark:text-white">
                                       {elm.market_type}
                                     </p>
-                                    <p className="info-10">{elm.token_amount.toFixed(4)}</p>
+                                    <p className="info-10">{new Intl.NumberFormat().format(elm.token_amount.toFixed(4))}</p>
                                   </div>
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
@@ -979,17 +979,17 @@ const ChartTabs = (props: propsData) => {
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                                   <p className="info-14-18 dark:text-white">
-                                    {elm?.limit_usdt?.toFixed(2)}
+                                    {new Intl.NumberFormat().format(elm?.limit_usdt?.toFixed(2))}
                                   </p>
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                                   <p className="info-14-18 dark:text-white ">
-                                    ${elm?.volume_usdt?.toFixed(2)}
+                                    ${new Intl.NumberFormat().format(elm?.volume_usdt?.toFixed(2))}
                                   </p>
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                                   <p className="info-14-18 dark:text-white ">
-                                    ${elm.token_amount?.toFixed(5)}
+                                    ${new Intl.NumberFormat().format(elm.token_amount?.toFixed(5))}
                                   </p>
                                 </div>
 

@@ -134,11 +134,11 @@ const BuyTableMobile = (props: activeSection) => {
                                     </div>
                                     <div className='mt-[12px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Price:</p>
-                                        <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{item?.price} <span className='sm-text !text-[10px] dark:!text-[#9295A6] !text-banner-text'>INR/USDT</span></p>
+                                        <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{new Intl.NumberFormat().format(item?.price)} <span className='sm-text !text-[10px] dark:!text-[#9295A6] !text-banner-text'>INR/USDT</span></p>
                                     </div>
                                     <div className='mt-[12px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Limit:</p>
-                                        <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{item?.min_limit} ~ ${item?.max_limit}<span className='sm-text !text-[14px] !text-h-primary dark:!text-beta'>INR</span></p>
+                                        <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{new Intl.NumberFormat().format(item?.min_limit)} ~ ${new Intl.NumberFormat().format(item?.max_limit)}<span className='sm-text !text-[14px] !text-h-primary dark:!text-beta'>INR</span></p>
                                     </div>
                                     <div className='mt-[12px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Available:</p>

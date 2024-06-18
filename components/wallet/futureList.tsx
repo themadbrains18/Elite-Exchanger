@@ -136,13 +136,13 @@ const FutureList = (props: propsData) => {
                                         </div>
                                     </td>
                                     <td>
-                                        <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance.toFixed(5)}</p>
+                                        <p className="info-14-18 dark:text-white  lg:text-start text-center">{new Intl.NumberFormat().format(item?.balance.toFixed(5))}</p>
                                     </td>
                                     <td className="lg:text-start text-end">
-                                        <p className="info-14-18 dark:text-white">${item.token !== null ? item?.token?.price.toFixed(5) : item?.global_token?.price.toFixed(5)}</p>
+                                        <p className="info-14-18 dark:text-white">${item.token !== null ? new Intl.NumberFormat().format(item?.token?.price.toFixed(5)) : new Intl.NumberFormat().format(item?.global_token?.price.toFixed(5))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 dark:text-white">${(item.token !== null ? item?.token?.price * item?.balance : item?.global_token?.price * item?.balance).toFixed(2)}</p>
+                                        <p className="info-14-18 dark:text-white">${((item.token !== null ? item?.token?.price * item?.balance : item?.global_token?.price * item?.balance).toFixed(2))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden ">
                                         <div className="flex items-center gap-[20px]">
@@ -233,10 +233,10 @@ const FutureList = (props: propsData) => {
                                         </div>
                                     </div>
                                     <div>
-                                        <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance.toFixed(2)}</p>
+                                        <p className="info-14-18 dark:text-white  lg:text-start text-center">{new Intl.NumberFormat().format(item?.balance.toFixed(2))}</p>
                                     </div>
                                     <div className="iconParent lg:text-start text-end flex items-center justify-between">
-                                        <p className="info-14-18 dark:text-white">${item.token !== null ? item?.token?.price.toFixed(5) : item?.global_token?.price.toFixed(5)}</p>
+                                        <p className="info-14-18 dark:text-white">${item.token !== null ? new Intl.NumberFormat().format(item?.token?.price.toFixed(5)) : new Intl.NumberFormat().format(item?.global_token?.price.toFixed(5))}</p>
                                         <div onClick={(e) => { setHeight(e) }}>
                                             <IconsComponent type="downArrow" hover={false} active={false} />
                                         </div>

@@ -115,8 +115,6 @@ const BuySellCard = (props: DynamicId) => {
         setEstimateFee(fee);
         setTotalAmount(totalAmount);
       }
-      console.log(selectedToken,"==selectedToken");
-      
 
       if (userAssets.message !== undefined) {
         signOut();

@@ -880,7 +880,7 @@ const BuySell = (props: fullWidth) => {
               </div>
             </div>
             <p className="!text-sell">{entryPriceValidate}</p>
-            <p className="top-label mt-[5px]">Current Price : {marketPrice}</p>
+            <p className="top-label mt-[5px]">Current Price : {new Intl.NumberFormat().format(marketPrice)}</p>
           </>
         )}
         {(showNes === 1 || showNes === 2) && (

@@ -55,7 +55,7 @@ const WatchList = (props: propsData) => {
                     </div>
                   </td>
                   <td>
-                    <p className="nav-text-sm dark:text-white ">${item.price.toFixed(3)}</p>
+                    <p className="nav-text-sm dark:text-white ">${new Intl.NumberFormat().format(item.price.toFixed(3))}</p>
                   </td>
                   <td>
                     <div className={` items-center gap-[10px] md:flex hidden`}>

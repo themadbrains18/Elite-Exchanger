@@ -290,11 +290,11 @@ const Exchange = (props: DynamicId): any => {
 
         <div className="flex gap-[18px] py-5">
           <Image src="/assets/market/walletpayment.svg" alt="wallet2" width={24} height={24} />
-          <p className="md-text w-full">${selectedToken?.avail_bal?.toFixed(6) || '0.00'}</p>
+          <p className="md-text w-full">${new Intl.NumberFormat().format(selectedToken?.avail_bal?.toFixed(6)) || '0.00'}</p>
           <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} />
           {props.coinList && props.coinList?.map((item: any) => {
             if (item.symbol === selectedToken?.symbol) {
-              return <p className="md-text">${(selectedToken !== undefined && selectedToken?.price !== undefined) ? item?.price?.toFixed(5) : '0.00'}</p>
+              return <p className="md-text">${(selectedToken !== undefined && selectedToken?.price !== undefined) ? new Intl.NumberFormat().format(item?.price?.toFixed(5)) : '0.00'}</p>
             }
 
           })}

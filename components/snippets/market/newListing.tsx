@@ -153,7 +153,7 @@ const NewListing = (props: propsData) => {
                     </td>
                     <td>
                       <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">
-                        ${item.price.toFixed(5)}
+                        ${new Intl.NumberFormat().format(item.price.toFixed(5))}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">
@@ -165,7 +165,7 @@ const NewListing = (props: propsData) => {
                               : "!text-[#DC2626]"
                           }`}
                         >
-                          {item.circulatingSupply}
+                          {new Intl.NumberFormat().format(item.circulatingSupply)}
                         </p>
                         <IconsComponent
                           type={item.status}
@@ -177,12 +177,12 @@ const NewListing = (props: propsData) => {
 
                     <td className="max-[1023px]:hidden">
                       <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
-                        ${item.totalSupply}
+                        ${new Intl.NumberFormat().format(item.totalSupply)}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">
                       <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
-                        ${item.maxSupply}
+                        ${new Intl.NumberFormat().format(item.maxSupply)}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">

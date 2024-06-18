@@ -55,7 +55,10 @@ const BuySellExpress = (props: propsData) => {
     getUsdtToInrPrice('USDT');
     getFilterAsset('');
     setCurrencyName('USDT',2);
-  }, []);
+    if(active1){
+      reset()
+    }
+  }, [active1]);
 
 
   let {
@@ -65,6 +68,7 @@ const BuySellExpress = (props: propsData) => {
     setError,
     getValues,
     clearErrors,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema)

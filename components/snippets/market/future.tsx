@@ -108,17 +108,17 @@ const Future = (props: propsData) => {
                                         </div>
                                     </td>
                                     <td>
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">${marketPrice}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">${new Intl.NumberFormat().format(marketPrice)}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{change?.toFixed(4)}</p>
                                     </td>
 
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${item?.hloc?.low?.toFixed(4)}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${new Intl.NumberFormat().format(item?.hloc?.low?.toFixed(4))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${item?.hloc?.high?.toFixed(4)}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${new Intl.NumberFormat().format(item?.hloc?.high?.toFixed(4))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">

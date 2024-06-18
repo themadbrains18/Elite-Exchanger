@@ -204,11 +204,11 @@ const BuyTableDesktop = (props: activeSection) => {
                     </td>
 
                     <td>
-                      <p className="info-14-18 dark:text-white  ">{item?.price} INR</p>
+                      <p className="info-14-18 dark:text-white  ">{new Intl.NumberFormat().format(item?.price)} INR</p>
                     </td>
 
                     <td>
-                      <p className="info-14-18 dark:text-white  ">{`${item?.min_limit} ~ ${item?.max_limit} INR`}</p>
+                      <p className="info-14-18 dark:text-white  ">{`${new Intl.NumberFormat().format(item?.min_limit)} ~ ${new Intl.NumberFormat().format(item?.max_limit)} INR`}</p>
                     </td>
 
                     <td>

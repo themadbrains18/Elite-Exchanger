@@ -234,7 +234,7 @@ const AdvertisementTabs = (props: propsData) => {
                     </div>
                     <div className=' max-w-full md:max-w-[20%] w-full'>
                         <DatePicker
-                            placeholderText={'Please select a date'} 
+                            placeholderText={'Select a date'} 
                             selected={startDate}
                             onChange={(date: any) => handleDate(date)}
                             peekNextMonth

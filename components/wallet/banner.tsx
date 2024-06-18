@@ -45,7 +45,7 @@ const Banner = (props: propsData): any => {
             <div className="mt-30 flex gap-10">
               <p className="md-heading dark:text-white">
                 {
-                  show == true ? <span> ${props?.assets.toFixed(4)}</span> :  <span>{'$' + star.repeat(props.assets.toFixed(4).length)}</span>
+                  show == true ? <span> ${new Intl.NumberFormat().format(props?.assets.toFixed(4))}</span> :  <span>{'$' + star.repeat(props.assets.toFixed(4).length)}</span>
                 }
               </p>
               <div className="p-[5px] bg-primary-100 dark:bg-black-v-1 rounded flex gap-[10px] items-center cursor-pointer" onClick={() => { setShow(!show) }}>
@@ -68,7 +68,7 @@ const Banner = (props: propsData): any => {
               </div>
               <div className="flex items-center gap-10">
                 <IconsComponent type="totalDepositBlue" hover={false} active={false} />
-                <p className="sm-text dark:!text-white">${props?.depositList?.toFixed(6)}</p>
+                <p className="sm-text dark:!text-white">${new Intl.NumberFormat().format(props?.depositList?.toFixed(6))}</p>
               </div>
             </div>
             <div className="flex items-center  justify-between gap-5 flex-wrap">
@@ -78,7 +78,7 @@ const Banner = (props: propsData): any => {
               </div>
               <div className="flex items-center gap-10">
                 <IconsComponent type="totalWithdrawBlue" hover={false} active={false} />
-                <p className="sm-text dark:!text-white">${props?.withdrawList?.toFixed(6)}</p>
+                <p className="sm-text dark:!text-white">${new Intl.NumberFormat().format(props?.withdrawList?.toFixed(6))}</p>
               </div>
             </div>
           </div>

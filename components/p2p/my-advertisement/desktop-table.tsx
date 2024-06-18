@@ -284,7 +284,7 @@ const DesktopTable = (props: dataTypes) => {
                                                 <p className={`info-14-18 !text-buy`}>BUY</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.price} INR</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{new Intl.NumberFormat().format(item.price)} INR</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
