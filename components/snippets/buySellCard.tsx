@@ -239,7 +239,7 @@ const BuySellCard = (props: DynamicId) => {
           }
 
           reset({
-            limit_usdt: props?.token?.price.toFixed(5),
+            limit_usdt: props?.token?.price.toFixed(6),
             token_amount: 0.00,
           })
           setEstimateFee(0.00)
@@ -282,7 +282,7 @@ const BuySellCard = (props: DynamicId) => {
       let amount: any = getValues('limit_usdt');
 
       let totalAmount = qty * amount;
-      let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(8) : (amount * qty * 0.00075).toFixed(8);
+      let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(6) : (amount * qty * 0.00075).toFixed(6);
 
       setEstimateFee(fee);
       setTotalAmount(totalAmount);
@@ -290,7 +290,7 @@ const BuySellCard = (props: DynamicId) => {
     else {
       let qty: any = getValues('token_amount');
       let totalAmount = qty * props?.token?.price;
-      let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(8) : (props?.token?.price * qty * 0.00075).toFixed(8);
+      let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(6) : (props?.token?.price * qty * 0.00075).toFixed(6);
 
       setEstimateFee(fee);
       setTotalAmount(totalAmount);
@@ -329,7 +329,7 @@ const BuySellCard = (props: DynamicId) => {
             setSpotType('buy');
             setTotalAmount(0.0); setEstimateFee(0.00)
             if (show === 2) {
-              setValue('limit_usdt', props?.token?.price.toFixed(5))
+              setValue('limit_usdt', props?.token?.price.toFixed(6))
             }
           }}>
             Buy
@@ -342,7 +342,7 @@ const BuySellCard = (props: DynamicId) => {
             setSpotType('sell');
             setTotalAmount(0.0); setEstimateFee(0.00);
             if (show === 2) {
-              setValue('limit_usdt', props?.token?.price.toFixed(5))
+              setValue('limit_usdt', props?.token?.price.toFixed(6))
             }
           }}>
             Sell
@@ -449,7 +449,7 @@ const BuySellCard = (props: DynamicId) => {
                   {router.pathname.includes("/chart") && <p className="md-text">
                     $
                     {props?.token !== undefined && props?.token?.price !== undefined
-                      ? props?.token?.price?.toFixed(5)
+                      ? props?.token?.price?.toFixed(6)
                       : "0.00"}
                   </p>
 
@@ -457,7 +457,7 @@ const BuySellCard = (props: DynamicId) => {
 
                   {router.pathname.includes("/market") && props.coins && props.coins.map((item: any) => {
                     if (item.symbol === selectedToken?.symbol) {
-                      return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? item?.price?.toFixed(5) : '0.00'}</p>
+                      return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? item?.price?.toFixed(6) : '0.00'}</p>
                     }
                   })}
                 </div>
