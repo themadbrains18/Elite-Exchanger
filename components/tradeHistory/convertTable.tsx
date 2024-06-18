@@ -54,14 +54,14 @@ const ConvertTable = (props: propsData) => {
   useEffect(() => {
 
     let history: any = totalRecord;
-    if (props.coin !== "" && props.coin !== undefined) {
+    if (props.coin !== "" && props.coin !== undefined && history?.length>0) {
       history = history?.filter((item: any) => {
         return item.token_id === props.coin;
       });
     }
     const targetDate = new Date(props.date).setHours(0, 0, 0, 0);
     const currentDate = new Date().setHours(0, 0, 0, 0);
-    if (targetDate !== currentDate) {
+    if (targetDate !== currentDate && history?.length>0) {
       history = history?.filter((item: any) => {
         const itemDate = new Date(item.createdAt).setHours(0, 0, 0, 0);
         return itemDate === targetDate;

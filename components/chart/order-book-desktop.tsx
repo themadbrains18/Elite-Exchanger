@@ -58,9 +58,9 @@ const OrderBook = (props: propsData) => {
                                 </div>
                                 {/* table content */}
                                 <div className='mt-10'>
-                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any) => {
+                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any, index:number) => {
                                         if (item.order_type === 'buy') {
-                                            return <div className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
+                                            return <div key={index+'buy'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-buy'>$ {item?.limit_usdt?.toFixed(5)}</p>
                                                 <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount?.toFixed(5)}</p>
                                                 <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt?.toFixed(5)}</p>
@@ -107,9 +107,9 @@ const OrderBook = (props: propsData) => {
                                 </div>
                                 {/* table content */}
                                 <div className='mt-10'>
-                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any) => {
+                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any,index:number) => {
                                         if (item.order_type === 'sell') {
-                                            return <div className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
+                                            return <div key={index+'sell'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-sell'>$ {item?.limit_usdt?.toFixed(5)}</p>
                                                 <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount?.toFixed(5)}</p>
                                                 <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt?.toFixed(5)}</p>
@@ -154,9 +154,9 @@ const OrderBook = (props: propsData) => {
                                 </div>
                                 {/* table content */}
                                 <div className='mt-10'>
-                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any) => {
+                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any, index:number) => {
                                         if (item.order_type === 'sell') {
-                                            return <div className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
+                                            return <div key={index+'sell2'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-sell'>$ {item?.limit_usdt?.toFixed(5)}</p>
                                                 <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount?.toFixed(5)}</p>
                                                 <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt?.toFixed(5)}</p>
@@ -203,9 +203,9 @@ const OrderBook = (props: propsData) => {
                                 </div>
                                 {/* table content */}
                                 <div className='mt-10'>
-                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any) => {
+                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any, index:number) => {
                                         if (item.order_type === 'buy') {
-                                            return <div className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
+                                            return <div key={index+'buy2'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-buy'>$ {item?.limit_usdt?.toFixed(5)}</p>
                                                 <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount?.toFixed(5)}</p>
                                                 <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt?.toFixed(5)}</p>
@@ -254,9 +254,9 @@ const OrderBook = (props: propsData) => {
                         {/* table content */}
                         <div className='mt-10'>
 
-                            {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any) => {
+                            {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any, index:number) => {
                                 if (item.order_type === 'buy') {
-                                    return <div className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
+                                    return <div key={index+'buy22'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                         <p className='info-12 !text-[14px] z-[2] !text-buy'>$ {item?.limit_usdt?.toFixed(5)}</p>
                                         <p className='info-12 !text-[14px] z-[2] text-center'>{item?.token_amount?.toFixed(5)}</p>
                                         <p className='info-12 text-end z-[2] !text-[14px]'>$ {item?.volume_usdt?.toFixed(5)}</p>

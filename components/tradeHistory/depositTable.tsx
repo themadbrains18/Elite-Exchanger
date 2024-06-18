@@ -32,7 +32,7 @@ const DepositTable = (props: propsData) => {
   useEffect(() => {
 
     let history: any = totalRecord;
-    if (props.coin !== "" && props.coin !== undefined) {
+    if (props.coin !== "" && props.coin !== undefined && history?.length>0) {
       history = history?.filter((item: any) => {
         let symbol = item.coinName.split('/')[1];
         return symbol === props.coin;
@@ -40,7 +40,7 @@ const DepositTable = (props: propsData) => {
     }
     const targetDate = new Date(props.date).setHours(0, 0, 0, 0);
     const currentDate = new Date().setHours(0, 0, 0, 0);
-    if (targetDate !== currentDate) {
+    if (targetDate !== currentDate && history?.length>0) {
       history = history?.filter((item: any) => {
         const itemDate = new Date(item.createdAt).setHours(0, 0, 0, 0);
         return itemDate === targetDate;
@@ -78,6 +78,8 @@ const DepositTable = (props: propsData) => {
     const newOffset = (event.selected * itemsPerPage) % total;
     setItemOffset(newOffset);
   };
+
+  
 
   return (
     <>
@@ -133,7 +135,7 @@ const DepositTable = (props: propsData) => {
                       {/* <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" /> */}
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                         <p className="info-14-18 dark:text-white">{item.coinName.split('/')[1]}</p>
-                        <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
+                        {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p> */}
                       </div>
                     </div>
                   </td>
