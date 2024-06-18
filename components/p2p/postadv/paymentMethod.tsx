@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import ConfirmationModel from "@/components/snippets/confirmation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { truncateNumber } from "@/libs/subdomain";
 
 const schema = yup.object().shape({
   p_method: yup.lazy((val) =>
@@ -147,9 +148,12 @@ const PaymentMethod = (props: activeSection) => {
       });
       return;
     } else {
-      setValue("max_limit", props.price * e.target.value);
-      setMaxInputValue(Number(props.price) * Number(e.target.value))
-      clearErrors("quantity");
+      // setValue("max_limit", props.price * e.target.value);
+      // setMaxInputValue(Number(props.price) * Number(e.target.value))
+      let maxLimit = truncateNumber(props.price * e.target.value, 2);
+      setValue('max_limit', maxLimit);
+      setMaxInputValue(maxLimit)
+      clearErrors('quantity');
     }
   };
 

@@ -144,6 +144,7 @@ const Adverstisement = (props: propsData) => {
     // setStep1Data(data);
     // setStep(2);
     if (assetsBalance > 0) {
+      data.price_type = show === 1 ? 'fixed' : 'floating';
       setStep1Data(data);
       setStep(2);
     }
@@ -154,7 +155,7 @@ const Adverstisement = (props: propsData) => {
 
   return (
     <>
-      <ToastContainer limit={1}/>
+      <ToastContainer limit={1} />
       {step == 1 && (
         <div className="mt-30 md:mt-40">
           <p className="sec-title">Set Asset Type and Price</p>
@@ -290,6 +291,9 @@ const Adverstisement = (props: propsData) => {
                     className={`info-14-18   max-[767px]:w-full max-[767px]:max-w-full after:block after:top-full  after:h-[2px] after:w-[0%] after:bg-primary cursor-pointer after:transition-all after:ease-linear after:duration-500 ${show === 2 && "border-primary after:w-[100%] after:bottom !text-primary"}`}
                     onClick={() => {
                       setShow(2);
+                      // selectToken(selectedAssets);
+                      let currentPrice = (inrPrice).toFixed(2)
+                      setValue('price', parseFloat(currentPrice))
                     }}
                     type="button"
                   >
@@ -341,7 +345,7 @@ const Adverstisement = (props: propsData) => {
                   </div> */}
                   <div className="md:mt-30 mt-20">
                     <p className="info-10-14">{show === 1 ? "Fixed" : "Floating"} (INR)</p>
-                    <input type="number" step={0.000001} {...register('price', { required: true })} name="price" placeholder="Enter Amount" className="py-[14px] px-[15px] border rounded-5 border-grey-v-1 mt-[10px] w-full bg-[transparent] dark:border-opacity-20 outline-none info-16-18" />
+                    <input type="number" step={0.000001} {...register('price', { required: true })} name="price" disabled={show === 2 ? true : false} placeholder="Enter Amount" className="py-[14px] px-[15px] border rounded-5 border-grey-v-1 mt-[10px] w-full bg-[transparent] dark:border-opacity-20 outline-none info-16-18" />
                   </div>
                   {errors?.price && (
                     <p style={{ color: "#ff0000d1" }}>{errors?.price?.message}</p>

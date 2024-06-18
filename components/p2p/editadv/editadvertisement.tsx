@@ -58,6 +58,8 @@ const EditAdverstisement = (props: propsData) => {
       selectToken(token[0]);
       setValue("price", props?.editPost?.price);
     }
+    let type = props.editPost?.price_type === 'fixed' ? 1 : 2;
+    setShow(type)
   }, [props.editPost]);
 
   const selectToken = async (item: any) => {
@@ -127,6 +129,7 @@ const EditAdverstisement = (props: propsData) => {
   };
 
   const onHandleSubmit = (data: any) => {
+    data.price_type = show === 1 ? 'fixed' : 'floating';
     setStep1Data(data);
     setStep(2);
   };
@@ -202,7 +205,7 @@ const EditAdverstisement = (props: propsData) => {
                   </p>
                   <div className="mt-20 mb-20 md:mb-0 md:mt-30 grid grid-cols-3 md:flex flex-wrap gap-x-10 gap-y-30 md:gap-20 p-10 md:p-0">
                     {cash?.map((item, index) => {
-                                  // {console.log(selectedAssets?.price , inrPrice)} 
+                      // {console.log(selectedAssets?.price , inrPrice)} 
                       return (
                         <div
                           key={index}
@@ -253,12 +256,12 @@ const EditAdverstisement = (props: propsData) => {
                 <p className="sec-title">Price Type</p>
                 <div className="items-center flex gap-20 md:gap-30 border-b border-grey-v-2">
                   <button
-                    className={`info-14-18 max-[767px]:w-full max-[767px]:max-w-full   after:block after:top-full  after:h-[2px] after:w-[0%] after:bg-primary after:transition-all after:ease-linear after:duration-500 ${
-                      show === 1 &&
+                    className={`info-14-18 max-[767px]:w-full max-[767px]:max-w-full   after:block after:top-full  after:h-[2px] after:w-[0%] after:bg-primary after:transition-all after:ease-linear after:duration-500 ${show === 1 &&
                       "border-primary after:w-[100%] after:bottom !text-primary"
-                    }`}
+                      }`}
                     onClick={() => {
                       setShow(1);
+                      setValue('price', props?.editPost?.price)
                     }}
                     type="button"
                   >
@@ -268,47 +271,48 @@ const EditAdverstisement = (props: propsData) => {
                         type="radio"
                         value=""
                         name="colored-radio-dd"
-                        checked={show === 1 ? true : false} 
+                        checked={show === 1 ? true : false}
                         className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]"
                       />
                       <label
                         htmlFor="radio--btn-1"
                         className="
-                 md-text py-[24px] px-[18px]  relative custom-radio  cursor-pointer
-                pl-[60px] 
-                after:dark:bg-omega
-                after:bg-white
-                after:lg:left-[29px]
-                after:left-[16px]
-                after:w-[20px] 
-                after:h-[20px]
-                after:rounded-[50%] 
-                after:border after:border-beta
-                after:absolute
-                before:dark:bg-[transparent]
-                before:bg-white
-                before:lg:left-[34px]
-                before:left-[21px]
-                before:md:top-[calc(50%-7px)]
-                before:top-[calc(50%-4px)]
-                before:w-[10px] 
-                before:h-[10px]
-                before:rounded-[50%] 
-                before:absolute
-                before:z-[1]
-                "
+                          md-text py-[24px] px-[18px]  relative custom-radio  cursor-pointer
+                          pl-[60px] 
+                          after:dark:bg-omega
+                          after:bg-white
+                          after:lg:left-[29px]
+                          after:left-[16px]
+                          after:w-[20px] 
+                          after:h-[20px]
+                          after:rounded-[50%] 
+                          after:border after:border-beta
+                          after:absolute
+                          before:dark:bg-[transparent]
+                          before:bg-white
+                          before:lg:left-[34px]
+                          before:left-[21px]
+                          before:md:top-[calc(50%-7px)]
+                          before:top-[calc(50%-4px)]
+                          before:w-[10px] 
+                          before:h-[10px]
+                          before:rounded-[50%] 
+                          before:absolute
+                          before:z-[1]
+                          "
                       >
                         Fixed
                       </label>
                     </div>
                   </button>
                   <button
-                    className={`info-14-18   max-[767px]:w-full max-[767px]:max-w-full after:block after:top-full  after:h-[2px] after:w-[0%] after:bg-primary cursor-pointer after:transition-all after:ease-linear after:duration-500 ${
-                      show === 2 &&
+                    className={`info-14-18   max-[767px]:w-full max-[767px]:max-w-full after:block after:top-full  after:h-[2px] after:w-[0%] after:bg-primary cursor-pointer after:transition-all after:ease-linear after:duration-500 ${show === 2 &&
                       "border-primary after:w-[100%] after:bottom !text-primary"
-                    }`}
+                      }`}
                     onClick={() => {
                       setShow(2);
+                      let currentPrice = (inrPrice).toFixed(2)
+                      setValue('price', parseFloat(currentPrice))
                     }}
                     type="button"
                   >
@@ -318,35 +322,35 @@ const EditAdverstisement = (props: propsData) => {
                         type="radio"
                         value=""
                         name="colored-radio-dd"
-                        checked={show === 2 ? true : false} 
+                        checked={show === 2 ? true : false}
                         className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]"
                       />
                       <label
                         htmlFor="radio-btn2"
                         className="
-                 md-text py-[24px] px-[18px] relative  custom-radio  cursor-pointer
-                pl-[60px] 
-                after:dark:bg-omega
-                after:bg-white
-                after:lg:left-[29px]
-                after:left-[16px]
-                after:w-[20px] 
-                after:h-[20px]
-                after:rounded-[50%] 
-                after:border after:border-beta
-                after:absolute
-                before:dark:bg-[transparent]
-                before:bg-white
-                before:lg:left-[34px]
-                before:left-[21px]
-                before:md:top-[calc(50%-7px)]
-                before:top-[calc(50%-4px)]
-                before:w-[10px] 
-                before:h-[10px]
-                before:rounded-[50%] 
-                before:absolute
-                before:z-[1]
-                "
+                          md-text py-[24px] px-[18px] relative  custom-radio  cursor-pointer
+                          pl-[60px] 
+                          after:dark:bg-omega
+                          after:bg-white
+                          after:lg:left-[29px]
+                          after:left-[16px]
+                          after:w-[20px] 
+                          after:h-[20px]
+                          after:rounded-[50%] 
+                          after:border after:border-beta
+                          after:absolute
+                          before:dark:bg-[transparent]
+                          before:bg-white
+                          before:lg:left-[34px]
+                          before:left-[21px]
+                          before:md:top-[calc(50%-7px)]
+                          before:top-[calc(50%-4px)]
+                          before:w-[10px] 
+                          before:h-[10px]
+                          before:rounded-[50%] 
+                          before:absolute
+                          before:z-[1]
+                          "
                       >
                         Floating
                       </label>
@@ -357,13 +361,13 @@ const EditAdverstisement = (props: propsData) => {
                   <div className="flex items-center justify-between gap-2 relative pb-[15px] border-b border-grey-v-1 dark:border-opacity-20">
                     <p className="info-14-18 dark:!text-white">Cuurent  Price</p>
                     {
-                     selectedAssets?.price == undefined ?
-                    <div className='loader w-[35px] z-[2] h-[35px] absolute top-0 right-0 border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>    
-                      :
-                    <p className="sec-title md:!text-[18px] !text-[14px]">
-            
-                      ₹{" "}{Number(selectedAssets?.price * inrPrice).toFixed(2)}
-                    </p>
+                      selectedAssets?.price == undefined ?
+                        <div className='loader w-[35px] z-[2] h-[35px] absolute top-0 right-0 border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
+                        :
+                        <p className="sec-title md:!text-[18px] !text-[14px]">
+
+                          ₹{" "}{Number(selectedAssets?.price * inrPrice).toFixed(2)}
+                        </p>
 
                     }
                   </div>
@@ -376,12 +380,13 @@ const EditAdverstisement = (props: propsData) => {
                     </p>
                   </div> */}
                   <div className="md:mt-30 mt-20">
-                    <p className="info-10-14">{show===1?"Fixed":"Floating"}</p>
+                    <p className="info-10-14">{show === 1 ? "Fixed" : "Floating"}</p>
                     <input
                       type="number"
                       step={0.000001}
                       {...register("price", { required: true })}
                       name="price"
+                      disabled={show === 2 ? true : false}
                       placeholder="Enter Amount"
                       className="py-[14px] px-[15px] border rounded-5 border-grey-v-1 mt-[10px] w-full bg-[transparent] dark:border-opacity-20 outline-none info-16-18"
                     />

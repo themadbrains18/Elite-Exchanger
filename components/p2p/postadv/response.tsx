@@ -85,6 +85,7 @@ const Response = (props: activeSection) => {
         "user_id": session?.user?.user_id,
         "token_id": props.step1Data?.token_id,
         "price": props.step1Data?.price,
+        "price_type":props.step1Data?.price_type,
         "quantity": props.step2Data?.quantity,
         "min_limit": props.step2Data?.min_limit,
         "max_limit": props.step2Data?.max_limit,
@@ -98,6 +99,8 @@ const Response = (props: activeSection) => {
         "min_btc": data?.min_btc == "min_btc" ? true : false,
         "fundcode": ''
       }
+
+
 
       setFinalFormData(formData);
       setActive(true);
@@ -139,6 +142,8 @@ const Response = (props: activeSection) => {
   const finalSubmitAds = async (pass: string) => {
     try {
       setDisable(true)
+      console.log(finalFormData,'--------------finalFormData');
+      
       finalFormData.fundcode = pass;
 
       const ciphertext = AES.encrypt(JSON.stringify(finalFormData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
