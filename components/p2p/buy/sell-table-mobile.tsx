@@ -138,7 +138,7 @@ const SellTableMobile = (props:activeSection) => {
                                     <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Available:</p>
                                     <div className='flex items-center gap-10 mt-[5px]'>
                                         {
-                                        elem.PaymentMethod.map((elem,ind)=>{
+                                        elem?.PaymentMethod?.map((elem,ind)=>{
                                             return(
                                                 <Fragment key={ind}>
                                                 <Image src={`/assets/payment-methods/${elem}`} alt='error' width={16} height={16} />

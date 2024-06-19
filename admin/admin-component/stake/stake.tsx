@@ -172,7 +172,7 @@ const AddEditStake = (props: activeSection) => {
             <div className="mb-[10px] ">
               <label className="sm-text ">Time Duration</label>
             </div>
-            {lockTimefields.map((item: any, i: number) => {
+            {lockTimefields?.map((item: any, i: number) => {
               return <div className="mb-[10px] flex gap-[30px] md:flex-row flex-col">
                 <div className="w-full">
                   <div className="border border-grey-v-1 dark:border-opacity-[15%] w-full rounded-5 md:px-[15px] text-center py-[8px]">

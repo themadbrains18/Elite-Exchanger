@@ -13,6 +13,7 @@ import AES from 'crypto-js/aes';
 import { useSession } from "next-auth/react";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { currencyFormatter } from "@/components/snippets/market/buySellCard";
+import AuthenticationModelPopup from "@/components/snippets/authenticationPopup";
 
 const schema = yup.object().shape({
   spend_amount: yup.number().positive().required('Please enter amount in INR').typeError('Please enter amount in INR'),
@@ -47,6 +48,8 @@ const BuySellExpress = (props: propsData) => {
   const [filterAsset, setFilterAsset] = useState(Object);
   const [changeSymbol, setChangeSymbol] = useState(false);
   const { status, data: session } = useSession();
+  const [show, setShow] = useState(false);
+  const [active, setActive] = useState(false);
   const route = useRouter();
 
   const router = useRouter();
@@ -207,6 +210,7 @@ const BuySellExpress = (props: propsData) => {
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
+        
         setSelectedSecondToken(token[0]);
         setSecondCurrency(symbol);
         getFilterAsset(token[0]?.id);
@@ -265,7 +269,15 @@ const BuySellExpress = (props: propsData) => {
 
     // p2p/postad
     if (active1 === 2) {
-      if (data?.spend_amount > filterAsset?.balance) {
+      if(filterAsset?.balance == undefined){
+        setError("spend_amount", {
+          type: "custom",
+          message: `Insufficiant balance`,
+        });
+        return;
+      }
+      
+      if ( data?.spend_amount > filterAsset?.balance) {
         setError("spend_amount", {
           type: "custom",
           message: `Insufficiant balance`,
@@ -273,7 +285,13 @@ const BuySellExpress = (props: propsData) => {
         return;
       }
       let tokenID = selectedSecondToken?.id;
-      route.push(`/p2p/postad?token_id=${tokenID}&qty=${data?.spend_amount}&price=${usdtToInr}`);
+      if(session?.user?.kyc !== 'approve' || session?.user?.TwoFA === false || (session?.user?.tradingPassword === '' || session?.user?.tradingPassword === null) || (session?.user?.email === '' || session?.user?.email === null)) {
+        setShow(true);
+        setActive(true)
+      }
+      else{
+        route.push(`/p2p/postad?token_id=${tokenID}&qty=${data?.spend_amount}&price=${usdtToInr}`);
+      }
       return;
     }
 
@@ -755,6 +773,9 @@ const BuySellExpress = (props: propsData) => {
           </form>
         </div>
       </div>
+      {show &&
+          <AuthenticationModelPopup title='Confirmation' message='Please complete your kyc' setShow={setShow} setActive={setActive} show={show} />
+      }
     </>
 
   );

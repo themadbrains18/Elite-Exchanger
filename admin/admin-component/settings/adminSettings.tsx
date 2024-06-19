@@ -254,7 +254,7 @@ const AdminSettings = (props: fixSection) => {
         <div className="max-[1023px]  rounded-[10px]">
           <p className="sec-title lg:p-0 pl-20 pt-20">Security</p>
           <div className="py-[30px] md:py-[50px] px-20 lg:px-0">
-            {data.map((item, index: number) => {
+            {data && data?.length>0 && data?.map((item, index: number) => {
               return (
                 <div
                   key={index}

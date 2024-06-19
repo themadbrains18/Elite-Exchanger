@@ -62,6 +62,7 @@ const EditResponse = (props: activeSection) => {
   });
 
   const onHandleSubmit = async (data: any) => {
+    
     try {
       setDisable(true);
 
@@ -88,10 +89,11 @@ const EditResponse = (props: activeSection) => {
         "remarks": data?.remarks,
         "auto_reply": data?.auto_reply,
         "complete_kyc": data?.condition === "complete_kyc" ? true : false,
-        "min_btc": data?.min_btc == "min_btc" ? true : false,
+        "min_btc": data?.condition == "min_btc" ? true : false,
         "fundcode": '123456'
       }
 
+      
       const ciphertext = AES.encrypt(JSON.stringify(formData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
       let record = encodeURIComponent(ciphertext.toString());
 
@@ -196,9 +198,9 @@ const EditResponse = (props: activeSection) => {
                 {condition?.map((item, index) => {
                   return (
                     <div key={index} className="mb-10 md:mb-20 cursor-pointer">
-                      <input id={`radio${item}`} type="radio" {...register('condition')}  onChange={() => selectCondition(item.value)} value={item?.value} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                      <input id={`radio${item.value}`} type="radio" {...register('condition')}  onChange={() => selectCondition(item.value)} value={item?.value} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                       <label
-                        htmlFor={`radio${item}`}
+                        htmlFor={`radio${item.value}`}
                         className="
                     cursor-pointer
                     ml-2 md-text dark:!text-g-secondary relative custom-radio 

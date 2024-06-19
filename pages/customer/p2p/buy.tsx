@@ -33,6 +33,8 @@ const P2pBuy = (props: propsData) => {
     socket(props?.sessions?.user?.user_id);
   }, [wbsocket])
 
+  
+
   const socket=(user_id:string | undefined)=>{
     if(wbsocket){
       
@@ -66,7 +68,7 @@ const P2pBuy = (props: propsData) => {
     <P2pLayout>
       <>
       </>
-      <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} posts={newPosts.length > 0 ? newPosts : props?.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} />
+      <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} assets={props?.assets} posts={newPosts.length > 0 ? newPosts : props?.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} />
       <BuyPopup show1={show1} setShow1={setShow1} selectedPost={selectedPost} />
     </P2pLayout>
   )

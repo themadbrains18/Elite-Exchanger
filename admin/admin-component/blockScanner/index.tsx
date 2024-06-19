@@ -101,8 +101,8 @@ const Blocksetting = (props: scanner) => {
           <div className=" mt-[24px] py-6 px-5  rounded-10 bg-white dark:bg-grey-v-4">
             <div className="flex items-center justify-between  mb-[26px]">
               <div className="flex items-center gap-[15px]">
-                {props.networks &&
-                  props.networks.map((network: any, index: number) => (
+                {props?.networks && props?.networks?.length>0 &&
+                  props?.networks?.map((network: any, index: number) => (
                     <Fragment key={network.id}>
                       <button
                         className={`${active === true

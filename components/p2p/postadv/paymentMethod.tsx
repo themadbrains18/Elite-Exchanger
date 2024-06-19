@@ -227,7 +227,7 @@ const PaymentMethod = (props: activeSection) => {
                 : "Payment Methods"}
             </p>
             <div className="">
-              {list?.map((item: any, index: any) => {
+              {list && list?.length>0 &&list?.map((item: any, index: any) => {
                 return (
                   <div
                     key={index}

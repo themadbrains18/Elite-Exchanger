@@ -170,7 +170,7 @@ const SellTableDesktop = (props: activeSection) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems?.map((item, index) => {
+            {currentItems && currentItems.length>0 && currentItems?.map((item, index) => {
               return (
                 <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FAFAFA] cursor-pointer">
                   <td className="group-hover:bg-[#FAFAFA] dark:group-hover:bg-black-v-1 ">
@@ -206,8 +206,8 @@ const SellTableDesktop = (props: activeSection) => {
 
                   <td>
                     <div className='flex items-center gap-10'>
-                      {
-                        item.PaymentMethod.map((elem, ind) => {
+                      {item?.PaymentMethod && item?.PaymentMethod.length>0 &&
+                        item?.PaymentMethod?.map((elem, ind) => {
                           return (
                             <Fragment key={ind}>
                               <Image src={`/assets/payment-methods/${elem}`} alt='error' width={30} height={30} />

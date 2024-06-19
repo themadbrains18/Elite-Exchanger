@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import { useWebSocket } from '@/libs/WebSocketContext';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
+import BuyAuthenticationModelPopup from '@/components/snippets/buyAuthenticationModelPopup';
 
 interface activeSection {
   setShow1: any;
@@ -14,17 +15,20 @@ interface activeSection {
   paymentId?: string;
   selectedToken?: any;
   firstCurrency?: string;
-  
+  assets?: any;
+
 }
 
 const BuyTableDesktop = (props: activeSection) => {
   const { mode } = useContext(Context);
-
+  const [show, setShow] = useState(false);
+  const [active, setActive] = useState(false);
   const [itemOffset, setItemOffset] = useState(0);
 
   const { status, data: session } = useSession();
   const [list, setList] = useState<any[]>([])
   const [total, setTotal] = useState(0)
+  const [type, setType] = useState('')
 
 
   let itemsPerPage = 10;
@@ -32,7 +36,7 @@ const BuyTableDesktop = (props: activeSection) => {
 
   useEffect(() => {
     getAllPosts(itemOffset);
-  }, [itemOffset,props?.firstCurrency, props?.paymentId]);
+  }, [itemOffset, props?.firstCurrency, props?.paymentId]);
 
 
 
@@ -62,7 +66,7 @@ const BuyTableDesktop = (props: activeSection) => {
           })
         }
         post.user_p_method = payment_method;
-    }
+      }
 
       let postData = [];
       let filter_posts = posts?.data?.data;
@@ -94,19 +98,19 @@ const BuyTableDesktop = (props: activeSection) => {
     }
   };
 
-  if(list?.length>0 ) {
-    
+  if (list?.length > 0) {
+
     for (const post of list) {
-     let payment_method: any = [];
-     for (const upid of post?.p_method) {
-       post?.User?.user_payment_methods.filter((item: any) => {
-         if (item.id === upid?.upm_id) {
-           payment_method.push(item);
-         }
-       })
-     }
-     post.user_p_method = payment_method;
-   }
+      let payment_method: any = [];
+      for (const upid of post?.p_method) {
+        post?.User?.user_payment_methods.filter((item: any) => {
+          if (item.id === upid?.upm_id) {
+            payment_method.push(item);
+          }
+        })
+      }
+      post.user_p_method = payment_method;
+    }
   }
 
   // const endOffset = itemOffset + itemsPerPage;
@@ -120,6 +124,42 @@ const BuyTableDesktop = (props: activeSection) => {
     setItemOffset(newOffset);
   };
 
+  const handleBuy = (item: any) => {
+    try {
+      if (session) {
+        console.log(item?.complete_kyc,"==item?.complete_kyc");
+        
+        if (item?.complete_kyc === true) {
+          if (session?.user?.kyc !== "approve") {
+            setType('kyc')
+            setShow(true)
+            setActive(true)
+          }
+        }
+        else if (item?.min_btc === true) {
+          let btcBalance = props?.assets.filter((item: any) => item?.token_id === "30c72375-b3a7-49ea-a17e-b6b530023cb7")
+          if (btcBalance < 0.01) {
+            setType('min_btc')
+            setShow(true)
+            setActive(true)
+          }
+
+
+        }
+        else {
+          props.setShow1(true); props.setSelectedPost(item);
+        }
+
+      }
+      else{
+        props.setShow1(true); props.setSelectedPost(item);
+      }
+
+
+    } catch (error) {
+
+    }
+  }
 
   return (
     <>
@@ -222,7 +262,7 @@ const BuyTableDesktop = (props: activeSection) => {
                           payment_method?.map((elem: any, ind: any) => {
                             return (
                               <Fragment key={ind}>
-                                <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className='ml-[-10px]'/>
+                                <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className='ml-[-10px]' />
                               </Fragment>
                             )
                           })
@@ -231,7 +271,7 @@ const BuyTableDesktop = (props: activeSection) => {
                     </td>
 
                     <td>
-                      <button className="info-14-18 text-buy px-[20px] py-[9px] rounded-[4px]  dark:bg-black-v-1 bg-green" onClick={() => { props.setShow1(true); props.setSelectedPost(item); }}>Buy</button>
+                      <button className="info-14-18 text-buy px-[20px] py-[9px] rounded-[4px]  dark:bg-black-v-1 bg-green" onClick={() => { handleBuy(item) }}>Buy</button>
                     </td>
                   </tr>
                 );
@@ -270,6 +310,11 @@ const BuyTableDesktop = (props: activeSection) => {
           previousLabel="<"
           renderOnZeroPageCount={null} />
       </div>
+
+      {show &&
+        <BuyAuthenticationModelPopup title='Confirmation' message='Please complete your kyc' setShow={setShow} setActive={setActive} show={show} type={type}/>
+      }
+
     </>
   )
 }

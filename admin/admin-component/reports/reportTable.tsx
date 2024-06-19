@@ -336,7 +336,8 @@ const ReportTable = () => {
                 </tr>
               </thead>
               <tbody >
-                {
+                {data &&
+                data?.length>0 &&
                   data?.map((item,index)=>{
                     return(
                 <tr key={index} className=" border-b-[0.5px] border-[#ECF0F3] dark:border-[#ffffff1a] hover:bg-[#3699ff14] rounded-10 dark:hover:bg-[#90caf929]">
