@@ -200,7 +200,7 @@ const AddNetwork = (props: activeSection) => {
                     <div className="pt-30">
 
                         <div className="pt-[30px]">
-                            {props?.networkList?.map((item: any, index: number) => {
+                            {props?.networkList && props?.networkList.length>0 && props?.networkList?.map((item: any, index: number) => {
                                 let previous = props?.editToken?.networks !== null && props?.editToken?.networks.filter((e: any) => {
                                     return e?.id === item?.id
                                 })

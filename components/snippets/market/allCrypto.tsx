@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import Context from "../../contexts/context";
 import { useRouter } from "next/router";
 import Deposit from "../deposit";
+import { currencyFormatter } from "./buySellCard";
 
 interface propsData {
     coins: any,
@@ -96,20 +97,20 @@ const AllCrypto = (props: propsData) => {
                                         </div>
                                     </td>
                                     <td>
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">${item.price.toFixed(5)}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">${currencyFormatter(item.price.toFixed(5))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <div className={` items-center gap-[10px] flex`}>
-                                            <p className={`footer-text-secondary !text-[14px] md:!text-[16px] ${item.status == "high" ? "!text-[#03A66D]" : "!text-[#DC2626]"}`}>{item.circulatingSupply}</p>
+                                            <p className={`footer-text-secondary !text-[14px] md:!text-[16px] ${item.status == "high" ? "!text-[#03A66D]" : "!text-[#DC2626]"}`}>{currencyFormatter(item.circulatingSupply)}</p>
                                             <IconsComponent type={item.status} active={false} hover={false} />
                                         </div>
                                     </td>
 
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${item.totalSupply}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(item.totalSupply)}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${item.maxSupply || 0}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(item.maxSupply) || 0}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">

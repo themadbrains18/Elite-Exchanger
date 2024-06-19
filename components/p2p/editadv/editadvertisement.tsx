@@ -138,7 +138,7 @@ const EditAdverstisement = (props: propsData) => {
     <>
       {step == 1 && (
         <div className="mt-30 md:mt-40">
-          <p className="sec-title">Set Type And Price</p>
+          <p className="sec-title">Set Asset Type and Price</p>
           <form onSubmit={handleSubmit(onHandleSubmit)}>
             <div className="mt-40 flex md:flex-row flex-col first-letter:  gap-30 items-start">
               <div className="max-w-[1048px] w-full">

@@ -11,6 +11,7 @@ import Withdraw from '../snippets/withdraw';
 import StakingModel from '../snippets/stake/staking';
 import TransferModal from '../future/popups/transfer-modal';
 import WithdrawAuthenticationModelPopup from './withdrawAuthentication';
+import { currencyFormatter } from '../snippets/market/buySellCard';
 
 interface propsData {
   networks: any;
@@ -151,10 +152,10 @@ const SpotList = (props: propsData): any => {
                     </div>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance.toFixed(6)}</p>
+                    <p className="info-14-18 dark:text-white  lg:text-start text-center">{currencyFormatter(item?.balance.toFixed(6))}</p>
                   </td>
                   <td className="lg:text-start text-end">
-                    <p className="info-14-18 dark:text-white">${item.token !== null ? item?.token?.price.toFixed(6) : item?.global_token?.price.toFixed(6)}</p>
+                    <p className="info-14-18 dark:text-white">${item.token !== null ? currencyFormatter(item?.token?.price.toFixed(6)) : currencyFormatter(item?.global_token?.price.toFixed(6))}</p>
                   </td>
 
                   <td className="max-[1023px]:hidden ">
@@ -298,10 +299,10 @@ const SpotList = (props: propsData): any => {
                     </div>
                   </div>
                   <div>
-                    <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance.toFixed(2)}</p>
+                    <p className="info-14-18 dark:text-white  lg:text-start text-center">{currencyFormatter(item?.balance.toFixed(2))}</p>
                   </div>
                   <div className="iconParent lg:text-start text-end flex items-center justify-between">
-                    <p className="info-14-18 dark:text-white">${item.token !== null ? item?.token?.price.toFixed(5) : item?.global_token?.price.toFixed(5)}</p>
+                    <p className="info-14-18 dark:text-white">${item.token !== null ? currencyFormatter(item?.token?.price.toFixed(5)) : currencyFormatter(item?.global_token?.price.toFixed(5))}</p>
                     <div onClick={(e) => { setHeight(e) }}>
                       <IconsComponent type="downArrow" hover={false} active={false} />
                     </div>

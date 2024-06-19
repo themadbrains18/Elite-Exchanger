@@ -197,6 +197,12 @@ const BuySellCard = (props: DynamicId) => {
         setFirstCurrency('BTCB');
         setSecondCurrency('USDT');
         setActive(false);
+        reset({
+          limit_usdt: props?.token?.price.toFixed(5),
+          token_amount: 0.00,
+        })
+        setEstimateFee(0.00)
+        setTotalAmount(0.0)
         if (wbsocket) {
           let withdraw = {
             ws_type: 'market',
@@ -238,12 +244,7 @@ const BuySellCard = (props: DynamicId) => {
 
           }
 
-          reset({
-            limit_usdt: props?.token?.price.toFixed(6),
-            token_amount: 0.00,
-          })
-          setEstimateFee(0.00)
-          setTotalAmount(0.0)
+          
           
         }, 2000);
 

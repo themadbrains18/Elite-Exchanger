@@ -45,8 +45,12 @@ const Adverstisement = (props: propsData) => {
       let price: any = router?.query?.price;
       setValue('price', price);
     }
+    if(show){
+      setInrPrice(0)
+      reset()
+    }
 
-  }, [router.query]);
+  }, [router.query, show]);
 
   let {
     register,
@@ -154,7 +158,7 @@ const Adverstisement = (props: propsData) => {
       <ToastContainer limit={1} />
       {step == 1 && (
         <div className="mt-30 md:mt-40">
-          <p className="sec-title">Set Type And Price</p>
+          <p className="sec-title">Set Asset Type and Price</p>
           <form onSubmit={handleSubmit(onHandleSubmit)}>
             <div className="mt-40 flex md:flex-row flex-col first-letter:  gap-30 items-start">
 

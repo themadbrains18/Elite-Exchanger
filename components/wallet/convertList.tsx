@@ -103,7 +103,7 @@ const ConvertList = () => {
                     </div>
                   </td>
                   <td>
-                    <p className="info-14 dark:text-white  lg:text-start text-center">{item?.converted}</p>
+                    <p className="info-14 dark:text-white  lg:text-start text-center">{(item?.converted)}</p>
                   </td>
                   <td className="lg:text-start text-end">
                     <p className="info-14 dark:text-white">{item?.received}</p>

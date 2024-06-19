@@ -2,6 +2,7 @@ import React from "react";
 import IconsComponent from "../snippets/icons";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { currencyFormatter } from "../snippets/market/buySellCard";
 
 interface propsData {
   coinList: any
@@ -55,11 +56,11 @@ const WatchList = (props: propsData) => {
                     </div>
                   </td>
                   <td>
-                    <p className="nav-text-sm dark:text-white ">${item.price.toFixed(3)}</p>
+                    <p className="nav-text-sm dark:text-white ">${currencyFormatter(item.price.toFixed(3))}</p>
                   </td>
                   <td>
                     <div className={` items-center gap-[10px] md:flex hidden`}>
-                      <p className={`nav-text-sm  ${item.status == "high" ? "!text-[#03A66D]" : "!text-[#DC2626]"}`}>{item.totalSupply && item.totalSupply.toLocaleString('en-US')}</p>
+                      <p className={`nav-text-sm  ${item.status == "high" ? "!text-[#03A66D]" : "!text-[#DC2626]"}`}>{item.totalSupply && currencyFormatter(item.totalSupply)}</p>
                       <IconsComponent type={item.status} active={false} hover={false} />
                     </div>
                   </td>

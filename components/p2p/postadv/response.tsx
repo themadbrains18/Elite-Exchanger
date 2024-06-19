@@ -72,6 +72,7 @@ const Response = (props: activeSection) => {
   });
 
   const onHandleSubmit = async (data: any) => {
+    
     try {
       setDisable(true)
       let p_method = [];
@@ -96,12 +97,12 @@ const Response = (props: activeSection) => {
         "remarks": data?.remarks,
         "auto_reply": data?.auto_reply,
         "complete_kyc": data.condition === "complete_kyc" ? true : false,
-        "min_btc": data?.min_btc == "min_btc" ? true : false,
+        "min_btc": data?.condition == "min_btc" ? true : false,
         "fundcode": ''
       }
 
 
-
+      
       setFinalFormData(formData);
       setActive(true);
       setShow(true);
@@ -132,6 +133,7 @@ const Response = (props: activeSection) => {
   }
 
   const selectCondition = (item: any) => {
+    
     setValue('condition', item)
   }
 
@@ -142,7 +144,7 @@ const Response = (props: activeSection) => {
   const finalSubmitAds = async (pass: string) => {
     try {
       setDisable(true)
-      console.log(finalFormData,'--------------finalFormData');
+      // console.log(finalFormData,'--------------finalFormData');
       
       finalFormData.fundcode = pass;
 
@@ -221,9 +223,9 @@ const Response = (props: activeSection) => {
                 {condition?.map((item, index) => {
                   return (
                     <div key={index} className="mb-10 md:mb-20 cursor-pointer">
-                      <input id={`radio${item}`} type="radio" {...register('condition')} onChange={() => selectCondition(item.value)} value={item.value} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                      <input id={`radio${item.value}`} type="radio" {...register('condition')} onChange={() => selectCondition(item.value)} value={item.value} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                       <label
-                        htmlFor={`radio${item}`}
+                        htmlFor={`radio${item.value}`}
                         className="
                           cursor-pointer
                           ml-2 md-text dark:!text-g-secondary relative custom-radio 

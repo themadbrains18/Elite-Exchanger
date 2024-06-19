@@ -10,6 +10,7 @@ import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
 import IconsComponent from "../snippets/icons";
 import Link from "next/link";
+import { currencyFormatter } from "../snippets/market/buySellCard";
 
 interface propsData {
   bannerCoinList: any,
@@ -75,9 +76,9 @@ const MarketCoin = (props: propsData) => {
                       </div>
 
                       <div className="coinCard_Cost flex items-center gap-[20px]">
-                        <h2 className="md-text !text-[18px] md:!text-[16px] dark:text-white">${elem.price.toFixed(5)}</h2>
+                        <h2 className="md-text !text-[18px] md:!text-[16px] dark:text-white">${currencyFormatter(elem.price.toFixed(5))}</h2>
                         <div className={`flex items-center gap-[10px] `}>
-                          <p className={`footer-text-secondary  ${elem.status == "high" ? "!text-[#03A66D]" : "!text-[#DC2626]"}`}>{elem.totalSupply && elem.totalSupply.toLocaleString('en-US')}</p>
+                          <p className={`footer-text-secondary  ${elem.status == "high" ? "!text-[#03A66D]" : "!text-[#DC2626]"}`}>{elem.totalSupply && currencyFormatter(elem.totalSupply)}</p>
                           <IconsComponent type={elem.status} active={false} hover={false} />
                         </div>
                       </div>

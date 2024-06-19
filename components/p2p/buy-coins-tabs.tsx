@@ -10,6 +10,7 @@ interface activeSection {
   posts?: any;
   setSelectedPost?: any;
   masterPayMethod?: any;
+  assets?:any
 }
 
 const BuyCoinsTabs = (props: activeSection) => {
@@ -83,6 +84,7 @@ const BuyCoinsTabs = (props: activeSection) => {
       <div>
         <div className="md:block hidden">
           <BuyTableDesktop
+          assets={props?.assets}
             setShow1={props.setShow1}
             paymentId={paymentId}
             selectedToken={selectedToken}

@@ -69,7 +69,7 @@ const AddedTokens = (props: propsData) => {
             </tr>
           </thead>
           <tbody>
-            {newCoins?.map((item: any, index: number) => {
+            {newCoins && newCoins?.length>0 && newCoins?.map((item: any, index: number) => {
               return (
                 <tr
                   key={index}

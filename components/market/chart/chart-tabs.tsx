@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import AES from "crypto-js/aes";
 import moment from "moment";
 import { useWebSocket } from "@/libs/WebSocketContext";
+import { currencyFormatter } from "@/components/snippets/market/buySellCard";
 
 interface propsData {
   coinsList: any;
@@ -330,7 +331,7 @@ const ChartTabs = (props: propsData) => {
                         </td>
                         <td>
                           <p className="info-14-18 dark:text-white  ">
-                            ${item.price}
+                            ${currencyFormatter(item.price)}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden">
@@ -341,7 +342,7 @@ const ChartTabs = (props: propsData) => {
                                 : "!text-[#DC2626]"
                                 }`}
                             >
-                              {item.circulatingSupply && item.circulatingSupply}
+                              {item.circulatingSupply && currencyFormatter(item.circulatingSupply)}
                             </p>
                             <IconsComponent
                               type={item.status}
@@ -353,12 +354,12 @@ const ChartTabs = (props: propsData) => {
 
                         <td className="max-[1023px]:hidden">
                           <p className="info-14-18 dark:text-white">
-                            ${item.totalSupply && item.totalSupply}
+                            ${item.totalSupply && currencyFormatter(item.totalSupply)}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden">
                           <p className="info-14-18 dark:text-white">
-                            ${item.maxSupply && item.maxSupply}
+                            ${item.maxSupply && currencyFormatter(item.maxSupply)}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden">
@@ -561,19 +562,19 @@ const ChartTabs = (props: propsData) => {
                           <td className="max-[1023px]:hidden">
                             <div className={` items-center gap-[10px] flex`}>
                               <p className={`info-14-18 dark:text-white`}>
-                                {item?.token_amount?.toFixed(5)}
+                                {currencyFormatter(item?.token_amount?.toFixed(5))}
                               </p>
                             </div>
                           </td>
 
                           <td className="max-[1023px]:hidden">
                             <p className="info-14-18 dark:text-white">
-                              ${item?.limit_usdt}
+                              ${currencyFormatter(item?.limit_usdt)}
                             </p>
                           </td>
                           <td className="max-[1023px]:hidden">
                             <p className="info-14-18 dark:text-white">
-                              ${item.volume_usdt.toFixed(2)}
+                              ${currencyFormatter(item.volume_usdt.toFixed(2))}
                             </p>
                           </td>
                           <td className="max-[1023px]:hidden">
@@ -824,7 +825,7 @@ const ChartTabs = (props: propsData) => {
                               <p className="info-14-18 dark:text-white">
                                 {item.market_type}
                               </p>
-                              <p className="info-10">{item.token_amount}</p>
+                              <p className="info-10">{currencyFormatter(item.token_amount)}</p>
                             </div>
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
@@ -840,17 +841,17 @@ const ChartTabs = (props: propsData) => {
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                              {item?.limit_usdt?.toFixed(2)}
+                              {currencyFormatter(item?.limit_usdt?.toFixed(2))}
                             </p>
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                              ${item.volume_usdt?.toFixed(6)}
+                              ${currencyFormatter(item.volume_usdt?.toFixed(6))}
                             </p>
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                              ${item.token_amount?.toFixed(6)}
+                              ${currencyFormatter(item.token_amount?.toFixed(6))}
                             </p>
                           </div>
 
@@ -973,7 +974,7 @@ const ChartTabs = (props: propsData) => {
                                     <p className="info-14-18 dark:text-white">
                                       {elm.market_type}
                                     </p>
-                                    <p className="info-10">{elm.token_amount}</p>
+                                    <p className="info-10">{currencyFormatter(elm.token_amount)}</p>
                                   </div>
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
@@ -988,17 +989,17 @@ const ChartTabs = (props: propsData) => {
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                                   <p className="info-14-18 dark:text-white">
-                                    {elm?.limit_usdt?.toFixed(2)}
+                                    {currencyFormatter(elm?.limit_usdt?.toFixed(2))}
                                   </p>
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                                   <p className="info-14-18 dark:text-white ">
-                                    ${elm?.volume_usdt?.toFixed(2)}
+                                    ${currencyFormatter(elm?.volume_usdt?.toFixed(2))}
                                   </p>
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                                   <p className="info-14-18 dark:text-white ">
-                                    ${elm.token_amount?.toFixed(5)}
+                                    ${currencyFormatter(elm.token_amount?.toFixed(5))}
                                   </p>
                                 </div>
 

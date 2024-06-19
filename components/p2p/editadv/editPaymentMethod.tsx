@@ -48,7 +48,7 @@ const EditPaymentMethod = (props: activeSection) => {
     setValue('max_limit', max_limit.toFixed(2));
 
     let method: any = [];
-    props.editPost.p_method.map((item: any) => {
+    props.editPost.p_method?.map((item: any) => {
       // console.log(item);
       method.push(item?.upm_id);
     })
