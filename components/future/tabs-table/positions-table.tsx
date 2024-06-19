@@ -202,7 +202,7 @@ const PositionsTable = (props: propsData) => {
                       </div>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] !text-buy">{item?.qty > 0 ? item?.qty?.toFixed(5) : item?.qty?.toFixed(2)}</p>
+                      <p className="top-label !font-[600] !text-buy">{item?.qty}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <p className="top-label !font-[600] !text-buy">{item?.size}</p>
@@ -226,7 +226,7 @@ const PositionsTable = (props: propsData) => {
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <div className='flex items-center gap-[5px]'>
                         <div>
-                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{item?.pnl?.toFixed(8)}</p>
+                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{item?.pnl}</p>
                           <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>USDT</p>
                         </div>
                         {/* <IconsComponent type='sendIcon' /> */}
@@ -235,7 +235,7 @@ const PositionsTable = (props: propsData) => {
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <div className='flex items-center gap-[5px]'>
                         <div>
-                          <p className={`top-label !font-[600] !text-sell`}>-{item?.realized_pnl?.toFixed(8)}</p>
+                          <p className={`top-label !font-[600] !text-sell`}>-{item?.realized_pnl}</p>
                           <p className={`top-label !font-[600] !text-sell`}>USDT</p>
                         </div>
                         {/* <IconsComponent type='sendIcon' /> */}

@@ -17,13 +17,14 @@ interface showPopup {
 const TradeConfirmPopupModal = (props: showPopup) => {
 
     let { mode } = useContext(Context);
+    const [disable, setDisable] = useState(false)
 
     const closePopup = () => {
         props.setConfirmModelOverlay(false);
-                        props.setConfirmModelPopup(0);
-      }
-      const wrapperRef = useRef(null);
-      clickOutSidePopupClose({ wrapperRef, closePopup });
+        props.setConfirmModelPopup(0);
+    }
+    const wrapperRef = useRef(null);
+    clickOutSidePopupClose({ wrapperRef, closePopup });
 
     return (
         <div ref={wrapperRef} className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[520px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.modelPopup == 1 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
@@ -71,11 +72,11 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Value</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type === 'limit' ? parseFloat(props?.confirmOrderData?.amount)?.toFixed(5) : props?.confirmOrderData?.size?.toFixed(5)} USDT</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type === 'limit' ? parseFloat(props?.confirmOrderData?.amount) : props?.confirmOrderData?.size} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Estimated Liq. Price</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.liq_price?.toFixed(5)} USDT</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.liq_price} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Leverage</p>
@@ -87,7 +88,12 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                 </div>
                 <div className='flex justify-between items-center mb-[10px] gap-[20px]'>
                     <div className='mt-[5px] w-full'>
-                        <button className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px]`} onClick={props.confirmOrder} >Confirm</button>
+                        <button
+                            disabled={disable}
+                            className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${disable ? 'cursor-not-allowed  opacity-50' : ''}`} onClick={() => {
+                                props.confirmOrder();
+                                setDisable(true)
+                            }} >Confirm</button>
                     </div>
                     <div className='mt-[5px] w-full'>
                         <button className={` solid-button w-full !bg-[#808080] !rounded-[8px] py-[10px] px-[15px] !text-[14px]`} onClick={() => {
