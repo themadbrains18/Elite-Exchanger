@@ -62,6 +62,9 @@ const Header = (props: propsData) => {
 
   useEffect(() => {
     if (session !== undefined && session?.user !== undefined) {
+
+      console.log('=============get user basic detail');
+
       getUserBasicDetail();
       getUserNotification();
     }
@@ -106,7 +109,7 @@ const Header = (props: propsData) => {
       },
     }).then(response => response.json());
 
-    if (profileDashboard && profileDashboard?.data!==null) {
+    if (profileDashboard && profileDashboard?.data !== null) {
       let data = profileDashboard?.data?.filter((item: any) => {
         return item?.status === 0 || item?.status === false
       })
