@@ -105,7 +105,7 @@ const AntiPhishingCode = (props: activeSection) => {
           props.setShow(false);
         }, 3000);
       } else {
-        toast.error(response.data.message,{autoClose:2000});
+        toast.error(response.data.message,{autoClose:2000});    
       }
     } catch (error) { }
   };

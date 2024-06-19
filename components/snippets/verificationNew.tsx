@@ -244,17 +244,12 @@ const VerificationNew = (props: activeSection) => {
     clickOutSidePopupClose({ wrapperRef, closePopup });
 
     const resetTimer = () => {
-        console.log("=heeee");
-        
-        setEnable(false);
+
         setDisabled(false);
-        setShowTime(false);
-        setTimer('');
         const inputElements = document.querySelectorAll(".input_wrapper3 input");
         inputElements?.forEach((ele, index) => {
             (ele as HTMLInputElement).value = "";
         });
-        if (Ref.current) clearInterval(Ref.current);
     };
 
     return (

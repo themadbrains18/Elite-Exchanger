@@ -617,7 +617,7 @@ const SecuritySettings = (props: fixSection) => {
                       <div className="mt-[30px] ">
                         <div className="flex md:flex-row flex-col gap-[30px]">
                           <div className=" w-full mb-[10px]">
-                            <p className="sm-text mb-[10px]">Old Password</p>
+                            <p className="sm-text mb-[10px]">Old Password<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
                             <div className="relative">
                               <input
                                 type={`${showOldPswd === true ? "text" : "password"}`}
@@ -648,7 +648,7 @@ const SecuritySettings = (props: fixSection) => {
                         <div className="mt-5 flex gap-[30px] md:flex-row flex-col">
                           <div className=" w-full">
                             <div className="flex justify-between mb-[10px]">
-                              <p className="sm-text ">New Password</p>
+                              <p className="sm-text ">New Password<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
                               <button type="button" className="!text-primary text-[14px] " onClick={() => generatePassword()}>Generate Password</button>
                             </div>
                             <div className='relative input-cta2 flex justify-between gap-3 items-center mb-[10px]' onFocus={() => { setChecker(true) }} onBlur={() => { setChecker(false) }}>
@@ -683,7 +683,7 @@ const SecuritySettings = (props: fixSection) => {
                           </div>
 
                           <div className=" w-full">
-                            <p className="sm-text mb-[10px] h-[21px]">Re-enter password</p>
+                            <p className="sm-text mb-[10px] h-[21px]">Re-enter password<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
                             <div className="relative">
                               <input
                                 type={`${showpswd === true ? "text" : "password"}`}

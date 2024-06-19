@@ -156,7 +156,7 @@ const Dashboard = (props: fixSection) => {
                 </div>
                 <div className="mt-5 flex gap-[30px] md:flex-row flex-col">
                   <div className="w-full">
-                    <p className="sm-text mb-[10px]">Display Name</p>
+                    <p className="sm-text mb-[10px]">Display Name<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
                     <div className="relative">
                       <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}>
                         <input
@@ -170,7 +170,7 @@ const Dashboard = (props: fixSection) => {
                     </div>
                   </div>
                   <div className="w-full">
-                    <p className="sm-text mb-[10px]">User Name</p>
+                    <p className="sm-text mb-[10px]">User Name<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
                     <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}>
                       <input
                         type="text"
