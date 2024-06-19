@@ -30,9 +30,6 @@ interface activeSection {
 }
 
 const EditPaymentMethod = (props: activeSection) => {
-
-  console.log(props.price, '======== price in edit');
-
   const [show, setShow] = useState(false)
   const [active, setActive] = useState(0)
   const [formMethod, setFormMethod] = useState();
@@ -75,14 +72,22 @@ const EditPaymentMethod = (props: activeSection) => {
   });
 
   const onHandleSubmit = async (data: any) => {
+
+    if(data.min_limit > data.max_limit){
+      setError("min_limit", {
+        type: "custom",
+        message: `Min Limit must be less than Max limit`,
+      });
+      setFocus("min_limit");
+      return;
+    }
+
     if (data.quantity < props.assetsBalance || data.quantity == props?.editPost?.quantity) {
       props.setPaymentMethod(data);
       props.setStep(3);
 
     }
     else {
-      // console.log("here");
-
       setError("quantity", {
         type: "custom",
         message: `Insufficiant balance`,
@@ -120,6 +125,10 @@ const EditPaymentMethod = (props: activeSection) => {
     const value = e.target.value;
     if (/^\d*\.?\d{0,6}$/.test(value)) {
       type === "min" ? setMinInputValue(value) : setMaxInputValue(value);
+    }
+
+    if (type === "min" && maxInputValue > 0) {
+      value > maxInputValue ? setError('min_limit', { type: "custom", message: "Min Limit must be less than Max limit" }) : clearErrors('min_limit'); setMinInputValue(value)
     }
   }
 

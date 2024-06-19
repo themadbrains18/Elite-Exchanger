@@ -5,6 +5,9 @@ import EditResponse from "./editResponse";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { truncateNumber } from "@/libs/subdomain";
+import { currencyFormatter } from "@/components/snippets/market/buySellCard";
+import { toast } from "react-toastify";
 
 interface propsData {
   masterPayMethod?: any;
@@ -31,6 +34,7 @@ const EditAdverstisement = (props: propsData) => {
   const [step1Data, setStep1Data] = useState(Object);
   const [step2Data, setStep2Data] = useState(Object);
   const [assetsBalance, setAssetsBalance] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const assets = props.tokenList;
   const cash = ["INR"];
@@ -56,72 +60,61 @@ const EditAdverstisement = (props: propsData) => {
     });
     if (token.length > 0) {
       selectToken(token[0]);
-      setValue("price", props?.editPost?.price);
+      setValue("price", truncateNumber(props?.editPost?.price, 4));
     }
     let type = props.editPost?.price_type === 'fixed' ? 1 : 2;
     setShow(type)
   }, [props.editPost]);
 
   const selectToken = async (item: any) => {
-    console.log(item);
-
-    setValue("token_id", item?.id);
-    clearErrors("token_id");
-
-    // let usdtToINR = await fetch(
-    //   `${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`,
-    //   {
-    //     method: "GET",
-    //   }
-    // ).then((response) => response.json());
-
-
-    // setInrPrice(usdtToINR?.data?.rate);
-    if (item?.tokenType === 'global') {
-      // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${item?.symbol}&tsyms=INR`, {
-      //   method: "GET",
-      // }).then(response => response.json());
-
-      let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
-        method: "POST",
-        headers: new Headers({
-          "content-type": "application/json",
-          "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
-        }),
-        body: JSON.stringify({
-          currency: "INR",
-          code: item?.symbol === 'BTCB' ? 'BTC' : item?.symbol === 'BNBT' ? 'BNB' : item?.symbol,
-          meta: false
-        }),
+    try {
+      setValue("token_id", item?.id);
+      clearErrors("token_id");
+      setLoading(true);
+      if (item?.tokenType === 'global') {
+        let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+          method: "POST",
+          headers: new Headers({
+            "content-type": "application/json",
+            "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+          }),
+          body: JSON.stringify({
+            currency: "INR",
+            code: item?.symbol === 'BTCB' ? 'BTC' : item?.symbol === 'BNBT' ? 'BNB' : item?.symbol,
+            meta: false
+          }),
+        });
+        let data = await responseData.json();
+        setLoading(false);
+        setInrPrice(truncateNumber(data?.rate, 4));
+      }
+      else {
+        let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
+          method: "POST",
+          headers: new Headers({
+            "content-type": "application/json",
+            "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
+          }),
+          body: JSON.stringify({
+            currency: "INR",
+            code: "USDT",
+            meta: false
+          }),
+        });
+        let data = await responseData.json();
+        setInrPrice(truncateNumber(item?.price * data?.rate, 4));
+      }
+      setSelectedAssets(item);
+      let balances = props?.assets?.filter((e: any) => {
+        return e.token_id === item?.id;
       });
-      let data = await responseData.json();
+      setAssetsBalance(balances[0]?.balance);
+      setLoading(false);
+    } catch (error:any) {
+      setLoading(false);
+      toast.error(error?.message);
+    }
 
-      setInrPrice(data?.rate);
-    }
-    else {
-      // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
-      //   method: "GET",
-      // }).then(response => response.json());
-      let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
-        method: "POST",
-        headers: new Headers({
-          "content-type": "application/json",
-          "x-api-key": `${process.env.NEXT_PUBLIC_PRICE_SINGLE_ASSET_KEY}`,
-        }),
-        body: JSON.stringify({
-          currency: "INR",
-          code: "USDT",
-          meta: false
-        }),
-      });
-      let data = await responseData.json();
-      setInrPrice(item?.price * data?.rate);
-    }
-    setSelectedAssets(item);
-    let balances = props?.assets?.filter((e: any) => {
-      return e.token_id === item?.id;
-    });
-    setAssetsBalance(balances[0]?.balance);
   };
 
   const setPaymentMethod = (data: any) => {
@@ -151,7 +144,7 @@ const EditAdverstisement = (props: propsData) => {
                       return (
                         <div
                           key={index}
-                          className="flex items-center md:mr-4 md:py-2 md:px-[18px] cursor-pointer"
+                          className="flex items-center md:mr-4 md:py-2 md:px-[18px] "
                         >
                           <input
                             id={`radio${item.id}`}
@@ -165,7 +158,7 @@ const EditAdverstisement = (props: propsData) => {
                           />
                           <label
                             htmlFor={`radio${item.id}`}
-                            className="ml-2 md-text dark:!text-g-secondary  cursor-pointer relative custom-radio 
+                            className="ml-2 md-text dark:!text-g-secondary  relative custom-radio 
                                 pl-[30px] 
                                 after:dark:bg-omega
                                 after:bg-white
@@ -261,7 +254,7 @@ const EditAdverstisement = (props: propsData) => {
                       }`}
                     onClick={() => {
                       setShow(1);
-                      setValue('price', props?.editPost?.price)
+                      setValue('price', truncateNumber(props?.editPost?.price, 4))
                     }}
                     type="button"
                   >
@@ -311,8 +304,9 @@ const EditAdverstisement = (props: propsData) => {
                       }`}
                     onClick={() => {
                       setShow(2);
-                      let currentPrice = (inrPrice).toFixed(2)
-                      setValue('price', parseFloat(currentPrice))
+                      selectToken(selectedAssets);
+                      let currentPrice = truncateNumber(inrPrice, 4)
+                      setValue('price', currentPrice)
                     }}
                     type="button"
                   >
@@ -361,12 +355,11 @@ const EditAdverstisement = (props: propsData) => {
                   <div className="flex items-center justify-between gap-2 relative pb-[15px] border-b border-grey-v-1 dark:border-opacity-20">
                     <p className="info-14-18 dark:!text-white">Cuurent  Price</p>
                     {
-                      selectedAssets?.price == undefined ?
-                        <div className='loader w-[35px] z-[2] h-[35px] absolute top-0 right-0 border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
+                      selectedAssets?.price == undefined && loading === true ?
+                        <div className='loader relative w-[35px] z-[2] h-[35px] top-0 right-0 border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
                         :
                         <p className="sec-title md:!text-[18px] !text-[14px]">
-
-                          ₹{" "}{Number(selectedAssets?.price * inrPrice).toFixed(2)}
+                          ₹{" "}{currencyFormatter(truncateNumber(inrPrice, 4))}
                         </p>
 
                     }

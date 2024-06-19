@@ -7,6 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { toast, ToastContainer } from "react-toastify";
+import { currencyFormatter } from "@/components/snippets/market/buySellCard";
+import { truncateNumber } from "@/libs/subdomain";
 
 interface propsData {
   masterPayMethod?: any;
@@ -45,12 +47,11 @@ const Adverstisement = (props: propsData) => {
       let price: any = router?.query?.price;
       setValue('price', price);
     }
-    if(show){
-      setInrPrice(0)
-      reset()
-    }
-
-  }, [router.query, show]);
+    // if(show){
+    //   setInrPrice(0)
+    //   reset()
+    // }
+  }, [router.query]);
 
   let {
     register,
@@ -93,7 +94,7 @@ const Adverstisement = (props: propsData) => {
         let data = await responseData.json();
         setLoading(false);
         setInrPrice(data?.rate);
-        setValue('price', (data?.rate).toFixed(4));
+        setValue('price', truncateNumber( data?.rate,4));
       }
       else {
         // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
@@ -115,7 +116,7 @@ const Adverstisement = (props: propsData) => {
         setLoading(false);
         setInrPrice(item?.price * data?.rate);
         let price: any = item?.price * data?.rate
-        setValue('price', price.toFixed(4));
+        setValue('price', truncateNumber( inrPrice,4));
       }
 
       setSelectedAssets(item);
@@ -291,7 +292,7 @@ const Adverstisement = (props: propsData) => {
                     className={`info-14-18   max-[767px]:w-full max-[767px]:max-w-full after:block after:top-full  after:h-[2px] after:w-[0%] after:bg-primary cursor-pointer after:transition-all after:ease-linear after:duration-500 ${show === 2 && "border-primary after:w-[100%] after:bottom !text-primary"}`}
                     onClick={() => {
                       setShow(2);
-                      // selectToken(selectedAssets);
+                      selectToken(selectedAssets);
                       let currentPrice = (inrPrice).toFixed(2)
                       setValue('price', parseFloat(currentPrice))
                     }}
@@ -335,7 +336,7 @@ const Adverstisement = (props: propsData) => {
                   <div className="flex items-center justify-between gap-2 pb-[15px] border-b border-grey-v-1 dark:border-opacity-20">
                     <p className="info-14-18 dark:!text-white">Your Price</p>
                     {loading === true ? <div className='loader relative w-[35px] z-[2] h-[35px] top-0 right-0 border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
-                      : <p className="sec-title md:!text-[18px] !text-[14px]">₹ {(inrPrice)?.toFixed(2)}</p>
+                      : <p className="sec-title md:!text-[18px] !text-[14px]">₹ {currencyFormatter(truncateNumber( inrPrice,4))}</p>
                     }
 
                   </div>
