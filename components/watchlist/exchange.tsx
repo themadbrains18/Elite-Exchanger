@@ -85,6 +85,7 @@ const Exchange = (props: DynamicId): any => {
   }, [errors])
 
   const setCurrencyName = (symbol: string, dropdown: number) => {
+    
     if (dropdown === 1) {
       setFirstCurrency(symbol);
       setValue('firstCurrency', symbol);
@@ -117,7 +118,15 @@ const Exchange = (props: DynamicId): any => {
 
   const onHandleSubmit = async (data: any) => {
 
+    
     try {
+      if(data?.firstCurrency=== data?.secondCurrency){
+        setError("secondCurrency", {
+          type: "custom",
+          message: `Please select different recieve currency`,
+        });
+        return;
+      }
       if (selectedToken?.avail_bal < data.spend_amount) {
         setError("spend_amount", {
           type: "custom",
@@ -319,10 +328,10 @@ const Exchange = (props: DynamicId): any => {
             </div>
           </div>
           {errors?.spend_amount && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.spend_amount?.message}</p>
+            <p style={{ color: "#ff0000d1", fontSize:'12px' }}>{errors?.spend_amount?.message}</p>
           )}
           {errors?.firstCurrency && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.firstCurrency?.message}</p>
+            <p style={{ color: "#ff0000d1", fontSize:'12px' }}>{errors?.firstCurrency?.message}</p>
           )}
           <div className="py-[10px]">
             <Image src="/assets/market/exchange.svg" width={30} height={30} alt="exchange" className=" mx-auto" />
@@ -334,11 +343,11 @@ const Exchange = (props: DynamicId): any => {
               <input type="number" value={receiveAmount > 0 ? receiveAmount?.toFixed(8) : ''} readOnly placeholder="$0" className="bg-[transparent] md-text outline-none border-l px-[5px] mt-[10px] border-h-primary" />
             </div>
             <div>
-              <FilterSelectMenuWithCoin data={list} border={false} {...register('secondCurrency')} dropdown={2} setCurrencyName={setCurrencyName} value={firstCurrency} />
+              <FilterSelectMenuWithCoin data={list} border={false} {...register('secondCurrency')} dropdown={2} setCurrencyName={setCurrencyName} value={secondCurrency} />
             </div>
           </div>
           {errors?.secondCurrency && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.secondCurrency?.message}</p>
+            <p style={{ color: "#ff0000d1", fontSize:'12px' }}>{errors?.secondCurrency?.message}</p>
           )}
 
           <div className="mt-5 mb-5">
@@ -353,7 +362,7 @@ const Exchange = (props: DynamicId): any => {
           }Preview</button>
             :
             <div className="flex gap-[18px]">
-              <button type="button" className="solid-button w-full bg-grey-v-2 !text-primary hover:!text-white" onClick={() => { setIsConvert(false); reset(); setSelectedToken({}); setSelectedSecondToken({}); setAmount(0); setReceivedAmount(0); setFirstCurrency('')}}>Cancel</button>
+              <button type="button" className="solid-button w-full bg-grey-v-2 !text-primary hover:!text-white" onClick={() => { setIsConvert(false); reset(); setSelectedToken({}); setSelectedSecondToken({}); setAmount(0); setReceivedAmount(0); setFirstCurrency(''); setSecondCurrency('')}}>Cancel</button>
 
               <button type="button" className=" solid-button w-full" disabled={btnDisabled2} onClick={() => sendConvertRequest()}>{btnDisabled2 &&
                 <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

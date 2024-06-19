@@ -97,7 +97,7 @@ const AddPayment = (props: activeSection) => {
   };
 
   const onHandleSubmit = (data: any) => {
-console.log(data.qr_code?.length, typeof data.qr_code, data?.qr_code,"==data");
+// console.log(data.qr_code?.length, typeof data.qr_code, data?.qr_code,"==data");
 
     if (data?.phonenumber?.length < 10) {
       toast.error("Number contain 10 digits");
@@ -113,7 +113,7 @@ console.log(data.qr_code?.length, typeof data.qr_code, data?.qr_code,"==data");
         toast.error("This Number is already added.");
         return;
       }
-      console.log(qrCode,"==qrCode");
+      // console.log(qrCode,"==qrCode");
       
 
       let pmid = data?.selectPayment?.id;
@@ -134,7 +134,7 @@ console.log(data.qr_code?.length, typeof data.qr_code, data?.qr_code,"==data");
         pmObject: data,
         master_method: master_method
       }
-console.log(obj,"==obj");
+// console.log(obj,"==obj");
 
       props.setFormMethod(obj);
       props.setActive(2);

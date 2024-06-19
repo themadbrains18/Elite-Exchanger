@@ -137,7 +137,7 @@ const Withdraw = (props: activeSection) => {
         },
       }).then(response => response.json());
 
-      console.log(address.data, '-----address data');
+      // console.log(address.data, '-----address data');
       let res = address?.data?.data?.filter((item: any) => item?.status === true)
       setAddressList(res);
     } catch (error) {
