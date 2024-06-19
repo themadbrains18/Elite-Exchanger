@@ -117,6 +117,14 @@ const PaymentMethod = (props: activeSection) => {
       setFocus("quantity");
       return;
     }
+    if(data.min_limit > data.max_limit){
+      setError("min_limit", {
+        type: "custom",
+        message: `Min Limit must be less than Max limit`,
+      });
+      setFocus("min_limit");
+      return;
+    }
     if (data.p_method === "false") {
       setError("p_method", {
         type: "custom",
@@ -206,7 +214,7 @@ const PaymentMethod = (props: activeSection) => {
     if (/^\d*\.?\d{0,6}$/.test(value)) {
       type === "min" ? setMinInputValue(value) : setMaxInputValue(value);
     }
-    if (type === "min") {
+    if (type === "min" && maxInputValue > 0) {
       value > maxInputValue ? setError('min_limit', { type: "custom", message: "Min Limit must be less than Max limit" }) : clearErrors('min_limit'); setMinInputValue(value)
     }
   }
@@ -227,7 +235,7 @@ const PaymentMethod = (props: activeSection) => {
                 : "Payment Methods"}
             </p>
             <div className="">
-              {list && list?.length>0 &&list?.map((item: any, index: any) => {
+              {list && list?.length > 0 && list?.map((item: any, index: any) => {
                 return (
                   <div
                     key={index}
@@ -419,6 +427,7 @@ const PaymentMethod = (props: activeSection) => {
                         <div className="flex items-center cursor-pointer">
                           <div className="w-full">
                             <input
+                              disabled={true}
                               type="number"
                               id="max_limit"
                               step={0.000001}
