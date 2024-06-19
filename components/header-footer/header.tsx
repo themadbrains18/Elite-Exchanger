@@ -61,6 +61,10 @@ const Header = (props: propsData) => {
   const wbsocket = useWebSocket();
 
   useEffect(() => {
+    socket();
+  }, [wbsocket]);
+
+  useEffect(() => {
     if (session !== undefined && session?.user !== undefined) {
 
       console.log('=============get user basic detail');
@@ -69,9 +73,8 @@ const Header = (props: propsData) => {
       getUserNotification();
     }
     getTokenList();
-    socket();
 
-  }, [wbsocket]);
+  }, []);
 
   const socket = () => {
     if (wbsocket) {
