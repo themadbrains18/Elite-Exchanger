@@ -162,23 +162,34 @@ const BuySellCard = (props: DynamicId) => {
       return;
     }
 
+    let totalUsdtAmount: any = totalAmount;
+    let transactionFee: any = active1 === 1 ? (data.token_amount * 0.00075).toFixed(8) : (data.token_amount * data.limit_usdt * 0.00075).toFixed(8);
+
     let obj = {
       "user_id": props.session.user.user_id,
       "token_id": selectedToken?.id,
       "market_type": type?.value,
       "order_type": active1 === 1 ? 'buy' : 'sell',
-      "limit_usdt": data.limit_usdt,
-      "volume_usdt": totalAmount,
-      "token_amount": data.token_amount,
-      "fee": active1 === 1 ? data.token_amount * 0.00075 : data.token_amount * data.limit_usdt * 0.00075,
+      "limit_usdt": data.limit_usdt.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
+      "volume_usdt": totalUsdtAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
+      "token_amount": data.token_amount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
+      "fee": transactionFee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
       "is_fee": false,
       "status": false,
       "isCanceled": false,
       "queue": false
     }
+
+    console.log(obj,'========final obj');
+    // return;
+
     setObjData(obj)
     setActive(true)
   }
+
+  // =======================================================
+  // Final Action perform after popup submit
+  // =======================================================
   const actionPerform = async () => {
     try {
       const ciphertext = AES.encrypt(JSON.stringify(objData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
@@ -199,7 +210,7 @@ const BuySellCard = (props: DynamicId) => {
         setSecondCurrency('USDT');
         setActive(false);
         reset({
-          limit_usdt: props?.token?.price.toFixed(5),
+          limit_usdt: props?.token?.price.toFixed(6),
           token_amount: 0.00,
         })
         setEstimateFee(0.00)
@@ -220,7 +231,7 @@ const BuySellCard = (props: DynamicId) => {
             "user_id": props.session.user.user_id,
             "token_id": selectedToken?.id,
             "order_type": active1 === 1 ? 'buy' : 'sell',
-            "market_type": show === 1? 'limit' : 'market'
+            "market_type": show === 1 ? 'limit' : 'market'
           }
 
           const ciphertext = AES.encrypt(JSON.stringify(partialObj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
@@ -242,14 +253,8 @@ const BuySellCard = (props: DynamicId) => {
               }
               wbsocket.send(JSON.stringify(withdraw));
             }
-
           }
-
-          
-          
         }, 2000);
-
-
       }
       else {
         toast.error(reponse.data?.data);
@@ -282,20 +287,25 @@ const BuySellCard = (props: DynamicId) => {
       }
       let qty: any = getValues('token_amount');
       let amount: any = getValues('limit_usdt');
+      if (qty) {
+        let totalAmount: any = qty * amount;
+        let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(8) : (amount * qty * 0.00075).toFixed(8);
+        console.log(fee,'-----------------fees');
+        
+        setEstimateFee(fee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
+        setTotalAmount(totalAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
+      }
 
-      let totalAmount = qty * amount;
-      let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(6) : (amount * qty * 0.00075).toFixed(6);
-
-      setEstimateFee(fee);
-      setTotalAmount(totalAmount);
     }
     else {
       let qty: any = getValues('token_amount');
-      let totalAmount = qty * props?.token?.price;
-      let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(6) : (props?.token?.price * qty * 0.00075).toFixed(6);
+      if (qty) {
+        let totalAmount: any = qty * props?.token?.price;
+        let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(8) : (props?.token?.price * qty * 0.00075).toFixed(8);
+        setEstimateFee(fee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
+        setTotalAmount(totalAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
+      }
 
-      setEstimateFee(fee);
-      setTotalAmount(totalAmount);
     }
   }
 
@@ -508,7 +518,7 @@ const BuySellCard = (props: DynamicId) => {
                   <div className="flex gap-2">
                     <p data-testid="total" className="sm-text dark:text-white">Total:</p>
                     {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
-                    <p className="sm-text dark:text-white">{totalAmount.toFixed(6)}</p>
+                    <p className="sm-text dark:text-white">{totalAmount}</p>
                   </div>
                   <div className="flex gap-2">
                     <p className="sm-text dark:text-white">Max Trade:</p>
