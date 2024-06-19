@@ -59,7 +59,7 @@ const schema = yup
         return originalValue;
       })
       .typeError("please enter a valid date")
-      .required('DOB is required field')
+      .required('This is required field')
     ,
     idfront: yup.mixed().required("Please upload front side of  document"),
     idback: yup.mixed().required("Please upload back side of  document"),
@@ -104,7 +104,7 @@ const KycAuth = (props: fixSection) => {
     { fullname: "Voter Id" }
   ];
 
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState();
 
   let {
     register,
