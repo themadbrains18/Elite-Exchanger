@@ -65,17 +65,11 @@ const Header = (props: propsData) => {
   }, [wbsocket]);
 
   useEffect(() => {
-    console.log(session,'==========session');
-    
     if (session !== undefined && session?.user !== undefined) {
-      console.log('=============get user basic detail');
       getUserBasicDetail();
       getUserNotification();
     }
-
-    console.log('=============token list');
     getTokenList();
-
   }, [session]);
 
   const socket = () => {
