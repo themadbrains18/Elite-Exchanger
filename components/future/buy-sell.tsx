@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import IconsComponent from "../snippets/icons";
 import RangeSlider from "./range-slider";
-import SelectDropdown from "./snippet/select-dropdown";
 import { useSession } from "next-auth/react";
 import AES from "crypto-js/aes";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProfitLossModal from "./popups/profit-loss-model";
 import Link from "next/link";
@@ -13,6 +12,7 @@ import OrderPreferenceModal from "../snippets/orderPreferenceModal";
 import PositionModal from "../snippets/positionModal";
 import ConfirmationModel from "../snippets/confirmation";
 import { useWebSocket } from "@/libs/WebSocketContext";
+import { truncateNumber } from "@/libs/subdomain";
 
 interface fullWidth {
   fullWidth?: boolean;
@@ -132,15 +132,6 @@ const BuySell = (props: fullWidth) => {
     let rewardsAmount = 0;
     if (symbol === "USDT") {
       rewardsAmount = props?.totalPoint;
-      // props?.rewardsList?.map((item: any) => {
-      //   if (item.claimed_on !== null) {
-      //     const difference = +new Date(item.expired_on) - +new Date();
-      //     if (difference > 0) {
-      //       rewardsAmount = rewardsAmount + item?.amount;
-      //     }
-      //   }
-
-      // });
     }
 
     if (asset?.length > 0) {
@@ -150,8 +141,9 @@ const BuySell = (props: fullWidth) => {
         setButtonStyle(false);
       }
 
-      let bal = Number(asset[0].balance) + rewardsAmount;
-      setAssetsBalance(Number(asset[0].balance));
+      let bal = truncateNumber(Number(asset[0].balance) + rewardsAmount, 6);
+      let assetbal = truncateNumber(Number(asset[0].balance), 6)
+      setAssetsBalance(assetbal);
       setAvailBalance(bal);
     } else {
       setAvailBalance(rewardsAmount);
@@ -184,15 +176,6 @@ const BuySell = (props: fullWidth) => {
     let rewardsAmount = 0;
     if (token === "USDT") {
       rewardsAmount = props?.totalPoint;
-      // props?.rewardsList?.map((item: any) => {
-      //   if (item.claimed_on !== null) {
-      //     const difference = +new Date(item.expired_on) - +new Date();
-      //     if (difference > 0) {
-      //       rewardsAmount = rewardsAmount + item?.amount;
-      //     }
-      //   }
-
-      // });
     }
 
     if (asset?.length > 0) {
@@ -234,7 +217,7 @@ const BuySell = (props: fullWidth) => {
         return;
       }
       // let entry_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
-      let Liquidation_Price =
+      let Liquidation_Price:any =
         (marketPrice * (1 - 0.01)) / props?.marginMode?.leverage;
 
       // Liquidation Price for long case
@@ -252,30 +235,31 @@ const BuySell = (props: fullWidth) => {
         qty = sizeValue.toString();
       }
       let value: any = (qty * 0.055).toFixed(5);
-      let releazedPnl = (marketPrice * value) / 100;
+      let releazedPnl: any = (marketPrice * value) / 100;
 
+      let size: any = qty * marketPrice
       obj = {
         symbol:
           props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
         user_id: session?.user?.user_id,
         coin_id: props?.currentToken?.coin_id,
         leverage: props?.marginMode?.leverage,
-        size: qty * marketPrice,
-        entry_price: marketPrice,
-        market_price: marketPrice,
-        liq_price: Liquidation_Price,
+        size: size.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
+        entry_price: marketPrice.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
+        market_price: marketPrice.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
+        liq_price: Liquidation_Price.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
         margin: sizeValue / props?.marginMode?.leverage,
         margin_ratio: 0.01,
         pnl: 0,
-        realized_pnl: releazedPnl.toFixed(5),
+        realized_pnl: releazedPnl.toString().match(/^-?\d+(?:\.\d{0,7})?/)[0],
         tp_sl: "--",
         status: false,
         queue: false,
         direction: show === 1 ? "long" : "short",
         order_type: orderType,
         leverage_type: props?.marginMode?.margin,
-        type: (show === 2 && marketType === 'limit') ? 'market' : marketType,
-        qty: parseFloat(qty),
+        market_type: (show === 2 && marketType === 'limit') ? 'market' : marketType,
+        qty: parseFloat(qty.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0]),
         position_mode: positionMode
       };
     }
@@ -289,7 +273,7 @@ const BuySell = (props: fullWidth) => {
         setSizeValidate("Amount must be positive number!");
         return;
       }
-      let Liquidation_Price =
+      let Liquidation_Price:any =
         (entryPrice * (1 - 0.01)) / props?.marginMode?.leverage;
 
       // Liquidation Price for long case
@@ -306,6 +290,9 @@ const BuySell = (props: fullWidth) => {
       if (orderType === "qty") {
         qty = sizeValue.toString();
       }
+
+      let enter_Price:any = entryPrice;
+      let amount:any = qty * entryPrice
       obj = {
         position_id: "--",
         user_id: session?.user?.user_id,
@@ -313,15 +300,15 @@ const BuySell = (props: fullWidth) => {
           props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
         side: show === 1 ? "open long" : "open short",
         type: marketType, //e.g limit, take profit market, stop market
-        amount: (qty * entryPrice).toString(), // limit order amount, close position
-        price_usdt: entryPrice, // limit order price
+        amount: amount.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0], // limit order amount, close position
+        price_usdt: enter_Price.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0], // limit order price
         trigger: "--", // TP/SL posiotion amount , limit order --
         reduce_only: "No", // TP/SL case Yes, limit order No
         post_only: "No", //No
         status: false,
         leverage: props?.marginMode?.leverage,
         margin: sizeValue / props?.marginMode?.leverage,
-        liq_price: Liquidation_Price,
+        liq_price: Liquidation_Price.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
         market_price:
           props?.currentToken?.token !== null
             ? props?.currentToken?.token?.price
@@ -329,7 +316,7 @@ const BuySell = (props: fullWidth) => {
         order_type: orderType,
         leverage_type: props?.marginMode?.margin,
         coin_id: props?.currentToken?.coin_id,
-        qty: parseFloat(qty),
+        qty: parseFloat(qty.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0]),
         position_mode: positionMode
       };
     }
@@ -343,112 +330,10 @@ const BuySell = (props: fullWidth) => {
 
   const confirmOrder = async () => {
     try {
-      let obj;
-      if (marketType === "market" || (show === 2 && marketType === 'limit')) {
-        if (sizeValue === 0 || sizeValue < 0) {
-          setSizeValidate("Amount must be positive number!");
-          return;
-        }
-        // let entry_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
-        let Liquidation_Price =
-          (marketPrice * (1 - 0.01)) / props?.marginMode?.leverage;
-
-        // Liquidation Price for long case
-        Liquidation_Price = marketPrice - Liquidation_Price;
-
-        // Liquidation Price for short case
-        if (show === 2) {
-          Liquidation_Price = marketPrice + Liquidation_Price;
-        }
-
-        let qty: any = sizeValue / marketPrice;
-        qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
-        if (orderType === "qty") {
-          qty = sizeValue.toString();
-        }
-        let value: any = (qty * 0.055).toFixed(5);
-        let releazedPnl = (marketPrice * value) / 100;
-        obj = {
-          symbol:
-            props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
-          user_id: session?.user?.user_id,
-          coin_id: props?.currentToken?.coin_id,
-          leverage: props?.marginMode?.leverage,
-          size: qty * marketPrice,
-          entry_price: marketPrice,
-          market_price: marketPrice,
-          liq_price: Liquidation_Price,
-          margin: sizeValue / props?.marginMode?.leverage,
-          margin_ratio: 0.01,
-          pnl: 0,
-          realized_pnl: releazedPnl,
-          tp_sl: "--",
-          status: false,
-          queue: false,
-          direction: show === 1 ? "long" : "short",
-          order_type: orderType,
-          leverage_type: props?.marginMode?.margin,
-          market_type: (show === 2 && marketType === 'limit') ? 'market' : marketType,
-          qty: parseFloat(qty),
-          position_mode: positionMode
-        };
-      } else {
-        if (entryPrice === 0 || entryPrice < 0) {
-          setEntryPriceValidate("Price must be positive number!");
-          return;
-        }
-
-        if (sizeValue === 0 || sizeValue < 0) {
-          setSizeValidate("Amount must be positive number!");
-          return;
-        }
-        let Liquidation_Price =
-          (entryPrice * (1 - 0.01)) / props?.marginMode?.leverage;
-
-        // Liquidation Price for long case
-        Liquidation_Price = entryPrice - Liquidation_Price;
-
-        // Liquidation Price for short case
-        if (show === 2) {
-          Liquidation_Price = entryPrice + Liquidation_Price;
-        }
-
-        let qty: any = sizeValue / marketPrice;
-        qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
-        if (orderType === "qty") {
-          qty = sizeValue.toString();
-        }
-        obj = {
-          position_id: "--",
-          user_id: session?.user?.user_id,
-          symbol:
-            props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
-          side: show === 1 ? "open long" : "open short",
-          type: marketType, //e.g limit, take profit market, stop market
-          amount: (qty * entryPrice).toString(), // limit order amount, close position
-          price_usdt: entryPrice, // limit order price
-          trigger: "--", // TP/SL posiotion amount , limit order --
-          reduce_only: "No", // TP/SL case Yes, limit order No
-          post_only: "No", //No
-          status: false,
-          leverage: props?.marginMode?.leverage,
-          margin: sizeValue / props?.marginMode?.leverage,
-          liq_price: Liquidation_Price,
-          market_price:
-            props?.currentToken?.token !== null
-              ? props?.currentToken?.token?.price
-              : props?.currentToken?.global_token?.price,
-          order_type: orderType,
-          leverage_type: props?.marginMode?.margin,
-          coin_id: props?.currentToken?.coin_id,
-          qty: parseFloat(qty),
-        };
-      }
-
       setButtonStyle(true);
 
       const ciphertext = AES.encrypt(
-        JSON.stringify(obj),
+        JSON.stringify(confirmOrderData),
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
       );
       let record = encodeURIComponent(ciphertext.toString());
@@ -477,7 +362,6 @@ const BuySell = (props: fullWidth) => {
         setButtonStyle(false);
       } else {
         if (istpslchecked === true) {
-          // console.log(tpsl?.profit?.position_id);
           if (tpsl.profit) {
             tpsl.profit.position_id = reponse?.data?.data?.result?.id;
           }
@@ -515,9 +399,9 @@ const BuySell = (props: fullWidth) => {
           };
           wbsocket.send(JSON.stringify(position));
         }
-        
+
         toast.success(reponse?.data?.data?.message, {
-           position: 'top-center'
+          position: 'top-center'
         });
         setButtonStyle(false);
         setEntryPrice(0);
@@ -670,7 +554,7 @@ const BuySell = (props: fullWidth) => {
           reponse?.data?.data?.message !== undefined
             ? reponse?.data?.data?.message
             : reponse?.data?.data, {
-              position: 'top-center'
+          position: 'top-center'
         }
         );
         setButtonStyle(false);

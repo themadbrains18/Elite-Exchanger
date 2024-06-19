@@ -71,11 +71,11 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Value</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type === 'limit' ? parseFloat(props?.confirmOrderData?.amount)?.toFixed(5) : props?.confirmOrderData?.size?.toFixed(5)} USDT</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type === 'limit' ? parseFloat(props?.confirmOrderData?.amount) : props?.confirmOrderData?.size} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Estimated Liq. Price</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.liq_price?.toFixed(5)} USDT</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.liq_price} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Leverage</p>
