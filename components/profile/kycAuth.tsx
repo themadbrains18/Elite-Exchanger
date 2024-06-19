@@ -255,7 +255,7 @@ const KycAuth = (props: fixSection) => {
       if (fileSize > 2) {
         setError("idfront", {
           type: "custom",
-          message: "File size upto 2 mb",
+          message: "Upload file upto 2 mb",
         });
         setEnableFront(false);
         return;
@@ -327,7 +327,7 @@ const KycAuth = (props: fixSection) => {
       if (fileSize > 2) {
         setError("idback", {
           type: "custom",
-          message: "File size upto 2 mb",
+          message: "Upload file upto 2 mb",
         });
         setEnableBack(false);
         return;
@@ -399,7 +399,7 @@ const KycAuth = (props: fixSection) => {
       if (fileSize > 2) {
         setError("statement", {
           type: "custom",
-          message: "File size upto 2 mb",
+          message: "Upload file upto 2 mb",
         });
         setEnableStatement(false);
         return;
@@ -832,7 +832,7 @@ const KycAuth = (props: fixSection) => {
 
             <div className="mt-[30px]">
               <div className="flex gap-[30px] md:flex-row flex-col">
-                <div className="max-w-full md:max-w-[30%] w-full">
+                <div className="max-w-full md:max-w-[50%] w-full">
                   <label htmlFor="docnumber" className="sm-text mb-[10px]">Document Number</label>
                   <input
                     id="docnumber"
@@ -847,7 +847,7 @@ const KycAuth = (props: fixSection) => {
                     </p>
                   )}
                 </div>
-                <div className="max-w-full md:max-w-[70%] w-full">
+                <div className="max-w-full md:max-w-[50%] w-full">
                   <label htmlFor="fname" className="sm-text mb-[10px]">
                     Full name on Identity
                   </label>
@@ -868,7 +868,7 @@ const KycAuth = (props: fixSection) => {
               </div>
 
               <div className="flex gap-[30px] md:flex-row flex-col mt-[24px]">
-                <div className="max-w-full md:max-w-[30%] w-full">
+                <div className="max-w-full md:max-w-[50%] w-full">
                   <label className="sm-text mb-[10px]">Date of Birth</label>
                   {/* <input type="date" placeholder="Enter ID number" className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"/> */}
                   <DatePicker
@@ -885,7 +885,7 @@ const KycAuth = (props: fixSection) => {
                     <p style={{ color: "#ff0000d1" }}>{errors?.dob.message}</p>
                   )}
                 </div>
-                <div className="max-w-full md:max-w-[70%] w-full">
+                <div className="max-w-full md:max-w-[50%] w-full">
                   <label className="sm-text mb-[10px]">Country</label>
                   <CountrylistDropdown
                     data={Countrylist}

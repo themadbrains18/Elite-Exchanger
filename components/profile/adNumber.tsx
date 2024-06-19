@@ -332,6 +332,13 @@ const AdNumber = (props: activeSection) => {
           toast.error(res?.data?.message, { autoClose: 2000 });
           setTimeout(() => {
             setBtnDisabled(false);
+            if (Ref.current) clearInterval(Ref.current);
+            setShowTime(false);
+            setStatuss(true);
+            const inputElements = document.querySelectorAll(".input_wrapper input");
+            inputElements.forEach((ele, index) => {
+              (inputElements[index] as HTMLInputElement).value = ""
+            })
           }, 3000);
         } else {
           await sendSessionOtp();
@@ -582,9 +589,9 @@ const AdNumber = (props: activeSection) => {
               sendSessionOtp={sendSessionOtp}
             />
           )}
-          {popup === true && <CodeNotRecieved setEnable={setPopup} />}
         </div>
       )}
+      {popup === true && <CodeNotRecieved setEnable={setPopup} />}
 
     </>
   );

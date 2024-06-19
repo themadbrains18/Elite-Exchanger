@@ -230,12 +230,12 @@ const GoogleAuth = (props: activeSection) => {
         setBtnDisabled(false);
       }
       else {
-        toast.error(response?.data?.data, { autoClose: 3000 });
+        toast.error(response?.data?.data, { autoClose: 2000 });
         setTimeout(() => {
 
           setReqCount(reqCount + 1);
           setBtnDisabled(false);
-        }, 3005);
+        }, 3000);
       }
     } catch (error) {
       console.log(error);
@@ -243,6 +243,7 @@ const GoogleAuth = (props: activeSection) => {
   }
 
   const closePopup = () => {
+    
     props?.setShow(false);
     props.setEnable(0);
   }
@@ -349,7 +350,7 @@ const GoogleAuth = (props: activeSection) => {
                   onClick={() => sendOtp()}
                   disabled={enable}
                 >
-                  Resend SMS
+                  Resend OTP
                 </button>
               </div>
             }

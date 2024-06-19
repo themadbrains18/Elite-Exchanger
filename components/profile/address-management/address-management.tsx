@@ -25,7 +25,7 @@ const AddressManagement = (props: fixSection) => {
   const [data, setData] = useState([]);
   const [tokens, setTokens] = useState([]);
   const [list, setList] = useState([]);
-  const [confirm, setConfirm] = useState(0);
+  const [confirm, setConfirm] = useState(false);
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState('Are you sure you want to delete from your address book?');
   const [title, setTitle] = useState('Are you sure you want to delete this address?');
@@ -150,7 +150,7 @@ const AddressManagement = (props: fixSection) => {
       if (postResponse?.data) {
         toast.success('Address delted successfully', { autoClose: 2000 });
         getAllWhitelistAddress(0);
-        setConfirm(0);
+        setConfirm(false);
         setShow(false);
       }
       else {
@@ -396,7 +396,7 @@ const AddressManagement = (props: fixSection) => {
                         </div>
                       </td>
                       <td>
-                        <button onClick={() => { setConfirm(1); setShow(true); setPostId(item?.id) }}>
+                        <button onClick={() => { setConfirm(true); setShow(true); setPostId(item?.id) }}>
                           <IconsComponent type='deleteIcon' hover={false} active={false} />
                         </button>
                       </td>
@@ -425,8 +425,8 @@ const AddressManagement = (props: fixSection) => {
         active &&
         <AddAddress active={active} setActive={setActive} networks={data} session={session} refreshData={getAllWhitelistAddress} token={tokens} />
       }
-      {confirm == 1 &&
-        <ConfirmationModel setActive={setConfirm} setShow={setShow} title={title} message={message} show={show} actionPerform={actionPerform} />
+      {confirm &&
+        <ConfirmationModel setActive={setConfirm} setShow={setShow} title={title} message="" show={show} actionPerform={actionPerform} />
       }
       {showSVG && (
         <>

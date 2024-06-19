@@ -27,7 +27,7 @@ const mockProps = {
   },
   token: {
     // Mock data for token
-    symbol: 'BLC',
+    symbol: 'BTCB',
     price: 100,
     tradepair:{
       limit_trade:true

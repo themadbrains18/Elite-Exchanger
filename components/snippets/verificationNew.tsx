@@ -32,6 +32,7 @@ const VerificationNew = (props: activeSection) => {
     const [isOtp, setIsOtp] = useState(false);
     const [showTime, setShowTime] = useState(false);
     const [optEnable, setOtpEnable] = useState(false);
+    
 
     useEffect(() => {
 
@@ -211,7 +212,15 @@ const VerificationNew = (props: activeSection) => {
                 return;
             }
 
-            props.finalOtpVerification(fillOtp);
+           let res= await props.finalOtpVerification(fillOtp);
+           console.log(res,"==res");
+           
+           if(!res){
+            setTimeout(()=>{
+                resetTimer()
+
+            },3000)
+           }
 
             // setTimeout(() => {
             //     const inputElements = document.querySelectorAll(".input_wrapper input");
@@ -222,7 +231,7 @@ const VerificationNew = (props: activeSection) => {
             //     setOtp('');
             // }, 4000)
         } catch (error) {
-            console.log(error);
+            console.log(error,"==errorr in new verification");
         }
     };
 
@@ -233,6 +242,20 @@ const VerificationNew = (props: activeSection) => {
     }
     const wrapperRef = useRef(null);
     clickOutSidePopupClose({ wrapperRef, closePopup });
+
+    const resetTimer = () => {
+        console.log("=heeee");
+        
+        setEnable(false);
+        setDisabled(false);
+        setShowTime(false);
+        setTimer('');
+        const inputElements = document.querySelectorAll(".input_wrapper3 input");
+        inputElements?.forEach((ele, index) => {
+            (ele as HTMLInputElement).value = "";
+        });
+        if (Ref.current) clearInterval(Ref.current);
+    };
 
     return (
         <>

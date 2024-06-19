@@ -30,7 +30,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
   const [demail, setdemail] = useState('');
 
   useEffect(() => {
-    if (props.userDetail && props?.userDetail?.messgae === undefined && props.userDetail?.dName !== null) {
+    if (props.userDetail && props?.userDetail?.messgae === undefined && props.userDetail?.dName !== null && props.userDetail?.dName !== undefined) {
       setduserName(props.userDetail?.dName[0].toUpperCase() + props.userDetail?.dName.slice(1));
     }
     if (session) {
