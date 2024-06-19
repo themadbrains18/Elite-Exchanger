@@ -180,9 +180,6 @@ const BuySellCard = (props: DynamicId) => {
       "queue": false
     }
 
-    console.log(obj,'========final obj');
-    // return;
-
     setObjData(obj)
     setActive(true)
   }
