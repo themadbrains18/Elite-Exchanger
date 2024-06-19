@@ -23,6 +23,7 @@ const StakingTable = () => {
     const [enable, setEnable] = useState(0);
     const [formData, setFormData] = useState();
     const [show, setShow] = useState(false);
+    const [confirmation, setConfirmation] = useState(false)
   
     const [selectedStake, setSelectedStake] = useState(Object);
     const { mode } = useContext(Context)
@@ -330,7 +331,7 @@ const StakingTable = () => {
                         <button className={`admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap ${item.status === false ? 'cursor-not-allowed opacity-[0.5]' : 'cursor-pointer'}`} onClick={(e) => { item?.status === true ? redeemReleased(item) : '' }}>
                           Redeem
                         </button>
-                        <button className={`admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap cursor-pointer`} onClick={(e) => { item?.status === false ? (setEnable(3), setSelectedStake(item), setShow(true)) : '' }}>
+                        <button className={`admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap cursor-pointer`} onClick={(e) => { item?.status === false ? (setConfirmation(true), setSelectedStake(item), setShow(true)) : '' }}>
                           Unstaking
                         </button>
                       </>
@@ -416,8 +417,8 @@ const StakingTable = () => {
           />
         )}
 
-        {enable === 3 &&
-          <ConfirmationModel setActive={setEnable} setShow={setShow} show={show} actionPerform={actionPerform} title="Unstaking" message="Are you sure you want to unstake this token" />
+        {confirmation &&
+          <ConfirmationModel setActive={setConfirmation} setShow={setShow} show={show} actionPerform={actionPerform} title="Unstaking" message="Are you sure you want to unstake this token" />
         }
   </>
   )

@@ -245,7 +245,7 @@ const ReEnterpass = (props: propsData) => {
       </section>
       {
         confirmation &&
-        <ConfirmationModel title="Reset Password" message="After reset password, Withdrawal will be restricted for 24 hours." actionPerform={confirmOtp} show={layout} setShow={setLayout} setActive={setConfirmation} />
+        <ConfirmationModel title="Reset Password" message="After reset password, Withdrawal will be restricted for 24 hours." actionPerform={confirmOtp}  setShow={setLayout} setActive={setConfirmation} />
       }
        {
         successModal &&

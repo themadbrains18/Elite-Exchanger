@@ -86,7 +86,7 @@ const TradingPassword = (props: activeSection) => {
 
   const onHandleSubmit = async (data: any) => {
     try {
-      
+
       let username =
         props.session?.user.email !== "null"
           ? props.session?.user.email
@@ -214,10 +214,14 @@ const TradingPassword = (props: activeSection) => {
           props.setShow(false);
           setDisabled(false);
         }, 3000);
+        return true
       } else {
         toast.error(response.data.message, { autoClose: 2000 });
+
         setTimeout(() => {
           setDisabled(false);
+          return false
+
         }, 3000)
       }
     } catch (error) {

@@ -18,7 +18,7 @@ const EmailChangeAlert = (props: changeProps) => {
     clickOutSidePopupClose({ wrapperRef, closePopup });
 
     return (
-        <div ref={wrapperRef} className='p-6 fixed max-h-[calc(100%-124px)] overscroll-none	 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  rounded-[10px] bg-white dark:bg-omega
+        <div ref={wrapperRef} className='p-5 md:p-40  fixed max-h-[calc(100%-124px)] overscroll-none	 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  rounded-[10px] bg-white dark:bg-omega
           z-[99] max-w-[calc(100%-36px)] md:max-w-[520px] w-full overflow-auto'>
             <div className='flex justify-center items-center mb-[16px]'>
                 {/* <Image src={`/assets/profile/${props?.data?.img}`} alt="img" width={96} height={96}/> */}

@@ -97,7 +97,7 @@ const SideBar = (props: profileSec) => {
                 return;
             }
             if (fileSize > 2) {
-                toast.error("File Size upto 2 mb.")
+                toast.error("Upload file upto 2 mb.")
                 setEnableDP(false);
                 return;
             }

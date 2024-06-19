@@ -160,7 +160,7 @@ const ChatBox = (props: PropsData) => {
             const fileSize = file.size / 1024 / 1024;
 
             if (fileSize > 2) {
-                toast.warning('File size up to 2 MB');
+                toast.warning('Upload file upto 2 mb');
                 return;
             }
 

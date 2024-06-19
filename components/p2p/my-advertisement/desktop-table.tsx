@@ -30,6 +30,7 @@ const DesktopTable = (props: dataTypes) => {
     let itemsPerPage = 10;
     const [postId, setPostId] = useState('');
     const [active, setActive] = useState(0);
+    const [showPopup, setShowPopup] = useState(false)
     const [show, setShow] = useState(false);
     const [message, setMessage] = useState('Are you sure you want to delete your ads with remaining quantity?');
     const [title, setTitle] = useState('Delete Ads');
@@ -325,7 +326,7 @@ const DesktopTable = (props: dataTypes) => {
                                                                 <IconsComponent type='editIcon' hover={false} active={false} />
                                                             </button>
                                                         }
-                                                        <button onClick={() => { setActive(1); setShow(true); setPostId(item?.id) }}>
+                                                        <button onClick={() => { setShowPopup(true); setShow(true); setPostId(item?.id) }}>
                                                             <IconsComponent type='deleteIcon' hover={false} active={false} />
                                                         </button>
                                                     </div>
@@ -369,8 +370,8 @@ const DesktopTable = (props: dataTypes) => {
                     previousLabel="<"
                     renderOnZeroPageCount={null} />
             </div>
-            {active === 1 &&
-                <ConfirmationModel setActive={setActive} setShow={setShow} title={title} message={message} show={show} actionPerform={actionPerform} />
+            {showPopup &&
+                <ConfirmationModel setActive={setShowPopup} setShow={setShow} title={title} message={message} show={show} actionPerform={actionPerform} />
             }
         </>
     )

@@ -64,9 +64,10 @@ const Withdraw = (props: activeSection) => {
   const [addressVerified, setAddressVerified] = useState(false);
   const [addressList, setAddressList] = useState([]);
   const [show, setShow] = useState(false);
+  const [itemOffset, setItemOffset] = useState(0);
 
   const wbsocket = useWebSocket();
-
+  let itemsPerPage = 50;
   let {
     register,
     setValue,
@@ -129,15 +130,15 @@ const Withdraw = (props: activeSection) => {
 
   const getAllWhitelistAddress = async () => {
     try {
-      let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list`, {
+      let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list?itemOffset=${itemOffset === undefined ? 0 : itemOffset}&itemsPerPage=${itemsPerPage}`, {
         method: "GET",
         headers: {
           "Authorization": session?.user?.access_token
         },
       }).then(response => response.json());
 
-      // console.log(address.data, '-----address data');
-      let res = address?.data.filter((item: any) => item?.status === true)
+      console.log(address.data, '-----address data');
+      let res = address?.data?.data?.filter((item: any) => item?.status === true)
       setAddressList(res);
     } catch (error) {
 

@@ -49,7 +49,7 @@ const CountrylistDropdown = (props: dataList) => {
 
   return (
     <>
-      <div className={`${props?.address?'absolute left-0 bottom-0 lg:max-w-full':'relative lg:max-w-[300px]'} max-w-full  w-full`}>
+      <div className={`${props?.address?'absolute left-0 bottom-0 lg:max-w-full':'relative '} max-w-full  w-full`}>
         {/* top dropdown input */}
         {props?.placeholder !== undefined && <div className='rounded-[5px] py-[13px] px-[15px] dark:bg-black-v-1  bg-bg-secondary '>
           <div  className="coin-dropdown-country flex items-center gap-10 cursor-pointer justify-between" onClick={() => { setShow(!show) }}>

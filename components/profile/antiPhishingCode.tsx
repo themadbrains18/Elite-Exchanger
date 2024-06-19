@@ -105,7 +105,7 @@ const AntiPhishingCode = (props: activeSection) => {
           props.setShow(false);
         }, 3000);
       } else {
-        toast.error(response.data.message);
+        toast.error(response.data.message,{autoClose:2000});
       }
     } catch (error) { }
   };
@@ -121,7 +121,7 @@ const AntiPhishingCode = (props: activeSection) => {
     <>
       <ToastContainer position="top-right" limit={1} />
       {enable === 1 && (
-        <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[400px] w-full p-5 md:p-20 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+        <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[500px] w-full p-6 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <div className="flex items-center justify-between ">
             <p className="sec-title">
 
@@ -156,7 +156,7 @@ const AntiPhishingCode = (props: activeSection) => {
           </div>
 
           <form onSubmit={handleSubmit(onHandleSubmit)}>
-            <div className="py-[30px]  px-0 lg:px-20">
+            <div className="py-[30px] ">
               <div className="">
                 <div
                   className={` md:flex-row flex-col gap-[30px] flex`}
