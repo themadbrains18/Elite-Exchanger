@@ -22,7 +22,6 @@ const Banner = (props: propsData): any => {
 
   let dataCoinWallet = props.coinList;
   const star='*'
-  console.log(props.assets,"==props.assets");
   
 
   return (
