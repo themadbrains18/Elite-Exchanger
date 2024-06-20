@@ -199,7 +199,7 @@ const ChatBox = (props: PropsData) => {
         }
     };
 
-    console.log(props?.order);
+    // console.log(props?.order);
 
     const profileImg = props?.sellerUser?.profile?.image ?? `${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`;
 

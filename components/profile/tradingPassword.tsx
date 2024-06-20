@@ -139,7 +139,7 @@ const TradingPassword = (props: activeSection) => {
         );
         let res = await userExist.json();
         if (res.data.message) {
-          toast.error(res.data.message, { autoClose: 2000 });
+          toast.error(`${res.data.message}`, { autoClose: 2000 });
           setTimeout(() => {
             setDisabled(false);
           }, 3000)
@@ -216,11 +216,13 @@ const TradingPassword = (props: activeSection) => {
         }, 3000);
         return true
       } else {
-        toast.error(response.data.message, { autoClose: 2000 });
 
+
+        toast.error(`${response.data.message}`, { autoClose: 2000 });
+        console.log("sdhfsdfhksh");
+        
         setTimeout(() => {
           setDisabled(false);
-          return false
 
         }, 3000)
       }

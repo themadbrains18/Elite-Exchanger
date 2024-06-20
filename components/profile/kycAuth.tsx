@@ -59,7 +59,7 @@ const schema = yup
         return originalValue;
       })
       .typeError("please enter a valid date")
-      .required('DOB is required field')
+      .required('This is required field')
     ,
     idfront: yup.mixed().required("Please upload front side of  document"),
     idback: yup.mixed().required("Please upload back side of  document"),
@@ -104,7 +104,7 @@ const KycAuth = (props: fixSection) => {
     { fullname: "Voter Id" }
   ];
 
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState();
 
   let {
     register,
@@ -833,7 +833,7 @@ const KycAuth = (props: fixSection) => {
             <div className="mt-[30px]">
               <div className="flex gap-[30px] md:flex-row flex-col">
                 <div className="max-w-full md:max-w-[50%] w-full">
-                  <label htmlFor="docnumber" className="sm-text mb-[10px]">Document Number</label>
+                  <label htmlFor="docnumber" className="sm-text mb-[10px]">Document Number<span className="text-red-dark dark:text-[#9295a6]">*</span></label>
                   <input
                     id="docnumber"
                     type="text"
@@ -849,7 +849,7 @@ const KycAuth = (props: fixSection) => {
                 </div>
                 <div className="max-w-full md:max-w-[50%] w-full">
                   <label htmlFor="fname" className="sm-text mb-[10px]">
-                    Full name on Identity
+                    Full name on Identity<span className="text-red-dark dark:text-[#9295a6]">*</span>
                   </label>
                   <input
                     id="fname"
@@ -869,7 +869,7 @@ const KycAuth = (props: fixSection) => {
 
               <div className="flex gap-[30px] md:flex-row flex-col mt-[24px]">
                 <div className="max-w-full md:max-w-[50%] w-full">
-                  <label className="sm-text mb-[10px]">Date of Birth</label>
+                  <label className="sm-text mb-[10px]">Date of Birth<span className="text-red-dark dark:text-[#9295a6]">*</span></label>
                   {/* <input type="date" placeholder="Enter ID number" className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"/> */}
                   <DatePicker
                     selected={startDate}
@@ -886,7 +886,7 @@ const KycAuth = (props: fixSection) => {
                   )}
                 </div>
                 <div className="max-w-full md:max-w-[50%] w-full">
-                  <label className="sm-text mb-[10px]">Country</label>
+                  <label className="sm-text mb-[10px]">Country<span className="text-red-dark dark:text-[#9295a6]">*</span></label>
                   <CountrylistDropdown
                     data={Countrylist}
                     placeholder="Choose Country"
@@ -905,7 +905,7 @@ const KycAuth = (props: fixSection) => {
 
           <div className="flex md:flex-row flex-col gap-[30px] py-[30px] md:py-[50px] lg:px-0 px-20">
             <div className="w-full">
-              <label htmlFor={`front${props?.num}`} className="sm-text ">Identity Document Front Side</label>
+              <label htmlFor={`front${props?.num}`} className="sm-text ">Identity Document Front Side<span className="text-red-dark dark:text-[#9295a6]">*</span></label>
               <div className="w-full relative min-h-[160px] hover:dark:bg-black-v-1 flex  mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
                 {enableFront &&
                   <>
@@ -972,7 +972,7 @@ const KycAuth = (props: fixSection) => {
             </div>
 
             <div className="w-full ">
-              <label className="sm-text ">Identity Document Back Side</label>
+              <label className="sm-text ">Identity Document Back Side<span className="text-red-dark dark:text-[#9295a6]">*</span></label>
               <div className="w-full relative min-h-[160px] mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 flex dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
                 {enableBack &&
                   <>
@@ -1034,7 +1034,7 @@ const KycAuth = (props: fixSection) => {
               )}
             </div>
             <div className="w-full">
-              <label className="sm-text ">A Selfie with your identity</label>
+              <label className="sm-text ">A Selfie with your identity<span className="text-red-dark dark:text-[#9295a6]">*</span></label>
 
               <div className="w-full relative min-h-[133px]  flex mt-2 md:mt-5 border-[1.5px] border-dashed border-grey-v-1 dark:border-grey-v-2 dark:border-opacity-[15%] rounded-md">
                 {enableStatement &&

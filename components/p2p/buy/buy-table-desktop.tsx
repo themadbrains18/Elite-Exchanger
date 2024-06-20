@@ -118,7 +118,7 @@ const BuyTableDesktop = (props: activeSection) => {
   const pageCount = Math.ceil(total / itemsPerPage);
 
   const handlePageClick = async (event: any) => {
-    console.log(event.selected * itemsPerPage);
+    // console.log(event.selected * itemsPerPage);
 
     const newOffset = (event.selected * itemsPerPage) % total;
     setItemOffset(newOffset);
@@ -127,7 +127,6 @@ const BuyTableDesktop = (props: activeSection) => {
   const handleBuy = (item: any) => {
     try {
       if (session) {
-        console.log(item?.complete_kyc,"==item?.complete_kyc");
         
         if (item?.complete_kyc === true) {
           if (session?.user?.kyc !== "approve") {

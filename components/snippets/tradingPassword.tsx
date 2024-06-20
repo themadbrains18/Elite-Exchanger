@@ -151,7 +151,7 @@ const TradingPassword = (props: activeSection) => {
 
       let pmid = props?.formMethod?.pmid;
       let pm_name = props?.formMethod?.pm_name;
-      console.log(props?.formMethod,"==props?.formMethod");
+      // console.log(props?.formMethod,"==props?.formMethod");
 
       let pmObject: any = props?.formMethod?.pmObject;
       pmObject['passcode'] = passCode;
@@ -185,16 +185,16 @@ const TradingPassword = (props: activeSection) => {
       let res = await responseData.json();
 
       if (res.data.status === 200) {
-        toast.success(res?.data?.data?.message);
+        toast.success(res?.data?.data?.message,{autoClose:2000});
         let userPaymentMethod = res?.data?.data?.result;
         userPaymentMethod.master_payment_method = props?.formMethod?.master_method;
         props.setList((prev: any) => [...prev, userPaymentMethod]);
         props.setActive(3);
       }
       else {
-        console.log(res,"=res");
+        // console.log(res,"=res");
         
-        toast.error(res?.data?.data);
+        toast.error(res?.data?.data,{autoClose:2000});
       }
     } catch (error) {
       console.log("error in add payment method", error);
