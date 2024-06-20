@@ -185,7 +185,7 @@ const AddToken = (props: activeSection) => {
       let networkChecked = data?.network.filter((item: any) => {
         return item.checked === true;
       });
-      if (networkChecked.length === 0) {
+      if (networkChecked?.length === 0) {
         setError("network", {
           type: "custom",
           message: `Please select atleast one network`,
@@ -450,7 +450,7 @@ const AddToken = (props: activeSection) => {
             )}
           </div>
           <div className="pt-[30px]">
-            {props?.networkList && props?.networkList.length>0 && props?.networkList?.map((item: any, index: number) => {
+            {props?.networkList && props?.networkList?.length>0 && props?.networkList?.map((item: any, index: number) => {
               // const fieldName = `network[${index}]`;
               return (
                 <>

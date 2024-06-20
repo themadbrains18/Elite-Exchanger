@@ -107,7 +107,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
                     </thead>
                     <tbody>
                         {
-                          list.length>0 && list?.map((item: any, ind: number) => {
+                          list && list?.length>0 && list?.map((item: any, ind: number) => {
                                 return (
                                     <Fragment key={ind}>
                                         <tr onClick={() => {

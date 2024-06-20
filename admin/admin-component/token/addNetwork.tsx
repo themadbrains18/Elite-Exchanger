@@ -94,7 +94,7 @@ const AddNetwork = (props: activeSection) => {
                 return e?.id === net?.id
             })
 
-            if (previous.length > 0) {
+            if (previous?.length > 0) {
                 setValue(`network.${index}.id`, previous[0].id);
                 setValue(`network.${index}.checked`, true);
                 setValue(`network.${index}.fee`, previous[0].fee);
@@ -111,7 +111,7 @@ const AddNetwork = (props: activeSection) => {
             let networkChecked = data?.network.filter((item: any) => {
                 return item.checked === true;
             });
-            if (networkChecked.length === 0) {
+            if (networkChecked?.length === 0) {
                 setError("network", {
                     type: "custom",
                     message: `Please select atleast one network`,
@@ -200,7 +200,7 @@ const AddNetwork = (props: activeSection) => {
                     <div className="pt-30">
 
                         <div className="pt-[30px]">
-                            {props?.networkList && props?.networkList.length>0 && props?.networkList?.map((item: any, index: number) => {
+                            {props?.networkList && props?.networkList?.length>0 && props?.networkList?.map((item: any, index: number) => {
                                 let previous = props?.editToken?.networks !== null && props?.editToken?.networks.filter((e: any) => {
                                     return e?.id === item?.id
                                 })
@@ -210,7 +210,7 @@ const AddNetwork = (props: activeSection) => {
                                             <input
                                                 id={`checbox-${index + 1}-item-token`}
                                                 type="checkbox"
-                                                className={`hidden checkboxes ${previous.length > 0 ? 'active' : ''}`}
+                                                className={`hidden checkboxes ${previous?.length > 0 ? 'active' : ''}`}
                                                 {...register(`network.${index}.checked`)}
                                                 onClick={(e: any) => {
                                                     clickHandler(e, index);
