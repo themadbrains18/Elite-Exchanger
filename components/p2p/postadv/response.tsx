@@ -203,7 +203,7 @@ const Response = (props: activeSection) => {
                 </div>
               </div>
               {errors?.remarks && (
-                <p style={{ color: "#ff0000d1" }}>{errors?.remarks?.message}</p>
+                <p className="errorMessage">{errors?.remarks?.message}</p>
               )}
               <div className="w-full">
                 <p className="info-10-14">Auto-Reply (Optional)</p>
@@ -212,7 +212,7 @@ const Response = (props: activeSection) => {
                 </div>
               </div>
               {errors?.auto_reply && (
-                <p style={{ color: "#ff0000d1" }}>{errors?.auto_reply?.message}</p>
+                <p className="errorMessage">{errors?.auto_reply?.message}</p>
               )}
             </div>
           </div>
@@ -304,10 +304,10 @@ const Response = (props: activeSection) => {
 
             </div>
             {errors?.condition && (
-              <p style={{ color: "#ff0000d1" }}>{errors?.condition?.message}</p>
+              <p className="errorMessage">{errors?.condition?.message}</p>
             )}
             {errors?.status && (
-              <p style={{ color: "#ff0000d1" }}>{errors?.status?.message}</p>
+              <p className="errorMessage">{errors?.status?.message}</p>
             )}
           </div>
           <div className="mt-50 flex gap-30">

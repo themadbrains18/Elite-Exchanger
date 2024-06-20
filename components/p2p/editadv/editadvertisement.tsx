@@ -187,7 +187,7 @@ const EditAdverstisement = (props: propsData) => {
                     })}
                   </div>
                   {errors?.token_id && (
-                    <p style={{ color: "#ff0000d1" }}>
+                    <p className="errorMessage">
                       {errors?.token_id?.message}
                     </p>
                   )}
@@ -385,7 +385,7 @@ const EditAdverstisement = (props: propsData) => {
                     />
                   </div>
                   {errors?.price && (
-                    <p style={{ color: "#ff0000d1" }}>
+                    <p className="errorMessage">
                       {errors?.price?.message}
                     </p>
                   )}

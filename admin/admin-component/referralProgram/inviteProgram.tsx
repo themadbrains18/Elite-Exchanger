@@ -135,7 +135,7 @@ const AddInviteProgram = (props: ActiveSession) => {
                         className="sm-text input-cta2 w-full"
                     />
                     {errors?.name && (
-                        <p style={{ color: "#ff0000d1" }}>{errors?.name?.message}</p>
+                        <p className="errorMessage">{errors?.name?.message}</p>
                     )}
                 </div>
                 <div className=" relative ">
@@ -148,7 +148,7 @@ const AddInviteProgram = (props: ActiveSession) => {
                         className="sm-text input-cta2 w-full"
                     />
                     {errors?.description && (
-                        <p style={{ color: "#ff0000d1" }}>{errors?.description?.message}</p>
+                        <p className="errorMessage">{errors?.description?.message}</p>
                     )}
                 </div>
                 <div className=" relative ">
@@ -161,7 +161,7 @@ const AddInviteProgram = (props: ActiveSession) => {
                         className="sm-text input-cta2 w-full"
                     />
                     {errors?.amount && (
-                        <p style={{ color: "#ff0000d1" }}>{errors?.amount?.message}</p>
+                        <p className="errorMessage">{errors?.amount?.message}</p>
                     )}
                 </div>
                 <div className=" relative ">
@@ -174,7 +174,7 @@ const AddInviteProgram = (props: ActiveSession) => {
                         className="sm-text input-cta2 w-full"
                     />
                     {errors?.deposit && (
-                        <p style={{ color: "#ff0000d1" }}>{errors?.deposit?.message}</p>
+                        <p className="errorMessage">{errors?.deposit?.message}</p>
                     )}
                 </div>
                 <div className=" relative ">
@@ -187,7 +187,7 @@ const AddInviteProgram = (props: ActiveSession) => {
                         className="sm-text input-cta2 w-full"
                     />
                     {errors?.trade && (
-                        <p style={{ color: "#ff0000d1" }}>{errors?.trade?.message}</p>
+                        <p className="errorMessage">{errors?.trade?.message}</p>
                     )}
                 </div>
                 <div className=" relative ">
@@ -209,7 +209,7 @@ const AddInviteProgram = (props: ActiveSession) => {
                     </div>
 
                     {errors?.type && (
-                        <p style={{ color: "#ff0000d1" }}>{errors?.type?.message}</p>
+                        <p className="errorMessage">{errors?.type?.message}</p>
                     )}
                 </div>
 

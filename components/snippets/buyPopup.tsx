@@ -229,7 +229,7 @@ const BuyPopup = (props: activeSection) => {
 
                 </div>
                 {errors?.spend_amount && (
-                  <p style={{ color: "#ff0000d1" }}>{errors?.spend_amount?.message}</p>
+                  <p className="errorMessage">{errors?.spend_amount?.message}</p>
                 )}
                 <div className="border mt-[15px] border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px] ">
                   <div className="flex items-center ">
@@ -254,7 +254,7 @@ const BuyPopup = (props: activeSection) => {
 
                 </div>
                 {errors?.receive_amount && (
-                  <p style={{ color: "#ff0000d1" }}>{errors?.receive_amount?.message}</p>
+                  <p className="errorMessage">{errors?.receive_amount?.message}</p>
                 )}
               </div>
             </div>

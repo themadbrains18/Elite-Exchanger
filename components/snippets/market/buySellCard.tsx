@@ -505,7 +505,7 @@ const BuySellCard = (props: DynamicId) => {
                     </div>
                   </div>
                 }
-                {errors.limit_usdt && <p style={{ color: 'red' }}>{errors.limit_usdt.message}</p>}
+                {errors.limit_usdt && <p className="errorMessage">{errors.limit_usdt.message}</p>}
 
                 {/* coin quantity Inputs */}
                 <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
@@ -527,7 +527,7 @@ const BuySellCard = (props: DynamicId) => {
                     }
                   </div>
                 </div>
-                {errors.token_amount && <p style={{ color: 'red' }}>{errors?.token_amount?.message}</p>}
+                {errors.token_amount && <p className="errorMessage">{errors?.token_amount?.message}</p>}
                 <div className="mt-5 flex gap-2 justify-between">
                 <div className=" flex gap-2">
                   <p className="sm-text dark:text-white">Total:</p>

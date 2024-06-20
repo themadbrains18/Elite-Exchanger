@@ -316,7 +316,7 @@ const AddToken = (props: activeSection) => {
               />
             </div>
             {errors?.symbol && (
-              <p style={{ color: "#ff0000d1" }}>{errors?.symbol?.message}</p>
+              <p  className="errorMessage">{errors?.symbol?.message}</p>
             )}
           </div>
           <div className="mb-[10px]">
@@ -330,7 +330,7 @@ const AddToken = (props: activeSection) => {
               />
             </div>
             {errors?.decimal && (
-              <p style={{ color: "#ff0000d1" }}>{errors?.decimal?.message}</p>
+              <p  className="errorMessage">{errors?.decimal?.message}</p>
             )}
           </div>
           <div className="mb-[10px]">
@@ -344,7 +344,7 @@ const AddToken = (props: activeSection) => {
               />
             </div>
             {errors?.price && (
-              <p style={{ color: "#ff0000d1" }}>{errors?.price?.message}</p>
+              <p  className="errorMessage">{errors?.price?.message}</p>
             )}
           </div>
           <div className="mb-[10px]">
@@ -373,7 +373,7 @@ const AddToken = (props: activeSection) => {
               />
             </div>
             {errors?.image && (
-              <p style={{ color: "#ff0000d1" }}>
+              <p  className="errorMessage">
                 {errors?.image.message?.toString()}
               </p>
             )}
@@ -389,7 +389,7 @@ const AddToken = (props: activeSection) => {
               />
             </div>
             {errors?.fullName && (
-              <p style={{ color: "#ff0000d1" }}>{errors?.fullName?.message}</p>
+              <p  className="errorMessage">{errors?.fullName?.message}</p>
             )}
           </div>
           <div className="mb-[10px]">
@@ -403,7 +403,7 @@ const AddToken = (props: activeSection) => {
               />
             </div>
             {errors?.minimum_withdraw && (
-              <p style={{ color: "#ff0000d1" }}>
+              <p  className="errorMessage">
                 {errors?.minimum_withdraw?.message}
               </p>
             )}
@@ -419,7 +419,7 @@ const AddToken = (props: activeSection) => {
               />
             </div>
             {errors?.min_price && (
-              <p style={{ color: "#ff0000d1" }}>{errors?.min_price?.message}</p>
+              <p  className="errorMessage">{errors?.min_price?.message}</p>
             )}
           </div>
           <div className="mb-[10px]">
@@ -433,7 +433,7 @@ const AddToken = (props: activeSection) => {
               />
             </div>
             {errors?.max_price && (
-              <p style={{ color: "#ff0000d1" }}>{errors?.max_price?.message}</p>
+              <p  className="errorMessage">{errors?.max_price?.message}</p>
             )}
           </div>
           <div className="mb-[10px]">
@@ -446,7 +446,7 @@ const AddToken = (props: activeSection) => {
               onDocumentChange={getTokenType}
             />
             {errors?.tokenType && (
-              <p style={{ color: "#ff0000d1" }}>{errors?.tokenType?.message}</p>
+              <p  className="errorMessage">{errors?.tokenType?.message}</p>
             )}
           </div>
           <div className="pt-[30px]">
@@ -506,7 +506,7 @@ const AddToken = (props: activeSection) => {
                           />
                         </div>
                         {errors?.network?.[index]?.fee && (
-                          <p style={{ color: "red" }}>
+                          <p  className="errorMessage">
                             {errors?.network[index]?.fee?.message}
                           </p>
                         )}
@@ -521,7 +521,7 @@ const AddToken = (props: activeSection) => {
                           />
                         </div>
                         {errors?.network?.[index]?.contract && (
-                          <p style={{ color: "red" }}>
+                          <p  className="errorMessage">
                             {errors?.network[index]?.contract?.message}
                           </p>
                         )}
@@ -532,7 +532,7 @@ const AddToken = (props: activeSection) => {
               );
             })}
             {errors?.network && (
-              <p style={{ color: "red" }}>{errors?.network.message}</p>
+              <p  className="errorMessage">{errors?.network.message}</p>
             )}
           </div>
         </div>

@@ -176,7 +176,7 @@ const AntiPhishingCode = (props: activeSection) => {
                 </div>
 
                 <p className={`
-                    ${errors.antiphishing ? "text-red-dark" : "text-[#b7bdc6]"} text-[16px] mt-[5px]`
+                    ${errors.antiphishing ? "text-red-dark" : "text-[#b7bdc6]"} text-[16px] mt-[5px] errorMessage`
                   }
                 >
                   {errors?.antiphishing?.message}

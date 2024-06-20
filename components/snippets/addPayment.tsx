@@ -18,7 +18,9 @@ const AddPayment = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [paymentFields, setPaymentFields] = useState([]);
   const [enableFront, setEnableFront] = useState(false);
+  const [disable, setDisable] = useState(false)
   const [qrCode, setQrCode] = useState("notValid");
+
   let {
     register,
     setValue,
@@ -47,8 +49,7 @@ const AddPayment = (props: activeSection) => {
     let fieldsItem = props.masterPayMethod.filter((item: any) => {
       return item?.id === id;
     })
-    console.log(fieldsItem,"==fieldsItem");
-    
+
     setPaymentFields(fieldsItem[0]?.fields);
     setValue('selectPayment', fieldsItem[0]);
   }
@@ -87,7 +88,7 @@ const AddPayment = (props: activeSection) => {
         setEnableFront(false);
         return;
       }
-      
+
       setQrCode(data.secure_url);
       setEnableFront(false);
 
@@ -97,35 +98,52 @@ const AddPayment = (props: activeSection) => {
   };
 
   const onHandleSubmit = (data: any) => {
-// console.log(data.qr_code?.length, typeof data.qr_code, data?.qr_code,"==data");
+    // console.log(data.qr_code?.length, typeof data.qr_code, data?.qr_code,"==data");
+    console.log(data,"=shdfjksh");
+    
+    setDisable(true)
+    if(Object.values(data).length==0){
+      toast.error("Please select payment method", { autoClose: 2000 });
+      setTimeout(() => {
+        setDisable(false)
+      }, 3000)
+      return;
+
+    }
 
     if (data?.phonenumber?.length < 10) {
-      toast.error("Number contain 10 digits");
+      toast.error("Number contain 10 digits", { autoClose: 2000 });
+      setTimeout(() => {
+        setDisable(false)
+      }, 3000)
       return;
       // setError("phonenumber",{ type: "custom", message: "Number contain 10 digits" })
     }
     else {
       let pmt = props.list.filter((item: any) => {
-        return item.pm_name === data.selectPayment.payment_method && item.pmObject.phonenumber === data.phonenumber
+        return item.pm_name === data?.selectPayment?.payment_method && item.pmObject.phonenumber === data.phonenumber
       })
 
       if (pmt.length > 0) {
-        toast.error("This Number is already added.");
+        toast.error("This Number is already added.", { autoClose: 2000 });
+        setTimeout(() => {
+          setDisable(false)
+        }, 3000)
         return;
       }
       // console.log(qrCode,"==qrCode");
-      
+
 
       let pmid = data?.selectPayment?.id;
       let pm_name = data?.selectPayment?.payment_method;
       let master_method = data?.selectPayment;
-      if (qrCode !== "notValid" || data?.qr_code?.length>0 ) {
+      if (qrCode !== "notValid" || data?.qr_code?.length > 0) {
         data.qr_code = qrCode;
       }
-      else{
-       delete data.qr_code
+      else {
+        delete data.qr_code
       }
-  
+
       delete data.selectPayment;
 
       let obj = {
@@ -134,7 +152,7 @@ const AddPayment = (props: activeSection) => {
         pmObject: data,
         master_method: master_method
       }
-// console.log(obj,"==obj");
+      // console.log(obj,"==obj");
 
       props.setFormMethod(obj);
       props.setActive(2);
@@ -184,20 +202,21 @@ const AddPayment = (props: activeSection) => {
       <form onSubmit={handleSubmit(onHandleSubmit)}>
         <div className="py-30 md:py-40">
           <div className="flex flex-col mb-[15px] md:mb-5 gap-10">
-            <label className="sm-text">Name</label>
+            <label className="sm-text">Payment Method</label>
             <FiliterSelectMenu data={props.masterPayMethod}
               placeholder="Choose Payment Method"
               auto={false}
               widthFull={true} type="pmethod" onPaymentMethodChange={onPaymentMethodChange} />
+           
           </div>
 
           {paymentFields && paymentFields.length > 0 && paymentFields.map((item: any) => {
             // console.log(typeof item?.required,'===field require');
 
             return <>
-              <div className="flex flex-col mb-[15px] md:mb-5 gap-10">
-                <label className="sm-text">{item?.label}</label>
-                <div className="border relative border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px]">
+              <div className="flex flex-col mb-[15px] md:mb-5 ">
+                <label className="sm-text mb-[10px]">{item?.label}</label>
+                <div className="border relative border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px] mb-[5px]">
                   {item?.name === "qr_code" &&
 
                     <>
@@ -219,17 +238,17 @@ const AddPayment = (props: activeSection) => {
                   }
 
                 </div>
+                {errors?.[item?.name] && (
+                  <p className="errorMessage">{item.err_msg}</p>
+                )}
               </div>
 
-              {errors?.[item?.name] && (
-                <p style={{ color: "#ff0000d1" }}>{item.err_msg}</p>
-              )}
 
             </>
           })}
 
         </div>
-        <button disabled={enableFront} className={`solid-button w-full ${enableFront === true ? 'opacity-25 cursor-not-allowed' : ''}`} >Submit</button>
+        <button disabled={enableFront || disable} className={`solid-button w-full ${(enableFront === true || disable) ? 'opacity-25 cursor-not-allowed' : ''}`} >Submit</button>
       </form>
     </div>
   );

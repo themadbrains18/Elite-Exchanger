@@ -126,13 +126,22 @@ const BuyTableDesktop = (props: activeSection) => {
 
   const handleBuy = (item: any) => {
     try {
+
+
       if (session) {
-        
+
         if (item?.complete_kyc === true) {
+          console.log("=here", session?.user?.kyc);
+
           if (session?.user?.kyc !== "approve") {
             setType('kyc')
             setShow(true)
             setActive(true)
+          }
+          else {
+            console.log("=here i am");
+            
+            props.setShow1(true); props.setSelectedPost(item);
           }
         }
         else if (item?.min_btc === true) {
@@ -142,15 +151,21 @@ const BuyTableDesktop = (props: activeSection) => {
             setShow(true)
             setActive(true)
           }
-
+          else {
+            console.log("=here i am");
+            
+            props.setShow1(true); props.setSelectedPost(item);
+          }
 
         }
+       
         else {
+          console.log("=here i am");
+          
           props.setShow1(true); props.setSelectedPost(item);
         }
-
       }
-      else{
+      else {
         props.setShow1(true); props.setSelectedPost(item);
       }
 
@@ -311,7 +326,7 @@ const BuyTableDesktop = (props: activeSection) => {
       </div>
 
       {show &&
-        <BuyAuthenticationModelPopup title='Confirmation' message='Please complete your kyc' setShow={setShow} setActive={setActive} show={show} type={type}/>
+        <BuyAuthenticationModelPopup title='Confirmation' message='Please complete your kyc' setShow={setShow} setActive={setActive} show={show} type={type} />
       }
 
     </>

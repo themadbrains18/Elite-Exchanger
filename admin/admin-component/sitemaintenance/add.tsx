@@ -108,7 +108,7 @@ const AddList = (props: ActiveSession) => {
             className="sm-text input-cta2 w-full"
           />
           {errors?.title && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.title?.message}</p>
+            <p className="errorMessage">{errors?.title?.message}</p>
           )}
         </div>
         <div className=" relative ">
@@ -121,7 +121,7 @@ const AddList = (props: ActiveSession) => {
             className="sm-text input-cta2 w-full"
           />
           {errors?.message && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.message?.message}</p>
+            <p className="errorMessage">{errors?.message?.message}</p>
           )}
         </div>
 
