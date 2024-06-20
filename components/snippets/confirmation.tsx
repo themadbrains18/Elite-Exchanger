@@ -51,6 +51,7 @@ const ConfirmationModel = (props: activeSection) => {
     const closePopup = () => {
         props?.setShow &&  props?.setShow(false);
         props.setActive(false);
+        setBtnDisabled(false);
     }
     const wrapperRef = useRef(null);
     clickOutSidePopupClose({ wrapperRef, closePopup });

@@ -66,7 +66,7 @@ const BuySell = (props: fullWidth) => {
 
   const [confirmOrderData, setConfirmOrderData] = useState(Object);
 
-  const [orderType, setOrderType] = useState("value");
+  const [orderType, setOrderType] = useState("qty");
   const [isShow, setIsShow] = useState(false);
   const [prefernce, setPreference] = useState(false);
   const [prefernceSymbol, setPreferenceSymbol] = useState('Qty')
@@ -75,6 +75,7 @@ const BuySell = (props: fullWidth) => {
 
   const [shortConfirm, setShortConfirm] = useState(false);
   const [active, setActive] = useState(false);
+  const [finalOrderSubmit, setFinalOrderSubmit] = useState(false);
 
   const wbsocket = useWebSocket();
 
@@ -218,7 +219,7 @@ const BuySell = (props: fullWidth) => {
         return;
       }
       // let entry_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
-      let Liquidation_Price:any =
+      let Liquidation_Price: any =
         (marketPrice * (1 - 0.01)) / props?.marginMode?.leverage;
 
       // Liquidation Price for long case
@@ -237,8 +238,9 @@ const BuySell = (props: fullWidth) => {
       }
       let value: any = (qty * 0.055).toFixed(5);
       let releazedPnl: any = (marketPrice * value) / 100;
+      let size: any = truncateNumber(qty * marketPrice, 5);
 
-      let size: any = qty * marketPrice
+      let marginValue = orderType === "qty" ? size / props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
       obj = {
         symbol:
           props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
@@ -249,7 +251,7 @@ const BuySell = (props: fullWidth) => {
         entry_price: marketPrice.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
         market_price: marketPrice.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
         liq_price: Liquidation_Price.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
-        margin: sizeValue / props?.marginMode?.leverage,
+        margin: marginValue,
         margin_ratio: 0.01,
         pnl: 0,
         realized_pnl: releazedPnl.toString().match(/^-?\d+(?:\.\d{0,7})?/)[0],
@@ -265,6 +267,7 @@ const BuySell = (props: fullWidth) => {
       };
     }
     else {
+
       if (entryPrice === 0 || entryPrice < 0) {
         setEntryPriceValidate("Price must be positive number!");
         return;
@@ -274,7 +277,7 @@ const BuySell = (props: fullWidth) => {
         setSizeValidate("Amount must be positive number!");
         return;
       }
-      let Liquidation_Price:any =
+      let Liquidation_Price: any =
         (entryPrice * (1 - 0.01)) / props?.marginMode?.leverage;
 
       // Liquidation Price for long case
@@ -292,8 +295,9 @@ const BuySell = (props: fullWidth) => {
         qty = sizeValue.toString();
       }
 
-      let enter_Price:any = entryPrice;
-      let amount:any = qty * entryPrice
+      let enter_Price: any = entryPrice;
+      let amount: any = qty * entryPrice;
+      let marginValue = orderType === "qty" ? sizeValue * props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
       obj = {
         position_id: "--",
         user_id: session?.user?.user_id,
@@ -308,7 +312,7 @@ const BuySell = (props: fullWidth) => {
         post_only: "No", //No
         status: false,
         leverage: props?.marginMode?.leverage,
-        margin: sizeValue / props?.marginMode?.leverage,
+        margin: marginValue,
         liq_price: Liquidation_Price.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
         market_price:
           props?.currentToken?.token !== null
@@ -321,8 +325,6 @@ const BuySell = (props: fullWidth) => {
         position_mode: positionMode
       };
     }
-
-
     setConfirmOrderData(obj);
     setConfirmModelPopup(1);
     setConfirmModelOverlay(true);
@@ -332,7 +334,7 @@ const BuySell = (props: fullWidth) => {
   const confirmOrder = async () => {
     try {
       setButtonStyle(true);
-
+      setFinalOrderSubmit(true);
       const ciphertext = AES.encrypt(
         JSON.stringify(confirmOrderData),
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
@@ -361,7 +363,9 @@ const BuySell = (props: fullWidth) => {
         }
         );
         setButtonStyle(false);
-      } else {
+        setFinalOrderSubmit(false);
+      }
+      else {
         if (istpslchecked === true) {
           if (tpsl.profit) {
             tpsl.profit.position_id = reponse?.data?.data?.result?.id;
@@ -410,8 +414,11 @@ const BuySell = (props: fullWidth) => {
         props?.refreshWalletAssets();
         setConfirmModelOverlay(false);
         setConfirmModelPopup(0);
+        setFinalOrderSubmit(false);
       }
-    } catch (error) { }
+    } catch (error) {
+      setFinalOrderSubmit(false);
+    }
   };
 
   // ===================================================================//
@@ -581,6 +588,9 @@ const BuySell = (props: fullWidth) => {
     submitForm();
   }
 
+  // console.log(sizeValue,'-------------size Value', orderType,'=========order typee');
+
+
   return (
     <>
       {/* <ToastContainer /> */}
@@ -689,7 +699,7 @@ const BuySell = (props: fullWidth) => {
             >
               Market
             </button>
-            <button
+            {/* <button
               className={`admin-body-text ${showNes === 3
                 ? "!text-black dark:!text-white"
                 : "!text-[#a3a8b7]"
@@ -706,7 +716,7 @@ const BuySell = (props: fullWidth) => {
               }}
             >
               Stop Limit
-            </button>
+            </button> */}
           </div>
           <div
             className="cursor-pointer"
@@ -949,7 +959,7 @@ const BuySell = (props: fullWidth) => {
                 </label>
               </div>
             </div>
-            {status !== "unauthenticated" && (
+            {session && (
               <div className="mt-[20px]">
                 {orderType === "value" && (
                   <div className="flex gap-5 items-center justify-between">
@@ -958,8 +968,8 @@ const BuySell = (props: fullWidth) => {
                       {showNes === 1
                         ? sizeValue === 0
                           ? 0.0
-                          : (sizeValue / entryPrice).toFixed(5)
-                        : (sizeValue / marketPrice).toFixed(5)}{" "}
+                          : (truncateNumber(sizeValue / entryPrice, 3))
+                        : (truncateNumber(sizeValue / marketPrice, 3))}{" "}
                       {props?.currentToken?.coin_symbol}
                     </p>
                   </div>
@@ -971,8 +981,8 @@ const BuySell = (props: fullWidth) => {
                       {showNes === 1
                         ? sizeValue === 0
                           ? 0.0
-                          : (sizeValue * entryPrice).toFixed(5)
-                        : (sizeValue * marketPrice).toFixed(5)}{" "}
+                          : (truncateNumber(sizeValue * entryPrice, 5))
+                        : (truncateNumber(sizeValue * marketPrice, 5))}{" "}
                       USDT
                     </p>
                   </div>
@@ -1023,7 +1033,7 @@ const BuySell = (props: fullWidth) => {
                 <div className="flex gap-5 items-center justify-between mt-[5px]">
                   <p className="top-label">Max</p>
                   <p className="top-label !text-[#000] dark:!text-[#fff]">
-                    {avaibalance * props?.marginMode?.leverage} {symbol}
+                    {truncateNumber(avaibalance * props?.marginMode?.leverage, 5)} {symbol}
                   </p>
                 </div>
               </div>
@@ -1141,10 +1151,11 @@ const BuySell = (props: fullWidth) => {
         modelOverlay={confirmModelOverlay}
         confirmOrder={confirmOrder}
         confirmOrderData={confirmOrderData}
+        finalOrderSubmit={finalOrderSubmit}
       />
       {
         prefernce &&
-        <OrderPreferenceModal setPreference={setPreference} currentToken={props?.currentToken} setPreferenceSymbol={setPreferenceSymbol} prefernceSymbol={prefernceSymbol} />
+        <OrderPreferenceModal setPreference={setPreference} currentToken={props?.currentToken} setPreferenceSymbol={setPreferenceSymbol} prefernceSymbol={prefernceSymbol} setOrderType={setOrderType} setSizeValue={setSizeValue} />
       }
       {isShow && <PositionModal setIsShow={setIsShow} positionMode={positionMode} setPositionMode={setPositionMode} positions={props.positions} openOrders={props.openOrders} />}
 

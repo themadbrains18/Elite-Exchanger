@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import RangeSlider from '../range-slider';
 import SelectDropdown from '../snippet/select-dropdown';
 import Context from '@/components/contexts/context';
@@ -12,6 +12,7 @@ interface showPopup {
     modelOverlay?: boolean;
     confirmOrder?: any;
     confirmOrderData?: any;
+    finalOrderSubmit?:boolean;
 }
 
 const TradeConfirmPopupModal = (props: showPopup) => {
@@ -22,9 +23,16 @@ const TradeConfirmPopupModal = (props: showPopup) => {
     const closePopup = () => {
         props.setConfirmModelOverlay(false);
         props.setConfirmModelPopup(0);
+        setDisable(false);
     }
     const wrapperRef = useRef(null);
     clickOutSidePopupClose({ wrapperRef, closePopup });
+
+    useEffect(()=>{
+        if(props.finalOrderSubmit === false){
+            setDisable(false);
+        }
+    },[props.finalOrderSubmit])
 
     return (
         <div ref={wrapperRef} className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[520px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.modelPopup == 1 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
@@ -34,6 +42,7 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                     onClick={() => {
                         props.setConfirmModelOverlay(false);
                         props.setConfirmModelPopup(0);
+                        setDisable(false);
 
                     }}
                     enableBackground="new 0 0 60.963 60.842"
