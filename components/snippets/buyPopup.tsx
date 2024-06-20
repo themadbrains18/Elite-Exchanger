@@ -32,6 +32,8 @@ const BuyPopup = (props: activeSection) => {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const { status, data: session } = useSession();
   const wbsocket = useWebSocket();
+  const [totalOrder,setTotalOrder] = useState(0);
+  
   let {
     register,
     setValue,
@@ -48,9 +50,21 @@ const BuyPopup = (props: activeSection) => {
   });
 
   useEffect(() => {
-    setValue('receive_amount',0)
+    setValue('receive_amount', 0)
     reset()
-    }, [props.show1])
+  }, [props.show1])
+
+  useEffect(() => {
+    getUserTotalOrders();
+  }, [props?.selectedPost?.user]);
+
+  const getUserTotalOrders = async () => {
+    let masterPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/postad?user_id=${props?.selectedPost?.user?.id}`, {
+      method: "GET",
+    }).then(response => response.json());
+    
+    setTotalOrder(masterPaymentMethod?.data);
+  }
 
   const profileImg = props?.selectedPost?.user?.profile && props?.selectedPost?.user?.profile?.image !== null ? props?.selectedPost?.user?.profile?.image : `/assets/orders/user1.png`;
   const userName = props?.selectedPost?.user?.profile && props?.selectedPost?.user?.profile?.dName !== null ? props?.selectedPost?.user?.profile?.dName : props?.selectedPost?.user?.user_kyc?.fname;
@@ -176,7 +190,7 @@ const BuyPopup = (props: activeSection) => {
                 <Image src={profileImg} width={44} height={44} alt="profile" className="rounded-full" />
                 <div>
                   <p className="info-14-18 dark:!text-white  !text-h-primary !font-medium">{userName}</p>
-                  <p className="sm-text mt-[2px]">{(props?.selectedPost?.user?.orders?.length) || 0} Orders </p>
+                  <p className="sm-text mt-[2px]">{(totalOrder) || 0} Orders </p>
                 </div>
               </div>
               <div className="mt-30 md:mt-50 grid md:grid-cols-1 grid-cols-2">
