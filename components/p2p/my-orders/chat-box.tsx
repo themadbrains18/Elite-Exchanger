@@ -127,6 +127,7 @@ const ChatBox = (props: PropsData) => {
                 if (res.data.status === 200) {
                     setMessage('');
                     setIsFileLoad(false);
+                    groupMessages(res?.data?.data?.result?.chat);
                     if (wbsocket) {
                         const chat = {
                             ws_type: 'chat',
