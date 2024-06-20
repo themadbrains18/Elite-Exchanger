@@ -159,7 +159,7 @@ const AddPair = (props: ActiveSession) => {
             dropdown={1}
           />
           {errors?.tokenOne && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.tokenOne?.message}</p>
+            <p className="errorMessage">{errors?.tokenOne?.message}</p>
           )}
         </div>
 
@@ -172,7 +172,7 @@ const AddPair = (props: ActiveSession) => {
             dropdown={2}
           />
           {errors?.tokenTwo && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.tokenTwo?.message}</p>
+            <p className="errorMessage">{errors?.tokenTwo?.message}</p>
           )}
         </div>
         <div className=" relative ">
@@ -185,7 +185,7 @@ const AddPair = (props: ActiveSession) => {
             className="sm-text input-cta2 w-full"
           />
           {errors?.maker && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.maker?.message}</p>
+            <p className="errorMessage">{errors?.maker?.message}</p>
           )}
         </div>
         <div className=" relative ">
@@ -198,7 +198,7 @@ const AddPair = (props: ActiveSession) => {
             className="sm-text input-cta2 w-full"
           />
           {errors?.taker && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.taker?.message}</p>
+            <p className="errorMessage">{errors?.taker?.message}</p>
           )}
         </div>
         <div className=" relative ">
@@ -211,7 +211,7 @@ const AddPair = (props: ActiveSession) => {
             className="sm-text input-cta2 w-full"
           />
           {errors?.min_trade && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.min_trade?.message}</p>
+            <p className="errorMessage">{errors?.min_trade?.message}</p>
           )}
         </div>
         <div className=" relative ">
@@ -224,7 +224,7 @@ const AddPair = (props: ActiveSession) => {
             className="sm-text input-cta2 w-full"
           />
           {errors?.max_trade && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.max_trade?.message}</p>
+            <p className="errorMessage">{errors?.max_trade?.message}</p>
           )}
         </div>
         <button className="solid-button w-full mt-30">Submit</button>

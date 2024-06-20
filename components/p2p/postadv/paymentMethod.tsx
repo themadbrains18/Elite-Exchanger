@@ -20,24 +20,24 @@ const schema = yup.object().shape({
     Array.isArray(val)
       ? yup
         .array()
-        .of(yup.string().min(1).required())
+        .of(yup.string().min(1,"Please select atleast 1 payment method").required())
         .required("Please select 1 payment method")
       : yup.string().min(1).required("Please select 1 payment method")
   ),
   // yup.array().of(yup.string().min(1).required()).required().nullable(),
   quantity: yup
     .number()
-    .positive()
+    .positive("Quantity must be greater than 0")
     .required("Please enter quantity to sell")
     .typeError("Please enter quantity to sell"),
   min_limit: yup
     .number()
-    .positive()
+    .positive("Quantity must be greater than 0")
     .required("Please enter min limit amount")
     .typeError("Please enter min limit amount"),
   max_limit: yup
     .number()
-    .positive()
+    .positive("Quantity must be greater than 0")
     .required("Please enter max limit amount")
     .typeError("Please enter max limit amount"),
   payment_time: yup.string().optional().default("15"),
@@ -221,7 +221,7 @@ const PaymentMethod = (props: activeSection) => {
 
   return (
     <>
-      <ToastContainer position="top-center" />
+      {props?.page==="user-center" && <ToastContainer position="top-center" />}
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"
           }`}
@@ -317,7 +317,7 @@ const PaymentMethod = (props: activeSection) => {
                 );
               })}
               {errors?.p_method && (
-                <p style={{ color: "#ff0000d1" }}>
+                <p className="errorMessage">
                   {errors?.p_method?.message}
                 </p>
               )}
@@ -372,7 +372,7 @@ const PaymentMethod = (props: activeSection) => {
                         </div>
                       </div>
                       {errors?.quantity && (
-                        <p style={{ color: "#ff0000d1" }}>
+                        <p className="errorMessage">
                           {errors?.quantity?.message}
                         </p>
                       )}
@@ -413,7 +413,7 @@ const PaymentMethod = (props: activeSection) => {
                         </div>
                       </div>
                       {errors?.min_limit && (
-                        <p style={{ color: "#ff0000d1" }}>
+                        <p className="errorMessage">
                           {errors?.min_limit?.message}
                         </p>
                       )}
@@ -449,7 +449,7 @@ const PaymentMethod = (props: activeSection) => {
                         </div>
                       </div>
                       {errors?.max_limit && (
-                        <p style={{ color: "#ff0000d1" }}>
+                        <p className="errorMessage">
                           {errors?.max_limit?.message}
                         </p>
                       )}
@@ -501,6 +501,7 @@ const PaymentMethod = (props: activeSection) => {
           formMethod={formMethod}
           setList={setList}
           list={setList}
+          page="ad"
         />
       )}
       {active == 3 && (

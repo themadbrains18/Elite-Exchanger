@@ -11,9 +11,9 @@ import { truncateNumber } from "@/libs/subdomain";
 
 const schema = yup.object().shape({
   p_method: yup.array().min(1, "Please select atleast 1 payment method").required().typeError("Please select atleast 1 payment method"),
-  quantity: yup.number().positive().required("Please enter quantity to sell").typeError("Please enter quantity to sell"),
-  min_limit: yup.number().positive().required("Please enter min limit amount").typeError("Please enter min limit amount"),
-  max_limit: yup.number().positive().required("Please enter max limit amount").typeError("Please enter max limit amount"),
+  quantity: yup.number().positive("Quantity must be greater than 0").required("Please enter quantity to sell").typeError("Please enter quantity to sell"),
+  min_limit: yup.number().positive("Quantity must be greater than 0").required("Please enter min limit amount").typeError("Please enter min limit amount"),
+  max_limit: yup.number().positive("Quantity must be greater than 0").required("Please enter max limit amount").typeError("Please enter max limit amount"),
   payment_time: yup.string().optional().default('15'),
 });
 
@@ -187,7 +187,7 @@ const EditPaymentMethod = (props: activeSection) => {
                 );
               })}
               {errors?.p_method && (
-                <p style={{ color: "#ff0000d1" }}>{errors?.p_method?.message}</p>
+                <p className="errorMessage">{errors?.p_method?.message}</p>
               )}
               <div className="md:mt-50 mt-10">
                 <button type="button" className="outline-button border-primary text-primary max-w-full sm:max-w-[176px] w-full" onClick={() => {
@@ -217,7 +217,7 @@ const EditPaymentMethod = (props: activeSection) => {
 
                   </div>
                   {errors?.quantity && (
-                    <p style={{ color: "#ff0000d1" }}>{errors?.quantity?.message}</p>
+                    <p className="errorMessage">{errors?.quantity?.message}</p>
                   )}
                 </div>
                 <div className="mt-10">
@@ -240,7 +240,7 @@ const EditPaymentMethod = (props: activeSection) => {
                     </div>
                   </div>
                   {errors?.min_limit && (
-                    <p style={{ color: "#ff0000d1" }}>{errors?.min_limit?.message}</p>
+                    <p className="errorMessage">{errors?.min_limit?.message}</p>
                   )}
                 </div>
               </div>
@@ -260,7 +260,7 @@ const EditPaymentMethod = (props: activeSection) => {
                     </div>
                   </div>
                   {errors?.max_limit && (
-                    <p style={{ color: "#ff0000d1" }}>{errors?.max_limit?.message}</p>
+                    <p className="errorMessage">{errors?.max_limit?.message}</p>
                   )}
                 </div>
               </div>

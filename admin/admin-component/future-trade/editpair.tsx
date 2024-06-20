@@ -143,7 +143,7 @@ const FutureEditPair = (props: ActiveSession) => {
             value={props?.editPair?.coin_symbol}
           />
           {errors?.coin_id && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.coin_id?.message}</p>
+            <p className="errorMessage">{errors?.coin_id?.message}</p>
           )}
         </div>
 
@@ -157,7 +157,7 @@ const FutureEditPair = (props: ActiveSession) => {
             value={props?.editPair?.usdt_symbol}
           />
           {errors?.usdt_id && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.usdt_id?.message}</p>
+            <p className="errorMessage">{errors?.usdt_id?.message}</p>
           )}
         </div>
         <div className=" relative mb-20">
@@ -170,7 +170,7 @@ const FutureEditPair = (props: ActiveSession) => {
             className="sm-text input-cta2 w-full"
           />
           {/* {errors?.coin_fee && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.coin_fee?.message}</p>
+            <p className="errorMessage">{errors?.coin_fee?.message}</p>
           )} */}
         </div>
         <div className=" relative mb-20">
@@ -183,7 +183,7 @@ const FutureEditPair = (props: ActiveSession) => {
             className="sm-text input-cta2 w-full"
           />
           {/* {errors?.usdt_fee && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.usdt_fee?.message}</p>
+            <p className="errorMessage">{errors?.usdt_fee?.message}</p>
           )} */}
         </div>
         <div className=" relative mb-20">
@@ -196,7 +196,7 @@ const FutureEditPair = (props: ActiveSession) => {
             className="sm-text input-cta2 w-full"
           />
           {errors?.coin_min_trade && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.coin_min_trade?.message}</p>
+            <p className="errorMessage">{errors?.coin_min_trade?.message}</p>
           )}
         </div>
         <div className=" relative mb-20">
@@ -209,7 +209,7 @@ const FutureEditPair = (props: ActiveSession) => {
             className="sm-text input-cta2 w-full"
           />
           {errors?.usdt_min_trade && (
-            <p style={{ color: "#ff0000d1" }}>{errors?.usdt_min_trade?.message}</p>
+            <p className="errorMessage">{errors?.usdt_min_trade?.message}</p>
           )}
         </div>
         <button className="solid-button w-full mt-30">Submit</button>

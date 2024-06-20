@@ -291,7 +291,7 @@ const TransferModal = (props: showPopup) => {
           }
         </div>
         {errors?.token_id && (
-          <p style={{ color: "#ff0000d1" }}>{errors?.token_id?.message}</p>
+          <p className="errorMessage">{errors?.token_id?.message}</p>
         )}
         <div className="flex items-center bg-[#e5ecf0] dark:bg-[#373d4e] p-[11px] mt-[25px] rounded-[5px] dark:text-white text-black justify-between">
           <input
@@ -311,7 +311,7 @@ const TransferModal = (props: showPopup) => {
           <p className="top-label dark:!text-primary cursor-pointer" onClick={() => setValue('amount', userAsset !== undefined && userAsset !== null ? userAsset?.balance?.toFixed(6) : 0)}>All</p>
         </div>
         {errors?.amount && (
-          <p style={{ color: "#ff0000d1" }}>{errors?.amount?.message}</p>
+          <p className="errorMessage">{errors?.amount?.message}</p>
         )}
 
         <p className="top-label !text-[16px] mt-[15px]">

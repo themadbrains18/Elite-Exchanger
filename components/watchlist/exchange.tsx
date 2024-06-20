@@ -328,10 +328,10 @@ const Exchange = (props: DynamicId): any => {
             </div>
           </div>
           {errors?.spend_amount && (
-            <p style={{ color: "#ff0000d1", fontSize:'12px' }}>{errors?.spend_amount?.message}</p>
+            <p className="errorMessage">{errors?.spend_amount?.message}</p>
           )}
           {errors?.firstCurrency && (
-            <p style={{ color: "#ff0000d1", fontSize:'12px' }}>{errors?.firstCurrency?.message}</p>
+            <p className="errorMessage">{errors?.firstCurrency?.message}</p>
           )}
           <div className="py-[10px]">
             <Image src="/assets/market/exchange.svg" width={30} height={30} alt="exchange" className=" mx-auto" />
@@ -347,7 +347,7 @@ const Exchange = (props: DynamicId): any => {
             </div>
           </div>
           {errors?.secondCurrency && (
-            <p style={{ color: "#ff0000d1", fontSize:'12px' }}>{errors?.secondCurrency?.message}</p>
+            <p className="errorMessage">{errors?.secondCurrency?.message}</p>
           )}
 
           <div className="mt-5 mb-5">

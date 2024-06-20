@@ -13,16 +13,18 @@ interface activeSection {
   formMethod?: any;
   setList?: any;
   list?: any;
+  page?: string
 }
 
 const TradingPassword = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [passCode, setPassCode] = useState("");
   const [fillOtp, setOtp] = useState("");
-    const [showNew, setShowNew] = useState(false);
+  const [showNew, setShowNew] = useState(false);
   const { status, data: session } = useSession();
   const [timeLeft, setTimer] = useState('');
   const [enable, setEnable] = useState(false);
+  const [disable, setDisable] = useState(false)
 
   useEffect(() => {
     const inputElements = document.querySelectorAll(".input_wrapper input");
@@ -98,7 +100,7 @@ const TradingPassword = (props: activeSection) => {
       let pmid = props?.formMethod?.pmid;
       let pm_name = props?.formMethod?.pm_name;
 
-      
+
 
       let pmObject: any = props?.formMethod?.pmObject;
       pmObject['passcode'] = passCode;
@@ -128,10 +130,10 @@ const TradingPassword = (props: activeSection) => {
       })
 
       let res = await responseData.json();
-      if(res){
+      if (res) {
         orderTimeCalculation(res?.data?.data?.otp?.expire);
       }
-      
+
     } catch (error) {
 
     }
@@ -139,13 +141,20 @@ const TradingPassword = (props: activeSection) => {
 
   const savePaymentMethod = async (e: any) => {
     try {
+      setDisable(true)
       e.preventDefault();
       if (fillOtp === '') {
-        toast.error('Please enter otp which send to your email address');
+        toast.error('Please enter otp which send to your email address', { autoClose: 2000 });
+        setTimeout(() => {
+          setDisable(false)
+        }, 3000)
         return;
       }
       if (passCode === '') {
-        toast.error('Please enter your trading password for security purpose');
+        toast.error('Please enter your trading password for security purpose', { autoClose: 2000 });
+        setTimeout(() => {
+          setDisable(false)
+        }, 3000)
         return;
       }
 
@@ -168,7 +177,7 @@ const TradingPassword = (props: activeSection) => {
       }
 
       // console.log(obj,'-----last submit');
-      
+
 
       const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
       let record = encodeURIComponent(ciphertext.toString());
@@ -185,16 +194,22 @@ const TradingPassword = (props: activeSection) => {
       let res = await responseData.json();
 
       if (res.data.status === 200) {
-        toast.success(res?.data?.data?.message,{autoClose:2000});
+        toast.success(res?.data?.data?.message, { autoClose: 2000 });
         let userPaymentMethod = res?.data?.data?.result;
         userPaymentMethod.master_payment_method = props?.formMethod?.master_method;
         props.setList((prev: any) => [...prev, userPaymentMethod]);
         props.setActive(3);
+        setTimeout(() => {
+          setDisable(false)
+        }, 3000)
       }
       else {
         // console.log(res,"=res");
-        
-        toast.error(res?.data?.data,{autoClose:2000});
+
+        toast.error(res?.data?.data, { autoClose: 2000 });
+        setTimeout(() => {
+          setDisable(false)
+        }, 3000)
       }
     } catch (error) {
       console.log("error in add payment method", error);
@@ -212,7 +227,7 @@ const TradingPassword = (props: activeSection) => {
 
   const Ref: any = useRef(null);
 
-  const orderTimeCalculation = async (time:any) => {
+  const orderTimeCalculation = async (time: any) => {
     setEnable(true);
     let deadline = new Date(time);
 
@@ -245,6 +260,11 @@ const TradingPassword = (props: activeSection) => {
     else {
       if (Ref.current) clearInterval(Ref.current);
       setEnable(false);
+      setOtp("")
+      const inputElements = document.querySelectorAll(".input_wrapper2 input");
+      inputElements.forEach((ele, index) => {
+        (inputElements[index] as HTMLInputElement).value = ""
+      })
     }
   }
 
@@ -260,7 +280,6 @@ const TradingPassword = (props: activeSection) => {
 
   return (
     <>
-      <ToastContainer />
       <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex items-center justify-between ">
           <p className="sec-title">Set Trading Passsword</p>
@@ -304,29 +323,29 @@ const TradingPassword = (props: activeSection) => {
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code5" />
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code6" onChange={(e) => { console.log(e) }} />
               </div> */}
-               <div className='relative'>
-                            <input
-                                type={`${showNew === true ? "text" : "password"}`}
-                                name='new_password'
-                                maxLength={32}
-                                placeholder="Enter new password"
-                                className="sm-text input-cta2 w-full"
-                                onChange={(e)=>{setPassCode(e.target.value)}}
-                            />
-                            <Image
-                                src={`/assets/register/${showNew === true ? "show.svg" : "hide.svg"}`}
-                                alt="eyeicon"
-                                width={24}
-                                height={24}
-                                onClick={() => {
-                                    setShowNew(!showNew);
-                                }}
-                                className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                            />
-                        </div>
+              <div className='relative'>
+                <input
+                  type={`${showNew === true ? "text" : "password"}`}
+                  name='new_password'
+                  maxLength={32}
+                  placeholder="Enter new password"
+                  className="sm-text input-cta2 w-full"
+                  onChange={(e) => { setPassCode(e.target.value) }}
+                />
+                <Image
+                  src={`/assets/register/${showNew === true ? "show.svg" : "hide.svg"}`}
+                  alt="eyeicon"
+                  width={24}
+                  height={24}
+                  onClick={() => {
+                    setShowNew(!showNew);
+                  }}
+                  className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                />
+              </div>
             </div>
-          
-            <div className="flex flex-col mb-[15px] md:mb-30 gap-20">
+
+            <div className="flex flex-col gap-20">
               <label className="sm-text">Enter Code Verification Code</label>
               <div className="flex gap-10 justify-between md:justify-center items-center input_wrapper2">
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
@@ -341,13 +360,14 @@ const TradingPassword = (props: activeSection) => {
                 <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
               </div>
               <div>
-                <p className={`info-10-14 text-end cursor-pointer ${enable === true ? 'hidden' : ''}`} onClick={sendOtp}>Send OTP</p>
+                <p className={`info-10-14 text-end cursor-pointer !text-primary ${enable === true ? 'hidden' : ''}`} onClick={sendOtp}>Send OTP</p>
               </div>
-              
+
             </div>
 
           </div>
-          <button className="solid-button w-full" onClick={(e: any) => { savePaymentMethod(e) }}>Submit</button>
+          <button disabled={disable} className={`solid-button w-full ${(disable) ? 'opacity-25 cursor-not-allowed' : ''}`} onClick={(e: any) => { savePaymentMethod(e) }}>Submit</button>
+
         </form>
       </div>
     </>

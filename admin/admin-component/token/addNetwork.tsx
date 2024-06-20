@@ -257,7 +257,7 @@ const AddNetwork = (props: activeSection) => {
                                                         />
                                                     </div>
                                                     {errors?.network?.[index]?.fee && (
-                                                        <p style={{ color: "red" }}>
+                                                        <p  className="errorMessage">
                                                             {errors?.network[index]?.fee?.message}
                                                         </p>
                                                     )}
@@ -272,7 +272,7 @@ const AddNetwork = (props: activeSection) => {
                                                         />
                                                     </div>
                                                     {errors?.network?.[index]?.contract && (
-                                                        <p style={{ color: "red" }}>
+                                                        <p  className="errorMessage">
                                                             {errors?.network[index]?.contract?.message}
                                                         </p>
                                                     )}
@@ -283,7 +283,7 @@ const AddNetwork = (props: activeSection) => {
                                 );
                             })}
                             {errors?.network && (
-                                <p style={{ color: "red" }}>{errors?.network.message}</p>
+                                <p  className="errorMessage">{errors?.network.message}</p>
                             )}
                         </div>
                     </div>

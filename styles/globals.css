@@ -643,3 +643,7 @@ input:-webkit-autofill {
   -webkit-text-fill-color: #9295a6;
   -webkit-box-shadow: 0 0 0px 1000px #e2f2ff inset;
 }
+
+.errorMessage {
+@apply text-[12px] text-[#ff0000d1]
+}

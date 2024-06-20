@@ -152,7 +152,7 @@ const AddEditStake = (props: activeSection) => {
                 />
               </div>
               {errors?.minimum_amount && (
-                <p style={{ color: "#ff0000d1" }}>{errors?.minimum_amount?.message}</p>
+                <p className="errorMessage">{errors?.minimum_amount?.message}</p>
               )}
             </div>
             <div className="mb-[10px]">
@@ -166,7 +166,7 @@ const AddEditStake = (props: activeSection) => {
                 />
               </div>
               {errors?.apr && (
-                <p style={{ color: "#ff0000d1" }}>{errors?.apr?.message}</p>
+                <p className="errorMessage">{errors?.apr?.message}</p>
               )}
             </div>
             <div className="mb-[10px] ">
@@ -185,7 +185,7 @@ const AddEditStake = (props: activeSection) => {
 
                   </div>
                   {errors.lockTime !== undefined &&
-                    <p style={{ color: "#ff0000d1" }}>{errors.lockTime[i]?.duration?.message}</p>
+                    <p className="errorMessage">{errors.lockTime[i]?.duration?.message}</p>
                   }
                 </div>
                 <div className="w-full">
@@ -199,7 +199,7 @@ const AddEditStake = (props: activeSection) => {
                     dropdown={i}
                   />
                   {errors.lockTime !== undefined &&
-                    <p style={{ color: "#ff0000d1" }}>{errors.lockTime[i]?.time?.message}</p>
+                    <p className="errorMessage">{errors.lockTime[i]?.time?.message}</p>
                   }
                 </div>
 

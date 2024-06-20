@@ -177,7 +177,7 @@ const AddReferralProgram = (props: ActiveSession) => {
                         className="sm-text input-cta2 w-full"
                     />
                     {errors?.name && (
-                        <p style={{ color: "#ff0000d1" }}>{errors?.name?.message}</p>
+                        <p className="errorMessage">{errors?.name?.message}</p>
                     )}
                 </div>
                 <div className=" relative ">
@@ -190,7 +190,7 @@ const AddReferralProgram = (props: ActiveSession) => {
                         className="sm-text input-cta2 w-full"
                     />
                     {errors?.description && (
-                        <p style={{ color: "#ff0000d1" }}>{errors?.description?.message}</p>
+                        <p className="errorMessage">{errors?.description?.message}</p>
                     )}
                 </div>
                 <div className=" relative ">
@@ -203,7 +203,7 @@ const AddReferralProgram = (props: ActiveSession) => {
                         className="sm-text input-cta2 w-full"
                     />
                     {errors?.amount && (
-                        <p style={{ color: "#ff0000d1" }}>{errors?.amount?.message}</p>
+                        <p className="errorMessage">{errors?.amount?.message}</p>
                     )}
                 </div>
 
@@ -216,7 +216,7 @@ const AddReferralProgram = (props: ActiveSession) => {
                         dropdown={1}
                     />
                     {errors?.token_id && (
-                        <p style={{ color: "#ff0000d1" }}>{errors?.token_id?.message}</p>
+                        <p className="errorMessage">{errors?.token_id?.message}</p>
                     )}
                 </div>
 
@@ -233,7 +233,7 @@ const AddReferralProgram = (props: ActiveSession) => {
                         className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"
                     />
                     {errors?.start_date && (
-                        <p style={{ color: "#ff0000d1" }}>{errors?.start_date.message}</p>
+                        <p className="errorMessage">{errors?.start_date.message}</p>
                     )}
 
                 </div>
@@ -251,7 +251,7 @@ const AddReferralProgram = (props: ActiveSession) => {
                         className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"
                     />
                     {errors?.end_date && (
-                        <p style={{ color: "#ff0000d1" }}>{errors?.end_date?.message}</p>
+                        <p className="errorMessage">{errors?.end_date?.message}</p>
                     )}
                 </div>
 

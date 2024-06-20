@@ -558,7 +558,7 @@ const BuySellExpress = (props: propsData) => {
                   </div>
                 </div>
                 {errors?.spend_amount && (
-                  <p style={{ color: "#ff0000d1" }}>{errors?.spend_amount?.message}</p>
+                  <p className="errorMessage">{errors?.spend_amount?.message}</p>
                 )}
 
                 {/* Second Currency Inputs */}
@@ -596,7 +596,7 @@ const BuySellExpress = (props: propsData) => {
                   </div>
                 </div>
                 {errors?.receive_amount && (
-                  <p style={{ color: "#ff0000d1" }}>{errors?.receive_amount?.message}</p>
+                  <p className="errorMessage">{errors?.receive_amount?.message}</p>
                 )}
 
                 <div className="mt-5 flex gap-2">
@@ -620,7 +620,7 @@ const BuySellExpress = (props: propsData) => {
                   />
                 </div>
                 {errors?.p_method && (
-                  <p style={{ color: "#ff0000d1" }}>{errors?.p_method?.message}</p>
+                  <p className="errorMessage">{errors?.p_method?.message}</p>
                 )}
               </div>
             }
@@ -683,7 +683,7 @@ const BuySellExpress = (props: propsData) => {
                   </div>
                 </div>
                 {errors?.spend_amount && (
-                  <p style={{ color: "#ff0000d1" }}>{errors?.spend_amount?.message}</p>
+                  <p className="errorMessage">{errors?.spend_amount?.message}</p>
                 )}
 
                 {/* Second Currency Inputs */}
@@ -720,7 +720,7 @@ const BuySellExpress = (props: propsData) => {
                   </div>
                 </div>
                 {errors?.receive_amount && (
-                  <p style={{ color: "#ff0000d1" }}>{errors?.receive_amount?.message}</p>
+                  <p className="errorMessage">{errors?.receive_amount?.message}</p>
                 )}
 
                 <div className="mt-5 flex gap-2">
@@ -745,7 +745,7 @@ const BuySellExpress = (props: propsData) => {
                   />
                 </div>
                 {errors?.p_method && (
-                  <p style={{ color: "#ff0000d1" }}>{errors?.p_method?.message}</p>
+                  <p className="errorMessage">{errors?.p_method?.message}</p>
                 )}
               </div>
             }
