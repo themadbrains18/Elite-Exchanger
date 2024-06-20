@@ -265,7 +265,7 @@ const ChatBox = (props: PropsData) => {
                                 placeholder="Input message..."
                             />
                         }
-                        <div>
+                        <div className='flex gap-2'>
                             <div>
                                 <input type="file" className="hidden" id="fileUpload" onChange={handleFileChange} />
                                 <label htmlFor="fileUpload" className="cursor-pointer group">
