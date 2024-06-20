@@ -22,7 +22,7 @@ const schema = yup.object().shape({
   withdraw_wallet: yup.string().required("This field is required"),
   amount: yup
     .number()
-    .positive()
+    .positive('Amount must be greater than 0')
     .required("This field is required")
     .typeError("This field is required"),
 });

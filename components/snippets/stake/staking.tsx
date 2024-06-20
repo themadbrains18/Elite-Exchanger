@@ -15,7 +15,7 @@ const schema = yup.object().shape({
     time: yup.string().required("This field is required"),
     amount: yup
         .number()
-        .positive()
+        .positive("Amount must be greater than 0")
         .required("This field is required")
         .typeError("Enter value must be number and positive value"),
 });

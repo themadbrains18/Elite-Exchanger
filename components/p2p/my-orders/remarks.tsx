@@ -271,7 +271,7 @@ const Remarks = (props: propsData) => {
                         <div className='border-b dark:border-opacity-[15%] border-grey-v-1 md:pb-30 pb-[15px] md:mb-30 mb-[15px]'>
                             <p className="text-[19px] md:text-[23px]  leading-7 font-medium   dark:!text-white  !text-h-primary">Remarks</p>
                         </div>
-                        <p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You Can Pay Me On ( Paytm / Phone pe / Google pay )</p>
+                        <p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You Can Pay Me On ( Paytm / PhonePe / Google pay )</p>
                         <p className='nav-text-sm md:mb-30 mb-20'>
                             {props?.userOrder?.user_post?.remarks !== "" ? props?.userOrder?.user_post?.remarks : "Please use an account under your name  to make the transfer. If the paying account and your personal information do not match, the seller may request a refund or cancel the order."}
                         </p>

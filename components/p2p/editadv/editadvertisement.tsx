@@ -21,7 +21,7 @@ const schema = yup.object().shape({
   token_id: yup.string().required("Please select asset that you want to sell"),
   price: yup
     .number()
-    .positive()
+    .positive('Price must be greater than 0')
     .required("Please enter amount")
     .typeError("Please enter amount"),
 });

@@ -16,8 +16,8 @@ import { currencyFormatter } from "@/components/snippets/market/buySellCard";
 import AuthenticationModelPopup from "@/components/snippets/authenticationPopup";
 
 const schema = yup.object().shape({
-  spend_amount: yup.number().positive().required('Please enter amount in INR').typeError('Please enter amount in INR'),
-  receive_amount: yup.number().positive().required('Please enter buy token amount ').typeError('Please enter buy token amount'),
+  spend_amount: yup.number().positive('Spend Amount must be greater than 0').required('Please enter amount in INR').typeError('Please enter amount in INR'),
+  receive_amount: yup.number().positive('Recieve amount must be greater than 0').required('Please enter buy token amount ').typeError('Please enter buy token amount'),
   p_method: yup.string().required('Please select payment method').typeError('Please select payment method')
 });
 

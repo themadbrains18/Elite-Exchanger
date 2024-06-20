@@ -38,9 +38,9 @@ const MyOrders = (props: propsData) => {
     socket();
     getUserOrders();
     if (orderId !== undefined && orderId !== '') {
-      getOrderByOrderId(orderId);
+      getOrderByOrderId(orderId, 'onload');
     }
-  }, [orderId,active1, wbsocket]);
+  }, [orderId, wbsocket]);
 
   const socket = async () => {
     if (wbsocket) {
@@ -48,7 +48,7 @@ const MyOrders = (props: propsData) => {
         const data = JSON.parse(event.data).data;
         let eventDataType = JSON.parse(event.data).type;
         if (eventDataType === "order") {
-          getOrderByOrderId(data?.id);
+          getOrderByOrderId(data?.id, 'socket');
           // setOrderDetail(data)
         }
         if (eventDataType === "buy") {
@@ -59,7 +59,7 @@ const MyOrders = (props: propsData) => {
 
   }
 
-  const getOrderByOrderId = async (orderid: any) => {
+  const getOrderByOrderId = async (orderid: any, type: string) => {
     let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {
       method: "GET",
       headers: {
@@ -76,8 +76,11 @@ const MyOrders = (props: propsData) => {
         toast.info('Third party user buy assets')
       }
       if (userOrder?.data?.status === 'isReleased' && userOrder?.data?.buy_user_id === session?.user?.user_id) {
-        toast.info('Assets Released successfully!..')
-        setActive1(true);
+        if (type === 'socket') {
+          toast.info('Assets Released successfully!..')
+          setActive1(true);
+        }
+
       }
     }
   }
@@ -155,7 +158,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
 
 
-    
+
 
     return {
       props: {

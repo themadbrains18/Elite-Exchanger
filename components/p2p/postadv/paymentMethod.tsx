@@ -32,12 +32,12 @@ const schema = yup.object().shape({
     .typeError("Please enter quantity to sell"),
   min_limit: yup
     .number()
-    .positive("Quantity must be greater than 0")
+    .positive("Minimum limit must be greater than 0")
     .required("Please enter min limit amount")
     .typeError("Please enter min limit amount"),
   max_limit: yup
     .number()
-    .positive("Quantity must be greater than 0")
+    .positive("Maximum Limit must be greater than 0")
     .required("Please enter max limit amount")
     .typeError("Please enter max limit amount"),
   payment_time: yup.string().optional().default("15"),
@@ -160,6 +160,7 @@ const PaymentMethod = (props: activeSection) => {
       // setMaxInputValue(Number(props.price) * Number(e.target.value))
       let maxLimit = truncateNumber(props.price * e.target.value, 2);
       setValue('max_limit', maxLimit);
+      clearErrors('max_limit')
       setMaxInputValue(maxLimit)
       clearErrors('quantity');
     }
@@ -464,7 +465,7 @@ const PaymentMethod = (props: activeSection) => {
                 <div className="md:mt-30 py-20 px-10 flex gap-10 items-center">
                   {/* <Image src={`/assets/payment-methods/gpay.png`} alt="payment image" width={32} height={32} />
                   <p className="sec-text !text-h-primary dark:!text-white !font-medium">Google Pay</p> */}
-                  <p className="sec-text !text-h-primary dark:!text-white">15 Minutes </p>
+                  <p className="sec-text !text-h-primary dark:!text-white">15:00 Minutes </p>
                 </div>
                 <div className="md:mt-50 mt-20 flex sm:gap-30 gap-10 sm:flex-row flex-col">
                   <button

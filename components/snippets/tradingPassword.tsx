@@ -25,6 +25,7 @@ const TradingPassword = (props: activeSection) => {
   const [timeLeft, setTimer] = useState('');
   const [enable, setEnable] = useState(false);
   const [disable, setDisable] = useState(false)
+  const [isOtp, setIsOtp] = useState(false)
 
   useEffect(() => {
     const inputElements = document.querySelectorAll(".input_wrapper input");
@@ -132,6 +133,7 @@ const TradingPassword = (props: activeSection) => {
       let res = await responseData.json();
       if (res) {
         orderTimeCalculation(res?.data?.data?.otp?.expire);
+        setIsOtp(true)
       }
 
     } catch (error) {
@@ -360,7 +362,8 @@ const TradingPassword = (props: activeSection) => {
                 <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
               </div>
               <div>
-                <p className={`info-10-14 text-end cursor-pointer !text-primary ${enable === true ? 'hidden' : ''}`} onClick={sendOtp}>Send OTP</p>
+                <p className={`info-10-14 text-end cursor-pointer !text-primary ${enable === true ? 'hidden' : ''}`} onClick={sendOtp}>{isOtp ? "Resend OTP":'Send OTP'}</p>
+             
               </div>
 
             </div>
