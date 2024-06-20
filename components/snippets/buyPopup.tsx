@@ -173,7 +173,7 @@ reset()
                 <Image src={profileImg} width={44} height={44} alt="profile" className="rounded-full" />
                 <div>
                   <p className="info-14-18 dark:!text-white  !text-h-primary !font-medium">{userName}</p>
-                  <p className="sm-text mt-[2px]">{props?.selectedPost?.user?.orders?.length || 0} Orders (s) </p>
+                  <p className="sm-text mt-[2px]">{(props?.selectedPost?.user?.buyerOrder?.length + props?.selectedPost?.user?.sellerOrder?.length) || 0} Orders </p>
                 </div>
               </div>
               <div className="mt-30 md:mt-50 grid md:grid-cols-1 grid-cols-2">

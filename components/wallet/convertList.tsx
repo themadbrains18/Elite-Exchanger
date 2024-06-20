@@ -22,7 +22,7 @@ const ConvertList = (props: propsData) => {
   useEffect(() => {
     getConvertData()
 
-  }, [itemOffset])
+  }, [itemOffset,,props?.filter])
 
   async function getConvertData() {
     let convertList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/convertlist?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
@@ -33,16 +33,20 @@ const ConvertList = (props: propsData) => {
     }).then(response => response.json());
 
     setTotal(convertList?.data?.total)
-    // if (props?.filter !== "") {
-    //   let data = withdrawList?.data?.data.filter((item: any) => {
-    //     return item.coinName.split('/')[1].toLowerCase().includes(props?.filter.toLowerCase());
-    //   })
-    //   setCurrentItems(data);
-    // }
-    // else{
-    setCurrentItems(convertList?.data?.data);
+    if (props?.filter !== "") {
+    
+      
+      const inputValue = props?.filter.toLowerCase();
+      let data = convertList?.data?.data.filter((item: any) => {
+        return (item.converted.toLowerCase().includes(inputValue) ||
+          item.received.toLowerCase().includes(inputValue));
+      })
+      setCurrentItems(data);
+    }
+    else {
+      setCurrentItems(convertList?.data?.data);
 
-    //   }
+    }
 
   }
 

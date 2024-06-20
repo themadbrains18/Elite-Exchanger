@@ -42,8 +42,8 @@ const Notification = (props: propsData) => {
   }
 
   return (
-    <div className="max-w-full lg:max-w-[352px] rounded-10 w-full bg-white dark:bg-d-bg-primary shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px] ">
-      <div className="p-[19px] overflow-y-auto max-h-[450px]">
+    <div className="max-w-full lg:min-w-[352px] rounded-10 w-full bg-white dark:bg-d-bg-primary shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px] ">
+      <div className="p-[19px] w-full overflow-y-auto max-h-[450px]">
         <div className='hidden lg:block'>
           {
             props.notificationData?.map((item: any, index: number) => {
