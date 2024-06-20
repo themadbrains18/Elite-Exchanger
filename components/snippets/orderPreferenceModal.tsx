@@ -7,6 +7,8 @@ interface propsData {
   currentToken: any;
   setPreferenceSymbol: Function;
   prefernceSymbol: string;
+  setOrderType:Function;
+  setSizeValue:Function
 }
 const OrderPreferenceModal = (props: propsData) => {
   const { mode } = useContext(Context);
@@ -198,6 +200,8 @@ const OrderPreferenceModal = (props: propsData) => {
               onClick={() => {
                 props?.setPreferenceSymbol(value)
                 props?.setPreference(false);
+                props?.setOrderType(value.toLowerCase());
+                props.setSizeValue(0);
                 // props.actionPerform();
               }}
             >
