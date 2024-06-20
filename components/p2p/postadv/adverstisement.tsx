@@ -19,7 +19,7 @@ interface propsData {
 
 const schema = yup.object().shape({
   token_id: yup.string().required("Please select asset that you want to sell"),
-  price: yup.number().positive().required("Please enter amount").typeError("Please enter amount"),
+  price: yup.number().positive('Price must be greater than 0').required("Please enter amount").typeError("Please enter amount"),
 });
 
 

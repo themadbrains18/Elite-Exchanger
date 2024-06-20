@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useRef, useState } from "react";
+import React, { Fragment, useContext, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Context from "../contexts/context";
 import { useRouter } from "next/router";
@@ -14,8 +14,8 @@ import clickOutSidePopupClose from "./clickOutSidePopupClose";
 import { useWebSocket } from "@/libs/WebSocketContext";
 
 const schema = yup.object().shape({
-  spend_amount: yup.number().positive().required('Please enter amount in INR').typeError('Please enter amount in INR'),
-  receive_amount: yup.number().positive().required('Please enter buy token amount ').typeError('Please enter buy token amount')
+  spend_amount: yup.number().positive('Spend Amount must be greater than 0').required('Please enter amount in INR').typeError('Please enter amount in INR'),
+  receive_amount: yup.number().positive('Recieve Amount must be greater than 0').required('Please enter buy token amount ').typeError('Please enter buy token amount')
 });
 
 interface activeSection {
@@ -46,6 +46,10 @@ const BuyPopup = (props: activeSection) => {
   } = useForm({
     resolver: yupResolver(schema)
   });
+
+  useEffect(()=>{
+reset()
+  },[])
 
   const profileImg = props?.selectedPost?.user?.profile && props?.selectedPost?.user?.profile?.image !== null ? props?.selectedPost?.user?.profile?.image : `/assets/orders/user1.png`;
   const userName = props?.selectedPost?.user?.profile && props?.selectedPost?.user?.profile?.dName !== null ? props?.selectedPost?.user?.profile?.dName : props?.selectedPost?.user?.user_kyc?.fname;

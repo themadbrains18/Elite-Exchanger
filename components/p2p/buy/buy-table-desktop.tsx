@@ -152,16 +152,12 @@ const BuyTableDesktop = (props: activeSection) => {
             setActive(true)
           }
           else {
-            console.log("=here i am");
-            
             props.setShow1(true); props.setSelectedPost(item);
           }
 
         }
        
         else {
-          console.log("=here i am");
-          
           props.setShow1(true); props.setSelectedPost(item);
         }
       }

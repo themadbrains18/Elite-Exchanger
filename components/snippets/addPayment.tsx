@@ -99,7 +99,7 @@ const AddPayment = (props: activeSection) => {
 
   const onHandleSubmit = (data: any) => {
     // console.log(data.qr_code?.length, typeof data.qr_code, data?.qr_code,"==data");
-    console.log(data,"=shdfjksh");
+    // console.log(data,"=shdfjksh");
     
     setDisable(true)
     if(Object.values(data).length==0){
@@ -111,7 +111,7 @@ const AddPayment = (props: activeSection) => {
 
     }
 
-    if (data?.phonenumber?.length < 10) {
+    if (data?.phonenumber?.length !== 10) {
       toast.error("Number contain 10 digits", { autoClose: 2000 });
       setTimeout(() => {
         setDisable(false)

@@ -50,20 +50,20 @@ const networkSchema = yup.object().shape({
 
 const schema = yup.object().shape({
   symbol: yup.string().min(3).required("Please enter symbol"),
-  decimal: yup.number().max(20).positive().typeError("Please enter decimal"),
-  price: yup.number().positive().typeError("Price must be a number"),
+  decimal: yup.number().max(20).positive('Decimal must be greater than 0').typeError("Please enter decimal"),
+  price: yup.number().positive('Price must be greater than 0').typeError("Price must be a number"),
   fullName: yup.string().min(3).required("Please enter full name of token"),
   image: yup.mixed().required("Please upload image of token"),
   minimum_withdraw: yup
     .string()
     .required("Please enter minimum withdraw amount of token"),
   tokenType: yup.string().required("Please select token type"),
-  min_price: yup.number().positive().typeError("Min Price must be a number"),
+  min_price: yup.number().positive('Minimum Price must be greater than 0').typeError("Min Price must be a number"),
   max_price: yup
     .number()
-    .positive()
+    .positive('Max price must be greater than 0')
     .typeError("Max Price must be a number")
-    .moreThan(yup.ref("min_price"), "Max Value must be greater than Min Price"),
+    .moreThan(yup.ref("min_price"), "Maximum Value must be greater than Min Price"),
   network: yup.array().of(
     yup.lazy((value) => {
       const { checked } = value; // Get the value of checked field

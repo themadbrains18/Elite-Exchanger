@@ -33,7 +33,7 @@ const schema = yup.object().shape({
   symbolTwo: yup.string().required("Please enter symbol"),
   maker: yup.number().notRequired(),
   taker: yup.number().notRequired(),
-  min_trade: yup.number().positive().required("Please enter symbol"),
+  min_trade: yup.number().positive('Minimum Trade must be greater than 0').required("Please enter symbol"),
 });
 
 

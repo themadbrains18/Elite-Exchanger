@@ -16,14 +16,14 @@ const schema = yup.object().shape({
   apr: yup.number().required("This field is required"),
   minimum_amount: yup
     .number()
-    .positive()
+    .positive('Minimum amount must be greater than 0')
     .typeError("Amount must be a number")
     .required("Please provide  minimum amount."),
   lockTime: yup.array().of(
     yup.object().shape({
       duration: yup
         .number()
-        .positive()
+        .positive('Duration must be greater than 0')
         .typeError("Time Duration must be a number")
         .required("Please provide time limit."),
       time: yup.string().required("This field  is required"),

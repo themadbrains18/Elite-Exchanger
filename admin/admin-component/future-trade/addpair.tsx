@@ -21,8 +21,8 @@ const schema = yup.object().shape({
   usdt_symbol: yup.string().required("Please enter symbol"),
   coin_fee: yup.number().notRequired().default(0),
   usdt_fee: yup.number().notRequired().default(0),
-  coin_min_trade: yup.number().positive().required("Please enter coin minimum trade limit").typeError("Please enter coin minimum trade limit"),
-  usdt_min_trade: yup.number().positive().required("Please enter usdt minimum trade limit").typeError("Please enter usdt minimum trade limit"),
+  coin_min_trade: yup.number().positive('Coin minimum trade must be greater than 0').required("Please enter coin minimum trade limit").typeError("Please enter coin minimum trade limit"),
+  usdt_min_trade: yup.number().positive('USDT minimum trade must be greater than 0').required("Please enter usdt minimum trade limit").typeError("Please enter usdt minimum trade limit"),
 });
 
 const FutureAddPair = (props: ActiveSession) => {
