@@ -12,6 +12,11 @@ const NotificationsList = (props: propsData) => {
   const capitalizeFirstLetter = (inputString: string) =>
     `${inputString.charAt(0).toUpperCase()}${inputString.slice(1)}`;
 
+  function containsImageUrl(str: string) {
+    const imageUrlPattern = /(https?:\/\/.*\.(?:png|jpg|jpeg|gif|bmp|webp))/i;
+    return imageUrlPattern.test(str);
+  }
+
   return (
     <section className=" bg-light-v-1 py-[20px] md:py-[80px]  dark:bg-black-v-1">
       <div className="container ">
@@ -42,19 +47,17 @@ const NotificationsList = (props: propsData) => {
           <div className="flex justify-between border-b border-grey-v-3 dark:border-opacity-[15%]">
             <div className="flex gap-5 md:gap-30 trade_history_scroll overflow-auto">
               <button
-                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${
-                  active === 1 && "border-primary !text-primary"
-                }`}
+                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 1 && "border-primary !text-primary"
+                  }`}
                 onClick={() => {
                   setActive(1);
                 }}
               >
                 All
               </button>
-              <button
-                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${
-                  active === 2 && "border-primary !text-primary"
-                }`}
+              {/* <button
+                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 2 && "border-primary !text-primary"
+                  }`}
                 onClick={() => {
                   setActive(2);
                 }}
@@ -62,9 +65,8 @@ const NotificationsList = (props: propsData) => {
                 System Notification
               </button>
               <button
-                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${
-                  active === 3 && "border-primary !text-primary"
-                }`}
+                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 3 && "border-primary !text-primary"
+                  }`}
                 onClick={() => {
                   setActive(3);
                 }}
@@ -72,9 +74,8 @@ const NotificationsList = (props: propsData) => {
                 Latest Events
               </button>
               <button
-                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${
-                  active === 4 && "border-primary !text-primary"
-                }`}
+                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 4 && "border-primary !text-primary"
+                  }`}
                 onClick={() => {
                   setActive(4);
                 }}
@@ -82,9 +83,8 @@ const NotificationsList = (props: propsData) => {
                 Announcements
               </button>
               <button
-                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${
-                  active === 5 && "border-primary !text-primary"
-                }`}
+                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 5 && "border-primary !text-primary"
+                  }`}
                 onClick={() => {
                   setActive(5);
                 }}
@@ -92,9 +92,8 @@ const NotificationsList = (props: propsData) => {
                 Rewards
               </button>
               <button
-                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${
-                  active === 6 && "border-primary !text-primary"
-                }`}
+                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 6 && "border-primary !text-primary"
+                  }`}
                 onClick={() => {
                   setActive(6);
                 }}
@@ -102,17 +101,16 @@ const NotificationsList = (props: propsData) => {
                 TradingView Alerts
               </button>
               <button
-                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${
-                  active === 7 && "border-primary !text-primary"
-                }`}
+                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 7 && "border-primary !text-primary"
+                  }`}
                 onClick={() => {
                   setActive(7);
                 }}
               >
                 News
-              </button>
+              </button> */}
             </div>
-            <div className="hidden lg:flex gap-5">
+            {/* <div className="hidden lg:flex gap-5">
               <div className="p-[5px] flex items-center gap-[10px] cursor-pointer">
                 <Image
                   src="/assets/history/calender.svg"
@@ -150,12 +148,13 @@ const NotificationsList = (props: propsData) => {
                 alt="dots"
                 className="cursor-pointer"
               />
-            </div>
+            </div> */}
           </div>
 
           <ul>
             {props?.notificationData.length > 0 &&
               props.notificationData?.map((item: any, index: number) => {
+                let isImage = containsImageUrl(item?.message?.message);
                 return (
                   <li
                     key={index}
@@ -167,9 +166,13 @@ const NotificationsList = (props: propsData) => {
                         {capitalizeFirstLetter(item?.type)}
                       </p>
                     </div>
-                    <p className={`info-14-18 text-sm dark:text-[#a0a1a7] w-full mb-7`}>
-                      {item?.message?.message}
-                    </p>
+                    {isImage === true ?
+                      <Image src={item?.message?.message} className="mb-7" alt="" width={300} height={300} />
+                      : <p className={`info-14-18 text-sm dark:text-[#a0a1a7] w-full mb-7`}>
+                        {item?.message?.message}
+                      </p>
+                    }
+
                     <div className="flex justify-between items-center">
                       <p className="admin-table-data">
                         {moment(item?.createdAt).format("YYYY-MM-DD HH:mm:ss")}

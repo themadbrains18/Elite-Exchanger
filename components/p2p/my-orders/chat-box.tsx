@@ -29,15 +29,12 @@ const ChatBox = (props: PropsData) => {
     const { status, data: session } = useSession();
     const [enableFront, setEnableFront] = useState(false);
     const wbsocket = useWebSocket();
+    const [isFileLoad, setIsFileLoad] = useState(false);
 
     useEffect(() => {
         getChatByOrderId();
         socket();
     }, [props.order?.id, wbsocket]);
-
-
-
-
 
     const socket = () => {
         if (wbsocket) {
@@ -129,6 +126,8 @@ const ChatBox = (props: PropsData) => {
 
                 if (res.data.status === 200) {
                     setMessage('');
+                    setIsFileLoad(false);
+                    groupMessages(res?.data?.data?.result?.chat);
                     if (wbsocket) {
                         const chat = {
                             ws_type: 'chat',
@@ -185,8 +184,9 @@ const ChatBox = (props: PropsData) => {
                 toast.error('Unsupported PDF file');
                 return;
             }
-
-            sendMessage(data.secure_url);
+            setIsFileLoad(true);
+            setMessage(data.secure_url);
+            // sendMessage(data.secure_url);
             setEnableFront(false);
         } catch (error) {
             console.error(error);
@@ -221,7 +221,7 @@ const ChatBox = (props: PropsData) => {
                 </div>
                 <div id="chat-feed" className="p-[14px] max-h-[300px] h-full overflow-x-auto flex flex-col gap-[10px] chatContainor  scroll-smooth">
 
-                   {(props?.order?.user_post && props?.order?.user_post?.auto_reply!=="" && props?.order?.user_post?.auto_reply !== null) && <div className='left gap-[4px]' >
+                    {(props?.order?.user_post && props?.order?.user_post?.auto_reply !== "" && props?.order?.user_post?.auto_reply !== null) && <div className='left gap-[4px]' >
                         <div className="mt-[4px] p-[10px] ml-[auto] rounded-lg min-w-[60px] max-w-fit w-full dark:bg-[#232530] bg-primary-600 bottom-right">
 
                             <p className="info-12 text-white">{props?.order?.user_post?.auto_reply}</p>
@@ -255,24 +255,29 @@ const ChatBox = (props: PropsData) => {
                     ))}
                 </div>
                 <div className="border-t border-[#cccccc7d] p-[16px] py-[24px] dark:bg-omega">
-                    <div className="flex items-center gap-[15px]">
-                        <input
-                            type="text"
-                            onChange={(e) => setMessage(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            value={message}
-                            className="border-0 w-full outline-none info-12 dark:!bg-omega !bg-[#F9FAFA] dark:!text-white !text-black"
-                            placeholder="Input message..."
-                        />
-                        <div>
-                            <input type="file" className="hidden" id="fileUpload" onChange={handleFileChange} />
-                            <label htmlFor="fileUpload" className="cursor-pointer group">
-                                <IconsComponent type="fileUpload" hover={false} active={false} />
-                            </label>
+                    <div className="flex items-center gap-[15px] justify-between">
+                        {isFileLoad === true ? <Image src={message} alt='' height={50} width={50} /> :
+                            <input
+                                type="text"
+                                onChange={(e) => setMessage(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                value={message}
+                                className="border-0 w-full outline-none info-12 dark:!bg-omega !bg-[#F9FAFA] dark:!text-white !text-black"
+                                placeholder="Input message..."
+                            />
+                        }
+                        <div className='flex gap-2'>
+                            <div>
+                                <input type="file" className="hidden" id="fileUpload" onChange={handleFileChange} />
+                                <label htmlFor="fileUpload" className="cursor-pointer group">
+                                    <IconsComponent type="fileUpload" hover={false} active={false} />
+                                </label>
+                            </div>
+                            <button className="cta group" onClick={() => sendMessage(message)}>
+                                <IconsComponent type="sendIcon" hover={true} active={message !== ''} />
+                            </button>
                         </div>
-                        <button className="cta group" onClick={() => sendMessage(message)}>
-                            <IconsComponent type="sendIcon" hover={true} active={message !== ''} />
-                        </button>
+
                     </div>
                 </div>
             </div>
