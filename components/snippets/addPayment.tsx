@@ -35,6 +35,9 @@ const AddPayment = (props: activeSection) => {
     formState: { errors },
   } = useForm();
 
+  const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   /**
    * On payment method change
    * @param id 
@@ -56,13 +59,40 @@ const AddPayment = (props: activeSection) => {
 
   const handleFileChange = async (e: any) => {
     try {
+      clearErrors('qr_code');
 
       let file = e.target.files[0];
-      const fileSize = file.size / 1024 / 1024;
-      if (fileSize > 2) {
-        toast.warning('Upload file upto 2 mb');
+      const fileType = file['type'];
+      if (!validImageTypes.includes(fileType)) {
+        // invalid file type code goes here.
+        setError("qr_code", {
+          type: "custom",
+          message: "invalid file type, upload only (png, jpg,jpeg)",
+        });
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ''; // Clear the input
+        }
+        setTimeout(() => {
+          clearErrors('qr_code')
+        }, 3000);
         return;
       }
+
+      const fileSize = file.size / 1024 / 1024;
+      if (fileSize > 2) {
+        setError("qr_code", {
+          type: "custom",
+          message: 'File size upto 2 MB',
+        });
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ''; // Clear the input
+        }
+        setTimeout(() => {
+          clearErrors('qr_code')
+        }, 3000);
+        return;
+      }
+
       const formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', 'my-uploads');
@@ -73,17 +103,9 @@ const AddPayment = (props: activeSection) => {
       }).then(r => r.json());
 
       if (data.error !== undefined) {
-        setError("idfront", {
+        setError("qr_code", {
           type: "custom",
           message: data?.error?.message,
-        });
-        setEnableFront(false);
-        return;
-      }
-      if (data.format === 'pdf') {
-        setError("idfront", {
-          type: "custom",
-          message: 'Unsupported pdf file',
         });
         setEnableFront(false);
         return;
@@ -98,11 +120,8 @@ const AddPayment = (props: activeSection) => {
   };
 
   const onHandleSubmit = (data: any) => {
-    // console.log(data.qr_code?.length, typeof data.qr_code, data?.qr_code,"==data");
-    // console.log(data,"=shdfjksh");
-    
     setDisable(true)
-    if(Object.values(data).length==0){
+    if (Object.values(data).length == 0) {
       toast.error("Please select payment method", { autoClose: 2000 });
       setTimeout(() => {
         setDisable(false)
@@ -207,7 +226,7 @@ const AddPayment = (props: activeSection) => {
               placeholder="Choose Payment Method"
               auto={false}
               widthFull={true} type="pmethod" onPaymentMethodChange={onPaymentMethodChange} />
-           
+
           </div>
 
           {paymentFields && paymentFields.length > 0 && paymentFields.map((item: any) => {
@@ -227,7 +246,7 @@ const AddPayment = (props: activeSection) => {
                         </>
                       }
 
-                      <input type={item?.type} placeholder={item?.placeholder} {...register(`${item?.name}`, { required: item?.required === 'true' ? true : false })} onChange={(e) => {
+                      <input type={item?.type} placeholder={item?.placeholder} {...register(`${item?.name}`, { required: item?.required === 'true' ? true : false })} ref={fileInputRef} onChange={(e) => {
                         handleFileChange(e);
                       }} className="outline-none sm-text w-full bg-[transparent]" />
                     </>
@@ -239,7 +258,16 @@ const AddPayment = (props: activeSection) => {
 
                 </div>
                 {errors?.[item?.name] && (
-                  <p className="errorMessage">{item.err_msg}</p>
+                  <>
+                    {errors?.[item?.name]?.type === 'custom' && (
+                      <p className="errorMessage">{String(errors?.[item?.name]?.message)}</p>
+                    )}
+                    {errors?.[item?.name]?.type !== 'custom' &&
+                      <p className="errorMessage">{item.err_msg}</p>
+                    }
+
+                  </>
+
                 )}
               </div>
 
