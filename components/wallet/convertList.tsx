@@ -5,8 +5,11 @@ import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
 import moment from 'moment';
 
+interface propsData {
+  filter: string;
+}
 
-const ConvertList = () => {
+const ConvertList = (props: propsData) => {
 
   const [currentItems, setCurrentItems] = useState([]);
   const [itemOffset, setItemOffset] = useState(0);

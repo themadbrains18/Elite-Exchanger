@@ -64,7 +64,7 @@ const WalletList = (props: propsData): any => {
                 Withdraw History
               </button>
               <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px]  ${active1 === 5 && "!text-primary border-primary"}`} onClick={() => setActive1(5)}>
-                Convert Record
+                Convert History
               </button>
             </div>
 
@@ -92,7 +92,7 @@ const WalletList = (props: propsData): any => {
           }
           {
             active1 === 5 &&
-            <ConvertList />
+            <ConvertList filter={filter}/>
           }
         </div>
       </section>

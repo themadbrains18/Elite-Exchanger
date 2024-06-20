@@ -23,6 +23,8 @@ interface showPopup {
   assets?: any;
   refreshWalletAssets?: any;
   wallet_type?: string
+  token?: any;
+  type?:string
 }
 const TransferModal = (props: showPopup) => {
   const { status, data: session } = useSession();
@@ -35,7 +37,7 @@ const TransferModal = (props: showPopup) => {
   // const [isError, setIsError] = useState(false);
   const [amount, setAmount] = useState(0);
   const [btnDisabled, setBtnDisabled] = useState(false);
-  const [coinDefaultValue, setCoinDefaultValue] = useState('Select Token')
+  const [coinDefaultValue, setCoinDefaultValue] = useState(props?.token?.symbol)
 
   let {
     register,
@@ -78,9 +80,26 @@ const TransferModal = (props: showPopup) => {
     });
     setCoinList(coins);
 
-    if(props?.wallet_type==="future_wallet"){
+    if (props?.wallet_type === "future_wallet" || props?.type==="future") {
       setFuture("Spot");
       setSpot("Futures");
+    }
+
+    if (props?.token) {
+      let type = props?.wallet_type === "future_wallet" ? "Futures" : "Spot"
+      filterAsset(props?.token?.symbol, type)
+    }
+    if(props?.type==="future"){
+      props?.assets?.filter((item: any) => {
+        if (item?.walletTtype === "future_wallet") {
+          coins.push(
+            item?.token !== null
+              ? item?.token?.symbol
+              : item?.global_token?.symbol
+          );
+        }
+      });
+      setCoinList(coins);
     }
 
     setTimeout(() => {
@@ -91,9 +110,11 @@ const TransferModal = (props: showPopup) => {
         clearErrors('token_id')
       }
     }, 3000);
-  }, [props?.assets, errors,props?.wallet_type]);
+  }, [props?.assets, errors, props?.wallet_type, props?.token,props?.type]);
 
   const filterAsset = (symbol: string, type: string) => {
+    console.log(symbol, type);
+
     if (type == "Spot") {
       let asset = props?.assets?.filter((item: any) => {
         let token = item?.token !== null ? item?.token : item?.global_token;
@@ -119,13 +140,18 @@ const TransferModal = (props: showPopup) => {
 
   const onHandleSubmit = async (data: any) => {
     try {
+      console.log(data?.amount, userAsset?.balance.toFixed(6), "==data");
 
-      if (data?.amount > userAsset?.balance) {
+
+      if (data?.amount > userAsset?.balance.toFixed(6)) {
         setError("amount", {
           type: "custom",
           message: `Insufficiant balance`,
         });
         return;
+      }
+      if(data?.amount == userAsset?.balance.toFixed(6)){
+        data.amount=userAsset?.balance
       }
 
       let obj = {
@@ -151,7 +177,6 @@ const TransferModal = (props: showPopup) => {
 
       if (assetReponse?.data?.status === 200) {
         toast.success(assetReponse?.data.data.message, { autoClose: 2000 });
-        setValue('amount', 0);
         setValue('token_id', '');
         setCoinDefaultValue('Select Token');
         setSelectedCoin('');
@@ -246,18 +271,24 @@ const TransferModal = (props: showPopup) => {
           </div>
         </div>
       </div>
-      <form onSubmit={handleSubmit(onHandleSubmit)}   onKeyDown={preventEnterSubmit}>
+      <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={preventEnterSubmit}>
         <div className="flex items-center justify-between px-[12px] py-[12px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[25px] relative">
-          <SelectDropdown
-            list={coinList}
-            defaultValue={coinDefaultValue}
-            setCoinDefaultValue={setCoinDefaultValue}
-            fullWidth={true}
-            whiteColor={true}
-            filterAsset={filterAsset}
-            Spot={Spot}
-            {...register('token_id')}
-          />
+          {
+            props?.wallet_type !== undefined ?
+              <input defaultValue={coinDefaultValue} readOnly disabled className='top-label py-[5px] px-[10px] w-full cursor-not-allowed   ' />
+              :
+              <SelectDropdown
+                list={coinList}
+                defaultValue={coinDefaultValue}
+                setCoinDefaultValue={setCoinDefaultValue}
+                fullWidth={true}
+                whiteColor={true}
+                filterAsset={filterAsset}
+                Spot={Spot}
+                {...register('token_id')}
+              />
+
+          }
         </div>
         {errors?.token_id && (
           <p style={{ color: "#ff0000d1" }}>{errors?.token_id?.message}</p>

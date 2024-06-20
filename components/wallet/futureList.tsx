@@ -298,7 +298,7 @@ const FutureList = (props: propsData) => {
                 show1 === 4 &&
                 <>
                     <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-                    <TransferModal setOverlay={setShow1} setPopupMode={setPopupMode} popupMode={popupMode} assets={currentItems} wallet_type="future_wallet"/>
+                    <TransferModal setOverlay={setShow1} setPopupMode={setPopupMode} popupMode={popupMode} assets={currentItems} wallet_type="future_wallet" token={selectedCoin}/>
                 </>
             }
         </>
