@@ -58,7 +58,7 @@ const EditModel = (props: ActiveSession) => {
       let result = await res.json();
 
       if (result) {
-        toast.success("Message update successfully");
+        toast.success("Message update successfully.");
         setTimeout(() => {
           props.setEditShow(false);
           props.refreshPairList();

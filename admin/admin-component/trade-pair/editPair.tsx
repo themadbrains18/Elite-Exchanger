@@ -106,7 +106,7 @@ const EditPair = (props: ActiveSession) => {
         let result = await res.json();
         // console.log(result);
         if (result?.data?.status === 200) {
-          toast.success("Pair update successfully");
+          toast.success("Pair update successfully.");
           setTimeout(() => {
             props?.setEditShow(false);
             props.refreshPairList();

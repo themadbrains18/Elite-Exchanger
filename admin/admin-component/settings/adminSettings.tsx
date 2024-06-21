@@ -138,7 +138,7 @@ const AdminSettings = (props: fixSection) => {
           reset();
         }
       } else {
-        toast.error("Your session is expired. Its auto redirect to login page");
+        toast.error("Your session is expired. Its auto redirect to login page.");
         setTimeout(() => {
           signOut();
         }, 4000);
@@ -186,7 +186,7 @@ const AdminSettings = (props: fixSection) => {
         }
       }
       else {
-        toast.error('Your session is expired. Its auto redirect to login page');
+        toast.error('Your session is expired. Its auto redirect to login page.');
         setTimeout(() => {
           signOut();
         }, 4000);

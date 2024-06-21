@@ -87,7 +87,7 @@ const FutureEditPair = (props: ActiveSession) => {
         let result = await res.json();
         // console.log(result);
         if (result?.status === 200) {
-          toast.success("token update successfully");
+          toast.success("Token update successfully.");
           setTimeout(() => {
             props?.setEditShow(false);
             props.refreshPairList();

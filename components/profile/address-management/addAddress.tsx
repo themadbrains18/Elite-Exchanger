@@ -265,7 +265,7 @@ const AddAddress = (props: activeSection) => {
       ).then((response) => response.json());
 
       if (response.data.status === 200) {
-        toast.success("whitelist address created successfully");
+        toast.success("Whitelist address created successfully.");
 
         setTimeout(() => {
           reset();
