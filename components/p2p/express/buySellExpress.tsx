@@ -612,7 +612,7 @@ const BuySellExpress = (props: propsData) => {
                     Payment Method
                   </p>
                 </div>
-                <div className="mt-5 flex gap-2">
+                <div className="mt-2 flex gap-2">
                   <FiliterSelectMenu
                     data={props.masterPayMethod}
                     placeholder="Select Payment Method"
@@ -637,7 +637,7 @@ const BuySellExpress = (props: propsData) => {
                 <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
 
                   <p className="sm-text dark:text-white">
-                    {filterAsset !== undefined ?currencyFormatter(filterAsset?.balance) : '0.0'}
+                    {filterAsset !== undefined ?currencyFormatter(filterAsset?.balance.toFixed(6)) : '0.0'}
                   </p>
                 </div>
                 {/* First Currency Inputs */}
@@ -740,7 +740,7 @@ const BuySellExpress = (props: propsData) => {
                     Payment Method
                   </p>
                 </div>
-                <div className="mt-5 flex gap-2">
+                <div className="mt-2 flex gap-2">
                   <FiliterSelectMenu
                     data={props.masterPayMethod}
                     placeholder="Select Payment Method"

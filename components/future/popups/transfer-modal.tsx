@@ -11,8 +11,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 
 const schema = yup.object().shape({
-  amount: yup.number().positive('Amount must be positive number').required('This field is required').typeError('This field is required'),
-  token_id: yup.string().required('This field is required'),
+  amount: yup.number().positive('Amount must be positive number.').required('This field is required.').typeError('This field is required.'),
+  token_id: yup.string().required('This field is required.'),
 });
 
 interface showPopup {
@@ -146,7 +146,7 @@ const TransferModal = (props: showPopup) => {
       if (data?.amount > userAsset?.balance.toFixed(6)) {
         setError("amount", {
           type: "custom",
-          message: `Insufficiant balance`,
+          message: `Insufficiant balance.`,
         });
         return;
       }

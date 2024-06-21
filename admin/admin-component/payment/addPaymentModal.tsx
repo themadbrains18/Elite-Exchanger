@@ -11,20 +11,20 @@ import { AES } from "crypto-js";
 const AddPaymentModal = (props: any) => {
   const { mode } = useContext(Context);
   const schema = yup.object().shape({
-    payment_method: yup.string().required("This field is required"),
-    icon: yup.mixed().required("Icon is required"),
-    numberOfFields: yup.string().required("Number of Fields is required"),
+    payment_method: yup.string().required("This field is required."),
+    icon: yup.mixed().required("Icon is required."),
+    numberOfFields: yup.string().required("Number of Fields is required."),
     paymentFields: yup.array().of(
       yup.object().shape({
-        label: yup.string().required("This field is required"),
-        type: yup.string().required("This field is required"),
-        required: yup.string().required("This field is required"),
-        ifoptional: yup.string().required("This field is required"),
-        name: yup.string().required("This field is required"),
-        placeholder: yup.string().required("This field is required"),
-        err_msg: yup.string().required("This field is required"),
+        label: yup.string().required("This field is required."),
+        type: yup.string().required("This field is required."),
+        required: yup.string().required("This field is required."),
+        ifoptional: yup.string().required("This field is required."),
+        name: yup.string().required("This field is required."),
+        placeholder: yup.string().required("This field is required."),
+        err_msg: yup.string().required("This field is required."),
       })
-    ).required("This field is required"),
+    ).required("This field is required."),
   });
 
   const {

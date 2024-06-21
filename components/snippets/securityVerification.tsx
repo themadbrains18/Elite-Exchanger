@@ -30,9 +30,9 @@ type UserSubmitForm = {
 };
 
 const schema = yup.object().shape({
-  password: yup.string().required("Account password is required"),
-  key: yup.string().required("Google authenticator key is required"),
-  code: yup.string().required("Google authenticator code is required"),
+  password: yup.string().required("Account password is required."),
+  key: yup.string().required("Google authenticator key is required."),
+  code: yup.string().required("Google authenticator code is required."),
 });
 
 const SecurityVerification = (props: activeSection) => {
@@ -242,7 +242,7 @@ const SecurityVerification = (props: activeSection) => {
                 {...register("code")}
               />
               {errors.code && (
-                <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.code.message}</p>
+                <p  className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px] errorMessage">{errors.code.message}</p>
               )}
             </div>
 
@@ -268,7 +268,7 @@ const SecurityVerification = (props: activeSection) => {
                 />
               </div>
               {errors.password && (
-                <p style={{ color: "red" }} className="absolute top-[100%] text-[10px] md:text-[12px]">{errors.password.message}</p>
+                <p  className="absolute top-[100%] text-[10px] md:text-[12px] errorMessage">{errors.password.message}</p>
               )}
             </div>
           </div>

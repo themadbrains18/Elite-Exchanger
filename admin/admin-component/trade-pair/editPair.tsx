@@ -27,13 +27,13 @@ type PairSubmitForm = {
 };
 
 const schema = yup.object().shape({
-  tokenOne: yup.string().required("Please enter symbol"),
-  tokenTwo: yup.string().required("Please enter symbol"),
-  symbolOne: yup.string().required("Please enter symbol"),
-  symbolTwo: yup.string().required("Please enter symbol"),
+  tokenOne: yup.string().required("Please enter symbol."),
+  tokenTwo: yup.string().required("Please enter symbol."),
+  symbolOne: yup.string().required("Please enter symbol."),
+  symbolTwo: yup.string().required("Please enter symbol."),
   maker: yup.number().notRequired(),
   taker: yup.number().notRequired(),
-  min_trade: yup.number().positive('Minimum Trade must be greater than 0').required("Please enter symbol"),
+  min_trade: yup.number().positive("Minimum Trade must be greater than '0'.").required("Please enter symbol."),
 });
 
 
@@ -85,7 +85,7 @@ const EditPair = (props: ActiveSession) => {
     // console.log(data);
     try {
       if (getValues("tokenOne") === getValues("tokenTwo")) {
-        setError("tokenTwo", { message: "Same tokens are not allowed" })
+        setError("tokenTwo", { message: "Same tokens are not allowed." })
       }
       else {
         data.id = props?.editPair?.id

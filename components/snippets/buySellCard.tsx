@@ -22,8 +22,8 @@ const pusher = new Pusher('b275b2f9e51725c09934', {
 });
 
 const schema = yup.object().shape({
-  token_amount: yup.number().positive('Amount must be greater than 0').required('Please enter quantity').typeError('Please enter quantity'),
-  limit_usdt: yup.number().positive('Limit must be greater than 0').required('Please enter limit amount').typeError('Please enter limit amount'),
+  token_amount: yup.number().positive("Amount must be greater than '0'.").required('Please enter quantity.').typeError('Please enter quantity.'),
+  limit_usdt: yup.number().positive("Limit must be greater than '0'.").required('Please enter limit amount.').typeError('Please enter limit amount.'),
   // market_type:yup.string().optional().default('limit')
 });
 
@@ -157,7 +157,7 @@ const BuySellCard = (props: DynamicId) => {
     if (props.token?.tradepair?.maxTrade < data.token_amount) {
       setError("token_amount", {
         type: "custom",
-        message: "you can trade less than max amount " + props.token?.tradepair?.maxTrade,
+        message: "you can trade less than max amount " + `'${props.token?.tradepair?.maxTrade}.'`,
       });
       return;
     }

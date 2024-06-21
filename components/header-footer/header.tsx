@@ -404,7 +404,7 @@ const Header = (props: propsData) => {
                       </div>
 
                       <span className="w-20 h-20 text-center bg-primary-400 rounded-full absolute top-[-10px]  right-[-10px]">
-                        <span data-testid="notification-count" className="nav-text-lg !text-white hidden xl:block mt-[-2px]">
+                        <span data-testid="notification-count" className="nav-text-lg !text-white hidden xl:block mt-[-2px] p-[2px] !text-[12px]">
                           {notificationData?.length}
                         </span>
                       </span>

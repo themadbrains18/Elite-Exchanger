@@ -27,14 +27,14 @@ type PairSubmitForm = {
 };
 
 const schema = yup.object().shape({
-  tokenOne: yup.string().required("Please enter symbol"),
-  tokenTwo: yup.string().required("Please enter symbol"),
-  symbolOne: yup.string().required("Please enter symbol"),
-  symbolTwo: yup.string().required("Please enter symbol"),
+  tokenOne: yup.string().required("Please enter symbol."),
+  tokenTwo: yup.string().required("Please enter symbol."),
+  symbolOne: yup.string().required("Please enter symbol."),
+  symbolTwo: yup.string().required("Please enter symbol."),
   maker: yup.number().optional().default(0),
   taker: yup.number().optional().default(0),
-  min_trade: yup.number().positive("Please enter min trade amount").required("Please enter min trade amount").typeError("Please enter coin minimum trade limit"),
-  max_trade: yup.number().positive("Please enter min trade amount").required("Please enter max trade amount").typeError("Please enter coin maximum trade limit"),
+  min_trade: yup.number().positive("Please enter min trade amount.").required("Please enter min trade amount.").typeError("Please enter coin minimum trade limit."),
+  max_trade: yup.number().positive("Please enter min trade amount.").required("Please enter max trade amount.").typeError("Please enter coin maximum trade limit."),
 
 });
 
@@ -78,7 +78,7 @@ const AddPair = (props: ActiveSession) => {
       // console.log("=hii",data);
       
       if (getValues("tokenOne") === getValues("tokenTwo")) {
-        setError("tokenTwo", { message: "Same tokens are not allowed" })
+        setError("tokenTwo", { message: "Same tokens are not allowed." })
       }
       else {
         data.status = true;

@@ -20,8 +20,8 @@ const pusher = new Pusher('b275b2f9e51725c09934', {
 });
 
 const schema = yup.object().shape({
-  token_amount: yup.number().positive('Amount must be greater than 0').required('Please enter quantity').typeError('Please enter quantity'),
-  limit_usdt: yup.number().positive("Limit must be greater than 0").required('Please enter limit amount').typeError('Please enter limit amount'),
+  token_amount: yup.number().positive("Amount must be greater than '0'.").required('Please enter quantity.').typeError('Please enter quantity.'),
+  limit_usdt: yup.number().positive("Limit must be greater than '0'.").required('Please enter limit amount.').typeError('Please enter limit amount.'),
   // market_type:yup.string().optional().default('limit')
 });
 
@@ -170,7 +170,7 @@ const BuySellCard = (props: DynamicId) => {
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
 
     if (firstCurrency === '') {
-      setError('token_amount', { type: 'custom', message: 'Please select coin that you want to buy' });
+      setError('token_amount', { type: 'custom', message: 'Please select coin that you want to buy.' });
       return
     }
     if (active1 === 1 && totalAmount > price) {
@@ -185,7 +185,7 @@ const BuySellCard = (props: DynamicId) => {
     if (selectedToken?.tradepair?.maxTrade < data.token_amount) {
       setError("token_amount", {
         type: "custom",
-        message: "you can trade less than max amount " + selectedToken?.tradepair?.maxTrade,
+        message: "you can trade less than max amount " + `'${selectedToken?.tradepair?.maxTrade}.'`,
       });
       return;
     }

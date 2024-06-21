@@ -19,8 +19,8 @@ import clickOutSidePopupClose from "@/components/snippets/clickOutSidePopupClose
 const schema = yup.object().shape({
   uname: yup
     .string()
-    .required("Email / Phone is required")
-    .test("email_or_phone", "Email / Phone is invalid", (value) => {
+    .required("Email / Phone is required.")
+    .test("email_or_phone", "Email / Phone is invalid.", (value) => {
       return validateEmail(value) || validatePhone(value);
     }),
 });
@@ -163,7 +163,7 @@ const AdNumber = (props: activeSection) => {
           setError("uname", {
             type: "custom",
             message: `Please enter valid ${
-              props?.type === "email" ? "email" : "number"
+              props?.type === "email" ? "email." : "number."
             }}`,
           });
         }
@@ -293,7 +293,7 @@ const AdNumber = (props: activeSection) => {
                   {...register("uname")}
                 />
                 {errors.uname && (
-                  <p style={{ color: "red" }}>{errors.uname.message}</p>
+                  <p className="errorMessage">{errors.uname.message}</p>
                 )}
               </div>
 

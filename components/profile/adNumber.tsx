@@ -21,7 +21,7 @@ import CodeNotRecieved from "../snippets/codeNotRecieved";
 const schema = yup.object().shape({
   uname: yup
     .string()
-    .required("Email / Phone is required").matches(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})+$/, "Please enter valid email(letters, number and period('.'))")
+    .required("Email / Phone is required.").matches(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})+$/, "Please enter valid email(letters, number and period('.')).")
   // .test("email_or_phone", "Email / Phone is invalid", (value) => {
   //   return validateEmail(value) || validatePhone(value);
   // }),
@@ -138,7 +138,7 @@ const AdNumber = (props: activeSection) => {
         if (isValidEmail === null) {
           setError("uname", {
             type: "custom",
-            message: `Please enter valid email(letters, number and period('.'))`,
+            message: `Please enter valid email(letters, number and period('.')).`,
           });
           setTimeout(() => {
             clearErrors('uname');
@@ -215,7 +215,7 @@ const AdNumber = (props: activeSection) => {
       else {
         setError("uname", {
           type: "custom",
-          message: `This field is required`,
+          message: `This field is required.`,
         });
         setDisabled(false);
         setTimeout(() => {
@@ -474,7 +474,7 @@ const AdNumber = (props: activeSection) => {
                         className="sm-text input-cta2 w-full"
                       />
                       {errors.uname && (
-                        <p style={{ color: "red" }}>{errors.uname.message}</p>
+                        <p className="errorMessage">{errors.uname.message}</p>
                       )}
                     </div>
                     <div>
@@ -547,7 +547,7 @@ const AdNumber = (props: activeSection) => {
                         name="code6"
                       />
                     </div>
-                    <p className={` text-center lg:mt-[20px] md-text ${otpMessage === '' ? 'hidden' : ''}`} style={{ color: 'red' }}>{otpMessage}</p>
+                    <p className={` text-center lg:mt-[20px] md-text errorMessage ${otpMessage === '' ? 'hidden' : ''}`} >{otpMessage}</p>
                   </div>
                 </div>
                 <div className="flex gap-[20px]">

@@ -326,7 +326,7 @@ const GoogleAuth = (props: activeSection) => {
                 />
                 {/* {errors.otp && <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.otp.message}</p>} */}
               </div>
-              <p className={` text-center lg:mt-[20px] md-text ${otpMessage === '' ? 'hidden' : ''}`} style={{ color: 'red' }}>{otpMessage}</p>
+              <p className={` text-center lg:mt-[20px] md-text errorMessage ${otpMessage === '' ? 'hidden' : ''}`} >{otpMessage}</p>
             </div>
             <div className={`flex  ${showTime === true ? '' : 'hidden'}`}>
               <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>

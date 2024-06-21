@@ -15,13 +15,13 @@ import ResetSuccessful from "../snippets/resetSuccessful";
 
 
 const schema = yup.object().shape({
-  new_password: yup.string().min(8).max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter")
-    .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
-    .matches(/\d/, "Password must have a number")
-    .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character")
-    .matches(/^\S*$/, "White Spaces are not allowed"),
+  new_password: yup.string().min(8).max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter.")
+    .matches(/\w*[A-Z]\w*/, "Password must have a capital letter.")
+    .matches(/\d/, "Password must have a number.")
+    .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character.")
+    .matches(/^\S*$/, "Whitespaces are not allowed."),
   confirmPassword: yup.string()
-    .oneOf([yup.ref('new_password'),''], 'Passwords must match'),
+    .oneOf([yup.ref('new_password'),''], 'Passwords must match.'),
 });
 
 interface propsData {

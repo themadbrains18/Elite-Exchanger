@@ -18,8 +18,8 @@ import FilterSelectMenuWithCoin from "@/components/snippets/filter-select-menu-w
 const schema = yup.object().shape({
   tokenID: yup.string().optional().default(""),
   networkId: yup.string().optional().default(""),
-  label: yup.string().required("This field is required").max(20),
-  address: yup.string().required("This field is required").max(50),
+  label: yup.string().required("This field is required.").max(20),
+  address: yup.string().required("This field is required.").max(50),
 });
 
 interface activeSection {
@@ -94,7 +94,7 @@ const AddAddress = (props: activeSection) => {
       if (selectedCoin === "") {
         setError("tokenID", {
           type: "custom",
-          message: "Please select Coin",
+          message: "Please select coin.",
         });
         return;
       } else {
@@ -107,7 +107,7 @@ const AddAddress = (props: activeSection) => {
       if (selectedNetwork === "") {
         setError("networkId", {
           type: "custom",
-          message: "Please select network",
+          message: "Please select network.",
         });
         return;
       } else {
@@ -339,7 +339,7 @@ const AddAddress = (props: activeSection) => {
 
                 </div>
                 {errors.label && (
-                  <p style={{ color: "red" }}>{errors.label.message}</p>
+                  <p className="errorMessage">{errors.label.message}</p>
                 )}
                 {/* <p className="mt-[10px] text-end text-buy sm-text">
                   Valid Address
@@ -356,7 +356,7 @@ const AddAddress = (props: activeSection) => {
             dropdown={1}
             filterNetworkListByCoin={filterNetworkListByCoin}
           />
-          {unSelectCoinError!=="" && <p style={{ color: "#ff0000d1" }}>{unSelectCoinError}</p>}
+          {unSelectCoinError!=="" && <p className="errorMessage">{unSelectCoinError}</p>}
         </div>
       }
               <div className="my-20">
@@ -370,7 +370,7 @@ const AddAddress = (props: activeSection) => {
                   depositToken={selectedCoin} setUnSelectCoinError={setUnSelectCoinError}
                 />
                 {errors.networkId && (
-                  <p style={{ color: "red" }}>{errors.networkId.message}</p>
+                  <p className="errorMessage">{errors.networkId.message}</p>
                 )}
               </div>
 
@@ -395,7 +395,7 @@ const AddAddress = (props: activeSection) => {
 
                 </div>
                 {errors.address && (
-                  <p style={{ color: "red" }}>{errors.address.message}</p>
+                  <p className="errorMessage">{errors.address.message}</p>
                 )}
 
               </div>

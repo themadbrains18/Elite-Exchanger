@@ -22,7 +22,7 @@ interface activeSection {
 }
 
 const schema = yup.object().shape({
-  password: yup.string().required("password is required"),
+  password: yup.string().required("Password is required."),
 });
 
 const Password = (props: activeSection) => {
@@ -314,7 +314,7 @@ const Password = (props: activeSection) => {
                   name="code6"
                 />
               </div>
-              <p className={` text-center lg:mt-[20px] md-text ${otpMessage === '' ? 'hidden' : ''}`} style={{ color: 'red' }}>{otpMessage}</p>
+              <p className={` text-center lg:mt-[20px] md-text errorMessage ${otpMessage === '' ? 'hidden' : ''}`}>{otpMessage}</p>
               <div>
                 <div className={`flex ${showTime === true ? '' : 'hidden'}`}>
                   <p className={`info-10-14 px-2 text-start  md-text`}>Your OTP will expire within </p>
@@ -356,7 +356,7 @@ const Password = (props: activeSection) => {
                 />
               </div>
               {errors.password && (
-                <p style={{ color: "red" }}>{errors.password.message}</p>
+                <p className="errorMessage">{errors.password.message}</p>
               )}
             </div>
           </div>

@@ -1,6 +1,5 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import IconsComponent from "../../../components/snippets/icons";
 import GoogleAuth from "../../../components/snippets/googleAuth";
 // import Verification from "../snippets/verification";
 // import AdNumber from "./adNumber";
@@ -18,15 +17,15 @@ import Verification from "@/admin/admin-snippet/verification";
 import AdNumber from "@/admin/admin-snippet/adNumber";
 
 const schema = yup.object().shape({
-  old_password: yup.string().required("Old password is required"),
+  old_password: yup.string().required("Old password is required."),
   new_password: yup
     .string()
-    .min(8)
+    .min(8, 'Password must be at least 8 character')
     .max(32)
-    .required("New password is required"),
+    .required("New password is required."),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("new_password")], "Passwords must match"),
+    .oneOf([yup.ref("new_password")], "Passwords must match."),
 });
 
 interface fixSection {
@@ -395,7 +394,7 @@ const AdminSettings = (props: fixSection) => {
                   </div>
                 </div>
                 {errors.old_password && (
-                  <p style={{ color: "#ff0000d1" }}>
+                  <p className="errorMessage">
                     {errors.old_password.message}
                   </p>
                 )}
@@ -410,7 +409,7 @@ const AdminSettings = (props: fixSection) => {
                       className="sm-text input-cta2 w-full"
                     />
                     {errors.new_password && (
-                      <p style={{ color: "#ff0000d1" }}>
+                      <p className="errorMessage">
                         {errors.new_password.message}
                       </p>
                     )}
@@ -426,7 +425,7 @@ const AdminSettings = (props: fixSection) => {
                       className="sm-text input-cta2 w-full"
                     />
                     {errors.confirmPassword && (
-                      <p style={{ color: "#ff0000d1" }}>
+                      <p className="errorMessage">
                         {errors.confirmPassword.message}
                       </p>
                     )}

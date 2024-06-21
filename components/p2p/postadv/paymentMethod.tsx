@@ -20,9 +20,9 @@ const schema = yup.object().shape({
     Array.isArray(val)
       ? yup
         .array()
-        .of(yup.string().min(1,"Please select atleast 1 payment method").required())
-        .required("Please select 1 payment method")
-      : yup.string().min(1).required("Please select 1 payment method")
+        .of(yup.string().min(1,"Please select atleast '1' payment method.").required())
+        .required("Please select '1' payment method.")
+      : yup.string().min(1).required("Please select '1' payment method.")
   ),
   // yup.array().of(yup.string().min(1).required()).required().nullable(),
   quantity: yup
@@ -112,7 +112,7 @@ const PaymentMethod = (props: activeSection) => {
     if (data.quantity > props.assetsBalance) {
       setError("quantity", {
         type: "custom",
-        message: `Insufficiant balance`,
+        message: `Insufficiant balance.`,
       });
       setFocus("quantity");
       return;
@@ -120,7 +120,7 @@ const PaymentMethod = (props: activeSection) => {
     if(data.min_limit > data.max_limit){
       setError("min_limit", {
         type: "custom",
-        message: `Min Limit must be less than Max limit`,
+        message: `Min limit must be less than max limit.`,
       });
       setFocus("min_limit");
       return;
@@ -128,7 +128,7 @@ const PaymentMethod = (props: activeSection) => {
     if (data.p_method === "false") {
       setError("p_method", {
         type: "custom",
-        message: `Please select at least 1 payment method`,
+        message: `Please select at least 1 payment method.`,
       });
       setFocus("p_method");
       return;
@@ -152,7 +152,7 @@ const PaymentMethod = (props: activeSection) => {
     if (e.target.value > props.assetsBalance) {
       setError("quantity", {
         type: "custom",
-        message: `Insufficiant balance`,
+        message: `Insufficiant balance.`,
       });
       return;
     } else {

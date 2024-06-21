@@ -18,13 +18,13 @@ import IconsComponent from "./icons";
 import { useWebSocket } from "@/libs/WebSocketContext";
 
 const schema = yup.object().shape({
-  networkId: yup.string().required('This field is required'),
-  withdraw_wallet: yup.string().required("This field is required"),
+  networkId: yup.string().required('This field is required.'),
+  withdraw_wallet: yup.string().required("This field is required."),
   amount: yup
     .number()
-    .positive('Amount must be greater than 0')
-    .required("This field is required")
-    .typeError("This field is required"),
+    .positive("Amount must be greater than '0'.")
+    .required("This field is required.")
+    .typeError("This field is required."),
 });
 
 interface activeSection {
@@ -469,7 +469,7 @@ const Withdraw = (props: activeSection) => {
                   onNetworkChange={getNetworkDetail}
                 />
                 {errors.networkId && (
-                  <p style={{ color: "red" }}>{errors.networkId.message}</p>
+                  <p className="errorMessage">{errors.networkId.message}</p>
                 )}
               </div>
 
@@ -508,7 +508,7 @@ const Withdraw = (props: activeSection) => {
 
                 </div>
                 {errors.withdraw_wallet && (
-                  <p style={{ color: "red" }}>{errors.withdraw_wallet.message}</p>
+                  <p className="errorMessage">{errors.withdraw_wallet.message}</p>
                 )}
                 {/* <p className="mt-[10px] text-end text-buy sm-text">
                   Valid Address
@@ -527,7 +527,7 @@ const Withdraw = (props: activeSection) => {
                   />
                 </div>
                 {errors.amount && (
-                  <p style={{ color: "red" }}>{errors.amount.message}</p>
+                  <p className="errorMessage">{errors.amount.message}</p>
                 )}
                 <p className="mt-[10px] text-end sm-text">
                   Transaction Fee {props?.token?.withdraw_fee} {props?.token?.symbol}

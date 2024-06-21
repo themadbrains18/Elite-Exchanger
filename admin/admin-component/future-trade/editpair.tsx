@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import Context from '@/components/contexts/context';
 
 interface ActiveSession {
@@ -14,14 +14,14 @@ interface ActiveSession {
 }
 
 const schema = yup.object().shape({
-  coin_id: yup.string().required("Please enter symbol"),
-  usdt_id: yup.string().required("Please enter symbol"),
-  coin_symbol: yup.string().required("Please enter symbol"),
-  usdt_symbol: yup.string().required("Please enter symbol"),
+  coin_id: yup.string().required("Please enter symbol."),
+  usdt_id: yup.string().required("Please enter symbol."),
+  coin_symbol: yup.string().required("Please enter symbol."),
+  usdt_symbol: yup.string().required("Please enter symbol."),
   coin_fee: yup.number().notRequired().default(0),
   usdt_fee: yup.number().notRequired().default(0),
-  coin_min_trade: yup.number().positive('Coin minimum trade must be greater than 0').required("Please enter coin minimum trade limit").typeError("Please enter coin minimum trade limit"),
-  usdt_min_trade: yup.number().positive('USDT minimum must be greater than 0').required("Please enter usdt minimum trade limit").typeError("Please enter usdt minimum trade limit"),
+  coin_min_trade: yup.number().positive("Coin minimum trade must be greater than '0'.").required("Please enter coin minimum trade limit.").typeError("Please enter coin minimum trade limit."),
+  usdt_min_trade: yup.number().positive("USDT minimum must be greater than '0'.").required("Please enter usdt minimum trade limit.").typeError("Please enter usdt minimum trade limit."),
 });
 
 
@@ -72,7 +72,7 @@ const FutureEditPair = (props: ActiveSession) => {
     // console.log(data);
     try {
       if (getValues("coin_id") === getValues("usdt_id")) {
-        setError("usdt_id", { message: "Same tokens are not allowed" })
+        setError("usdt_id", { message: "Same tokens are not allowed." })
       }
       else {
         data.id = props?.editPair?.id

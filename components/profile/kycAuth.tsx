@@ -45,11 +45,11 @@ const validFileExtensions: { [key: string]: string[] } = {
 const schema = yup
   .object()
   .shape({
-    country: yup.string().required("Please select Country"),
-    fname: yup.string().required("Full name must be required").min(4, 'Must be greater than 4 charater').max(30).matches(/^([a-zA-Z])+([\s*\S+\s+\S+\sa-zA-Z])+$/, 'Please enter only(letters)'),
+    country: yup.string().required("Please select country."),
+    fname: yup.string().required("Full name must be required.").min(4, "Must be greater than '4' charater.").max(30).matches(/^([a-zA-Z])+([\s*\S+\s+\S+\sa-zA-Z])+$/, 'Please enter only(letters).'),
     // lname: yup.string().required("This field is required"),
-    doctype: yup.string().required("Please select Document type"),
-    docnumber: yup.string().required("Please enter valid Document number").min(6,"Document Number must equal to identity number").max(30),
+    doctype: yup.string().required("Please select Document type."),
+    docnumber: yup.string().required("Please enter valid document number.").min(6,"Document Number must equal to identity number.").max(30),
     dob: yup
       .date()
       .transform(function (value, originalValue) {
@@ -58,12 +58,12 @@ const schema = yup
         }
         return originalValue;
       })
-      .typeError("please enter a valid date")
-      .required('This is required field')
+      .typeError("please enter a valid date.")
+      .required('This is required field.')
     ,
-    idfront: yup.mixed().required("Please upload front side of  document"),
-    idback: yup.mixed().required("Please upload back side of  document"),
-    statement: yup.mixed().required("Please upload bank statement"),
+    idfront: yup.mixed().required("Please upload front side of  document."),
+    idback: yup.mixed().required("Please upload back side of  document."),
+    statement: yup.mixed().required("Please upload bank statement."),
   })
   .required();
 
@@ -247,7 +247,7 @@ const KycAuth = (props: fixSection) => {
         // invalid file type code goes here.
         setError("idfront", {
           type: "custom",
-          message: "invalid file type, upload only (png, jpg,jpeg)",
+          message: "invalid file type, upload only (png, jpg,jpeg).",
         });
         setEnableFront(false);
         return;
@@ -255,7 +255,7 @@ const KycAuth = (props: fixSection) => {
       if (fileSize > 2) {
         setError("idfront", {
           type: "custom",
-          message: "Upload file upto 2 mb",
+          message: "Upload file upto 2 mb.",
         });
         setEnableFront(false);
         return;
@@ -280,7 +280,7 @@ const KycAuth = (props: fixSection) => {
       if (data.format === 'pdf') {
         setError("idfront", {
           type: "custom",
-          message: 'Unsupported pdf file',
+          message: 'Unsupported pdf file.',
         });
         setEnableFront(false);
         return;
@@ -319,7 +319,7 @@ const KycAuth = (props: fixSection) => {
         // invalid file type code goes here.
         setError("idback", {
           type: "custom",
-          message: "invalid file type, upload only (png, jpg,jpeg)",
+          message: "invalid file type, upload only (png, jpg,jpeg).",
         });
         setEnableBack(false);
         return;
@@ -327,7 +327,7 @@ const KycAuth = (props: fixSection) => {
       if (fileSize > 2) {
         setError("idback", {
           type: "custom",
-          message: "Upload file upto 2 mb",
+          message: "Upload file upto 2 mb.",
         });
         setEnableBack(false);
         return;
@@ -352,7 +352,7 @@ const KycAuth = (props: fixSection) => {
       if (data.format === 'pdf') {
         setError("idback", {
           type: "custom",
-          message: 'Unsupported pdf file',
+          message: 'Unsupported pdf file.',
         });
         setEnableBack(false);
         return;
@@ -391,7 +391,7 @@ const KycAuth = (props: fixSection) => {
         // invalid file type code goes here.
         setError("statement", {
           type: "custom",
-          message: "invalid file type, upload only (png, jpg,jpeg)",
+          message: "invalid file type, upload only (png, jpg,jpeg).",
         });
         setEnableStatement(false);
         return;
@@ -399,7 +399,7 @@ const KycAuth = (props: fixSection) => {
       if (fileSize > 2) {
         setError("statement", {
           type: "custom",
-          message: "Upload file upto 2 mb",
+          message: "Upload file upto 2 mb.",
         });
         setEnableStatement(false);
         return;
@@ -425,7 +425,7 @@ const KycAuth = (props: fixSection) => {
       if (data.format === 'pdf') {
         setError("statement", {
           type: "custom",
-          message: 'Unsupported pdf file',
+          message: 'Unsupported pdf file.',
         });
         setEnableStatement(false);
         return;

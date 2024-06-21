@@ -58,7 +58,7 @@ const ConfirmationModel = (props: activeSection) => {
 
     return (
         <>
-            <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show ? "opacity-80 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow(false) }}></div>
+            <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show ? " opacity-20 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow(false) }}></div>
             <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full  z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
              <div className="p-5 md:p-40 relative">
                 <div className="">

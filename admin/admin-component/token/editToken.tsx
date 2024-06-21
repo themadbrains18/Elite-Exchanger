@@ -34,9 +34,9 @@ type UserSubmitForm = {
 
 const requiredNetworkSchema = yup.object().shape({
     checked: yup.boolean().optional(),
-    id: yup.string().required('This field id required'),
-    fee: yup.string().required('Fee is required field'),
-    contract: yup.string().required('This field is required'),
+    id: yup.string().required('This field id required.'),
+    fee: yup.string().required('Fee is required field.'),
+    contract: yup.string().required('This field is required.'),
 }).required();
 
 const networkSchema = yup.object().shape({
@@ -47,21 +47,21 @@ const networkSchema = yup.object().shape({
 });
 
 const schema = yup.object().shape({
-    symbol: yup.string().min(3).required("Please enter symbol"),
-    decimal: yup.number().max(20).positive('Number must be greater than 0').typeError("Please enter decimal"),
-    price: yup.number().positive('Price must be greater than 0').typeError("Price must be a number"),
-    fullName: yup.string().min(3).required("Please enter full name of token"),
+    symbol: yup.string().min(3).required("Please enter symbol."),
+    decimal: yup.number().max(20).positive("Number must be greater than '0'.").typeError("Please enter decimal."),
+    price: yup.number().positive("Price must be greater than '0'.").typeError("Price must be a number."),
+    fullName: yup.string().min(3).required("Please enter full name of token."),
     image: yup.mixed().optional(),
     minimum_withdraw: yup
         .string()
-        .required("Please enter minimum withdraw amount of token"),
-    tokenType: yup.string().required("Please select token type"),
-    min_price: yup.number().positive('Minimum Price must be greater than 0').typeError("Minimum Price must be a number"),
+        .required("Please enter minimum withdraw amount of token."),
+    tokenType: yup.string().required("Please select token type."),
+    min_price: yup.number().positive("Minimum price must be greater than '0'.").typeError("Minimum price must be a number."),
     max_price: yup
         .number()
-        .positive('Maximum Price must be greater than 0')
-        .typeError("Maximum Price must be a number")
-        .moreThan(yup.ref("min_price"), "Maximum Value must be greater than Min Price"),
+        .positive("Maximum price must be greater than '0'.")
+        .typeError("Maximum price must be a number.")
+        .moreThan(yup.ref("min_price"), "Maximum value must be greater than min price."),
     network: yup.array().of(
         yup.lazy(value => {
             const { checked } = value // Get the value of checked field
@@ -174,7 +174,7 @@ const EditToken = (props: activeSection) => {
             if (networkChecked.length === 0) {
                 setError("network", {
                     type: "custom",
-                    message: `Please select atleast one network`,
+                    message: `Please select atleast one network.`,
                 });
                 return;
             }

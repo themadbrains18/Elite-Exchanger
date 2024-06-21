@@ -43,15 +43,15 @@ const schema2 = yup.object().shape({
   old_password: yup.string().when('exist_password', {
     is: true,
     then(schema) {
-      return schema.required('Must enter Old password');
+      return schema.required('Must enter old password.');
     },
   }),
   new_password: yup
     .string()
-    .required("This field is required").min(8).max(32),
+    .required("This field is required.").min(8,"Password must be at least of '8' characters.").max(32,"Password length maximum '32' character"),
   confirmPassword: yup
-    .string().required("This field is required")
-    .oneOf([yup.ref("new_password")], "Passwords must match"),
+    .string().required("This field is required.")
+    .oneOf([yup.ref("new_password")], "Passwords must match."),
 });
 
 // .when('exist_password', {
@@ -96,7 +96,7 @@ const TradingPassword = (props: activeSection) => {
         if (data?.old_password === data?.new_password) {
           setError("new_password", {
             type: "custom",
-            message: `New password must be different from the old password`,
+            message: `New password must be different from the old password.`,
           });
           return;
         }
@@ -304,7 +304,7 @@ const TradingPassword = (props: activeSection) => {
                 e.preventDefault();
               }
             }}>
-            <div className="py-[30px] md:py-[50px] px-0 lg:px-20">
+            <div className="py-[30px] md:py-[50px] ">
               <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
                 Trading Password
               </p>
@@ -340,7 +340,7 @@ const TradingPassword = (props: activeSection) => {
                   </div>
                 </div>
                 {(props?.session?.user?.tradingPassword !== null) && errors.old_password && (
-                  <p style={{ color: "#ff0000d1" }}>
+                  <p className="errorMessage">
                     {errors.old_password.message}
                   </p>
                 )}
@@ -368,7 +368,7 @@ const TradingPassword = (props: activeSection) => {
                   </div>
 
                   {errors.new_password && (
-                    <p style={{ color: "#ff0000d1" }}>
+                    <p className="errorMessage">
                       {errors.new_password.message}
                     </p>
                   )}
@@ -399,7 +399,7 @@ const TradingPassword = (props: activeSection) => {
                   </div>
 
                   {errors.confirmPassword && (
-                    <p style={{ color: "#ff0000d1" }}>
+                    <p className="errorMessage">
                       {errors.confirmPassword.message}
                     </p>
                   )}
