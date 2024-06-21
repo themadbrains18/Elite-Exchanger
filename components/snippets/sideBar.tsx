@@ -92,7 +92,7 @@ const SideBar = (props: profileSec) => {
             const fileType = file['type'];
             if (!validImageTypes.includes(fileType)) {
                 // invalid file type code goes here.
-                toast.error("invalid file type, upload only (png, jpg,jpeg)")
+                toast.error("Invalid file type, upload only (png, jpg,jpeg).")
                 setEnableDP(false);
                 return;
             }

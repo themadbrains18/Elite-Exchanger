@@ -146,7 +146,7 @@ const TransferModal = (props: showPopup) => {
       if (data?.amount > userAsset?.balance.toFixed(6)) {
         setError("amount", {
           type: "custom",
-          message: `Insufficiant balance.`,
+          message: `Insufficient balance.`,
         });
         return;
       }

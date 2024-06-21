@@ -146,11 +146,11 @@ const BuySellCard = (props: DynamicId) => {
   const onHandleSubmit = async (data: any) => {
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
     if (active1 === 1 && totalAmount > price) {
-      toast.error('Insufficiant balance');
+      toast.error('Insufficient balance');
       return;
     }
     else if (active1 === 2 && data.token_amount > price) {
-      toast.error('Insufficiant balance');
+      toast.error('Insufficient balance');
       return;
     }
 
@@ -483,7 +483,7 @@ const BuySellCard = (props: DynamicId) => {
                     </div>
 
                     <div className="relative">
-                      <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} />
+                      <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} disabled={true}/>
                     </div>
                   </div>
                 }

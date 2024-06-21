@@ -174,11 +174,11 @@ const BuySellCard = (props: DynamicId) => {
       return
     }
     if (active1 === 1 && totalAmount > price) {
-      toast.error('Insufficiant balance');
+      toast.error('Insufficient balance.');
       return;
     }
     else if (active1 === 2 && data.token_amount > price) {
-      toast.error('Insufficiant balance');
+      toast.error('Insufficient balance.');
       return;
     }
     

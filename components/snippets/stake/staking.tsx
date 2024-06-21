@@ -77,7 +77,7 @@ const StakingModel = (props: activeSection) => {
         try {
 
             if (data.amount > props.selectedCoinBalance) {
-                toast.error('Insufficiant balance');
+                toast.error('Insufficient balance');
                 return
             }
             if (data.amount < props?.token?.token_stakes[0]?.minimum_amount) {

@@ -130,7 +130,7 @@ const Exchange = (props: DynamicId): any => {
       if (selectedToken?.avail_bal < data.spend_amount) {
         setError("spend_amount", {
           type: "custom",
-          message: `Insufficiant balance`,
+          message: `Insufficient balance`,
         });
         return;
       }

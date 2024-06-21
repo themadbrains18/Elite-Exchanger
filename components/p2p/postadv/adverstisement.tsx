@@ -150,7 +150,7 @@ const Adverstisement = (props: propsData) => {
       setStep(2);
     }
     else {
-      toast.error('Insufficiant Balance')
+      toast.error('Insufficient Balance.')
     }
   }
 

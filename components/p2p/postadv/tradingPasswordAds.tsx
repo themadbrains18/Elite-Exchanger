@@ -58,7 +58,7 @@ const TradingPasswordAds = (props: activeSection) => {
 
     const closePopup = () => {
         props?.setShow(false);
-        props.setActive(0)
+        props.setActive(false)
     }
     const wrapperRef: any = useRef(null);
     clickOutSidePopupClose({ wrapperRef, closePopup });

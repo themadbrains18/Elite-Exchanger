@@ -90,7 +90,7 @@ const EditPaymentMethod = (props: activeSection) => {
     else {
       setError("quantity", {
         type: "custom",
-        message: `Insufficiant balance.`,
+        message: `Insufficient balance.`,
       });
       setFocus('quantity');
       return;
@@ -115,7 +115,7 @@ const EditPaymentMethod = (props: activeSection) => {
       setMaxInputValue(Number(props.price) * Number(e.target.value))
       setError("quantity", {
         type: "custom",
-        message: `Insufficiant balance.`,
+        message: `Insufficient balance.`,
       });
       return;
     }

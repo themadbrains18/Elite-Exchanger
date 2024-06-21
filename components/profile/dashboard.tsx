@@ -13,8 +13,8 @@ import { useWebSocket } from "@/libs/WebSocketContext";
 const schema = yup.object().shape({
   fName: yup.string().optional(),
   lName: yup.string().optional(),
-  dName: yup.string().min(4, "Display name must be at least '4' characters.").max(20).required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
-  uName: yup.string().min(4, "User name must be at least '4' characters").max(20).required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
+  dName: yup.string().min(4, "Display name must be at least '4' characters.").max(20,"Display name must be at most '20' characters.").required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
+  uName: yup.string().min(4, "User name must be at least '4' characters").max(20,"User name must be at most '20' characters.").required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
 });
 
 interface fixSection {
@@ -161,6 +161,7 @@ const Dashboard = (props: fixSection) => {
                       <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}>
                         <input
                           type="text"
+                          maxLength={20}
                           {...register('dName')} name="dName"
                           placeholder={editable ? "Enter display name" : "Enter display name"}
                           className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
@@ -175,6 +176,7 @@ const Dashboard = (props: fixSection) => {
                       <input
                         type="text"
                         {...register('uName')} name="uName"
+                        maxLength={20}
                         placeholder={editable ? "Enter user name" : "Enter user name"}
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />

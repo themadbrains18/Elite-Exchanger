@@ -67,7 +67,7 @@ const AddPayment = (props: activeSection) => {
         // invalid file type code goes here.
         setError("qr_code", {
           type: "custom",
-          message: "invalid file type, upload only (png, jpg,jpeg)",
+          message: "Invalid file type, upload only (png, jpg,jpeg).",
         });
         if (fileInputRef.current) {
           fileInputRef.current.value = ''; // Clear the input

@@ -27,19 +27,19 @@ const schema = yup.object().shape({
   // yup.array().of(yup.string().min(1).required()).required().nullable(),
   quantity: yup
     .number()
-    .positive("Quantity must be greater than 0")
-    .required("Please enter quantity to sell")
-    .typeError("Please enter quantity to sell"),
+    .positive("Quantity must be greater than '0'.")
+    .required("Please enter quantity to sell.")
+    .typeError("Please enter quantity to sell."),
   min_limit: yup
     .number()
-    .positive("Minimum limit must be greater than 0")
-    .required("Please enter min limit amount")
-    .typeError("Please enter min limit amount"),
+    .positive("Minimum limit must be greater than '0'.")
+    .required("Please enter min limit amount.")
+    .typeError("Please enter min limit amount."),
   max_limit: yup
     .number()
-    .positive("Maximum Limit must be greater than 0")
-    .required("Please enter max limit amount")
-    .typeError("Please enter max limit amount"),
+    .positive("Maximum limit must be greater than '0'.")
+    .required("Please enter max limit amount.")
+    .typeError("Please enter max limit amount."),
   payment_time: yup.string().optional().default("15"),
 });
 
@@ -112,7 +112,7 @@ const PaymentMethod = (props: activeSection) => {
     if (data.quantity > props.assetsBalance) {
       setError("quantity", {
         type: "custom",
-        message: `Insufficiant balance.`,
+        message: `Insufficient balance.`,
       });
       setFocus("quantity");
       return;
@@ -152,7 +152,7 @@ const PaymentMethod = (props: activeSection) => {
     if (e.target.value > props.assetsBalance) {
       setError("quantity", {
         type: "custom",
-        message: `Insufficiant balance.`,
+        message: `Insufficient balance.`,
       });
       return;
     } else {
@@ -179,7 +179,7 @@ const PaymentMethod = (props: activeSection) => {
       }
 
       if (paymentMethodRelation.length > 0) {
-        toast.warning('you can`t remove this payment method because it related to your ads. In case you first change payment method in ad then remove payment method.', { autoClose: 2000 });
+        toast.warning('You can`t remove this payment method because it related to your ads. In case you first change payment method in ad then remove payment method.', { autoClose: 2000 });
         return;
       }
 
@@ -216,7 +216,7 @@ const PaymentMethod = (props: activeSection) => {
       type === "min" ? setMinInputValue(value) : setMaxInputValue(value);
     }
     if (type === "min" && maxInputValue > 0) {
-      value > maxInputValue ? setError('min_limit', { type: "custom", message: "Min Limit must be less than Max limit" }) : clearErrors('min_limit'); setMinInputValue(value)
+      value > maxInputValue ? setError('min_limit', { type: "custom", message: "Min limit must be less than max limit." }) : clearErrors('min_limit'); setMinInputValue(value)
     }
   }
 

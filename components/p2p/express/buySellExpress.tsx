@@ -272,7 +272,7 @@ const BuySellExpress = (props: propsData) => {
       if(filterAsset?.balance == undefined){
         setError("spend_amount", {
           type: "custom",
-          message: `Insufficiant balance`,
+          message: `Insufficient balance.`,
         });
         return;
       }
@@ -280,7 +280,7 @@ const BuySellExpress = (props: propsData) => {
       if ( data?.spend_amount > filterAsset?.balance) {
         setError("spend_amount", {
           type: "custom",
-          message: `Insufficiant balance`,
+          message: `Insufficient balance.`,
         });
         return;
       }
@@ -386,43 +386,46 @@ const BuySellExpress = (props: propsData) => {
       }
 
     }
-
-    let seller = props?.posts?.filter((item: any) => {
-      return item?.token_id === token?.id && session?.user?.user_id !== item?.user_id
-    })
-
-    if (seller.length > 0) {
-      for (const post of seller) {
-        let userPaymentMethod = post?.user?.user_payment_methods;
-        let sellerPost = userPaymentMethod?.filter((item: any) => {
-          return item?.pmid === id
-        })
-        if (sellerPost.length > 0) {
-          setPaymentMethod(id);
-          setFinalPost(post);
-          setUsdtToInr(post?.price);
-          let spendAmount = getValues('spend_amount');
-          if (spendAmount > 0 && spendAmount < parseFloat(post.min_limit)) {
-            setError("spend_amount", {
-              type: "custom",
-              message: `Please enter spend amount more than minimum amount ${post.min_limit} `,
-            });
+    if(props?.posts && props?.posts.length>0){
+      let seller = props?.posts?.filter((item: any) => {
+        return item?.token_id === token?.id && session?.user?.user_id !== item?.user_id
+      })
+      
+          if (seller.length > 0) {
+            for (const post of seller) {
+              let userPaymentMethod = post?.user?.user_payment_methods;
+              let sellerPost = userPaymentMethod?.filter((item: any) => {
+                return item?.pmid === id
+              })
+              if (sellerPost.length > 0) {
+                setPaymentMethod(id);
+                setFinalPost(post);
+                setUsdtToInr(post?.price);
+                let spendAmount = getValues('spend_amount');
+                if (spendAmount > 0 && spendAmount < parseFloat(post.min_limit)) {
+                  setError("spend_amount", {
+                    type: "custom",
+                    message: `Please enter spend amount more than minimum amount ${post.min_limit} `,
+                  });
+                }
+                // else if (spendAmount > 0 && spendAmount > parseFloat(post.min_limit)) {
+                //   setValue('spend_amount', 0);
+                //   setValue('receive_amount', 0);
+                // }
+                break;
+              }
+              else {
+                setFinalPost({});
+              }
+            }
           }
-          // else if (spendAmount > 0 && spendAmount > parseFloat(post.min_limit)) {
-          //   setValue('spend_amount', 0);
-          //   setValue('receive_amount', 0);
-          // }
-          break;
-        }
-        else {
-          setFinalPost({});
-        }
-      }
+          else {
+            setFinalPost({});
+          }
+          setPaymentMethod(id);
+
     }
-    else {
-      setFinalPost({});
-    }
-    setPaymentMethod(id);
+
 
   }
 
@@ -433,6 +436,8 @@ const BuySellExpress = (props: propsData) => {
   const filterBuyerAds = (id: string) => {
     setPaymentMethod(id);
     setValue('p_method', id);
+    clearErrors('receive_amount');
+    clearErrors('spend_amount');
     clearErrors('p_method');
   }
 
