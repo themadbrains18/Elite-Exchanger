@@ -1,4 +1,3 @@
-import FilterSelectMenuWithCoin from "@/components/snippets/filter-select-menu-with-coin";
 import React, { useContext, useEffect } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -16,8 +15,8 @@ interface ActiveSession {
 }
 
 const schema = yup.object().shape({
-  title: yup.string().required("Please enter title"),
-  message: yup.string().required("Please enter messgae"),
+  title: yup.string().required("Please enter title."),
+  message: yup.string().required("Please enter message."),
 });
 
 const EditModel = (props: ActiveSession) => {

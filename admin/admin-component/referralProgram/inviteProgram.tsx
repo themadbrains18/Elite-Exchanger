@@ -1,13 +1,11 @@
 import Context from "@/components/contexts/context";
-import FilterSelectMenuWithCoin from "@/components/snippets/filter-select-menu-with-coin";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
 import { toast, ToastContainer } from "react-toastify";
 import { AES } from "crypto-js";
 import { useSession } from "next-auth/react";
-import DatePicker from "react-datepicker";
 import SelectDropdown from "@/components/future/snippet/select-dropdown";
 
 interface ActiveSession {
@@ -17,12 +15,12 @@ interface ActiveSession {
 }
 
 const schema = yup.object().shape({
-    name: yup.string().required("Please enter program name"),
-    description: yup.string().required("Please enter program short description"),
-    amount: yup.number().required("Please enter total amount for program").typeError('Please enter total amount for program'),
-    type: yup.string().required("Please enter program name"),
-    deposit : yup.number().required("Please enter amount for deposit by user").typeError('Please enter amount for deposit by user'),
-    trade : yup.number().required("Please enter amount for trade by user").typeError('Please enter amount for trade by user'),
+    name: yup.string().required("Please enter program name."),
+    description: yup.string().required("Please enter program short description."),
+    amount: yup.number().required("Please enter total amount for program.").typeError('Please enter total amount for program.'),
+    type: yup.string().required("Please enter program name."),
+    deposit : yup.number().required("Please enter amount for deposit by user.").typeError('Please enter amount for deposit by user.'),
+    trade : yup.number().required("Please enter amount for trade by user.").typeError('Please enter amount for trade by user.'),
 
 });
 

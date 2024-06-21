@@ -1,14 +1,6 @@
 import Context from "@/components/contexts/context";
-import FilterSelectMenuWithCoin from "@/components/snippets/filter-select-menu-with-coin";
-import React, { useContext, useState } from "react";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, useForm } from "react-hook-form";
-import { toast, ToastContainer } from "react-toastify";
-import { AES } from "crypto-js";
+import React, { useContext } from "react";
 import { useSession } from "next-auth/react";
-import DatePicker from "react-datepicker";
-import SelectDropdown from "@/components/future/snippet/select-dropdown";
 import Image from "next/image";
 
 interface ActiveSession {

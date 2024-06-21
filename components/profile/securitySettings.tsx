@@ -28,16 +28,16 @@ const schema = yup.object().shape({
   old_password: yup.string().required("Old password is required"),
   new_password: yup
     .string()
-    .min(8, 'New Password must be at least of 8 character')
+    .min(8, "New password must be at least of '8' character.")
     .max(32)
-    .required("New password is required").matches(/\w*[a-z]\w*/, "Password must have a small letter")
-    .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
-    .matches(/\d/, "Password must have a number")
-    .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character")
-    .matches(/^\S*$/, "White Spaces are not allowed"),
+    .required("New password is required.").matches(/\w*[a-z]\w*/, "Password must have a small letter.")
+    .matches(/\w*[A-Z]\w*/, "Password must have a capital letter.")
+    .matches(/\d/, "Password must have a number.")
+    .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character.")
+    .matches(/^\S*$/, "Whitespaces are not allowed."),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("new_password")], "Passwords must match"),
+    .oneOf([yup.ref("new_password")], "Passwords must match."),
 });
 
 interface fixSection {
@@ -641,7 +641,7 @@ const SecuritySettings = (props: fixSection) => {
                           </div>
                         </div>
                         {errors.old_password && (
-                          <p style={{ color: "#ff0000d1" }}>
+                          <p className="errorMessage">
                             {errors.old_password.message}
                           </p>
                         )}
@@ -676,7 +676,7 @@ const SecuritySettings = (props: fixSection) => {
 
                             <StrengthCheck password={pswd} />
                             {errors.new_password && (
-                              <p style={{ color: "#ff0000d1" }}>
+                              <p className="errorMessage">
                                 {errors.new_password.message}
                               </p>
                             )}
@@ -706,7 +706,7 @@ const SecuritySettings = (props: fixSection) => {
                             </div>
 
                             {errors.confirmPassword && (
-                              <p style={{ color: "#ff0000d1" }}>
+                              <p className="errorMessage">
                                 {errors.confirmPassword.message}
                               </p>
                             )}

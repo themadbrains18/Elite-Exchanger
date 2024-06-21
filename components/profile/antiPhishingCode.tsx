@@ -6,9 +6,7 @@ import { useForm } from "react-hook-form";
 import { AES } from "crypto-js";
 import { ToastContainer, toast } from "react-toastify";
 import ConfirmPopupNew from "../snippets/confirm-popup-new";
-import { signOut, useSession } from "next-auth/react";
 import VerificationNew from "../snippets/verificationNew";
-import Image from "next/image";
 import clickOutSidePopupClose from "../snippets/clickOutSidePopupClose";
 
 interface activeSection {
@@ -24,17 +22,16 @@ type UserSubmitForm = {
 
 const schema2 = yup.object().shape({
   antiphishing: yup
-    .string().required("Antiphishing code is required")
+    .string().required("Antiphishing code is required.")
     .min(4)
     .max(20)
-    .matches(/^([a-zA-Z0-9_/_])+$/, 'Please enter valid code(letters, number)').typeError('Please Enter 4-20 character'),
+    .matches(/^([a-zA-Z0-9_/_])+$/, 'Please enter valid code(letters, number).').typeError('Please enter 4-20 character.'),
 });
 const AntiPhishingCode = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [enable, setEnable] = useState(1);
   const [formData, setFormData] = useState<UserSubmitForm | null>();
-  const { status, data:session } = useSession();
-  const [sendOtpRes, setSendOtpRes] = useState<any>();
+
 
   let {
     register,

@@ -10,10 +10,10 @@ import { useForm } from "react-hook-form";
 import { truncateNumber } from "@/libs/subdomain";
 
 const schema = yup.object().shape({
-  p_method: yup.array().min(1, "Please select atleast 1 payment method").required().typeError("Please select atleast 1 payment method"),
-  quantity: yup.number().positive("Quantity must be greater than 0").required("Please enter quantity to sell").typeError("Please enter quantity to sell"),
-  min_limit: yup.number().positive("Quantity must be greater than 0").required("Please enter min limit amount").typeError("Please enter min limit amount"),
-  max_limit: yup.number().positive("Quantity must be greater than 0").required("Please enter max limit amount").typeError("Please enter max limit amount"),
+  p_method: yup.array().min(1, "Please select atleast '1' payment method.").required().typeError("Please select atleast '1' payment method."),
+  quantity: yup.number().positive("Quantity must be greater than '0'.").required("Please enter quantity to sell.").typeError("Please enter quantity to sell."),
+  min_limit: yup.number().positive("Quantity must be greater than '0'.").required("Please enter min limit amount.").typeError("Please enter min limit amount."),
+  max_limit: yup.number().positive("Quantity must be greater than '0'.").required("Please enter max limit amount.").typeError("Please enter max limit amount."),
   payment_time: yup.string().optional().default('15'),
 });
 
@@ -76,7 +76,7 @@ const EditPaymentMethod = (props: activeSection) => {
     if(data.min_limit > data.max_limit){
       setError("min_limit", {
         type: "custom",
-        message: `Min Limit must be less than Max limit`,
+        message: `Min limit must be less than max limit.`,
       });
       setFocus("min_limit");
       return;
@@ -90,7 +90,7 @@ const EditPaymentMethod = (props: activeSection) => {
     else {
       setError("quantity", {
         type: "custom",
-        message: `Insufficiant balance`,
+        message: `Insufficiant balance.`,
       });
       setFocus('quantity');
       return;
@@ -115,7 +115,7 @@ const EditPaymentMethod = (props: activeSection) => {
       setMaxInputValue(Number(props.price) * Number(e.target.value))
       setError("quantity", {
         type: "custom",
-        message: `Insufficiant balance`,
+        message: `Insufficiant balance.`,
       });
       return;
     }
@@ -128,7 +128,7 @@ const EditPaymentMethod = (props: activeSection) => {
     }
 
     if (type === "min" && maxInputValue > 0) {
-      value > maxInputValue ? setError('min_limit', { type: "custom", message: "Min Limit must be less than Max limit" }) : clearErrors('min_limit'); setMinInputValue(value)
+      value > maxInputValue ? setError('min_limit', { type: "custom", message: "Min limit must be less than max limit." }) : clearErrors('min_limit'); setMinInputValue(value)
     }
   }
 

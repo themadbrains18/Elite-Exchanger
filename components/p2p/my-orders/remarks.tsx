@@ -337,7 +337,7 @@ const Remarks = (props: propsData) => {
                     }
                     {
                         props?.userOrder?.status === 'isCompleted' && props?.userOrder?.buy_user_id === session?.user?.user_id &&
-                        <button className='solid-button max-w-full sm:max-w-[220px] w-full'>I Have Paid</button>
+                        <button disabled className='solid-button max-w-full sm:max-w-[220px] w-full cursor-not-allowed'>I Have Paid</button>
                     }
                     {
                         props?.userOrder?.status === 'isProcess' && props?.userOrder?.sell_user_id === session?.user?.user_id &&
@@ -349,7 +349,7 @@ const Remarks = (props: propsData) => {
                     }
                     {
                         props?.userOrder?.status === 'isReleased' &&
-                        <button className='solid-button max-w-full sm:max-w-[220px] w-full cursor-auto'>Order Completed</button>
+                        <button disabled className='solid-button max-w-full sm:max-w-[220px] w-full cursor-not-allowed'>Order Completed</button>
                     }
 
                 </div>

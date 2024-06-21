@@ -16,8 +16,8 @@ interface ActiveSession {
 }
 
 const schema = yup.object().shape({
-  title: yup.string().required("Please enter title"),
-  message: yup.string().required("Please enter messgae"),
+  title: yup.string().required("Please enter title."),
+  message: yup.string().required("Please enter message."),
 });
 
 const AddList = (props: ActiveSession) => {

@@ -14,8 +14,8 @@ import clickOutSidePopupClose from "./clickOutSidePopupClose";
 import { useWebSocket } from "@/libs/WebSocketContext";
 
 const schema = yup.object().shape({
-  spend_amount: yup.number().positive('Spend Amount must be greater than 0').required('Please enter amount in INR').typeError('Please enter amount in INR'),
-  receive_amount: yup.number().positive('Recieve Amount must be greater than 0').required('Please enter buy token amount ').typeError('Please enter buy token amount')
+  spend_amount: yup.number().positive("Spend amount must be greater than '0'.").required('Please enter amount in INR.').typeError('Please enter amount in INR.'),
+  receive_amount: yup.number().positive("Recieve amount must be greater than '0'.").required('Please enter buy token amount.').typeError('Please enter buy token amount.')
 });
 
 interface activeSection {
@@ -27,13 +27,13 @@ interface activeSection {
 const BuyPopup = (props: activeSection) => {
   const { mode } = useContext(Context);
   const route = useRouter();
-  const [receiveAmount, setReceiveAmount] = useState();
-  const [spendAmount, setSpendAmount] = useState()
+  const [receiveAmount, setReceiveAmount] = useState<any>();
+  const [spendAmount, setSpendAmount] = useState<any>()
   const [btnDisabled, setBtnDisabled] = useState(false);
   const { status, data: session } = useSession();
   const wbsocket = useWebSocket();
-  const [totalOrder,setTotalOrder] = useState(0);
-  
+  const [totalOrder, setTotalOrder] = useState(0);
+
   let {
     register,
     setValue,
@@ -50,7 +50,6 @@ const BuyPopup = (props: activeSection) => {
   });
 
   useEffect(() => {
-    setValue('receive_amount', 0)
     reset()
   }, [props.show1])
 
@@ -62,7 +61,7 @@ const BuyPopup = (props: activeSection) => {
     let masterPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/postad?user_id=${props?.selectedPost?.user?.id}`, {
       method: "GET",
     }).then(response => response.json());
-    
+
     setTotalOrder(masterPaymentMethod?.data);
   }
 
@@ -76,7 +75,7 @@ const BuyPopup = (props: activeSection) => {
     if (data.spend_amount < props?.selectedPost?.min_limit) {
       setError("spend_amount", {
         type: "custom",
-        message: `Please enter price greater than minimum limit ${props?.selectedPost?.min_limit}`,
+        message: `Please enter price greater than minimum limit '${props?.selectedPost?.min_limit}'.`,
       });
       return;
     }
@@ -84,7 +83,7 @@ const BuyPopup = (props: activeSection) => {
     if (data.spend_amount > props?.selectedPost?.max_limit) {
       setError("spend_amount", {
         type: "custom",
-        message: `Please enter price less than maximum limit ${props?.selectedPost?.max_limit}`,
+        message: `Please enter price less than maximum limit '${props?.selectedPost?.max_limit}'.`,
       });
       return;
     }
@@ -153,6 +152,8 @@ const BuyPopup = (props: activeSection) => {
   const closePopup = () => {
     props?.setShow1(false);
     setBtnDisabled(false)
+    setSpendAmount('')
+    setReceiveAmount('')
     reset()
   }
   const wrapperRef = useRef(null);
@@ -168,6 +169,8 @@ const BuyPopup = (props: activeSection) => {
             <svg
               onClick={() => {
                 props?.setShow1(0);
+                setSpendAmount('')
+                setReceiveAmount('')
                 reset()
               }}
               xmlns="http://www.w3.org/2000/svg"
@@ -187,7 +190,7 @@ const BuyPopup = (props: activeSection) => {
           <div className="p-0 md:py-30 md:px-40 flex md:flex-row flex-col gap-30 ">
             <div className="max-w-full md:max-w-[50%] w-full">
               <div className="flex gap-3">
-                <Image src={profileImg} width={44} height={44} alt="profile" className="rounded-full" />
+                <Image src={profileImg} width={44} height={44} alt="profile" className="rounded-full w-[40px] h-[40px] object-cover object-top" />
                 <div>
                   <p className="info-14-18 dark:!text-white  !text-h-primary !font-medium">{userName}</p>
                   <p className="sm-text mt-[2px]">{(totalOrder) || 0} Orders </p>
@@ -208,12 +211,13 @@ const BuyPopup = (props: activeSection) => {
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Payment Methods :</p>
-                  <div className="w-full flex ">
+                  <div className="w-full flex">
                     {
-                      props?.selectedPost?.user?.user_payment_methods && props?.selectedPost?.user?.user_payment_methods.map((elem: any, ind: any) => {
+                      props?.selectedPost?.user?.user_payment_methods && props?.selectedPost?.user?.user_payment_methods.map((elem:any, ind:number) => {
+                        const iconClass = ind === 0 ? 'mr-[10px]' : 'ml-[-20px]';
                         return (
                           <Fragment key={ind}>
-                            <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className="ml-[-10px]" />
+                            <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className={iconClass} />
                           </Fragment>
                         )
                       })
@@ -280,7 +284,7 @@ const BuyPopup = (props: activeSection) => {
               </div>
             </div>
           </div>
-          <div className=" border-t-[0.5px] p-0 pt-[10px] md:px-40 md:pt-20 md:pb-30 border-grey-v-1 flex md:flex-row flex-col gap-[15px] items-start md:items-center justify-end">
+          <div className=" border-t-[0.5px] p-0 pt-[10px] mx-0 md:mx-[20px] md:px-40 md:pt-20 md:pb-30 border-grey-v-1 flex md:flex-row flex-col gap-[15px] items-start md:items-center justify-end">
             {/* <p className="sm-text text-start">The Trading Password is Required</p> */}
             {session &&
               <button disabled={btnDisabled} className={`solid-button w-full max-w-full md:max-w-[50%] !p-[17px] ${btnDisabled === true ? 'cursor-not-allowed ' : ''}`} >

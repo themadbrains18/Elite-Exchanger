@@ -12,12 +12,12 @@ import { useSession } from "next-auth/react";
 import clickOutSidePopupClose from "../clickOutSidePopupClose";
 
 const schema = yup.object().shape({
-    time: yup.string().required("This field is required"),
+    time: yup.string().required("This field is required."),
     amount: yup
         .number()
-        .positive("Amount must be greater than 0")
-        .required("This field is required")
-        .typeError("Enter value must be number and positive value"),
+        .positive("Amount must be greater than '0'.")
+        .required("This field is required.")
+        .typeError("Enter value must be number and positive value."),
 });
 
 interface activeSection {
@@ -229,7 +229,7 @@ const StakingModel = (props: activeSection) => {
                                 />
                             </div>
                             {errors.time && (
-                                <p style={{ color: "red" }}>{errors.time.message}</p>
+                                <p className="errorMessage">{errors.time.message}</p>
                             )}
 
                             {timeLock?.time !== undefined &&
@@ -245,7 +245,7 @@ const StakingModel = (props: activeSection) => {
                                         />
                                     </div>
                                     {errors.amount && (
-                                        <p style={{ color: "red" }}>{errors.amount.message}</p>
+                                        <p className="errorMessage">{errors.amount.message}</p>
                                     )}
 
                                 </div>

@@ -19,18 +19,18 @@ import StrengthCheck2 from "../snippets/strengthCheck2";
 
 const schema = yup.object().shape({
   username: yup.string()
-    .required('Email / Phone is required').matches(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})|([0-9]{10})+$/, "Please enter valid email(letters, number and period('.')) or phone number "),
+    .required('Email / Phone is required.').matches(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})|([0-9]{10})+$/, "Please enter valid email(letters, number and period('.')) or phone number."),
   // .test('email_or_phone', 'Email / Phone is invalid', (value) => {
   //   return yupValidateEmail(value) || validatePhone(value);
   // }),
-  password: yup.string().min(8).max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter")
-    .matches(/\w*[A-Z]\w*/, "Password must have a capital letter")
-    .matches(/\d/, "Password must have a number")
-    .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character")
-    .matches(/^\S*$/, "White Spaces are not allowed"),
-  confirmPassword: yup.string().oneOf([yup.ref('password'), ''], 'Passwords must match').required('Confirm Password is required'),
+  password: yup.string().min(8).max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter.")
+    .matches(/\w*[A-Z]\w*/, "Password must have a capital letter.")
+    .matches(/\d/, "Password must have a number.")
+    .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character.")
+    .matches(/^\S*$/, "Whitespaces are not allowed."),
+  confirmPassword: yup.string().oneOf([yup.ref('password'), ''], 'Passwords must match.').required('Confirm password is required.'),
   refeer_code: yup.string().optional(),
-  agree: yup.bool().oneOf([true], "You must accept the terms and conditions")
+  agree: yup.bool().oneOf([true], "You must accept the terms and conditions.")
 });
 
 const SignUp = () => {

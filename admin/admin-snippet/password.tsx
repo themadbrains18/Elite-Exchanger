@@ -18,7 +18,7 @@ interface activeSection {
 }
 
 const schema = yup.object().shape({
-  password: yup.string().required("password is required"),
+  password: yup.string().required("Password is required."),
 });
 
 const Password = (props: activeSection) => {
@@ -239,7 +239,7 @@ const Password = (props: activeSection) => {
               {...register("password")}
             />
             {errors.password && (
-              <p style={{ color: "red" }}>{errors.password.message}</p>
+              <p className="errorMessage">{errors.password.message}</p>
             )}
           </div>
         </div>

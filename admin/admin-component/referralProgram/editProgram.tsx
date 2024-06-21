@@ -17,10 +17,10 @@ interface propsData {
 }
 
 const schema = yup.object().shape({
-    name: yup.string().required("Please enter program name"),
-    description: yup.string().required("Please enter program short description"),
-    amount: yup.number().required("Please enter total amount for program").typeError('Please enter total amount for program'),
-    token_id: yup.string().required("Please enter token which you give to user after refer"),
+    name: yup.string().required("Please enter program name."),
+    description: yup.string().required("Please enter program short description."),
+    amount: yup.number().required("Please enter total amount for program.").typeError('Please enter total amount for program.'),
+    token_id: yup.string().required("Please enter token which you give to user after refer."),
     start_date: yup
         .date()
         .transform(function (value, originalValue) {
@@ -29,15 +29,15 @@ const schema = yup.object().shape({
             }
             return originalValue;
         })
-        .typeError("please enter a valid date")
+        .typeError("Please enter a valid date.")
         .required()
-        .min(new Date(), "Date cannot be in the past")
+        .min(new Date(), "Date cannot be in the past.")
     ,
 
     end_date: yup
         .date().min(
             yup.ref('start_date'),
-            "End date can't be before Start date"
+            "End date can't be before Start date."
         )
         .transform(function (value, originalValue) {
             if (this.isType(value)) {
@@ -45,7 +45,7 @@ const schema = yup.object().shape({
             }
             return originalValue;
         })
-        .typeError("please enter a valid date")
+        .typeError("Please enter a valid date.")
         .required()
 
 

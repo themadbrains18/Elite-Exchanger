@@ -1,12 +1,9 @@
-import FiliterSelectMenu from "@/components/snippets/filter-select-menu";
 import Context from "../../../components/contexts/context";
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {  useContext, useEffect } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller, useForm } from "react-hook-form";
-import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
-import { json } from "stream/consumers";
 import { AES } from "crypto-js";
 import { useSession } from "next-auth/react";
 
@@ -31,9 +28,9 @@ const requiredNetworkSchema = yup
     .object()
     .shape({
         checked: yup.boolean().optional(),
-        id: yup.string().required("This field id required"),
-        fee: yup.string().required("Fee is required field"),
-        contract: yup.string().required("This field is required"),
+        id: yup.string().required("This field id required."),
+        fee: yup.string().required("Fee is required field."),
+        contract: yup.string().required("This field is required."),
     })
     .required();
 
@@ -114,7 +111,7 @@ const AddNetwork = (props: activeSection) => {
             if (networkChecked?.length === 0) {
                 setError("network", {
                     type: "custom",
-                    message: `Please select atleast one network`,
+                    message: `Please select atleast one network.`,
                 });
                 return;
             }
