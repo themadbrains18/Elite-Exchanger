@@ -67,7 +67,7 @@ const EditStake = (props: activeSection) => {
     }, []);
 
     const createForm = (async () => {
-        if (props.data.length > 0) {
+        if (props?.data?.length > 0) {
             SetEmptyData(props.data);
             setValue('minimum_amount', props.data[0].minimum_amount);
             setValue('apr', props.data[0].apr);

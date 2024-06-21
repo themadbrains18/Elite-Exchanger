@@ -70,7 +70,7 @@ const MarketOverview = (props: list) => {
           </thead>
           <tbody >
             {
-              list && list.length > 0 && list?.map((item: any, index: number) => {
+              list && list?.length > 0 && list?.map((item: any, index: number) => {
                 console.log(item?.image);
                 
                 return (

@@ -76,7 +76,7 @@ const OrdersTableMobile = (props: dataTypes) => {
         <>
             <div>
                 {
-                   list.length>0 && list?.map((item: any, ind: number) => {
+                  list &&  list?.length>0 && list?.map((item: any, ind: number) => {
                         return (
                             <Fragment key={ind}>
                                 <div className='grid grid-cols-2 py-[15px] border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2' onClick={() => {
@@ -115,7 +115,7 @@ const OrdersTableMobile = (props: dataTypes) => {
 
             </div>
 
-            {list.length === 0 &&
+            {list && list?.length === 0 &&
                 <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                     <Image
                         src="/assets/refer/empty.svg"

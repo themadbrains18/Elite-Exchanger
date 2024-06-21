@@ -10,9 +10,9 @@ import { useForm } from "react-hook-form";
 import { currencyFormatter } from "../snippets/market/buySellCard";
 
 const schema = yup.object().shape({
-  spend_amount: yup.number().positive('Quantity must be positive number').required('Please enter amount ').typeError('Please enter amount'),
+  spend_amount: yup.number().positive('Quantity must be positive number ').required('Please enter quantity ').typeError('Please enter quantity '),
   // receive_amount: yup.number().positive().required('Please enter amount ').typeError('Please enter amount'),
-  firstCurrency: yup.string().required('Please select spend quantity currency token'),
+  firstCurrency: yup.string().required('Please select spend quantity currency token '),
   secondCurrency: yup.string().required('Please select receive currency token'),
 });
 
@@ -85,7 +85,7 @@ const Exchange = (props: DynamicId): any => {
   }, [errors])
 
   const setCurrencyName = (symbol: string, dropdown: number) => {
-    
+
     if (dropdown === 1) {
       setFirstCurrency(symbol);
       setValue('firstCurrency', symbol);
@@ -118,9 +118,9 @@ const Exchange = (props: DynamicId): any => {
 
   const onHandleSubmit = async (data: any) => {
 
-    
+
     try {
-      if(data?.firstCurrency=== data?.secondCurrency){
+      if (data?.firstCurrency === data?.secondCurrency) {
         setError("secondCurrency", {
           type: "custom",
           message: `Please select different recieve currency`,
@@ -324,15 +324,24 @@ const Exchange = (props: DynamicId): any => {
               }} className="bg-[transparent] outline-none md-text border-l px-[5px] mt-[10px] border-h-primary" />
             </div>
             <div>
-              <FilterSelectMenuWithCoin data={props?.coinList} {...register('firstCurrency')} border={false} dropdown={1} setCurrencyName={setCurrencyName} value={firstCurrency}/>
+              <FilterSelectMenuWithCoin data={props?.coinList} {...register('firstCurrency')} border={false} dropdown={1} setCurrencyName={setCurrencyName} value={firstCurrency} />
             </div>
           </div>
-          {errors?.spend_amount && (
-            <p className="errorMessage">{errors?.spend_amount?.message}</p>
-          )}
-          {errors?.firstCurrency && (
-            <p className="errorMessage">{errors?.firstCurrency?.message}</p>
-          )}
+          <div className="flex gap-[1px]">
+            {(errors?.spend_amount && errors?.firstCurrency) ? (
+              <p className="errorMessage whitespace-nowrap">Please enter quantity and select token from quantity</p>
+            )
+              :
+              errors?.spend_amount ? (
+                <p className="errorMessage whitespace-nowrap">{errors?.spend_amount?.message}</p>
+              )
+                :
+                errors?.firstCurrency && (
+                  <p className="errorMessage inline-block">{errors?.firstCurrency?.message}</p>
+                )
+            }
+
+          </div>
           <div className="py-[10px]">
             <Image src="/assets/market/exchange.svg" width={30} height={30} alt="exchange" className=" mx-auto" />
           </div>
@@ -362,7 +371,7 @@ const Exchange = (props: DynamicId): any => {
           }Preview</button>
             :
             <div className="flex gap-[18px]">
-              <button type="button" className="solid-button w-full bg-grey-v-2 !text-primary hover:!text-white" onClick={() => { setIsConvert(false); reset(); setSelectedToken({}); setSelectedSecondToken({}); setAmount(0); setReceivedAmount(0); setFirstCurrency(''); setSecondCurrency('')}}>Cancel</button>
+              <button type="button" className="solid-button w-full bg-grey-v-2 !text-primary hover:!text-white" onClick={() => { setIsConvert(false); reset(); setSelectedToken({}); setSelectedSecondToken({}); setAmount(0); setReceivedAmount(0); setFirstCurrency(''); setSecondCurrency('') }}>Cancel</button>
 
               <button type="button" className=" solid-button w-full" disabled={btnDisabled2} onClick={() => sendConvertRequest()}>{btnDisabled2 &&
                 <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

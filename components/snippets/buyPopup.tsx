@@ -32,6 +32,8 @@ const BuyPopup = (props: activeSection) => {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const { status, data: session } = useSession();
   const wbsocket = useWebSocket();
+  const [totalOrder,setTotalOrder] = useState(0);
+  
   let {
     register,
     setValue,
@@ -47,9 +49,22 @@ const BuyPopup = (props: activeSection) => {
     resolver: yupResolver(schema)
   });
 
-  useEffect(()=>{
-reset()
-  },[])
+  useEffect(() => {
+    setValue('receive_amount', 0)
+    reset()
+  }, [props.show1])
+
+  useEffect(() => {
+    getUserTotalOrders();
+  }, [props?.selectedPost?.user]);
+
+  const getUserTotalOrders = async () => {
+    let masterPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/postad?user_id=${props?.selectedPost?.user?.id}`, {
+      method: "GET",
+    }).then(response => response.json());
+    
+    setTotalOrder(masterPaymentMethod?.data);
+  }
 
   const profileImg = props?.selectedPost?.user?.profile && props?.selectedPost?.user?.profile?.image !== null ? props?.selectedPost?.user?.profile?.image : `/assets/orders/user1.png`;
   const userName = props?.selectedPost?.user?.profile && props?.selectedPost?.user?.profile?.dName !== null ? props?.selectedPost?.user?.profile?.dName : props?.selectedPost?.user?.user_kyc?.fname;
@@ -116,7 +131,7 @@ reset()
           }
           wbsocket.send(JSON.stringify(buy));
         }
-        
+
         setTimeout(() => {
           route.push(`/p2p/my-orders?buy=${res?.data?.data?.result?.id}`);
         }, 3000);
@@ -138,6 +153,7 @@ reset()
   const closePopup = () => {
     props?.setShow1(false);
     setBtnDisabled(false)
+    reset()
   }
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
@@ -152,6 +168,7 @@ reset()
             <svg
               onClick={() => {
                 props?.setShow1(0);
+                reset()
               }}
               xmlns="http://www.w3.org/2000/svg"
               width={30}
@@ -173,7 +190,7 @@ reset()
                 <Image src={profileImg} width={44} height={44} alt="profile" className="rounded-full" />
                 <div>
                   <p className="info-14-18 dark:!text-white  !text-h-primary !font-medium">{userName}</p>
-                  <p className="sm-text mt-[2px]">{(props?.selectedPost?.user?.buyerOrder?.length + props?.selectedPost?.user?.sellerOrder?.length) || 0} Orders </p>
+                  <p className="sm-text mt-[2px]">{(totalOrder) || 0} Orders </p>
                 </div>
               </div>
               <div className="mt-30 md:mt-50 grid md:grid-cols-1 grid-cols-2">
@@ -196,7 +213,7 @@ reset()
                       props?.selectedPost?.user?.user_payment_methods && props?.selectedPost?.user?.user_payment_methods.map((elem: any, ind: any) => {
                         return (
                           <Fragment key={ind}>
-                            <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className="ml-[-10px]"/>
+                            <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className="ml-[-10px]" />
                           </Fragment>
                         )
                       })
@@ -213,7 +230,7 @@ reset()
                 <div className="border mt-[10px] border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px] ">
                   <div className="flex items-center ">
                     <div className="max-w-full md:max-w-[315px] w-full">
-                      <input type="number" step={0.000001} id="spendamount" {...register('spend_amount')}  name="spend_amount" value={spendAmount} onChange={(e: any) => {
+                      <input type="number" step={0.000001} id="spendamount" {...register('spend_amount')} name="spend_amount" value={spendAmount} onChange={(e: any) => {
                         if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
                           setSpendAmount(e?.target?.value);
                         }
@@ -266,7 +283,7 @@ reset()
           <div className=" border-t-[0.5px] p-0 pt-[10px] md:px-40 md:pt-20 md:pb-30 border-grey-v-1 flex md:flex-row flex-col gap-[15px] items-start md:items-center justify-end">
             {/* <p className="sm-text text-start">The Trading Password is Required</p> */}
             {session &&
-              <button disabled={btnDisabled} className={`solid-button w-full max-w-full md:max-w-[50%] !p-[17px] ${btnDisabled === true ? 'cursor-not-allowed ':''}`} >
+              <button disabled={btnDisabled} className={`solid-button w-full max-w-full md:max-w-[50%] !p-[17px] ${btnDisabled === true ? 'cursor-not-allowed ' : ''}`} >
                 {btnDisabled &&
                   <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />

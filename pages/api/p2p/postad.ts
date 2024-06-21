@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from 'next/server';
 import { createRouter, expressWrapper } from "next-connect";
-import { postData } from "../../../libs/requestMethod";
+import {  getMethod, postData } from "../../../libs/requestMethod";
 import AES from 'crypto-js/aes';
 import { enc } from 'crypto-js';
 
@@ -29,6 +29,22 @@ router
             throw new Error(error.message)
         }
     });
+
+  router
+    .get(async (req, res) => {
+        try {
+            
+            // let token = req.headers.authorization;
+            let {user_id}= req.query;
+            console.log(user_id,'========userdi');
+            
+            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/post/ordertotal/${user_id}`,'');
+            return res.status(200).send({ data });
+            
+        } catch (error: any) {
+            throw new Error(error.message)
+        }
+    });  
 
 
 export default router.handler({
