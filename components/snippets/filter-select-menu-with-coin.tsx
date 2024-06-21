@@ -12,6 +12,7 @@ interface dataList {
   setCurrency?: Function,
   value?: string;
   filterNetworkListByCoin?: any;
+  disabled?:boolean;
 }
 
 const FilterSelectMenuWithCoin = (props: dataList) => {
@@ -44,12 +45,15 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
         if (evt?.target.nodeName === 'svg') {
           targetEl = evt?.target?.parentNode
         }
-        if (targetEl !== dropdown) {
-          setShow(false);
+        if(props?.disabled !==true){
+          if (targetEl !== dropdown) {
+            setShow(false);
+          }
+          if (targetEl !== dropdown2) {
+            setShowSecond(false);
+          }
         }
-        if (targetEl !== dropdown2) {
-          setShowSecond(false);
-        }
+        
       }
 
     })
@@ -74,7 +78,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
       <div className='max-w-full  w-full' >
         {props.dropdown === 1 &&
           <>
-            <div onClick={(e) => { setShow(!show) }}>
+            <div onClick={(e) => { if(props?.disabled!==true){setShow(!show)} }}>
               <div className={` ${props.border == true && 'border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[8px] pl-[15px] pr-[5px]'} `} >
                 <div className=" cursor-pointer max-w-full w-full" >
                   <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} >
@@ -114,7 +118,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
 
         {props.dropdown === 2 &&
           <>
-            <div onClick={(e) => { setShowSecond(!showSecond) }}>
+            <div onClick={(e) => { if(props?.disabled!==true){setShowSecond(!showSecond)}  }}>
               <div className={`${props.border == true && 'border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[8px] pl-[15px] pr-[5px]'} `} >
                 <div className=" cursor-pointer max-w-full w-full">
                   <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} >

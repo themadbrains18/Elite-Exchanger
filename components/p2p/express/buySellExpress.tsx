@@ -16,9 +16,9 @@ import { currencyFormatter } from "@/components/snippets/market/buySellCard";
 import AuthenticationModelPopup from "@/components/snippets/authenticationPopup";
 
 const schema = yup.object().shape({
-  spend_amount: yup.number().positive('Spend Amount must be greater than 0').required('Please enter amount in INR').typeError('Please enter amount in INR'),
-  receive_amount: yup.number().positive('Recieve amount must be greater than 0').required('Please enter buy token amount ').typeError('Please enter buy token amount'),
-  p_method: yup.string().required('Please select payment method').typeError('Please select payment method')
+  spend_amount: yup.number().positive("Spend amount must be greater than '0'.").required('This field must be required.').typeError('This field must be required.'),
+  receive_amount: yup.number().positive("Recieve amount must be greater than '0'.").required('This field must be required.').typeError('This field must be required.'),
+  p_method: yup.string().required('Please select payment method.').typeError('Please select payment method.')
 });
 
 
@@ -499,7 +499,7 @@ const BuySellExpress = (props: propsData) => {
                 <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
                   <div className="">
                     <p className="sm-text dark:text-white">
-                      I want to {active1 === 1 ? "pay" : "sell"}
+                      I want to {active1 === 1 ? "pay ≈" : "sell ≈"}
                     </p>
                     <input
                       type="number"
@@ -553,6 +553,7 @@ const BuySellExpress = (props: propsData) => {
                         setCurrencyName={setCurrencyName}
                         dropdown={1}
                         value="INR"
+                        disabled={true}
                       />
                     )}
                   </div>
@@ -564,7 +565,7 @@ const BuySellExpress = (props: propsData) => {
                 {/* Second Currency Inputs */}
                 <div className="mt-30 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
                   <div className="">
-                    <p className="sm-text dark:text-white">I will receive≈</p>
+                    <p className="sm-text dark:text-white">I will receive ≈</p>
                     <input
                       type="number"
                       placeholder="$0"
@@ -630,9 +631,11 @@ const BuySellExpress = (props: propsData) => {
             {/* //======================*/}
             {active1 === 2 &&
               <div className="py-20">
-                <div className="mt-5 flex gap-2">
+                <div className="mt-5 flex gap-2 items-center">
+                <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
+
                   <p className="sm-text dark:text-white">
-                    Available Balance: {filterAsset !== undefined ?currencyFormatter(filterAsset?.balance) : '0.0'}
+                    {filterAsset !== undefined ?currencyFormatter(filterAsset?.balance) : '0.0'}
                   </p>
                 </div>
                 {/* First Currency Inputs */}
@@ -640,7 +643,7 @@ const BuySellExpress = (props: propsData) => {
 
                   <div className="">
                     <p className="sm-text dark:text-white">
-                      I want to sell
+                      I want to sell ≈
                     </p>
                     <input
                       type="number"
@@ -689,7 +692,7 @@ const BuySellExpress = (props: propsData) => {
                 {/* Second Currency Inputs */}
                 <div className="mt-30 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
                   <div className="">
-                    <p className="sm-text dark:text-white">I will receive≈</p>
+                    <p className="sm-text dark:text-white">I will receive ≈</p>
                     <input
                       type="number"
                       placeholder="$0"
@@ -716,6 +719,7 @@ const BuySellExpress = (props: propsData) => {
                       setCurrencyName={setCurrencyName}
                       dropdown={2}
                       value="INR"
+                      disabled={true}
                     />
                   </div>
                 </div>
