@@ -210,7 +210,7 @@ const ReEnterpass = (props: propsData) => {
                       <StrengthCheck2 password={pswd} />}
                     </div>
                     <StrengthCheck password={pswd} />
-                {errors.new_password && <p style={{ color: 'red' }}>{errors.new_password.message}</p>}
+                {errors.new_password && <p className="errorMessage">{errors.new_password.message}</p>}
                 <div className="relative mt-[10px]">
                   <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
                   <Image
@@ -224,7 +224,7 @@ const ReEnterpass = (props: propsData) => {
                     className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                   />
                 </div>
-                {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword.message}</p>}
+                {errors.confirmPassword && <p className="errorMessage">{errors.confirmPassword.message}</p>}
 
                 <button
                   type="submit" disabled={btnDisabled}

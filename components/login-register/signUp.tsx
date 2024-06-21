@@ -201,7 +201,7 @@ const SignUp = () => {
                 <form onSubmit={handleSubmit(onHandleSubmit)}  autoComplete="new-password">
                   <div className="flex flex-col gap-[15px] lg:gap-10">
                     <input type="text"  autoComplete="new-password"  placeholder="Enter Email / Phone Number" {...register('username')}  name="username" className="input-cta" />
-                    {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
+                    {errors.username && <p className="errorMessage">{errors.username.message}</p>}
                     <div className="relative text-end">
                       <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
                     </div>
@@ -225,7 +225,7 @@ const SignUp = () => {
                       <StrengthCheck2 password={pswd} />}
                     </div>
                     <StrengthCheck password={pswd} />
-                    {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
+                    {errors.password && <p className="errorMessage">{errors.password.message}</p>}
 
                     <div className="relative">
                       <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
@@ -241,7 +241,7 @@ const SignUp = () => {
                         className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                       />
                     </div>
-                    {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword.message}</p>}
+                    {errors.confirmPassword && <p className="errorMessage">{errors.confirmPassword.message}</p>}
                     <input type="text" {...register('refeer_code')} disabled={queryParams !== null ? true : false} placeholder="Referal Code(Optional)" className="input-cta" />
                   </div>
                   <div className="flex mt-[30px] gap-[10px] items-start">
@@ -253,7 +253,7 @@ const SignUp = () => {
                       </Link>
                     </label>
                   </div>
-                  {errors.agree && <p style={{ color: 'red' }}>{errors.agree.message}</p>}
+                  {errors.agree && <p className="errorMessage">{errors.agree.message}</p>}
                   <button type="submit" className={`my-[30px] lg:my-[50px] solid-button w-full ${btnDisabled === true ? 'cursor-not-allowed ':''}`} disabled={btnDisabled}>{btnDisabled &&
                     <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />

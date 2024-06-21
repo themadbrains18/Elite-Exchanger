@@ -136,7 +136,7 @@ const TradingPasswordAds = (props: activeSection) => {
                             />
                         </div>
                     </div>
-                    <p style={{ color: "#ff0000d1" }}>
+                    <p className="errorMesaage">
                         {message}
                     </p>
                 </div>
@@ -152,7 +152,7 @@ const TradingPasswordAds = (props: activeSection) => {
                             },3000)
                         }
                         else {
-                            setMessage("Please enter your trading password");
+                            setMessage("Please enter your trading password.");
                         }
                     } catch (error) {
 

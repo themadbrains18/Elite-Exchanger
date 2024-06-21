@@ -166,7 +166,7 @@ const Dashboard = (props: fixSection) => {
                           className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                         />
                       </div>
-                      {errors.dName && <p style={{ color: 'red' }}>{errors.dName.message}</p>}
+                      {errors.dName && <p className="errorMessage">{errors.dName.message}</p>}
                     </div>
                   </div>
                   <div className="w-full">
@@ -179,7 +179,7 @@ const Dashboard = (props: fixSection) => {
                         className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
                       />
                     </div>
-                    {errors.uName && <p style={{ color: 'red' }}>{errors.uName.message}</p>}
+                    {errors.uName && <p className="errorMessage">{errors.uName.message}</p>}
                   </div>
                 </div>
                 <div className="mt-5 flex md:flex-row flex-col gap-[30px]">

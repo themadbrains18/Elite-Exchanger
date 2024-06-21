@@ -127,7 +127,7 @@ const Deposit = (props: activeSection) => {
             dropdown={1}
             filterNetworkListByCoin={filterNetworkListByCoin}
           />
-          {unSelectCoinError!=="" && <p style={{ color: "#ff0000d1" }}>{unSelectCoinError}</p>}
+          {unSelectCoinError!=="" && <p className="errorMessage">{unSelectCoinError}</p>}
         </div>
       }
       <div className="mt-20">

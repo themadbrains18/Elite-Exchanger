@@ -154,7 +154,7 @@ const SignIn = (Props: loginType) => {
                 <form onSubmit={handleSubmit(onHandleSubmit)}>
                   <div className="flex flex-col gap-[15px] lg:gap-10">
                     <input type="text" placeholder="Enter Email or Phone Number" {...register('username')} name="username" className="input-cta" />
-                    {errors.username && <p style={{ color: 'red' }}>{errors.username.message}</p>}
+                    {errors.username && <p className="errorMessage">{errors.username.message}</p>}
                     <div className="relative">
                       <input type={`${show === true ? "text" : "password"}`} placeholder="Password" {...register('password')} name="password" className="input-cta w-full" />
 
@@ -170,7 +170,7 @@ const SignIn = (Props: loginType) => {
                         className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                       />
                     </div>
-                    {errors.password && <p style={{ color: 'red' }}>{errors.password.message}</p>}
+                    {errors.password && <p className="errorMessage">{errors.password.message}</p>}
                   </div>
                   <div className="flex mt-[30px] justify-between gap-5">
                     {/* <p className="sec-text">Scan to Login</p> */}
