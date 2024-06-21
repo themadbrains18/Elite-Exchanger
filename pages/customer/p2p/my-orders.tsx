@@ -69,18 +69,16 @@ const MyOrders = (props: propsData) => {
 
     setOrderDetail(userOrder?.data);
     if (userOrder?.data) {
-      if (userOrder?.data?.status === 'isCompleted' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
-        toast.info('Payment released by buyer.')
-      }
-      if (userOrder?.data?.status === 'isProcess' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
-        toast.info('Third party user buy assets')
-      }
+      // if (userOrder?.data?.status === 'isCompleted' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
+      //   toast.info('Payment released by buyer.')
+      // }
+      // if (userOrder?.data?.status === 'isProcess' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
+      //   toast.info('Third party user buy assets')
+      // }
       if (userOrder?.data?.status === 'isReleased' && userOrder?.data?.buy_user_id === session?.user?.user_id) {
         if (type === 'socket') {
-          toast.info('Assets Released successfully!..')
           setActive1(true);
         }
-
       }
     }
   }

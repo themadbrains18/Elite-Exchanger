@@ -278,7 +278,7 @@ const FutureTrading = (props: Session) => {
 
     return (
         <>
-            <ToastContainer />
+            <ToastContainer limit={1}/>
             {/* For Desktop use */}
             <div className='max-[991px]:hidden flex max-[1023px]:mt-[57px] mt-[69px]'>
                 <div className='w-full max-w-[calc(100%-300px)]'>

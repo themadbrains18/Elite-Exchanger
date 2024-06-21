@@ -190,7 +190,7 @@ const Response = (props: activeSection) => {
 
   return (
     <>
-      <ToastContainer />
+      {/* <ToastContainer limit={1}/> */}
       <form onSubmit={handleSubmit(onHandleSubmit)}>
         <div className="mt-40">
           <div className="mt-30 p-20 md:p-40 border rounded-10 border-grey-v-2 dark:border-opacity-[15%]">

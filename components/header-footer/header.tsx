@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { use, useContext, useEffect, useState } from "react";
+import React, { use, useContext, useEffect, useRef, useState } from "react";
 import HeaderLogo from "../svg-snippets/headerLogo";
 import Link from "next/link";
 import TradeIcon from "../svg-snippets/trade-icon";
@@ -32,6 +32,7 @@ const Header = (props: propsData) => {
   let [showMenu, setShowMenu] = useState(false);
 
   const [duserName, setduserName] = useState('');
+  const [shownNotifications, setShownNotifications] = useState(new Set());
 
   const linkList = [
     {
@@ -60,9 +61,59 @@ const Header = (props: propsData) => {
 
   const wbsocket = useWebSocket();
 
+  const socketListenerRef = useRef<(event: MessageEvent) => void>();
+
   useEffect(() => {
-    socket();
-  }, [wbsocket]);
+    // socket();
+    const handleSocketMessage = (event: any) => {
+      const data = JSON.parse(event.data).data;
+      let eventDataType = JSON.parse(event.data).type;
+
+      if (eventDataType === "user_notify") {
+        getUserNotification();
+      }
+
+      if (eventDataType === "profile") {
+        if (data?.user_id === session?.user?.user_id) {
+          setUserDetail(data);
+          if (data && data?.dName !== null) {
+            setduserName(data?.dName);
+          }
+          else if (session?.user?.email !== null && session?.user?.email !== "") {
+            let str = session?.user?.email.split('@');
+            let substring = str[0].substring(0, 3);
+            setduserName(substring + '****@' + str[1])
+          }
+          else if (session?.user?.number !== null && session?.user?.number !== "") {
+            setduserName(session?.user?.number)
+          }
+        }
+      }
+
+      if (eventDataType === "order") {
+        if (shownNotifications.has(data?.id)) {
+          return;
+        }
+        getOrderByOrderId(data?.id, 'socket');
+        setShownNotifications((prev) => new Set(prev).add(data?.id));
+      }
+    };
+
+    // wbsocket.addEventListener('message', handleSocketMessage);
+    if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
+      if (socketListenerRef.current) {
+        wbsocket.removeEventListener('message', socketListenerRef.current);
+      }
+      socketListenerRef.current = handleSocketMessage;
+      wbsocket.addEventListener('message', handleSocketMessage);
+    }
+
+    return () => {
+      if (wbsocket) {
+        wbsocket.removeEventListener('message', handleSocketMessage);
+      }
+    };
+  }, [wbsocket, session]);
 
   useEffect(() => {
     if (session !== undefined && session?.user !== undefined) {
@@ -72,33 +123,11 @@ const Header = (props: propsData) => {
     getTokenList();
   }, [session]);
 
-  const socket = () => {
-    if (wbsocket) {
-      wbsocket.onmessage = (event) => {
-        const data = JSON.parse(event.data).data;
-        let eventDataType = JSON.parse(event.data).type;
-        if (eventDataType === "user_notify") {
-          getUserNotification();
-        }
-        if (eventDataType === "profile") {
-          if (data?.user_id === session?.user?.user_id) {
-            setUserDetail(data);
-            if (data && data?.dName !== null) {
-              setduserName(data?.dName);
-            }
-            else if (session?.user?.email !== null && session?.user?.email !== "") {
-              let str = session?.user?.email.split('@');
-              let substring = str[0].substring(0, 3);
-              setduserName(substring + '****@' + str[1])
-            }
-            else if (session?.user?.number !== null && session?.user?.number !== "") {
-              setduserName(session?.user?.number)
-            }
-          }
-        }
-      };
-    }
-  };
+  // const socket = () => {
+  //   if (wbsocket) {
+
+  //   }
+  // };
 
   const getUserNotification = async () => {
     let profileDashboard = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/notification?userid=${session?.user?.user_id}`, {
@@ -129,7 +158,6 @@ const Header = (props: propsData) => {
 
     if (profileDashboard) {
       setUserDetail(profileDashboard?.data);
-
       if (profileDashboard?.data && profileDashboard?.data?.dName !== null) {
         setduserName(profileDashboard?.data?.dName);
       }
@@ -148,20 +176,35 @@ const Header = (props: propsData) => {
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
       method: "GET"
     }).then(response => response.json());
-    // console.log(tokenList,"==hfjdhjfhdjfj");
-
     let spot = tokenList?.data?.filter((item: any) => {
       return item.tradepair !== null
     });
-
     SetSpotTrade(spot);
-
     let future = tokenList?.data?.filter((item: any) => {
       return item.futuretradepair !== null
     });
-    // console.log(future,"===dshkjhd");
-
     SetFutureTrade(future);
+  }
+
+  const getOrderByOrderId = async (orderid: any, type: string) => {
+    let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {
+      method: "GET",
+      headers: {
+        "Authorization": props.session?.user?.access_token
+      },
+    }).then(response => response.json());
+
+    if (userOrder?.data) {
+      if (userOrder?.data?.status === 'isCompleted' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
+        toast.info('A buyer has send payment on your register payment method. Please check your payment and release assets.', { position: 'top-center' });
+      }
+      if (userOrder?.data?.status === 'isProcess' && userOrder?.data?.sell_user_id === session?.user?.user_id) {
+        toast.info('Someone has placed order. Check order list', { position: 'top-center' });
+      }
+      if (userOrder?.data?.status === 'isReleased' && userOrder?.data?.buy_user_id === session?.user?.user_id) {
+        toast.info('Assets Released successfully!..')
+      }
+    }
   }
 
   return (

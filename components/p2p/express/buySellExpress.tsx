@@ -457,10 +457,12 @@ const BuySellExpress = (props: propsData) => {
     }
   }
 
+  console.log(finalPost,'================final Post=============');
+  
 
   return (
     <>
-      <ToastContainer position="top-center" />
+      <ToastContainer position="top-center" limit={1}/>
       <div className="flex items-center mt-[30px] justify-around">
         <div className="max-w-full md:max-w-[554px] w-full hidden md:block">
           <Image src='/assets/refer/referSafe.png' width={487} height={529} alt="refr-safe-sction" />
@@ -470,14 +472,14 @@ const BuySellExpress = (props: propsData) => {
             <button
               className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 1 && "!text-primary border-primary"
                 }`}
-              onClick={() => setActive1(1)}
+              onClick={() => {setActive1(1); setFinalPost({}); setPaymentMethod('')}}
             >
               Buy
             </button>
             <button
               className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 2 && "!text-primary border-primary"
                 }`}
-              onClick={() => { setActive1(2); setSecondCurrency('USDT'); getUsdtToInrPrice('USDT') }}
+              onClick={() => { setActive1(2); setSecondCurrency('USDT'); getUsdtToInrPrice('USDT'); setFinalPost({}); setPaymentMethod('') }}
             >
               Sell
             </button>

@@ -33,11 +33,11 @@ const P2pBuy = (props: propsData) => {
     socket(props?.sessions?.user?.user_id);
   }, [wbsocket])
 
-  
 
-  const socket=(user_id:string | undefined)=>{
-    if(wbsocket){
-      
+
+  const socket = (user_id: string | undefined) => {
+    if (wbsocket) {
+
       wbsocket.onmessage = (event) => {
         const data = JSON.parse(event.data).data;
         let eventDataType = JSON.parse(event.data).type;
@@ -58,16 +58,14 @@ const P2pBuy = (props: propsData) => {
       }
 
       const limit = 20;
-          const offset = 0;
-          wbsocket.send(JSON.stringify({ ws_type: "post", user_id, limit, offset }));
+      const offset = 0;
+      wbsocket.send(JSON.stringify({ ws_type: "post", user_id, limit, offset }));
     }
   }
 
 
   return (
     <P2pLayout>
-      <>
-      </>
       <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} assets={props?.assets} posts={newPosts.length > 0 ? newPosts : props?.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} />
       <BuyPopup show1={show1} setShow1={setShow1} selectedPost={selectedPost} />
     </P2pLayout>
@@ -94,7 +92,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   // masterpayment
   let masterPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/masterpayment`, {
     method: "GET",
-    
+
   }).then(response => response.json());
 
   if (session) {

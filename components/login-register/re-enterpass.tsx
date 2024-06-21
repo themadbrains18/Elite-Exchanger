@@ -148,7 +148,7 @@ const ReEnterpass = (props: propsData) => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer limit={1}/>
       <section className="bg-primary-300 lg:dark:bg-black-v-1 h-screen xl:h-full  lg:bg-bg-primary ">
         <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none h-screen">
           <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
