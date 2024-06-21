@@ -48,7 +48,7 @@ const ConfirmPopup = (props: activeSection) => {
 
   return (
     <>
-      <ToastContainer position="top-right" />
+      <ToastContainer position="top-right" limit={1}/>
 
 
       <div ref={wrapperRef} className='fixed top-[50%] z-[9] left-[50%] translate-x-[-50%] translate-y-[-50%] lg:bg-white lg:dark:bg-d-bg-primary lg:p-40 max-w-[557px] w-full rounded-10'>

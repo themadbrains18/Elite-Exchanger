@@ -198,7 +198,7 @@ const MobileTable = (props: dataTypes) => {
 
     return (
         <>
-          <ToastContainer />
+          <ToastContainer limit={1}/>
             <div>
                 {
                    postList && postList.length > 0 && postList?.map((item:any, ind:any) => {

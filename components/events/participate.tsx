@@ -20,7 +20,7 @@ const Participate = (props: propsData) => {
 
   return (
     <>
-    <ToastContainer />
+    <ToastContainer limit={1}/>
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"
           }`}

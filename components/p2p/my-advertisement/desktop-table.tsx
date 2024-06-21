@@ -216,7 +216,7 @@ const DesktopTable = (props: dataTypes) => {
 
     return (
         <>
-            <ToastContainer />
+            <ToastContainer limit={1}/>
             <div className='mt-20'>
                 <table width="100%">
                     <thead>

@@ -1,7 +1,7 @@
 import IconsComponent from '@/components/snippets/icons';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import AES from 'crypto-js/aes';
 import { toast } from 'react-toastify';
 import { useWebSocket } from '@/libs/WebSocketContext';
@@ -31,27 +31,47 @@ const ChatBox = (props: PropsData) => {
     const wbsocket = useWebSocket();
     const [isFileLoad, setIsFileLoad] = useState(false);
 
+    const socketListenerRef = useRef<(event: MessageEvent) => void>();
+    const [shownNotifications, setShownNotifications] = useState(new Set());
+    const chatFeedRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
         getChatByOrderId();
-        socket();
+        const handleSocketMessage = (event: any) => {
+            const data = JSON.parse(event.data).data;
+            let eventDataType = JSON.parse(event.data).type;
+
+            if (eventDataType === 'chat' && data[0]?.orderid === props?.order?.id) {
+                if (shownNotifications.has(data[0]?.orderid)) {
+                    return;
+                }
+                setOrderChat(data[0].chat);
+                groupMessages(data[0].chat);
+                setShownNotifications((prev) => new Set(prev).add(data[0]?.orderid));
+            }
+        };
+
+        if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
+            if (socketListenerRef.current) {
+                wbsocket.removeEventListener('message', socketListenerRef.current);
+            }
+            socketListenerRef.current = handleSocketMessage;
+            wbsocket.addEventListener('message', handleSocketMessage);
+        }
+
+        return () => {
+            if (wbsocket) {
+                wbsocket.removeEventListener('message', handleSocketMessage);
+            }
+        };
     }, [props.order?.id, wbsocket]);
 
-    const socket = () => {
-        if (wbsocket) {
-            wbsocket.onmessage = (event) => {
-                const data = JSON.parse(event.data).data;
-                const eventDataType = JSON.parse(event.data).type;
-                if (eventDataType === 'chat' && data[0]?.orderid === props?.order?.id) {
-                    setOrderChat(data[0].chat);
-                    groupMessages(data[0].chat);
-                    const el = document.getElementById('chat-feed');
-                    if (el) {
-                        el.scrollTop = el.scrollHeight;
-                    }
-                }
-            };
+    useEffect(() => {
+        if (chatFeedRef.current) {
+          chatFeedRef.current.scrollTop = chatFeedRef.current.scrollHeight;
         }
-    };
+      }, [orderChat]);
+
 
     const getChatByOrderId = async () => {
         try {
@@ -199,8 +219,6 @@ const ChatBox = (props: PropsData) => {
         }
     };
 
-    // console.log(props?.order);
-
     const profileImg = props?.sellerUser?.profile?.image ?? `${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`;
 
     return (
@@ -219,7 +237,7 @@ const ChatBox = (props: PropsData) => {
                         <p className="info-12 !text-start !text-white">Online</p>
                     </div>
                 </div>
-                <div id="chat-feed" className="p-[14px] max-h-[300px] h-full overflow-x-auto flex flex-col gap-[10px] chatContainor  scroll-smooth">
+                <div id="chat-feed" ref={chatFeedRef} className="p-[14px] max-h-[300px] h-full overflow-x-auto flex flex-col gap-[10px] chatContainor  scroll-smooth">
 
                     {(props?.order?.user_post && props?.order?.user_post?.auto_reply !== "" && props?.order?.user_post?.auto_reply !== null) && <div className='left gap-[4px]' >
                         <div className="mt-[4px] p-[10px] ml-[auto] rounded-lg min-w-[60px] max-w-fit w-full dark:bg-[#232530] bg-primary-600 bottom-right">
@@ -239,7 +257,7 @@ const ChatBox = (props: PropsData) => {
                             <div>
                                 {messages && messages?.map((item: any) => (
                                     <>
-                                        <div key={item.id} className={item.from !== session?.user?.user_id ? 'left gap-[4px]' : 'right flex items-start gap-[4px]'}>
+                                        <div key={item.id} className={item.from !== session?.user?.user_id ? 'left gap-[4px] mb-1' : 'right flex items-start gap-[4px] mb-1'}>
                                             <div className="mt-[4px] p-[10px] ml-[auto] rounded-[6px] min-w-[60px] max-w-fit w-full dark:bg-[#232530] bg-primary-600 bottom-right">
                                                 {item.message.includes('https://') ? (
                                                     <Image src={item.message} alt="error" width={100} height={100} />

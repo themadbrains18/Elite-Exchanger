@@ -46,7 +46,7 @@ const Historytrade = (props: propsData) => {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer limit={1}/>
       <section className=" bg-light-v-1 py-[20px] md:py-[80px] dark:bg-black-v-1">
         <div className="container ">
           <div className="p-5 md:p-40 rounded-10  bg-white dark:bg-d-bg-primary">

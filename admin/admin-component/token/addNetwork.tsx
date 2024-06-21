@@ -167,7 +167,7 @@ const AddNetwork = (props: activeSection) => {
 
     return (
         <>
-            <ToastContainer />
+            <ToastContainer limit={1}/>
             <div className="max-w-[calc(100%-30px)] md:max-w-[730px] overflow-y-auto  w-full p-5 md:px-30 md:py-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
                 <div className="flex items-center justify-between ">
                     <p className="sec-title">Token Chain Set</p>

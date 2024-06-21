@@ -32,8 +32,8 @@ const BuyPopup = (props: activeSection) => {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const { status, data: session } = useSession();
   const wbsocket = useWebSocket();
-  const [totalOrder,setTotalOrder] = useState(0);
-  
+  const [totalOrder, setTotalOrder] = useState(0);
+
   let {
     register,
     setValue,
@@ -62,7 +62,7 @@ const BuyPopup = (props: activeSection) => {
     let masterPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/postad?user_id=${props?.selectedPost?.user?.id}`, {
       method: "GET",
     }).then(response => response.json());
-    
+
     setTotalOrder(masterPaymentMethod?.data);
   }
 
@@ -130,6 +130,12 @@ const BuyPopup = (props: activeSection) => {
             orderId: res?.data?.data?.result?.id
           }
           wbsocket.send(JSON.stringify(buy));
+
+          let orderData = {
+            ws_type: 'order',
+            orderid: res?.data?.data?.result?.id
+          }
+          wbsocket.send(JSON.stringify(orderData));
         }
 
         setTimeout(() => {
@@ -160,7 +166,7 @@ const BuyPopup = (props: activeSection) => {
 
   return (
     <div ref={wrapperRef}>
-      <ToastContainer />
+      <ToastContainer limit={1} />
       <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow1(false) }}></div>
       <form onSubmit={handleSubmit(onHandleSubmit)}>
         <div className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[951px] w-full z-10 fixed rounded-10 md:p-0 p-20 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] ${props.show1 ? " translate-y-[-50%] opacity-1 visible" : " translate-y-[-55%] opacity-0 invisible"}`}>

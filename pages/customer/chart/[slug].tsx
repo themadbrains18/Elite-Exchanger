@@ -229,7 +229,7 @@ const Chart = (props: Session) => {
     return (
         <>
             <div>
-                <ToastContainer />
+                <ToastContainer limit={1}/>
                 <div className=" bg-light-v-1 py-20 dark:bg-black-v-1">
                     <div className="container p-[15px] lg:p-20 gap-30">
                         <ChartBanner hlocData={hlocData} />

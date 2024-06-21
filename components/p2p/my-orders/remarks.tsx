@@ -1,6 +1,6 @@
 import IconsComponent from '@/components/snippets/icons';
 import React, { useEffect, useRef, useState } from 'react';
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
 import { signOut, useSession } from 'next-auth/react';
@@ -29,8 +29,6 @@ const Remarks = (props: propsData) => {
     const router = useRouter();
 
     const Ref: any = useRef(null);
-
-    
 
     const [finalFormData, setFinalFormData] = useState({
         "order_id": "",
@@ -124,7 +122,6 @@ const Remarks = (props: propsData) => {
             })
 
             let res = await responseData.json();
-
             if (res.data.status === 200) {
                 props.getUserOrders();
                 if (wbsocket) {
@@ -134,7 +131,6 @@ const Remarks = (props: propsData) => {
                     }
                     wbsocket.send(JSON.stringify(orderData));
                 }
-
                 if (Ref.current) clearInterval(Ref.current);
                 toast.success('Thanks for payment. Receiver release assets in short time.');
             }
@@ -263,7 +259,6 @@ const Remarks = (props: propsData) => {
 
     return (
         <>
-            {/* <ToastContainer /> */}
             <div className='p-[15px] md:p-[40px] md:pb-20 border dark:border-opacity-[15%] border-grey-v-1 rounded-10 mt-30'>
                 {
                     props?.userOrder?.status !== 'isCanceled' &&
@@ -271,10 +266,9 @@ const Remarks = (props: propsData) => {
                         <div className='border-b dark:border-opacity-[15%] border-grey-v-1 md:pb-30 pb-[15px] md:mb-30 mb-[15px]'>
                             <p className="text-[19px] md:text-[23px]  leading-7 font-medium   dark:!text-white  !text-h-primary">Remarks</p>
                         </div>
-                        <p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You Can Pay Me On ( Paytm / PhonePe / Google pay )</p>
-                        <p className='nav-text-sm md:mb-30 mb-20'>
-                            {props?.userOrder?.user_post?.remarks !== "" ? props?.userOrder?.user_post?.remarks : "Please use an account under your name  to make the transfer. If the paying account and your personal information do not match, the seller may request a refund or cancel the order."}
-                        </p>
+                        {props?.userOrder?.sell_user_id === session?.user?.user_id ? 
+                        <p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You can pay me on my registered Payment Methods</p>
+                        :<p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You can pay me on above listed Payment Methods</p> }
                     </>
                 }
                 {
@@ -290,8 +284,10 @@ const Remarks = (props: propsData) => {
                     <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The Payment is done. Please wait for the seller to release the crypto</p>
                 }
                 {
-                    props?.userOrder?.status === 'isReleased' &&
-                    <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The seller has release the crypto please not to check.</p>
+                    props?.userOrder?.status === 'isReleased' && 
+                    (props?.userOrder?.sell_user_id === session?.user?.user_id ?
+                    <><p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order Completed! You have released your coins. Your P2P order #{props.orderid} has been successfully completed</p></>
+                    :<p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order Completed! Your P2P order #{props.orderid} has been successfully completed. The assets have been transferred to your wallet.</p>)
                 }
                 {
                     props?.userOrder?.status === 'isCanceled' &&
@@ -305,7 +301,6 @@ const Remarks = (props: propsData) => {
                         <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The Order Was Canceled.</p>
                     </>
                 }
-
                 {
                     props?.userOrder?.status !== 'isCanceled' &&
                     <p className='nav-text-sm'>
@@ -337,7 +332,7 @@ const Remarks = (props: propsData) => {
                     }
                     {
                         props?.userOrder?.status === 'isCompleted' && props?.userOrder?.buy_user_id === session?.user?.user_id &&
-                        <button className='solid-button max-w-full sm:max-w-[220px] w-full'>I Have Paid</button>
+                        <button disabled className='solid-button max-w-full sm:max-w-[220px] w-full cursor-not-allowed'>I Have Paid</button>
                     }
                     {
                         props?.userOrder?.status === 'isProcess' && props?.userOrder?.sell_user_id === session?.user?.user_id &&
@@ -347,10 +342,10 @@ const Remarks = (props: propsData) => {
                         props?.userOrder?.status === 'isCompleted' && props?.userOrder?.sell_user_id === session?.user?.user_id &&
                         <button className='solid-button max-w-full sm:max-w-[220px] w-full' onClick={() => { orderReleased() }}>Release Crypto</button>
                     }
-                    {
-                        props?.userOrder?.status === 'isReleased' &&
-                        <button className='solid-button max-w-full sm:max-w-[220px] w-full cursor-auto'>Order Completed</button>
-                    }
+                    {/* {
+                        props?.userOrder?.status === 'isReleased' && props?.userOrder?.sell_user_id === session?.user?.user_id &&
+                        <button disabled={true} className='solid-button max-w-full sm:max-w-[220px] w-full cursor-not-allowed'>Order Completed</button>
+                    } */}
 
                 </div>
             </div >
