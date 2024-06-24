@@ -34,10 +34,7 @@ router
     .get(async (req, res) => {
         try {
             
-            // let token = req.headers.authorization;
             let {user_id}= req.query;
-            console.log(user_id,'========userdi');
-            
             let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/post/ordertotal/${user_id}`,'');
             return res.status(200).send({ data });
             
