@@ -1,7 +1,6 @@
 import Context from "@/components/contexts/context";
 import IconsComponent from "@/components/snippets/icons";
 import { AES } from "crypto-js";
-import moment from "moment";
 import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -16,7 +15,6 @@ import ReactPaginate from "react-paginate";
 interface fixSection {
   showActivity?: boolean;
   setShowActivity: Function;
-  // activity?: any;
 }
 const AddressManagement = (props: fixSection) => {
   const [active, setActive] = useState(false);
@@ -35,16 +33,16 @@ const AddressManagement = (props: fixSection) => {
   const [btnDisabledCopy, setBtnDisabledCopy] = useState(false);
   const { SVG } = useQRCode();
   const [itemOffset, setItemOffset] = useState(0);
-  const [total, setTotal] = useState(0)
-
+  const [total, setTotal] = useState(0);
   let itemsPerPage = 10;
+  const pageCount = Math.ceil(total / itemsPerPage);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   useEffect(() => {
     getAllNetworks()
     getAllTokens()
     getAllWhitelistAddress(itemOffset)
   }, [itemOffset])
-
 
   const getAllNetworks = async () => {
     try {
@@ -54,44 +52,37 @@ const AddressManagement = (props: fixSection) => {
           "Authorization": session?.user?.access_token
         },
       }).then(response => response.json());
-
-      // console.log(activity.data,'-----activity data');
       setData(activity?.data);
     } catch (error) {
 
     }
   }
+
   const getAllTokens = async () => {
     try {
       let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
         method: "GET"
       }).then(response => response.json());
-
-      // console.log(activity.data,'-----activity data');
       setTokens(tokenList?.data);
     } catch (error) {
 
     }
   }
+
   const getAllWhitelistAddress = async (itemOffset: number) => {
     try {
-
       let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list?itemOffset=${itemOffset === undefined ? 0 : itemOffset}&itemsPerPage=${itemsPerPage}`, {
         method: "GET",
         headers: {
           "Authorization": session?.user?.access_token
         },
       }).then(response => response.json());
-
-      // console.log(address.data,'-----address data');
       setTotal(address?.data?.totalLength)
       setList(address?.data?.data);
     } catch (error) {
 
     }
   }
-
-  const pageCount = Math.ceil(total / itemsPerPage);
 
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % total;
@@ -127,6 +118,7 @@ const AddressManagement = (props: fixSection) => {
 
     }
   };
+
   const actionPerform = async () => {
 
     if (status === 'authenticated') {
@@ -178,10 +170,10 @@ const AddressManagement = (props: fixSection) => {
     }, 3000);
   }
 
-
   const closePopup = () => {
     setShowSVG(false)
   }
+  
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
 
@@ -202,16 +194,19 @@ const AddressManagement = (props: fixSection) => {
         <div className="flex gap-5 justify-between mb-[40px]">
           <p className="sec-title">Address Management</p>
           <div className="flex gap-2 items-center">
-            <button onClick={() => {
+            <button disabled={isDisabled} onClick={() => {
               if (session?.user?.TwoFA === true) {
-
                 setActive(true)
               }
               else {
-                toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again', { position: 'top-center' })
+                setIsDisabled(true);
+                toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again', { position: 'top-center', autoClose: 2000 });
+                setTimeout(() => {
+                  setIsDisabled(false);
+                }, 3000);
               }
 
-            }} className=" solid-button w-full hover:bg-primary-800">
+            }} className= {`solid-button w-full hover:bg-primary-800 ${isDisabled === true?'opacity-70 cursor-not-allowed':''}`}>
               Add address
             </button>
           </div>

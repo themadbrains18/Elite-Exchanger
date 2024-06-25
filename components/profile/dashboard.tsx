@@ -13,8 +13,8 @@ import { useWebSocket } from "@/libs/WebSocketContext";
 const schema = yup.object().shape({
   fName: yup.string().optional(),
   lName: yup.string().optional(),
-  dName: yup.string().min(4, "Display name must be at least '4' characters.").max(20,"Display name must be at most '20' characters.").required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
-  uName: yup.string().min(4, "User name must be at least '4' characters").max(20,"User name must be at most '20' characters.").required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
+  dName: yup.string().min(4, "Display name must be at least '4' characters.").max(20, "Display name must be at most '20' characters.").required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
+  uName: yup.string().min(4, "User name must be at least '4' characters").max(20, "User name must be at most '20' characters.").required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
 });
 
 interface fixSection {
@@ -108,24 +108,28 @@ const Dashboard = (props: fixSection) => {
             <div className="text-center">
               <p className="sec-title">My Profile</p>
             </div>
-            <div onClick={() => { setEditable(true) }} className="cursor-pointer">
-              <IconsComponent type="editIcon" hover={false} active={false} />
-            </div>
+            {editable === false &&
+              <div onClick={() => { setEditable(true) }} className="cursor-pointer">
+                <IconsComponent type="editIcon" hover={false} active={false} />
+              </div>
+            }
           </div>
         </div>
 
         <div className="max-[1023px] lg:p-0 p-20 dark:bg-omega bg-white rounded-[10px]">
           <div className="flex items-center gap-5 justify-between">
             <p className="sec-title">My Profile</p>
-            <div className="py-[13px] px-[15px] border dark:border-opacity-[15%] border-grey-v-1 items-center rounded-5 hidden md:flex gap-[10px] cursor-pointer solid-button" onClick={() => { setEditable(true) }}>
-              <Image
-                src="/assets/profile/edit.svg"
-                width={24}
-                height={24}
-                alt="edit"
-              />
-              <p className="">Edit</p>
-            </div>
+            {editable === false &&
+              <div className="py-[13px] px-[15px] border dark:border-opacity-[15%] border-grey-v-1 items-center rounded-5 hidden md:flex gap-[10px] cursor-pointer solid-button" onClick={() => { setEditable(true) }}>
+                <Image
+                  src="/assets/profile/edit.svg"
+                  width={24}
+                  height={24}
+                  alt="edit"
+                />
+                <p className="">Edit</p>
+              </div>
+            }
           </div>
           <div className="py-[30px] md:py-[50px]">
             <form onSubmit={handleSubmit(onHandleSubmit)}>

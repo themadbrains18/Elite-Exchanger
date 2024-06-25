@@ -289,7 +289,7 @@ const AddAddress = (props: activeSection) => {
 
   return (
     <>
-      <ToastContainer position="top-right" limit={1} />
+      {/* <ToastContainer position="top-right" limit={1} /> */}
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80`}
       ></div>

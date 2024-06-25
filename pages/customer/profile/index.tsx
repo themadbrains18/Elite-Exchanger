@@ -45,10 +45,9 @@ const Profile = (props: propsData) => {
 
   return (
     <>
-      <ToastContainer limit={1}/>
+      <ToastContainer limit={1} />
       <SideBarLayout userDetail={userProfile} kycInfo={props.kycInfo} referalList={props.referalList} activity={props?.activity}>
         <Dashboard fixed={false} session={props.session} userDetail={props.userDetail} />
-
       </SideBarLayout>
 
     </>
