@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
 import { useWebSocket } from "@/libs/WebSocketContext";
+import { currencyFormatter } from "./market/buySellCard";
 
 const schema = yup.object().shape({
   spend_amount: yup.number().positive("Spend amount must be greater than '0'.").required('Please enter amount in INR.').typeError('Please enter amount in INR.'),
@@ -219,11 +220,11 @@ const BuyPopup = (props: activeSection) => {
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Limit :</p>
-                  <p className="sm-text w-full">{props?.selectedPost?.min_limit} INR ~ {props?.selectedPost?.max_limit} INR</p>
+                  <p className="sm-text w-full">{currencyFormatter(props?.selectedPost?.min_limit)} INR ~ {currencyFormatter(props?.selectedPost?.max_limit)} INR</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Market Price :</p>
-                  <p className="sm-text w-full">{props?.selectedPost?.price} INR</p>
+                  <p className="sm-text w-full">{currencyFormatter(props?.selectedPost?.price)} INR</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Payment Methods :</p>
