@@ -8,23 +8,26 @@ interface activeSection {
   setActive1?: Function;
   setShow: Function;
   type: string;
+  hideVisibility?: boolean
 }
 
 const Successfull = (props: activeSection) => {
   const { mode } = useContext(Context);
 
   const closePopup = () => {
-    props.setShow(false), 
-    props.setActive!==undefined &&  props.setActive(0);
-    props.setActive1!==undefined &&  props.setActive1(false);
+    props.setShow(false),
+      props.setActive !== undefined && props.setActive(0);
+    props.setActive1 !== undefined && props.setActive1(false);
   };
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
   return (
     <>
-      <div
-        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible`}
-      ></div>
+      {props?.hideVisibility !== true &&
+        <div
+          className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible`}
+        ></div>
+      }
       <div
         ref={wrapperRef}
         className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
@@ -34,15 +37,15 @@ const Successfull = (props: activeSection) => {
           <p className="sec-title">
 
             {props?.type === "success"
-              ? "Payment Method Setting"
+              ? "Payment Method"
               : props?.type === "release" ? "Assets Release"
                 : "Risk Warning"}
 
           </p>
           <svg
             onClick={() => {
-              props.setShow(false), props.setActive!==undefined &&  props.setActive(0);
-              props.setActive1!==undefined &&  props.setActive1(false);
+              props.setShow(false), props.setActive !== undefined && props.setActive(0);
+              props.setActive1 !== undefined && props.setActive1(false);
             }}
             enableBackground="new 0 0 60.963 60.842"
             version="1.1"
@@ -80,8 +83,8 @@ const Successfull = (props: activeSection) => {
           <button
             className="solid-button w-full"
             onClick={() => {
-              props.setActive!==undefined &&  props.setActive(0);
-              props.setActive1!==undefined &&  props.setActive1(false);
+              props.setActive !== undefined && props.setActive(0);
+              props.setActive1 !== undefined && props.setActive1(false);
               props.setShow(false);
             }}
           >
@@ -92,8 +95,8 @@ const Successfull = (props: activeSection) => {
             <button
               className="solid-button w-full"
               onClick={() => {
-                props.setActive!==undefined &&  props.setActive(0);
-                props.setActive1!==undefined &&  props.setActive1(false);
+                props.setActive !== undefined && props.setActive(0);
+                props.setActive1 !== undefined && props.setActive1(false);
                 props.setShow(false);
               }}
             >
@@ -102,8 +105,8 @@ const Successfull = (props: activeSection) => {
             <button
               className="solid-button w-full"
               onClick={() => {
-                props.setActive!==undefined &&  props.setActive(0);
-                props.setActive1!==undefined &&  props.setActive1(false);
+                props.setActive !== undefined && props.setActive(0);
+                props.setActive1 !== undefined && props.setActive1(false);
                 props.setShow(false);
               }}
             >

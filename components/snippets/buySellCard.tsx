@@ -51,6 +51,7 @@ const BuySellCard = (props: DynamicId) => {
   const [objData, setObjData] = useState(Object);
   const router = useRouter()
   const [spotType, setSpotType] = useState('buy');
+  const [disabled, setDisabled] = useState(false);
 
   const [tokenInputValue, setTokenInputValue] = useState(0.000000);
   const [limitInputValue, setLimitInputValue] = useState(0.000000);
@@ -146,11 +147,19 @@ const BuySellCard = (props: DynamicId) => {
   const onHandleSubmit = async (data: any) => {
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
     if (active1 === 1 && totalAmount > price) {
-      toast.error('Insufficient balance');
+      setDisabled(true);
+        toast.error('Insufficient balance.', { autoClose: 2000 });
+        setTimeout(() => {
+          setDisabled(false);
+        }, 3000);
       return;
     }
     else if (active1 === 2 && data.token_amount > price) {
-      toast.error('Insufficient balance');
+      setDisabled(true);
+        toast.error('Insufficient balance.', { autoClose: 2000 });
+        setTimeout(() => {
+          setDisabled(false);
+        }, 3000);
       return;
     }
 
@@ -535,7 +544,7 @@ const BuySellCard = (props: DynamicId) => {
           {((show === 1 && props.token?.tradepair?.limit_trade === true) || show === 2) &&
             <>
               {props?.session ?
-                <button type="submit" className=" solid-button w-full" >{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
+                <button type="submit" className={`solid-button w-full ${disabled === true?'opacity-70 cursor-not-allowed':''}`} disabled={disabled} >{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
                 :
                 <Link href="/login" className="solid-button w-full block text-center">Login</Link>
               }

@@ -114,7 +114,6 @@ const TransferModal = (props: showPopup) => {
   }, [props?.assets, errors, props?.wallet_type, props?.token,props?.type]);
 
   const filterAsset = (symbol: string, type: string) => {
-    console.log(symbol, type);
 
     if (type == "Spot") {
       let asset = props?.assets?.filter((item: any) => {

@@ -17,10 +17,7 @@ interface propsData {
 }
 
 const TradeHistory = (props: propsData) => {
-
-
   return (
-
     <Historytrade coinList={props.coinList}/>
   )
 }

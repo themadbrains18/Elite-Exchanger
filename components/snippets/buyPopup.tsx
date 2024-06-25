@@ -165,6 +165,16 @@ const BuyPopup = (props: activeSection) => {
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
 
+  let payment_method: any = [];
+
+  for (const upid of props?.selectedPost?.user?.user_payment_methods) {
+    props?.selectedPost?.p_method.filter((e: any) => {
+      if (e?.upm_id === upid?.id) {
+        payment_method.push(upid);
+      }
+    })
+  }
+
   return (
     <div ref={wrapperRef}>
       <ToastContainer limit={1} />
@@ -219,7 +229,7 @@ const BuyPopup = (props: activeSection) => {
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Payment Methods :</p>
                   <div className="w-full flex">
                     {
-                      props?.selectedPost?.user?.user_payment_methods && props?.selectedPost?.user?.user_payment_methods.map((elem: any, ind: number) => {
+                      payment_method && payment_method.map((elem: any, ind: number) => {
                         const iconClass = ind === 0 ? 'mr-[10px]' : 'ml-[-20px]';
                         return (
                           <Fragment key={ind}>
