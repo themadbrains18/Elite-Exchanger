@@ -40,7 +40,7 @@ const Banner = (props: propsData): any => {
         </div>
         <div className="mt-30 md:mt-50 flex lg:flex-row lg:items-center items-start flex-col flex-wrap gap-[20px] justify-between">
           <div>
-            <div className="flex gap-[10px]">
+            <div className="flex gap-[10px] items-center">
               <Image src='/assets/market/walletpayment.svg' width={24} height={24} alt="payment wallet" />
               <p className="nav-text-sm !text-gamma">Wallet Balance</p>
             </div>
