@@ -120,10 +120,8 @@ const PaymentMethod = (props: activeSection) => {
 
     if(name!==''){
       let method:any= userPaymentMethod?.data?.find((item:any)=>item?.pm_name===name)
-      console.log(method,"=method");
       
       if(method){
-       console.log(method?.id,"==d");
        
         setValue("p_method",method?.id)
       }
