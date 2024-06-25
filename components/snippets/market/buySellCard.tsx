@@ -36,10 +36,10 @@ interface DynamicId {
   getUserTradeHistory?: any;
 }
 
-export function currencyFormatter(amount:any) {
+export function currencyFormatter(amount: any) {
   // Ensure the amount is a number
   const number = Number(amount);
-  
+
   // Split the number into integer and decimal parts
   const [integerPart, decimalPart] = number.toString().split('.');
 
@@ -65,12 +65,13 @@ const BuySellCard = (props: DynamicId) => {
   const [objData, setObjData] = useState(Object);
   const router = useRouter()
   const [spotType, setSpotType] = useState('buy');
+  const [disabled, setDisabled] = useState(false);
 
   const wbsocket = useWebSocket();
   const list = props.coins;
 
-  const qtylist = props.coins.filter((item:any)=>{
-    return item.symbol!=='USDT' && item?.tradepair !== null
+  const qtylist = props.coins.filter((item: any) => {
+    return item.symbol !== 'USDT' && item?.tradepair !== null
   });
 
   let secondList = props.coins?.filter((item: any) => {
@@ -143,69 +144,78 @@ const BuySellCard = (props: DynamicId) => {
   }
 
   const setPriceOnChangeType = (type: string, symbol: string) => {
-
-    setPrice(0.00);
-    // console.log(list,"==list");
-    
-    let token = list.filter((item: any) => {
-      return item.symbol === (type === 'buy' ? 'USDT' : symbol === '' ? firstCurrency : symbol)
-    });
-    // console.log(token,"==token");
-    
-
-    if (token.length > 0) {
-      // get assets balance
-      let selectAssets = userAssets.filter((item: any) => {
-        return item.token_id === token[0].id && item?.walletTtype === "main_wallet"
+    try {
+      setPrice(0.00);
+      let token = list.filter((item: any) => {
+        return item.symbol === (type === 'buy' ? 'USDT' : symbol === '' ? firstCurrency : symbol)
       });
-      
-
-      if (selectAssets.length > 0) {
-        setPrice(selectAssets[0].balance);
+      if (token.length > 0) {
+        let selectAssets = userAssets.filter((item: any) => {
+          return item.token_id === token[0].id && item?.walletTtype === "main_wallet"
+        });
+        if (selectAssets.length > 0) {
+          setPrice(selectAssets[0].balance);
+        }
       }
+    } catch (error: any) {
+      toast.error(error);
     }
   }
 
   const onHandleSubmit = async (data: any) => {
-    let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
+    try {
+      
+      let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
 
-    if (firstCurrency === '') {
-      setError('token_amount', { type: 'custom', message: 'Please select coin that you want to buy.' });
-      return
-    }
-    if (active1 === 1 && totalAmount > price) {
-      toast.error('Insufficient balance.');
-      return;
-    }
-    else if (active1 === 2 && data.token_amount > price) {
-      toast.error('Insufficient balance.');
-      return;
-    }
-    
-    if (selectedToken?.tradepair?.maxTrade < data.token_amount) {
-      setError("token_amount", {
-        type: "custom",
-        message: "you can trade less than max amount " + `'${selectedToken?.tradepair?.maxTrade}.'`,
-      });
-      return;
+      if (firstCurrency === '') {
+        setError('token_amount', { type: 'custom', message: 'Please select coin that you want to buy.' });
+        return
+      }
+      if (active1 === 1 && totalAmount > price) {
+        setDisabled(true);
+        toast.error('Insufficient balance.', { autoClose: 2000 });
+        setTimeout(() => {
+          setDisabled(false);
+        }, 3000);
+        return;
+      }
+      else if (active1 === 2 && data.token_amount > price) {
+        setDisabled(true);
+        toast.error('Insufficient balance.', { autoClose: 2000 });
+        setTimeout(() => {
+          setDisabled(false);
+        }, 3000);
+        return;
+      }
+
+      if (selectedToken?.tradepair?.maxTrade < data.token_amount) {
+        setError("token_amount", {
+          type: "custom",
+          message: "you can trade less than max amount " + `'${selectedToken?.tradepair?.maxTrade}.'`,
+        });
+        return;
+      }
+
+      let obj = {
+        "user_id": props.session.user.user_id,
+        "token_id": selectedToken?.id,
+        "market_type": type?.value,
+        "order_type": active1 === 1 ? 'buy' : 'sell',
+        "limit_usdt": data.limit_usdt,
+        "volume_usdt": totalAmount,
+        "token_amount": data.token_amount,
+        "fee": active1 === 1 ? data.token_amount * 0.00075 : data.token_amount * data.limit_usdt * 0.00075,
+        "is_fee": false,
+        "status": false,
+        "isCanceled": false,
+        "queue": false
+      }
+      setObjData(obj)
+      setActive(true)
+    } catch (error: any) {
+      toast.error(error);
     }
 
-    let obj = {
-      "user_id": props.session.user.user_id,
-      "token_id": selectedToken?.id,
-      "market_type": type?.value,
-      "order_type": active1 === 1 ? 'buy' : 'sell',
-      "limit_usdt": data.limit_usdt,
-      "volume_usdt": totalAmount,
-      "token_amount": data.token_amount,
-      "fee": active1 === 1 ? data.token_amount * 0.00075 : data.token_amount * data.limit_usdt * 0.00075,
-      "is_fee": false,
-      "status": false,
-      "isCanceled": false,
-      "queue": false
-    }
-    setObjData(obj)
-    setActive(true)
   }
 
   const actionPerform = async () => {
@@ -243,7 +253,7 @@ const BuySellCard = (props: DynamicId) => {
             "user_id": props.session.user.user_id,
             "token_id": selectedToken?.id,
             "order_type": active1 === 1 ? 'buy' : 'sell',
-            "market_type": show === 1? 'limit' : 'market'
+            "market_type": show === 1 ? 'limit' : 'market'
           }
 
           const ciphertext = AES.encrypt(JSON.stringify(partialObj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
@@ -359,10 +369,10 @@ const BuySellCard = (props: DynamicId) => {
             })
             setSpotType('buy');
             setTotalAmount(0.0); setEstimateFee(0.00)
-            if(show === 2 && selectedToken?.price){
+            if (show === 2 && selectedToken?.price) {
               setValue('limit_usdt', selectedToken?.price.toFixed(6))
             }
-            else if(show === 2 ){
+            else if (show === 2) {
               setValue('limit_usdt', 1)
             }
           }}>
@@ -375,10 +385,10 @@ const BuySellCard = (props: DynamicId) => {
             })
             setSpotType('sell');
             setTotalAmount(0.0); setEstimateFee(0.00)
-            if(show === 2 && selectedToken?.price){
+            if (show === 2 && selectedToken?.price) {
               setValue('limit_usdt', selectedToken?.price.toFixed(6))
             }
-            else if(show === 2 ){
+            else if (show === 2) {
               setValue('limit_usdt', 1)
             }
           }}>
@@ -469,9 +479,7 @@ const BuySellCard = (props: DynamicId) => {
               <>
                 <div className="mt-5 flex gap-[18px] items-center">
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
-                  {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
                   <p className="md-text w-full">{currencyFormatter(Number(price.toFixed(6)))}({active1 === 1 ? 'USDT' : firstCurrency})</p>
-
                   <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className="min-w-[24px]" alt="wallet2" width={24} height={24} />
                   {router.pathname.includes("/chart") && <p className="md-text">
                     $
@@ -479,12 +487,10 @@ const BuySellCard = (props: DynamicId) => {
                       ? props?.token?.price?.toFixed(6)
                       : "0.00"}
                   </p>
-
                   }
-
                   {router.pathname.includes("/market") && props.coins && props.coins.map((item: any) => {
                     if (item.symbol === selectedToken?.symbol) {
-                      return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? currencyFormatter(item?.price?.toFixed(6)): '0.00'}</p>
+                      return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? currencyFormatter(item?.price?.toFixed(6)) : '0.00'}</p>
                     }
                   })}
                 </div>
@@ -529,15 +535,13 @@ const BuySellCard = (props: DynamicId) => {
                 </div>
                 {errors.token_amount && <p className="errorMessage">{errors?.token_amount?.message}</p>}
                 <div className="mt-5 flex gap-2 justify-between">
-                <div className=" flex gap-2">
-                  <p className="sm-text dark:text-white">Total:</p>
-                  {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
-                  <p className="sm-text dark:text-white">{totalAmount.toFixed(6)}</p>
+                  <div className=" flex gap-2">
+                    <p className="sm-text dark:text-white">Total:</p>
+                    <p className="sm-text dark:text-white">{totalAmount.toFixed(6)}</p>
 
-                </div>
-                <div className="flex gap-2">
+                  </div>
+                  <div className="flex gap-2">
                     <p className="sm-text dark:text-white">Max Trade:</p>
-                    {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
                     <p className="sm-text dark:text-white">{selectedToken?.tradepair?.maxTrade}</p>
                   </div>
                 </div>
@@ -553,7 +557,7 @@ const BuySellCard = (props: DynamicId) => {
           {(show === 1 || show === 2) &&
             <>
               {props?.session ?
-                <button type="submit" className=" solid-button w-full" >{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
+                <button type="submit" className={`solid-button w-full ${disabled === true?'opacity-70 cursor-not-allowed':''}`} disabled={disabled}>{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
                 :
                 <Link href="/login" className="solid-button w-full block text-center">Login</Link>
               }

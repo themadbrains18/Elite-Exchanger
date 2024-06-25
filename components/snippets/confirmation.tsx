@@ -11,38 +11,23 @@ interface activeSection {
     title?: string;
     show?: boolean;
     actionPerform?: any;
+    hideVisibility?: boolean;
 }
 
 const ConfirmationModel = (props: activeSection) => {
     const { mode } = useContext(Context);
     const [btnDisabled, setBtnDisabled] = useState(false)
-
-    const { status, data: session } = useSession()
-
     const text: any = props.message;
     const newText = text.split('\n');
 
 
     const sendOtp = async () => {
         try {
-
             setBtnDisabled(true)
             props.actionPerform();
             setTimeout(() => {
                 setBtnDisabled(false)
             }, 3000)
-            // if (session) {
-            //     props.actionPerform();
-            //     setTimeout(() => {
-            //         setBtnDisabled(false)
-            //     }, 3000)
-            // }
-            // else {
-            //     toast.error('Your session is expired. Its auto redirect to login page');
-            //     setTimeout(() => {
-            //         signOut();
-            //     }, 4000);
-            // }
         } catch (error) {
             console.log(error);
         }
@@ -58,9 +43,11 @@ const ConfirmationModel = (props: activeSection) => {
 
     return (
         <>
-            <div
-                className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80`}
-            ></div>
+            {props?.hideVisibility !== true &&
+                <div
+                    className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80`}
+                ></div>
+            }
             <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show ? " opacity-20 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow(false) }}></div>
             <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full  z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
                 <div className="p-5 md:p-40 relative">

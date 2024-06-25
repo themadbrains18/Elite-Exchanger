@@ -162,15 +162,10 @@ const Deposit = (props: activeSection) => {
             <p className="sec-text text-ellipsis overflow-hidden">{address === "" ?"":address}</p>
             <button className={`solid-button py-2 sec-text font-normal ${address === '' ? 'cursor-not-allowed' : 'cursor-pointer'} `}
               disabled={address === '' ? true : false} onClick={() => {
-                // navigator.clipboard.writeText(address);
                 btnDisabledCopy === false ? copyCode() : ''
               }}>Copy</button>
           </div>
         </div>
-        {/* <div className="flex items-center justify-between pt-5 md:pt-30">
-          <p className="nav-text-sm"> Minimum Deposit Amount</p>
-          <p className="nav-text-sm"> {depositToken?.minimum_deposit}</p>
-        </div> */}
       </div>
     </div>
   );

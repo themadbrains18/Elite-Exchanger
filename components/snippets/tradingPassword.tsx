@@ -284,7 +284,7 @@ const TradingPassword = (props: activeSection) => {
     <>
       <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex items-center justify-between ">
-          <p className="sec-title">Set Trading Passsword</p>
+          <p className="sec-title">Account Verification</p>
           <svg
             onClick={() => {
               props?.setShow(false);
@@ -330,7 +330,7 @@ const TradingPassword = (props: activeSection) => {
                   type={`${showNew === true ? "text" : "password"}`}
                   name='new_password'
                   maxLength={32}
-                  placeholder="Enter new password"
+                  placeholder="Enter trading password"
                   className="sm-text input-cta2 w-full"
                   onChange={(e) => { setPassCode(e.target.value) }}
                 />

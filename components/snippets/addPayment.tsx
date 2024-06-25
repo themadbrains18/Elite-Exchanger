@@ -119,8 +119,6 @@ const AddPayment = (props: activeSection) => {
       console.error(error);
     }
   };
-
-  console.log(errors,"==error");
   
 
   const onHandleSubmit = (data: any) => {
@@ -241,7 +239,7 @@ const AddPayment = (props: activeSection) => {
 
             return <>
               <div className="flex flex-col mb-[15px] md:mb-5 ">
-                <label className="sm-text mb-[10px]">{item?.label}</label>
+                <label className="sm-text mb-[10px]">{item?.label} {item?.required === 'true' && <span style={{ color: 'red' }}>*</span>}</label>
                 <div className="border relative border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px] mb-[5px]">
                   {item?.name === "qr_code" &&
 
@@ -283,7 +281,7 @@ const AddPayment = (props: activeSection) => {
           })}
 
         </div>
-        <button disabled={enableFront || disable} className={`solid-button w-full ${(enableFront === true || disable) ? 'opacity-25 cursor-not-allowed' : ''}`} >Submit</button>
+        <button disabled={enableFront || disable || paymentFields.length === 0} className={`solid-button w-full ${(enableFront === true || disable || paymentFields.length === 0) ? 'opacity-25 cursor-not-allowed' : ''}`} >Submit</button>
       </form>
     </div>
   );

@@ -11,6 +11,7 @@ interface activeSection {
     title?: string;
     show?: boolean;
     actionPerform?: any;
+    hideVisibility?: boolean;
 }
 
 const AuthenticationModelPopup = (props: activeSection) => {
@@ -27,7 +28,9 @@ const AuthenticationModelPopup = (props: activeSection) => {
 
     return (
         <>
-            <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible`} onClick={() => { props.setShow(false) }}></div>
+            {props?.hideVisibility !== true &&
+                <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible`} onClick={() => { props.setShow(false) }}></div>
+            }
             <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[710px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
                 <div className="flex items-center justify-between ">
                     <p className="sec-title">{props?.title}</p>
@@ -58,45 +61,51 @@ const AuthenticationModelPopup = (props: activeSection) => {
                     </svg>
                 </div>
                 <div className="mt-40">
-                    <div className="flex justify-between mt-20">
-                        <div className="md-text dark:!text-g-secondary  ">
-                            {(session?.user?.email === '' || session?.user?.email === null) ? 'Please Verify Your Email' : 'Email verified'}
-                        </div>
-                        <div>
-                            {(session?.user?.email === '' || session?.user?.email === null) ? <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap " onClick={() => route.push('/profile/security')}>
-                                Verify
-                            </button> : <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap">
-                                Approved
-                            </button>}
 
-                        </div>
-                    </div>
-                    <div className="flex justify-between mt-20">
-                        <div className="md-text dark:!text-g-secondary">
-                            {session?.user?.kyc !== 'approve' ? 'Please verify your Kyc' : 'Kyc verified'}
-                        </div>
-                        <div>
-                            {session?.user?.kyc !== 'approve' ? <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap" onClick={() => route.push('/profile/kyc')}>
-                                Verify
-                            </button> : <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap">
-                                Approved
-                            </button>}
+                    {props?.hideVisibility !== true &&
+                        <>
+                            <div className="flex justify-between mt-20">
+                                <div className="md-text dark:!text-g-secondary  ">
+                                    {(session?.user?.email === '' || session?.user?.email === null) ? 'Please Verify Your Email' : 'Email verified'}
+                                </div>
+                                <div>
+                                    {(session?.user?.email === '' || session?.user?.email === null) ? <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap " onClick={() => route.push('/profile/security')}>
+                                        Verify
+                                    </button> : <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap">
+                                        Approved
+                                    </button>}
 
-                        </div>
-                    </div>
-                    <div className="flex justify-between mt-20">
-                        <div className="md-text dark:!text-g-secondary">
-                            {session?.user?.TwoFA === false ? 'Please set google authentication 2FA' : 'Google Authentication 2FA '}
-                        </div>
-                        <div>
-                            {session?.user?.TwoFA === false ? <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap" onClick={() => route.push('/profile/security')}>
-                                Verify
-                            </button> : <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap">
-                                Approved
-                            </button>}
+                                </div>
+                            </div>
+                            <div className="flex justify-between mt-20">
+                                <div className="md-text dark:!text-g-secondary">
+                                    {session?.user?.kyc !== 'approve' ? 'Please verify your Kyc' : 'Kyc verified'}
+                                </div>
+                                <div>
+                                    {session?.user?.kyc !== 'approve' ? <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap" onClick={() => route.push('/profile/kyc')}>
+                                        Verify
+                                    </button> : <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap">
+                                        Approved
+                                    </button>}
 
-                        </div>
-                    </div>
+                                </div>
+                            </div>
+                            <div className="flex justify-between mt-20">
+                                <div className="md-text dark:!text-g-secondary">
+                                    {session?.user?.TwoFA === false ? 'Please set google authentication 2FA' : 'Google Authentication 2FA '}
+                                </div>
+                                <div>
+                                    {session?.user?.TwoFA === false ? <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap" onClick={() => route.push('/profile/security')}>
+                                        Verify
+                                    </button> : <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap">
+                                        Approved
+                                    </button>}
+
+                                </div>
+                            </div>
+                        </>
+                    }
+
                     <div className="flex justify-between mt-20">
                         <div className="md-text dark:!text-g-secondary">
                             {(session?.user?.tradingPassword === '' || session?.user?.tradingPassword === null) ? 'Please Set trading password' : 'Trading Password'}
@@ -107,7 +116,6 @@ const AuthenticationModelPopup = (props: activeSection) => {
                             </button> : <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap">
                                 Approved
                             </button>}
-
                         </div>
                     </div>
 

@@ -2,7 +2,7 @@ import FilterSelectMenuWithCoin from "@/components/snippets/filter-select-menu-w
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -14,7 +14,6 @@ import { useSession } from "next-auth/react";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { currencyFormatter } from "@/components/snippets/market/buySellCard";
 import AuthenticationModelPopup from "@/components/snippets/authenticationPopup";
-import Skeleton from "react-loading-skeleton";
 
 const schema = yup.object().shape({
   spend_amount: yup.number().positive("Spend amount must be greater than '0'.").required('This field must be required.').typeError('This field must be required.'),
@@ -56,17 +55,22 @@ const BuySellExpress = (props: propsData) => {
 
   const router = useRouter();
   const wbsocket = useWebSocket();
+  const hasRun = useRef(false);
 
   useEffect(() => {
-    // getUsdtToInrPrice('USDT');
-    getFilterAsset('');
-    setCurrencyName('USDT', 2);
     if (active1) {
       reset()
-      setSecondCurrency("USDT")
+      setSecondCurrency("USDT");
     }
   }, [active1]);
 
+  useEffect(() => {
+    if (!hasRun.current) {
+      getFilterAsset('');
+      setCurrencyName('USDT', 2);
+      hasRun.current = true;
+    }
+  }, [])
 
   let {
     register,
@@ -498,7 +502,7 @@ const BuySellExpress = (props: propsData) => {
       setFilterAsset(asset[0]);
     }
   }
-  
+
 
   return (
     <>
@@ -512,7 +516,7 @@ const BuySellExpress = (props: propsData) => {
             <button
               className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 1 && "!text-primary border-primary"
                 }`}
-              onClick={() => { setActive1(1); setFinalPost({}); setPaymentMethod('') }}
+              onClick={() => { setActive1(1); setFinalPost({});getUsdtToInrPrice('USDT'); setPaymentMethod('') }}
             >
               Buy
             </button>
@@ -524,12 +528,12 @@ const BuySellExpress = (props: propsData) => {
               Sell
             </button>
           </div>
-          <form onSubmit={handleSubmit(onHandleSubmit)} 
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-            }
-          }}
+          <form onSubmit={handleSubmit(onHandleSubmit)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}
           >
 
             {/* //======================*/}
@@ -781,7 +785,7 @@ const BuySellExpress = (props: propsData) => {
                     <p className="sm-text dark:text-white">  Estimated price: 1 {secondCurrency}=</p>
                     {loader ?
                       <div className="w-[100px] h-[10px] bg-nav-secondary rounded-md animate-pulse" />
-                      :<p className="sm-text dark:text-white">{currencyFormatter(Number(Number(usdtToInr)?.toFixed(2)))} INR</p> 
+                      : <p className="sm-text dark:text-white">{currencyFormatter(Number(Number(usdtToInr)?.toFixed(2)))} INR</p>
                     }
                   </div>
                 </div>

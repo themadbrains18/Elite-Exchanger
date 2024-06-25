@@ -14,13 +14,14 @@ import ConfirmationModel from "@/components/snippets/confirmation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { truncateNumber } from "@/libs/subdomain";
+import AuthenticationModelPopup from "@/components/snippets/authenticationPopup";
 
 const schema = yup.object().shape({
   p_method: yup.lazy((val) =>
     Array.isArray(val)
       ? yup
         .array()
-        .of(yup.string().min(1,"Please select atleast '1' payment method.").required())
+        .of(yup.string().min(1, "Please select atleast '1' payment method.").required())
         .required("Please select '1' payment method.")
       : yup.string().min(1).required("Please select '1' payment method.")
   ),
@@ -66,16 +67,15 @@ const PaymentMethod = (props: activeSection) => {
   const [inputValue, setInputValue] = useState(0.000000);
   const [minInputValue, setMinInputValue] = useState(0.000000);
   const [maxInputValue, setMaxInputValue] = useState(0.000000);
+  const [verified, setVerified] = useState(false);
   // let list = props.userPaymentMethod;
 
   const router = useRouter();
 
-  const getPaymentMethodName = (pmid:string) => {
-    const method = props.masterPayMethod.find((method:any) => method.id === pmid);
+  const getPaymentMethodName = (pmid: string) => {
+    const method = props.masterPayMethod.find((method: any) => method.id === pmid);
     return method ? method.payment_method : "";
   };
-
-
 
   useEffect(() => {
     getAllPayments('');
@@ -86,7 +86,7 @@ const PaymentMethod = (props: activeSection) => {
       setValue("max_limit", props.price * qty);
       const paymentMethodName = getPaymentMethodName(pmid);
       getAllPayments(paymentMethodName)
- 
+
     }
   }, [router.query]);
 
@@ -106,7 +106,7 @@ const PaymentMethod = (props: activeSection) => {
     resolver: yupResolver(schema),
   });
 
-  const getAllPayments = async (name:string|undefined) => {
+  const getAllPayments = async (name: string | undefined) => {
     let userPaymentMethod = await fetch(
       `${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod`,
       {
@@ -118,18 +118,15 @@ const PaymentMethod = (props: activeSection) => {
     ).then((response) => response.json());
     setList(userPaymentMethod?.data);
 
-    if(name!==''){
-      let method:any= userPaymentMethod?.data?.find((item:any)=>item?.pm_name===name)
-      
-      if(method){
-       
-        setValue("p_method",method?.id)
+    if (name !== '') {
+      let method: any = userPaymentMethod?.data?.find((item: any) => item?.pm_name === name)
+
+      if (method) {
+
+        setValue("p_method", method?.id)
       }
     }
-
-
   };
-
 
   const onHandleSubmit = async (data: any) => {
     if (data.quantity > props.assetsBalance) {
@@ -140,7 +137,7 @@ const PaymentMethod = (props: activeSection) => {
       setFocus("quantity");
       return;
     }
-    if(data.min_limit > data.max_limit){
+    if (data.min_limit > data.max_limit) {
       setError("min_limit", {
         type: "custom",
         message: `Min limit must be less than max limit.`,
@@ -245,9 +242,9 @@ const PaymentMethod = (props: activeSection) => {
 
   return (
     <>
-      {props?.page==="user-center" && <ToastContainer position="top-center" limit={1}/>}
+      {props?.page === "user-center" && <ToastContainer position="top-center" limit={1} />}
       <div
-        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"
+        className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show || verified ? "opacity-80 visible" : "opacity-0 invisible"
           }`}
       ></div>
       <form onSubmit={handleSubmit(onHandleSubmit)}>
@@ -354,8 +351,14 @@ const PaymentMethod = (props: activeSection) => {
                   type="button"
                   className="outline-button border-primary text-primary max-w-full sm:max-w-[176px] w-full"
                   onClick={() => {
-                    setShow(!show);
-                    setActive(1);
+                    if ((session?.user?.tradingPassword === '' || session?.user?.tradingPassword === null)) {
+                      setVerified(true);
+                    }
+                    else {
+                      setShow(!show);
+                      setActive(1);
+                    }
+
                   }}
                 >
                   {" "}
@@ -533,7 +536,7 @@ const PaymentMethod = (props: activeSection) => {
         />
       )}
       {active == 3 && (
-        <Successfull setShow={setShow} setActive={setActive} type="success" />
+        <Successfull setShow={setShow} setActive={setActive} type="success" hideVisibility={true}/>
       )}
       {active === 4 && (
         <ConfirmationModel
@@ -543,8 +546,13 @@ const PaymentMethod = (props: activeSection) => {
           message="Are you sure you want to delete this item?"
           actionPerform={handleDelete}
           show={show}
+          hideVisibility={true}
         />
       )}
+
+      {verified &&
+        <AuthenticationModelPopup title='Confirmation' message='Please complete your kyc' setShow={setVerified} setActive={setActive} show={verified} hideVisibility={true}/>
+      }
     </>
   );
 };
