@@ -3,6 +3,7 @@ import Context from "../contexts/context";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
+import { currencyFormatter } from "./market/buySellCard";
 
 interface activeSection {
   setActive: Function;
@@ -84,8 +85,8 @@ const ConfirmBuy = (props: activeSection) => {
             <div>
               <p className="info-10-14 ">
                 {props?.objData?.market_type === "limit"
-                  ? props?.objData?.limit_usdt
-                  : props?.price}
+                  ? currencyFormatter(props?.objData?.limit_usdt)
+                  : currencyFormatter(props?.price)}
                 {}
               </p>
             </div>
@@ -100,7 +101,7 @@ const ConfirmBuy = (props: activeSection) => {
             <div className="md-text dark:!text-g-secondary">Order Value</div>
             <div>
               <p className="info-10-14 ">
-                {props?.objData?.volume_usdt} {props?.secondCurrency}
+                {currencyFormatter(props?.objData?.volume_usdt)} {props?.secondCurrency}
               </p>
             </div>
           </div>
