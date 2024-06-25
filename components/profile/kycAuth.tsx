@@ -49,7 +49,7 @@ const schema = yup
     fname: yup.string().required("Full name must be required.").min(4, "Must be greater than '4' charater.").max(30).matches(/^([a-zA-Z])+([\s*\S+\s+\S+\sa-zA-Z])+$/, 'Please enter only(letters).'),
     // lname: yup.string().required("This field is required"),
     doctype: yup.string().required("Please select Document type."),
-    docnumber: yup.string().required("Please enter valid document number.").min(6,"Document Number must equal to identity number.").max(30),
+    docnumber: yup.string().required("Please enter valid document number.").min(6, "Document Number must equal to identity number.").max(30),
     dob: yup
       .date()
       .transform(function (value, originalValue) {
@@ -120,37 +120,6 @@ const KycAuth = (props: fixSection) => {
     resolver: yupResolver(schema),
   });
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (errors.doctype) {
-  //       clearErrors('doctype')
-  //     }
-  //     if (errors.docnumber) {
-  //       clearErrors('docnumber')
-  //     }
-  //     if (errors.fname) {
-  //       clearErrors('fname')
-  //     }
-  //     if (errors.dob) {
-  //       clearErrors('dob')
-  //     }
-  //     if (errors.country) {
-  //       clearErrors('country')
-  //     }
-  //     if (errors.idfront) {
-  //       clearErrors('idfront')
-  //     }
-  //     if (errors.idback) {
-  //       clearErrors('idback')
-  //     }
-  //     if (errors.statement) {
-  //       clearErrors('statement')
-  //     }
-  //   }, 3000);
-
-  //   // frontImageDragDrop();
-  // }, [errors])
-
   async function handleDrop(e: any) {
     e.preventDefault();
     e.stopPropagation();
@@ -217,6 +186,8 @@ const KycAuth = (props: fixSection) => {
         type: "custom",
         message: "Please ensure your date of birth should be greater than 18 years.",
       });
+      setValue('dob', currentTime);
+      setStartDate(undefined);
       return;
     }
     setValue("dob", date);
@@ -770,7 +741,7 @@ const KycAuth = (props: fixSection) => {
 
   return (
     <>
-      <ToastContainer limit={1}/>
+      <ToastContainer limit={1} />
       <section
         className={`${props.show == 3 && "!left-[50%]"} ${props.fixed
           ? "overflow-y-scroll duration-300 p-5 md:p-40 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary "

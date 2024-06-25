@@ -26,11 +26,12 @@ const CryptoCoin = (props: propsData) => {
     Cta: false,
     hidden: false
   };
-  
-  let cardData = props.coinList.slice(0, 4);;
 
-  // cardData = cardData.map(obj => ({ ...obj, newPropsObj }));
+  let coins = props.coinList.filter((item:any)=>{
+    return item?.symbol!=="USDT"
+  });
 
+  let cardData = coins.slice(0, 4);
   cardData.forEach(function (element:any) {
     element.chartImg = "ChartImage";
     element.status = 'high';

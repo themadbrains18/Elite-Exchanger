@@ -257,7 +257,7 @@ const GoogleAuth = (props: activeSection) => {
       <div className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[600px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${popup===false  ?"opacity-100":"opacity-0"}
       }`}>
         <div className="flex items-center justify-between">
-          <p className="sec-title" style={{ fontSize: '18px' }}>Set Up Google Two-Factor Authentication</p>
+          <p className="sec-title " style={{ fontSize: '18px'}}>Set Up Google Two-Factor Authentication</p>
           <svg
             onClick={() => {
               props.setShow(false);
@@ -326,7 +326,7 @@ const GoogleAuth = (props: activeSection) => {
                 />
                 {/* {errors.otp && <p style={{ color: "red" }} className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px]">{errors.otp.message}</p>} */}
               </div>
-              <p className={` text-center lg:mt-[20px] md-text errorMessage ${otpMessage === '' ? 'hidden' : ''}`} >{otpMessage}</p>
+              <p className={` text-center lg:mt-[20px] errorMessage ${otpMessage === '' ? 'hidden' : ''}`} >{otpMessage}</p>
             </div>
             <div className={`flex  ${showTime === true ? '' : 'hidden'}`}>
               <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>

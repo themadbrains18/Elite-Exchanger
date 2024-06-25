@@ -58,7 +58,7 @@ const BuySellExpress = (props: propsData) => {
   const wbsocket = useWebSocket();
 
   useEffect(() => {
-    getUsdtToInrPrice('USDT');
+    // getUsdtToInrPrice('USDT');
     getFilterAsset('');
     setCurrencyName('USDT', 2);
     if (active1) {
