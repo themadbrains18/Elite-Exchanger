@@ -459,7 +459,7 @@ const AdNumber = (props: activeSection) => {
               </div>
               <form onSubmit={handleSubmit(onHandleSubmit)}>
                 <div className="py-30 md:py-40">
-                  <div className="flex flex-col mb-[15px] md:mb-30 gap-20">
+                  <div className="flex flex-col mb-[15px] md:mb-20 gap-20">
                     <div>
                       <label className="sm-text mb-[6px]">
                         {props?.type === "email"

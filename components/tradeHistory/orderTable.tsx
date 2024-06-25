@@ -4,6 +4,7 @@ import Image from 'next/image';
 import React, { useContext, useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate';
 import Context from '../contexts/context';
+import { currencyFormatter } from '../snippets/market/buySellCard';
 
 interface propsData {
   filter: string;
@@ -187,10 +188,10 @@ const OrderTable = (props: propsData) => {
                     <p className="info-14-18 dark:text-white  md:block hidden">{item.market_type}</p>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white md:block hidden">${item?.token !== null ? item?.token?.price.toFixed(4) : item?.global_token?.price.toFixed(4)}</p>
+                    <p className="info-14-18 dark:text-white md:block hidden">${item?.token !== null ? currencyFormatter(item?.token?.price.toFixed(4)) : currencyFormatter(item?.global_token?.price.toFixed(4))}</p>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white md:block hidden">{item.limit_usdt}</p>
+                    <p className="info-14-18 dark:text-white md:block hidden">{currencyFormatter(item.limit_usdt)}</p>
                   </td>
                   <td>
                     <p className="info-14-18 dark:text-white md:block hidden">${item.volume_usdt.toFixed(2)}</p>

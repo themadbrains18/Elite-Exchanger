@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate';
 import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
+import { currencyFormatter } from '../snippets/market/buySellCard';
 
 
 interface propsData {
@@ -177,10 +178,10 @@ const DepositTable = (props: propsData) => {
                     <p className="info-14-18 dark:text-white md:block hidden">Filled</p>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white md:block hidden">{item.amount}</p>
+                    <p className="info-14-18 dark:text-white md:block hidden">{currencyFormatter(item.amount)}</p>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white md:block hidden">{item.amount}</p>
+                    <p className="info-14-18 dark:text-white md:block hidden">{currencyFormatter(item.amount)}</p>
                   </td>
                   <td>
                     <p className={`info-14-18  text-buy`}>Approved</p>

@@ -11,6 +11,7 @@ import ConfirmPopup from "@/pages/customer/profile/confirm-popup";
 import Verification from "../snippets/verification";
 
 import ConfirmationModel from "../snippets/confirmation";
+import { currencyFormatter } from '../snippets/market/buySellCard';
 
 const StakingTable = () => {
     const { data: session, status } = useSession();
@@ -307,7 +308,7 @@ const StakingTable = () => {
                   </div>
                 </td>
                 <td>
-                  <p className="info-14-18 dark:text-white  md:block">{item?.amount}</p>
+                  <p className="info-14-18 dark:text-white  md:block">{currencyFormatter(item?.amount)}</p>
                 </td>
                 <td>
                   <p className={`info-14-18 dark:text-white  md:block hidden`}>{item?.apr}</p>
