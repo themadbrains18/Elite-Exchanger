@@ -74,8 +74,10 @@ const PaymentMethod = (props: activeSection) => {
     getAllPayments();
     if (Object.keys(router?.query).length > 0) {
       let qty: any = router?.query?.qty;
+      let pmid: any = router?.query?.pmid;
       setValue("quantity", qty);
       setValue("max_limit", props.price * qty);
+      setValue("p_method",pmid)
     }
   }, [router.query]);
 
@@ -250,6 +252,10 @@ const PaymentMethod = (props: activeSection) => {
                           name="p_method"
                           id={`checkbox${item?.id}`}
                           value={item?.id}
+                          defaultChecked={
+                            router.query.pmid?.includes(item?.id) ??
+                            false
+                          }
                           className="hidden methods"
                         />
                         <label

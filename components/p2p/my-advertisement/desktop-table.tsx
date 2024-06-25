@@ -159,7 +159,7 @@ const DesktopTable = (props: dataTypes) => {
                 })
 
                 setPostList(remainingPost);
-                setActive(0);
+                setShowPopup(false);
                 setShow(false);
             }
             else {

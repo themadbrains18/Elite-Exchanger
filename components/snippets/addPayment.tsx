@@ -20,6 +20,7 @@ const AddPayment = (props: activeSection) => {
   const [enableFront, setEnableFront] = useState(false);
   const [disable, setDisable] = useState(false)
   const [qrCode, setQrCode] = useState("notValid");
+  const [errMsg, setErrMsg] = useState(false)
 
   let {
     register,
@@ -119,17 +120,17 @@ const AddPayment = (props: activeSection) => {
     }
   };
 
+  console.log(errors,"==error");
+  
+
   const onHandleSubmit = (data: any) => {
-    setDisable(true)
+
     if (Object.values(data).length == 0) {
-      toast.error("Please select payment method", { autoClose: 2000 });
-      setTimeout(() => {
-        setDisable(false)
-      }, 3000)
+      setErrMsg(true)
       return;
 
     }
-
+    setDisable(true)
     if (data?.phonenumber?.length !== 10) {
       toast.error("Number contain 10 digits", { autoClose: 2000 });
       setTimeout(() => {
@@ -226,6 +227,12 @@ const AddPayment = (props: activeSection) => {
               placeholder="Choose Payment Method"
               auto={false}
               widthFull={true} type="pmethod" onPaymentMethodChange={onPaymentMethodChange} />
+            {
+            errMsg && (
+                <p className="errorMessage">Please select payment method.</p>
+              )
+            }
+
 
           </div>
 

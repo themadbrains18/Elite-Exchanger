@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import IconsComponent from '../snippets/icons';
 import TimerCountDown from './timer-countdown';
 import moment from 'moment';
+import { currencyFormatter } from '../snippets/market/buySellCard';
 
 interface showSidebar {
     show?: boolean;
@@ -158,10 +159,10 @@ const TopBar = (props: showSidebar) => {
                     </div>
 
                     {/* coin price */}
-                    <p className='admin-component-heading !text-buy'>{props?.currentToken?.token !== null ? props?.currentToken?.token?.price.toFixed(5) : props?.currentToken?.global_token?.price.toFixed(5)}</p>
+                    <p className='admin-component-heading !text-buy'>{props?.currentToken?.token !== null ?currencyFormatter(props?.currentToken?.token?.price.toFixed(5)) : currencyFormatter(props?.currentToken?.global_token?.price.toFixed(5))}</p>
                     <div>
                         <p className='top-label'>Mark</p>
-                        <p className='top-label !text-[#000] dark:!text-[#fff]'>{props?.currentToken?.token !== null ? props?.currentToken?.token?.price.toFixed(5) : props?.currentToken?.global_token?.price.toFixed(5)}</p>
+                        <p className='top-label !text-[#000] dark:!text-[#fff]'>{props?.currentToken?.token !== null ? currencyFormatter(props?.currentToken?.token?.price.toFixed(5)) : currencyFormatter(props?.currentToken?.global_token?.price.toFixed(5))}</p>
                     </div>
                     {/* index */}
                     {/* <div>
@@ -182,22 +183,22 @@ const TopBar = (props: showSidebar) => {
                     {/* 24h High */}
                     <div>
                         <p className='top-label'>24h High</p>
-                        <p className='top-label !text-[#000] dark:!text-[#fff]'>{props?.topHLOCData?.high?.toFixed(4)}</p>
+                        <p className='top-label !text-[#000] dark:!text-[#fff]'>{currencyFormatter(props?.topHLOCData?.high?.toFixed(4))}</p>
                     </div>
                     {/* 24h Low */}
                     <div>
                         <p className='top-label'>24h Low</p>
-                        <p className='top-label !text-[#000] dark:!text-[#fff]'>{props?.topHLOCData?.low?.toFixed(4)}</p>
+                        <p className='top-label !text-[#000] dark:!text-[#fff]'>{currencyFormatter(props?.topHLOCData?.low?.toFixed(4))}</p>
                     </div>
                     {/* 24h Volume(BTC) */}
                     <div>
                         <p className='top-label'>open</p>
-                        <p className='top-label !text-[#000] dark:!text-[#fff]'>{props?.topHLOCData?.open?.toFixed(4)}</p>
+                        <p className='top-label !text-[#000] dark:!text-[#fff]'>{currencyFormatter(props?.topHLOCData?.open?.toFixed(4))}</p>
                     </div>
                     {/* 24h Volume(USDT) */}
                     <div>
                         <p className='top-label'>24h Volume({props?.currentToken?.usdt_symbol})</p>
-                        <p className='top-label !text-[#000] dark:!text-[#fff]'>{props?.topHLOCData?.volume}</p>
+                        <p className='top-label !text-[#000] dark:!text-[#fff]'>{currencyFormatter(props?.topHLOCData?.volume)}</p>
                     </div>
                 </div>
             </div>

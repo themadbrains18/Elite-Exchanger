@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from "moment";
 import Image from 'next/image';
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
 interface setState {
     show?: number;
@@ -29,7 +30,7 @@ const MarketTrades = (props: setState) => {
                 {props?.positionRecord && props?.positionRecord.length > 0 && props?.positionRecord.map((item: any) => {
                     return <>
                         <div className={`grid grid-cols-3 gap-[10px] ${item?.direction === 'long' ? 'bg-[#25e39e0a]' : 'bg-[#fc47471c]'} rounded mb-[4px]`}>
-                            <p className={`top-label text-start ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.entry_price?.toFixed(6)}</p>
+                            <p className={`top-label text-start ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{currencyFormatter(item?.entry_price?.toFixed(6))}</p>
                             <p className='top-label text-center !text-black dark:!text-white'>{item?.margin}</p>
                             <p className='top-label text-end !text-black dark:!text-white'>{moment(item?.createdAt).format("YYYY-MM-DD")}</p>
                         </div>

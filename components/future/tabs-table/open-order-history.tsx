@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmationModel from '@/components/snippets/confirmation';
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
 interface propsData {
     openOrders?: any;
@@ -113,10 +114,10 @@ const OpenOrderHistoryTable = (props: propsData) => {
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item?.side}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.price_usdt}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(item?.price_usdt)}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.amount}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(item?.amount)}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">0.0</p>

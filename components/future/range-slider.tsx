@@ -42,15 +42,28 @@ const RangeSlider = (props: uniqueIds) => {
         }
 
     }
+    const handleBulletClick = (value: number) => {
+        console.log("==her");
+        
+        const sliderInput = document.getElementById(props.inputId) as HTMLInputElement;
+        console.log(value,"=value");
+        
+        if (sliderInput) {
+          sliderInput.value = value.toString();
+          showSliderValue();
+        }
+      };
 
     return (
         <>
             <div className='w-full bg-primary h-[4px] flex items-center justify-between mt-[20px]'>
-                <div className='w-[10px] h-[10px] rounded-full bg-primary'></div>
-                <div className='w-[10px] h-[10px] rounded-full bg-primary'></div>
-                <div className='w-[10px] h-[10px] rounded-full bg-primary'></div>
-                <div className='w-[10px] h-[10px] rounded-full bg-primary'></div>
-                <div className='w-[10px] h-[10px] rounded-full bg-primary'></div>
+            {[0, 25, 50, 75, 100].map((value, index) => (
+          <div
+            key={index}
+            className='w-[10px] h-[10px] rounded-full bg-primary cursor-pointer'
+            onClick={() => handleBulletClick(value)}
+          ></div>
+        ))}
             </div>
             <div className="range-slider mt-[-12px] cursor-pointer">
                 <div id={props.thumbId} className="range-slider_thumb"></div>

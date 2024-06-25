@@ -111,7 +111,7 @@ const MarginMode = (props: fullWidth) => {
 
             <RangeSlider inputId={props.inputId} thumbId={props.thumbId} lineId={props.lineId} onChangeSizeInPercentage={onChangeSizeInPercentage} rangetype={'X'} step={1} />
 
-            <p className='top-label mt-[10px]'>Maximum position at current leverage: 3500000 USDT</p>
+            <p className='top-label mt-[10px]'>Maximum position at current leverage: 35,00,000 USDT</p>
             <p className='top-label mb-[25px]'>Selecting higher leverage such as [10x] increases your liquidation risk. Always manage your risk levels.</p>
 
             <div className='flex items-center gap-[15px] mt-[15px]'>

@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ConfirmationModel from '@/components/snippets/confirmation';
 import AES from 'crypto-js/aes';
 import { useWebSocket } from '@/libs/WebSocketContext';
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
 interface propsData {
   positions?: any;
@@ -208,13 +209,13 @@ const PositionsTable = (props: propsData) => {
                       <p className="top-label !font-[600] !text-buy">{item?.size}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.entry_price?.toFixed(5)}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(item?.entry_price?.toFixed(5))}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.token !== null ? item?.token?.price?.toFixed(5) : item?.global_token?.price?.toFixed(5)}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.token !== null ? currencyFormatter(item?.token?.price?.toFixed(5)) : currencyFormatter(item?.global_token?.price?.toFixed(5))}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.liq_price?.toFixed(5)}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(item?.liq_price?.toFixed(5))}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction}</p>

@@ -9,6 +9,7 @@ import clickOutSidePopupClose from "@/components/snippets/clickOutSidePopupClose
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
+import { currencyFormatter } from "@/components/snippets/market/buySellCard";
 
 const schema = yup.object().shape({
   amount: yup.number().positive('Amount must be positive number.').required('This field is required.').typeError('This field is required.'),
@@ -316,7 +317,7 @@ const TransferModal = (props: showPopup) => {
 
         <p className="top-label !text-[16px] mt-[15px]">
           Available{" "}
-          {userAsset !== undefined && userAsset !== null ? userAsset?.balance?.toFixed(6) : 0}{" "}
+          {userAsset !== undefined && userAsset !== null ? currencyFormatter(userAsset?.balance?.toFixed(6)) : 0}{" "}
           {selectedCoin}
         </p>
         <button

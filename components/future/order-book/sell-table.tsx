@@ -1,3 +1,4 @@
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import moment from 'moment';
 import Image from 'next/image';
 import React from 'react'
@@ -27,8 +28,8 @@ const SelltableFuture = (props: setState) => {
                 {data && data?.length > 0 && data.map((item: any) => {
                     return <>
                         <div className='grid grid-cols-3 gap-[10px] bg-[#fc47471c] rounded mb-[4px]'>
-                            <p className={`top-label text-start ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.entry_price?.toFixed(6)}</p>
-                            <p className='top-label text-center !text-black dark:!text-white'>{item?.qty?.toFixed(6)}</p>
+                            <p className={`top-label text-start ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{currencyFormatter(item?.entry_price?.toFixed(6))}</p>
+                            <p className='top-label text-center !text-black dark:!text-white'>{currencyFormatter(item?.qty?.toFixed(6))}</p>
                             <p className='top-label text-end !text-black dark:!text-white'>{item?.margin}</p>
                         </div>
                     </>
@@ -45,8 +46,8 @@ const SelltableFuture = (props: setState) => {
             {
                 props.showPrice &&
                 <div className='bg-card-bg py-[6px] px-[20px] flex items-center justify-between dark:bg-omega bg-white my-[10px]'>
-                    <p className='info-18 !text-black dark:!text-white'>{props?.currentToken?.token !== null ? (props?.currentToken?.token?.price)?.toFixed(5) : (props?.currentToken?.global_token?.price)?.toFixed(5)}</p>
-                    <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !== null ? (props?.currentToken?.token?.price)?.toFixed(5) : (props?.currentToken?.global_token?.price)?.toFixed(5)}</p>
+                    <p className='info-18 !text-black dark:!text-white'>{props?.currentToken?.token !== null ? currencyFormatter((props?.currentToken?.token?.price)?.toFixed(5) ): currencyFormatter((props?.currentToken?.global_token?.price)?.toFixed(5))}</p>
+                    <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !== null ? currencyFormatter((props?.currentToken?.token?.price)?.toFixed(5)) : currencyFormatter((props?.currentToken?.global_token?.price)?.toFixed(5))}</p>
                 </div>
             }
         </>
