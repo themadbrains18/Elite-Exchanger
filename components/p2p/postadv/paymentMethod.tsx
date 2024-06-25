@@ -70,14 +70,23 @@ const PaymentMethod = (props: activeSection) => {
 
   const router = useRouter();
 
+  const getPaymentMethodName = (pmid:string) => {
+    const method = props.masterPayMethod.find((method:any) => method.id === pmid);
+    return method ? method.payment_method : "";
+  };
+
+
+
   useEffect(() => {
-    getAllPayments();
+    getAllPayments('');
     if (Object.keys(router?.query).length > 0) {
       let qty: any = router?.query?.qty;
       let pmid: any = router?.query?.pmid;
       setValue("quantity", qty);
       setValue("max_limit", props.price * qty);
-      setValue("p_method",pmid)
+      const paymentMethodName = getPaymentMethodName(pmid);
+      getAllPayments(paymentMethodName)
+ 
     }
   }, [router.query]);
 
@@ -97,7 +106,7 @@ const PaymentMethod = (props: activeSection) => {
     resolver: yupResolver(schema),
   });
 
-  const getAllPayments = async () => {
+  const getAllPayments = async (name:string|undefined) => {
     let userPaymentMethod = await fetch(
       `${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod`,
       {
@@ -108,7 +117,21 @@ const PaymentMethod = (props: activeSection) => {
       }
     ).then((response) => response.json());
     setList(userPaymentMethod?.data);
+
+    if(name!==''){
+      let method:any= userPaymentMethod?.data?.find((item:any)=>item?.pm_name===name)
+      console.log(method,"=method");
+      
+      if(method){
+       console.log(method?.id,"==d");
+       
+        setValue("p_method",method?.id)
+      }
+    }
+
+
   };
+
 
   const onHandleSubmit = async (data: any) => {
     if (data.quantity > props.assetsBalance) {
@@ -196,7 +219,7 @@ const PaymentMethod = (props: activeSection) => {
       ).then((res) => res.json());
       // console.log(responseData, "==responseData");
       if (responseData?.data) {
-        getAllPayments()
+        getAllPayments('')
         toast.success("Payment method delete successfully");
         setTimeout(() => {
           setActive(0);

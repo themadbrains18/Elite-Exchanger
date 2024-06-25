@@ -143,7 +143,7 @@ const Response = (props: activeSection) => {
 
   const finalSubmitAds = async (pass: string) => {
     try {
-      if (status === 'authenticated') {
+      if (session?.user) {
 
     
       setDisable(true)
