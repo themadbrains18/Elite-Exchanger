@@ -249,15 +249,15 @@ const ChatBox = (props: PropsData) => {
 
                     {Object.entries(groupedMessages).map(([date, messages]) => (
                         <React.Fragment key={date}>
-                            <div className='relative'>
-                                <div className="border-t dark:border-opacity-[15%] border-grey-v-1"></div>
-                                <p className="nav-text-sm  dark:bg-black-v-1 bg-[#F9FAFA] dark:text-white z-[2] left-[50%] -translate-x-1/2 top-[50%] -translate-y-1/2 absolute">{date !== 'Invalid Date' ? date : 'Today'}</p>
+                            <div className='relative mb-2'>
+                                <div className="border-t-2 dark:border-opacity-[15%] border-grey-v-1"></div>
+                                <p className="nav-text-sm  dark:bg-black-v-1 bg-[#F9FAFA] dark:text-white z-[2] left-[50%] px-[6px] -translate-x-1/2 top-[50%] -translate-y-1/2 absolute">{date !== 'Invalid Date' ? date : 'Today'}</p>
                             </div>
 
                             <div>
                                 {messages && messages?.map((item: any) => (
                                     <>
-                                        <div key={item.id} className={item.from !== session?.user?.user_id ? 'left gap-[4px] mb-1' : 'right flex items-start gap-[4px] mb-1'}>
+                                        <div key={item.id} className={item.from !== session?.user?.user_id ? 'left gap-[4px] mb-2' : 'right flex items-start gap-[4px] mb-2'}>
                                             <div className="mt-[4px] p-[10px] ml-[auto] rounded-[6px] min-w-[60px] max-w-fit w-full dark:bg-[#232530] bg-primary-600 bottom-right">
                                                 {item.message.includes('https://') ? (
                                                     <Image src={item.message} alt="error" width={100} height={100} />

@@ -29,7 +29,7 @@ const Successfull = (props: activeSection) => {
         ref={wrapperRef}
         className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
       >
-        <div className="flex items-center justify-between ">
+        <div className="flex items-center justify-between relative">
 
           <p className="sec-title">
 
@@ -53,7 +53,7 @@ const Successfull = (props: activeSection) => {
             y="0px"
             viewBox="0 0 60.963 60.842"
             xmlSpace="preserve"
-            className="max-w-[18px] cursor-pointer w-full"
+            className="max-w-[18px] cursor-pointer w-full absolute top-[-6px] md:top-[-17px] right-[-5px] md:right-[-10px]"
           >
             <path
               fill={mode === "dark" ? "#fff" : "#9295A6"}
@@ -68,7 +68,7 @@ const Successfull = (props: activeSection) => {
         {props?.type === "release" && <div className="flex items-center justify-center ">
           <Image src='/assets/profile/success-icon.svg' width={40} height={40} alt="success" />
         </div>}
-        <p className={`py-40 info-14-18 ${props?.type === "release" ? 'text-center' : ''}`}>
+        <p className={`py-[20px] md:py-40 info-14-18 ${props?.type === "release" ? 'text-center' : ''}`}>
           {props?.type === "success"
             ? "New payment method has been added successfully."
             : props?.type === "release" ? "Assets Released successfully."

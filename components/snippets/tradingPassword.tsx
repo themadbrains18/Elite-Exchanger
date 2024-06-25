@@ -348,7 +348,7 @@ const TradingPassword = (props: activeSection) => {
             </div>
 
             <div className="flex flex-col gap-20">
-              <label className="sm-text">Enter Code Verification Code</label>
+              <label className="sm-text">Enter Verification Code</label>
               <div className="flex gap-10 justify-between md:justify-center items-center input_wrapper2">
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
                 <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />

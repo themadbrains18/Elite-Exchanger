@@ -206,7 +206,7 @@ const SideBar = (props: profileSec) => {
                                 {enableDp &&
                                     <>
                                         <div className="bg-black  z-[1] duration-300 absolute top-0 left-0 h-full w-full opacity-80 visible"></div>
-                                        <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#ff815d] rounded-full animate-spin border-t-[#ff815d75] '></div>
+                                        <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
                                     </>
                                 }
                                 {profileImg === '' && <Image src={`${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`} width={125} height={125} alt='avtar profile' className='m-auto' />}

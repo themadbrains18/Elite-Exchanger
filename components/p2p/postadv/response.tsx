@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AES from 'crypto-js/aes';
@@ -143,6 +143,9 @@ const Response = (props: activeSection) => {
 
   const finalSubmitAds = async (pass: string) => {
     try {
+      if (session?.user) {
+
+    
       setDisable(true)
       // console.log(finalFormData,'--------------finalFormData');
       
@@ -180,8 +183,18 @@ const Response = (props: activeSection) => {
         route.push('/p2p/my-advertisement');
       }
       else {
-        toast.error(res.data.data);
+        toast.error(res.data.data, { autoClose: 2000 });
+        setTimeout(() => {
+          setDisable(false)
+        }, 3000)
       }
+    }
+    else{
+      toast.error('Your session is expired. Its auto redirect to login page.', {autoClose:2000});
+      setTimeout(() => {
+        signOut();
+      }, 3000);
+    }
     } catch (error) {
 
     }

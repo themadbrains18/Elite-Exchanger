@@ -8,6 +8,7 @@ import ConfirmationModel from '@/components/snippets/confirmation';
 import moment from 'moment';
 import { AES } from 'crypto-js';
 import { useWebSocket } from '@/libs/WebSocketContext';
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
 interface propsData {
     openOrders?: any;
@@ -173,10 +174,10 @@ const OpenOrderTable = (props: propsData) => {
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item?.side}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.price_usdt}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(item?.price_usdt)}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.amount}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(item?.amount)}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">0.0</p>

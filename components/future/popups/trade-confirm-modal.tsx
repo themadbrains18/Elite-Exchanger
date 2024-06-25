@@ -4,6 +4,7 @@ import SelectDropdown from '../snippet/select-dropdown';
 import Context from '@/components/contexts/context';
 import { useSession } from 'next-auth/react';
 import clickOutSidePopupClose from '@/components/snippets/clickOutSidePopupClose';
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
 interface showPopup {
     modelPopup?: number;
@@ -69,7 +70,7 @@ const TradeConfirmPopupModal = (props: showPopup) => {
             <div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Price</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type === 'limit' ? props?.confirmOrderData?.price_usdt : props?.confirmOrderData?.market_price}</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type === 'limit' ? currencyFormatter(props?.confirmOrderData?.price_usdt) : currencyFormatter(props?.confirmOrderData?.market_price)}</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Qty</p>
@@ -77,15 +78,15 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Cost</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.margin} USDT</p>
+                    <p className='dark:text-white text-black'>{currencyFormatter(props?.confirmOrderData?.margin)} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Value</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type === 'limit' ? parseFloat(props?.confirmOrderData?.amount) : props?.confirmOrderData?.size} USDT</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type === 'limit' ? currencyFormatter(parseFloat(props?.confirmOrderData?.amount)) : currencyFormatter(props?.confirmOrderData?.size)} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Estimated Liq. Price</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.liq_price} USDT</p>
+                    <p className='dark:text-white text-black'>{currencyFormatter(props?.confirmOrderData?.liq_price)} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Leverage</p>

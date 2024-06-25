@@ -1,4 +1,5 @@
 import IconsComponent from '@/components/snippets/icons';
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import moment from 'moment';
 import Image from 'next/image';
 import React, { useState } from 'react';
@@ -83,7 +84,7 @@ const PositionsHistoryTable = (props: propsData) => {
                                             <p className={`top-label !font-[600]`}>{item?.qty}/{item?.qty}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.market_price?.toFixed(2)}/{item?.market_type}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(item?.market_price?.toFixed(2))}/{item?.market_type}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className={`top-label !font-[600] ${item?.direction === 'Open Long'?'!text-buy':'!text-sell'}`}>{item?.direction}</p>

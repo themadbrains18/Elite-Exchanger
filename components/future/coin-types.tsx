@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Context from "../contexts/context";
 import { useRouter } from "next/router";
 import Link from 'next/link';
+import { currencyFormatter } from '../snippets/market/buySellCard';
 
 interface propsData {
     coins?: any;
@@ -116,7 +117,7 @@ const CoinTypes = (props: propsData) => {
                                         <p className='top-label text-start !text-black dark:!text-white flex items-center gap-[5px]'>
                                             <span>{item?.coin_symbol}{item?.usdt_symbol}</span>
                                         </p>
-                                        <p className='top-label text-center !text-black dark:!text-white'>{item?.token !== null ? item?.token?.price?.toFixed(5) : item?.global_token?.price?.toFixed(5)}</p>
+                                        <p className='top-label text-center !text-black dark:!text-white'>{item?.token !== null ? currencyFormatter(item?.token?.price?.toFixed(5)) : currencyFormatter(item?.global_token?.price?.toFixed(5))}</p>
                                         <p className='top-label text-end !text-black dark:!text-white'>0.32%</p>
                                         <p className='top-label text-end !text-black dark:!text-white'>33.2M<span>USDT</span></p>
                                     </div>
@@ -165,7 +166,7 @@ const CoinTypes = (props: propsData) => {
                                         <p className='top-label text-start !text-black dark:!text-white flex items-center gap-[5px]'>
                                             <span>{item?.coin_symbol}{item?.usdt_symbol}</span>
                                         </p>
-                                        <p className='top-label text-center !text-black dark:!text-white'>{item?.token !== null ? item?.token?.price?.toFixed(5) : item?.global_token?.price?.toFixed(5)}</p>
+                                        <p className='top-label text-center !text-black dark:!text-white'>{item?.token !== null ? currencyFormatter(item?.token?.price?.toFixed(5)) : currencyFormatter(item?.global_token?.price?.toFixed(5))}</p>
                                         <p className='top-label text-end !text-black dark:!text-white'>0.32%</p>
                                         <p className='top-label text-end !text-black dark:!text-white'>33.2M<span>USDT</span></p>
                                     </div>

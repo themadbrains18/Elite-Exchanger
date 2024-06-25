@@ -21,7 +21,7 @@ interface Session {
 const Express = (props: Session) => {
   return (
     <P2pLayout>
-      <BuySellExpress coins={props?.coinList} session={props?.session} posts={props?.posts} masterPayMethod={props.masterPayMethod} assets={props.assets} />
+      <BuySellExpress coins={props?.coinList} session={props?.session} posts={props?.posts} masterPayMethod={props?.masterPayMethod} assets={props?.assets}/>
     </P2pLayout>
   )
 }

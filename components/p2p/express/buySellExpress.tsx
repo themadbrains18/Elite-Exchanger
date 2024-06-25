@@ -14,6 +14,7 @@ import { useSession } from "next-auth/react";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { currencyFormatter } from "@/components/snippets/market/buySellCard";
 import AuthenticationModelPopup from "@/components/snippets/authenticationPopup";
+import Skeleton from "react-loading-skeleton";
 
 const schema = yup.object().shape({
   spend_amount: yup.number().positive("Spend amount must be greater than '0'.").required('This field must be required.').typeError('This field must be required.'),
@@ -51,6 +52,7 @@ const BuySellExpress = (props: propsData) => {
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(false);
   const route = useRouter();
+  const [loader, setLoader] = useState(false)
 
   const router = useRouter();
   const wbsocket = useWebSocket();
@@ -58,8 +60,8 @@ const BuySellExpress = (props: propsData) => {
   useEffect(() => {
     // getUsdtToInrPrice('USDT');
     getFilterAsset('');
-    setCurrencyName('USDT',2);
-    if(active1){
+    setCurrencyName('USDT', 2);
+    if (active1) {
       reset()
       setSecondCurrency("USDT")
     }
@@ -86,6 +88,7 @@ const BuySellExpress = (props: propsData) => {
     // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
     //   method: "GET"
     // }).then(response => response.json());
+    setLoader(true)
 
     try {
       let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
@@ -101,13 +104,15 @@ const BuySellExpress = (props: propsData) => {
         }),
       });
 
-      let data = await responseData.json();
+      let data = await responseData?.json();
 
       setUsdtToInr(data?.rate?.toFixed(6));
+      setLoader(false)
 
       return data;
     } catch (error: any) {
       console.log(error?.message);
+      setLoader(false)
     }
 
   }
@@ -192,6 +197,7 @@ const BuySellExpress = (props: propsData) => {
     //================
     else {
       if (dropdown === 2) {
+
         setFirstCurrency(symbol);
         let token = list1.filter((item: any) => {
           return item.symbol === symbol;
@@ -210,7 +216,7 @@ const BuySellExpress = (props: propsData) => {
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
-        
+
         setSelectedSecondToken(token[0]);
         setSecondCurrency(symbol);
         getFilterAsset(token[0]?.id);
@@ -235,6 +241,19 @@ const BuySellExpress = (props: propsData) => {
 
         let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
         let data = await getUsdtToInrPrice(asset);
+
+        console.log(amount, "=amount", getValues('spend_amount'));
+
+        if (amount !== undefined) {
+          let spend_amount: any = getValues('spend_amount') * data?.rate
+          setReceivedAmount(spend_amount)
+          setValue('receive_amount', spend_amount.toFixed(6));
+        }
+        else {
+          setReceivedAmount(0.00)
+          setValue('receive_amount', 0.00);
+        }
+
         setChangeSymbol(false);
 
       }
@@ -250,6 +269,17 @@ const BuySellExpress = (props: propsData) => {
         });
         currentPrice = token[0]?.price * data?.rate;
         setUsdtToInr(currentPrice);
+        console.log(currentPrice, "==current");
+
+        // if (amount !== undefined) {
+        //   let spend_amount: any = amount * data?.rate
+        //   setReceivedAmount(amount * data?.rate)
+        //   setValue('spend_amount', spend_amount.toFixed(6));
+        // }
+        // else {
+        //   setReceivedAmount(0.00)
+        //   setValue('spend_amount', 0.00);
+        // }
         setChangeSymbol(false);
       }
     }
@@ -267,17 +297,24 @@ const BuySellExpress = (props: propsData) => {
    */
   const onHandleSubmit = async (data: any) => {
 
+
+    let pmId = getValues("p_method")
     // p2p/postad
     if (active1 === 2) {
-      if(filterAsset?.balance == undefined){
+
+      let pmMethod = props.masterPayMethod.filter((item: any) => item?.id === pmId)
+      console.log(pmMethod);
+
+
+      if (filterAsset?.balance == undefined) {
         setError("spend_amount", {
           type: "custom",
           message: `Insufficient balance.`,
         });
         return;
       }
-      
-      if ( data?.spend_amount > filterAsset?.balance) {
+
+      if (data?.spend_amount > filterAsset?.balance) {
         setError("spend_amount", {
           type: "custom",
           message: `Insufficient balance.`,
@@ -285,12 +322,12 @@ const BuySellExpress = (props: propsData) => {
         return;
       }
       let tokenID = selectedSecondToken?.id;
-      if(session?.user?.kyc !== 'approve' || session?.user?.TwoFA === false || (session?.user?.tradingPassword === '' || session?.user?.tradingPassword === null) || (session?.user?.email === '' || session?.user?.email === null)) {
+      if (session?.user?.kyc !== 'approve' || session?.user?.TwoFA === false || (session?.user?.tradingPassword === '' || session?.user?.tradingPassword === null) || (session?.user?.email === '' || session?.user?.email === null)) {
         setShow(true);
         setActive(true)
       }
-      else{
-        route.push(`/p2p/postad?token_id=${tokenID}&qty=${data?.spend_amount}&price=${usdtToInr}`);
+      else {
+        route.push(`/p2p/postad?token_id=${tokenID}&qty=${data?.spend_amount}&price=${usdtToInr}&pmid=${pmId}`);
       }
       return;
     }
@@ -304,7 +341,7 @@ const BuySellExpress = (props: propsData) => {
     }
 
     if (status === 'authenticated') {
-      
+
       let obj = {
         post_id: finalPost?.id,
         sell_user_id: finalPost?.user?.id,
@@ -315,7 +352,7 @@ const BuySellExpress = (props: propsData) => {
         spend_amount: data?.spend_amount,
         receive_amount: data?.receive_amount,
         spend_currency: 'INR',
-        receive_currency: finalPost?.token!==null? finalPost?.token?.symbol:finalPost?.global_token?.symbol,
+        receive_currency: finalPost?.token !== null ? finalPost?.token?.symbol : finalPost?.global_token?.symbol,
         p_method: '',
         type: 'buy',
         status: 'isProcess'
@@ -344,7 +381,7 @@ const BuySellExpress = (props: propsData) => {
           }
           wbsocket.send(JSON.stringify(buy));
         }
-        
+
         setTimeout(() => {
           route.push(`/p2p/my-orders?buy=${res?.data?.data?.result?.id}`);
         }, 3000);
@@ -386,43 +423,43 @@ const BuySellExpress = (props: propsData) => {
       }
 
     }
-    if(props?.posts && props?.posts.length>0){
+    if (props?.posts && props?.posts.length > 0) {
       let seller = props?.posts?.filter((item: any) => {
         return item?.token_id === token?.id && session?.user?.user_id !== item?.user_id
       })
-      
-          if (seller.length > 0) {
-            for (const post of seller) {
-              let userPaymentMethod = post?.user?.user_payment_methods;
-              let sellerPost = userPaymentMethod?.filter((item: any) => {
-                return item?.pmid === id
-              })
-              if (sellerPost.length > 0) {
-                setPaymentMethod(id);
-                setFinalPost(post);
-                setUsdtToInr(post?.price);
-                let spendAmount = getValues('spend_amount');
-                if (spendAmount > 0 && spendAmount < parseFloat(post.min_limit)) {
-                  setError("spend_amount", {
-                    type: "custom",
-                    message: `Please enter spend amount more than minimum amount ${post.min_limit} `,
-                  });
-                }
-                // else if (spendAmount > 0 && spendAmount > parseFloat(post.min_limit)) {
-                //   setValue('spend_amount', 0);
-                //   setValue('receive_amount', 0);
-                // }
-                break;
-              }
-              else {
-                setFinalPost({});
-              }
+
+      if (seller.length > 0) {
+        for (const post of seller) {
+          let userPaymentMethod = post?.user?.user_payment_methods;
+          let sellerPost = userPaymentMethod?.filter((item: any) => {
+            return item?.pmid === id
+          })
+          if (sellerPost.length > 0) {
+            setPaymentMethod(id);
+            setFinalPost(post);
+            setUsdtToInr(post?.price);
+            let spendAmount = getValues('spend_amount');
+            if (spendAmount > 0 && spendAmount < parseFloat(post.min_limit)) {
+              setError("spend_amount", {
+                type: "custom",
+                message: `Please enter spend amount more than minimum amount ${post.min_limit} `,
+              });
             }
+            // else if (spendAmount > 0 && spendAmount > parseFloat(post.min_limit)) {
+            //   setValue('spend_amount', 0);
+            //   setValue('receive_amount', 0);
+            // }
+            break;
           }
           else {
             setFinalPost({});
           }
-          setPaymentMethod(id);
+        }
+      }
+      else {
+        setFinalPost({});
+      }
+      setPaymentMethod(id);
 
     }
 
@@ -465,7 +502,7 @@ const BuySellExpress = (props: propsData) => {
 
   return (
     <>
-      <ToastContainer position="top-center" limit={1}/>
+      <ToastContainer position="top-center" limit={1} />
       <div className="flex items-center mt-[30px] justify-around">
         <div className="max-w-full md:max-w-[554px] w-full hidden md:block">
           <Image src='/assets/refer/referSafe.png' width={487} height={529} alt="refr-safe-sction" />
@@ -475,7 +512,7 @@ const BuySellExpress = (props: propsData) => {
             <button
               className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 1 && "!text-primary border-primary"
                 }`}
-              onClick={() => {setActive1(1); setFinalPost({}); setPaymentMethod('')}}
+              onClick={() => { setActive1(1); setFinalPost({}); setPaymentMethod('') }}
             >
               Buy
             </button>
@@ -487,7 +524,13 @@ const BuySellExpress = (props: propsData) => {
               Sell
             </button>
           </div>
-          <form onSubmit={handleSubmit(onHandleSubmit)}>
+          <form onSubmit={handleSubmit(onHandleSubmit)} 
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}
+          >
 
             {/* //======================*/}
             {/* //============ Express Buy process ==========*/}
@@ -497,7 +540,8 @@ const BuySellExpress = (props: propsData) => {
                 {changeSymbol &&
                   <>
                     <div className="bg-black  z-[1] duration-300 absolute top-0 left-0 h-full w-full opacity-80 visible"></div>
-                    <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#ff815d] rounded-full animate-spin border-t-[#ff815d75] '></div>
+                    <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
+
                   </>
                 }
                 {/* First Currency Inputs */}
@@ -637,10 +681,10 @@ const BuySellExpress = (props: propsData) => {
             {active1 === 2 &&
               <div className="py-20">
                 <div className="mt-5 flex gap-2 items-center">
-                <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
+                  <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
 
                   <p className="sm-text dark:text-white">
-                    {filterAsset !== undefined ?currencyFormatter(filterAsset?.balance.toFixed(6)) : '0.0'}
+                    {filterAsset !== undefined ? currencyFormatter(filterAsset?.balance.toFixed(6)) : '0.0'}
                   </p>
                 </div>
                 {/* First Currency Inputs */}
@@ -733,9 +777,13 @@ const BuySellExpress = (props: propsData) => {
                 )}
 
                 <div className="mt-5 flex gap-2">
-                  <p className="sm-text dark:text-white">
-                    Estimated price: 1 {secondCurrency} = {currencyFormatter(Number(Number(usdtToInr)?.toFixed(2)))} INR
-                  </p>
+                  <div className=" flex items-center">
+                    <p className="sm-text dark:text-white">  Estimated price: 1 {secondCurrency}=</p>
+                    {loader ?
+                      <div className="w-[100px] h-[10px] bg-nav-secondary rounded-md animate-pulse" />
+                      :<p className="sm-text dark:text-white">{currencyFormatter(Number(Number(usdtToInr)?.toFixed(2)))} INR</p> 
+                    }
+                  </div>
                 </div>
 
                 <div className="mt-5 flex gap-2">
@@ -783,7 +831,7 @@ const BuySellExpress = (props: propsData) => {
         </div>
       </div>
       {show &&
-          <AuthenticationModelPopup title='Confirmation' message='Please complete your kyc' setShow={setShow} setActive={setActive} show={show} />
+        <AuthenticationModelPopup title='Confirmation' message='Please complete your kyc' setShow={setShow} setActive={setActive} show={show} />
       }
     </>
 

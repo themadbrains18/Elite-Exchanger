@@ -3,6 +3,7 @@ import RangeSlider from '../range-slider';
 import SelectDropdown from '../snippet/select-dropdown';
 import Context from '@/components/contexts/context';
 import { useSession } from 'next-auth/react';
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
 interface showPopup {
     modelPopup?: number;
@@ -215,11 +216,11 @@ const ProfitLossModal = (props: showPopup) => {
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Entry Price</p>
-                    <p className='dark:text-white text-black'>{props?.entryPrice}</p>
+                    <p className='dark:text-white text-black'>{currencyFormatter(props?.entryPrice)}</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Market Price</p>
-                    <p className='dark:text-white text-black'>{props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price}</p>
+                    <p className='dark:text-white text-black'>{props?.currentToken?.token !== null ? currencyFormatter(props?.currentToken?.token?.price) : currencyFormatter(props?.currentToken?.global_token?.price)}</p>
                 </div>
             </div>
 

@@ -1,3 +1,4 @@
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import moment from 'moment';
 import Image from 'next/image';
 import React from 'react'
@@ -19,8 +20,8 @@ const BuyTableFuture = (props: setState) => {
             {
                 props.showPrice &&
                 <div className='bg-card-bg py-[6px] px-[20px] flex items-center justify-between dark:bg-omega bg-white my-[10px]'>
-                    <p className='info-18 !text-black dark:!text-white'>{props?.currentToken?.token !== null ? (props?.currentToken?.token?.price)?.toFixed(5) : (props?.currentToken?.global_token?.price)?.toFixed(5)}</p>
-                    <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !== null ? (props?.currentToken?.token?.price)?.toFixed(5) : (props?.currentToken?.global_token?.price)?.toFixed(5)}</p>
+                    <p className='info-18 !text-black dark:!text-white'>{props?.currentToken?.token !== null ? currencyFormatter((props?.currentToken?.token?.price)?.toFixed(5)) : currencyFormatter((props?.currentToken?.global_token?.price)?.toFixed(5))}</p>
+                    <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !== null ? currencyFormatter((props?.currentToken?.token?.price)?.toFixed(5)) : currencyFormatter((props?.currentToken?.global_token?.price)?.toFixed(5))}</p>
                 </div>
             }
             <div className={`p-[16px] pt-[0] overflow-y-auto orderTable ${props.fullHeight ? 'max-h-[274px]' : 'max-h-[137px]'}`}>
@@ -34,8 +35,8 @@ const BuyTableFuture = (props: setState) => {
                 {data && data?.length > 0 && data.map((item: any) => {
                     return <>
                         <div className='grid grid-cols-3 gap-[10px] bg-[#25e39e0a] rounded mb-[4px]'>
-                            <p className={`top-label text-start ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.entry_price?.toFixed(6)}</p>
-                            <p className='top-label text-center !text-black dark:!text-white'>{item?.qty?.toFixed(6)}</p>
+                            <p className={`top-label text-start ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{currencyFormatter(item?.entry_price?.toFixed(6))}</p>
+                            <p className='top-label text-center !text-black dark:!text-white'>{currencyFormatter(item?.qty?.toFixed(6))}</p>
                             <p className='top-label text-end !text-black dark:!text-white'>{item?.margin}</p>
                         </div>
                     </>
