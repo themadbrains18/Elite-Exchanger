@@ -498,9 +498,7 @@ const BuySellExpress = (props: propsData) => {
       setFilterAsset(asset[0]);
     }
   }
-
-  console.log(finalPost, '================final Post=============');
-
+  
 
   return (
     <>
