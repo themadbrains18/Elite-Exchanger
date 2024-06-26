@@ -63,8 +63,8 @@ const OrderBook = (props: propsData) => {
                                         if (item.order_type === 'buy') {
                                             return <div key={index+'buy'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-buy'>$ {currencyFormatter(item?.limit_usdt?.toFixed(5))}</p>
-                                                <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(item?.token_amount?.toFixed(5))}</p>
-                                                <p className='info-12 text-end z-[2] !text-[14px]'>$ {currencyFormatter(item?.volume_usdt?.toFixed(5))}</p>
+                                                <p className='info-12 !text-[14px] z-[2]  text-center'>{currencyFormatter(item?.token_amount?.toFixed(5))}</p>
+                                                <p className='info-12  text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(item?.volume_usdt?.toFixed(5))}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
                                             </div>
                                         }
@@ -113,7 +113,7 @@ const OrderBook = (props: propsData) => {
                                             return <div key={index+'sell'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-sell'>$ {currencyFormatter(item?.limit_usdt?.toFixed(5))}</p>
                                                 <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(item?.token_amount?.toFixed(5))}</p>
-                                                <p className='info-12 text-end z-[2] !text-[14px]'>$ {currencyFormatter(item?.volume_usdt?.toFixed(5))}</p>
+                                                <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(item?.volume_usdt?.toFixed(5))}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
                                             </div>
                                         }
@@ -160,7 +160,7 @@ const OrderBook = (props: propsData) => {
                                             return <div key={index+'sell2'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-sell'>$ {currencyFormatter(item?.limit_usdt?.toFixed(5))}</p>
                                                 <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(item?.token_amount?.toFixed(5))}</p>
-                                                <p className='info-12 text-end z-[2] !text-[14px]'>$ {currencyFormatter(item?.volume_usdt?.toFixed(5))}</p>
+                                                <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(item?.volume_usdt?.toFixed(5))}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
                                             </div>
                                         }
@@ -209,7 +209,7 @@ const OrderBook = (props: propsData) => {
                                             return <div key={index+'buy2'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-buy'>$ {currencyFormatter(item?.limit_usdt?.toFixed(5))}</p>
                                                 <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(item?.token_amount?.toFixed(5))}</p>
-                                                <p className='info-12 text-end z-[2] !text-[14px]'>$ {currencyFormatter(item?.volume_usdt?.toFixed(5))}</p>
+                                                <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(item?.volume_usdt?.toFixed(5))}</p>
                                                 <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
                                             </div>
                                         }
@@ -260,7 +260,7 @@ const OrderBook = (props: propsData) => {
                                     return <div key={index+'buy22'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                         <p className='info-12 !text-[14px] z-[2] !text-buy'>$ {currencyFormatter(item?.limit_usdt?.toFixed(5))}</p>
                                         <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(item?.token_amount?.toFixed(5))}</p>
-                                        <p className='info-12 text-end z-[2] !text-[14px]'>$ {currencyFormatter(item?.volume_usdt?.toFixed(5))}</p>
+                                        <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(item?.volume_usdt?.toFixed(5))}</p>
                                         <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
                                     </div>
                                 }
@@ -268,7 +268,7 @@ const OrderBook = (props: propsData) => {
                                     return <div className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                         <p className='info-12 !text-[14px] z-[2] !text-sell'>$ {currencyFormatter(item?.limit_usdt?.toFixed(5))}</p>
                                         <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(item?.token_amount?.toFixed(5))}</p>
-                                        <p className='info-12 text-end z-[2] !text-[14px]'>$ {currencyFormatter(item?.volume_usdt?.toFixed(5))}</p>
+                                        <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(item?.volume_usdt?.toFixed(5))}</p>
                                         <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
                                     </div>
                                 }
