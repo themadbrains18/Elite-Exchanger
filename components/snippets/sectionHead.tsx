@@ -27,7 +27,7 @@ return (
         </div>
         {
             props.headData.Cta &&
-            <Link href='/chart/BTC' className='sec-Brief hidden lg:flex items-center gap-[10px] !text-primary mt-[8px]'>
+            <Link href='/chart/BTCB' className='sec-Brief hidden lg:flex items-center gap-[10px] !text-primary mt-[8px]'>
                 <span className='block relative after:absolute after:w-full after:h-[2px] after:bg-primary after:top-[100%] after:left-0 hover:text-black hover:after:bg-black dark:hover:text-white dark:hover:after:bg-white'>Start Trading</span>
                 <IconsComponent type='rightArrow' hover={false} active={false}/>
             </Link>

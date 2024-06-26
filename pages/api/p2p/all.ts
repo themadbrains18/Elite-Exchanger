@@ -3,31 +3,34 @@
 
 import type { NextApiRequest, NextApiResponse } from "next";
 import { createRouter } from "next-connect";
-import { postForm, getMethod, deleteMethod } from "../../../libs/requestMethod";
+import { getMethod } from "../../../libs/requestMethod";
+// Create a router instance for handling API requests.
 const router = createRouter<NextApiRequest, NextApiResponse>();
 
-import AES from 'crypto-js/aes';
-import { enc } from 'crypto-js';
-
+// Configuration for this API route.
 export const config = {
     api: {
         bodyParser: true,
     }
 }
 
+// Add a GET handler to the router.
 router.get(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
+        // Retrieve the authorization token from the request headers.
         let token = req.headers.authorization;
+        // Call the API using a helper function and pass the necessary parameters.
         let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/post/get/all`, token);
-
+        // Respond with a 200 status and send the retrieved data.
         return res.status(200).send({ data });
     } catch (error: any) {
+        // If an error occurs, throw it with its message for further handling.
         throw new Error(error.message)
     }
 });
 
 
-
+// Define the error handler for the router.
 
 export default router.handler({
     onError: (err: any, req, res) => {

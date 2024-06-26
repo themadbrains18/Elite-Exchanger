@@ -6,20 +6,17 @@ import AES from "crypto-js/aes";
 import { enc } from "crypto-js";
 import useragent from "useragent";
 
-// import CryptoJS from "crypto-js";
-// interface MyApiRequest extends NextApiRequest {
-//   useragent?: any; // You can refine the type as needed
-// }
+// Create a router instance for handling API requests.
 const router = createRouter<NextApiRequest, NextApiResponse>();
 
+// Configuration for this API route.
 export const config = {
   api: {
     bodyParser: true,
   },
 };
 
-// router.use(withUserAgent);
-
+// Add a POST handler to the router.
 router.post(async (req, res) => {
   try {
     const userAgentString = req.headers["user-agent"];
@@ -42,19 +39,7 @@ router.post(async (req, res) => {
     // Access different properties of the user agent object
     const browser = userAgent.toAgent();
     const os = userAgent.os.toString();
-    // var locationData: any;
 
-    // let ipInfoData = await fetch('https://ipapi.co/json/');
-
-    // let ip = await fetch("https://api.ipgeolocation.io/getip");
-    
-    // let ipAddress = await ip.json();
-    // let ipInfoData = await fetch(`https://api.ipgeolocation.io/ipgeo?ip=${ipAddress?.ip}&apiKey=7d5fe611c25341e098d44f283185d665`);
-    
-    // locationData = await ipInfoData.json();
-
-    // console.log(locationData)
-    
     const decodedStr = decodeURIComponent(req.body);
     let formData = AES.decrypt(
       decodedStr,
@@ -65,24 +50,24 @@ router.post(async (req, res) => {
     formdata.deviceType = device
     formdata.os = os
     formdata.browser = browser
-    // formdata.ip = locationData?.ip
-    // formdata.location = locationData?.country_name
-    // formdata.region = locationData?.region
 
     let token = "";
+    // Call the API using a helper function and pass the necessary parameters.
     let data = await postData(
       `${process.env.NEXT_PUBLIC_APIURL}/user/login`,
       formdata,
       token
     );
+
+    // Respond with a 200 status and send the retrieved data.
     return res.status(200).send({ data });
   } catch (error: any) {
-    console.log(error);
-
+    // If an error occurs, throw it with its message for further handling.
     throw new Error(error.message);
   }
 });
 
+// Define the error handler for the router.
 export default router.handler({
   onError: (err: any, req, res) => {
     console.error(err.stack);
@@ -92,7 +77,6 @@ export default router.handler({
 
 export async function OPTIONS(request: Request) {
   const allowedOrigin = request.headers.get("origin");
-  // console.log(allowedOrigin,'============allowedOrigin');
 
   const response = new NextResponse(null, {
     status: 200,
@@ -104,7 +88,5 @@ export async function OPTIONS(request: Request) {
       "Access-Control-Max-Age": "86400",
     },
   });
-  // console.log(response,'==============response');
-
   return response;
 }
