@@ -66,7 +66,7 @@ const P2pBuy = (props: propsData) => {
 
   return (
     <P2pLayout>
-      <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} assets={props?.assets} posts={newPosts.length > 0 ? newPosts : props?.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} />
+      <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} assets={props?.assets} posts={newPosts?.length > 0 ? newPosts : props?.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} />
       {show1 === true &&
         <BuyPopup show1={show1} setShow1={setShow1} selectedPost={selectedPost} />
       }

@@ -27,12 +27,12 @@ const CryptoCoin = (props: propsData) => {
     hidden: false
   };
 
-  let coins = props.coinList.filter((item:any)=>{
+  let coins = props?.coinList?.filter((item:any)=>{
     return item?.symbol!=="USDT"
   });
 
-  let cardData = coins.slice(0, 4);
-  cardData.forEach(function (element:any) {
+  let cardData = coins?.slice(0, 4);
+  cardData?.forEach(function (element:any) {
     element.chartImg = "ChartImage";
     element.status = 'high';
     element.change24h = '4'
@@ -46,7 +46,7 @@ const CryptoCoin = (props: propsData) => {
           <SectionHead headData={headData} center={true} />
           <div className='cryptoCoin_cards hidden lg:mt-[60px] mt-[50px] md:flex items-center flex-wrap justify-center gap-[30px]'>
             {
-              cardData.map((elem: any, ind: any) => {
+             cardData && cardData.length>0 && cardData?.map((elem: any, ind: any) => {
                 return (
                   <Fragment key={ind}>
                     <CoinCard coinCardData={elem} />
@@ -58,7 +58,7 @@ const CryptoCoin = (props: propsData) => {
           <div className='block md:hidden mt-[50px]'>
             <Swiper slidesPerView={1.2} spaceBetween={20} pagination={true} modules={[Pagination]} className="mySwiper tmb-swiper">
               {
-                cardData.map((elem: any, ind: any) => {
+               cardData && cardData.length>0 && cardData.map((elem: any, ind: any) => {
                   return (
                     <Fragment key={ind}>
                       <SwiperSlide key={ind}>

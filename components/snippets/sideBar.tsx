@@ -180,7 +180,7 @@ const SideBar = (props: profileSec) => {
 
     useEffect(() => {
         if (props.profileInfo && props?.profileInfo?.messgae === undefined && props.profileInfo?.dName !== null) {
-            setduserName(props.profileInfo?.dName[0].toUpperCase() + props.profileInfo?.dName.slice(1));
+            setduserName(props.profileInfo?.dName?.[0].toUpperCase() + props.profileInfo?.dName?.slice(1));
         }
         if (session) {
             if (session?.user?.email !== null && session?.user?.email !== "") {

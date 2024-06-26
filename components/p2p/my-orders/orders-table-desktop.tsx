@@ -137,7 +137,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
                                 )
                             })
                         }
-                        {list?.length === 0 &&
+                        {list && list?.length === 0 &&
                             <tr>
                                 <td colSpan={7}>
                                     <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>

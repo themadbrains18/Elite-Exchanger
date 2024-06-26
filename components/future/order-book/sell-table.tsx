@@ -11,7 +11,7 @@ interface setState {
 }
 const SelltableFuture = (props: setState) => {
 
-    let data = props?.positionRecord.filter((item:any)=>{
+    let data = props?.positionRecord?.filter((item:any)=>{
         return item?.direction === 'short'
     });
 

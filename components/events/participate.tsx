@@ -36,7 +36,7 @@ const Participate = (props: propsData) => {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[24px]">
             {
-              participation?.map((item: any, index: number) => {
+            participation&& participation.length>0 && participation?.map((item: any, index: number) => {
                 return (
                   <div key={index} className="rounded-[8px] overflow-hidden bg-bg-secondary dark:bg-white">
                     <div className="py-[19px] px-[23px] bg-primary  w-full whitespace-nowrap">

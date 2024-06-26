@@ -97,7 +97,7 @@ const EditToken = (props: activeSection) => {
         let index = 0;
         for (const net of props.networkList) {
 
-            let previous = props.editToken.networks.filter((e: any) => {
+            let previous = props.editToken.networks?.filter((e: any) => {
                 return e?.id === net?.id
             })
 
@@ -168,7 +168,7 @@ const EditToken = (props: activeSection) => {
         try {
             let networks: any = [];
 
-            let networkChecked = data?.network.filter((item: any) => {
+            let networkChecked = data?.network?.filter((item: any) => {
                 return item.checked === true
             })
             if (networkChecked.length === 0) {
@@ -178,7 +178,7 @@ const EditToken = (props: activeSection) => {
                 });
                 return;
             }
-            networks = data?.network.filter((e: any) => {
+            networks = data?.network?.filter((e: any) => {
                 if (e.checked == true) {
                     return e;
                 }
@@ -427,7 +427,7 @@ const EditToken = (props: activeSection) => {
                     <div className="pt-[30px]">
                         {props?.networkList && props?.networkList.length>0  && props?.networkList?.map((item: any, index: number) => {
                             // const fieldName = `network[${index}]`;
-                            let previous = props.editToken.networks.filter((e: any) => {
+                            let previous = props.editToken.networks?.filter((e: any) => {
                                 return e?.id === item?.id
                             })
 

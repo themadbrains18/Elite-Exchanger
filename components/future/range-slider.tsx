@@ -43,10 +43,8 @@ const RangeSlider = (props: uniqueIds) => {
 
     }
     const handleBulletClick = (value: number) => {
-        console.log("==her");
         
         const sliderInput = document.getElementById(props.inputId) as HTMLInputElement;
-        console.log(value,"=value");
         
         if (sliderInput) {
           sliderInput.value = value.toString();

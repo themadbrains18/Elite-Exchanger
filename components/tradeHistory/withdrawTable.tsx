@@ -5,6 +5,7 @@ import ReactPaginate from 'react-paginate';
 import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { currencyFormatter } from '../snippets/market/buySellCard';
 
 interface propsData {
   filter: string,
@@ -168,7 +169,7 @@ const WithdrawTable = (props: propsData) => {
                     <p className="info-14-18 dark:text-white  md:block hidden">{item?.withdraw_wallet.substring(0, 7) + '...'}</p>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white">{item?.amount}</p>
+                    <p className="info-14-18 dark:text-white">{currencyFormatter(item?.amount)}</p>
                   </td>
                   <td>
                     <p className="info-14-18 dark:text-white md:block hidden">{item.fee}</p>

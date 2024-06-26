@@ -233,7 +233,7 @@ const ChatBox = (props: PropsData) => {
                         </div>
                     </div>
                     <div>
-                        <p className="info-14 !text-start !text-white">{props?.sellerUser?.profile?.fName || props?.sellerUser?.user_kyc?.fname}</p>
+                        <p className="info-14 !text-start !text-white">{props?.sellerUser?.profile?.fName || props?.sellerUser?.user_kyc?.fname || props?.sellerUser?.profile?.dName}</p>
                         <p className="info-12 !text-start !text-white">Online</p>
                     </div>
                 </div>

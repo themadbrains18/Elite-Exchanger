@@ -47,7 +47,7 @@ const ChartBanner = (props: propsData) => {
       method: "GET"
     }).then(response => response.json());
 
-    let ccurrentToken = tokenList?.data.filter((item: any) => {
+    let ccurrentToken = tokenList?.data?.filter((item: any) => {
       return item.symbol === slug
     })
 
@@ -132,7 +132,7 @@ const ChartBanner = (props: propsData) => {
                             existItem = JSON.parse(existItem);
                           }
                           if (existItem && existItem.indexOf(currentToken?.id) !== -1) {
-                            existItem = existItem.filter((item: any) => {
+                            existItem = existItem?.filter((item: any) => {
                               return item !== currentToken?.id
                             })
                             setFillFav(false);

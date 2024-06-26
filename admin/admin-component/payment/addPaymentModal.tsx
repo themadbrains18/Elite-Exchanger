@@ -223,7 +223,7 @@ const AddPaymentModal = (props: any) => {
                   {...register("payment_method")}
                   className="sm-text input-cta2 w-full"
                 />
-                <p className="text-red-dark text-[12px]">
+                <p className="errorMessage">
                   {errors.payment_method?.message}
                 </p>
               </div>
@@ -273,7 +273,7 @@ const AddPaymentModal = (props: any) => {
                   </div>
                 </div>
                 {/* )} */}
-                <p className="text-red-dark text-[12px]">{errors.icon?.message}</p>
+                <p className="errorMessage">{errors.icon?.message}</p>
               </div>
 
               <div className="flex justify-between items-center">

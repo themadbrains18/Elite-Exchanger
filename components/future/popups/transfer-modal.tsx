@@ -213,7 +213,7 @@ const TransferModal = (props: showPopup) => {
     }
   };
 
-
+  
   return (
     <div ref={wrapperRef}
       className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[550px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.popupMode === 3
@@ -316,7 +316,7 @@ const TransferModal = (props: showPopup) => {
 
         <p className="top-label !text-[16px] mt-[15px]">
           Available{" "}
-          {userAsset !== undefined && userAsset !== null ? currencyFormatter(userAsset?.balance?.toFixed(6)) : 0}{" "}
+          {userAsset !== undefined && userAsset !== null && Object.keys(userAsset).length>0  ? currencyFormatter(userAsset?.balance?.toFixed(6)) : 0}{" "}
           {selectedCoin}
         </p>
         <button
@@ -332,7 +332,7 @@ const TransferModal = (props: showPopup) => {
           </svg>
           }
           Transfer
-        </button>
+        </button> 
       </form>
     </div>
   );

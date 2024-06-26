@@ -23,7 +23,7 @@ const Marketpage = (props: propsData) => {
   },[props.coinList]);
 
   const filterCoins = (e:any)=>{
-    let records = props.coinList.filter((item:any)=>{
+    let records = props?.coinList?.filter((item:any)=>{
       return item.symbol.toLowerCase().includes(e.target.value.toLowerCase());
     }) 
     setCoins(records)

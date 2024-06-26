@@ -182,7 +182,7 @@ const AddToken = (props: activeSection) => {
     try {
       let networks: any = [];
 
-      let networkChecked = data?.network.filter((item: any) => {
+      let networkChecked = data?.network?.filter((item: any) => {
         return item.checked === true;
       });
       if (networkChecked?.length === 0) {
@@ -192,7 +192,7 @@ const AddToken = (props: activeSection) => {
         });
         return;
       }
-      networks = data?.network.filter((e: any) => {
+      networks = data?.network?.filter((e: any) => {
         if (e.checked == true) {
           return e;
         }

@@ -489,7 +489,7 @@ const Withdraw = (props: activeSection) => {
 
 
                   {/* </div> */}
-                  {show && addressList.length > 0 &&
+                  {show && addressList?.length > 0 &&
                     <CountrylistDropdown data={addressList} address={true} show={show} onCountryChange={onAddressChange} />
                   }
                   {/* <Image

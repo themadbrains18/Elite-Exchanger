@@ -105,7 +105,7 @@ const AddNetwork = (props: activeSection) => {
         try {
             let networks: any = [];
 
-            let networkChecked = data?.network.filter((item: any) => {
+            let networkChecked = data?.network?.filter((item: any) => {
                 return item.checked === true;
             });
             if (networkChecked?.length === 0) {
@@ -115,7 +115,7 @@ const AddNetwork = (props: activeSection) => {
                 });
                 return;
             }
-            networks = data?.network.filter((e:any) => {
+            networks = data?.network?.filter((e:any) => {
                 if (e.checked == true) {
                     return e;
                 }
@@ -198,7 +198,7 @@ const AddNetwork = (props: activeSection) => {
 
                         <div className="pt-[30px]">
                             {props?.networkList && props?.networkList?.length>0 && props?.networkList?.map((item: any, index: number) => {
-                                let previous = props?.editToken?.networks !== null && props?.editToken?.networks.filter((e: any) => {
+                                let previous = props?.editToken?.networks !== null && props?.editToken?.networks?.filter((e: any) => {
                                     return e?.id === item?.id
                                 })
                                 return (

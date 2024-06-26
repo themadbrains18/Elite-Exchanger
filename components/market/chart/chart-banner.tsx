@@ -36,7 +36,7 @@ const ChartBanner = () => {
       method: "GET"
     }).then(response => response.json());
 
-    let ccurrentToken = tokenList?.data.filter((item: any) => {
+    let ccurrentToken = tokenList?.data?.filter((item: any) => {
       return item.symbol === slug
     })
 
@@ -124,7 +124,7 @@ const ChartBanner = () => {
                         existItem = JSON.parse(existItem);
                       }
                       if (existItem && existItem.indexOf(currentToken?.id) !== -1) {
-                        existItem = existItem.filter((item: any) => {
+                        existItem = existItem?.filter((item: any) => {
                           return item !== currentToken?.id
                         })
                         setFillFav(false);
@@ -196,7 +196,7 @@ const ChartBanner = () => {
         <div className='max-w-full lg:max-w-[50%] w-full lg:mt-0 mt-20'>
           <div className='grid grid-cols-2 xl:grid-cols-4 gap-20'>
             {
-              cardsData.map((ele: any, ind: number) => {
+           cardsData && cardsData.length>0 && cardsData?.map((ele: any, ind: number) => {
                 return (
                   <Fragment key={ind} >
                     <div className={`dark:bg-black-v-1 p-10 rounded-[5px] ${ele.bg === "blue" ? "bg-[#B9DDFF]" : ele.bg === "red" ? "bg-[#FEE2E2]" : ele.bg === "green" ? "bg-[#D1FAE5]" : "bg-[#E2F2FF]"}`} >

@@ -64,11 +64,18 @@ const ChartTabs = (props: propsData) => {
 
   // Open order paggination code here
   const endOpenOffset = openItemOffset + itemsPerPage;
-  const currentOpenItems =props?.openOrder && props?.openOrder.length > 0 ? props.openOrder.slice(openItemOffset, endOpenOffset) : [];
-  const pageOpenCount = Math.ceil(props.openOrder && props.openOrder.length / itemsPerPage);
+  const currentOpenItems =
+    props?.openOrder && props?.openOrder.length > 0
+      ? props.openOrder.slice(openItemOffset, endOpenOffset)
+      : [];
+  const pageOpenCount = Math.ceil(
+    props?.openOrder && props?.openOrder?.length / itemsPerPage
+  );
 
   const handleOpenPageClick = async (event: any) => {
-    const newOffset =(event.selected * itemsPerPage) % (props.openOrder && props.openOrder.length);
+    const newOffset =
+      (event.selected * itemsPerPage) %
+      (props?.openOrder && props.openOrder?.length);
     setOpenItemOffset(newOffset);
   };
 
@@ -268,7 +275,7 @@ const ChartTabs = (props: propsData) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentItems?.map((item: any, index: number) => {
+                  {currentItems && currentItems.length>0 && currentItems?.map((item: any, index: number) => {
                     return (
                       <tr
                         key={index}
@@ -310,7 +317,7 @@ const ChartTabs = (props: propsData) => {
                         </td>
                         <td>
                           <p className="info-14-18 dark:text-white  max-[767px]:text-end">
-                            ${currencyFormatter(item.price.toFixed(6))}
+                            ${currencyFormatter(item.price?.toFixed(6))}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden">
@@ -487,7 +494,7 @@ const ChartTabs = (props: propsData) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentOpenItems.length > 0 &&
+                  {currentOpenItems && currentOpenItems.length > 0 &&
                     currentOpenItems?.map((item: any, index: number) => {
                       return (
                         <tr
@@ -573,7 +580,7 @@ const ChartTabs = (props: propsData) => {
                         </tr>
                       );
                     })}
-                  {currentOpenItems.length === 0 && (
+                  {currentOpenItems && currentOpenItems.length === 0 && (
                     <tr>
                       <td colSpan={8}>
                         <div
@@ -712,7 +719,7 @@ const ChartTabs = (props: propsData) => {
                   </div>
                 </div>
                 {/* =========================== */}
-                {currentTradeItems?.length > 0 ? (
+                {currentTradeItems && currentTradeItems?.length > 0 ? (
                   currentTradeItems?.map((item: any, index: number) => {
 
                     const sortBlogPostsByDate = item?.market_order_histroys.sort((a: any, b: any) => {
@@ -874,7 +881,7 @@ const ChartTabs = (props: propsData) => {
                         }
                         <div className={`h-0 overflow-hidden duration-300 flex flex-col-reverse`} >
 
-                          {sortBlogPostsByDate && sortBlogPostsByDate.map((elm: any, ind: number) => {
+                          {sortBlogPostsByDate && sortBlogPostsByDate.length>0 &&  sortBlogPostsByDate?.map((elm: any, ind: number) => {
 
                             let classByStatus = "";
                             let status = "";
