@@ -8,13 +8,13 @@ import { useSession } from "next-auth/react";
 import AES from "crypto-js/aes";
 import moment from "moment";
 import { currencyFormatter } from "../snippets/market/buySellCard";
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 interface propsData {
   coinsList: any;
   openOrder?: any;
   tradehistory?: any;
-  getUserOpenOrder?: any;
-  getUserTradeHistory?: any;
+
   slug?: any;
 }
 
@@ -27,16 +27,13 @@ const ChartTabs = (props: propsData) => {
   const [openItemOffset, setOpenItemOffset] = useState(0);
   const [tradeItemOffset, setTradeItemOffset] = useState(0);
   const { mode } = useContext(Context);
-  const [cancelItemSymbol, setCancelItemSymbol] = useState('');
 
   const [active, setActive] = useState(false);
   const [show, setShow] = useState(false);
-  const [message, setMessage] = useState(
-    "Are you sure you want to delete your order?"
-  );
+  const [message, setMessage] = useState("Are you sure you want to delete your order?");
   const [title, setTitle] = useState("Cancel Order");
   const [orderId, setOrderId] = useState("");
-
+  const wbsocket = useWebSocket();
   let data = props.coinsList; //token list
 
   let itemsPerPage = 10;
@@ -67,35 +64,21 @@ const ChartTabs = (props: propsData) => {
 
   // Open order paggination code here
   const endOpenOffset = openItemOffset + itemsPerPage;
-  const currentOpenItems =
-    props?.openOrder && props?.openOrder.length > 0
-      ? props.openOrder.slice(openItemOffset, endOpenOffset)
-      : [];
-  const pageOpenCount = Math.ceil(
-    props.openOrder && props.openOrder.length / itemsPerPage
-  );
+  const currentOpenItems =props?.openOrder && props?.openOrder.length > 0 ? props.openOrder.slice(openItemOffset, endOpenOffset) : [];
+  const pageOpenCount = Math.ceil(props.openOrder && props.openOrder.length / itemsPerPage);
 
   const handleOpenPageClick = async (event: any) => {
-    const newOffset =
-      (event.selected * itemsPerPage) %
-      (props.openOrder && props.openOrder.length);
+    const newOffset =(event.selected * itemsPerPage) % (props.openOrder && props.openOrder.length);
     setOpenItemOffset(newOffset);
   };
 
   // Trade History Tab
   const endTradeOffset = tradeItemOffset + itemsPerPage;
-  const currentTradeItems =
-    props?.tradehistory && props?.tradehistory.length > 0
-      ? props.tradehistory.slice(tradeItemOffset, endTradeOffset)
-      : [];
-  const pageTradeCount = Math.ceil(
-    props.tradehistory && props.tradehistory.length / itemsPerPage
-  );
+  const currentTradeItems = props?.tradehistory && props?.tradehistory.length > 0 ? props.tradehistory.slice(tradeItemOffset, endTradeOffset) : [];
+  const pageTradeCount = Math.ceil(props.tradehistory && props.tradehistory.length / itemsPerPage);
 
   const handleTradePageClick = async (event: any) => {
-    const newOffset =
-      (event.selected * itemsPerPage) %
-      (props.tradehistory && props.tradehistory.length);
+    const newOffset =(event.selected * itemsPerPage) % (props.tradehistory && props.tradehistory.length);
     setTradeItemOffset(newOffset);
   };
 
@@ -131,8 +114,12 @@ const ChartTabs = (props: propsData) => {
         setActive(false);
         setShow(false);
         setOrderId("");
-        props.getUserOpenOrder(props.slug);
-        props.getUserTradeHistory(props.slug);
+        if (wbsocket) {
+          let withdraw = {
+            ws_type: 'market',
+          }
+          wbsocket.send(JSON.stringify(withdraw));
+        }
       }
 
     } catch (error) {
@@ -290,8 +277,6 @@ const ChartTabs = (props: propsData) => {
                           item?.tradepair !== null
                             ? (window.location.href = `/chart/${item.symbol}`)
                             : "";
-                          props.getUserOpenOrder(item?.symbol);
-                          props.getUserTradeHistory(item?.symbol);
                         }}
                       >
                         <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky left-0 bg-white dark:bg-d-bg-primary">
