@@ -48,7 +48,7 @@ const BuyTableMobile = (props: activeSection) => {
             for (const post of posts?.data?.data) {
                 let payment_method: any = [];
                 for (const upid of post.p_method) {
-                  post?.user?.user_payment_methods.filter((item: any) => {
+                  post?.user?.user_payment_methods?.filter((item: any) => {
                     if (item.id === upid?.upm_id) {
                       payment_method.push(item);
                     }
@@ -61,7 +61,7 @@ const BuyTableMobile = (props: activeSection) => {
             let postData = [];
             let filter_posts = posts?.data?.data;
             if(props?.firstCurrency !==""){
-                 filter_posts = posts?.data?.data.filter((item: any) => {
+                 filter_posts = posts?.data?.data?.filter((item: any) => {
                     return props?.selectedToken?.id === item?.token_id;
                 });
 
@@ -108,7 +108,7 @@ const BuyTableMobile = (props: activeSection) => {
                         let payment_method: any = [];
 
                         for (const upid of item?.user?.user_payment_methods) {
-                            item?.p_method.filter((e: any) => {
+                            item?.p_method?.filter((e: any) => {
                                 if (e?.upm_id === upid?.id) {
                                     payment_method.push(upid);
                                 }

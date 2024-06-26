@@ -47,7 +47,7 @@ const Banner = (props: propsData): any => {
             <div className="mt-30 flex gap-10">
               <p className="md-heading dark:text-white">
                 {
-                  show == true ? <span> ${props.assets !=0 ? currencyFormatter(props?.assets.toFixed(4)) :'0.00' }</span> :  <span>$ {props.assets !=0 ?star.repeat(props.assets.toFixed(4).length):star.repeat(4)}</span>
+                  show == true ? <span> ${props.assets !=0 ? currencyFormatter(props?.assets.toFixed(4)) :'0.00' }</span> :  <span>$ {props.assets !=0 ?star.repeat(props.assets.toFixed(4)?.length):star.repeat(4)}</span>
                 }
               </p>
               <div className="p-[5px] bg-primary-100 dark:bg-black-v-1 rounded flex gap-[10px] items-center cursor-pointer" onClick={() => { setShow(!show) }}>

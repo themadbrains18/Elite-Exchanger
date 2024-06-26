@@ -24,10 +24,10 @@ const Favorites = (props: propsData) => {
     let itemsPerPage = 10;
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = props.coins.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(props.coins.length / itemsPerPage);
+    const pageCount = Math.ceil(props?.coins?.length / itemsPerPage);
 
     const handlePageClick = async (event: any) => {
-        const newOffset = (event.selected * itemsPerPage) % props.coins.length;
+        const newOffset = (event.selected * itemsPerPage) % props?.coins?.length;
         setItemOffset(newOffset);
     };
 
@@ -126,7 +126,7 @@ const Favorites = (props: propsData) => {
                                 </tr>
                             );
                         })}
-                        {currentItems?.length === 0 &&
+                        {currentItems && currentItems?.length === 0 &&
                             <tr>
                                 <td colSpan={6}>
                                     <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>

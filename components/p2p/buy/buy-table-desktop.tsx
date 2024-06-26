@@ -59,7 +59,7 @@ const BuyTableDesktop = (props: activeSection) => {
       for (const post of posts?.data?.data) {
         let payment_method: any = [];
         for (const upid of post.p_method) {
-          post?.user?.user_payment_methods.filter((item: any) => {
+          post?.user?.user_payment_methods?.filter((item: any) => {
             if (item.id === upid?.upm_id) {
               payment_method.push(item);
             }
@@ -71,7 +71,7 @@ const BuyTableDesktop = (props: activeSection) => {
       let postData = [];
       let filter_posts = posts?.data?.data;
       if (props?.firstCurrency !== "") {
-        filter_posts = posts?.data?.data.filter((item: any) => {
+        filter_posts = posts?.data?.data?.filter((item: any) => {
           return props?.selectedToken?.id === item?.token_id;
         });
         postData = filter_posts;
@@ -103,7 +103,7 @@ const BuyTableDesktop = (props: activeSection) => {
     for (const post of list) {
       let payment_method: any = [];
       for (const upid of post?.p_method) {
-        post?.User?.user_payment_methods.filter((item: any) => {
+        post?.User?.user_payment_methods?.filter((item: any) => {
           if (item.id === upid?.upm_id) {
             payment_method.push(item);
           }
@@ -145,7 +145,7 @@ const BuyTableDesktop = (props: activeSection) => {
           }
         }
         else if (item?.min_btc === true) {
-          let btcBalance = props?.assets.filter((item: any) => item?.token_id === "30c72375-b3a7-49ea-a17e-b6b530023cb7")
+          let btcBalance = props?.assets?.filter((item: any) => item?.token_id === "30c72375-b3a7-49ea-a17e-b6b530023cb7")
           if (btcBalance < 0.01) {
             setType('min_btc')
             setShow(true)
@@ -229,7 +229,7 @@ const BuyTableDesktop = (props: activeSection) => {
                 let payment_method: any = [];
 
                 for (const upid of item?.user?.user_payment_methods) {
-                  item?.p_method.filter((e: any) => {
+                  item?.p_method?.filter((e: any) => {
                     if (e?.upm_id === upid?.id) {
                       payment_method.push(upid);
                     }
@@ -269,7 +269,7 @@ const BuyTableDesktop = (props: activeSection) => {
                     <td>
                       <div className='flex items-center '>
                         {
-                          payment_method?.map((elem: any, ind: any) => {
+                         payment_method && payment_method?.length>0 && payment_method?.map((elem: any, ind: any) => {
                             return (
                               <Fragment key={ind}>
                                 <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className='ml-[-10px]' />

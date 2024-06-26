@@ -774,7 +774,7 @@ const BuySell = (props: fullWidth) => {
                 </p>
               </div>
             </div>
-            <p className="!text-sell">{entryPriceValidate}</p>
+            <p className="errorMessage">{entryPriceValidate}</p>
             <p className="top-label mt-[5px]">Current Price : {currencyFormatter(marketPrice)}</p>
           </>
         )}
@@ -815,7 +815,7 @@ const BuySell = (props: fullWidth) => {
                 /> */}
               </div>
             </div>
-            <p className="!text-sell">{sizeValidate}</p>
+            <p className="errorMessage">{sizeValidate}</p>
           </>
         )}
 
@@ -846,7 +846,7 @@ const BuySell = (props: fullWidth) => {
                 </p>
               </div>
             </div>
-            <p className="!text-sell">{stopPriceValidate}</p>
+            <p className="errorMessage">{stopPriceValidate}</p>
 
             <div className="mt-10 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]">
               <div>
@@ -872,7 +872,7 @@ const BuySell = (props: fullWidth) => {
                 </p>
               </div>
             </div>
-            <p className="!text-sell">{entryPriceValidate}</p>
+            <p className="errorMessage">{entryPriceValidate}</p>
 
             <div className="mt-10 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]">
               <div>
@@ -898,7 +898,7 @@ const BuySell = (props: fullWidth) => {
                 </p>
               </div>
             </div>
-            <p className="!text-sell">{sizeValidate}</p>
+            <p className="errorMessage">{sizeValidate}</p>
           </>
         )}
 

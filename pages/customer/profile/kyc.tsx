@@ -24,7 +24,7 @@ const Kyc = (props: Session) => {
   return (
     <SideBarLayout userDetail={props.userDetail} kycInfo={props.kycInfo} >
       {
-        ((props?.kycInfo?.isReject === 1) || Object.keys(props.kycInfo).length === 0) &&
+        ((props?.kycInfo?.isReject === 1) || Object.keys(props?.kycInfo)?.length === 0) &&
         <KycAuth fixed={false} num={1} session={props.session} />
       }
 

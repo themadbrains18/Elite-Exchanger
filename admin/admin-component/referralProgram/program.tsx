@@ -110,7 +110,7 @@ const MainProgram = (props: propsData) => {
     };
 
     const filterEventList = (item: any) => {
-        let record:any = list.filter((e: any) => {
+        let record:any = list?.filter((e: any) => {
             return e.id === item.id
         })
 

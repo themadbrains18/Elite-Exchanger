@@ -9,7 +9,7 @@ interface propsData {
 
 const AddedTokens = (props: propsData) => {
 
-  let newCoins = props.coins.filter((item: any) => {
+  let newCoins = props?.coins?.filter((item: any) => {
     return item.tokenType === 'mannual'
   });
 

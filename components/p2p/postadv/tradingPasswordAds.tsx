@@ -76,7 +76,7 @@ const TradingPasswordAds = (props: activeSection) => {
                     <svg
                         onClick={() => {
                             props?.setShow(false);
-                            props.setActive(0)
+                            props.setActive(false)
                         }}
                         enableBackground="new 0 0 60.963 60.842"
                         version="1.1"
@@ -136,7 +136,7 @@ const TradingPasswordAds = (props: activeSection) => {
                             />
                         </div>
                     </div>
-                    <p className="errorMesaage">
+                    <p className="errorMessage">
                         {message}
                     </p>
                 </div>

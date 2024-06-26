@@ -210,11 +210,11 @@ const StakingModel = (props: activeSection) => {
 
                             <div className='flex items-center justify-between mb-[15px]'>
                                 <p className='info-16-22 !text-black dark:!text-white !font-mediumn'>Minimum Amount</p>
-                                <p className='info-14-16 text-grey'>{props?.token?.token_stakes.length > 0 && props?.token?.token_stakes[0]?.minimum_amount} {props?.token?.symbol} </p>
+                                <p className='info-14-16 text-grey'>{props?.token?.token_stakes?.length > 0 && props?.token?.token_stakes[0]?.minimum_amount} {props?.token?.symbol} </p>
                             </div>
                             <div className='flex items-center justify-between mb-[15px]'>
                                 <p className='info-16-22 !text-black dark:!text-white !font-mediumn'>APR</p>
-                                <p className='info-14-16 text-grey'>{props?.token?.token_stakes.length > 0 && props?.token?.token_stakes[0]?.apr}%</p>
+                                <p className='info-14-16 text-grey'>{props?.token?.token_stakes?.length > 0 && props?.token?.token_stakes[0]?.apr}%</p>
                             </div>
 
                             <div className='flex items-center justify-between mb-[15px]'>

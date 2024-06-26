@@ -58,7 +58,7 @@ const EditAdverstisement = (props: propsData) => {
     let token = props?.tokenList?.filter((e: any) => {
       return e.id === props.editPost?.token_id;
     });
-    if (token.length > 0) {
+    if (token?.length > 0) {
       selectToken(token[0]);
       setValue("price", truncateNumber(props?.editPost?.price, 4));
     }

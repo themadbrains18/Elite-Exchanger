@@ -206,7 +206,7 @@ const OrderTable = (props: propsData) => {
               );
             })}
 
-            {currentItems?.length === 0 &&
+            {currentItems && currentItems?.length === 0 &&
               <tr>
                 <td colSpan={8}>
                   <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>

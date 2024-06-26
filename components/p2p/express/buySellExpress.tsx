@@ -135,7 +135,7 @@ const BuySellExpress = (props: propsData) => {
     if (active1 === 1) {
       if (dropdown === 1) {
         setFirstCurrency(symbol);
-        let token = list1.filter((item: any) => {
+        let token = list1?.filter((item: any) => {
           return item.symbol === symbol;
         });
 
@@ -149,7 +149,7 @@ const BuySellExpress = (props: propsData) => {
         return;
       }
       else {
-        let token = list2.filter((item: any) => {
+        let token = list2?.filter((item: any) => {
           return item.symbol === symbol
         });
         setSelectedSecondToken(token[0]);
@@ -161,7 +161,7 @@ const BuySellExpress = (props: propsData) => {
           setSecondMannual(false);
         }
       }
-      let token = list2.filter((item: any) => {
+      let token = list2?.filter((item: any) => {
         return item.symbol === symbol
       });
 
@@ -495,7 +495,7 @@ const BuySellExpress = (props: propsData) => {
       setFilterAsset(asset[0]);
     }
     else {
-      let asset = props.assets.filter((item: any) => {
+      let asset = props?.assets?.filter((item: any) => {
         return item?.token_id === tokenID && item.walletTtype === "main_wallet"
       });
 

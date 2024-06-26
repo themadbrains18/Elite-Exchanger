@@ -32,7 +32,7 @@ const AllUsers = (props: usersList) => {
     getUser(itemOffset);
   }, [itemOffset]);
 
-  const netwoks = props?.networks.filter((item: any) => {
+  const netwoks = props?.networks?.filter((item: any) => {
     if (process.env.NEXT_PUBLIC_APPLICATION_MODE === 'dev') {
       return item.network === 'testnet'
     }
@@ -115,9 +115,9 @@ const AllUsers = (props: usersList) => {
   const refreshTransaction = async (network: any) => {
     try {
       let address = "";
-      Object.keys(wallets?.wallets[0]?.wallets).filter((e) => {
+      Object.keys(wallets?.wallets?.[0]?.wallets)?.filter((e) => {
         if (e === network?.walletSupport) {
-          address = wallets.wallets[0]?.wallets[e]?.address;
+          address = wallets.wallets?.[0]?.wallets[e]?.address;
         }
       });
       let response = await fetch(

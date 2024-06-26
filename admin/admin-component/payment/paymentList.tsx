@@ -167,7 +167,7 @@ const PaymentList = () => {
               </tr>
             </thead>
             <tbody>
-              {list && list.length > 0 && list?.map((item: any, index: number) => {
+              {list && list?.length > 0 && list?.map((item: any, index: number) => {
                 return (
                   <tr
                     key={index}
