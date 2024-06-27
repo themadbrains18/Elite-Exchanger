@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import IconsComponent from '../snippets/icons';
-import TimerCountDown from './timer-countdown';
-import moment from 'moment';
+
 import { currencyFormatter } from '../snippets/market/buySellCard';
 
 interface showSidebar {

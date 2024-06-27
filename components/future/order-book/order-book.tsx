@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import BuyTableFuture from './buy-table';
 import SelltableFuture from './sell-table';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';

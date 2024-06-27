@@ -6,7 +6,6 @@ import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
 import AES from "crypto-js/aes";
-import { enc } from "crypto-js";
 
 interface propsData {
   step: number;

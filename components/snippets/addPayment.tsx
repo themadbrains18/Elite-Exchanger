@@ -239,7 +239,7 @@ const AddPayment = (props: activeSection) => {
 
             return <>
               <div className="flex flex-col mb-[15px] md:mb-5 ">
-                <label className="sm-text mb-[10px]">{item?.label} {item?.required === 'true' && <span style={{ color: 'red' }}>*</span>}</label>
+                <label className="sm-text mb-[10px]">{item?.label} {item?.required === 'true' && <span className="text-red dark:text-[#9295a6]">*</span>}</label>
                 <div className="border relative border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px] mb-[5px]">
                   {item?.name === "qr_code" &&
 

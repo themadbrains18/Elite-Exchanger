@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import moment from "moment";
-import Image from 'next/image';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
 interface setState {

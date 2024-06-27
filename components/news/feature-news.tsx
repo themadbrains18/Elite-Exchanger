@@ -1,4 +1,3 @@
-import AdminIcons from '@/admin/admin-snippet/admin-icons';
 import Image from 'next/image';
 import React, { useContext } from 'react'
 import Context from '../contexts/context';

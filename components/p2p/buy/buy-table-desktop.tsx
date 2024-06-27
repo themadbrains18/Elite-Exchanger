@@ -1,11 +1,8 @@
 import Image from 'next/image';
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import ReactPaginate from "react-paginate";
-import IconsComponent from '../../snippets/icons';
 import Context from "../../contexts/context";
-import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import { useWebSocket } from '@/libs/WebSocketContext';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import BuyAuthenticationModelPopup from '@/components/snippets/buyAuthenticationModelPopup';
 

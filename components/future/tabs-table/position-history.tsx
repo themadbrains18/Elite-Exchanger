@@ -1,4 +1,3 @@
-import IconsComponent from '@/components/snippets/icons';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import moment from 'moment';
 import Image from 'next/image';

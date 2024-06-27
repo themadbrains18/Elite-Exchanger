@@ -5,7 +5,6 @@ import { useRouter } from "next/router";
 import { signIn } from "next-auth/react"
 import { toast } from 'react-toastify';
 import AES from 'crypto-js/aes';
-import ResetSuccessful from "../snippets/resetSuccessful";
 import CodeNotRecieved from "../snippets/codeNotRecieved";
 
 interface propsData {

@@ -1,10 +1,6 @@
-import IconsComponent from '@/components/snippets/icons';
-import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import React, { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import React from 'react';
 import 'react-toastify/dist/ReactToastify.css';
-import ConfirmationModel from '@/components/snippets/confirmation';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
 interface propsData {

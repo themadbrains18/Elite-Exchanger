@@ -1,6 +1,4 @@
 import React, { useContext, useState } from 'react'
-import RangeSlider from '../range-slider';
-import SelectDropdown from '../snippet/select-dropdown';
 import Context from '@/components/contexts/context';
 import { useSession } from 'next-auth/react';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';

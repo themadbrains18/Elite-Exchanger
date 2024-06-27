@@ -1,10 +1,7 @@
 import Image from 'next/image';
 import React, { useEffect, useRef, useState } from 'react'
-import Avtar from '../../public/assets/header/Avatar.png';
-
 import Link from 'next/link';
 import IconsComponent from '../snippets/icons';
-import LanguageCurrency from '../snippets/language-currency';
 import { toast } from 'react-toastify';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';

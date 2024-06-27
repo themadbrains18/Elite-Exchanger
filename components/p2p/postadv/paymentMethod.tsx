@@ -260,7 +260,7 @@ const PaymentMethod = (props: activeSection) => {
                 return (
                   <div
                     key={index}
-                    className="flex items-center gap-30 py-20 md:mt-30"
+                    className="flex items-center gap-20 py-20 md:mt-30"
                   >
                     {props.page !== "user-center" && (
                       <div>
@@ -309,18 +309,19 @@ const PaymentMethod = (props: activeSection) => {
                         ></label>
                       </div>
                     )}
-                    <div className="flex gap-30 items-center justify-between w-full">
-                      <div className="flex gap-30 items-center">
+                    <div className="flex gap-20 items-center justify-between w-full">
+                      <div className="flex gap-20 items-center">
                         <div className="flex gap-10 items-center w-full max-w-[145px]">
+                         
+                          <p className="sec-text !text-h-primary dark:!text-white !font-medium">
+                            {item?.pm_name}
+                          </p>
                           <Image
                             src={`${item?.master_payment_method?.icon}`}
                             alt="payment image"
                             width={32}
                             height={32}
                           />
-                          <p className="sec-text !text-h-primary dark:!text-white !font-medium">
-                            {item?.pm_name}
-                          </p>
                         </div>
                         <p className="md:block hidden sec-text !text-banner-text dark:!text-white">
                           ({item?.pmObject?.phonenumber})
