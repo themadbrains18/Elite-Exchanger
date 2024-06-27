@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import IconsComponent from "./icons";
 import Image from "next/image";
 import FilterSelectMenuWithCoin from "./filter-select-menu-with-coin";
@@ -12,14 +12,8 @@ import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import ConfirmBuy from "./confirmBuy";
-
-import Pusher from 'pusher-js';
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { currencyFormatter } from "./market/buySellCard";
-
-const pusher = new Pusher('b275b2f9e51725c09934', {
-  cluster: 'ap2'
-});
 
 const schema = yup.object().shape({
   token_amount: yup.number().positive("Amount must be greater than '0'.").required('Please enter quantity.').typeError('Please enter quantity.'),
@@ -67,40 +61,53 @@ const BuySellCard = (props: DynamicId) => {
     resolver: yupResolver(schema),
   });
 
+  const socketListenerRef = useRef<(event: MessageEvent) => void>();
+
   useEffect(() => {
-    if (props.slug) {
-      setCurrencyName(props.slug, 1);
-      setPriceOnChangeType(spotType, '');
+    
+    const handleSocketMessage = (event: any) => {
+      const data = JSON.parse(event.data).data;
+      let eventDataType = JSON.parse(event.data).type;
+
+      if (eventDataType === "market") {
+        if (props.session) {
+          setPriceOnChangeType(spotType, '');
+        }
+      }
+    };
+    if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
+      if (socketListenerRef.current) {
+        wbsocket.removeEventListener('message', socketListenerRef.current);
+      }
+      socketListenerRef.current = handleSocketMessage;
+      wbsocket.addEventListener('message', handleSocketMessage);
     }
-    Socket();
+
     convertTotalAmount();
     let radioCta = document.querySelector(".custom-radio") as HTMLInputElement | null;
     let prevSibling: ChildNode | null | undefined = radioCta?.previousSibling;
     if (prevSibling instanceof HTMLElement) {
       prevSibling.click();
     }
-  }, [userAssets])
 
+    return () => {
+      if (wbsocket) {
+        wbsocket.removeEventListener('message', handleSocketMessage);
+      }
+    };
+  }, [wbsocket])
 
-  // useEffect(() => {
-  //   convertTotalAmount();
-  // }, [props.token]);
+  const hasRun = useRef(false);
 
-  const Socket = () => {
-    if (wbsocket) {
-      wbsocket.onmessage = (event) => {
-        const data = JSON.parse(event.data).data;
-        let eventDataType = JSON.parse(event.data).type;
-
-        if (eventDataType === "market") {
-          if (props.session) {
-            getAssets();
-          }
-        }
+  useEffect(() => {
+    if (props.slug && props?.coins.length > 0) {
+      if (!hasRun.current) {
+        setCurrencyName(props.slug, 1);
+        setPriceOnChangeType(spotType, '');
+        hasRun.current = true;
       }
     }
-
-  };
+  }, [props.session, props.slug, props?.coins]);
 
   const setCurrencyName = (symbol: string, dropdown: number) => {
     if (dropdown === 1) {
@@ -112,7 +119,7 @@ const BuySellCard = (props: DynamicId) => {
 
       if (token.length > 0) {
         setSelectedToken(token[0]);
-        setPriceOnChangeType(active1 === 1 ? 'buy' : 'sell', symbol);
+        // setPriceOnChangeType(active1 === 1 ? 'buy' : 'sell', symbol);
       }
 
       if (userAssets.message !== undefined) {
@@ -125,21 +132,26 @@ const BuySellCard = (props: DynamicId) => {
     }
   }
 
-  const setPriceOnChangeType = (type: string, symbol: string) => {
+  const setPriceOnChangeType = async (type: string, symbol: string) => {
 
-    setPrice(0.00);
+    // setPrice(0.00);
     let token = list.filter((item: any) => {
       return item.symbol === (type === 'buy' ? 'USDT' : symbol === '' ? firstCurrency : symbol)
     });
 
     if (token.length > 0) {
-      // get assets balance
-      let selectAssets = userAssets.filter((item: any) => {
-        return item.token_id === token[0].id && item?.walletTtype === "main_wallet"
-      });
-
-      if (selectAssets.length > 0) {
-        setPrice(selectAssets[0].balance);
+      if(props?.session){
+        let assets: any = await getAssets();
+        if (assets) {
+          
+          let selectAssets = assets.filter((item: any) => {
+            return item.token_id === token[0].id && item?.walletTtype === "main_wallet"
+          });
+  
+          if (selectAssets.length > 0) {
+            setPrice(selectAssets[0].balance);
+          }
+        }
       }
     }
   }
@@ -148,18 +160,18 @@ const BuySellCard = (props: DynamicId) => {
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
     if (active1 === 1 && totalAmount > price) {
       setDisabled(true);
-        toast.error('Insufficient balance.', { autoClose: 2000 });
-        setTimeout(() => {
-          setDisabled(false);
-        }, 3000);
+      toast.error('Insufficient balance.', { autoClose: 2000 });
+      setTimeout(() => {
+        setDisabled(false);
+      }, 3000);
       return;
     }
     else if (active1 === 2 && data.token_amount > price) {
       setDisabled(true);
-        toast.error('Insufficient balance.', { autoClose: 2000 });
-        setTimeout(() => {
-          setDisabled(false);
-        }, 3000);
+      toast.error('Insufficient balance.', { autoClose: 2000 });
+      setTimeout(() => {
+        setDisabled(false);
+      }, 3000);
       return;
     }
 
@@ -297,7 +309,7 @@ const BuySellCard = (props: DynamicId) => {
         let totalAmount: any = qty * amount;
         let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(8) : (amount * qty * 0.00075).toFixed(8);
         // console.log(fee,'-----------------fees');
-        
+
         setEstimateFee(fee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
         setTotalAmount(totalAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
       }
@@ -315,11 +327,11 @@ const BuySellCard = (props: DynamicId) => {
     }
   }
 
-  const getAssets = async () => {
-    try {
-      /**
+  /**
       * Get user assets data after order create
       */
+  const getAssets = async () => {
+    try {
       let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${props.session?.user?.user_id}`, {
         method: "GET",
         headers: {
@@ -328,6 +340,7 @@ const BuySellCard = (props: DynamicId) => {
       }).then(response => response.json());
 
       setUserAssets(userAssets);
+      return userAssets
 
     } catch (error) {
       console.log("error while fetching assets", error);
@@ -353,12 +366,15 @@ const BuySellCard = (props: DynamicId) => {
             Buy
           </button>
           <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 2 && "!text-primary border-primary"}`} onClick={() => {
-            setActive1(2); setPriceOnChangeType('sell', ''); reset({
+            setActive1(2); 
+            setPriceOnChangeType('sell', ''); 
+            reset({
               limit_usdt: 0.00,
               token_amount: 0.00,
             })
             setSpotType('sell');
-            setTotalAmount(0.0); setEstimateFee(0.00);
+            setTotalAmount(0.0); 
+            setEstimateFee(0.00);
             if (show === 2) {
               setValue('limit_usdt', props?.token?.price.toFixed(6))
             }
@@ -492,7 +508,7 @@ const BuySellCard = (props: DynamicId) => {
                     </div>
 
                     <div className="relative">
-                      <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} disabled={true}/>
+                      <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} disabled={true} />
                     </div>
                   </div>
                 }
@@ -544,7 +560,7 @@ const BuySellCard = (props: DynamicId) => {
           {((show === 1 && props.token?.tradepair?.limit_trade === true) || show === 2) &&
             <>
               {props?.session ?
-                <button type="submit" className={`solid-button w-full ${disabled === true?'opacity-70 cursor-not-allowed':''}`} disabled={disabled} >{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
+                <button type="submit" className={`solid-button w-full ${disabled === true ? 'opacity-70 cursor-not-allowed' : ''}`} disabled={disabled} >{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
                 :
                 <Link href="/login" className="solid-button w-full block text-center">Login</Link>
               }
