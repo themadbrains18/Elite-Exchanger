@@ -52,7 +52,7 @@ const BuySellExpress = (props: propsData) => {
   const [active, setActive] = useState(false);
   const route = useRouter();
   const [loader, setLoader] = useState(false)
-
+  const [resetValue, setResetValue] = useState(false)
   const router = useRouter();
   const wbsocket = useWebSocket();
   const hasRun = useRef(false);
@@ -133,6 +133,13 @@ const BuySellExpress = (props: propsData) => {
     //================
 
     if (active1 === 1) {
+      console.log("=here");
+      
+      clearErrors("spend_amount")
+      clearErrors("receive_amount")
+      setResetValue(true)
+      setPaymentMethod('')
+      reset()
       if (dropdown === 1) {
         setFirstCurrency(symbol);
         let token = list1?.filter((item: any) => {
@@ -408,7 +415,9 @@ const BuySellExpress = (props: propsData) => {
    * @param token 
    */
   const filterSellerAds = (id: string, token: any) => {
-
+    setResetValue(false)
+    clearErrors("spend_amount")
+    clearErrors("receive_amount")
     setValue('p_method', id);
     if (Object.keys(selectedSecondToken).length === 0) {
       if (token === undefined || token === null || token?.length < 1) {
@@ -504,7 +513,7 @@ const BuySellExpress = (props: propsData) => {
       else {
         setFinalPost({});
       }
-      
+
     }
   }
 
@@ -543,12 +552,21 @@ const BuySellExpress = (props: propsData) => {
 
   return (
     <>
+
       <ToastContainer position="top-center" limit={1} />
-      <div className="flex items-center mt-[30px] justify-around">
+      <div className="flex items-center mt-[30px] justify-around ">
+
         <div className="max-w-full md:max-w-[554px] w-full hidden md:block">
           <Image src='/assets/refer/referSafe.png' width={487} height={529} alt="refr-safe-sction" />
         </div>
-        <div className="p-20 md:p-20 rounded-10  bg-white dark:bg-d-bg-primary max-w-[500px] w-full border border-grey-v-1 dark:border-opacity-[15%] ">
+        <div className="p-20 md:p-20 rounded-10  bg-white dark:bg-d-bg-primary max-w-[500px] w-full border border-grey-v-1 dark:border-opacity-[15%] relative ">
+
+          {(loader || changeSymbol) &&
+            <>
+              <div className="bg-black dark:bg-omega z-[1] duration-300 absolute top-0 left-0 h-full w-full opacity-50 visible  rounded-10"></div>
+              <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
+            </>
+          }
           <div className="flex border-b border-grey-v-1">
             <button
               className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 1 && "!text-primary border-primary"
@@ -578,13 +596,7 @@ const BuySellExpress = (props: propsData) => {
             {/* //======================*/}
             {active1 === 1 &&
               <div className="py-20 relative">
-                {changeSymbol &&
-                  <>
-                    <div className="bg-black  z-[1] duration-300 absolute top-0 left-0 h-full w-full opacity-80 visible"></div>
-                    <div className='loader w-[35px] z-[2] h-[35px] absolute top-[calc(50%-10px)] left-[calc(50%-10px)] border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
 
-                  </>
-                }
                 {/* First Currency Inputs */}
                 <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
                   <div className="">
@@ -708,6 +720,7 @@ const BuySellExpress = (props: propsData) => {
                     auto={false}
                     widthFull={true}
                     onPaymentMethodChange={filterSellerAds}
+                    resetValue={resetValue}
                   />
                 </div>
                 {errors?.p_method && (
@@ -819,12 +832,8 @@ const BuySellExpress = (props: propsData) => {
 
                 <div className="mt-5 flex gap-2 ">
                   <div className=" flex items-center relative">
-                    <p className="sm-text dark:text-white">  Estimated price: 1 {secondCurrency}=</p>
-                    {loader ?
-                      <div className='loader w-[20px] z-[2] h-[20px] absolute top-[calc(50%-10px)] right-[-23px] border-[3px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
+                    <p className="sm-text dark:text-white">  Estimated price: 1 {secondCurrency}={currencyFormatter(Number(Number(usdtToInr)?.toFixed(2)))} INR</p>
 
-                      : <p className="sm-text dark:text-white">{currencyFormatter(Number(Number(usdtToInr)?.toFixed(2)))} INR</p>
-                    }
                   </div>
                 </div>
 

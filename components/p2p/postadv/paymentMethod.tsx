@@ -68,6 +68,8 @@ const PaymentMethod = (props: activeSection) => {
   const [minInputValue, setMinInputValue] = useState(0.000000);
   const [maxInputValue, setMaxInputValue] = useState(0.000000);
   const [verified, setVerified] = useState(false);
+  const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
+
   // let list = props.userPaymentMethod;
 
   const router = useRouter();
@@ -117,7 +119,7 @@ const PaymentMethod = (props: activeSection) => {
       }
     ).then((response) => response.json());
     // Assuming `userPaymentMethod?.data` contains the payment methods array
-    let sortedPaymentMethods = userPaymentMethod?.data.sort((a:any, b:any) => {
+    let sortedPaymentMethods = userPaymentMethod?.data.sort((a: any, b: any) => {
       if (a.pm_name < b.pm_name) return -1;
       if (a.pm_name > b.pm_name) return 1;
       return 0;
@@ -247,6 +249,21 @@ const PaymentMethod = (props: activeSection) => {
     }
   }
 
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      if (selectedMethods.length < 5) {
+        setSelectedMethods([...selectedMethods, value]);
+      }
+    } else {
+      setSelectedMethods(selectedMethods.filter((method) => method !== value));
+    }
+  };
+
+  const isCheckboxDisabled = (value: string) => {
+    return selectedMethods.length >= 5 && !selectedMethods.includes(value);
+  };
+
   return (
     <>
       {props?.page === "user-center" && <ToastContainer position="top-center" limit={1} />}
@@ -281,11 +298,13 @@ const PaymentMethod = (props: activeSection) => {
                             router.query.pmid?.includes(item?.id) ??
                             false
                           }
+                          onChange={handleCheckboxChange}
+                          disabled={isCheckboxDisabled(item.id)}
                           className="hidden methods"
                         />
                         <label
                           htmlFor={`checkbox${item?.id}`}
-                          className="
+                          className={`
                             relative 
                             cursor-pointer
                             after:block
@@ -312,12 +331,12 @@ const PaymentMethod = (props: activeSection) => {
                             before:border-primary
                             before:rotate-[-50deg]
                             before:opacity-0
-                          "
+                          `}
                         ></label>
                       </div>
                     )}
                     <div className="flex gap-20 items-center justify-between w-full">
-                      <div className="flex gap-20 items-center">
+                      <div className={`flex gap-20 items-center ${isCheckboxDisabled(item.id) ? "disabled-text" : ""}`}>
                         <div className="flex gap-10 items-center w-full max-w-[145px]">
 
                           <p className="sec-text !text-h-primary dark:!text-white !font-medium">
