@@ -428,44 +428,83 @@ const BuySellExpress = (props: propsData) => {
 
     }
     if (props?.posts && props?.posts.length > 0) {
+
       let seller = props?.posts?.filter((item: any) => {
         return item?.token_id === token?.id && session?.user?.user_id !== item?.user_id
       })
 
       if (seller.length > 0) {
+        let nearestObject: any = null;
+        let minDifference = Infinity;
+        let flag = false;
+        let spendAmount = getValues('spend_amount');
         for (const post of seller) {
           let userPaymentMethod = post?.user?.user_payment_methods;
-          console.log(userPaymentMethod, "=userPaymentMethod");
+          let postPaymethod = post?.p_method;
 
-          let sellerPost = userPaymentMethod?.filter((item: any) => {
+          const filteredArray = userPaymentMethod.filter((item: any) =>
+            postPaymethod?.some((upm: any) => upm.upm_id === item.id)
+          );
+
+          let sellerPost = filteredArray?.filter((item: any) => {
             return item?.pmid === id
           })
+
           if (sellerPost.length > 0) {
-            setPaymentMethod(id);
-            setFinalPost(post);
-            setUsdtToInr(post?.price);
-            let spendAmount = getValues('spend_amount');
-            if (spendAmount > 0 && (spendAmount < parseFloat(post.min_limit) || spendAmount < parseFloat(post.max_limit))) {
-              setError("spend_amount", {
-                type: "custom",
-                message: `Note: There's an order available in the range  ${post?.min_limit} - ${post?.max_limit}. Order within the range. `,
-              });
+            if (spendAmount > 0 && (spendAmount < parseFloat(post.min_limit) || spendAmount > parseFloat(post.max_limit))) {
+              flag = true;
             }
-            // else if (spendAmount > 0 && spendAmount > parseFloat(post.min_limit)) {
-            //   setValue('spend_amount', 0);
-            //   setValue('receive_amount', 0);
-            // }
-            break;
+            else if (spendAmount > 0 && (spendAmount >= parseFloat(post.min_limit) || spendAmount < parseFloat(post.max_limit))) {
+              flag = false;
+              setPaymentMethod(id);
+              setFinalPost(post);
+              setUsdtToInr(post?.price);
+              clearErrors('spend_amount');
+              break;
+            }
           }
           else {
             setFinalPost({});
           }
         }
+
+        if (flag === true) {
+          seller.forEach((item: any) => {
+            let userPaymentMethod = item?.user?.user_payment_methods;
+            let postPaymethod = item?.p_method;
+
+            const filteredArray = userPaymentMethod.filter((item: any) =>
+              postPaymethod?.some((upm: any) => upm.upm_id === item.id)
+            );
+
+            const minLimit = parseFloat(item.min_limit);
+            const difference = Math.abs(minLimit - spendAmount);
+
+            if (filteredArray.length > 0) {
+
+              let sellerPost = filteredArray?.filter((item: any) => {
+                return item?.pmid === id
+              })
+
+              if (difference < minDifference && sellerPost.length > 0) {
+                minDifference = difference;
+                nearestObject = item;
+              }
+            }
+          });
+          setPaymentMethod('')
+          setError("spend_amount", {
+            type: "custom",
+            message: `Note: There's an order available in the range  ${nearestObject?.min_limit} - ${nearestObject?.max_limit}. Order within the range. `,
+          });
+
+        }
       }
+
       else {
         setFinalPost({});
       }
-      setPaymentMethod(id);
+      
     }
   }
 
@@ -501,7 +540,6 @@ const BuySellExpress = (props: propsData) => {
       setFilterAsset(asset[0]);
     }
   }
-
 
   return (
     <>
