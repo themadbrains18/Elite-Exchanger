@@ -53,6 +53,11 @@ input::-webkit-credentials-auto-fill-button {
   opacity: 0.5;
 }
 
+button:focus-visible {
+  outline: none;
+}
+
+
 @layer components {
   
   .trade_history_scroll::-webkit-scrollbar {
