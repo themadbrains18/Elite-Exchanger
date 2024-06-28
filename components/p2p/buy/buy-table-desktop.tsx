@@ -1,11 +1,8 @@
 import Image from 'next/image';
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import ReactPaginate from "react-paginate";
-import IconsComponent from '../../snippets/icons';
 import Context from "../../contexts/context";
-import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import { useWebSocket } from '@/libs/WebSocketContext';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import BuyAuthenticationModelPopup from '@/components/snippets/buyAuthenticationModelPopup';
 
@@ -131,7 +128,6 @@ const BuyTableDesktop = (props: activeSection) => {
       if (session) {
 
         if (item?.complete_kyc === true) {
-          console.log("=here", session?.user?.kyc);
 
           if (session?.user?.kyc !== "approve") {
             setType('kyc')
@@ -139,13 +135,14 @@ const BuyTableDesktop = (props: activeSection) => {
             setActive(true)
           }
           else {
-            console.log("=here i am");
             
             props.setShow1(true); props.setSelectedPost(item);
           }
         }
         else if (item?.min_btc === true) {
-          let btcBalance = props?.assets?.filter((item: any) => item?.token_id === "30c72375-b3a7-49ea-a17e-b6b530023cb7")
+          let btcBalanceItem = props?.assets?.find((item: any) => item?.token_id === "30c72375-b3a7-49ea-a17e-b6b530023cb7" && item?.account_type==="Main Account")
+          let btcBalance = btcBalanceItem ? btcBalanceItem.balance : 0;
+
           if (btcBalance < 0.01) {
             setType('min_btc')
             setShow(true)

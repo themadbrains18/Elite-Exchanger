@@ -92,7 +92,7 @@ const WalletList = (props: propsData): any => {
           }
           {
             active1 === 5 &&
-            <ConvertList filter={filter}/>
+            <ConvertList filter={filter} />
           }
         </div>
       </section>

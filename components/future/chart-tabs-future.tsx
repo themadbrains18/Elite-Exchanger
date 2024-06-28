@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import PositionsTable from './tabs-table/positions-table';
 import OpenOrderTable from './tabs-table/open-order-table';
 import PositionsHistoryTable from './tabs-table/position-history';
-import OpenOrderHistoryTable from './tabs-table/open-order-history';
 
 interface propsData {
     positions?: any;

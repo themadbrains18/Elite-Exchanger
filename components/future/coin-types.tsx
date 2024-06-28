@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import Context from "../contexts/context";
 import { useRouter } from "next/router";
-import Link from 'next/link';
 import { currencyFormatter } from '../snippets/market/buySellCard';
 
 interface propsData {

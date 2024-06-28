@@ -84,7 +84,7 @@ const SlectPaymentMethod = (props: propsData) => {
                                         before:z-[1]    
                                         flex items-center gap-10
                                         ">
-                                               <span className='text-banner-text'>{elem?.master_payment_method?.payment_method}</span>
+                                               <span className='text-banner-text  dark:text-white'>{elem?.master_payment_method?.payment_method}</span>
                                         <Fragment key={ind}>
                                             <Image src={`${elem?.master_payment_method?.icon}`} alt='error' width={28} height={28} />
                                         </Fragment>

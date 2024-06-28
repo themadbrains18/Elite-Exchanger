@@ -301,6 +301,7 @@ const BuySellExpress = (props: propsData) => {
    */
   const onHandleSubmit = async (data: any) => {
 
+    
 
     let pmId = getValues("p_method")
     // p2p/postad
@@ -339,13 +340,12 @@ const BuySellExpress = (props: propsData) => {
     if (data.spend_amount < finalPost?.min_limit) {
       setError("spend_amount", {
         type: "custom",
-        message: `Please enter price greater than minimum limit ${finalPost?.min_limit}`,
+        message: `Note: There's an order available in the range  ${finalPost?.min_limit} - ${finalPost?.max_limit}. Order within the range.`,
       });
       return;
     }
 
     if (status === 'authenticated') {
-
       let obj = {
         post_id: finalPost?.id,
         sell_user_id: finalPost?.user?.id,
@@ -435,6 +435,8 @@ const BuySellExpress = (props: propsData) => {
       if (seller.length > 0) {
         for (const post of seller) {
           let userPaymentMethod = post?.user?.user_payment_methods;
+          console.log(userPaymentMethod,"=userPaymentMethod");
+          
           let sellerPost = userPaymentMethod?.filter((item: any) => {
             return item?.pmid === id
           })
@@ -443,10 +445,10 @@ const BuySellExpress = (props: propsData) => {
             setFinalPost(post);
             setUsdtToInr(post?.price);
             let spendAmount = getValues('spend_amount');
-            if (spendAmount > 0 && spendAmount < parseFloat(post.min_limit)) {
+            if (spendAmount > 0 && (spendAmount < parseFloat(post.min_limit) || spendAmount < parseFloat(post.max_limit) )) {
               setError("spend_amount", {
                 type: "custom",
-                message: `Please enter spend amount more than minimum amount ${post.min_limit} `,
+                message: `Note: There's an order available in the range  ${post?.min_limit} - ${post?.max_limit}. Order within the range. `,
               });
             }
             // else if (spendAmount > 0 && spendAmount > parseFloat(post.min_limit)) {
@@ -557,7 +559,7 @@ const BuySellExpress = (props: propsData) => {
                     <input
                       type="number"
                       placeholder="$0"
-                      step="any" required
+                      step="any" 
                       {...register('spend_amount')}
                       onChange={(e: any) => {
                         if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
@@ -573,7 +575,7 @@ const BuySellExpress = (props: propsData) => {
                           if (finalPost?.max_limit < parseFloat(e?.target?.value)) {
                             setError("spend_amount", {
                               type: "custom",
-                              message: `Min ${finalPost?.min_limit} - max ${finalPost?.max_limit}`,
+                              message: `Note: There's an order available in the range  ${finalPost?.min_limit} - ${finalPost?.max_limit}. Order within the range.`,
                             });
                           }
 
@@ -688,7 +690,7 @@ const BuySellExpress = (props: propsData) => {
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
 
                   <p className="sm-text dark:text-white">
-                    {filterAsset !== undefined ? currencyFormatter(filterAsset?.balance.toFixed(6)) : '0.0'}
+                    {filterAsset !== undefined ? currencyFormatter(parseFloat(filterAsset?.balance.toFixed(6))) : '0.0'}
                   </p>
                 </div>
                 {/* First Currency Inputs */}
@@ -780,11 +782,12 @@ const BuySellExpress = (props: propsData) => {
                   <p className="errorMessage">{errors?.receive_amount?.message}</p>
                 )}
 
-                <div className="mt-5 flex gap-2">
-                  <div className=" flex items-center">
+                <div className="mt-5 flex gap-2 ">
+                  <div className=" flex items-center relative">
                     <p className="sm-text dark:text-white">  Estimated price: 1 {secondCurrency}=</p>
                     {loader ?
-                      <div className="w-[100px] h-[10px] bg-nav-secondary rounded-md animate-pulse" />
+                                          <div className='loader w-[20px] z-[2] h-[20px] absolute top-[calc(50%-10px)] left-[calc(50%-60px)] border-[3px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
+
                       : <p className="sm-text dark:text-white">{currencyFormatter(Number(Number(usdtToInr)?.toFixed(2)))} INR</p>
                     }
                   </div>

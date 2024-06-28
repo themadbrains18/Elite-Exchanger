@@ -1,6 +1,4 @@
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
-import moment from 'moment';
-import Image from 'next/image';
 import React from 'react'
 interface setState {
     show?: number;

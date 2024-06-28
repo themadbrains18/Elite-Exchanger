@@ -143,7 +143,7 @@ const EditPaymentMethod = (props: activeSection) => {
             <div className="">
               {list?.map((item: any, index: any) => {
                 return (
-                  <div key={index} className="flex gap-30 py-20 md:mt-30">
+                  <div key={index} className="flex gap-20 py-20 md:mt-30">
                     <div>
                       <input type="checkbox" {...register('p_method')} name="p_method" id={`checkbox${item?.id}`} value={item?.id} className="hidden methods" />
                       <label
@@ -179,8 +179,8 @@ const EditPaymentMethod = (props: activeSection) => {
                       </label>
                     </div>
                     <div className="flex gap-10 items-center w-full max-w-[145px]">
-                      <Image src={`${item?.master_payment_method?.icon}`} alt="payment image" width={32} height={32} />
                       <p className="sec-text !text-h-primary dark:!text-white !font-medium">{item?.pm_name}</p>
+                      <Image src={`${item?.master_payment_method?.icon}`} alt="payment image" width={32} height={32} />
                     </div>
                     <p className="md:block hidden sec-text !text-banner-text dark:!text-white">({item?.pmObject?.phonenumber})</p>
                   </div>
@@ -271,7 +271,7 @@ const EditPaymentMethod = (props: activeSection) => {
             <div className="md:mt-30 py-20 px-10 flex gap-10 items-center">
               {/* <Image src={`/assets/payment-methods/gpay.png`} alt="payment image" width={32} height={32} /> */}
               {/* <p className="sec-text !text-h-primary dark:!text-white !font-medium">Google Pay</p> */}
-              <p className="sec-text !text-h-primary dark:!text-white">15 Minutes </p>
+              <p className="sec-text !text-h-primary dark:!text-white">15:00 Minutes </p>
             </div>
             <div className="md:mt-50 mt-20 flex sm:gap-30 gap-10 sm:flex-row flex-col">
               <button type="button" className="solid-button2 max-w-full sm:max-w-[262px] w-full" onClick={() => { props?.setStep(1) }}>Previous</button>

@@ -3,7 +3,6 @@ import MarketCoin from "./marketCoin";
 import CoinList from "./coinList";
 import BuySellCard from "../snippets/market/buySellCard";
 import WatchList from "./watchList";
-import ResponsiveFixCta from "./responsive-fix-cta";
 
 interface propsData {
   coinList: any,

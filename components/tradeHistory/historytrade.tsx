@@ -112,7 +112,7 @@ const Historytrade = (props: propsData) => {
                     selected={startDate}
                     onChange={(date: any) => handleStartDate(date)}
                     peekNextMonth
-                    placeholderText={'Please select a date'} 
+                    placeholderText={'Select date'} 
                     showMonthDropdown
                     showYearDropdown
                     dropdownMode="select"

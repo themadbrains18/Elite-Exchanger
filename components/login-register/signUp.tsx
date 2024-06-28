@@ -224,8 +224,8 @@ const SignUp = () => {
                     {checker && 
                       <StrengthCheck2 password={pswd} />}
                     </div>
+                      {errors.password && <p className="errorMessage">{errors.password.message}</p>}
                     <StrengthCheck password={pswd} />
-                    {errors.password && <p className="errorMessage">{errors.password.message}</p>}
 
                     <div className="relative">
                       <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
