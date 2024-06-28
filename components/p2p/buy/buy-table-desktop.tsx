@@ -36,12 +36,15 @@ const BuyTableDesktop = (props: activeSection) => {
   }, [itemOffset, props?.firstCurrency, props?.paymentId]);
 
 
+  
 
   const getAllPosts = async (itemOffset: number) => {
     try {
       if (itemOffset === undefined) {
         itemOffset = 0;
       }
+      console.log("=here");
+      
       let posts = await fetch(
         `/api/p2p/buy?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
         {
@@ -67,27 +70,29 @@ const BuyTableDesktop = (props: activeSection) => {
 
       let postData = [];
       let filter_posts = posts?.data?.data;
+      postData= filter_posts
       if (props?.firstCurrency !== "") {
         filter_posts = posts?.data?.data?.filter((item: any) => {
           return props?.selectedToken?.id === item?.token_id;
         });
         postData = filter_posts;
       }
-      else if (props?.paymentId !== "") {
+       if (props?.paymentId !== "") {
+        let filterRecord=[]
+
         for (const post of filter_posts) {
           for (const upid of post.user_p_method) {
+            
             if (props?.paymentId === upid?.pmid) {
-              postData.push(post);
+              filterRecord.push(post);
             }
           }
         }
+        postData = filterRecord;
       } else {
         postData = filter_posts;
       }
       setList(postData)
-
-
-
       setTotal(posts?.data?.totalLength)
     } catch (error) {
       console.log("error in get token list", error);

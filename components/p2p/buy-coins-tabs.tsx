@@ -20,14 +20,9 @@ const BuyCoinsTabs = (props: activeSection) => {
   const [paymentId, setPaymentId] = useState("");
   const [value, setValue] = useState(""); // For currency dropdown
   const [resetValue, setResetValue] = useState(false)
-  const [filteredAssets, setFilteredAssets] = useState(props.assets);
 
 
   const list = props.masterPayMethod;
-
-  console.log(list,"=list");
-  
-
 
   const setCurrencyName = (symbol: string, dropdown: number) => {
     if (dropdown === 1) {
@@ -41,8 +36,8 @@ const BuyCoinsTabs = (props: activeSection) => {
   };
 
   const onPaymentMethodChange = (id: any) => {
-    setResetValue(false)
     setPaymentId(id);
+    setResetValue(false)
   };
   
   const clearAll = () => {
@@ -53,27 +48,7 @@ const BuyCoinsTabs = (props: activeSection) => {
     setResetValue(true);
   };
 
-  useEffect(() => {
-    let filtered = props.assets;
-    console.log(firstCurrency,paymentId,"=paymentId");
-    
 
-    if (firstCurrency) {
-      filtered = filtered.filter((asset: any) => asset.currency === firstCurrency);
-    }
-
-    if (paymentId) {   
-      console.log("=here i am")
-      
-      // filtered = filtered.filter((asset: any) => {
-      //   // asset?.user?.user_payment_methods.map(method =>console.log(method,"==method")
-      //   );
-        
-      // });
-    }
-
-    setFilteredAssets(filtered);
-  }, [firstCurrency, paymentId, props.assets]);
 
   return (
     <>
@@ -109,7 +84,7 @@ const BuyCoinsTabs = (props: activeSection) => {
       <div>
         <div className="md:block hidden">
           <BuyTableDesktop
-            assets={filteredAssets}
+            assets={props?.assets}
             setShow1={props.setShow1}
             paymentId={paymentId}
             selectedToken={selectedToken}
