@@ -440,22 +440,23 @@ const BuySellExpress = (props: propsData) => {
           let sellerPost = userPaymentMethod?.filter((item: any) => {
             return item?.pmid === id
           })
+
           if (sellerPost.length > 0) {
-            setPaymentMethod(id);
-            setFinalPost(post);
-            setUsdtToInr(post?.price);
+
             let spendAmount = getValues('spend_amount');
-            if (spendAmount > 0 && (spendAmount < parseFloat(post.min_limit) || spendAmount < parseFloat(post.max_limit))) {
+            if (spendAmount > 0 && (spendAmount < parseFloat(post.min_limit) || spendAmount > parseFloat(post.max_limit))) {
               setError("spend_amount", {
                 type: "custom",
                 message: `Note: There's an order available in the range  ${post?.min_limit} - ${post?.max_limit}. Order within the range. `,
               });
             }
-            // else if (spendAmount > 0 && spendAmount > parseFloat(post.min_limit)) {
-            //   setValue('spend_amount', 0);
-            //   setValue('receive_amount', 0);
-            // }
-            break;
+            else if (spendAmount > 0 && (spendAmount >= parseFloat(post.min_limit) || spendAmount < parseFloat(post.max_limit))) {
+              setPaymentMethod(id);
+              setFinalPost(post);
+              setUsdtToInr(post?.price);
+              clearErrors('spend_amount');
+              break;
+            }
           }
           else {
             setFinalPost({});
@@ -501,7 +502,6 @@ const BuySellExpress = (props: propsData) => {
       setFilterAsset(asset[0]);
     }
   }
-
 
   return (
     <>
