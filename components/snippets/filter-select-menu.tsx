@@ -56,7 +56,7 @@ const FiliterSelectMenu = (props: dataList) => {
         }}>
           <div className="coin-dropdown flex items-center gap-10 cursor-pointer justify-between" >
             <div className='w-full'>
-              <input type="text" id='paymentMethod' className="sm-text max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-[transparent] pr-0 outline-none bg-transparent w-full  cursor-pointer dark:text-white"
+              <input type="text" id='paymentMethod' className="sm-text max-w-none placeholder:text-white dark:bg-d-bg-primary  bg-[transparent] pr-0 outline-none bg-transparent w-full  cursor-pointer dark:!text-white"
                 placeholder={`${active ? active : props.placeholder}`} readOnly value={active} />
             </div>
             <div className={`pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer `}>

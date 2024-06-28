@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import ReactPaginate from 'react-paginate';
 import IconsComponent from '../snippets/icons';
 import Context from '../contexts/context';
@@ -12,6 +12,7 @@ import StakingModel from '../snippets/stake/staking';
 import TransferModal from '../future/popups/transfer-modal';
 import WithdrawAuthenticationModelPopup from './withdrawAuthentication';
 import { currencyFormatter } from '../snippets/market/buySellCard';
+import { useWebSocket } from '@/libs/WebSocketContext';
 
 interface propsData {
   networks: any;
@@ -35,10 +36,36 @@ const SpotList = (props: propsData): any => {
   const router = useRouter();
 
   let itemsPerPage = 10;
+  const wbsocket = useWebSocket();
+
+  const socketListenerRef = useRef<(event: MessageEvent) => void>();
+    useEffect(() => {
+        const handleSocketMessage = (event: any) => {
+            const data = JSON.parse(event.data).data;
+            let eventDataType = JSON.parse(event.data).type;
+
+            if (eventDataType === "convert") {
+                if (session) {
+                  getSpotData();
+                }
+            }
+        };
+        if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
+            if (socketListenerRef.current) {
+                wbsocket.removeEventListener('message', socketListenerRef.current);
+            }
+            socketListenerRef.current = handleSocketMessage;
+            wbsocket.addEventListener('message', handleSocketMessage);
+        }
+        return () => {
+            if (wbsocket) {
+                wbsocket.removeEventListener('message', handleSocketMessage);
+            }
+        };
+    }, [wbsocket]);
 
   useEffect(() => {
     getSpotData()
-
   }, [itemOffset, props?.filter, popupMode])
 
 
@@ -418,7 +445,7 @@ const SpotList = (props: propsData): any => {
         show1 === 4 &&
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-          <TransferModal setOverlay={setShow1} setPopupMode={setPopupMode} popupMode={popupMode} token={selectedCoin} assets={currentItems} wallet_type="main_wallet"/>
+          <TransferModal setOverlay={setShow1} setPopupMode={setPopupMode} popupMode={popupMode} token={selectedCoin} assets={currentItems} wallet_type="main_wallet" />
         </>
       }
       {withdrawActive === true &&

@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { currencyFormatter } from "../snippets/market/buySellCard";
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 const schema = yup.object().shape({
   spend_amount: yup.number().positive('Quantity must be positive number ').required('Please enter quantity ').typeError('Please enter quantity '),
@@ -39,8 +40,10 @@ const Exchange = (props: DynamicId): any => {
 
   const [isConvert, setIsConvert] = useState(false);
   let { status, data: session } = useSession();
-  const list = props?.coinList;
+  let list = props?.coinList;
   let newCoinListWithBalance = [];
+
+  const wbsocket = useWebSocket();
 
   let {
     register,
@@ -57,17 +60,20 @@ const Exchange = (props: DynamicId): any => {
     resolver: yupResolver(schema)
   });
 
-  if (props?.coinList !== undefined && props?.assets !== undefined) {
-    for (const ls of props?.coinList) {
-      ls.avail_bal = 0.00;
-      for (const as of props?.assets) {
-        if (as.token_id === ls.id && as.balance > 0) {
-          ls.avail_bal = as.balance;
-          newCoinListWithBalance.push(ls)
+  useEffect(() => {
+    if (props?.coinList !== undefined && props?.assets !== undefined) {
+      for (const ls of props?.coinList) {
+        ls.avail_bal = 0.00;
+        for (const as of props?.assets) {
+          if (as.token_id === ls.id && as.balance > 0 && as.walletTtype === "main_wallet") {
+            ls.avail_bal = as.balance;
+            newCoinListWithBalance.push(ls)
+          }
         }
       }
+      setCurrencyName(firstCurrency,1);
     }
-  }
+  }, [props?.assets])
 
   useEffect(() => {
     setTimeout(() => {
@@ -257,7 +263,12 @@ const Exchange = (props: DynamicId): any => {
           setReceivedAmount(0);
           setIsConvert(false);
           reset()
-          props.refreshData();
+          if (wbsocket) {
+            let withdraw = {
+              ws_type: 'convert',
+            }
+            wbsocket.send(JSON.stringify(withdraw));
+          }
           toast.success('Your coin conversion request has been sent successfully!!.', {
             position: 'top-center'
           });

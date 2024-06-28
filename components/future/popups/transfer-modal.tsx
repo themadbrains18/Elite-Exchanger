@@ -67,6 +67,8 @@ const TransferModal = (props: showPopup) => {
     filterAsset(selectedCoin, Spot === "Spot" ? "Futures" : "Spot");
   }
 
+  
+
   useEffect(() => {
 
     let coins: any = [];

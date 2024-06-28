@@ -43,11 +43,13 @@ export function currencyFormatter(amount: any) {
   // Split the number into integer and decimal parts
   const [integerPart, decimalPart] = number.toString().split('.');
 
+  
+
   // Format the integer part using toLocaleString
   const formattedInteger = Number(integerPart).toLocaleString('en-IN');
 
   // Combine the formatted integer part and the decimal part
-  return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger;
+  return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger +'.00';
 }
 
 

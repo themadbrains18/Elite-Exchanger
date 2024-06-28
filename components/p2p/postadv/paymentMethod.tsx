@@ -21,7 +21,7 @@ const schema = yup.object().shape({
     Array.isArray(val)
       ? yup
         .array()
-        .of(yup.string().min(1, "Please select atleast '1' payment method.").required())
+        .of(yup.string().min(1, "Please select atleast '1' payment method.").required()).max(5, "Only '5' payment methods are allowed.")
         .required("Please select '1' payment method.")
       : yup.string().min(1).required("Please select '1' payment method.")
   ),

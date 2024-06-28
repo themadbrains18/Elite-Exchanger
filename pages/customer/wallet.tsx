@@ -1,7 +1,7 @@
 import ResponsiveFixCta from '../../components/market/responsive-fix-cta'
 import Banner from '../../components/wallet/banner'
 import Exchange from '../../components/watchlist/exchange'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import WalletList from '../../components/wallet/wallet-list'
 // import AddMoney from '../components/wallet/add-money'
 import { ToastContainer, toast } from 'react-toastify';
@@ -37,22 +37,36 @@ const Wallet = (props: Session) => {
 
     const wbsocket = useWebSocket();
     const router = useRouter()
-
+    const socketListenerRef = useRef<(event: MessageEvent) => void>();
     useEffect(() => {
-        socket();
-    }, [wbsocket])
 
-    const socket = () => {
-        if (wbsocket) {
-            wbsocket.onmessage = (event) => {
-                const data = JSON.parse(event.data).data;
-                let eventDataType = JSON.parse(event.data).type;
-                if (eventDataType === "price") {
+        const handleSocketMessage = (event: any) => {
+            const data = JSON.parse(event.data).data;
+            let eventDataType = JSON.parse(event.data).type;
+
+            if (eventDataType === "convert") {
+                if (props.session) {
                     refreshTokenList()
+                    refreshData();
                 }
             }
+            if (eventDataType === "price") {
+                refreshTokenList()
+            }
+        };
+        if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
+            if (socketListenerRef.current) {
+                wbsocket.removeEventListener('message', socketListenerRef.current);
+            }
+            socketListenerRef.current = handleSocketMessage;
+            wbsocket.addEventListener('message', handleSocketMessage);
         }
-    }
+        return () => {
+            if (wbsocket) {
+                wbsocket.removeEventListener('message', handleSocketMessage);
+            }
+        };
+    }, [wbsocket]);
 
     const refreshTokenList = async () => {
         let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
@@ -62,11 +76,10 @@ const Wallet = (props: Session) => {
         setAllCoins(tokenList?.data);
     }
 
-    const refreshData = async () => {        
+    const refreshData = async () => {
+
         if (props.session) {
-            router?.refresh()
-         
-            let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${props.session?.user?.user_id}`, {
+            let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${props.session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
                 method: "GET",
                 headers: {
                     "Authorization": props.session?.user?.access_token
@@ -75,18 +88,18 @@ const Wallet = (props: Session) => {
 
             setUserAssetsList(userAssets);
 
-       
+
         }
     }
 
     return (
         <div>
-            <ToastContainer limit={1}/>
+            <ToastContainer limit={1} />
             <div className=" bg-light-v-1 py-[20px] md:py-[80px] dark:bg-black-v-1">
                 <div className="container flex gap-30 flex-wrap">
                     <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
                         <Banner coinList={allCoins} networks={props?.networks} session={props.session} assets={userAssetsList?.data?.totalAmount} withdrawList={props.withdrawList} depositList={props.depositList} />
-                        <WalletList coinList={allCoins} networks={props?.networks} session={props.session}   refreshData={refreshData}/>
+                        <WalletList coinList={allCoins} networks={props?.networks} session={props.session} refreshData={refreshData} />
                     </div>
                     <div className="lg:max-w-[432px] w-full md:block hidden">
                         <div className="lg:block hidden ">
@@ -139,7 +152,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
             },
         }).then(response => response.json());
 
-    
+
 
 
         return {
@@ -151,7 +164,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
                 networks: networkList?.data || [],
                 withdrawList: withdraws?.data?.totalAmount || 0.00,
                 depositList: deposits?.data?.totalAmount || 0.00,
-                assets: userAssets || [] ,
+                assets: userAssets || [],
             },
         };
     }

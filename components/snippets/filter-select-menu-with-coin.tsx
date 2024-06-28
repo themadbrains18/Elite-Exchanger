@@ -84,7 +84,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
                   <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} >
                     <li className='flex items-center gap-[5px] rounded-[5px] mr-[15px] w-full max-w-full'>
                       <Image src={`${(image === 'Coin.svg' && ((props?.value === null || props?.value === undefined) || text==="Select" )) ? `/assets/history/Coin.svg` : drop1Image !== '' ? drop1Image : drop2Image !== '' ? drop2Image : image}`} alt="error" width={20} height={20} className={`${text === 'XRP' || text === 'ETH' ? 'bg-white rounded-full' : ''}`} />
-                      <p className={`sm-text rounded-[5px] w-full max-w-full  cursor-pointer !text-banner-text ${props.dropdown == 1 ? ' one' : ' two'}`}>{text}</p>
+                      <p className={`sm-text rounded-[5px] w-full max-w-full  cursor-pointer !text-banner-text dark:!text-white ${props.dropdown == 1 ? ' one' : ' two'}`}>{text}</p>
                     </li>
                     <IconsComponent type="downArrow" hover={false} active={false} rotate={show} />
                   </div>
