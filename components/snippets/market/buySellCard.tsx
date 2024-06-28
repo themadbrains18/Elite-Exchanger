@@ -49,7 +49,13 @@ export function currencyFormatter(amount: any) {
   const formattedInteger = Number(integerPart).toLocaleString('en-IN');
 
   // Combine the formatted integer part and the decimal part
-  return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger +'.00';
+  if(formattedInteger!=='NaN'){
+    return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger +'.00';
+
+  }
+  else{
+    return 0.00
+  }
 }
 
 

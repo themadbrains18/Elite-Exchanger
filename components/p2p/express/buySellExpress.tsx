@@ -301,7 +301,7 @@ const BuySellExpress = (props: propsData) => {
    */
   const onHandleSubmit = async (data: any) => {
 
-    
+
 
     let pmId = getValues("p_method")
     // p2p/postad
@@ -435,8 +435,8 @@ const BuySellExpress = (props: propsData) => {
       if (seller.length > 0) {
         for (const post of seller) {
           let userPaymentMethod = post?.user?.user_payment_methods;
-          console.log(userPaymentMethod,"=userPaymentMethod");
-          
+          console.log(userPaymentMethod, "=userPaymentMethod");
+
           let sellerPost = userPaymentMethod?.filter((item: any) => {
             return item?.pmid === id
           })
@@ -445,7 +445,7 @@ const BuySellExpress = (props: propsData) => {
             setFinalPost(post);
             setUsdtToInr(post?.price);
             let spendAmount = getValues('spend_amount');
-            if (spendAmount > 0 && (spendAmount < parseFloat(post.min_limit) || spendAmount < parseFloat(post.max_limit) )) {
+            if (spendAmount > 0 && (spendAmount < parseFloat(post.min_limit) || spendAmount < parseFloat(post.max_limit))) {
               setError("spend_amount", {
                 type: "custom",
                 message: `Note: There's an order available in the range  ${post?.min_limit} - ${post?.max_limit}. Order within the range. `,
@@ -466,10 +466,7 @@ const BuySellExpress = (props: propsData) => {
         setFinalPost({});
       }
       setPaymentMethod(id);
-
     }
-
-
   }
 
   /**
@@ -518,7 +515,7 @@ const BuySellExpress = (props: propsData) => {
             <button
               className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[25px] max-w-[50%] w-full ${active1 === 1 && "!text-primary border-primary"
                 }`}
-              onClick={() => { setActive1(1); setFinalPost({});getUsdtToInrPrice('USDT'); setPaymentMethod('') }}
+              onClick={() => { setActive1(1); setFinalPost({}); getUsdtToInrPrice('USDT'); setPaymentMethod('') }}
             >
               Buy
             </button>
@@ -559,7 +556,7 @@ const BuySellExpress = (props: propsData) => {
                     <input
                       type="number"
                       placeholder="$0"
-                      step="any" 
+                      step="any"
                       {...register('spend_amount')}
                       onChange={(e: any) => {
                         if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
@@ -786,7 +783,7 @@ const BuySellExpress = (props: propsData) => {
                   <div className=" flex items-center relative">
                     <p className="sm-text dark:text-white">  Estimated price: 1 {secondCurrency}=</p>
                     {loader ?
-                                          <div className='loader w-[20px] z-[2] h-[20px] absolute top-[calc(50%-10px)] left-[calc(50%-60px)] border-[3px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
+                      <div className='loader w-[20px] z-[2] h-[20px] absolute top-[calc(50%-10px)] right-[-23px] border-[3px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
 
                       : <p className="sm-text dark:text-white">{currencyFormatter(Number(Number(usdtToInr)?.toFixed(2)))} INR</p>
                     }

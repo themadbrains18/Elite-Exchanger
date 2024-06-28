@@ -50,7 +50,7 @@ const AddPayment = (props: activeSection) => {
     }
     reset();
 
-    let fieldsItem = props.masterPayMethod.filter((item: any) => {
+    let fieldsItem = props?.masterPayMethod?.filter((item: any) => {
       return item?.id === id;
     })
 
@@ -138,7 +138,7 @@ const AddPayment = (props: activeSection) => {
       // setError("phonenumber",{ type: "custom", message: "Number contain 10 digits" })
     }
     else {
-      let pmt = props.list.filter((item: any) => {
+      let pmt = props?.list?.filter((item: any) => {
         return item.pm_name === data?.selectPayment?.payment_method && item.pmObject.phonenumber === data.phonenumber
       })
 

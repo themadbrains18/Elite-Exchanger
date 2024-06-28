@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { truncateNumber } from "@/libs/subdomain";
 
 const schema = yup.object().shape({
-  p_method: yup.array().min(1, "Please select atleast '1' payment method.").required().typeError("Please select atleast '1' payment method."),
+  p_method: yup.array().min(1, "Please select atleast '1' payment method.").required().max(5, "Only '5' payment methods are allowed.").typeError("Please select atleast '1' payment method."),
   quantity: yup.number().positive("Quantity must be greater than '0'.").required("Please enter quantity to sell.").typeError("Please enter quantity to sell."),
   min_limit: yup.number().positive("Quantity must be greater than '0'.").required("Please enter min limit amount.").typeError("Please enter min limit amount."),
   max_limit: yup.number().positive("Quantity must be greater than '0'.").required("Please enter max limit amount.").typeError("Please enter max limit amount."),
@@ -44,11 +44,22 @@ const EditPaymentMethod = (props: activeSection) => {
     let max_limit = props?.editPost?.price !== props.price ? props.price * props?.editPost?.quantity : props?.editPost?.max_limit
     setValue('max_limit', max_limit.toFixed(2));
 
+
+    let sortedPaymentMethods = props.userPaymentMethod?.sort((a:any, b:any) => {
+      if (a.pm_name < b.pm_name) return -1;
+      if (a.pm_name > b.pm_name) return 1;
+      return 0;
+    });
+
+    setList(sortedPaymentMethods);
+
     let method: any = [];
     props.editPost.p_method?.map((item: any) => {
       // console.log(item);
       method.push(item?.upm_id);
     })
+
+
 
     setValue('p_method', method);
 

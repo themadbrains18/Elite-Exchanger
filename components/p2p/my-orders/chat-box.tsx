@@ -225,9 +225,9 @@ const ChatBox = (props: PropsData) => {
         <>
             <div className={`bg-black z-[8] duration-300 fixed top-0 left-0 h-full w-full ${show ? 'opacity-80 visible' : 'opacity-0 invisible'}`}></div>
             <div className={`${show ? 'max-[1200px]:opacity-1 max-[1200px]:visible' : 'max-[1200px]:opacity-0 max-[1200px]:invisible'} duration-300 max-w-[25%] w-full max-[1200px]:z-[8] max-[1200px]:max-w-[345px] max-[1200px]:bottom-[105px] max-[1200px]:left-[50%] max-[1200px]:translate-x-[-50%] max-[1200px]:fixed rounded-[10px] overflow-hidden dark:bg-black-v-1 bg-[#F9FAFA] border dark:border-opacity-[15%] border-grey-v-1`}>
-                <div className="flex items-center gap-[20px] grow-[1.6] p-[14px] pb-[30px] dark:bg-[url(/assets/order/chat-head-bg-dark.png)] bg-[url(/assets/order/chat-head-bg.png)] no-reapeat bg-cover bg-bottom">
-                    <div className="w-[44px] h-[44px] rounded-full bg-[#e8f6f7] dark:bg-[#8ed0d9] border border-white flex relative">
-                        <Image src={profileImg} alt="error" width={44} height={44} className="rounded-full object-cover object-top" />
+                <div className="flex items-center gap-[10px] grow-[1.6] p-[14px] pb-[30px] dark:bg-[url(/assets/order/chat-head-bg-dark.png)] bg-[url(/assets/order/chat-head-bg.png)] no-reapeat bg-cover bg-bottom">
+                    <div className="w-[36px] h-[36px] rounded-full bg-[#e8f6f7] dark:bg-[#8ed0d9] border border-white flex relative">
+                        <Image src={profileImg} alt="error" width={36} height={36} className="rounded-full object-cover object-top" />
                         <div className="absolute bottom-0 right-[-5px]">
                             <IconsComponent type="activeStatus" hover={false} active={false} />
                         </div>

@@ -116,7 +116,14 @@ const PaymentMethod = (props: activeSection) => {
         },
       }
     ).then((response) => response.json());
-    setList(userPaymentMethod?.data);
+    // Assuming `userPaymentMethod?.data` contains the payment methods array
+    let sortedPaymentMethods = userPaymentMethod?.data.sort((a:any, b:any) => {
+      if (a.pm_name < b.pm_name) return -1;
+      if (a.pm_name > b.pm_name) return 1;
+      return 0;
+    });
+
+    setList(sortedPaymentMethods);
 
     if (name !== '') {
       let method: any = userPaymentMethod?.data?.find((item: any) => item?.pm_name === name)
@@ -312,7 +319,7 @@ const PaymentMethod = (props: activeSection) => {
                     <div className="flex gap-20 items-center justify-between w-full">
                       <div className="flex gap-20 items-center">
                         <div className="flex gap-10 items-center w-full max-w-[145px]">
-                         
+
                           <p className="sec-text !text-h-primary dark:!text-white !font-medium">
                             {item?.pm_name}
                           </p>
@@ -537,7 +544,7 @@ const PaymentMethod = (props: activeSection) => {
         />
       )}
       {active == 3 && (
-        <Successfull setShow={setShow} setActive={setActive} type="success" hideVisibility={true}/>
+        <Successfull setShow={setShow} setActive={setActive} type="success" hideVisibility={true} />
       )}
       {active === 4 && (
         <ConfirmationModel
@@ -552,7 +559,7 @@ const PaymentMethod = (props: activeSection) => {
       )}
 
       {verified &&
-        <AuthenticationModelPopup title='Confirmation' message='Please complete your kyc' setShow={setVerified} setActive={setActive} show={verified} hideVisibility={true}/>
+        <AuthenticationModelPopup title='Confirmation' message='Please complete your kyc' setShow={setVerified} setActive={setActive} show={verified} hideVisibility={true} />
       }
     </>
   );
