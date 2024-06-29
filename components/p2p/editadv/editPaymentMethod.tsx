@@ -37,7 +37,7 @@ const EditPaymentMethod = (props: activeSection) => {
   const [inputValue, setInputValue] = useState(props?.editPost?.quantity);
   const [minInputValue, setMinInputValue] = useState(props?.editPost?.min_limit);
   const [maxInputValue, setMaxInputValue] = useState(props?.editPost?.price !== props.price ? props.price * props?.editPost?.quantity : props?.editPost?.max_limit);
-
+  const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
   useEffect(() => {
     setValue('quantity', props?.editPost?.quantity);
     setValue('min_limit', props?.editPost?.min_limit);
@@ -45,7 +45,7 @@ const EditPaymentMethod = (props: activeSection) => {
     setValue('max_limit', max_limit.toFixed(2));
 
 
-    let sortedPaymentMethods = props.userPaymentMethod?.sort((a:any, b:any) => {
+    let sortedPaymentMethods = props.userPaymentMethod?.sort((a: any, b: any) => {
       if (a.pm_name < b.pm_name) return -1;
       if (a.pm_name > b.pm_name) return 1;
       return 0;
@@ -84,7 +84,7 @@ const EditPaymentMethod = (props: activeSection) => {
 
   const onHandleSubmit = async (data: any) => {
 
-    if(data.min_limit > data.max_limit){
+    if (data.min_limit > data.max_limit) {
       setError("min_limit", {
         type: "custom",
         message: `Min limit must be less than max limit.`,
@@ -142,7 +142,23 @@ const EditPaymentMethod = (props: activeSection) => {
       value > maxInputValue ? setError('min_limit', { type: "custom", message: "Min limit must be less than max limit." }) : clearErrors('min_limit'); setMinInputValue(value)
     }
   }
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = e.target;
+   
+    if (checked) {
+    
+      if (selectedMethods.length < 5) {
+        setSelectedMethods([...selectedMethods, value]);
+        setValue('p_method', [...selectedMethods, value]);
+      }
+    } else {
+      setSelectedMethods(selectedMethods.filter((method) => method !== value));
+    }
+  };
 
+  const isCheckboxDisabled = (value: string) => {
+    return selectedMethods.length >= 5 && !selectedMethods.includes(value);
+  };
 
   return (
     <>
@@ -156,7 +172,8 @@ const EditPaymentMethod = (props: activeSection) => {
                 return (
                   <div key={index} className="flex gap-20 py-20 md:mt-30">
                     <div>
-                      <input type="checkbox" {...register('p_method')} name="p_method" id={`checkbox${item?.id}`} value={item?.id} className="hidden methods" />
+                      <input type="checkbox" {...register('p_method')} name="p_method" id={`checkbox${item?.id}`} value={item?.id} className="hidden methods" onChange={handleCheckboxChange}
+                        disabled={isCheckboxDisabled(item.id)} />
                       <label
                         htmlFor={`checkbox${item?.id}`}
                         className="
@@ -189,7 +206,7 @@ const EditPaymentMethod = (props: activeSection) => {
                     ">
                       </label>
                     </div>
-                    <div className="flex gap-10 items-center w-full max-w-[145px]">
+                    <div className={`flex gap-20 items-center ${isCheckboxDisabled(item.id) ? "disabled-text" : ""}`}>
                       <p className="sec-text !text-h-primary dark:!text-white !font-medium">{item?.pm_name}</p>
                       <Image src={`${item?.master_payment_method?.icon}`} alt="payment image" width={32} height={32} />
                     </div>

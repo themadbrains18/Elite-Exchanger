@@ -62,7 +62,7 @@ const BuyAuthenticationModelPopup = (props: activeSection) => {
                   
                     <div className=" mt-20">
                         <div className="sec-text dark:!text-g-secondary text-center">
-                            {props?.type==="kyc" ? 'Please Complete your Kyc!' : 'User must be holding more than 0.01 BTC'}
+                            {props?.type==="kyc" ? 'Please complete your Kyc!' : 'User must be holding more than 0.01 BTC'}
                         </div>
                         
                     </div>

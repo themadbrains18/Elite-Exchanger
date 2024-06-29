@@ -63,7 +63,7 @@ const BuyCoinsTabs = (props: activeSection) => {
               value={value} // Controlled value for the currency dropdown
             />
           </div>
-          <div className="max-w-full md:max-w-[50%] w-full">
+          <div className="max-w-full min-w-max md:max-w-[50%] w-full">
             <FiliterSelectMenu
               data={list}
               placeholder="Payment Method"

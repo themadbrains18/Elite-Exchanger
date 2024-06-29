@@ -138,6 +138,8 @@ const PaymentMethod = (props: activeSection) => {
   };
 
   const onHandleSubmit = async (data: any) => {
+    console.log(data,"==daa");
+    
     if (data.quantity > props.assetsBalance) {
       setError("quantity", {
         type: "custom",
@@ -154,6 +156,11 @@ const PaymentMethod = (props: activeSection) => {
       setFocus("min_limit");
       return;
     }
+
+    let ans = Array.isArray(data.p_method);
+    if (ans === false) {
+      data.p_method = [data.p_method];
+    }
     if (data.p_method === "false") {
       setError("p_method", {
         type: "custom",
@@ -163,10 +170,6 @@ const PaymentMethod = (props: activeSection) => {
       return;
     }
 
-    let ans = Array.isArray(data.p_method);
-    if (ans === false) {
-      data.p_method = [data.p_method];
-    }
     props.setPaymentMethod(data);
     props.setStep(3);
   };
@@ -251,9 +254,12 @@ const PaymentMethod = (props: activeSection) => {
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
+   
     if (checked) {
+    
       if (selectedMethods.length < 5) {
         setSelectedMethods([...selectedMethods, value]);
+        setValue('p_method', [...selectedMethods, value]);
       }
     } else {
       setSelectedMethods(selectedMethods.filter((method) => method !== value));

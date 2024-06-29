@@ -52,7 +52,6 @@ const BuySellExpress = (props: propsData) => {
   const [active, setActive] = useState(false);
   const route = useRouter();
   const [loader, setLoader] = useState(false)
-  const [resetValue, setResetValue] = useState(false)
   const router = useRouter();
   const wbsocket = useWebSocket();
   const hasRun = useRef(false);
@@ -132,14 +131,11 @@ const BuySellExpress = (props: propsData) => {
     //Buy case
     //================
 
+    clearErrors("spend_amount")
+    clearErrors("receive_amount")
+ 
+    reset()
     if (active1 === 1) {
-      console.log("=here");
-      
-      clearErrors("spend_amount")
-      clearErrors("receive_amount")
-      setResetValue(true)
-      setPaymentMethod('')
-      reset()
       if (dropdown === 1) {
         setFirstCurrency(symbol);
         let token = list1?.filter((item: any) => {
@@ -415,7 +411,7 @@ const BuySellExpress = (props: propsData) => {
    * @param token 
    */
   const filterSellerAds = (id: string, token: any) => {
-    setResetValue(false)
+   
     clearErrors("spend_amount")
     clearErrors("receive_amount")
     setValue('p_method', id);
@@ -640,7 +636,7 @@ const BuySellExpress = (props: propsData) => {
                     />
                   </div>
 
-                  <div className="max-w-max w-full">
+                  <div className="max-w-[120px] w-full">
                     {router.pathname.includes("/chart") ? (
                       <div className="flex items-center gap-[5px] rounded-[5px] mr-[15px] pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d]">
                         <p
@@ -688,7 +684,7 @@ const BuySellExpress = (props: propsData) => {
                     />
                   </div>
 
-                  <div>
+                  <div className="max-w-[120px] w-full">
                     <FilterSelectMenuWithCoin
                       data={list2}
                       border={false}
@@ -720,7 +716,6 @@ const BuySellExpress = (props: propsData) => {
                     auto={false}
                     widthFull={true}
                     onPaymentMethodChange={filterSellerAds}
-                    resetValue={resetValue}
                   />
                 </div>
                 {errors?.p_method && (

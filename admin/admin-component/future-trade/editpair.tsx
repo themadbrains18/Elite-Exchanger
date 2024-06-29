@@ -132,7 +132,7 @@ const FutureEditPair = (props: ActiveSession) => {
           />
         </svg>
       </div>
-      <form className="pt-30" onSubmit={handleSubmit(onHandleSubmit)}>
+      <form className="pt-30" onSubmit={handleSubmit(onHandleSubmit)} >
       <div className=" relative mb-20">
           <p className="sm-text mb-2">Select Coin</p>
           <FilterSelectMenuWithCoin

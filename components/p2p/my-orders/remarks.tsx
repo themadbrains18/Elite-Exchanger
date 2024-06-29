@@ -274,14 +274,19 @@ const Remarks = (props: propsData) => {
                 {
                     props?.userOrder?.status === 'isProcess' &&
                     (props?.userOrder?.buy_user_id === session?.user?.user_id ?
-                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please Complete Your Payment within <span className='dark:text-white text-black'>{timeLeft}</span> you need to pay<span className='dark:text-white text-black'> {props?.userOrder?.spend_amount} INR.</span></p>
+                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please complete your payment within <span className='dark:text-white text-black'>{timeLeft}</span> you need to pay<span className='dark:text-white text-black'> {props?.userOrder?.spend_amount} INR.</span></p>
                         :
-                        <p className='dark:!text-[#96969A] !text-ban}ner-text mb-20 sec-text'> Payment completed within <span className='dark:text-white text-black'>{timeLeft}</span></p>
+                        <p className='dark:!text-[#96969A] !text-ban}ner-text mb-20 sec-text'> Payment complete within <span className='dark:text-white text-black'>{timeLeft}</span></p>
                     )
                 }
                 {
                     props?.userOrder?.status === 'isCompleted' &&
-                    <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The Payment is done. Please wait for the seller to release the crypto</p>
+            
+                    (props?.userOrder?.buy_user_id === session?.user?.user_id ?
+                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The Payment is done. Please wait for the seller to release the crypto</p>
+                        :
+                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The Payment is done. Please release the crypto</p>
+                    )
                 }
                 {
                     props?.userOrder?.status === 'isReleased' && 
@@ -305,8 +310,7 @@ const Remarks = (props: propsData) => {
                     props?.userOrder?.status !== 'isCanceled' &&
                     <p className='nav-text-sm'>
                         <span className='text-black dark:text-white'>Notice: </span>
-                        Please Do Not leave sensitive character while transferring funds
-                        paying means you agree to our terms and conditions
+                        Please don't leave sensitive information when transferring funds. By making a payment, you agree to our terms and conditions.
                     </p>
 
                 }

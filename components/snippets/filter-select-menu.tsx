@@ -26,7 +26,6 @@ const FiliterSelectMenu = (props: dataList) => {
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(props.value);
 
-  console.log(props?.resetValue,"props?.resetValue=");
   
 
   useEffect(() => {
@@ -50,6 +49,15 @@ const FiliterSelectMenu = (props: dataList) => {
       setActive('')
     }
   }, [props.value,props?.resetValue])
+
+  useEffect(()=>{
+    
+    if(props?.resetValue){
+      
+      setActive('')
+    }
+
+  },[props?.resetValue])
 
 
   console.log(active, props?.placeholder);

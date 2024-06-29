@@ -160,12 +160,12 @@ button:focus-visible {
 
   /* Large Text Typography (fs-18)  */
   .sec-text {
-    @apply font-normal text-[14px] md:text-[18px] leading-22 md:leading-24 dark:text-white;
+    @apply font-normal text-[14px] md:text-[18px] leading-22 md:leading-24 text-black dark:text-white;
   }
 
   /* Medium Text Typography (fs-16)  */
   .md-text {
-    @apply font-normal text-[12px] md:text-[16px] leading-18 md:leading-24 dark:text-white;
+    @apply font-normal text-[12px] md:text-[16px] leading-18 md:leading-24 text-black dark:text-white;
   }
 
   /* Small Text Typography (fs-14)  */
@@ -181,7 +181,7 @@ button:focus-visible {
     @apply font-normal text-[14px] md:text-[18px] leading-17 md:leading-22 text-gamma;
   }
   .info-16-18 {
-    @apply font-normal text-[16px] md:text-[18px] leading-24 md:leading-22 dark:text-white;
+    @apply font-normal text-[16px] md:text-[18px] leading-24 md:leading-22 text-black dark:text-white;
   }
 
   .info-12 {
