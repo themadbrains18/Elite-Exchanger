@@ -23,7 +23,7 @@ const Remarks = (props: propsData) => {
 
     const { status, data: session } = useSession();
     const [active, setActive] = useState(false);
-    const [active1, setActive1] = useState(false);
+    const [active1, setActive1] = useState(true);
     const [show, setShow] = useState(false);
     const [confirmation, setConfirmation] = useState(false)
     const router = useRouter();
@@ -47,6 +47,7 @@ const Remarks = (props: propsData) => {
         deadline.setMinutes(deadline.getMinutes() + 15);
         deadline.setSeconds(deadline.getSeconds() + 5);
         let currentTime = new Date();
+        // console.log(props.userOrder?.status,"=========props.userOrder?.status");
         if (currentTime < deadline && props.userOrder?.status === 'isProcess') {
             if (Ref.current) clearInterval(Ref.current);
             const timer = setInterval(() => {
@@ -55,6 +56,8 @@ const Remarks = (props: propsData) => {
             Ref.current = timer;
         }
         else if (currentTime > deadline && props.userOrder?.status === 'isProcess') {
+            console.log("This is here");
+            // return;
             await orderCancel();
         }
     }
@@ -64,9 +67,11 @@ const Remarks = (props: propsData) => {
      * @param e 
      */
     const calculateTimeLeft = (e: any) => {
+        
         let { total, minutes, seconds }
             = getTimeRemaining(e);
-
+        console.log(props.userOrder?.status,"=========props.userOrder?.status");
+        
         if (total >= 0) {
             setTimer(
                 (minutes > 9 ? minutes : '0' + minutes) + ':'
@@ -76,6 +81,8 @@ const Remarks = (props: propsData) => {
         else {
             if (Ref.current) clearInterval(Ref.current);
             if (props.userOrder?.status === 'isProcess') {
+                // console.log("i am here");
+                // return;
                 orderCancel();
             }
 
@@ -151,6 +158,9 @@ const Remarks = (props: propsData) => {
      * @returns 
      */
     const orderCancel = async () => {
+
+        console.log("this is called!");
+        
         let obj = {
             "order_id": props.orderid,
             "user_id": props.userOrder?.buy_user_id
