@@ -47,7 +47,6 @@ const Remarks = (props: propsData) => {
         deadline.setMinutes(deadline.getMinutes() + 15);
         deadline.setSeconds(deadline.getSeconds() + 5);
         let currentTime = new Date();
-
         if (currentTime < deadline && props.userOrder?.status === 'isProcess') {
             if (Ref.current) clearInterval(Ref.current);
             const timer = setInterval(() => {
@@ -57,6 +56,8 @@ const Remarks = (props: propsData) => {
         }
         
         else if (currentTime > deadline && props.userOrder?.status === 'isProcess') {
+            console.log("This is here");
+            // return;
             await orderCancel();
         }
     }
@@ -66,6 +67,7 @@ const Remarks = (props: propsData) => {
      * @param e 
      */
     const calculateTimeLeft = (e: any) => {
+        
         let { total, minutes, seconds }
             = getTimeRemaining(e);
 
@@ -79,6 +81,8 @@ const Remarks = (props: propsData) => {
         else {
             if (Ref.current) clearInterval(Ref.current);
             if (props.userOrder?.status === 'isProcess') {
+                // console.log("i am here");
+                // return;
                 orderCancel();
             }
 
@@ -154,6 +158,9 @@ const Remarks = (props: propsData) => {
      * @returns 
      */
     const orderCancel = async () => {
+
+        console.log("this is called!");
+        
         let obj = {
             "order_id": props.orderid,
             "user_id": props.userOrder?.buy_user_id
@@ -211,7 +218,7 @@ const Remarks = (props: propsData) => {
         setActive(true);
     }
 
-    // console.log(props?.userOrder,"============");
+    
     const finalSubmitAds = async (pass: string) => {
         try {
 
@@ -289,7 +296,7 @@ const Remarks = (props: propsData) => {
                     (props?.userOrder?.buy_user_id === session?.user?.user_id ?
                         <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please complete your payment within <span className='dark:text-white text-black'>{timeLeft}</span> minutes you need to pay<span className='dark:text-white text-black'> {props?.userOrder?.spend_amount} INR.</span></p>
                         :
-                        <p className='dark:!text-[#96969A] !text-ban}ner-text mb-20 sec-text'> Payment complete within <span className='dark:text-white text-black'>{timeLeft}</span></p>
+                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'> Payment complete within <span className='dark:text-white text-black'>{timeLeft} </span> minutes</p>
                     )
                 }
                 {

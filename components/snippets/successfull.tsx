@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef } from "react";
 import Context from "../contexts/context";
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 interface activeSection {
   setActive?: Function;
@@ -13,7 +14,7 @@ interface activeSection {
 
 const Successfull = (props: activeSection) => {
   const { mode } = useContext(Context);
-
+  const router = useRouter();
   const closePopup = () => {
     props.setShow(false),
       props.setActive !== undefined && props.setActive(0);
@@ -34,7 +35,7 @@ const Successfull = (props: activeSection) => {
       >
         <div className="flex items-center justify-between relative">
 
-          <p className="sec-title">
+          <p className="sec-title mb-8">
 
             {props?.type === "success"
               ? "Payment Method"
@@ -74,22 +75,27 @@ const Successfull = (props: activeSection) => {
         <p className={`py-[20px] md:py-40 info-14-18 ${props?.type === "release" ? 'text-center' : ''}`}>
           {props?.type === "success"
             ? "New payment method has been added successfully."
-            : props?.type === "release" ? "Assets Released successfully."
+            : props?.type === "release" ? "Assets has been released successfully."
               : "Before releasing the crypto, please confirm that you have received the payment and have checked if the amount and payers name match those of the order if payment information is inconsistent or there arise a dispute , please immediatly contact the customer support and do not release the crypto."}
         </p>
 
 
         {props?.type === "success" || props?.type === "release" ? (
-          <button
-            className="solid-button w-full"
-            onClick={() => {
-              props.setActive !== undefined && props.setActive(0);
-              props.setActive1 !== undefined && props.setActive1(false);
-              props.setShow(false);
-            }}
-          >
-            OK
+          <div className="flex gap-3">
+            <button
+              className="solid-button w-full"
+              onClick={() => {
+                props.setActive !== undefined && props.setActive(0);
+                props.setActive1 !== undefined && props.setActive1(false);
+                props.setShow(false);
+              }}
+            >
+              OK
+            </button>
+            <button onClick={() => { router.push('/p2p/buy') }} className={`solid-button max-w-full w-full `}>
+              Place another order
           </button>
+        </div>
         ) : (
           <div>
             <button
