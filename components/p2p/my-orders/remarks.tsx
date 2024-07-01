@@ -208,7 +208,7 @@ const Remarks = (props: propsData) => {
         setActive(true);
     }
 
-    // console.log(props?.userOrder,"============");
+    
     const finalSubmitAds = async (pass: string) => {
         try {
 
@@ -283,7 +283,7 @@ const Remarks = (props: propsData) => {
                     (props?.userOrder?.buy_user_id === session?.user?.user_id ?
                         <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please complete your payment within <span className='dark:text-white text-black'>{timeLeft}</span> minutes you need to pay<span className='dark:text-white text-black'> {props?.userOrder?.spend_amount} INR.</span></p>
                         :
-                        <p className='dark:!text-[#96969A] !text-ban}ner-text mb-20 sec-text'> Payment complete within <span className='dark:text-white text-black'>{timeLeft}</span></p>
+                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'> Payment complete within <span className='dark:text-white text-black'>{timeLeft} </span> minutes</p>
                     )
                 }
                 {
