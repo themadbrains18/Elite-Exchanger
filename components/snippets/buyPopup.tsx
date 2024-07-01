@@ -76,7 +76,7 @@ const BuyPopup = (props: activeSection) => {
     if (data.spend_amount < props?.selectedPost?.min_limit) {
       setError("spend_amount", {
         type: "custom",
-        message: `Please enter price greater than minimum limit '${props?.selectedPost?.min_limit}'.`,
+        message: `Please enter price greater than or equal  minimum limit '${props?.selectedPost?.min_limit}'.`,
       });
       return;
     }
@@ -84,7 +84,7 @@ const BuyPopup = (props: activeSection) => {
     if (data.spend_amount > props?.selectedPost?.max_limit) {
       setError("spend_amount", {
         type: "custom",
-        message: `Please enter price less than maximum limit '${props?.selectedPost?.max_limit}'.`,
+        message: `Please enter price less than or equal to maximum limit '${props?.selectedPost?.max_limit}'.`,
       });
       return;
     }
