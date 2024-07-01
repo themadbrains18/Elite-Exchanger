@@ -133,6 +133,8 @@ const PaymentMethod = (props: activeSection) => {
       if (method) {
 
         setValue("p_method", method?.id)
+        setSelectedMethods([method?.id]);
+
       }
     }
   };
@@ -300,8 +302,9 @@ const PaymentMethod = (props: activeSection) => {
                           name="p_method"
                           id={`checkbox${item?.id}`}
                           value={item?.id}
+                          
                           defaultChecked={
-                            router.query.pmid?.includes(item?.id) ??
+                            selectedMethods.includes(item.id) ??
                             false
                           }
                           onChange={handleCheckboxChange}
