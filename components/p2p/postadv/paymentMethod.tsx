@@ -344,7 +344,7 @@ const PaymentMethod = (props: activeSection) => {
                         ></label>
                       </div>
                     )}
-                    <div className="flex gap-20 items-center justify-between w-full">
+                    <div className="flex gap-2 items-center justify-between w-full">
                       <div className={`flex gap-20 items-center ${isCheckboxDisabled(item.id) ? "disabled-text" : ""}`}>
                         <div className="flex gap-10 items-center w-full max-w-[145px]">
 
