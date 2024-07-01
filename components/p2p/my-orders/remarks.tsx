@@ -47,6 +47,7 @@ const Remarks = (props: propsData) => {
         deadline.setMinutes(deadline.getMinutes() + 15);
         deadline.setSeconds(deadline.getSeconds() + 5);
         let currentTime = new Date();
+
         if (currentTime < deadline && props.userOrder?.status === 'isProcess') {
             if (Ref.current) clearInterval(Ref.current);
             const timer = setInterval(() => {
@@ -54,6 +55,7 @@ const Remarks = (props: propsData) => {
             }, 1000);
             Ref.current = timer;
         }
+        
         else if (currentTime > deadline && props.userOrder?.status === 'isProcess') {
             await orderCancel();
         }
@@ -66,6 +68,7 @@ const Remarks = (props: propsData) => {
     const calculateTimeLeft = (e: any) => {
         let { total, minutes, seconds }
             = getTimeRemaining(e);
+
 
         if (total >= 0) {
             setTimer(
@@ -208,10 +211,14 @@ const Remarks = (props: propsData) => {
         setActive(true);
     }
 
+    // console.log(props?.userOrder,"============");
     const finalSubmitAds = async (pass: string) => {
         try {
 
             finalFormData.fundcode = pass;
+
+            console.log(finalFormData,"==aJSON.parse(formData)");
+            
 
             if (status === 'authenticated') {
                 const ciphertext = AES.encrypt(JSON.stringify(finalFormData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
@@ -266,15 +273,21 @@ const Remarks = (props: propsData) => {
                         <div className='border-b dark:border-opacity-[15%] border-grey-v-1 md:pb-30 pb-[15px] md:mb-30 mb-[15px]'>
                             <p className="text-[19px] md:text-[23px]  leading-7 font-medium   dark:!text-white  !text-h-primary">Remarks</p>
                         </div>
+                        
+                        
                         {props?.userOrder?.sell_user_id === session?.user?.user_id ? 
-                        <p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You can pay me on my registered Payment Methods</p>
-                        :<p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You can pay me on above listed Payment Methods</p> }
+                        <p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You can pay me on my registered payment methods</p>
+                        :<p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You can pay me on above listed payment methods</p> }
                     </>
+                }
+                {
+                    
+                    <p className='nav-text-sm mb-[15px] md:mb-[24px]'>{props?.userOrder?.user_post?.remarks ? props?.userOrder?.user_post?.remarks : `The exchange offers a seamless trading experience with intuitive navigation and quick transaction times. Highly recommend for both beginners and experienced traders!`}</p>
                 }
                 {
                     props?.userOrder?.status === 'isProcess' &&
                     (props?.userOrder?.buy_user_id === session?.user?.user_id ?
-                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please complete your payment within <span className='dark:text-white text-black'>{timeLeft}</span> you need to pay<span className='dark:text-white text-black'> {props?.userOrder?.spend_amount} INR.</span></p>
+                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please complete your payment within <span className='dark:text-white text-black'>{timeLeft}</span> minutes you need to pay<span className='dark:text-white text-black'> {props?.userOrder?.spend_amount} INR.</span></p>
                         :
                         <p className='dark:!text-[#96969A] !text-ban}ner-text mb-20 sec-text'> Payment complete within <span className='dark:text-white text-black'>{timeLeft}</span></p>
                     )
@@ -283,16 +296,16 @@ const Remarks = (props: propsData) => {
                     props?.userOrder?.status === 'isCompleted' &&
             
                     (props?.userOrder?.buy_user_id === session?.user?.user_id ?
-                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The Payment is done. Please wait for the seller to release the crypto</p>
+                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The payment is done. Please wait for the seller to release the crypto</p>
                         :
-                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The Payment is done. Please release the crypto</p>
+                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The payment is done. Please release the crypto</p>
                     )
                 }
                 {
                     props?.userOrder?.status === 'isReleased' && 
                     (props?.userOrder?.sell_user_id === session?.user?.user_id ?
-                    <><p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order Completed! You have released your coins. Your P2P order #{props.orderid} has been successfully completed</p></>
-                    :<p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order Completed! Your P2P order #{props.orderid} has been successfully completed. The assets have been transferred to your wallet.</p>)
+                    <><p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! You have released your coins. Your P2P order #{props.orderid} has been successfully completed</p></>
+                    :<p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! Your P2P order #{props.orderid} has been successfully completed. The assets have been transferred to your wallet.</p>)
                 }
                 {
                     props?.userOrder?.status === 'isCanceled' &&
@@ -301,9 +314,9 @@ const Remarks = (props: propsData) => {
                             <div className='min-w-[24px]'>
                                 <IconsComponent type='infoIconRed' hover={false} active={false} />
                             </div>
-                            <p className='text-[#DC2626] text-[14px] md:text-[18px]'>Unavailable to Check The Order Has Been Canceled</p>
+                            <p className='text-[#DC2626] text-[14px] md:text-[18px]'>Unavailable to check the order has been canceled</p>
                         </div>
-                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The Order Was Canceled.</p>
+                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The order was canceled.</p>
                     </>
                 }
                 {

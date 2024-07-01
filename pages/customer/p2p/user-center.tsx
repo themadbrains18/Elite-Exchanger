@@ -54,9 +54,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       headers: {
         "Authorization": session?.user?.access_token
       },
-    }).then(response => response.json());
-
-    let userPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/all`, {
+    }).then(response => response.json());    
+    let userPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/advertisement?status=all&itemOffset=0&itemsPerPage=50`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token

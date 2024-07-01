@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import Context from "../../contexts/context";
 import ReactPaginate from 'react-paginate';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
+import { truncateNumber } from '@/libs/subdomain';
 
 interface dataTypes {
 
@@ -289,7 +290,7 @@ const DesktopTable = (props: dataTypes) => {
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(item.price)} INR</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(item.quantity,6)} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
