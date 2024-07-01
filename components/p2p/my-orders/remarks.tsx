@@ -23,7 +23,7 @@ const Remarks = (props: propsData) => {
 
     const { status, data: session } = useSession();
     const [active, setActive] = useState(false);
-    const [active1, setActive1] = useState(true);
+    const [active1, setActive1] = useState(false);
     const [show, setShow] = useState(false);
     const [confirmation, setConfirmation] = useState(false)
     const router = useRouter();
