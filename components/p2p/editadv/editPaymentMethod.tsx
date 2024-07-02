@@ -38,6 +38,7 @@ const EditPaymentMethod = (props: activeSection) => {
   const [minInputValue, setMinInputValue] = useState(props?.editPost?.min_limit);
   const [maxInputValue, setMaxInputValue] = useState(props?.editPost?.price !== props.price ? props.price * props?.editPost?.quantity : props?.editPost?.max_limit);
   const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
+
   useEffect(() => {
     setValue('quantity', props?.editPost?.quantity);
     setValue('min_limit', props?.editPost?.min_limit);
@@ -60,7 +61,7 @@ const EditPaymentMethod = (props: activeSection) => {
     })
 
 
-
+    setSelectedMethods(method)
     setValue('p_method', method);
 
   }, [props.editPost]);
@@ -144,17 +145,20 @@ const EditPaymentMethod = (props: activeSection) => {
   }
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
-   
+
     if (checked) {
-    
       if (selectedMethods.length < 5) {
-        setSelectedMethods([...selectedMethods, value]);
-        setValue('p_method', [...selectedMethods, value]);
+        const newSelectedMethods = [...selectedMethods, value];
+        setSelectedMethods(newSelectedMethods);
+        setValue('p_method', newSelectedMethods);
       }
     } else {
-      setSelectedMethods(selectedMethods.filter((method) => method !== value));
+      const newSelectedMethods = selectedMethods.filter((method) => method !== value);
+      setSelectedMethods(newSelectedMethods);
+      setValue('p_method', newSelectedMethods);
     }
   };
+
 
   const isCheckboxDisabled = (value: string) => {
     return selectedMethods.length >= 5 && !selectedMethods.includes(value);
@@ -172,8 +176,8 @@ const EditPaymentMethod = (props: activeSection) => {
                 return (
                   <div key={index} className="flex gap-20 py-20 md:mt-30">
                     <div>
-                      <input type="checkbox" {...register('p_method')} name="p_method" id={`checkbox${item?.id}`} value={item?.id} className="hidden methods" onChange={handleCheckboxChange}
-                        disabled={isCheckboxDisabled(item.id)} />
+                      <input type="checkbox" {...register('p_method')} name="p_method" id={`checkbox${item?.id}`} value={item?.id} className="hidden methods" onChange={handleCheckboxChange} checked={selectedMethods.includes(item?.id.toString())} disabled={isCheckboxDisabled(item?.id.toString())} />
+
                       <label
                         htmlFor={`checkbox${item?.id}`}
                         className="

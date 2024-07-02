@@ -202,9 +202,13 @@ const PaymentMethod = (props: activeSection) => {
 
   const handleDelete = async () => {
     try {
+      console.log(props?.userPosts,"==id");
+      
 
       let paymentMethodRelation = [];
-      for (const post of props?.userPosts) {
+      for (const post of props?.userPosts?.data) {
+        console.log(post,"==");
+        
         post?.p_method.filter((itm: any) => {
           if (itm.upm_id === id) {
             paymentMethodRelation.push(itm);
@@ -217,6 +221,7 @@ const PaymentMethod = (props: activeSection) => {
         return;
       }
 
+      // return;
       let responseData = await fetch(
         `${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod?id=${id}`,
         {
@@ -256,6 +261,8 @@ const PaymentMethod = (props: activeSection) => {
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
+    console.log(value, checked,"==checked");
+    
    
     if (checked) {
     
@@ -264,7 +271,9 @@ const PaymentMethod = (props: activeSection) => {
         setValue('p_method', [...selectedMethods, value]);
       }
     } else {
-      setSelectedMethods(selectedMethods.filter((method) => method !== value));
+      const newSelectedMethods = selectedMethods.filter((method) => method !== value);
+      setSelectedMethods(newSelectedMethods);
+      setValue('p_method', newSelectedMethods);
     }
   };
 

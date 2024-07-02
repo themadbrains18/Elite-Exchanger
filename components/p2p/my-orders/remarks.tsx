@@ -58,6 +58,7 @@ const Remarks = (props: propsData) => {
             }, 1000);
             Ref.current = timer;
         }
+        
         else if (currentTime > deadline && props.userOrder?.status === 'isProcess') {
             
             console.log(props.userOrder?.status,"========= userOrder status 1");
@@ -229,6 +230,9 @@ const Remarks = (props: propsData) => {
         try {
 
             finalFormData.fundcode = pass;
+
+            console.log(finalFormData,"==aJSON.parse(formData)");
+            
 
             if (status === 'authenticated') {
                 const ciphertext = AES.encrypt(JSON.stringify(finalFormData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
