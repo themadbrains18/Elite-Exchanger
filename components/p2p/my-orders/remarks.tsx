@@ -56,7 +56,6 @@ const Remarks = (props: propsData) => {
         }
         
         else if (currentTime > deadline && props.userOrder?.status === 'isProcess') {
-            console.log("This is here");
             // return;
             await orderCancel();
         }
@@ -81,7 +80,6 @@ const Remarks = (props: propsData) => {
         else {
             if (Ref.current) clearInterval(Ref.current);
             if (props.userOrder?.status === 'isProcess') {
-                // console.log("i am here");
                 // return;
                 orderCancel();
             }

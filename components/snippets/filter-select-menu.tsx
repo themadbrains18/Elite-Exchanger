@@ -44,7 +44,7 @@ const FiliterSelectMenu = (props: dataList) => {
     })
 
     if(props?.resetValue){
-      console.log("=-here",props?.resetValue);
+      // console.log("=-here",props?.resetValue);
       
       setActive('')
     }
@@ -60,7 +60,7 @@ const FiliterSelectMenu = (props: dataList) => {
   },[props?.resetValue])
 
 
-  console.log(active, props?.placeholder);
+  // console.log(active, props?.placeholder);
   
 
   return (

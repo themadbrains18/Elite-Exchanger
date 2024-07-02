@@ -1,3 +1,4 @@
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import { truncateNumber } from '@/libs/subdomain';
 import { useSession } from 'next-auth/react';
 import React from 'react'
@@ -23,11 +24,11 @@ const OrderInfo = (props: propsData) => {
                 </div>
                 <div className='grid grid-cols-2 gap-20  mb-[42px]'>
                     <p className='info-14-18 !text-banner-heading  !text-[#232530] dark:!text-white'>Order Value</p>
-                    <p className='info-16-18 md:!text-[16px] !text-[14px]  dark:!text-white !text-[#232530]'>{props.userOrder?.spend_amount} INR</p>
+                    <p className='info-16-18 md:!text-[16px] !text-[14px]  dark:!text-white !text-[#232530]  '>{currencyFormatter(props.userOrder?.spend_amount)} INR</p>
                 </div>
                 <div className='grid grid-cols-2 gap-20  mb-[42px]'>
-                    <p className='info-14-18 !text-banner-heading dark:!text-white'>Price</p>
-                    <p className='info-16-18 md:!text-[16px] !text-[14px]  dark:!text-white !text-body-primary'>{props.userOrder?.price} INR/{props?.userOrder?.receive_currency}</p>
+                    <p className='info-14-18 !text-banner-heading dark:!text-white capitalize'>{props?.userOrder?.buy_user_id !== session?.user?.user_id && props?.userOrder?.user_post?.price_type} Price</p>
+                    <p className='info-16-18 md:!text-[16px] !text-[14px]  dark:!text-white !text-body-primary'>{currencyFormatter(props.userOrder?.price)} INR/{props?.userOrder?.receive_currency}</p>
                 </div>
                 <div className='grid grid-cols-2 gap-20  mb-[42px]'>
                     <p className='info-14-18 !text-banner-heading dark:!text-white'>Qty.</p>

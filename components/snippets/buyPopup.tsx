@@ -247,7 +247,7 @@ const BuyPopup = (props: activeSection) => {
                   <p className="sm-text w-full">{currencyFormatter(props?.selectedPost?.min_limit)} INR ~ {currencyFormatter(props?.selectedPost?.max_limit)} INR</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
-                  <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Market Price :</p>
+                  <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Price :</p>
                   <p className="sm-text w-full">{currencyFormatter(props?.selectedPost?.price)} INR</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
