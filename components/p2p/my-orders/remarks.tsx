@@ -60,6 +60,13 @@ const Remarks = (props: propsData) => {
         }
         
         else if (currentTime > deadline && props.userOrder?.status === 'isProcess') {
+<<<<<<< HEAD
+=======
+            
+            console.log(props.userOrder?.status,"========= userOrder status 1");
+    
+            console.log("=====================order time calculation==============");
+>>>>>>> acb825ea3cd29715e030e77f3e751621e614c045
             // return;
             await orderCancel();
         }
@@ -83,7 +90,12 @@ const Remarks = (props: propsData) => {
         else {
             if (Ref.current) clearInterval(Ref.current);
             if (props.userOrder?.status === 'isProcess') {
+<<<<<<< HEAD
                 // return;
+=======
+                console.log(props.userOrder?.status,"========= userOrder status 2");
+                console.log("=====================calculate time left==============");
+>>>>>>> acb825ea3cd29715e030e77f3e751621e614c045
                 orderCancel();
             }
 
