@@ -176,9 +176,7 @@ const OrderPreferenceModal = (props: propsData) => {
                 </p>
               </div>
               <p className="info-12 pl-[25px]">
-                Please enter your order cost that's inclusive of the initial
-                margin, fees to open, and fees to close. Modifying the leverage
-                will not change your order cost.
+              Please enter your desired order value. You can modify the required margin by adjusting the applied leverage.
               </p>
             </div>
           </div>

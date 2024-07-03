@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Context from '@/components/contexts/context';
 import { useSession } from 'next-auth/react';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
+import clickOutSidePopupClose from '@/components/snippets/clickOutSidePopupClose';
 
 interface showPopup {
     modelPopup?: number;
@@ -16,6 +17,7 @@ interface showPopup {
     setTpSl?: any;
     actionType?: any;
     positionId?: any;
+    setProfitLossConfirm?: any;
 }
 
 const ProfitLossModal = (props: showPopup) => {
@@ -28,6 +30,15 @@ const ProfitLossModal = (props: showPopup) => {
 
     const [takeProfirValue, setTakeProfitValue] = useState(0);
     const [stopLossValue, setStopLossValue] = useState(0);
+
+
+    useEffect(()=>{
+        setTakeProfitValue(0)
+        setStopLossValue(0)
+        setProfit(0)
+        setLoss(0)
+    },[])
+
 
     const findTakeProfit = (e: any) => {
         let marketPrice = e?.target?.value;
@@ -139,6 +150,7 @@ const ProfitLossModal = (props: showPopup) => {
 
         if (props?.actionType === 'buysell') {
             props.setTpSl({ profit: profitobj, stopls: stoplossobj });
+          
         }
         else {
 
@@ -172,8 +184,20 @@ const ProfitLossModal = (props: showPopup) => {
 
     }
 
+    const closePopup = () => {
+        setProfit(0);
+        setLoss(0);
+        setStopLossValue(0);
+        setTakeProfitValue(0);
+        props.setModelOverlay(false);
+        props.setModelPopup(0);
+        props.setProfitLossConfirm &&    props.setProfitLossConfirm(false)
+      }
+      const wrapperRef = useRef(null);
+      clickOutSidePopupClose({ wrapperRef, closePopup });
+
     return (
-        <div className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[720px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.modelPopup == 1 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
+        <div ref={wrapperRef} className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[720px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.modelPopup == 1 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
             <div className="flex items-center justify-between mb-[20px]">
                 <p className="sec-title !text-[20px]">TP/SL for entire position </p>
                 <svg
@@ -184,6 +208,7 @@ const ProfitLossModal = (props: showPopup) => {
                         setTakeProfitValue(0);
                         props.setModelOverlay(false);
                         props.setModelPopup(0);
+                        props.setProfitLossConfirm(false)
 
                     }}
                     enableBackground="new 0 0 60.963 60.842"
@@ -228,7 +253,7 @@ const ProfitLossModal = (props: showPopup) => {
                     <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative p-[15px] rounded-[5px] justify-between'>
                         <p className='top-label min-w-max'>Take Profit</p>
                         <div className='flex item-center justify-between'>
-                            <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' onChange={(e: any) => findTakeProfit(e)} />
+                            <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' value={takeProfirValue} onChange={(e: any) => findTakeProfit(e)} />
                             <p className='top-label min-w-max'>USDT</p>
                             {/* <SelectDropdown list={list} defaultValue="USDT" whiteColor={true} /> */}
                         </div>
@@ -240,7 +265,7 @@ const ProfitLossModal = (props: showPopup) => {
                     <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative p-[15px] rounded-[5px] justify-between'>
                         <p className='top-label min-w-max'>Stop Loss</p>
                         <div className='flex item-center justify-between'>
-                            <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' onChange={(e: any) => findStopLoss(e)} />
+                            <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' value={stopLossValue} onChange={(e: any) => findStopLoss(e)} />
                             <p className='top-label min-w-max'>USDT</p>
                             {/* <SelectDropdown list={list} defaultValue="USDT" whiteColor={true} /> */}
                         </div>

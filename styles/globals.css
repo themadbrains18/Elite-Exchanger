@@ -540,7 +540,7 @@ input[name="colored-radio"].contactform:checked + .custom-radio{
 .range-slider_line {
 	height: 4px;
 	width: 100%;
-	background-color: #005FD2;
+	background-color: #f5faff5d;
 	top: 50%;
 	transform: translateY(-50%);
 	left: 0;
