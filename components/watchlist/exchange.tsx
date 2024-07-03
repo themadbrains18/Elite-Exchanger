@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { currencyFormatter } from "../snippets/market/buySellCard";
 import { useWebSocket } from "@/libs/WebSocketContext";
+import { truncateNumber } from "@/libs/subdomain";
 
 const schema = yup.object().shape({
   spend_amount: yup.number().positive('Quantity must be positive number ').required('Please enter quantity ').typeError('Please enter quantity '),
@@ -214,7 +215,7 @@ const Exchange = (props: DynamicId): any => {
       // user_convert_history form data
       let history = [];
       let spendObj = { token_id: selectedToken.id, type: 'Consumption', amount: amount, fee: 0, balance: spendBalance };
-      let receivedObj = { token_id: selectedSecondToken.id, type: 'Gain', amount: conversionPrice?.toFixed(8), fee: 0, balance: receivedBalance?.toFixed(8) };
+      let receivedObj = { token_id: selectedSecondToken.id, type: 'Gain', amount: truncateNumber(conversionPrice,8), fee: 0, balance: receivedBalance?.toFixed(8) };
 
       history.push(spendObj);
       history.push(receivedObj);

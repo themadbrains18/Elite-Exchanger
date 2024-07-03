@@ -6,6 +6,7 @@ import FilterSelectMenuWithCoin from '@/components/snippets/filter-select-menu-w
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment';
+import { useRouter } from 'next/router';
 
 interface propsData {
     posts?: any;
@@ -17,7 +18,9 @@ interface propsData {
 }
 
 const AdvertisementTabs = (props: propsData) => {
-    const [active, setActive] = useState(1);
+    const router = useRouter();
+    const initialTab = parseInt(router.query.t as string) || 1;
+    const [active, setActive] = useState(initialTab);
 
     const [firstCurrency, setFirstCurrency] = useState('');
     const [selectedToken, setSelectedToken] = useState(Object);

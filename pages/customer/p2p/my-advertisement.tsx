@@ -5,6 +5,7 @@ import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
+import { useRouter } from 'next/router';
 
 interface propsData {
   // posts?: any;
@@ -15,6 +16,8 @@ interface propsData {
 
 const MyAdvertisement = (props: propsData) => {
 
+  const router= useRouter()
+  
 
   return (
     <P2pLayout>

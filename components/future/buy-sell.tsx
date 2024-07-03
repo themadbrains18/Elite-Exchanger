@@ -789,7 +789,7 @@ const BuySell = (props: fullWidth) => {
                 <p className="top-label">Amount </p>
                 <input
                   type="number"
-                  value={sizeValue}
+                  defaultValue={sizeValue}
                   placeholder={
                     props?.currentToken?.coin_symbol === symbol
                       ? props?.currentToken?.coin_min_trade
@@ -1152,6 +1152,7 @@ const BuySell = (props: fullWidth) => {
         confirmOrder={confirmOrder}
         confirmOrderData={confirmOrderData}
         finalOrderSubmit={finalOrderSubmit}
+        symbol={props?.currentToken?.coin_symbol}
       />
       {
         prefernce &&

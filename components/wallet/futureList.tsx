@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import TransferModal from '../future/popups/transfer-modal';
 import { currencyFormatter } from '../snippets/market/buySellCard';
+import { truncateNumber } from '@/libs/subdomain';
 
 
 interface propsData {
@@ -137,10 +138,10 @@ const FutureList = (props: propsData) => {
                                         </div>
                                     </td>
                                     <td>
-                                        <p className="info-14-18 dark:text-white  lg:text-start text-center">{currencyFormatter(item?.balance.toFixed(5))}</p>
+                                        <p className="info-14-18 dark:text-white  lg:text-start text-center">{currencyFormatter(truncateNumber(item?.balance,6))}</p>
                                     </td>
                                     <td className="lg:text-start text-end">
-                                        <p className="info-14-18 dark:text-white">${item.token !== null ? currencyFormatter(item?.token?.price.toFixed(5)) : currencyFormatter(item?.global_token?.price.toFixed(5))}</p>
+                                        <p className="info-14-18 dark:text-white">${item.token !== null ? currencyFormatter(truncateNumber(item?.token?.price,6)) : currencyFormatter(truncateNumber(item?.global_token?.price,6))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18 dark:text-white">${((item.token !== null ? item?.token?.price * item?.balance : item?.global_token?.price * item?.balance).toFixed(2))}</p>

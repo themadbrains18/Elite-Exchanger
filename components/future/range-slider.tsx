@@ -7,13 +7,14 @@ interface uniqueIds {
     onChangeSizeInPercentage?: any;
     rangetype?: string;
     step?:any;
+    levrage?:any;
 }
 
 const RangeSlider = (props: uniqueIds) => {
 
     useEffect(() => {
         const slider_input: any = document.getElementById(props.inputId);
-
+        showSliderValue();
         // showSliderValue();
         // window.addEventListener("resize", showSliderValue);
         // slider_input.addEventListener('input', showSliderValue, false);
@@ -68,7 +69,7 @@ const RangeSlider = (props: uniqueIds) => {
                 <div className="range-slider_line">
                     <div id={props.lineId} className="range-slider_line-fill"></div>
                 </div>
-                <input id={props.inputId} className="range-slider_input" type="range" min="0" max="100" step={props.step} onChange={() => showSliderValue()} />
+                <input id={props.inputId} className="range-slider_input" type="range" min="0" max="100" step={props.step} defaultValue={props?.levrage} onChange={() => showSliderValue()} />
             </div>
             <div className='flex items-center justify-between mt-[7px] relative z-[4]'>
                 <p className='text-[12px] dark:text-white text-black'>0{props.rangetype}</p>

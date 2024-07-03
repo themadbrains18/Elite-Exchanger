@@ -11,6 +11,7 @@ interface showPopup {
     confirmOrder?: any;
     confirmOrderData?: any;
     finalOrderSubmit?:boolean;
+    symbol?:string;
 }
 
 const TradeConfirmPopupModal = (props: showPopup) => {
@@ -71,7 +72,7 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Qty</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.qty} BTC</p>
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.qty} {props?.symbol}</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Cost</p>

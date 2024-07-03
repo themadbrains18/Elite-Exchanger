@@ -1,6 +1,7 @@
 import Context from '@/components/contexts/context';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import RangeSlider from '../range-slider';
+import clickOutSidePopupClose from '@/components/snippets/clickOutSidePopupClose';
 interface fullWidth {
     inputId?: string;
     thumbId?: string;
@@ -11,12 +12,17 @@ interface fullWidth {
     setOverlay?: any;
     overlay?: boolean;
     setMarginModeAndLeverage?: any;
+    levrage?:any
+    currentToken?:any
 }
 const MarginMode = (props: fullWidth) => {
     const { mode } = useContext(Context);
     const [cross, setCross] = useState(2);
     const [marginType, setMarginType] = useState('Isolated');
-    const [leverageValue, setLeverageValue] = useState(10);
+    const [leverageValue, setLeverageValue] = useState(props?.levrage ?? 10);
+
+    console.log(props?.currentToken,"currentToken");
+    
 
     function increment() {
         let inputPercent: any = document?.querySelector(".inputPercent");
@@ -32,11 +38,16 @@ const MarginMode = (props: fullWidth) => {
     const onChangeSizeInPercentage = (value: any) => {
         setLeverageValue(value);
     }
+    const closePopup = () => {
+        props.setOverlay(false); props.setPopupMode(0)
+      }
+      const wrapperRef = useRef(null);
+      clickOutSidePopupClose({ wrapperRef, closePopup });
 
     return (
-        <div className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[720px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.popupMode == 1 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
+        <div ref={wrapperRef} className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[500px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.popupMode == 1 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
             <div className="flex items-center justify-between mb-[20px]">
-                <p className="sec-title !text-[20px]">Margin Mode </p>
+                <p className="sec-title !text-[20px]">Select Leverage </p>
                 <svg
                     onClick={() => { props.setOverlay(false); props.setPopupMode(0) }}
                     enableBackground="new 0 0 60.963 60.842"
@@ -60,7 +71,7 @@ const MarginMode = (props: fullWidth) => {
                     />
                 </svg>
             </div>
-            <div className='flex items-center mt-10 gap-[15px]'>
+            {/* <div className='flex items-center mt-10 gap-[15px]'>
                 <button className={`w-full relative py-[12px] px-[5px] md:rounded-[4px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[2px] border ${cross === 1 ? 'text-primary border-primary' : 'text-[#a3a8b7] border-[#f0f8ff00]'}`} onClick={() => { setCross(1); setMarginType('Cross') }}>
                     <span> Cross</span>
                     {
@@ -97,25 +108,25 @@ const MarginMode = (props: fullWidth) => {
                         </svg>
                     }
                 </button>
-            </div>
-            <p className='top-label mt-[10px] mb-[20px]'>Switching the margin mode will only apply it to the selected contract.</p>
-            <p className="sec-title !text-[20px] mb-[10px]">Adjust Leverage</p>
-            <div className='flex bg-[#e5ecf0] dark:bg-[#3c4355] items-center justify-between relative z-[4]'>
-                <p className='text-[25px] dark:text-white text-black cursor-pointer w-[50px] h-[40px] text-center'> - </p>
+            </div> */}
+            {/* <p className='top-label mt-[10px] mb-[20px]'>Switching the margin mode will only apply it to the selected contract.</p> */}
+            <p className="sec-title !text-[15px] mb-[10px]">{props?.currentToken?.coin_symbol}-{props?.currentToken.usdt_symbol}</p>
+            <div className='flex bg-[#e5ecf0] dark:bg-[#3c4355] items-center justify-center relative z-[4]'>
+                {/* <p className='text-[25px] dark:text-white text-black cursor-pointer w-[50px] h-[40px] text-center'> - </p> */}
                 <div>
-                    <input type="text" className='bg-[#e5ecf0] dark:bg-[#3c4355] outline-none text-center inputPercent dark:text-[#fff] text-[#000]' readOnly value={leverageValue.toString() + 'x'} />
+                    <input type="text" className='bg-[#e5ecf0] dark:bg-[#3c4355] outline-none text-center inputPercent dark:text-[#fff] text-[#000] h-[40px]' readOnly value={leverageValue.toString() + 'x'} />
                 </div>
                 {/* <p className='text-[18px] font-[600] text-center dark:text-[#fff] text-[#000] inputPercent'>20</p> */}
-                <p className='text-[25px] dark:text-white text-black cursor-pointer w-[50px] h-[40px] text-center' onClick={() => { increment() }}> + </p>
+                {/* <p className='text-[25px] dark:text-white text-black cursor-pointer w-[50px] h-[40px] text-center' onClick={() => { increment() }}> + </p> */}
             </div>
 
-            <RangeSlider inputId={props.inputId} thumbId={props.thumbId} lineId={props.lineId} onChangeSizeInPercentage={onChangeSizeInPercentage} rangetype={'X'} step={1} />
+            <RangeSlider inputId={props.inputId} thumbId={props.thumbId} lineId={props.lineId} onChangeSizeInPercentage={onChangeSizeInPercentage} rangetype={'X'} step={1} levrage={props?.levrage}/>
 
-            <p className='top-label mt-[10px]'>Maximum position at current leverage: 35,00,000 USDT</p>
-            <p className='top-label mb-[25px]'>Selecting higher leverage such as [10x] increases your liquidation risk. Always manage your risk levels.</p>
+            {/* <p className='top-label mt-[10px]'>Maximum position at current leverage: 35,00,000 USDT</p> */}
+            <p className='top-label mb-[25px] p-[8px] bg-[#e5ecf0] dark:bg-[#3c4355] dark:text-[#fff] text-[#000] mt-[10px] rounded-8 '>Selecting higher leverage such as [10x] increases your liquidation risk. Always manage your risk levels.</p>
 
             <div className='flex items-center gap-[15px] mt-[15px]'>
-                <button className='border dark:text-white text-[#1A1B1F] dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[15px] px-[10px] w-full max-w-full' onClick={() => { props.setOverlay(false); props.setPopupMode(0) }}>Cancel</button>
+                {/* <button className='border dark:text-white text-[#1A1B1F] dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[15px] px-[10px] w-full max-w-full' onClick={() => { props.setOverlay(false); props.setPopupMode(0) }}>Cancel</button> */}
                 <button className='border bg-primary text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[15px] px-[10px] w-full max-w-full' onClick={() => {
                     props.setMarginModeAndLeverage(marginType, leverageValue);
                 }}>Confirm</button>

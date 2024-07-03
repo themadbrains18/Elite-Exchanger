@@ -355,7 +355,7 @@ const FutureTrading = (props: Session) => {
             {/* Leverage and margin type popup component */}
             {popupMode === 1 ?
 
-                <MarginMode setOverlay={setOverlay} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setPopupMode={setPopupMode} popupMode={popupMode} setMarginModeAndLeverage={setMarginModeAndLeverage} />
+                <MarginMode setOverlay={setOverlay} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setPopupMode={setPopupMode} popupMode={popupMode} setMarginModeAndLeverage={setMarginModeAndLeverage} levrage={marginMode?.leverage} currentToken={currentToken[0]}/>
                 :
                 popupMode === 2 ?
                     <SwapModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
