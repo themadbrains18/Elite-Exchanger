@@ -734,14 +734,14 @@ const BuySell = (props: fullWidth) => {
             Available: {avaibalance}
           </p>
           <p className="admin-body-text !text-[12px] dark:!text-white"> {symbol}</p>
-          <div
+          {/* <div
             onClick={() => {
               props.setOverlay(true);
               props.setPopupMode(3);
             }}
           >
             <IconsComponent type="swap-calender-with-circle" />
-          </div>
+          </div> */}
         </div>
 
         {/* ================================= */}

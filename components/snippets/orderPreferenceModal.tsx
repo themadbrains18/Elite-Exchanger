@@ -122,7 +122,7 @@ const OrderPreferenceModal = (props: propsData) => {
                 </p>
               </div>
               <p className="info-12 pl-[25px]">
-                Please enter your order qty denominated in BTC terms.
+                Please enter your order qty denominated in {props?.currentToken?.coin_symbol} terms.
               </p>
             </div>
           </div>
@@ -183,17 +183,17 @@ const OrderPreferenceModal = (props: propsData) => {
             </div>
           </div>
 
-          <div className=" mt-20">
+         {value==="Value" && <div className=" mt-20">
             <div className="info-10-14 mb-2">
-              <sup className="!text-red-dark">*</sup>Note
+             Note
             </div>
 
-            <p className="info-12 ">
+            <p className="info-12 text-black dark:text-white">
               Your order quantity will be calculated based on the value of your
               filled order. Please note that in the event of extreme market
               fluctuations, your order placement may fail.
             </p>
-          </div>
+          </div>}
           <div className="flex items-center gap-10 mt-[20px]">
             <button
               className="solid-button w-full px-[20px] py-[15px]"
@@ -207,7 +207,7 @@ const OrderPreferenceModal = (props: propsData) => {
             >
               Confirm
             </button>
-            <button
+            {/* <button
               className="outline-button w-full"
               onClick={() => {
                 props?.setPreference(false);
@@ -215,7 +215,7 @@ const OrderPreferenceModal = (props: propsData) => {
               }}
             >
               Cancel
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

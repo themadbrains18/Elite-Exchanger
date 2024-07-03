@@ -14,11 +14,15 @@ const RangeSlider = (props: uniqueIds) => {
 
     useEffect(() => {
         const slider_input: any = document.getElementById(props.inputId);
+        if(props?.levrage){
+            slider_input.value=props?.levrage
+
+        }
         showSliderValue();
         // showSliderValue();
         // window.addEventListener("resize", showSliderValue);
         // slider_input.addEventListener('input', showSliderValue, false);
-    }, []);
+    }, [props?.levrage]);
 
     const showSliderValue = () => {
         const slider_input: any = document.getElementById(props.inputId);
