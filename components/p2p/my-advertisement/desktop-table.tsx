@@ -60,23 +60,9 @@ const DesktopTable = (props: dataTypes) => {
                 },
             }).then(response => response.json());
 
-            setTotal(userAllOrderList?.data?.totalLength)
+            setTotal(userAllOrderList?.data?.totalLength);
             setPostList(userAllOrderList?.data?.data);
         
-            
-
-            for (const post of userAllOrderList?.data?.data) {
-                let payment_method: any = [];
-                for (const upid of post.p_method) {
-                    props.userPaymentMethod.filter((item: any) => {
-                        if (item.id === upid?.upm_id) {
-                            payment_method.push(item);
-
-                        }
-                    })
-                }
-                post.user_p_method = payment_method;
-            }
 
             let postData:any = [];
             let filterRecord = userAllOrderList?.data?.data;
@@ -102,7 +88,7 @@ const DesktopTable = (props: dataTypes) => {
                     postData = filter_posts;
                 }
                    
-                 if (props?.startDate !== null && props?.startDate !== undefined) {
+                if (props?.startDate !== null && props?.startDate !== undefined) {
                     let filter_posts=[]
                     filter_posts = filterRecord.filter((item: any) => {
                         let postDate = moment(item?.createdAt).format('LL');

@@ -14,6 +14,7 @@ interface propsData {
 }
 
 const OrdersTabs = (props: propsData) => {
+    
     const [active, setActive] = useState(1);
 
     const [firstCurrency, setFirstCurrency] = useState('');
@@ -21,13 +22,16 @@ const OrdersTabs = (props: propsData) => {
     const [paymentId, setPaymentId] = useState('');
     const [startDate, setStartDate] = useState();
 
+    
     const setCurrencyName = (symbol: string, dropdown: number) => {
+        
         if (dropdown === 1) {
             setFirstCurrency(symbol);
             let token = props?.coinList?.filter((item: any) => {
                 return item.symbol === symbol
             });
             setSelectedToken(token[0]);
+            
         }
     }
 
@@ -77,18 +81,13 @@ const OrdersTabs = (props: propsData) => {
                     </button>
                 </div>
                 <div className='flex md:flex-nowrap flex-wrap items-center gap-10 w-full lg:w-auto md:p-0 pb-[15px] md:!border-none border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2'>
-                    <div className='relative max-w-full md:max-w-[40%] w-full'>
+                    <div className='relative max-w-full md:max-w-[50%] w-full'>
                         <FilterSelectMenuWithCoin data={props?.coinList} border={true} dropdown={1} setCurrencyName={setCurrencyName} />
                     </div>
-                    <div className=' max-w-full md:max-w-[40%] min-w-[250px] w-full'>
-                        <FiliterSelectMenu data={props?.masterPayMethod}
-                            placeholder="Choose Payment Method"
-                            auto={false}
-                            widthFull={false} type="pmethod" onPaymentMethodChange={onPaymentMethodChange} />
-                    </div>
-                    <div className=' max-w-full md:max-w-[20%] w-full'>
+                   
+                    <div className=' max-w-full md:max-w-[50%] w-full'>
                         <ReactDatePicker
-                            placeholderText={'Select date'}
+                            placeholderText={'MM/DD/YYYY'}
                             selected={startDate}
                             onChange={(date: any) => handleDate(date)}
                             peekNextMonth
