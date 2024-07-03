@@ -9,6 +9,11 @@ import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 interface dataTypes {
     active: any;
     setOrderId?: any;
+    paymentId?: string;
+    firstCurrency?: string;
+    startDate?: string;
+    userPaymentMethod?: any;
+    selectedToken?: any;
 }
 const OrdersTableMobile = (props: dataTypes) => {
     

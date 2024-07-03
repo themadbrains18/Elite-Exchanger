@@ -39,7 +39,10 @@ const Remarks = (props: propsData) => {
     const wbsocket = useWebSocket();
 
     useEffect(() => {
-        orderTimeCalculation();
+        if( props.userOrder?.status === 'isProcess'){
+            orderTimeCalculation();
+
+        }
     }, [props?.orderid, props.userOrder, wbsocket]);
 
     const orderTimeCalculation = async () => {
@@ -47,6 +50,7 @@ const Remarks = (props: propsData) => {
         deadline.setMinutes(deadline.getMinutes() + 15);
         deadline.setSeconds(deadline.getSeconds() + 5);
         let currentTime = new Date();
+        
         if (currentTime < deadline && props.userOrder?.status === 'isProcess') {
             if (Ref.current) clearInterval(Ref.current);
             const timer = setInterval(() => {
@@ -66,11 +70,10 @@ const Remarks = (props: propsData) => {
      * @param e 
      */
     const calculateTimeLeft = (e: any) => {
-        
+        console.log(props.userOrder?.status,"========= time update");
         let { total, minutes, seconds }
             = getTimeRemaining(e);
-
-
+        
         if (total >= 0) {
             setTimer(
                 (minutes > 9 ? minutes : '0' + minutes) + ':'
@@ -114,6 +117,7 @@ const Remarks = (props: propsData) => {
         }
 
         if (status === 'authenticated') {
+            if (Ref.current) clearInterval(Ref.current);
             const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
             let record = encodeURIComponent(ciphertext.toString());
 
@@ -157,7 +161,7 @@ const Remarks = (props: propsData) => {
      */
     const orderCancel = async () => {
 
-        console.log("this is called!");
+        console.log("=====================order cancel==============");
         
         let obj = {
             "order_id": props.orderid,

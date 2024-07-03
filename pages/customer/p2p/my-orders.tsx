@@ -4,7 +4,7 @@ import OrderInfo from '@/components/p2p/my-orders/order-info';
 import OrdersTabs from '@/components/p2p/my-orders/orders-tabs';
 import Remarks from '@/components/p2p/my-orders/remarks';
 import SlectPaymentMethod from '@/components/p2p/my-orders/select-payment-method';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { getProviders, useSession } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
@@ -20,6 +20,9 @@ interface propsData {
   userOrder?: any;
   orderList?: any;
   session?: any;
+  coinList?:any;
+  masterPayMethod?: any;
+  userPaymentMethod?: any;
 }
 
 const MyOrders = (props: propsData) => {
@@ -33,31 +36,44 @@ const MyOrders = (props: propsData) => {
   const [show, setShow] = useState(false);
 
   const wbsocket = useWebSocket();
+  const socketListenerRef = useRef<(event: MessageEvent) => void>();
 
   useEffect(() => {
-    socket();
+    const handleSocketMessage = (event: any) => {
+      const data = JSON.parse(event.data).data;
+      let eventDataType = JSON.parse(event.data).type;
+      if (eventDataType === "order") {
+        getOrderByOrderId(data?.id, 'socket');
+      }
+
+      if (eventDataType === "buy") {
+        getUserOrders();
+      }
+    };
+
+    // wbsocket.addEventListener('message', handleSocketMessage);
+    if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
+      if (socketListenerRef.current) {
+        wbsocket.removeEventListener('message', socketListenerRef.current);
+      }
+      socketListenerRef.current = handleSocketMessage;
+      wbsocket.addEventListener('message', handleSocketMessage);
+    }
+
+    return () => {
+      if (wbsocket) {
+        wbsocket.removeEventListener('message', handleSocketMessage);
+      }
+    };
+  }, [wbsocket, session]);
+
+  useEffect(() => {
     getUserOrders();
     if (orderId !== undefined && orderId !== '') {
       getOrderByOrderId(orderId, 'onload');
     }
-  }, [orderId, wbsocket]);
+  }, [orderId]);
 
-  const socket = async () => {
-    if (wbsocket) {
-      wbsocket.onmessage = (event) => {
-        const data = JSON.parse(event.data).data;
-        let eventDataType = JSON.parse(event.data).type;
-        if (eventDataType === "order") {
-          getOrderByOrderId(data?.id, 'socket');
-          // setOrderDetail(data)
-        }
-        if (eventDataType === "buy") {
-          getUserOrders();
-        }
-      }
-    }
-
-  }
 
   const getOrderByOrderId = async (orderid: any, type: string) => {
     let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {
@@ -118,7 +134,7 @@ const MyOrders = (props: propsData) => {
               }
             </>
             :
-            <OrdersTabs orderList={newOrderList} setOrderId={setOrderId} />
+            <OrdersTabs orderList={newOrderList} userPaymentMethod={props.userPaymentMethod} coinList={props?.coinList} masterPayMethod={props.masterPayMethod} setOrderId={setOrderId} />
         }
 
       </P2pLayout>
@@ -154,6 +170,29 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     }).then(response => response.json());
 
+    // get UserPaymentMethod
+    let userPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod`, {
+      method: "GET",
+      headers: {
+        "Authorization": session?.user?.access_token
+      },
+    }).then(response => response.json());
+
+
+    // get all coin list
+    let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
+      method: "GET"
+    }).then(response => response.json());
+
+
+    // get masterPaymentMethod 
+    let masterPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/masterpayment`, {
+      method: "GET",
+      headers: {
+        "Authorization": session?.user?.access_token
+      },
+    }).then(response => response.json());
+
 
 
 
@@ -164,7 +203,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         sessions: session,
         session: session,
         userOrder: buy !== undefined ? userOrder?.data : null,
-        orderList: userAllOrderList?.data || []
+        masterPayMethod: masterPaymentMethod?.data || [],
+        userPaymentMethod: userPaymentMethod?.data || [],
+        orderList: userAllOrderList?.data || [],
+        coinList: tokenList?.data || [],
       },
     };
   }

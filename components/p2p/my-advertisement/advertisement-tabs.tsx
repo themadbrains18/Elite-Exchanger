@@ -36,7 +36,7 @@ const AdvertisementTabs = (props: propsData) => {
     const [startDate, setStartDate] = useState();
 
     const setCurrencyName = (symbol: string, dropdown: number) => {
-        
+
         if (dropdown === 1) {
             setFirstCurrency(symbol);
             let token = props?.coinList?.filter((item: any) => {
@@ -126,7 +126,7 @@ const AdvertisementTabs = (props: propsData) => {
         //         }  
         //     });
         // }
-        
+
         // if (active === 1) {
         //     setPublishedData(filter_posts);
         // }
@@ -165,7 +165,7 @@ const AdvertisementTabs = (props: propsData) => {
         //     });
         // }
 
-        
+
         // if(filter_posts.length > 0){
         //     filter_posts = filter_posts.filter((item: any) => {
         //         let postDate = moment(item?.createdAt).format('LL');
@@ -226,18 +226,18 @@ const AdvertisementTabs = (props: propsData) => {
                     </button>
                 </div>
                 <div className='flex md:flex-nowrap flex-wrap items-center gap-10 w-full lg:w-auto md:p-0 pb-[15px] md:!border-none border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2'>
-                <div className='relative max-w-full md:max-w-[40%] w-full'>
-                    <FilterSelectMenuWithCoin data={props.coinList} border={true} dropdown={1} setCurrencyName={setCurrencyName} />
+                    <div className='relative max-w-full md:max-w-[40%] w-full'>
+                        <FilterSelectMenuWithCoin data={props.coinList} border={true} dropdown={1} setCurrencyName={setCurrencyName} />
                     </div>
                     <div className=' max-w-full md:max-w-[40%] min-w-[250px] w-full'>
-                    <FiliterSelectMenu data={props.masterPayMethod}
-                        placeholder="Choose Payment Method"
-                        auto={false}
-                        widthFull={false} type="pmethod" onPaymentMethodChange={onPaymentMethodChange} />
+                        <FiliterSelectMenu data={props.masterPayMethod}
+                            placeholder="Choose Payment Method"
+                            auto={false}
+                            widthFull={false} type="pmethod" onPaymentMethodChange={onPaymentMethodChange} />
                     </div>
                     <div className=' max-w-full md:max-w-[20%] w-full'>
                         <DatePicker
-                            placeholderText={'Select date'} 
+                            placeholderText={'Select date'}
                             selected={startDate}
                             onChange={(date: any) => handleDate(date)}
                             peekNextMonth
@@ -254,15 +254,15 @@ const AdvertisementTabs = (props: propsData) => {
             {/* Table Data */}
             {/* {
                 active === 1 && */}
-                <div>
-                    <div className='md:block hidden'>
-                        <DesktopTable active={active} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate}/>
-                    </div>
-                    <div className='md:hidden'>
-                        <MobileTable active={active} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate}/>
-                    </div>
+            <div>
+                <div className='md:block hidden'>
+                    <DesktopTable active={active} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate} />
                 </div>
-{/* 
+                <div className='md:hidden'>
+                    <MobileTable active={active} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate} />
+                </div>
+            </div>
+            {/* 
             }
 
             {
