@@ -521,13 +521,13 @@ input[name="colored-radio"].contactform:checked + .custom-radio{
 .range-slider_thumb {
 	width: 20px;
 	height: 20px;
-	border: 0.6vmin solid #005FD2;
+	border: 0.6vmin solid #5367ff;
 	border-radius: 50%;
 	position: absolute;
 	left: 0;
 	top: 50%;
 	transform: translateY(-50%);
-	background-color: #005FD2;
+	background-color: #5367ff;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -540,7 +540,8 @@ input[name="colored-radio"].contactform:checked + .custom-radio{
 .range-slider_line {
 	height: 4px;
 	width: 100%;
-	background-color: #005FD2;
+	/* background-color: #005FD2; */
+  @apply bg-[#e5ecf0] dark:bg-[#3c4355];
 	top: 50%;
 	transform: translateY(-50%);
 	left: 0;
@@ -552,7 +553,7 @@ input[name="colored-radio"].contactform:checked + .custom-radio{
 	position: absolute;
 	height: 4px;
 	width: 0;
-	background-color: #005FD2;
+	background-color: #5367ff;
 }
 .parentWrapper:after{
   content: '';

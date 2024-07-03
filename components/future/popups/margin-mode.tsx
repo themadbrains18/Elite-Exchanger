@@ -137,10 +137,10 @@ const MarginMode = (props: fullWidth) => {
             <RangeSlider inputId={props.inputId} thumbId={props.thumbId} lineId={props.lineId} onChangeSizeInPercentage={onChangeSizeInPercentage} rangetype={'X'} step={1} levrage={leverageValue}/>
 
             {/* <p className='top-label mt-[10px]'>Maximum position at current leverage: 35,00,000 USDT</p> */}
-            <div className='flex gap-[1px] bg-[#e5ecf0] dark:bg-[#3c4355] mb-[25px] p-[8px] mt-[10px] rounded-8 items-center'>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className="text-contentWarning  shrink-0" width="16" height="16"><path d="M12 2.25A9.75 9.75 0 1021.75 12 9.76 9.76 0 0012 2.25zm-.75 5.25a.75.75 0 111.5 0v5.25a.75.75 0 11-1.5 0V7.5zm.75 9.75A1.125 1.125 0 1112 15a1.125 1.125 0 010 2.25z"></path></svg>       
-                 <p className='top-label   dark:text-[#fff] text-[#000] whitespace-nowrap'>{leverageValue>10?'Selecting higher leverage increases your risk of liquidation.':'It is recommended to use a lower leverage to reduce risk of liquidation.'}</p>
-            </div>
+            <div className={`flex gap-[5px] ${leverageValue > 10 ? ' bg-[#ff18006b]':'bg-[#e5ecf0] dark:bg-[#3c4355]'}  mb-[25px] p-[8px] mt-[10px] rounded-8 items-center`}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"  aria-hidden="true" className={`${leverageValue > 10 ? 'dark:fill-white':'currentColor dark:fill-white' }  text-contentWarning  shrink-0`} width="16" height="16"><path d="M12 2.25A9.75 9.75 0 1021.75 12 9.76 9.76 0 0012 2.25zm-.75 5.25a.75.75 0 111.5 0v5.25a.75.75 0 11-1.5 0V7.5zm.75 9.75A1.125 1.125 0 1112 15a1.125 1.125 0 010 2.25z"></path></svg>       
+                    <p className={`top-label   dark:text-[#fff] text-[#000] whitespace-nowrap ${leverageValue > 10 ? '':'' }}`}>{leverageValue>10?'Selecting higher leverage increases your risk of liquidation.':'It is recommended to use a lower leverage to reduce risk of liquidation.'}</p>
+                </div>
 
             <div className='flex items-center gap-[15px] mt-[15px]'>
                 {/* <button className='border dark:text-white text-[#1A1B1F] dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[15px] px-[10px] w-full max-w-full' onClick={() => { props.setOverlay(false); props.setPopupMode(0) }}>Cancel</button> */}
