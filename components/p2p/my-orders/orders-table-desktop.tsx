@@ -49,23 +49,20 @@ const OrdersTableDesktop = (props: dataTypes) => {
                 },
               }).then(response => response.json());
 
-              for (const post of userAllOrderList?.data?.data) {
-                let payment_method: any = [];
-                console.log(props.userPaymentMethod,"=props.userPaymentMethod");
-                
-               
-                    props.userPaymentMethod.filter((item: any) => {
-                        if (item.id === post.p_method) {
-                            payment_method.push(item);
+                for (const post of userAllOrderList?.data?.data) {
+                    let payment_method: any = [];
+                    console.log(props.userPaymentMethod,"=props.userPaymentMethod");
+                        props.userPaymentMethod.filter((item: any) => {
+                            if (item.id === post.p_method) {
+                                payment_method.push(item);
 
-                        }
-                    })
-                
-                post.user_p_method = payment_method;
-            }
+                            }
+                        })
+                    post.user_p_method = payment_method;
+                }
 
-              setTotal(userAllOrderList?.data?.total)
-            setList(userAllOrderList?.data?.data);
+                setTotal(userAllOrderList?.data?.total)
+                setList(userAllOrderList?.data?.data);
 
         } catch (error) {
             console.log("error in get token list", error);
