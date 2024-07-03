@@ -338,6 +338,7 @@ const BuySell = (props: fullWidth) => {
 
   const confirmOrder = async () => {
     try {
+      console.log("i am here!!");
       setButtonStyle(true);
       setFinalOrderSubmit(true);
       const ciphertext = AES.encrypt(
@@ -345,7 +346,8 @@ const BuySell = (props: fullWidth) => {
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
       );
       let record = encodeURIComponent(ciphertext.toString());
-
+      
+      
       let reponse = await fetch(
         `${process.env.NEXT_PUBLIC_BASEURL}/future/${(marketType === "market" || (show === 2 && marketType === 'limit')) ? "position" : "openorder"
         }`,
@@ -376,6 +378,11 @@ const BuySell = (props: fullWidth) => {
           if (tpsl.profit) {
             tpsl.profit.position_id = reponse?.data?.data?.result?.id;
           }
+          const ciphertext = AES.encrypt(
+            JSON.stringify(tpsl?.profit),
+            `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+          );
+          let record = encodeURIComponent(ciphertext.toString());
           let profitreponse = await fetch(
             `${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`,
             {
@@ -384,13 +391,19 @@ const BuySell = (props: fullWidth) => {
                 "Content-Type": "application/json",
                 Authorization: session?.user?.access_token,
               },
-              body: JSON.stringify(tpsl?.profit),
+              body:JSON.stringify(record),
             }
           ).then((response) => response.json());
 
           if (tpsl.stopls) {
             tpsl.stopls.position_id = reponse?.data?.data?.result?.id;
           }
+
+          const ciphertext1 = AES.encrypt(
+            JSON.stringify(tpsl?.stopls),
+            `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+          );
+          let record1 = encodeURIComponent(ciphertext1.toString());
           let stopreponse = await fetch(
             `${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`,
             {
@@ -399,7 +412,7 @@ const BuySell = (props: fullWidth) => {
                 "Content-Type": "application/json",
                 Authorization: session?.user?.access_token,
               },
-              body: JSON.stringify(tpsl?.stopls),
+              body: JSON.stringify(record1),
             }
           ).then((response) => response.json());
         }
@@ -921,7 +934,7 @@ const BuySell = (props: fullWidth) => {
           lineId={props.lineId}
           onChangeSizeInPercentage={onChangeSizeInPercentage}
           rangetype={"%"}
-          step={25}
+          
         />
 
         {/* ================================= */}

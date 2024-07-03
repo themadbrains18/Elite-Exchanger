@@ -119,7 +119,6 @@ const MyOrders = (props: propsData) => {
           (props?.userOrder !== null)
             ?
             <>
-
               <div className='mt-30 flex items-start gap-30'>
                 <div className='max-[1200px]:max-w-full max-w-[75%] w-full'>
                   <OrderInfo userOrder={order} />

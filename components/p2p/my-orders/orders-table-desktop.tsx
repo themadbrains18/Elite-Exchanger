@@ -18,7 +18,8 @@ interface dataTypes {
 }
 
 const OrdersTableDesktop = (props: dataTypes) => {
-
+    // console.log(props.selectedToken,"========selectedToken");
+    
     const route = useRouter();
     const { mode } = useContext(Context);
 
@@ -34,7 +35,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
 
     useEffect(() => {
         getAllOrders(itemOffset);
-    }, [itemOffset, props?.active]);
+    }, [itemOffset, props?.active, props?.selectedToken,props?.startDate]);
 
 
     const getAllOrders = async (itemOffset: number) => {
@@ -48,21 +49,41 @@ const OrdersTableDesktop = (props: dataTypes) => {
                   "Authorization": session?.user?.access_token
                 },
               }).then(response => response.json());
-
-                for (const post of userAllOrderList?.data?.data) {
-                    let payment_method: any = [];
-                    console.log(props.userPaymentMethod,"=props.userPaymentMethod");
-                        props.userPaymentMethod.filter((item: any) => {
-                            if (item.id === post.p_method) {
-                                payment_method.push(item);
-
-                            }
-                        })
-                    post.user_p_method = payment_method;
-                }
+                
 
                 setTotal(userAllOrderList?.data?.total)
                 setList(userAllOrderList?.data?.data);
+
+                let postData:any = [];
+                let filterRecord = userAllOrderList?.data?.data;
+                postData = filterRecord;
+
+                
+                
+                if (props?.firstCurrency !== '') {
+                    
+                    filterRecord = filterRecord.filter((item: any) => {
+                        return props?.selectedToken?.id === item?.token_id
+                    });
+                    postData = filterRecord;
+
+                    setList(postData);
+                }
+                if (props?.startDate !== null && props?.startDate !== undefined) {
+                    let filter_posts=[]
+                    filter_posts = filterRecord.filter((item: any) => {
+
+                        let postDate = moment(item?.createdAt).format('LL');
+
+                        let compareDate = moment(props?.startDate).format('LL');
+                        if (compareDate === postDate) {
+                            return item
+                        }
+                    });
+                    postData = filter_posts;
+                }
+
+                setList(postData);
 
         } catch (error) {
             console.log("error in get token list", error);
@@ -125,7 +146,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
                     <tbody>
                         {
                           list && list?.length>0 && list?.map((item: any, ind: number) => {
-                              {console.log(item,"======")}
+                              
                                 return (
                                     
                                     <Fragment key={ind}>

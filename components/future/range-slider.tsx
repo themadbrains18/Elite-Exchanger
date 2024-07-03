@@ -61,12 +61,12 @@ const RangeSlider = (props: uniqueIds) => {
         <>
             <div className='w-full bg-primary h-[4px] flex items-center justify-between mt-[20px]'>
             {[0, 25, 50, 75, 100].map((value, index) => (
-          <div
-            key={index}
-            className='w-[10px] h-[10px] rounded-full bg-primary cursor-pointer'
-            onClick={() => handleBulletClick(value)}
-          ></div>
-        ))}
+                <div
+                    key={index}
+                    className='w-[10px] h-[10px] rounded-full bg-primary cursor-pointer relative z-[2]'
+                    onClick={() => handleBulletClick(value)}
+                ></div>
+                ))}
             </div>
             <div className="range-slider mt-[-12px] cursor-pointer">
                 <div id={props.thumbId} className="range-slider_thumb"></div>
