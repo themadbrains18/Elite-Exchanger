@@ -69,7 +69,7 @@ const PositionModal = (props: propsData) => {
             />
           </svg>
         </div>
-        <div className="mt-40">
+        <div className="mt-20">
           <div className="flex justify-between mt-20">
             <div className="w-full">
               <div className="flex justify-between items-center w-full mb-[5px]" onClick={() => { setValue("oneWay") }}>
@@ -178,49 +178,10 @@ const PositionModal = (props: propsData) => {
 
           <div className=" mt-20">
             <p className="info-12 mb-[10px]">
-              It is not allowed to switch between one-way mode and hedge mode
+            <span className="text-black dark:text-white">Note :</span>  It is not allowed to switch between one-way mode and hedge mode
               while holding position(s) or active order(s). The setting applies
               to the current Derivatives pair only.
             </p>
-            <p className="info-12">
-              This switch will take effect on both the website and the app at
-              the same time. Please upgrade the app to the latest version.
-            </p>
-            <div className="flex mt-[30px] gap-5">
-              <input
-                id={`custom-radio-12`}
-                type="checkbox"
-                value=""
-                name="colored-radio"
-                className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]"
-              />
-              <label
-                htmlFor={`custom-radio-12`}
-                className="
-                    custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
-                    cursor-pointer
-                    after:dark:bg-omega
-                    after:bg-white
-                    after:left-[0px]
-                    after:w-[20px] 
-                    after:h-[20px]
-                    after:border after:border-beta
-                    after:absolute
-
-                    before:dark:bg-[transparent]
-                    before:bg-white
-                    before:left-[5px]
-        
-                    before:w-[10px] 
-                    before:h-[10px]
-                    before:absolute
-                    before:z-[1]
-                    
-                    "
-              >
-                <p className="ml-2 info-12">Apply to all USDT pairs</p>
-              </label>
-            </div>
           </div>
           <div className="flex items-center gap-10 mt-[30px]">
             <button
@@ -241,15 +202,15 @@ const PositionModal = (props: propsData) => {
             >
               Confirm
             </button>
-            <button
+            {/* <button
               className="outline-button w-full"
               onClick={() => {
                 props?.setIsShow(false);
                 // props.setShow(0);
               }}
-            >
+            > 
               Cancel
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

@@ -10,17 +10,18 @@ interface showPopup {
 }
 
 const SwapModal = (props:showPopup) => {
-    const list = ['BTCUSDT_SWAP', 'ETHUSDT SWAP','BCHUSDT_SWAP','ETCUSDT_SWAP','LTCUSDT SWAP','FETUSDT SWAP','BNBUSDT_SWAP'];
+    const list = ['BTCUSDT', 'ETHUSDT','BCHUSDT','ETCUSDT','LTCUSDT','FETUSDT','BNBUSDT'];
     const list2 = ['Isolated']
     let { mode } = useContext(Context);
     const [show,setShow] = useState(1);
     const [long,setLong] = useState(1);
+    const [selectVal,setSelectVal] = useState('');
 
   return (
     <div className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[720px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.popupMode == 2 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
       <div className="flex items-center justify-between mb-[20px]">
         {/* <p className="sec-title !text-[20px]">Margin Mode </p> */}
-        <SelectDropdown list={list} defaultValue="USDT" whiteColor={true} />
+        <SelectDropdown list={list} defaultValue="USDT" whiteColor={true} setSelectVal={setSelectVal} />
         <svg
           onClick={() => { props.setOverlay(false); props.setPopupMode(0) }}
           enableBackground="new 0 0 60.963 60.842"
@@ -75,7 +76,7 @@ const SwapModal = (props:showPopup) => {
                 <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative z-[4] p-[10px] rounded-[5px] justify-between'>
                     <p className='top-label min-w-max'>Amount</p>
                     <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' />
-                    <p className='top-label min-w-max'>XRP</p>
+                    <p className='top-label min-w-max'>{selectVal ? selectVal: 'USDT'}</p>
                 </div>
                 <button className="py-[10.5px] px-[10px] w-full max-w-full mt-[15px] solid-button rounded-[5px]">Calculate</button>
             </div>

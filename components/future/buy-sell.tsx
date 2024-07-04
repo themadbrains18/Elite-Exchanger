@@ -152,8 +152,8 @@ const BuySell = (props: fullWidth) => {
       setAvailBalance(rewardsAmount);
       setButtonStyle(true);
       setAssetsBalance(0);
-    }  
-    if(tpsl.profit.leverage!=0 && tpsl.stopls.leverage!==0){
+    }
+    if (tpsl.profit.leverage != 0 && tpsl.stopls.leverage !== 0) {
       setProfitLossConfirm(true)
     }
   }, [props?.currentToken?.coin_symbol, props.assets, tpsl]);
@@ -345,8 +345,8 @@ const BuySell = (props: fullWidth) => {
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
       );
       let record = encodeURIComponent(ciphertext.toString());
-      
-      
+
+
       let reponse = await fetch(
         `${process.env.NEXT_PUBLIC_BASEURL}/future/${(marketType === "market" || (show === 2 && marketType === 'limit')) ? "position" : "openorder"
         }`,
@@ -372,7 +372,7 @@ const BuySell = (props: fullWidth) => {
         setFinalOrderSubmit(false);
       }
       else {
-       
+
         if (istpslchecked === true) {
           if (tpsl.profit) {
             tpsl.profit.position_id = reponse?.data?.data?.result?.id;
@@ -390,7 +390,7 @@ const BuySell = (props: fullWidth) => {
                 "Content-Type": "application/json",
                 Authorization: session?.user?.access_token,
               },
-              body:JSON.stringify(record),
+              body: JSON.stringify(record),
             }
           ).then((response) => response.json());
 
@@ -426,7 +426,7 @@ const BuySell = (props: fullWidth) => {
         toast.success(reponse?.data?.data?.message, {
           position: 'top-center'
         });
-      
+
         setButtonStyle(false);
         setEntryPrice(0);
         setSizeValue(0);
@@ -444,8 +444,8 @@ const BuySell = (props: fullWidth) => {
   // =======Take Profit and Sop Loss popup hide and shoow===============//
   // ===================================================================//
   const profitlosspopupenable = (event: any) => {
-    console.log(event.currentTarget.checked,"=event.currentTarget.checked");
-    
+    console.log(event.currentTarget.checked, "=event.currentTarget.checked");
+
     if (event.currentTarget.checked === true) {
       setModelPopup(1);
     } else {
@@ -628,7 +628,7 @@ const BuySell = (props: fullWidth) => {
               props.setPopupMode(1);
             }}
           >
-            <div className="flex items-center gap-10 w-full">
+            <div className="flex items-center gap-[2px] w-full">
               <p className="top-label dark:!text-white !text-[#000]">
                 {props?.marginMode?.margin ? (
                   <span>{props?.marginMode?.margin}</span>
@@ -636,9 +636,13 @@ const BuySell = (props: fullWidth) => {
                   <span>Isolated </span>
                 )}
               </p>
-              <p className="bg-[#13c2c21f] px-[5px] text-primary text-[12px]">
+              <p className="px-[5px] text-primary text-[12px]">
                 {props?.marginMode?.leverage}X
               </p>
+            </div>
+          </div>
+
+            <div className="px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer w-full">
               <p className="top-label dark:!text-white !text-[#000]">
                 {positionMode === "oneWay" ? (
                   <span>One Way Mode</span>
@@ -647,8 +651,8 @@ const BuySell = (props: fullWidth) => {
                 )}
               </p>
             </div>
-            <IconsComponent type="rightArrowWithoutBg" />
-          </div>
+
+            {/* <IconsComponent type="rightArrowWithoutBg" /> */}
           <div className="cursor-pointer" onClick={() => { setIsShow(true) }}>
             <IconsComponent type="settingIcon" />
           </div>
@@ -933,7 +937,7 @@ const BuySell = (props: fullWidth) => {
           lineId={props.lineId}
           onChangeSizeInPercentage={onChangeSizeInPercentage}
           rangetype={"%"}
-          
+
         />
 
         {/* ================================= */}
