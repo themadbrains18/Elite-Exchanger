@@ -152,9 +152,8 @@ const BuySell = (props: fullWidth) => {
       setAvailBalance(rewardsAmount);
       setButtonStyle(true);
       setAssetsBalance(0);
-    }
-
-    if(tpsl){
+    }  
+    if(tpsl.profit.leverage!=0 && tpsl.stopls.leverage!==0){
       setProfitLossConfirm(true)
     }
   }, [props?.currentToken?.coin_symbol, props.assets, tpsl]);
