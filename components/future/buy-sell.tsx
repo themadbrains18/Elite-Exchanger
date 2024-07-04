@@ -49,9 +49,9 @@ const BuySell = (props: fullWidth) => {
   const [showNes, setShowNes] = useState(1);
   const [symbol, setSymbol] = useState("USDT");
   const [avaibalance, setAvailBalance] = useState(0);
-  const [sizeValue, setSizeValue] = useState(0);
+  const [sizeValue, setSizeValue] = useState<any>();
   const [marketType, setMarketType] = useState("limit");
-  const [entryPrice, setEntryPrice] = useState(0);
+  const [entryPrice, setEntryPrice] = useState<any>();
   const [istpslchecked, setIsTpSlchecked] = useState(false);
 
   const [buttonStyle, setButtonStyle] = useState(false);
