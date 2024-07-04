@@ -11,7 +11,7 @@ interface showPopup {
 
 const SwapModal = (props:showPopup) => {
     const list = ['BTCUSDT_SWAP', 'ETHUSDT SWAP','BCHUSDT_SWAP','ETCUSDT_SWAP','LTCUSDT SWAP','FETUSDT SWAP','BNBUSDT_SWAP'];
-    const list2 = ['Isolated',"Cross"]
+    const list2 = ['Isolated']
     let { mode } = useContext(Context);
     const [show,setShow] = useState(1);
     const [long,setLong] = useState(1);
@@ -57,7 +57,7 @@ const SwapModal = (props:showPopup) => {
                     show === 2 &&
                     <SelectDropdown list={list2} defaultValue="Isolated" whiteColor={true} />
                 }
-                <div className='flex items-center dark:bg-[#373d4e] mt-[15px] bg-[#e5ecf0] rounded-[2px] relative z-[4]'>
+                <div className='flex items-center dark:bg-[#373d4e]  bg-[#e5ecf0] rounded-[2px] relative z-[4]'>
                     <button className={`w-full p-[5px] rounded-[4px] border ${long === 1 ? 'text-buy border-buy' : 'text-[#a3a8b7] border-[#f0f8ff00]'}`} onClick={() => { setLong(1) }}>Long</button>
                     <button className={`w-full p-[5px] rounded-[4px] border ${long === 2 ? 'text-sell border-sell ' : 'text-[#a3a8b7] border-[#f0f8ff00]'}`} onClick={() => { setLong(2) }}>Short</button>
                 </div>

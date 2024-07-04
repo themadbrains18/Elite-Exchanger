@@ -76,6 +76,7 @@ const BuySell = (props: fullWidth) => {
   const [shortConfirm, setShortConfirm] = useState(false);
   const [active, setActive] = useState(false);
   const [finalOrderSubmit, setFinalOrderSubmit] = useState(false);
+  const [profitLossConfirm, setProfitLossConfirm] = useState(false)
 
   const wbsocket = useWebSocket();
 
@@ -151,8 +152,11 @@ const BuySell = (props: fullWidth) => {
       setAvailBalance(rewardsAmount);
       setButtonStyle(true);
       setAssetsBalance(0);
+    }  
+    if(tpsl.profit.leverage!=0 && tpsl.stopls.leverage!==0){
+      setProfitLossConfirm(true)
     }
-  }, [props?.currentToken?.coin_symbol, props.assets]);
+  }, [props?.currentToken?.coin_symbol, props.assets, tpsl]);
 
   // ===================================================================//
   // =======Change wallet balance according to token change=============//
@@ -215,7 +219,7 @@ const BuySell = (props: fullWidth) => {
 
       // }
       if (sizeValue === 0 || sizeValue < 0) {
-        setSizeValidate("Amount must be positive number!");
+        setSizeValidate("Amount must be greater than '0'");
         return;
       }
       // let entry_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
@@ -269,12 +273,12 @@ const BuySell = (props: fullWidth) => {
     else {
 
       if (entryPrice === 0 || entryPrice < 0) {
-        setEntryPriceValidate("Price must be positive number!");
+        setEntryPriceValidate("Price must be greater than '0'");
         return;
       }
 
       if (sizeValue === 0 || sizeValue < 0) {
-        setSizeValidate("Amount must be positive number!");
+        setSizeValidate("Amount must be greater than '0'");
         return;
       }
       let Liquidation_Price: any =
@@ -368,6 +372,7 @@ const BuySell = (props: fullWidth) => {
         setFinalOrderSubmit(false);
       }
       else {
+       
         if (istpslchecked === true) {
           if (tpsl.profit) {
             tpsl.profit.position_id = reponse?.data?.data?.result?.id;
@@ -421,6 +426,7 @@ const BuySell = (props: fullWidth) => {
         toast.success(reponse?.data?.data?.message, {
           position: 'top-center'
         });
+      
         setButtonStyle(false);
         setEntryPrice(0);
         setSizeValue(0);
@@ -438,9 +444,12 @@ const BuySell = (props: fullWidth) => {
   // =======Take Profit and Sop Loss popup hide and shoow===============//
   // ===================================================================//
   const profitlosspopupenable = (event: any) => {
+    console.log(event.currentTarget.checked,"=event.currentTarget.checked");
+    
     if (event.currentTarget.checked === true) {
       setModelPopup(1);
     } else {
+      setProfitLossConfirm(false)
       setModelPopup(0);
     }
     setModelOverlay(event?.currentTarget?.checked);
@@ -770,6 +779,7 @@ const BuySell = (props: fullWidth) => {
                   type="number"
                   placeholder="$0"
                   step="any"
+                  defaultValue={entryPrice}
                   onChange={(e) => {
                     setEntryPrice(
                       e.target.value === "" ? 0 : parseFloat(e.target.value)
@@ -803,11 +813,12 @@ const BuySell = (props: fullWidth) => {
                 <input
                   type="number"
                   defaultValue={sizeValue}
-                  placeholder={
-                    props?.currentToken?.coin_symbol === symbol
-                      ? props?.currentToken?.coin_min_trade
-                      : props?.currentToken?.usdt_min_trade
-                  }
+                  // placeholder={
+                  //   props?.currentToken?.coin_symbol === symbol
+                  //     ? props?.currentToken?.coin_min_trade
+                  //     : props?.currentToken?.usdt_min_trade
+                  // }
+                  placeholder="0.00"
                   onChange={(e) => {
                     onChangeSizeValue(e);
                     setSizeValidate("");
@@ -932,7 +943,7 @@ const BuySell = (props: fullWidth) => {
           <>
             <div className="flex items-center justify-between mt-[20px]">
               <div
-                className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`}
+                className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent] prefrence`}
               >
                 <input
                   id={`custom-radio${props.radioId}`}
@@ -942,7 +953,7 @@ const BuySell = (props: fullWidth) => {
                   }}
                   value=""
                   name="colored-radio"
-                  // defaultChecked={modelPopup?true:false}
+                  checked={profitLossConfirm}
                   className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]"
                 />
                 <label
@@ -1154,6 +1165,7 @@ const BuySell = (props: fullWidth) => {
         show={show === 1 ? "long" : "short"}
         setTpSl={setTpSl}
         actionType="buysell"
+        setProfitLossConfirm={setProfitLossConfirm}
       />
 
       {/* Trade confirm order popup */}
