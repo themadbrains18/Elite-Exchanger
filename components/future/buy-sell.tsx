@@ -34,6 +34,7 @@ interface fullWidth {
   openOrders?: any;
   rewardsList?: any;
   totalPoint?: any;
+  minTrade?:any
 }
 
 const BuySell = (props: fullWidth) => {
@@ -48,8 +49,8 @@ const BuySell = (props: fullWidth) => {
   // nested tabs
   const [showNes, setShowNes] = useState(1);
   const [symbol, setSymbol] = useState("USDT");
-  const [avaibalance, setAvailBalance] = useState(0);
   const [sizeValue, setSizeValue] = useState(0);
+  const [avaibalance, setAvailBalance] = useState(0);
   const [marketType, setMarketType] = useState("limit");
   const [entryPrice, setEntryPrice] = useState(0);
   const [istpslchecked, setIsTpSlchecked] = useState(false);
@@ -72,6 +73,8 @@ const BuySell = (props: fullWidth) => {
   const [prefernceSymbol, setPreferenceSymbol] = useState('Qty')
   const [positionMode, setPositionMode] = useState('oneWay');
   const [assetsBalance, setAssetsBalance] = useState(0);
+  const [assetsList, setAssetsList] = useState();
+  const [percentage, setPercentage] = useState(0)
 
   const [shortConfirm, setShortConfirm] = useState(false);
   const [active, setActive] = useState(false);
@@ -113,21 +116,35 @@ const BuySell = (props: fullWidth) => {
       ? props?.currentToken?.token?.price
       : props?.currentToken?.global_token?.price;
 
+
+      
+
   useEffect(() => {
     // setSymbol('USDT');
     let futureAssets = props?.assets?.filter((item: any) => {
       return item.walletTtype === "future_wallet";
     });
 
+    
+    
     let asset = futureAssets?.filter((item: any) => {
       let tokenSymbol =
-        item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol;
+      item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol;
       if (show === 2 && showNes === 3) {
         return tokenSymbol === props?.currentToken?.coin_symbol;
-      } else {
+      }
+      else if (prefernceSymbol === "Qty") {
+        console.log(props?.currentToken?.coin_symbol, "==props?.currentToken?.coin_symbol");
+
+         let symbol = props?.currentToken?.coin_symbol==="BTC" ? 'BTCB': props?.currentToken?.coin_symbol;
+         return tokenSymbol=== symbol
+      }
+      else {
         return tokenSymbol === symbol;
       }
     });
+    setAssetsList(asset)
+    console.log(asset, "=asset");
 
     // ---------------------------------------
     // Rewards points add to derivative
@@ -152,11 +169,11 @@ const BuySell = (props: fullWidth) => {
       setAvailBalance(rewardsAmount);
       setButtonStyle(true);
       setAssetsBalance(0);
-    }  
-    if(tpsl.profit.leverage!=0 && tpsl.stopls.leverage!==0){
+    }
+    if (tpsl.profit.leverage != 0 && tpsl.stopls.leverage !== 0) {
       setProfitLossConfirm(true)
     }
-  }, [props?.currentToken?.coin_symbol, props.assets, tpsl]);
+  }, [props?.currentToken?.coin_symbol, props.assets, tpsl,prefernceSymbol]);
 
   // ===================================================================//
   // =======Change wallet balance according to token change=============//
@@ -204,9 +221,25 @@ const BuySell = (props: fullWidth) => {
   // ===================================================================//
   // asset amount value using range slider //
   // ===================================================================//
-  const onChangeSizeInPercentage = (value: any) => {
-    let actualValue = (avaibalance * value) / 100;
-    setSizeValue(actualValue * props?.marginMode?.leverage);
+  const onChangeSizeInPercentage = (value: string | number) => {
+    console.log("=here",  value);
+    value= parseFloat(value)
+    
+  setPercentage(value)
+  if(prefernceSymbol === "Qty"){
+    let finalvalue=(props?.minTrade) * (value / 100)
+    console.log(finalvalue,"=finalvalue");
+    
+    setSizeValue(truncateNumber(finalvalue,6))
+  }
+  else{
+    let finalvalue=(entryPrice*props?.minTrade) * (value / 100)
+    setSizeValue(truncateNumber(finalvalue,6))
+    console.log(finalvalue);
+    
+  }
+    // let actualValue = (avaibalance * value) / 100;
+    // setSizeValue(actualValue * props?.marginMode?.leverage);
   };
 
   // ===================================================================//
@@ -337,103 +370,143 @@ const BuySell = (props: fullWidth) => {
 
   const confirmOrder = async () => {
     try {
-      console.log("i am here!!");
-      setButtonStyle(true);
-      setFinalOrderSubmit(true);
-      const ciphertext = AES.encrypt(
-        JSON.stringify(confirmOrderData),
-        `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
-      );
-      let record = encodeURIComponent(ciphertext.toString());
+      console.log(confirmOrderData,"confirmOrderData");
+      // return;
       
-      
-      let reponse = await fetch(
-        `${process.env.NEXT_PUBLIC_BASEURL}/future/${(marketType === "market" || (show === 2 && marketType === 'limit')) ? "position" : "openorder"
-        }`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: session?.user?.access_token,
-          },
-          body: JSON.stringify(record),
-        }
-      ).then((response) => response.json());
 
-      if (reponse?.data?.status !== 200) {
-        toast.error(
-          reponse?.data?.data?.message !== undefined
-            ? reponse?.data?.data?.message
-            : reponse?.data?.data, {
-          position: 'top-center'
-        }
-        );
-        setButtonStyle(false);
-        setFinalOrderSubmit(false);
+      if(prefernceSymbol === "Qty" && confirmOrderData?.qty>props?.minTrade){
+    
+          toast.error("Failed to place your order as it would result in the total value of your position and active orders exceeding the current maximum leverage allowed. Please reduce your leverage before trying again.",{autoClose:2000})
+         
+          setButtonStyle(false);
+          props?.refreshWalletAssets();
+          setConfirmModelOverlay(false);
+          setConfirmModelPopup(0);
+          setFinalOrderSubmit(false);
+          return;
+      
+        
+        // let finalvalue=(props?.minTrade) * (value / 100)
+        // setSizeValue(truncateNumber(finalvalue,6))
       }
-      else {
-       
-        if (istpslchecked === true) {
-          if (tpsl.profit) {
-            tpsl.profit.position_id = reponse?.data?.data?.result?.id;
-          }
-          const ciphertext = AES.encrypt(
-            JSON.stringify(tpsl?.profit),
-            `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
-          );
-          let record = encodeURIComponent(ciphertext.toString());
-          let profitreponse = await fetch(
-            `${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: session?.user?.access_token,
-              },
-              body:JSON.stringify(record),
-            }
-          ).then((response) => response.json());
+      else if(prefernceSymbol === "Value" && (entryPrice*props?.minTrade)<sizeValue){
 
-          if (tpsl.stopls) {
-            tpsl.stopls.position_id = reponse?.data?.data?.result?.id;
-          }
 
-          const ciphertext1 = AES.encrypt(
-            JSON.stringify(tpsl?.stopls),
-            `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+            toast.error("Failed to place your order as it would result in the total value of your position and active orders exceeding the current maximum leverage allowed. Please reduce your leverage before trying again.",{autoClose:2000})
+           
+            setButtonStyle(false);
+            props?.refreshWalletAssets();
+            setConfirmModelOverlay(false);
+            setConfirmModelPopup(0);
+            setFinalOrderSubmit(false);
+            return;
+        
+
+        // let finalvalue=(entryPrice*props?.minTrade) * (value / 100)
+        // setSizeValue(truncateNumber(finalvalue,6))
+        // console.log(finalvalue);
+        
+      }
+      else{
+        console.log("i am here!!");
+        setButtonStyle(true);
+        setFinalOrderSubmit(true);
+        const ciphertext = AES.encrypt(
+          JSON.stringify(confirmOrderData),
+          `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+        );
+        let record = encodeURIComponent(ciphertext.toString());
+  
+  
+        let reponse = await fetch(
+          `${process.env.NEXT_PUBLIC_BASEURL}/future/${(marketType === "market" || (show === 2 && marketType === 'limit')) ? "position" : "openorder"
+          }`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: session?.user?.access_token,
+            },
+            body: JSON.stringify(record),
+          }
+        ).then((response) => response.json());
+  
+        if (reponse?.data?.status !== 200) {
+          toast.error(
+            reponse?.data?.data?.message !== undefined
+              ? reponse?.data?.data?.message
+              : reponse?.data?.data, {
+            position: 'top-center'
+          }
           );
-          let record1 = encodeURIComponent(ciphertext1.toString());
-          let stopreponse = await fetch(
-            `${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`,
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: session?.user?.access_token,
-              },
-              body: JSON.stringify(record1),
+          setButtonStyle(false);
+          setFinalOrderSubmit(false);
+        }
+        else {
+  
+          if (istpslchecked === true) {
+            if (tpsl.profit) {
+              tpsl.profit.position_id = reponse?.data?.data?.result?.id;
             }
-          ).then((response) => response.json());
+            const ciphertext = AES.encrypt(
+              JSON.stringify(tpsl?.profit),
+              `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+            );
+            let record = encodeURIComponent(ciphertext.toString());
+            let profitreponse = await fetch(
+              `${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: session?.user?.access_token,
+                },
+                body: JSON.stringify(record),
+              }
+            ).then((response) => response.json());
+  
+            if (tpsl.stopls) {
+              tpsl.stopls.position_id = reponse?.data?.data?.result?.id;
+            }
+  
+            const ciphertext1 = AES.encrypt(
+              JSON.stringify(tpsl?.stopls),
+              `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+            );
+            let record1 = encodeURIComponent(ciphertext1.toString());
+            let stopreponse = await fetch(
+              `${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: session?.user?.access_token,
+                },
+                body: JSON.stringify(record1),
+              }
+            ).then((response) => response.json());
+          }
+  
+          if (wbsocket) {
+            let position = {
+              ws_type: "position",
+            };
+            wbsocket.send(JSON.stringify(position));
+          }
+  
+          toast.success(reponse?.data?.data?.message, {
+            position: 'top-center'
+          });
+  
+          setButtonStyle(false);
+          setEntryPrice(0);
+          setSizeValue(0);
+          props?.refreshWalletAssets();
+          setConfirmModelOverlay(false);
+          setConfirmModelPopup(0);
+          setFinalOrderSubmit(false);
         }
 
-        if (wbsocket) {
-          let position = {
-            ws_type: "position",
-          };
-          wbsocket.send(JSON.stringify(position));
-        }
-
-        toast.success(reponse?.data?.data?.message, {
-          position: 'top-center'
-        });
-      
-        setButtonStyle(false);
-        setEntryPrice(0);
-        setSizeValue(0);
-        props?.refreshWalletAssets();
-        setConfirmModelOverlay(false);
-        setConfirmModelPopup(0);
-        setFinalOrderSubmit(false);
       }
     } catch (error) {
       setFinalOrderSubmit(false);
@@ -444,8 +517,8 @@ const BuySell = (props: fullWidth) => {
   // =======Take Profit and Sop Loss popup hide and shoow===============//
   // ===================================================================//
   const profitlosspopupenable = (event: any) => {
-    console.log(event.currentTarget.checked,"=event.currentTarget.checked");
-    
+    console.log(event.currentTarget.checked, "=event.currentTarget.checked");
+
     if (event.currentTarget.checked === true) {
       setModelPopup(1);
     } else {
@@ -610,7 +683,7 @@ const BuySell = (props: fullWidth) => {
     submitForm();
   }
 
-  // console.log(sizeValue,'-------------size Value', orderType,'=========order typee');
+  console.log(sizeValue,'-------------size Value');
 
 
   return (
@@ -662,6 +735,8 @@ const BuySell = (props: fullWidth) => {
               }`}
             onClick={() => {
               setShow(1);
+              setSizeValue(0);
+              setEntryPrice(0);
               if (showNes === 3) {
                 onCoinDropDownChange("USDT");
               }
@@ -676,6 +751,8 @@ const BuySell = (props: fullWidth) => {
               }`}
             onClick={() => {
               setShow(2);
+              setSizeValue(0);
+              setEntryPrice(0);
               if (showNes === 3) {
                 onCoinDropDownChange(props?.currentToken?.coin_symbol);
               }
@@ -755,7 +832,7 @@ const BuySell = (props: fullWidth) => {
           <p className="admin-body-text !text-[12px] !text-[#a3a8b7]">
             Available: {avaibalance}
           </p>
-          <p className="admin-body-text !text-[12px] dark:!text-white"> {symbol}</p>
+          <p className="admin-body-text !text-[12px] dark:!text-white"> {prefernceSymbol === "Qty" ? props?.currentToken?.coin_symbol : symbol}</p>
           {/* <div
             onClick={() => {
               props.setOverlay(true);
@@ -778,17 +855,26 @@ const BuySell = (props: fullWidth) => {
                 <input
                   type="number"
                   placeholder="$0"
-                  step="any"
+                  step="0.000001"
                   defaultValue={entryPrice}
                   onChange={(e) => {
-                    setEntryPrice(
-                      e.target.value === "" ? 0 : parseFloat(e.target.value)
-                    );
-                    setEntryPriceValidate("");
+                    const value = e.target.value;
+                    const regex = /^\d{0,10}(\.\d{0,6})?$/;
+
+                    if (regex.test(value) || value === "") {
+                      setEntryPrice(value === "" ? 0 : parseFloat(value));
+                      setEntryPriceValidate("");
+                    } else {
+                      setEntryPriceValidate("Invalid format: up to 10 digits before decimal and up to 6 digits after decimal.");
+                      e.target.value = value.slice(0, -1);
+                    }
+                    
                   }}
                   name="token_amount"
                   className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "
-                ></input>
+                  pattern="^\d{0,10}(\.\d{0,6})?$"
+                />
+
               </div>
               <div>
                 <p className="admin-body-text !text-[12px] dark:!text-white">
@@ -798,7 +884,7 @@ const BuySell = (props: fullWidth) => {
               </div>
             </div>
             <p className="errorMessage">{entryPriceValidate}</p>
-            <p className="top-label mt-[5px]">Current Price : {currencyFormatter(marketPrice)}</p>
+            <p className="top-label mt-[5px]">Current Price : {currencyFormatter(truncateNumber(marketPrice, 6))}</p>
           </>
         )}
         {(showNes === 1 || showNes === 2) && (
@@ -809,7 +895,7 @@ const BuySell = (props: fullWidth) => {
             </div>
             <div className="mt-2 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]">
               <div>
-                <p className="top-label">Amount </p>
+                <p className="top-label">Amounta </p>
                 <input
                   type="number"
                   defaultValue={sizeValue}
@@ -933,7 +1019,7 @@ const BuySell = (props: fullWidth) => {
           lineId={props.lineId}
           onChangeSizeInPercentage={onChangeSizeInPercentage}
           rangetype={"%"}
-          
+
         />
 
         {/* ================================= */}
