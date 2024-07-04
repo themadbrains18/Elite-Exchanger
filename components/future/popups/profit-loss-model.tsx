@@ -278,7 +278,7 @@ const ProfitLossModal = (props: showPopup) => {
                     <div className='mt-[30px]'>
                         <p className='top-label !text-[14px]'>This setting applies to the entire position. Take Profit and Stop-loss automatically cancel after closing the position. A Market order is triggered when the stop price is reached. The order will be rejected if the position size exceeds the Max Market Order Qty limit.</p>
                     </div>
-                    <button className="border bg-primary text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px]" onClick={storeProfitLossData}>Confirm</button>
+                    <button className="border bg-primary text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px] solid-button" onClick={storeProfitLossData}>Confirm</button>
                 </div>
             </div>
         </div>
