@@ -603,7 +603,7 @@ const BuySellExpress = (props: propsData) => {
                       I want to {active1 === 1 ? "pay ≈" : "sell ≈"}
                     </p>
                     <input
-                      type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                      type="number"  
                       placeholder="$0"
                       step="any"
                       {...register('spend_amount')}
@@ -668,7 +668,7 @@ const BuySellExpress = (props: propsData) => {
                   <div className="">
                     <p className="sm-text dark:text-white">I will receive ≈</p>
                     <input
-                      type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                      type="number"  
                       placeholder="$0"
                       step="any"
                       {...register('receive_amount')}
@@ -747,7 +747,7 @@ const BuySellExpress = (props: propsData) => {
                       I want to sell ≈
                     </p>
                     <input
-                      type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                      type="number"  
                       placeholder="$0"
                       step="any"
                       {...register('spend_amount')}
@@ -795,7 +795,7 @@ const BuySellExpress = (props: propsData) => {
                   <div className="">
                     <p className="sm-text dark:text-white">I will receive ≈</p>
                     <input
-                      type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                      type="number"  
                       placeholder="$0"
                       step="any"
                       {...register('receive_amount')}

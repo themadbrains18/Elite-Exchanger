@@ -199,7 +199,8 @@ const EditReferralProgram = (props: propsData) => {
                 <div className=" relative ">
                     <p className="sm-text mb-3 mt-3">Amount</p>
                     <input
-                        type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                        type="number"  
+                        // 
                         {...register("amount")}
                         name="amount"
                         placeholder="Please enter total amount of program"

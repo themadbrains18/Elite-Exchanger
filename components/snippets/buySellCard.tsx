@@ -502,7 +502,7 @@ const BuySellCard = (props: DynamicId) => {
 
                     <div className="">
                       <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
-                      <input type="number"  onWheel={(e) => (e.target as HTMLElement).blur()}  placeholder="$0" step="0.000000" {...register('limit_usdt', {
+                      <input type="number"   placeholder="$0" step="0.000000" {...register('limit_usdt', {
                         onChange: (e) => { { convertTotalAmount(); checkInput(e, 'limit') } }
                       })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
                     </div>
@@ -518,7 +518,7 @@ const BuySellCard = (props: DynamicId) => {
                 <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
                   <div className="">
                     <p className="sm-text dark:text-white">Quantity({firstCurrency})</p>
-                    <input type="number"  onWheel={(e) => (e.target as HTMLElement).blur()}  placeholder="0" step={0.000001} {...register('token_amount', {
+                    <input type="number"   placeholder="0" step={0.000001} {...register('token_amount', {
                       onChange: (e) => { { convertTotalAmount(); checkInput(e, 'max') } }
                     })} name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text " />
                   </div>

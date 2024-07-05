@@ -890,7 +890,7 @@ const [leverage, setLerverage] = useState(0)
               <div>
                 <p className="top-label">Price </p>
                 <input
-                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                  type="number"  
                   placeholder="$0"
                   step="0.000001"
                   value={entryPrice}
@@ -936,7 +936,7 @@ const [leverage, setLerverage] = useState(0)
               <div>
                 <p className="top-label">Amount</p>
                 <input
-                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                  type="number"  
                   value={sizeValue}
                   placeholder="0.00"
                   onChange={onChangeSizeValue}
@@ -974,7 +974,7 @@ const [leverage, setLerverage] = useState(0)
               <div>
                 <p className="top-label">Stop Price </p>
                 <input
-                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                  type="number"  
                   placeholder="0"
                   onChange={(e) => {
                     setStopPrice(e.target?.value);
@@ -998,7 +998,7 @@ const [leverage, setLerverage] = useState(0)
               <div>
                 <p className="top-label">Price </p>
                 <input
-                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                  type="number"  
                   placeholder="0"
                   onChange={(e) => {
                     
@@ -1025,7 +1025,7 @@ const [leverage, setLerverage] = useState(0)
               <div>
                 <p className="top-label">Amount</p>
                 <input
-                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                  type="number"  
                   placeholder="0"
                   onChange={(e) => {
                     setSizeValue(

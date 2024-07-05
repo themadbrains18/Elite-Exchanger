@@ -423,7 +423,7 @@ const AddAddress = (props: activeSection) => {
         <ConfirmPopup
           setEnable={setEnable}
           setShow={props.setActive}
-          type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+          type="number"  
           data={formData}
           session={props?.session}
           snedOtpToUser={snedOtpToUser}

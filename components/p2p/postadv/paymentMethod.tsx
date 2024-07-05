@@ -427,7 +427,7 @@ const PaymentMethod = (props: activeSection) => {
                         <div className="flex items-center cursor-pointer">
                           <div className="w-full">
                             <input
-                              type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                              type="number"  
                               id="quantity"
                               step={0.000001}
                               {...register("quantity")}
@@ -468,7 +468,7 @@ const PaymentMethod = (props: activeSection) => {
                         <div className="flex items-center cursor-pointer ">
                           <div className="w-full">
                             <input
-                              type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                              type="number"  
                               id="min_limit"
                               step={0.000001}
                               {...register("min_limit")}
@@ -504,7 +504,7 @@ const PaymentMethod = (props: activeSection) => {
                           <div className="w-full">
                             <input
                               disabled={true}
-                              type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                              type="number"  
                               id="max_limit"
                               step={0.000001}
                               {...register("max_limit")}

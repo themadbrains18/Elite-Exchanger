@@ -334,7 +334,7 @@ const Exchange = (props: DynamicId): any => {
           <div className="mt-20 rounded-5 p-[10px] justify-between flex border items-center border-grey-v-1 dark:border-opacity-[15%] relative">
             <div className="">
               <p className="sm-text dark:text-white">Quantity</p>
-              <input type="number"  onWheel={(e) => (e.target as HTMLElement).blur()}  placeholder="$0" step={0.000001} readOnly={isConvert} {...register('spend_amount')} name="spend_amount" onChange={(e: any) => {
+              <input type="number"   placeholder="$0" step={0.000001} readOnly={isConvert} {...register('spend_amount')} name="spend_amount" onChange={(e: any) => {
                 // setAmount(parseFloat(e.target?.value));
 
                 const value = e.target.value;
@@ -369,7 +369,7 @@ const Exchange = (props: DynamicId): any => {
           <div className=" rounded-5 p-[10px] justify-between flex border items-center border-grey-v-1 dark:border-opacity-[15%] relative">
             <div className="">
               <p className="sm-text dark:text-white">Buy For </p>
-              <input type="number"  onWheel={(e) => (e.target as HTMLElement).blur()}  value={receiveAmount > 0 ? receiveAmount?.toFixed(8) : ''} readOnly placeholder="$0" className="bg-[transparent] md-text outline-none border-l px-[5px] mt-[10px] border-h-primary" />
+              <input type="number"   value={receiveAmount > 0 ? receiveAmount?.toFixed(8) : ''} readOnly placeholder="$0" className="bg-[transparent] md-text outline-none border-l px-[5px] mt-[10px] border-h-primary" />
             </div>
             <div>
               <FilterSelectMenuWithCoin data={list} border={false} {...register('secondCurrency')} dropdown={2} setCurrencyName={setCurrencyName} value={secondCurrency} />

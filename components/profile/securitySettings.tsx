@@ -755,7 +755,7 @@ const SecuritySettings = (props: fixSection) => {
         <Verification
           setShow={setShow}
           setEnable={setEnable}
-          type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+          type="number"  
           data={formData}
           session={props?.session}
           snedOtpToUser={snedOtpToUser}
@@ -774,7 +774,7 @@ const SecuritySettings = (props: fixSection) => {
         <ConfirmPopup
           setEnable={setEnable}
           setShow={setShow}
-          type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+          type="number"  
           data={formData}
           session={props?.session}
           snedOtpToUser={snedOtpToUser}
@@ -819,7 +819,7 @@ const SecuritySettings = (props: fixSection) => {
         <AdNumber
           setShow={setShow}
           setActive={setActive}
-          type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+          type="number"  
           session={props?.session}
         />
       )}

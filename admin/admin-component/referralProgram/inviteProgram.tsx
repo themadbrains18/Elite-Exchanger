@@ -153,7 +153,7 @@ const AddInviteProgram = (props: ActiveSession) => {
                     <p className="sm-text mb-3 mt-3">Amount</p>
                     <input
                     
-                        type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                        type="number"  
                         {...register("amount")}
                         name="amount"
                         placeholder="Please enter total amount of program"
@@ -166,7 +166,7 @@ const AddInviteProgram = (props: ActiveSession) => {
                 <div className=" relative ">
                     <p className="sm-text mb-3 mt-3">Deposit Amount</p>
                     <input
-                        type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                        type="number"  
                         {...register("deposit")}
                         name="deposit"
                         placeholder="Please enter amount of deposit "
@@ -179,7 +179,7 @@ const AddInviteProgram = (props: ActiveSession) => {
                 <div className=" relative ">
                     <p className="sm-text mb-3 mt-3">Trade Amount</p>
                     <input
-                        type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                        type="number"  
                         {...register("trade")}
                         name="trade"
                         placeholder="Please enter amount of trade"

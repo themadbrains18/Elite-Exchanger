@@ -81,25 +81,25 @@ const PinLock = (props: activeSection) => {
               <label className="sm-text">Enter PIN</label>
               <div className="flex gap-10 justify-between items-center input_wrapper">
                 <input
-                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                  type="number"  
                   autoComplete="off"
                   className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                   name="code1"
                 />
                 <input
-                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                  type="number"  
                   autoComplete="off"
                   className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                   name="code2"
                 />
                 <input
-                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                  type="number"  
                   autoComplete="off"
                   className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                   name="code3"
                 />
                 <input
-                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+                  type="number"  
                   autoComplete="off"
                   className="block px-2 font-noto md:px-5 w-[40px] lg:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] lg:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                   name="code4"

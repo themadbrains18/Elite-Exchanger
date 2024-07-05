@@ -297,7 +297,7 @@ const TransferModal = (props: showPopup) => {
         )}
         <div className="flex items-center bg-[#e5ecf0] dark:bg-[#373d4e] p-[11px] mt-[25px] rounded-[5px] dark:text-white text-black justify-between">
           <input
-            type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
+            type="number"  
             step={0.000001}
             {...register('amount')}
             name="amount"

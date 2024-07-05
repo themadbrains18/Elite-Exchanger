@@ -346,7 +346,7 @@ const Adverstisement = (props: propsData) => {
                   </div> */}
                   <div className="md:mt-30 mt-20">
                     <p className="info-10-14">{show === 1 ? "Fixed" : "Floating"} (INR)</p>
-                    <input type="number"  onWheel={(e) => (e.target as HTMLElement).blur()}  step={0.000001} {...register('price', { required: true })} name="price" disabled={show === 2 ? true : false} placeholder="Enter Amount" className="py-[14px] px-[15px] border rounded-5 border-grey-v-1 mt-[10px] w-full bg-[transparent] dark:border-opacity-20 outline-none info-16-18" />
+                    <input type="number"   step={0.000001} {...register('price', { required: true })} name="price" disabled={show === 2 ? true : false} placeholder="Enter Amount" className="py-[14px] px-[15px] border rounded-5 border-grey-v-1 mt-[10px] w-full bg-[transparent] dark:border-opacity-20 outline-none info-16-18" />
                   </div>
                   {errors?.price && (
                     <p className="errorMessage">{errors?.price?.message}</p>

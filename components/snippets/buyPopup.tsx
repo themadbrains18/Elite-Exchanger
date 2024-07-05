@@ -275,7 +275,7 @@ const BuyPopup = (props: activeSection) => {
                 <div className="border mt-[10px] border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px] ">
                   <div className="flex items-center ">
                     <div className="max-w-full md:max-w-[315px] w-full">
-                      <input type="number"  onWheel={(e) => (e.target as HTMLElement).blur()}  step={0.000001} id="spendamount" {...register('spend_amount')} name="spend_amount" value={spendAmount} onChange={(e: any) => {
+                      <input type="number"   step={0.000001} id="spendamount" {...register('spend_amount')} name="spend_amount" value={spendAmount} onChange={(e: any) => {
                         if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
                           setSpendAmount(e?.target?.value);
                         }
@@ -300,7 +300,7 @@ const BuyPopup = (props: activeSection) => {
                 <div className="border mt-[15px] border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px] ">
                   <div className="flex items-center ">
                     <div className="max-w-full md:max-w-[315px] w-full">
-                      <input type="number"  onWheel={(e) => (e.target as HTMLElement).blur()}  step={0.000001} id="receiveamount" value={receiveAmount} {...register('receive_amount')} name="receive_amount" onChange={(e: any) => {
+                      <input type="number"   step={0.000001} id="receiveamount" value={receiveAmount} {...register('receive_amount')} name="receive_amount" onChange={(e: any) => {
                         if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                           setReceiveAmount(e?.target?.value);
                         }
