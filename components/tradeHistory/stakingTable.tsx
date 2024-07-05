@@ -397,7 +397,7 @@ const StakingTable = () => {
     {enable === 1 && (
           <ConfirmPopup
             setEnable={setEnable}
-            type="number"
+            type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
             data={formData}
             session={session}
             snedOtpToUser={snedOtpToUser}

@@ -500,7 +500,7 @@ const AdminSettings = (props: fixSection) => {
         <AdNumber
           setShow={setShow}
           setActive={setActive}
-          type="number"
+          type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
           session={session}
         />
       )}

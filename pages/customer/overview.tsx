@@ -62,7 +62,7 @@ const Overview = ({ sessions }: InferGetServerSidePropsType<typeof getServerSide
             <div className=" w-full">
               <p className="sm-text mb-[10px]">Phone Number</p>
               <div className="relative">
-                <input type="number" value="+91 7777777777" id="contactNumber"
+                <input type="number"  onWheel={(e) => (e.target as HTMLElement).blur()}  value="+91 7777777777" id="contactNumber"
                       name="contactNumber" placeholder="Enter phone number" className="sm-text input-cta2 w-full" />
                 <Image src="/assets/profile/phone.svg" alt="phone" width={22} height={22} className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]" />
               </div>

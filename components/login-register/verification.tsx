@@ -152,7 +152,7 @@ const Verification = (props: propsData) => {
               <input
                 id="securityNumber"
                 name="securityNumber"
-                type="number"
+                type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
                 placeholder="Enter Phone Number "
                 className="input-cta"
                 disabled={true}
