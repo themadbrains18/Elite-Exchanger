@@ -277,7 +277,7 @@ const TransferModal = (props: showPopup) => {
         <div className="flex items-center justify-between px-[12px] py-[12px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[25px] relative">
           {
             props?.wallet_type !== undefined ?
-              <input defaultValue={coinDefaultValue} readOnly disabled className='top-label py-[5px] px-[10px] w-full cursor-not-allowed   ' />
+              <input defaultValue={coinDefaultValue} readOnly className='top-label py-[5px] px-[10px] w-full cursor-not-allowed bg-[transparent]  ' />
               :
               <SelectDropdown
                 list={coinList}
