@@ -241,7 +241,7 @@ const BuyTableDesktop = (props: activeSection) => {
                   <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FAFAFA] cursor-pointer">
                     <td className="group-hover:bg-[#FAFAFA] dark:group-hover:bg-black-v-1 ">
                       <div className="flex items-center gap-[10px]">
-                        <Image src='/assets/market/star.svg' width={24} height={24} alt="star" />
+                        {/* <Image src='/assets/market/star.svg' width={24} height={24} alt="star" /> */}
                         <p className="info-14-18 ">{index + 1}</p>
                       </div>
                     </td>

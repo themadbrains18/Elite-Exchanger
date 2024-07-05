@@ -66,7 +66,7 @@ const CoinTypes = (props: propsData) => {
     }
 
     return (
-        <div className='h-[600px] max-[1499px]:overflow-x-auto p-[16px] dark:bg-[#1f2127] bg-[#fff] max-w-[380px] w-full max-[991px]:border-b border-r dark:border-[#25262a] border-[#e5e7eb]'>
+        <div className='h-[780px] max-[1499px]:overflow-x-auto p-[16px] dark:bg-[#1f2127] bg-[#fff] max-w-[380px] w-full max-[991px]:border-b border-r dark:border-[#25262a] border-[#e5e7eb]'>
             <div className='mb-[15px]'>
                 <input type="search" placeholder='search...' className='max-w-full w-full  dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] py-[6px] outline-none dark:text-white text-black text-[12px] px-[10px]' />
             </div>

@@ -143,20 +143,36 @@ const TopBar = (props: showSidebar) => {
     // let change = ((marketPrice - 42000)/42000)*100;
 
     return (
-        <section className='px-[1.25rem] py-[10px] bg-[#fafafa] dark:bg-[#1a1b1f] border-b dark:border-[#25262a] border-[#e5e7eb]'>
+        <section className='px-[1.25rem]  py-[10px] bg-[#fafafa] dark:bg-[#1a1b1f] border-b dark:border-[#25262a] border-[#e5e7eb]'>
             <div className='overflow-x-auto hide-scroller'>
                 <div className='flex items-center gap-[26px] w-[1200px]'>
-                    {/* coin name */}
-                    <div onClick={() => { props.setShow !== undefined && props.setShow(!props.show) }} className='max-[1140px]:left-0 max-[1140px]:top-0 max-[1140px]:sticky dark:bg-[#232428] bg-[#fff] rounded-[4px] cursor-pointer border border-[#9db3ba33] p-[5px] flex items-center gap-10'>
-                        <div>
-                            <p className='info-14-18 dark:!text-white'>{props?.currentToken?.coin_symbol}{props?.currentToken?.usdt_symbol}</p>
-                            <p className='admin-body-text !text-[#a3a8b7]'>Perpetual</p>
-                        </div>
-                        <div className='max-w-[24px] w-full'>
-                            <IconsComponent type='swap' />
-                        </div>
+                    {/* coin name display for desktop */}
+                    <div onMouseOut={() => { props.setShow !== undefined && props.setShow(false) }} onMouseOver={() => { props.setShow !== undefined && props.setShow(true) }} className='hover:pb-[20px] hidden lg:block hover:mb-[-20px] '>
+                        <div className='max-[1140px]:left-0 relative z-[5] max-[1140px]:top-0 max-[1140px]:sticky dark:bg-[#232428] bg-[#fff] rounded-[4px] cursor-pointer border border-[#9db3ba33] p-[5px] flex items-center gap-10'>
+                            <div>
+                                <p className='info-14-18 dark:!text-white'>{props?.currentToken?.coin_symbol}{props?.currentToken?.usdt_symbol}</p>
+                                <p className='admin-body-text !text-[#a3a8b7]'>Perpetual</p>
+                            </div>
+                            <div className='max-w-[24px] w-full'>
+                                <IconsComponent type='swap' />
+                            </div>
 
+                        </div>
                     </div>
+                    {/* coin name display for mobile */}
+                    <div onClick={() => { props.setShow !== undefined && props.setShow(!props.show) }} className='hover:pb-[20px] lg:hidden hover:mb-[-20px] '>
+                        <div className='max-[1140px]:left-0 relative z-[5] max-[1140px]:top-0 max-[1140px]:sticky dark:bg-[#232428] bg-[#fff] rounded-[4px] cursor-pointer border border-[#9db3ba33] p-[5px] flex items-center gap-10'>
+                            <div>
+                                <p className='info-14-18 dark:!text-white'>{props?.currentToken?.coin_symbol}{props?.currentToken?.usdt_symbol}</p>
+                                <p className='admin-body-text !text-[#a3a8b7]'>Perpetual</p>
+                            </div>
+                            <div className='max-w-[24px] w-full'>
+                                <IconsComponent type='swap' />
+                            </div>
+
+                        </div>
+                    </div>
+                   
 
                     {/* coin price */}
                     <p className='admin-component-heading !text-buy'>{props?.currentToken?.token !== null ?currencyFormatter(truncateNumber(props?.currentToken?.token?.price,6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price,6))}</p>
