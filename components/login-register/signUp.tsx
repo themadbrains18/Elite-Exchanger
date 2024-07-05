@@ -57,7 +57,7 @@ const SignUp = () => {
   const queryParams = searchParams.get('r');
   const referLink = searchParams.get('e');
 
-  let { register, setValue, handleSubmit, watch, setError, clearErrors, formState: { errors } } = useForm({
+  let { register, setValue, handleSubmit, watch, setError, clearErrors, formState: { errors },reset,getValues } = useForm({
     resolver: yupResolver(schema),
 
   });
@@ -105,10 +105,11 @@ const SignUp = () => {
       else {
         toast.error(userExist?.data?.data?.message !== undefined ? userExist?.data?.data?.message : userExist?.data?.data,{autoClose:2000});
         setTimeout(() => {
-          setpswd('');
-          setValue('password', '');
-          setValue('confirmPassword', '');
-          setValue('refeer_code', '');
+          // reset()
+          // setpswd('');
+          // setValue('password', '');
+          setValue('confirmPassword', getValues('password'));
+          // setValue('refeer_code', '');
           setBtnDisabled(false);
         }, 3000);
       }
