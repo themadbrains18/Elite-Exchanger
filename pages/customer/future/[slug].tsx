@@ -61,7 +61,7 @@ const [minTrade, setMinTrade] = useState()
             return item.coin_symbol + item.usdt_symbol === props?.serverSlug
         })
 
-        console.log(ccurrentToken,"token");
+        
         if(ccurrentToken && ccurrentToken?.length>0){
             setMinTrade(ccurrentToken[0]?.coin_min_trade)
         }

@@ -148,12 +148,11 @@ const BuySell = (props: fullWidth) => {
       }
     });
     setAssetsList(asset)
-    console.log(asset, "=asset");
 
     // ---------------------------------------
     // Rewards points add to derivative
     // ---------------------------------------
-    console.log(props?.totalPoint,"=========props?.totalPoint");
+    
     
     let rewardsAmount = 0;
     if (symbol === "USDT") {
@@ -167,21 +166,14 @@ const BuySell = (props: fullWidth) => {
         setButtonStyle(false);
       }
 
-      console.log(rewardsAmount,"============rewardsAmount");
       let bal = truncateNumber(Number(asset[0].balance) + rewardsAmount  , 6);
-      console.log(asset[0].balance,"============asset[0].balance");
-      console.log(bal,"============bal");
       
       let assetbal = truncateNumber(Number(asset[0].balance), 6)
-      
-      // console.log(typeof rewardsAmount,"============rewardsAmount");
-      // console.log(assetbal,"============assetbal");
 
       setAssetsBalance(assetbal);
       setAvailBalance(bal);
       
     } else {
-      console.log("============assetbal");
       setAvailBalance(rewardsAmount);
       setButtonStyle(true);
       setAssetsBalance(0);
@@ -701,7 +693,6 @@ const BuySell = (props: fullWidth) => {
     submitForm();
   }
 
-  console.log(sizeValue,'-------------size Value');
 
 
   return (

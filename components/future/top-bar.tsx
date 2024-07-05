@@ -131,8 +131,11 @@ const TopBar = (props: showSidebar) => {
     useEffect(() => {
         clearTimer(getDeadTime());
     }, []);
-
+    
     let marketPrice = props?.currentToken?.token !== null ? props?.currentToken?.token?.price.toFixed(5) : props?.currentToken?.global_token?.price.toFixed(5);
+ 
+    console.log(props.currentToken);
+    
 
     let change = ((marketPrice - props?.topHLOCData?.open) / props?.topHLOCData?.open) * 100;
 
@@ -175,7 +178,9 @@ const TopBar = (props: showSidebar) => {
                    
 
                     {/* coin price */}
-                    <p className='admin-component-heading !text-buy'>{props?.currentToken?.token !== null ?currencyFormatter(truncateNumber(props?.currentToken?.token?.price,6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price,6))}</p>
+                    
+                    
+                    <p className='admin-component-heading !text-buy'>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price,6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price,6))}</p>
                     <div>
                         <p className='top-label'>Mark</p>
                         <p className='top-label !text-[#000] dark:!text-[#fff]'>{props?.currentToken?.token !== null ? currencyFormatter(props?.currentToken?.token?.price.toFixed(5)) : currencyFormatter(props?.currentToken?.global_token?.price.toFixed(5))}</p>
