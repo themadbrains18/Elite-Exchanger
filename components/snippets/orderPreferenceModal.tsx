@@ -184,8 +184,8 @@ const OrderPreferenceModal = (props: propsData) => {
          {value==="Value" && <div className=" mt-20">
     
 
-            <p className="info-12 text-black dark:text-white">
-            <span className="text-black dark:text-white">Note : </span> 
+            <p className="info-12  dark:text-gamma">
+            <span className="text-black  dark:text-white">Note : </span > 
               Your order quantity will be calculated based on the value of your
               filled order. Please note that in the event of extreme market
               fluctuations, your order placement may fail.

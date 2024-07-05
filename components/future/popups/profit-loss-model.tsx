@@ -269,9 +269,8 @@ const ProfitLossModal = (props: showPopup) => {
                     <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative p-[15px] rounded-[5px] justify-between'>
                         <p className='top-label min-w-max'>Stop Loss</p>
                         <div className='flex item-center justify-between'>
-                            <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]'  pattern="/^\d{1,10}(\.\d{1,6})?$/" min={0} value={stopLossValue} onChange={(e: any) => {
-                                findStopLoss(e);
-                                // const value = e.target.value;
+                            <input type="text" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]'  maxLength={11} value={stopLossValue} onChange={(e: any) => {
+                                const value = e.target.value;
                                 // const regex = /^\d{1,10}(\.\d{1,6})?$/;
                                 // if (regex.test(value) || value === "") {
                                 //     // Call your findStopLoss function
@@ -280,6 +279,14 @@ const ProfitLossModal = (props: showPopup) => {
                                 //     setErrmsg("Invalid format: up to 10 digits before decimal and up to 6 digits after decimal.");
                                 //     e.target.value = value.slice(0, -1);
                                 // }
+
+                                const regex = /^[.]{0,10}$/;
+                                if (regex.test(value)) {
+                                    setErrmsg("Invalid format: up to 10 digits before decimal and up to 6 digits after decimal.");
+                                }else{
+                                    findStopLoss(e);
+                                    setErrmsg('');
+                                }
 
                               
                             }} />
@@ -299,7 +306,7 @@ const ProfitLossModal = (props: showPopup) => {
                     <div className='mt-[30px]'>
                         <p className='top-label !text-[14px]'>This setting applies to the entire position. Take Profit and Stop-loss automatically cancel after closing the position. A Market order is triggered when the stop price is reached. The order will be rejected if the position size exceeds the Max Market Order Qty limit.</p>
                     </div>
-                    <button className="border bg-primary text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px] solid-button" onClick={storeProfitLossData}>Confirm</button>
+                    <button className=" w-full max-w-full mt-[15px] solid-button" onClick={storeProfitLossData}>Confirm</button>
                 </div>
             </div>
         </div>

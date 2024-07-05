@@ -310,6 +310,9 @@ const BuySellExpress = (props: propsData) => {
     // p2p/postad
     if (active1 === 2) {
 
+      console.log(data,"==daa");
+      
+
       let pmMethod = props.masterPayMethod.filter((item: any) => item?.id === pmId)
       console.log(pmMethod);
 

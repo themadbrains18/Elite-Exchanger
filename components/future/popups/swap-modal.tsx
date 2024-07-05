@@ -62,7 +62,7 @@ const SwapModal = (props:showPopup) => {
                     <button className={`w-full p-[5px] rounded-[4px] border ${long === 1 ? 'text-buy border-buy' : 'text-[#a3a8b7] border-[#f0f8ff00]'}`} onClick={() => { setLong(1) }}>Long</button>
                     <button className={`w-full p-[5px] rounded-[4px] border ${long === 2 ? 'text-sell border-sell ' : 'text-[#a3a8b7] border-[#f0f8ff00]'}`} onClick={() => { setLong(2) }}>Short</button>
                 </div>
-                <RangeSlider inputId={'slider_input4'} thumbId={'slider_thumb4'} lineId={'slider_line4'} rangetype={'X'} />
+                {/* <RangeSlider inputId={'slider_input4'} thumbId={'slider_thumb4'} lineId={'slider_line4'} rangetype={'X'} /> */}
                 <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative z-[4] p-[10px] rounded-[5px] '>
                     <p className='top-label min-w-max'>Open Price</p>
                     <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' />

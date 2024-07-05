@@ -151,7 +151,7 @@ button:focus-visible {
   }
 
   .top-label{
-    @apply font-normal text-[12px] leading-22 text-[#a3a8b7];
+    @apply font-normal text-[12px] leading-22 !text-[#a3a8b7];
   }
   /*/==================================/*/
 

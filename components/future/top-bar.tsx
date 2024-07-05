@@ -134,8 +134,6 @@ const TopBar = (props: showSidebar) => {
     
     let marketPrice = props?.currentToken?.token !== null ? props?.currentToken?.token?.price.toFixed(5) : props?.currentToken?.global_token?.price.toFixed(5);
  
-    console.log(props.currentToken);
-    
 
     let change = ((marketPrice - props?.topHLOCData?.open) / props?.topHLOCData?.open) * 100;
 

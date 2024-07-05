@@ -317,7 +317,7 @@ const TransferModal = (props: showPopup) => {
         )}
 
         <p className="top-label !text-[16px] mt-[15px]">
-          Available{" "}
+          Available:{" "}
           {userAsset !== undefined && userAsset !== null && Object.keys(userAsset).length>0  ? currencyFormatter(userAsset?.balance?.toFixed(6)) : 0}{" "}
           {selectedCoin}
         </p>
