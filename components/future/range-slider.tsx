@@ -55,9 +55,9 @@ const RangeSlider: React.FC<UniqueIds> = ({ inputId, thumbId, lineId, onChangeSi
 
       const inputPercent = document.querySelector('.inputPercent') as HTMLInputElement;
       if (inputPercent) {
-        inputPercent.value = `${(value / max) * 100}X`;
+        inputPercent.value = `${ Math.trunc( (value / max) * 100)}X`;
       }
-
+      
       onChangeSizeInPercentage(value);
     }
   };

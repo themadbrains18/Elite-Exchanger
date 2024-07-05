@@ -203,7 +203,7 @@ const AntiPhishingCode = (props: activeSection) => {
           setEnable={setEnable}
           setShow={props?.setShow}
           parentSetEnable={props.setEnable}
-          type="number"
+          type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
           data={formData}
           session={props?.session}
         />

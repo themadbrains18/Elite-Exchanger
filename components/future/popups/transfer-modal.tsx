@@ -297,7 +297,7 @@ const TransferModal = (props: showPopup) => {
         )}
         <div className="flex items-center bg-[#e5ecf0] dark:bg-[#373d4e] p-[11px] mt-[25px] rounded-[5px] dark:text-white text-black justify-between">
           <input
-            type="number"
+            type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
             step={0.000001}
             {...register('amount')}
             name="amount"
@@ -317,7 +317,7 @@ const TransferModal = (props: showPopup) => {
         )}
 
         <p className="top-label !text-[16px] mt-[15px]">
-          Available{" "}
+          Available:{" "}
           {userAsset !== undefined && userAsset !== null && Object.keys(userAsset).length>0  ? currencyFormatter(userAsset?.balance?.toFixed(6)) : 0}{" "}
           {selectedCoin}
         </p>

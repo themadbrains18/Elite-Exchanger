@@ -34,8 +34,9 @@ interface fullWidth {
   openOrders?: any;
   rewardsList?: any;
   totalPoint?: any;
-  minTrade?: any
-  maxTrade?: any
+  minTrade?: any;
+  maxTrade?: any;
+  setOpnlong?:Function;
 }
 
 const BuySell = (props: fullWidth) => {
@@ -156,12 +157,11 @@ const [leverage, setLerverage] = useState(0)
     });
     setAssetsList(asset)
 
-
     // ---------------------------------------
     // Rewards points add to derivative
     // ---------------------------------------
-
-
+    
+    
     let rewardsAmount = 0;
     if (symbol === "USDT") {
       rewardsAmount = props?.totalPoint || 0;
@@ -174,18 +174,14 @@ const [leverage, setLerverage] = useState(0)
         setButtonStyle(false);
       }
 
-      let bal = truncateNumber(Number(asset[0].balance) + rewardsAmount, 6);
-
+      let bal = truncateNumber(Number(asset[0].balance) + rewardsAmount  , 6);
+      
       let assetbal = truncateNumber(Number(asset[0].balance), 6)
-
-      // console.log(typeof rewardsAmount,"============rewardsAmount");
-      // console.log(assetbal,"============assetbal");
 
       setAssetsBalance(assetbal);
       setAvailBalance(bal);
 
     } else {
-
       setAvailBalance(rewardsAmount);
       setButtonStyle(true);
       setAssetsBalance(0);
@@ -244,7 +240,8 @@ const [leverage, setLerverage] = useState(0)
   // ===================================================================//
   const onChangeSizeInPercentage = (value: number) => {
     
-    setPercentage(value);
+    setPercentage(Math.trunc(value));
+
     let finalValue = 0;
 
 
@@ -272,7 +269,6 @@ const [leverage, setLerverage] = useState(0)
       }
     }
 
-    console.log(finalValue, "=finalvalue");
   };
 
   // ===================================================================//
@@ -773,8 +769,9 @@ const [leverage, setLerverage] = useState(0)
               }`}
             onClick={() => {
               setShow(1);
-              setSizeValue('');
-              setEntryPrice('');
+              setSizeValue(0);
+              props?.setOpnlong && props?.setOpnlong('Long');
+              setEntryPrice(0);
               if (showNes === 3) {
                 onCoinDropDownChange("USDT");
               }
@@ -789,8 +786,9 @@ const [leverage, setLerverage] = useState(0)
               }`}
             onClick={() => {
               setShow(2);
-              setSizeValue('');
-              setEntryPrice('');
+              setSizeValue(0);
+              props?.setOpnlong && props?.setOpnlong('Short');
+              setEntryPrice(0);
               if (showNes === 3) {
                 onCoinDropDownChange(props?.currentToken?.coin_symbol);
               }
@@ -892,7 +890,7 @@ const [leverage, setLerverage] = useState(0)
               <div>
                 <p className="top-label">Price </p>
                 <input
-                  type="number"
+                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
                   placeholder="$0"
                   step="0.000001"
                   value={entryPrice}
@@ -938,7 +936,7 @@ const [leverage, setLerverage] = useState(0)
               <div>
                 <p className="top-label">Amount</p>
                 <input
-                  type="number"
+                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
                   value={sizeValue}
                   placeholder="0.00"
                   onChange={onChangeSizeValue}
@@ -976,7 +974,7 @@ const [leverage, setLerverage] = useState(0)
               <div>
                 <p className="top-label">Stop Price </p>
                 <input
-                  type="number"
+                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
                   placeholder="0"
                   onChange={(e) => {
                     setStopPrice(e.target?.value);
@@ -1000,7 +998,7 @@ const [leverage, setLerverage] = useState(0)
               <div>
                 <p className="top-label">Price </p>
                 <input
-                  type="number"
+                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
                   placeholder="0"
                   onChange={(e) => {
                     
@@ -1027,7 +1025,7 @@ const [leverage, setLerverage] = useState(0)
               <div>
                 <p className="top-label">Amount</p>
                 <input
-                  type="number"
+                  type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
                   placeholder="0"
                   onChange={(e) => {
                     setSizeValue(

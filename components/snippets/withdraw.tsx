@@ -576,7 +576,7 @@ const Withdraw = (props: activeSection) => {
         <ConfirmPopup
           setEnable={setEnable}
           setShow={props.setShow1}
-          type="number"
+          type="number"  onWheel={(e) => (e.target as HTMLElement).blur()} 
           data={formData}
           session={props?.session}
           snedOtpToUser={snedOtpToUser}

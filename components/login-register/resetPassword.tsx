@@ -136,7 +136,7 @@ const ResetPassword = () => {
                 </p>
                 {/**Form Start  */}
                 <form onSubmit={handleSubmit(onHandleSubmit)}>
-                  <div className="flex flex-col gap-[15px] lg:gap-10">
+                  <div className="flex flex-col gap-[15px] lg:gap-10 relative">
                     <input
                       type="text"
                       placeholder="Enter Email/Number "
@@ -144,8 +144,9 @@ const ResetPassword = () => {
                       name="username"
                       className="input-cta"
                     />
+                      {/* <p className="errorMessage absolute top-[100%] left-0">skkfsdfs;d sfsd f;lk</p> */}
                     {errors.username && (
-                      <p className="errorMessage">{errors.username.message}</p>
+                      <p className="errorMessage absolute top-[calc(100%+5px)] left-0">{errors.username.message}</p>
                     )}
                   </div>
                   <button

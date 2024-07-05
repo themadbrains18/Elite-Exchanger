@@ -16,6 +16,7 @@ interface FullWidth {
     setMarginModeAndLeverage?: any;
     leverage?: any;
     currentToken?: any;
+    opnlong?:string;
 }
 
 const MarginMode: React.FC<FullWidth> = (props) => {
@@ -24,7 +25,7 @@ const MarginMode: React.FC<FullWidth> = (props) => {
     const [marginType, setMarginType] = useState('Isolated');
     const [leverageValue, setLeverageValue] = useState(props?.leverage ?? 10);
 
-    console.log(props?.currentToken, "currentToken");
+    
 
     useEffect(() => {
         setLeverageValue(props?.leverage ?? 10);
@@ -77,11 +78,11 @@ const MarginMode: React.FC<FullWidth> = (props) => {
                     />
                 </svg>
             </div>
-            <p className="sec-title !text-[15px] mb-[10px]">{props?.currentToken?.coin_symbol}-{props?.currentToken?.usdt_symbol}</p>
+            <p className="sec-title !text-[15px] mb-[10px]">{props?.currentToken?.coin_symbol}-{props?.currentToken?.usdt_symbol} <span className={`${props?.opnlong == "Short" ? 'text-sell':'text-buy'}`}>({props?.opnlong})</span></p>
             <div className='flex bg-[#e5ecf0] dark:bg-[#3c4355] items-center justify-between relative z-[4] rounded-8'>
                 <p className='text-[25px] dark:text-white text-black cursor-pointer w-[50px] h-[40px] text-center' onClick={decrement}> - </p>
                 <div>
-                    <input type="text" className='bg-[#e5ecf0] dark:bg-[#3c4355] outline-none text-center lowercase inputPercent dark:text-[#fff] text-[#000] h-[40px]' readOnly value={parseInt(leverageValue).toString() + 'x'} />
+                    <input type="text" className='bg-[#e5ecf0] dark:bg-[#3c4355] outline-none text-center lowercase inputPercent dark:text-[#fff] text-[#000] h-[40px]' readOnly value={Math.trunc(parseInt( leverageValue )).toString() + 'x'} />
                 </div>
                 <p className='text-[25px] dark:text-white text-black cursor-pointer w-[50px] h-[40px] text-center' onClick={increment}> + </p>
             </div>

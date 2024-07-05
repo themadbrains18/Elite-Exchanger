@@ -53,6 +53,7 @@ const [maxTrade, setMaxTrade] = useState()
     const [openOrderHistoryData, setOpenOrderHistoryData] = useState([]);
     const [topHLOCData, setTopHLOCData] = useState(Object);
     const [positionRecord, setPositionRecord] = useState([]);
+    const [opnlong,setOpnlong] = useState('long');
 
     const [rewardsTotalPoint, setRewardsTotalPoint] = useState(props?.totalPoint);
     const wbsocket = useWebSocket();
@@ -62,7 +63,7 @@ const [maxTrade, setMaxTrade] = useState()
             return item.coin_symbol + item.usdt_symbol === props?.serverSlug
         })
 
-        console.log(ccurrentToken,"token");
+        
         if(ccurrentToken && ccurrentToken?.length>0){
             setMinTrade(ccurrentToken[0]?.coin_min_trade) 
             setMaxTrade(ccurrentToken[0]?.coin_max_trade) 
@@ -313,7 +314,7 @@ const [maxTrade, setMaxTrade] = useState()
                 </div>
                 <div className='bg-[#fff] dark:bg-[#1a1b1f]  border-l  dark:border-[#25262a] border-[#e5e7eb] '>
                     {/* Buy/Sell open short traading component */}
-                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} minTrade= {minTrade} maxTrade= {maxTrade}/>
+                    <BuySell inputId={'slider_input1'} setOpnlong={setOpnlong} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} minTrade= {minTrade} maxTrade= {maxTrade}/>
                     <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
                 </div>
             </div>
@@ -349,7 +350,7 @@ const [maxTrade, setMaxTrade] = useState()
                 </div>
 
                 <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} positionHistoryData={positionHistoryData} openOrderHistoryData={openOrderHistoryData} />
-                <BuySell setOverlay={setOverlay} inputId={'slider_input2'} minTrade= {minTrade} maxTrade= {maxTrade} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} />
+                <BuySell setOpnlong={setOpnlong} setOverlay={setOverlay} inputId={'slider_input2'} minTrade= {minTrade} maxTrade= {maxTrade} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} />
                 <MarginRatio fullWidth={true} heightAuto={true} setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
             </div>
 
@@ -359,7 +360,7 @@ const [maxTrade, setMaxTrade] = useState()
             {/* Leverage and margin type popup component */}
             {popupMode === 1 ?
 
-                <MarginMode setOverlay={setOverlay} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setPopupMode={setPopupMode} popupMode={popupMode} setMarginModeAndLeverage={setMarginModeAndLeverage} leverage={marginMode?.leverage} currentToken={currentToken[0]}/>
+                <MarginMode setOverlay={setOverlay} opnlong={opnlong} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setPopupMode={setPopupMode} popupMode={popupMode} setMarginModeAndLeverage={setMarginModeAndLeverage} leverage={marginMode?.leverage} currentToken={currentToken[0]}/>
                 :
                 popupMode === 2 ?
                     <SwapModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
