@@ -47,7 +47,7 @@ const FutureTrading = (props: Session) => {
     const [positions, setPositionData] = useState([]);
     const [openOrders, setOpenOrders] = useState([]);
     const [allAssets, setAllAssets] = useState(props?.assets);
-
+const [minTrade, setMinTrade] = useState()
     const [positionHistoryData, setPositionHistoryData] = useState([]);
     const [openOrderHistoryData, setOpenOrderHistoryData] = useState([]);
     const [topHLOCData, setTopHLOCData] = useState(Object);
@@ -60,6 +60,11 @@ const FutureTrading = (props: Session) => {
         let ccurrentToken = props.coinList.filter((item: any) => {
             return item.coin_symbol + item.usdt_symbol === props?.serverSlug
         })
+
+        console.log(ccurrentToken,"token");
+        if(ccurrentToken && ccurrentToken?.length>0){
+            setMinTrade(ccurrentToken[0]?.coin_min_trade)
+        }
         setCurrentToken(ccurrentToken);
         getUserFuturePositionData();
         getUserOpenOrderData();
@@ -278,7 +283,7 @@ const FutureTrading = (props: Session) => {
 
     return (
         <>
-            <ToastContainer limit={1}/>
+            <ToastContainer limit={1} position='top-center'/>
             {/* For Desktop use */}
             <div className='max-[991px]:hidden flex max-[1023px]:mt-[57px] mt-[69px]'>
                 <div className='w-full max-w-[calc(100%-300px)]'>
@@ -309,7 +314,7 @@ const FutureTrading = (props: Session) => {
                 </div>
                 <div>
                     {/* Buy/Sell open short traading component */}
-                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} />
+                    <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} minTrade= {minTrade}/>
                     <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
                 </div>
             </div>
@@ -345,7 +350,7 @@ const FutureTrading = (props: Session) => {
                 </div>
 
                 <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} positionHistoryData={positionHistoryData} openOrderHistoryData={openOrderHistoryData} />
-                <BuySell setOverlay={setOverlay} inputId={'slider_input2'} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} />
+                <BuySell setOverlay={setOverlay} inputId={'slider_input2'} minTrade= {minTrade} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} />
                 <MarginRatio fullWidth={true} heightAuto={true} setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
             </div>
 

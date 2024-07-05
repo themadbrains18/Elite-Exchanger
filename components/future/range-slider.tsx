@@ -39,12 +39,14 @@ const RangeSlider = (props: uniqueIds) => {
         slider_line.style.width = (slider_input.value / (slider_input.max / 100)) + '%';
         let inputPercent: any = document?.querySelector(".inputPercent");
         if (inputPercent) {
+            console.log("=here");
+            
             inputPercent.value = (slider_input.value / (slider_input.max / 100)) + 'X';
 
             value = slider_input.value / (slider_input.max / 100);
 
-            props.onChangeSizeInPercentage(value);
         }
+        props.onChangeSizeInPercentage(slider_input.value);
 
     }
     const handleBulletClick = (value: number) => {
