@@ -1,92 +1,99 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState, useEffect } from 'react';
 
-interface uniqueIds {
-    inputId?: any;
-    thumbId?: any;
-    lineId?: any;
-    onChangeSizeInPercentage?: any;
-    rangetype?: string;
-    step?:any;
-    levrage?:any;
+interface UniqueIds {
+  inputId: string;
+  thumbId: string;
+  lineId: string;
+  onChangeSizeInPercentage: (value: number) => void;
+  rangetype?: string;
+  step?: number;
+  levrage?: number;
 }
 
-const RangeSlider = (props: uniqueIds) => {
-
-    useEffect(() => {
-        const slider_input: any = document.getElementById(props.inputId);
-        if(props?.levrage){
-            slider_input.value=props?.levrage
-
-        }
-        showSliderValue();
-        // showSliderValue();
-        // window.addEventListener("resize", showSliderValue);
-        // slider_input.addEventListener('input', showSliderValue, false);
-    }, [props?.levrage]);
-
-    const showSliderValue = () => {
-        const slider_input: any = document.getElementById(props.inputId);
-
-        let slider_thumb: any = document.getElementById(props.thumbId);
-        let slider_line: any = document.getElementById(props.lineId);
-        let value = 0;
-
-        slider_thumb.innerHTML = `${slider_input.value}X`;
-        const bulletPosition = slider_input.value / slider_input.max,
-            space = slider_input.offsetWidth - slider_thumb.offsetWidth;
-
-        slider_thumb.style.left = (bulletPosition * space) + 'px';
-        slider_line.style.width = (slider_input.value / (slider_input.max / 100)) + '%';
-        let inputPercent: any = document?.querySelector(".inputPercent");
-        if (inputPercent) {
-            console.log("=here");
-            
-            inputPercent.value = (slider_input.value / (slider_input.max / 100)) + 'X';
-
-            value = slider_input.value / (slider_input.max / 100);
-
-        }
-        props.onChangeSizeInPercentage(slider_input.value);
-
+const RangeSlider: React.FC<UniqueIds> = ({ inputId, thumbId, lineId, onChangeSizeInPercentage, rangetype = '', step = 1, levrage = 0 }) => {
+  useEffect(() => {
+    const sliderInput = document.getElementById(inputId) as HTMLInputElement;
+    if (sliderInput) {
+      sliderInput.value = levrage.toString();
+      showSliderValue();
+      sliderInput.addEventListener('input', showSliderValue);
     }
-    const handleBulletClick = (value: number) => {
-        
-        const sliderInput = document.getElementById(props.inputId) as HTMLInputElement;
-        
-        if (sliderInput) {
-          sliderInput.value = value.toString();
-          showSliderValue();
-        }
-      };
+    return () => {
+      if (sliderInput) {
+        sliderInput.removeEventListener('input', showSliderValue);
+      }
+    };
+  }, [levrage, inputId]);
 
-    return (
-        <>
-            <div className='w-full bg-primary h-[4px] flex items-center justify-between mt-[20px]'>
-            {[0, 25, 50, 75, 100].map((value, index) => (
-                <div
-                    key={index}
-                    className='w-[10px] h-[10px] rounded-full bg-primary cursor-pointer relative z-[2]'
-                    onClick={() => handleBulletClick(value)}
-                ></div>
-                ))}
-            </div>
-            <div className="range-slider mt-[-12px] cursor-pointer">
-                <div id={props.thumbId} className="range-slider_thumb"></div>
-                <div className="range-slider_line">
-                    <div id={props.lineId} className="range-slider_line-fill"></div>
-                </div>
-                <input id={props.inputId} className="range-slider_input" type="range" min="0" max="100" step={props.step} defaultValue={props?.levrage} onChange={() => showSliderValue()} />
-            </div>
-            <div className='flex items-center justify-between mt-[7px] relative z-[4]'>
-                <p className='text-[12px] dark:text-white text-black'>0{props.rangetype}</p>
-                <p className='text-[12px] dark:text-white text-black ml-[8px]'>25{props.rangetype}</p>
-                <p className='text-[12px] dark:text-white text-black ml-[8px]'>50{props.rangetype}</p>
-                <p className='text-[12px] dark:text-white text-black ml-[8px]'>75{props.rangetype}</p>
-                <p className='text-[12px] dark:text-white text-black'>100{props.rangetype}</p>
-            </div>
+  const showSliderValue = () => {
+    const sliderInput = document.getElementById(inputId) as HTMLInputElement;
+    const sliderThumb = document.getElementById(thumbId) as HTMLDivElement;
+    const sliderLine = document.getElementById(lineId) as HTMLDivElement;
 
-        </>
-    )
-}
+    if (sliderInput && sliderThumb && sliderLine) {
+      const value = Number(sliderInput.value);
+      const max = Number(sliderInput.max);
+
+      sliderThumb.innerHTML = `${value}X`;
+      const bulletPosition = value / max;
+      const space = sliderInput.offsetWidth - sliderThumb.offsetWidth;
+
+      sliderThumb.style.left = `${bulletPosition * space}px`;
+      sliderLine.style.width = `${(value / max) * 100}%`;
+
+      const inputPercent = document.querySelector('.inputPercent') as HTMLInputElement;
+      if (inputPercent) {
+        inputPercent.value = `${(value / max) * 100}X`;
+      }
+
+      onChangeSizeInPercentage(value);
+    }
+  };
+
+  const handleBulletClick = (value: number) => {
+    const sliderInput = document.getElementById(inputId) as HTMLInputElement;
+    if (sliderInput) {
+      sliderInput.value = value.toString();
+      showSliderValue();
+    }
+  };
+
+  return (
+    <>
+      <div className="w-full bg-primary h-[4px] flex items-center justify-between mt-[20px]">
+        {[0, 25, 50, 75, 100].map((value) => (
+          <div
+            key={value}
+            className="w-[10px] h-[10px] rounded-full bg-primary cursor-pointer relative z-[2]"
+            onClick={() => handleBulletClick(value)}
+          ></div>
+        ))}
+      </div>
+      <div className="range-slider mt-[-12px] cursor-pointer">
+        <div id={thumbId} className="range-slider_thumb"></div>
+        <div className="range-slider_line">
+          <div id={lineId} className="range-slider_line-fill"></div>
+        </div>
+        <input
+          id={inputId}
+          className="range-slider_input"
+          type="range"
+          min="0"
+          max="100"
+          step={step}
+          defaultValue={levrage}
+          onChange={showSliderValue}
+        />
+      </div>
+      <div className="flex items-center justify-between mt-[7px] relative z-[4]">
+        {[0, 25, 50, 75, 100].map((value) => (
+          <p key={value} className="text-[12px] dark:text-white text-black ml-[8px]">
+            {value}{rangetype}
+          </p>
+        ))}
+      </div>
+    </>
+  );
+};
 
 export default RangeSlider;

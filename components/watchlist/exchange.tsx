@@ -38,11 +38,12 @@ const Exchange = (props: DynamicId): any => {
   const [requestBody, setRequestBody] = useState(Object);
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [btnDisabled2, setBtnDisabled2] = useState(false);
+  const [currentTokenWalletBalance, setCurrentTokenWalletBalance] = useState(0.00)
 
   const [isConvert, setIsConvert] = useState(false);
   let { status, data: session } = useSession();
   let list = props?.coinList;
-  let newCoinListWithBalance = [];
+  let newCoinListWithBalance: any = [];
 
   const wbsocket = useWebSocket();
 
@@ -63,16 +64,16 @@ const Exchange = (props: DynamicId): any => {
 
   useEffect(() => {
     if (props?.coinList !== undefined && props?.assets !== undefined) {
-      for (const ls of props?.coinList) {
-        ls.avail_bal = 0.00;
-        for (const as of props?.assets) {
-          if (as.token_id === ls.id && as.balance > 0 && as.walletTtype === "main_wallet") {
-            ls.avail_bal = as.balance;
-            newCoinListWithBalance.push(ls)
-          }
-        }
-      }
-      setCurrencyName(firstCurrency,1);
+      // for (const ls of props?.coinList) {
+      //   ls.avail_bal = 0.00;
+      //   for (const as of props?.assets) {
+      //     if (as.token_id === ls.id && as.balance > 0 && as.walletTtype === "main_wallet") {
+      //       ls.avail_bal = as.balance;
+      //       newCoinListWithBalance.push(ls)
+      //     }
+      //   }
+      // }
+      setCurrencyName(firstCurrency, 1);
     }
   }, [props?.assets])
 
@@ -95,11 +96,18 @@ const Exchange = (props: DynamicId): any => {
 
     if (dropdown === 1) {
       setFirstCurrency(symbol);
+
       setValue('firstCurrency', symbol);
-      let token = list.filter((item: any) => {
+      let token = props?.coinList.filter((item: any) => {
         return item.symbol === symbol
       });
+
       setSelectedToken(token[0]);
+      let asset = props.assets.filter((item: any) => {
+        return item.token_id === token[0]?.id && item?.walletTtype === "main_wallet"
+      })
+
+      setCurrentTokenWalletBalance(asset[0]?.balance);
       if (token[0]?.tokenType === 'mannual') {
         setFirstMannual(true);
       }
@@ -110,10 +118,11 @@ const Exchange = (props: DynamicId): any => {
     else {
       setSecondCurrency(symbol)
       setValue('secondCurrency', symbol);
-      let token = list.filter((item: any) => {
+      let token = props?.coinList.filter((item: any) => {
         return item.symbol === symbol
       });
       setSelectedSecondToken(token[0]);
+      
       if (token[0]?.tokenType === 'mannual') {
         setSecondMannual(true);
       }
@@ -134,7 +143,7 @@ const Exchange = (props: DynamicId): any => {
         });
         return;
       }
-      if (selectedToken?.avail_bal < data.spend_amount) {
+      if (currentTokenWalletBalance < data.spend_amount) {
         setError("spend_amount", {
           type: "custom",
           message: `Insufficient balance`,
@@ -215,7 +224,7 @@ const Exchange = (props: DynamicId): any => {
       // user_convert_history form data
       let history = [];
       let spendObj = { token_id: selectedToken.id, type: 'Consumption', amount: amount, fee: 0, balance: spendBalance };
-      let receivedObj = { token_id: selectedSecondToken.id, type: 'Gain', amount: truncateNumber(conversionPrice,8), fee: 0, balance: receivedBalance?.toFixed(8) };
+      let receivedObj = { token_id: selectedSecondToken.id, type: 'Gain', amount: truncateNumber(conversionPrice, 8), fee: 0, balance: receivedBalance?.toFixed(8) };
 
       history.push(spendObj);
       history.push(receivedObj);
@@ -300,7 +309,6 @@ const Exchange = (props: DynamicId): any => {
     }
   }
 
-
   return (
     <>
       <div className="p-20 md:p-40 rounded-10 bg-white dark:bg-d-bg-primary">
@@ -312,7 +320,7 @@ const Exchange = (props: DynamicId): any => {
 
         <div className="flex gap-[18px] py-5">
           <Image src="/assets/market/walletpayment.svg" alt="wallet2" width={24} height={24} />
-          <p className="md-text w-full">${selectedToken?.avail_bal ? currencyFormatter(selectedToken?.avail_bal?.toFixed(6)) : '0.00'}</p>
+          <p className="md-text w-full">${currencyFormatter(truncateNumber(currentTokenWalletBalance, 6)) || 0.00}</p>
           <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} />
           {props.coinList && props.coinList?.map((item: any) => {
             if (item.symbol === selectedToken?.symbol) {
