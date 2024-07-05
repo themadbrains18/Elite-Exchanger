@@ -8,13 +8,18 @@ interface UniqueIds {
   rangetype?: string;
   step?: number;
   levrage?: number;
+  levrageValue?: number;
 }
 
-const RangeSlider: React.FC<UniqueIds> = ({ inputId, thumbId, lineId, onChangeSizeInPercentage, rangetype = '', step = 1, levrage = 0 }) => {
+const RangeSlider: React.FC<UniqueIds> = ({ inputId, thumbId, lineId, onChangeSizeInPercentage, rangetype = '', step = 1, levrage = 0,levrageValue=0 }) => {
+
   useEffect(() => {
+    
     const sliderInput = document.getElementById(inputId) as HTMLInputElement;
     if (sliderInput) {
-      sliderInput.value = levrage.toString();
+      
+      sliderInput.value = inputId==="rangeInput" ? levrageValue.toString(): levrage.toString();
+
       showSliderValue();
       sliderInput.addEventListener('input', showSliderValue);
     }
@@ -23,13 +28,17 @@ const RangeSlider: React.FC<UniqueIds> = ({ inputId, thumbId, lineId, onChangeSi
         sliderInput.removeEventListener('input', showSliderValue);
       }
     };
-  }, [levrage, inputId]);
+  }, [levrageValue,levrage, inputId]);
 
+  
+  
   const showSliderValue = () => {
     const sliderInput = document.getElementById(inputId) as HTMLInputElement;
     const sliderThumb = document.getElementById(thumbId) as HTMLDivElement;
     const sliderLine = document.getElementById(lineId) as HTMLDivElement;
-
+    
+    console.log(sliderInput.value,"sliderInput.value");
+    
     if (sliderInput && sliderThumb && sliderLine) {
       const value = Number(sliderInput.value);
       const max = Number(sliderInput.max);
@@ -40,6 +49,9 @@ const RangeSlider: React.FC<UniqueIds> = ({ inputId, thumbId, lineId, onChangeSi
 
       sliderThumb.style.left = `${bulletPosition * space}px`;
       sliderLine.style.width = `${(value / max) * 100}%`;
+
+      console.log(sliderLine, value, max);
+      
 
       const inputPercent = document.querySelector('.inputPercent') as HTMLInputElement;
       if (inputPercent) {
@@ -81,7 +93,7 @@ const RangeSlider: React.FC<UniqueIds> = ({ inputId, thumbId, lineId, onChangeSi
           min="0"
           max="100"
           step={step}
-          defaultValue={levrage}
+          defaultValue={inputId==="rangeInput"?levrageValue: levrage}
           onChange={showSliderValue}
         />
       </div>

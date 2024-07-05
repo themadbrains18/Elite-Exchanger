@@ -76,6 +76,8 @@ const BuySell = (props: fullWidth) => {
   const [assetsBalance, setAssetsBalance] = useState(0);
   const [assetsList, setAssetsList] = useState();
   const [percentage, setPercentage] = useState(0)
+  
+const [leverage, setLerverage] = useState(0)
 
   const [shortConfirm, setShortConfirm] = useState(false);
   const [active, setActive] = useState(false);
@@ -120,6 +122,13 @@ const BuySell = (props: fullWidth) => {
       : props?.currentToken?.global_token?.price;
 
 
+      useEffect(()=>{
+        if(showNes===2){
+
+          onChangeSizeInPercentage(percentage)
+        }
+      },[marketPrice])
+
 
 
   useEffect(() => {
@@ -137,7 +146,6 @@ const BuySell = (props: fullWidth) => {
         return tokenSymbol === props?.currentToken?.coin_symbol;
       }
       else if (prefernceSymbol === "Qty") {
-        console.log(props?.currentToken?.coin_symbol, "==props?.currentToken?.coin_symbol");
 
         let symbol = props?.currentToken?.coin_symbol === "BTC" ? 'BTCB' : props?.currentToken?.coin_symbol;
         return tokenSymbol === symbol
@@ -147,12 +155,12 @@ const BuySell = (props: fullWidth) => {
       }
     });
     setAssetsList(asset)
-    console.log(asset, "=asset");
+
 
     // ---------------------------------------
     // Rewards points add to derivative
     // ---------------------------------------
-    console.log(props?.totalPoint, "=========props?.totalPoint");
+
 
     let rewardsAmount = 0;
     if (symbol === "USDT") {
@@ -166,10 +174,7 @@ const BuySell = (props: fullWidth) => {
         setButtonStyle(false);
       }
 
-      console.log(rewardsAmount, "============rewardsAmount");
       let bal = truncateNumber(Number(asset[0].balance) + rewardsAmount, 6);
-      console.log(asset[0].balance, "============asset[0].balance");
-      console.log(bal, "============bal");
 
       let assetbal = truncateNumber(Number(asset[0].balance), 6)
 
@@ -180,7 +185,7 @@ const BuySell = (props: fullWidth) => {
       setAvailBalance(bal);
 
     } else {
-      console.log("============assetbal");
+
       setAvailBalance(rewardsAmount);
       setButtonStyle(true);
       setAssetsBalance(0);
@@ -242,14 +247,29 @@ const BuySell = (props: fullWidth) => {
     setPercentage(value);
     let finalValue = 0;
 
-    if (prefernceSymbol === "Qty") {
 
-      finalValue = (props.maxTrade) * (value / 100);
-      setSizeValue(truncateNumber(finalValue, 6));
-    } else {
+    if(showNes===1){
 
-      finalValue = (entryPrice * props.maxTrade) * (value / 100);
-      setSizeValue(truncateNumber(finalValue, 6));
+      if (prefernceSymbol === "Qty") {
+  
+        finalValue = (props.maxTrade) * (value / 100);
+        setSizeValue(truncateNumber(finalValue, 6));
+      } else {
+  
+        finalValue = (entryPrice * props.maxTrade) * (value / 100);
+        setSizeValue(truncateNumber(finalValue, 6));
+      }
+    }
+    else{
+      if (prefernceSymbol === "Qty") {
+  
+        finalValue = (props.maxTrade) * (value / 100);
+        setSizeValue(truncateNumber(finalValue, 6));
+      } else {
+  
+        finalValue = (truncateNumber(marketPrice, 6) * props.maxTrade) * (value / 100);
+        setSizeValue(truncateNumber(finalValue, 6));
+      }
     }
 
     console.log(finalValue, "=finalvalue");
@@ -268,6 +288,7 @@ const BuySell = (props: fullWidth) => {
         setSizeValidate("Amount must be greater than '0'");
         return;
       }
+      
       // let entry_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
       let Liquidation_Price: any =
         (marketPrice * (1 - 0.01)) / props?.marginMode?.leverage;
@@ -282,10 +303,14 @@ const BuySell = (props: fullWidth) => {
 
       let qty: any = sizeValue / marketPrice;
       qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
-
+      if(qty< props?.minTrade){
+        toast.error('Order cost falls below the min. threshold.', {autoClose:2000})
+        return;
+      }
       if (orderType === "qty") {
         qty = sizeValue.toString();
       }
+
       let value: any = (qty * 0.055).toFixed(5);
       let releazedPnl: any = (marketPrice * value) / 100;
       let size: any = truncateNumber(qty * marketPrice, 5);
@@ -329,6 +354,8 @@ const BuySell = (props: fullWidth) => {
         setSizeValidate("Amount must be greater than '0'");
         return;
       }
+
+      
       let Liquidation_Price: any =
         (entryPrice * (1 - 0.01)) / props?.marginMode?.leverage;
 
@@ -343,9 +370,15 @@ const BuySell = (props: fullWidth) => {
       let qty: any = sizeValue / marketPrice;
       qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
 
+      if(qty< props?.minTrade){
+        toast.error('Order cost falls below the min. threshold.', {autoClose:2000})
+        return;
+      }
+
       if (orderType === "qty") {
         qty = sizeValue.toString();
       }
+      
 
       let enter_Price: any = entryPrice;
       let amount: any = qty * entryPrice;
@@ -511,7 +544,7 @@ const BuySell = (props: fullWidth) => {
 
           setButtonStyle(false);
           setEntryPrice('');
-          setSizeValue(0);
+          setSizeValue('');
           props?.refreshWalletAssets();
           setConfirmModelOverlay(false);
           setConfirmModelPopup(0);
@@ -543,7 +576,7 @@ const BuySell = (props: fullWidth) => {
   // =====Validation in case of amount more than enter wallet value=====//
   // ===================================================================//
   const onChangeSizeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-
+    setLerverage(0)
     const value = parseFloat(e.target.value)==0 ? 0.00 : parseFloat(e.target.value);
   
     if (isNaN(value)) {
@@ -555,7 +588,6 @@ const BuySell = (props: fullWidth) => {
       setSizeValidate(`Minimum value: ${props?.minTrade}`)
       // console.log(sizeValue,"==sizeValue");
       
-      setSizeValue(0.000)
       return; 
     }
     else{
@@ -741,8 +773,8 @@ const BuySell = (props: fullWidth) => {
               }`}
             onClick={() => {
               setShow(1);
-              setSizeValue(0);
-              setEntryPrice(0);
+              setSizeValue('');
+              setEntryPrice('');
               if (showNes === 3) {
                 onCoinDropDownChange("USDT");
               }
@@ -757,8 +789,8 @@ const BuySell = (props: fullWidth) => {
               }`}
             onClick={() => {
               setShow(2);
-              setSizeValue(0);
-              setEntryPrice(0);
+              setSizeValue('');
+              setEntryPrice('');
               if (showNes === 3) {
                 onCoinDropDownChange(props?.currentToken?.coin_symbol);
               }
@@ -869,7 +901,7 @@ const BuySell = (props: fullWidth) => {
                     const regex = /^\d{0,10}(\.\d{0,6})?$/;
 
                     if (regex.test(value) || value === "") {
-                      setEntryPrice(value === "" ? 0 : parseFloat(value));
+                      setEntryPrice(value === "" ? '' : parseFloat(value));
                       setEntryPriceValidate("");
                     } else {
                       setEntryPriceValidate("Invalid format: up to 10 digits before decimal and up to 6 digits after decimal.");
@@ -932,7 +964,7 @@ const BuySell = (props: fullWidth) => {
           onChangeSizeInPercentage={onChangeSizeInPercentage}
           rangetype="X"
           step={1}
-          levrage={props.marginMode.leverage}
+          levrageValue={leverage}
         />
 
         {/* ================================= */}
@@ -971,8 +1003,9 @@ const BuySell = (props: fullWidth) => {
                   type="number"
                   placeholder="0"
                   onChange={(e) => {
+                    
                     setEntryPrice(
-                      e.target.value === "" ? 0 : parseFloat(e.target.value)
+                      e.target.value === "" ? '' : parseFloat(e.target.value)
                     );
                     setEntryPriceValidate("");
                   }}
