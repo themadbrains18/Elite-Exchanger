@@ -49,10 +49,10 @@ const BuySell = (props: fullWidth) => {
   // nested tabs
   const [showNes, setShowNes] = useState(1);
   const [symbol, setSymbol] = useState("USDT");
-  const [sizeValue, setSizeValue] = useState(0);
   const [avaibalance, setAvailBalance] = useState(0);
+  const [sizeValue, setSizeValue] = useState<any>();
   const [marketType, setMarketType] = useState("limit");
-  const [entryPrice, setEntryPrice] = useState(0);
+  const [entryPrice, setEntryPrice] = useState<any>();
   const [istpslchecked, setIsTpSlchecked] = useState(false);
 
   const [buttonStyle, setButtonStyle] = useState(false);
@@ -81,6 +81,9 @@ const BuySell = (props: fullWidth) => {
   const [finalOrderSubmit, setFinalOrderSubmit] = useState(false);
   const [profitLossConfirm, setProfitLossConfirm] = useState(false)
 
+
+  
+
   const wbsocket = useWebSocket();
 
   let openOrderObj = {
@@ -103,6 +106,7 @@ const BuySell = (props: fullWidth) => {
     leverage_type: "--",
     coin_id: "",
   };
+
   const [tpsl, setTpSl] = useState({
     profit: openOrderObj,
     stopls: openOrderObj,
@@ -149,9 +153,11 @@ const BuySell = (props: fullWidth) => {
     // ---------------------------------------
     // Rewards points add to derivative
     // ---------------------------------------
+    console.log(props?.totalPoint,"=========props?.totalPoint");
+    
     let rewardsAmount = 0;
     if (symbol === "USDT") {
-      rewardsAmount = props?.totalPoint;
+      rewardsAmount = props?.totalPoint || 0 ;
     }
 
     if (asset?.length > 0) {
@@ -161,11 +167,21 @@ const BuySell = (props: fullWidth) => {
         setButtonStyle(false);
       }
 
-      let bal = truncateNumber(Number(asset[0].balance) + rewardsAmount, 6);
+      console.log(rewardsAmount,"============rewardsAmount");
+      let bal = truncateNumber(Number(asset[0].balance) + rewardsAmount  , 6);
+      console.log(asset[0].balance,"============asset[0].balance");
+      console.log(bal,"============bal");
+      
       let assetbal = truncateNumber(Number(asset[0].balance), 6)
+      
+      // console.log(typeof rewardsAmount,"============rewardsAmount");
+      // console.log(assetbal,"============assetbal");
+
       setAssetsBalance(assetbal);
       setAvailBalance(bal);
+      
     } else {
+      console.log("============assetbal");
       setAvailBalance(rewardsAmount);
       setButtonStyle(true);
       setAssetsBalance(0);
@@ -210,6 +226,7 @@ const BuySell = (props: fullWidth) => {
       let bal = Number(asset[0].balance) + rewardsAmount;
       setAssetsBalance(Number(asset[0].balance));
       setAvailBalance(bal);
+      
     } else {
       setAvailBalance(rewardsAmount);
       setButtonStyle(true);
@@ -537,17 +554,17 @@ const BuySell = (props: fullWidth) => {
       setButtonStyle(true);
       setSizeValue(0);
     } else {
+      console.log(e.target.value,"=======e.target.value");
+      
       setSizeValue(parseFloat(e.target.value));
       setButtonStyle(false);
       if (
-        parseFloat(e.target.value) >
-        avaibalance * props?.marginMode?.leverage
+        parseFloat(e.target.value) > avaibalance * props?.marginMode?.leverage
       ) {
         setButtonStyle(true);
       }
       if (
-        parseFloat(e.target.value) / props?.marginMode?.leverage >
-        avaibalance
+        parseFloat(e.target.value) / props?.marginMode?.leverage > avaibalance
       ) {
         setButtonStyle(true);
       }
@@ -701,7 +718,7 @@ const BuySell = (props: fullWidth) => {
               props.setPopupMode(1);
             }}
           >
-            <div className="flex items-center gap-10 w-full">
+            <div className="flex items-center gap-[2px] w-full">
               <p className="top-label dark:!text-white !text-[#000]">
                 {props?.marginMode?.margin ? (
                   <span>{props?.marginMode?.margin}</span>
@@ -709,9 +726,13 @@ const BuySell = (props: fullWidth) => {
                   <span>Isolated </span>
                 )}
               </p>
-              <p className="bg-[#13c2c21f] px-[5px] text-primary text-[12px]">
+              <p className="px-[5px] text-primary text-[12px]">
                 {props?.marginMode?.leverage}X
               </p>
+            </div>
+          </div>
+
+            <div className="px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer w-full">
               <p className="top-label dark:!text-white !text-[#000]">
                 {positionMode === "oneWay" ? (
                   <span>One Way Mode</span>
@@ -720,8 +741,8 @@ const BuySell = (props: fullWidth) => {
                 )}
               </p>
             </div>
-            <IconsComponent type="rightArrowWithoutBg" />
-          </div>
+
+            {/* <IconsComponent type="rightArrowWithoutBg" /> */}
           <div className="cursor-pointer" onClick={() => { setIsShow(true) }}>
             <IconsComponent type="settingIcon" />
           </div>
@@ -761,6 +782,7 @@ const BuySell = (props: fullWidth) => {
             Sell
           </button>
         </div>
+
         {/* nested tabs */}
         <div className="flex items-center justify-between  mt-10">
           <div className="flex items-center gap-[10px]">
@@ -774,8 +796,8 @@ const BuySell = (props: fullWidth) => {
                 setMarketType("limit");
                 setSizeValidate("");
                 setEntryPriceValidate("");
-                setSizeValue(0);
-                setEntryPrice(0);
+                setSizeValue("");
+                setEntryPrice("");
                 setStopPrice("0");
               }}
             >
@@ -791,9 +813,9 @@ const BuySell = (props: fullWidth) => {
                 setMarketType("market");
                 setSizeValidate("");
                 setEntryPriceValidate("");
-                setSizeValue(0);
-                setEntryPrice(0);
-                setStopPrice("0");
+                setSizeValue("");
+                setEntryPrice("");
+                setStopPrice('0');
               }}
             >
               Market
@@ -895,15 +917,10 @@ const BuySell = (props: fullWidth) => {
             </div>
             <div className="mt-2 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]">
               <div>
-                <p className="top-label">Amounta </p>
+                <p className="top-label">Amount </p>
                 <input
                   type="number"
                   defaultValue={sizeValue}
-                  // placeholder={
-                  //   props?.currentToken?.coin_symbol === symbol
-                  //     ? props?.currentToken?.coin_min_trade
-                  //     : props?.currentToken?.usdt_min_trade
-                  // }
                   placeholder="0.00"
                   onChange={(e) => {
                     onChangeSizeValue(e);
@@ -911,7 +928,7 @@ const BuySell = (props: fullWidth) => {
                   }}
                   step="any"
                   name="token_amount"
-                  className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "
+                  className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text asdadasassdsad"
                 />
               </div>
               <div className="cursor-default">
@@ -946,7 +963,7 @@ const BuySell = (props: fullWidth) => {
                   }}
                   step="any"
                   name="token_amount"
-                  className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "
+                  className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text dddddddddd"
                 />
               </div>
               <div>
@@ -972,7 +989,7 @@ const BuySell = (props: fullWidth) => {
                   }}
                   step="any"
                   name="token_amount"
-                  className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "
+                  className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text dssdaaafw"
                 />
               </div>
               <div>
@@ -998,7 +1015,7 @@ const BuySell = (props: fullWidth) => {
                   }}
                   step="any"
                   name="token_amount"
-                  className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text "
+                  className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] md-text rrreyyy"
                 />
               </div>
               <div>
@@ -1078,7 +1095,7 @@ const BuySell = (props: fullWidth) => {
                       {showNes === 1
                         ? sizeValue === 0
                           ? 0.0
-                          : (truncateNumber(sizeValue / entryPrice, 3))
+                          : (truncateNumber(sizeValue / entryPrice, 6))
                         : (truncateNumber(sizeValue / marketPrice, 3))}{" "}
                       {props?.currentToken?.coin_symbol}
                     </p>
@@ -1256,6 +1273,7 @@ const BuySell = (props: fullWidth) => {
 
       {/* Trade confirm order popup */}
       <TradeConfirmPopupModal
+        leverage={props?.marginMode?.leverage}
         setConfirmModelOverlay={setConfirmModelOverlay}
         setConfirmModelPopup={setConfirmModelPopup}
         modelPopup={confirmModelPopup}

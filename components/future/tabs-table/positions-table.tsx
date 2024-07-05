@@ -9,6 +9,7 @@ import ConfirmationModel from '@/components/snippets/confirmation';
 import AES from 'crypto-js/aes';
 import { useWebSocket } from '@/libs/WebSocketContext';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
+import ConfirmationClouserModel from '@/components/snippets/confirm-clouser';
 
 interface propsData {
   positions?: any;
@@ -17,19 +18,32 @@ interface propsData {
 
 const PositionsTable = (props: propsData) => {
 
+  // console.log(props.positions,"=========props.positions");
+  // console.log(props.currentToken,"======props.currentToken");
+  
   const [modelPopup, setModelPopup] = useState(0);
   const [modelOverlay, setModelOverlay] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState(Object);
   const { status, data: session } = useSession();
 
+  // console.log(selectedPosition ,"======pselectedPosition");
+
   const [active, setActive] = useState(false);
   const [show, setShow] = useState(false);
   const [positionId, setPositionId] = useState('');
-
+  let [positionData,setPositionData] = useState();
   const wbsocket = useWebSocket();
 
   const closePositionOrder = async (id: string) => {
-    setPositionId(id);
+      
+      
+      props?.positions.map((item:any,index:number)=>{
+        if(item.id == id){
+          setPositionData(item);
+          console.log("test done");
+        }
+      });
+      
     setActive(true);
     setShow(true);
   }
@@ -244,7 +258,7 @@ const PositionsTable = (props: propsData) => {
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%] cursor-pointer'>
                       <div className='flex items-center'>
-                        <p className='top-label dark:!text-[#cccc56] !font-[600] pr-[20px]' onClick={() => closePositionOrder(item?.id)}>Close Position</p>
+                        <p className='top-label dark:!text-[#cccc56] !font-[600] pr-[20px]' onClick={() => {closePositionOrder(item?.id); setPositionId(item?.id);}}>Close Position</p>
                         {/* <div className='flex items-center gap-[20px]'>
                           <p className='top-label dark:!text-[#cccc56] !font-[600] pl-[20px] border-l border-grey-v-3 dark:border-opacity-[15%]'>Limit</p>
                           <div className='flex items-center gap-[5px]'>
@@ -273,10 +287,10 @@ const PositionsTable = (props: propsData) => {
         </table>
       </div>
       {/* overlay */}
-      <div className={`sdsadsadd bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${modelOverlay && '!opacity-[70%] !visible'}`}></div>
+      <div className={`bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${modelOverlay && '!opacity-[70%] !visible'}`}></div>
       <ProfitLossModal setModelOverlay={setModelOverlay} setModelPopup={setModelPopup} modelPopup={modelPopup} modelOverlay={modelOverlay} currentToken={props?.currentToken} entryPrice={selectedPosition?.entry_price} leverage={selectedPosition?.leverage} sizeValue={selectedPosition?.size} show={selectedPosition?.direction} actionType="position" positionId={selectedPosition?.id} />
       {active === true &&
-        <ConfirmationModel setActive={setActive} setShow={setShow} title='Notification' message='Please confirm to close this position.' actionPerform={actionPerform} show={show} />
+        <ConfirmationClouserModel setActive={setActive} positionData={positionData} setShow={setShow} title='Confirm Position Closure' message='Are you sure to want to close this position.' actionPerform={actionPerform} show={show} />
       }
 
     </>

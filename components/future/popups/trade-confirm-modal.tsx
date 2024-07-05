@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 import Context from '@/components/contexts/context';
 import clickOutSidePopupClose from '@/components/snippets/clickOutSidePopupClose';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
+import { truncateNumber } from '@/libs/subdomain';
 
 interface showPopup {
     modelPopup?: number;
@@ -12,6 +13,7 @@ interface showPopup {
     confirmOrderData?: any;
     finalOrderSubmit?:boolean;
     symbol?:string;
+    leverage?:any
 }
 
 const TradeConfirmPopupModal = (props: showPopup) => {
@@ -36,7 +38,8 @@ const TradeConfirmPopupModal = (props: showPopup) => {
     return (
         <div ref={wrapperRef} className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[520px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.modelPopup == 1 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
             <div className="flex items-center justify-between mb-[20px]">
-                <p className="sec-title !text-[20px]">Market Buy {props?.confirmOrderData?.symbol} </p>
+                {/* <p className="sec-title !text-[20px]">Market Buy {props?.confirmOrderData?.symbol} </p> */}
+                <p className="sec-title !text-[20px]">Order confirmation</p>
                 <svg
                     onClick={() => {
                         props.setConfirmModelOverlay(false);
@@ -76,7 +79,7 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Cost</p>
-                    <p className='dark:text-white text-black'>{currencyFormatter(props?.confirmOrderData?.margin)} USDT</p>
+                    <p className='dark:text-white text-black'>{truncateNumber(Number(currencyFormatter(props?.confirmOrderData?.margin)),6)} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Value</p>
@@ -88,12 +91,13 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Leverage</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.leverage_type} {props?.confirmOrderData?.leverage}x</p>
+                    {/* <p className='dark:text-white text-black'>{props?.confirmOrderData?.leverage_type} {props?.confirmOrderData?.leverage}x</p> */}
+                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.leverage_type} {props?.leverage}x</p>
                 </div>
-                <div className='flex justify-between items-center mb-[10px]'>
+                {/* <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Time in Force</p>
                     <p className='dark:text-white text-black'>Immediate-Or-Cancel</p>
-                </div>
+                </div> */}
                 <div className='flex justify-between items-center mb-[10px] gap-[20px]'>
                     <div className='mt-[5px] w-full'>
                         <button

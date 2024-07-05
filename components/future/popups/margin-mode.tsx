@@ -60,28 +60,28 @@ const MarginMode = (props: fullWidth) => {
         <div ref={wrapperRef} className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[500px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.popupMode == 1 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
             <div className="flex items-center justify-between mb-[20px]">
                 <p className="sec-title !text-[20px]">Select Leverage </p>
-                <svg
-                    onClick={() => { props.setOverlay(false); props.setPopupMode(0) }}
-                    enableBackground="new 0 0 60.963 60.842"
-                    version="1.1"
-                    id="Layer_1"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlnsXlink="http://www.w3.org/1999/xlink"
-                    x="0px"
-                    y="0px"
-                    viewBox="0 0 60.963 60.842"
-                    xmlSpace="preserve"
-                    className="max-w-[18px] cursor-pointer w-full"
-                >
-                    <path
-                        fill={mode === "dark" ? "#fff" : "#9295A6"}
-                        d="M59.595,52.861L37.094,30.359L59.473,7.98c1.825-1.826,1.825-4.786,0-6.611
-                c-1.826-1.825-4.785-1.825-6.611,0L30.483,23.748L8.105,1.369c-1.826-1.825-4.785-1.825-6.611,0c-1.826,1.826-1.826,4.786,0,6.611
-                l22.378,22.379L1.369,52.861c-1.826,1.826-1.826,4.785,0,6.611c0.913,0.913,2.109,1.369,3.306,1.369s2.393-0.456,3.306-1.369
-                l22.502-22.502l22.501,22.502c0.913,0.913,2.109,1.369,3.306,1.369s2.393-0.456,3.306-1.369
-                C61.42,57.647,61.42,54.687,59.595,52.861z"
-                    />
-                </svg>
+                    <svg
+                        onClick={() => { props.setOverlay(false); props.setPopupMode(0) }}
+                        enableBackground="new 0 0 60.963 60.842"
+                        version="1.1"
+                        id="Layer_1"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlnsXlink="http://www.w3.org/1999/xlink"
+                        x="0px"
+                        y="0px"
+                        viewBox="0 0 60.963 60.842"
+                        xmlSpace="preserve"
+                        className="max-w-[18px] cursor-pointer w-full"
+                    >
+                        <path
+                            fill={mode === "dark" ? "#fff" : "#9295A6"}
+                            d="M59.595,52.861L37.094,30.359L59.473,7.98c1.825-1.826,1.825-4.786,0-6.611
+                    c-1.826-1.825-4.785-1.825-6.611,0L30.483,23.748L8.105,1.369c-1.826-1.825-4.785-1.825-6.611,0c-1.826,1.826-1.826,4.786,0,6.611
+                    l22.378,22.379L1.369,52.861c-1.826,1.826-1.826,4.785,0,6.611c0.913,0.913,2.109,1.369,3.306,1.369s2.393-0.456,3.306-1.369
+                    l22.502-22.502l22.501,22.502c0.913,0.913,2.109,1.369,3.306,1.369s2.393-0.456,3.306-1.369
+                    C61.42,57.647,61.42,54.687,59.595,52.861z"
+                        />
+                    </svg>
             </div>
             {/* <div className='flex items-center mt-10 gap-[15px]'>
                 <button className={`w-full relative py-[12px] px-[5px] md:rounded-[4px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[2px] border ${cross === 1 ? 'text-primary border-primary' : 'text-[#a3a8b7] border-[#f0f8ff00]'}`} onClick={() => { setCross(1); setMarginType('Cross') }}>
@@ -128,7 +128,7 @@ const MarginMode = (props: fullWidth) => {
                     
                     > - </p>
                 <div>
-                    <input type="text" className='bg-[#e5ecf0] dark:bg-[#3c4355] outline-none text-center inputPercent dark:text-[#fff] text-[#000] h-[40px]' readOnly value={leverageValue.toString() + 'x'} />
+                    <input type="text" className='bg-[#e5ecf0] dark:bg-[#3c4355] outline-none text-center lowercase inputPercent dark:text-[#fff] text-[#000] h-[40px]' readOnly value={leverageValue.toString() + 'x'} />
                 </div>
                 {/* <p className='text-[18px] font-[600] text-center dark:text-[#fff] text-[#000] inputPercent'>20</p> */}
                 <p className='text-[25px] dark:text-white text-black cursor-pointer w-[50px] h-[40px] text-center' onClick={() => { increment() }}> + </p>

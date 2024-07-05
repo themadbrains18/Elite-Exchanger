@@ -10,6 +10,7 @@ interface propsData {
     filterAsset?: any;
     Spot?:string;
     setCoinDefaultValue?:Function;
+    setSelectVal?:Function
 }
 const SelectDropdown = (props: propsData) => {
     const [showDrop, setShowDrop] = useState(false);
@@ -44,7 +45,7 @@ const SelectDropdown = (props: propsData) => {
                     {
                         props.list?.map((item, index) => {
                             return (
-                                <li onClick={(e) => { changeInputVal(e); setShowDrop(false) }} key={index} className='top-label py-[5px] px-[10px] cursor-pointer hover:dark:bg-[#373d4e] hover:bg-[#6a7c8114] hover:dark:text-[#fff] hover:text-[#000]'>{item}</li>
+                                <li onClick={(e) => { changeInputVal(e); setShowDrop(false);  props.setSelectVal && props.setSelectVal(item) }} key={index} className='top-label py-[5px] px-[10px] cursor-pointer hover:dark:bg-[#373d4e] hover:bg-[#6a7c8114] hover:dark:text-[#fff] hover:text-[#000]'>{item}</li>
                             )
                         })
                     }

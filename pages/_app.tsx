@@ -52,7 +52,7 @@ export default function App({ Component, pageProps: { sessions, ...pageProps } }
               <Component {...pageProps} />
           </div>
           {
-            !router.pathname.includes('/register') && !router.pathname.includes('/login') && !router.pathname.includes('/forget') && !router.pathname.includes('/admin') && !router.pathname.includes('/future') && <Footer />
+            !router.pathname.includes('/register') && !router.pathname.includes('/login') && !router.pathname.includes('/forget') && !router.pathname.includes('/admin') && <Footer />
           }
         </Context.Provider>
       </SessionProvider>
