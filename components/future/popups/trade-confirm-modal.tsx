@@ -71,38 +71,38 @@ const TradeConfirmPopupModal = (props: showPopup) => {
             <div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Price</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type === 'limit' ? currencyFormatter(props?.confirmOrderData?.price_usdt) : currencyFormatter(props?.confirmOrderData?.market_price)}</p>
+                    <p className='dark:text-[#6a6d7d] text-black'>{props?.confirmOrderData?.type === 'limit' ? currencyFormatter(props?.confirmOrderData?.price_usdt) : currencyFormatter(props?.confirmOrderData?.market_price)}</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Qty</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.qty} {props?.symbol}</p>
+                    <p className='dark:text-[#6a6d7d] text-black'>{props?.confirmOrderData?.qty} {props?.symbol}</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Cost</p>
-                    <p className='dark:text-white text-black'>{truncateNumber(Number(currencyFormatter(props?.confirmOrderData?.margin)),6)} USDT</p>
+                    <p className='dark:text-[#6a6d7d] text-black'>{truncateNumber(Number(currencyFormatter(props?.confirmOrderData?.margin)),6)} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Value</p>
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.type === 'limit' ? currencyFormatter(parseFloat(props?.confirmOrderData?.amount)) : currencyFormatter(props?.confirmOrderData?.size)} USDT</p>
+                    <p className='dark:text-[#6a6d7d] text-black'>{props?.confirmOrderData?.type === 'limit' ? currencyFormatter(parseFloat(props?.confirmOrderData?.amount)) : currencyFormatter(props?.confirmOrderData?.size)} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Estimated Liq. Price</p>
-                    <p className='dark:text-white text-black'>{currencyFormatter(props?.confirmOrderData?.liq_price)} USDT</p>
+                    <p className='dark:text-[#6a6d7d] text-black'>{currencyFormatter(props?.confirmOrderData?.liq_price)} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Leverage</p>
                     {/* <p className='dark:text-white text-black'>{props?.confirmOrderData?.leverage_type} {props?.confirmOrderData?.leverage}x</p> */}
-                    <p className='dark:text-white text-black'>{props?.confirmOrderData?.leverage_type} {props?.leverage}x</p>
+                    <p className='dark:text-[#6a6d7d] text-black'>{props?.confirmOrderData?.leverage_type} {props?.leverage}x</p>
                 </div>
                 {/* <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Time in Force</p>
-                    <p className='dark:text-white text-black'>Immediate-Or-Cancel</p>
+                    <p className='dark:text-[#6a6d7d] text-black'>Immediate-Or-Cancel</p>   
                 </div> */}
-                <div className='flex justify-between items-center mb-[10px] gap-[20px]'>
+                <div className='flex justify-between items-center mt-[30px] gap-[20px]'>
                     <div className='mt-[5px] w-full'>
                         <button
                             disabled={disable}
-                            className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${disable ? 'cursor-not-allowed  opacity-50' : ''}`} onClick={() => {
+                            className={` solid-button w-full !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${disable ? 'cursor-not-allowed  opacity-50' : ''}`} onClick={() => {
                                 props.confirmOrder();
                                 setDisable(true)
                             }} >Confirm</button>

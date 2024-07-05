@@ -300,6 +300,8 @@ const Exchange = (props: DynamicId): any => {
     }
   }
 
+  console.log(selectedToken,"=selectedToken");
+  
 
   return (
     <>

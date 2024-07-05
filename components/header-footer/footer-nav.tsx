@@ -163,7 +163,7 @@ const FooterNav = () => {
                 </ul>
             </div>
             <div className='max-w-full xl:max-w-[32%] w-full'>
-                <div>
+                {/* <div>
                     <h4 className='footer-heading !text-white mb-[21px] md:mb-[51px]'>NewsLetter</h4>
                     <form>
                         <div className='flex gap-[5px]'>
@@ -171,8 +171,8 @@ const FooterNav = () => {
                             <button className='solid-button !text-[16px] rounded-[5px] md:rounded-[10px] p-[13px] md:p-[15px]'>Send</button>
                         </div>
                     </form>
-                </div>
-                <p className='info-14-18  md:text-[18px] text-[16px] !text-footer-text md:mt-40 my-[20px] md:mb-30'>We accept following payment systems</p>
+                </div> */}
+                <p className='info-14-18  md:text-[18px] text-[16px] !text-footer-text  mb-[20px] md:mb-30'>We accept following payment systems</p>
                 <div className='flex items-center gap-[13px] flex-wrap'>
                     <button  type='button' className='block max-w-[67px] md:max-w-[91px] w-full' >
                         <IconsComponent type='paypal' hover={false} active={false} />

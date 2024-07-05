@@ -279,8 +279,6 @@ const [minTrade, setMinTrade] = useState()
         }
     }
 
-
-
     return (
         <>
             <ToastContainer limit={1} position='top-center'/>
@@ -290,19 +288,18 @@ const [minTrade, setMinTrade] = useState()
                     {/* future trade page top header */}
                     <TopBar show={show1} setShow={setShow1} currentToken={currentToken[0]} topHLOCData={topHLOCData} />
                     <div className='flex'>
-                        <div className='w-full max-w-full max-w-[calc(100%-300px)]'>
+                        <div className='w-full max-w-full'>
                             <div className='flex relative w-full max-w-full'>
-                                {/* Future trade coin list */}
-                                <div className={`w-full max-w-[380px] max-[1500px]:absolute duration-300 z-[4] max-[1500px]:top-0 ${show1 ? 'max-[1500px]:left-0' : 'max-[1500px]:left-[-100%]'}`}>
+                                <div className={`w-full max-w-[380px]  absolute duration-300 z-[4] top-[-12px] hover:left-0  ${show1 ? 'left-0':'left-[-100%]'}`} >
                                     <CoinTypes coins={allCoins} />
                                 </div>
                                 {/* Future chart */}
-                                <div className='max-[1499px]:pl-[20px] w-full max-w-full min-[1500px]:max-w-[calc(100%-300px)] bg-[#fafafa] dark:bg-[#1a1b1f] '>
+                                <div className='max-[1499px]:pl-[20px] w-full max-w-full  bg-[#fafafa] dark:bg-[#1a1b1f] '>
                                     <ChartSec slug={`${props?.serverSlug}`} view="desktop" />
                                 </div>
                             </div>
                         </div>
-                        <div className='w-full max-w-[300px]'>
+                        <div className='w-full max-w-[300px] bg-[#fafafa] dark:bg-[#1a1b1f] '>
                             {/* order Book compoenent */}
                             <OrderBookFuture setShow={setShow} show={show} currentToken={currentToken[0]} positionRecord={positionRecord} />
                             {/* Market trade listing component */}
@@ -312,7 +309,7 @@ const [minTrade, setMinTrade] = useState()
                     {/* position,open order and trade history table */}
                     <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} positionHistoryData={positionHistoryData} openOrderHistoryData={openOrderHistoryData} />
                 </div>
-                <div>
+                <div className='bg-[#fff] dark:bg-[#1a1b1f]  border-l  dark:border-[#25262a] border-[#e5e7eb] '>
                     {/* Buy/Sell open short traading component */}
                     <BuySell inputId={'slider_input1'} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} minTrade= {minTrade}/>
                     <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
@@ -320,7 +317,7 @@ const [minTrade, setMinTrade] = useState()
             </div>
 
             {/* For mobile use */}
-            <div className='max-[991px]:block hidden mt-[57px] '>
+            <div className='max-[991px]:block hidden mt-[57px]'>
                 <div className='relative'>
                     <TopBar show={show1} setShow={setShow1} currentToken={currentToken[0]} topHLOCData={topHLOCData} />
                     <div className={`w-full max-w-full absolute duration-300 z-[4] top-[76px] ${show1 ? 'left-0' : 'left-[-100%]'}`}>

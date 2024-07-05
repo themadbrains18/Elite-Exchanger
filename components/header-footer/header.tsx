@@ -32,6 +32,7 @@ const Header = (props: propsData) => {
   let [showMenu, setShowMenu] = useState(false);
 
   const [duserName, setduserName] = useState('');
+  
   const [shownNotifications, setShownNotifications] = useState(new Set());
 
   const linkList = [
@@ -267,13 +268,13 @@ const Header = (props: propsData) => {
                           </div>
                         }
                         {elem?.dropdown && elem?.name == 'Derivatives' &&
-                          <div className="absolute group-hover:top-[45px] top-[50px] opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300 left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px] border dark:border-[#25262a] border-[#e5e7eb]">
+                          <div className={`absolute group-hover:top-[45px] top-[50px]  opacity-0 invisible group-hover:!opacity-[1] group-hover:!visible duration-300  left-0 min-w-[300px] rounded-[12px] dark:bg-omega bg-white p-[15px] border dark:border-[#25262a] border-[#e5e7eb]`}>
                             <ul>
                               {futureTrade?.map((item: any, nesIndex: any) => {
                                 let symbol = item?.futuretradepair?.coin_symbol === 'BTCB' ? 'BTC' : item?.futuretradepair?.coin_symbol === 'BNBT' ? 'BNB' : item?.futuretradepair?.coin_symbol
                                 return (
                                   <li key={nesIndex + Date.now()} className="mb-[10px]">
-                                    <Link href={`/future/${symbol}${item?.futuretradepair?.usdt_symbol}`}>
+                                    <Link href={`/future/${symbol}${item?.futuretradepair?.usdt_symbol}`} >
                                       <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
                                         <Image src={`${item?.image}`} width={30} height={30} alt="coins" className="min-w-[30px]" />
                                         <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">

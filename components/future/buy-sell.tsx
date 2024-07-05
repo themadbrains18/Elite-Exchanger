@@ -555,8 +555,9 @@ const BuySell = (props: fullWidth) => {
       setSizeValue(0);
     } else {
       console.log(e.target.value,"=======e.target.value");
-      
-      setSizeValue(parseFloat(e.target.value));
+
+      setSizeValue(e.target.value);
+
       setButtonStyle(false);
       if (
         parseFloat(e.target.value) > avaibalance * props?.marginMode?.leverage
@@ -708,7 +709,7 @@ const BuySell = (props: fullWidth) => {
       {/* <ToastContainer /> */}
       <div
         className={`p-[16px] dark:bg-[#1f2127] bg-[#fff] ${props.fullWidth ? "max-w-full h-auto" : "max-w-[300px] h-[677px]"
-          } w-full border-l border-b dark:border-[#25262a] border-[#e5e7eb]`}
+          } w-full border-b dark:border-[#25262a] border-[#e5e7eb]`}
       >
         <div className="flex  gap-2 w-full items-center">
           <div
@@ -911,9 +912,11 @@ const BuySell = (props: fullWidth) => {
         )}
         {(showNes === 1 || showNes === 2) && (
           <>
-            <div className="flex gap-1 mt-10 items-center" onClick={() => { setPreference(true) }} >
+            <div className="flex gap-1 mt-10 items-center"  >
               <p className="top-label ">{prefernceSymbol === "Qty" ? "Order by Qty" : "Order by Value"}</p>
-              <IconsComponent type="swap-calender-with-circle" />
+              <div onClick={() => { setPreference(true) }}>
+                <IconsComponent type="swap-calender-with-circle" />
+              </div>
             </div>
             <div className="mt-2 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]">
               <div>

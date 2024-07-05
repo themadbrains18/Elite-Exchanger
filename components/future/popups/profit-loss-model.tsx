@@ -3,6 +3,7 @@ import Context from '@/components/contexts/context';
 import { useSession } from 'next-auth/react';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import clickOutSidePopupClose from '@/components/snippets/clickOutSidePopupClose';
+import { truncateNumber } from '@/libs/subdomain';
 
 interface showPopup {
     modelPopup?: number;
@@ -30,6 +31,7 @@ const ProfitLossModal = (props: showPopup) => {
 
     const [takeProfirValue, setTakeProfitValue] = useState(0);
     const [stopLossValue, setStopLossValue] = useState(0);
+    const [errmsg, setErrmsg] = useState("");
 
 
     useEffect(()=>{
@@ -73,6 +75,9 @@ const ProfitLossModal = (props: showPopup) => {
     }
 
     const findStopLoss = (e: any) => {
+        if(e?.target?.value < 0){
+            return;
+        }
         let marketPrice = e?.target?.value;
         setStopLossValue(e?.target?.value);
 
@@ -101,7 +106,6 @@ const ProfitLossModal = (props: showPopup) => {
             //=====================================
             let usdt_pnl: any = (coin_pnl * parseFloat(marketPrice)).toFixed(5);
             setLoss(usdt_pnl);
-
         }
     }
 
@@ -235,15 +239,15 @@ const ProfitLossModal = (props: showPopup) => {
             <div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Symbol</p>
-                    <p className='dark:text-white text-black'>{props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol} Perpetual {props?.leverage}x</p>
+                    <p className='dark:text-white text-black'>{props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol} Perpetual <span className='lowercase'>{props?.leverage}x</span></p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Entry Price</p>
-                    <p className='dark:text-white text-black'>{currencyFormatter(props?.entryPrice)}</p>
+                    <p className='dark:text-white text-black'>{currencyFormatter(truncateNumber(props?.entryPrice,6))}</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Market Price</p>
-                    <p className='dark:text-white text-black'>{props?.currentToken?.token !== null ? currencyFormatter(props?.currentToken?.token?.price) : currencyFormatter(props?.currentToken?.global_token?.price)}</p>
+                    <p className='dark:text-white text-black'>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price,6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price,6))}</p>
                 </div>
             </div>
 
@@ -253,7 +257,7 @@ const ProfitLossModal = (props: showPopup) => {
                     <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative p-[15px] rounded-[5px] justify-between'>
                         <p className='top-label min-w-max'>Take Profit</p>
                         <div className='flex item-center justify-between'>
-                            <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' value={takeProfirValue} onChange={(e: any) => findTakeProfit(e)} />
+                            <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' min={0} value={takeProfirValue} onChange={(e: any) => findTakeProfit(e)} />
                             <p className='top-label min-w-max'>USDT</p>
                             {/* <SelectDropdown list={list} defaultValue="USDT" whiteColor={true} /> */}
                         </div>
@@ -265,12 +269,29 @@ const ProfitLossModal = (props: showPopup) => {
                     <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative p-[15px] rounded-[5px] justify-between'>
                         <p className='top-label min-w-max'>Stop Loss</p>
                         <div className='flex item-center justify-between'>
-                            <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' value={stopLossValue} onChange={(e: any) => findStopLoss(e)} />
+                            <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]'  pattern="/^\d{1,10}(\.\d{1,6})?$/" min={0} value={stopLossValue} onChange={(e: any) => {
+                                findStopLoss(e);
+                                // const value = e.target.value;
+                                // const regex = /^\d{1,10}(\.\d{1,6})?$/;
+                                // if (regex.test(value) || value === "") {
+                                //     // Call your findStopLoss function
+                                //     setErrmsg("");
+                                // } else {
+                                //     setErrmsg("Invalid format: up to 10 digits before decimal and up to 6 digits after decimal.");
+                                //     e.target.value = value.slice(0, -1);
+                                // }
+
+                              
+                            }} />
                             <p className='top-label min-w-max'>USDT</p>
                             {/* <SelectDropdown list={list} defaultValue="USDT" whiteColor={true} /> */}
                         </div>
-
                     </div>
+                            {
+                                errmsg && (
+                                    <p className='errorMessage'>{errmsg}</p>
+                                )
+                            }
                     <div className='mt-[10px]'>
                         <p className='top-label !text-[14px]'>When Market Price reaches {stopLossValue}, it will trigger Stop Market order to close this position. Estimated PNL will be {loss} USDT</p>
                     </div>

@@ -23,7 +23,7 @@ const ChartSec = (props: propsData) => {
         symbol={`${props.slug}`}
         interval="D"
         theme={mode === "dark" ? "dark" : "light"}
-        height={630}
+        height={800}
         width={'100%'}
         container_id={`tradingview_46b68${props.view}`}
       ></AdvancedRealTimeChart>

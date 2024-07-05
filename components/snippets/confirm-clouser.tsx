@@ -106,7 +106,7 @@ const ConfirmationClouserModel = (props: activeSection) => {
                     </div>
                     <div className="flex justify-between items-center mb-[10px]">
                         <p className="dark:text-white text-black">Profit/Loss</p>
-                        <p className={`${props?.positionData?.pnl > 0 ? 'text-buy':'text-sell'}`}>{props?.positionData?.pnl > 0 ? '+':'-'}${props?.positionData?.pnl}</p>
+                        <p className={`${props?.positionData?.pnl > 0 ? 'text-buy':'text-sell'}`}>{props?.positionData?.pnl > 0 ? '+':'-'}${truncateNumber(Math.abs(props?.positionData?.pnl),6)}</p>
                     </div>
 
                     <div className="flex items-center gap-10 mt-[40px]">
