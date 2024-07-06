@@ -14,6 +14,7 @@ import ConfirmationModel from "../snippets/confirmation";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { truncateNumber } from "@/libs/subdomain";
 import { currencyFormatter } from "../snippets/market/buySellCard";
+import { useRouter } from "next/router";
 
 interface fullWidth {
   fullWidth?: boolean;
@@ -113,7 +114,7 @@ const [leverage, setLerverage] = useState(0)
     profit: openOrderObj,
     stopls: openOrderObj,
   });
-
+const router= useRouter()
   // ------------------------------
   // Initial market price
   // ------------------------------
@@ -854,7 +855,7 @@ const [leverage, setLerverage] = useState(0)
               Stop Limit
             </button> */}
           </div>
-          <div
+          {/* <div
             className="cursor-pointer"
             onClick={() => {
               props.setOverlay(true);
@@ -862,7 +863,7 @@ const [leverage, setLerverage] = useState(0)
             }}
           >
             <IconsComponent type="swap-calender" />
-          </div>
+          </div> */}
         </div>
         {/* available Balance*/}
         <div className="flex items-center gap-[8px] mt-10">
@@ -870,14 +871,19 @@ const [leverage, setLerverage] = useState(0)
             Available: {avaibalance}
           </p>
           <p className="admin-body-text !text-[12px] dark:!text-white"> {prefernceSymbol === "Qty" ? props?.currentToken?.coin_symbol : symbol}</p>
-          {/* <div
+          <div
             onClick={() => {
-              props.setOverlay(true);
-              props.setPopupMode(3);
+              if(session?.user){
+                props.setOverlay(true);
+                props.setPopupMode(3);
+              }
+              else{
+                router.push('/login')
+              }
             }}
           >
             <IconsComponent type="swap-calender-with-circle" />
-          </div> */}
+          </div>
         </div>
 
         {/* ================================= */}

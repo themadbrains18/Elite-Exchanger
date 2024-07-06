@@ -37,7 +37,7 @@ const RangeSlider: React.FC<UniqueIds> = ({ inputId, thumbId, lineId, onChangeSi
     const sliderThumb = document.getElementById(thumbId) as HTMLDivElement;
     const sliderLine = document.getElementById(lineId) as HTMLDivElement;
     
-    console.log(sliderInput.value,"sliderInput.value");
+    // console.log(sliderInput.value,"sliderInput.value");
     
     if (sliderInput && sliderThumb && sliderLine) {
       const value = Number(sliderInput.value);
@@ -50,7 +50,7 @@ const RangeSlider: React.FC<UniqueIds> = ({ inputId, thumbId, lineId, onChangeSi
       sliderThumb.style.left = `${bulletPosition * space}px`;
       sliderLine.style.width = `${(value / max) * 100}%`;
 
-      console.log(sliderLine, value, max);
+      // console.log(sliderLine, value, max);
       
 
       const inputPercent = document.querySelector('.inputPercent') as HTMLInputElement;
