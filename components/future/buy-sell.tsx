@@ -300,14 +300,16 @@ const router= useRouter()
 
       let qty: any = sizeValue / marketPrice;
       qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
-      if(qty< props?.minTrade){
-        toast.error('Order cost falls below the min. threshold.', {autoClose:2000})
-        return;
-      }
+    
+      
       if (orderType === "qty") {
         qty = sizeValue.toString();
       }
-
+      
+      if(qty< props?.minTrade){
+        toast.error('Order cost falls below the min. amount.', {autoClose:2000})
+        return;
+      }
       let value: any = (qty * 0.055).toFixed(5);
       let releazedPnl: any = (marketPrice * value) / 100;
       let size: any = truncateNumber(qty * marketPrice, 5);
@@ -367,13 +369,16 @@ const router= useRouter()
       let qty: any = sizeValue / marketPrice;
       qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
 
+   
+      if (orderType === "qty") {
+        qty = sizeValue.toString();
+        console.log(qty,"==qty", props?.minTrade,"==props?.minTrade");
+      
+        
+      }
       if(qty< props?.minTrade){
         toast.error('Order cost falls below the min. threshold.', {autoClose:2000})
         return;
-      }
-
-      if (orderType === "qty") {
-        qty = sizeValue.toString();
       }
       
 
@@ -1121,9 +1126,9 @@ const router= useRouter()
                       {showNes === 1
                         ? sizeValue === 0
                           ? 0.00
-                          : isNaN(truncateNumber(sizeValue / entryPrice, 6))
+                          : isNaN(truncateNumber(sizeValue / entryPrice, 3))
                             ? 0.00
-                            : truncateNumber(sizeValue / entryPrice, 6)
+                            : truncateNumber(sizeValue / entryPrice, 3)
                         : isNaN(truncateNumber(sizeValue / marketPrice, 3))
                           ? 0.00
                           : truncateNumber(sizeValue / marketPrice, 3)}{" "}
