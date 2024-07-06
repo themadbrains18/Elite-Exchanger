@@ -896,7 +896,7 @@ const router= useRouter()
               <div>
                 <p className="top-label">Price </p>
                 <input
-                  type="number"  
+                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
                   placeholder="$0"
                   step="0.000001"
                   value={entryPrice}
@@ -942,7 +942,7 @@ const router= useRouter()
               <div>
                 <p className="top-label">Amount</p>
                 <input
-                  type="number"  
+                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
                   value={sizeValue}
                   placeholder="0.00"
                   onChange={onChangeSizeValue}
@@ -980,7 +980,7 @@ const router= useRouter()
               <div>
                 <p className="top-label">Stop Price </p>
                 <input
-                  type="number"  
+                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
                   placeholder="0"
                   onChange={(e) => {
                     setStopPrice(e.target?.value);
@@ -1004,7 +1004,7 @@ const router= useRouter()
               <div>
                 <p className="top-label">Price </p>
                 <input
-                  type="number"  
+                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
                   placeholder="0"
                   onChange={(e) => {
                     
@@ -1031,7 +1031,7 @@ const router= useRouter()
               <div>
                 <p className="top-label">Amount</p>
                 <input
-                  type="number"  
+                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
                   placeholder="0"
                   onChange={(e) => {
                     setSizeValue(

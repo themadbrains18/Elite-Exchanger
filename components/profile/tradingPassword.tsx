@@ -441,7 +441,7 @@ const TradingPassword = (props: activeSection) => {
           setEnable={setEnable}
           setShow={props?.setShow}
           parentSetEnable={props.setEnable}
-          type="number"  
+          type="number" 
           data={formData}
           session={props?.session}
         />
