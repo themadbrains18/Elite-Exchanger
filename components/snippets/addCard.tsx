@@ -43,7 +43,7 @@ const AddCard = (props: activeSection) => {
           <div className="flex flex-col mb-[15px] md:mb-5 gap-[6px]">
             <label className="sm-text">Number</label>
             <div className="border border-grey-v-1 dark:border-opacity-[15%]  gap-[15px] items-center flex rounded-5 p-[11px] md:p-[15px]">
-              <input type="number"   placeholder="Enter Card Number" className="outline-none max-w-[355px] sm-text w-full bg-[transparent]" />
+              <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="Enter Card Number" className="outline-none max-w-[355px] sm-text w-full bg-[transparent]" />
               <Image src="/assets/payment/visa.svg" width={24} height={24} alt="visa" />
             </div>
           </div>
@@ -57,7 +57,7 @@ const AddCard = (props: activeSection) => {
             <div className="flex flex-col mb-[15px] md:mb-5 gap-[6px] max-w-full md:max-w-[50%] w-full">
               <label className="sm-text">CVV</label>
               <div className="border border-grey-v-1 dark:border-opacity-[15%]  gap-[15px] items-center flex rounded-5 p-[11px] md:p-[15px]">
-                <input type="number"   placeholder="Enter Card Number" className="outline-none max-w-full md:max-w-[131px] sm-text w-full bg-[transparent]" />
+                <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="Enter Card Number" className="outline-none max-w-full md:max-w-[131px] sm-text w-full bg-[transparent]" />
                 <Image src="/assets/payment/info.svg" width={24} height={24} alt="visa" />
               </div>
             </div>

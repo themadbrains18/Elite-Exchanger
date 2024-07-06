@@ -239,7 +239,7 @@ const EditPaymentMethod = (props: activeSection) => {
                   <div className="border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px]">
                     <div className="flex items-center cursor-pointer">
                       <div className="w-full">
-                        <input type="number"   id="quantity" step={0.000001} value={inputValue}  {...register('quantity')} name="quantity" onChange={(e) => checkBalnce(e)} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Quntity" />
+                        <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   id="quantity" step={0.000001} value={inputValue}  {...register('quantity')} name="quantity" onChange={(e) => checkBalnce(e)} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Quntity" />
                       </div>
 
                       <div className="pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] flex items-center">
@@ -263,7 +263,7 @@ const EditPaymentMethod = (props: activeSection) => {
                   <div className="border  border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px]">
                     <div className="flex items-center cursor-pointer ">
                       <div className="w-full">
-                        <input type="number"   id="min_limit" step={0.000001} value={minInputValue} {...register('min_limit')} onChange={(e) => { checkInput(e, 'min') }} name="min_limit" className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Min. Amount" />
+                        <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   id="min_limit" step={0.000001} value={minInputValue} {...register('min_limit')} onChange={(e) => { checkInput(e, 'min') }} name="min_limit" className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Min. Amount" />
                       </div>
 
                       <div className="pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] flex items-center">
@@ -283,7 +283,7 @@ const EditPaymentMethod = (props: activeSection) => {
                   <div className="border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px]">
                     <div className="flex items-center cursor-pointer">
                       <div className="w-full">
-                        <input type="number"   id="max_limit" step={0.000001} value={maxInputValue}{...register('max_limit')} onChange={(e) => { checkInput(e, 'max') }} name="max_limit" className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Max. Amount" />
+                        <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   id="max_limit" step={0.000001} value={maxInputValue}{...register('max_limit')} onChange={(e) => { checkInput(e, 'max') }} name="max_limit" className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Max. Amount" />
                       </div>
 
                       <div className="pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] flex items-center">

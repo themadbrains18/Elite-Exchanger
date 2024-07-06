@@ -218,7 +218,7 @@ const Dashboard = (props: fixSection) => {
                         <input
                           id="dashNumber"
                           name="dashNumber"
-                          type="number"  
+                          type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
                           value={props.session?.user?.number || ''}
                           placeholder="Enter phone number"
                           className={`sm-text input-cta2 w-full cursor-not-allowed`}

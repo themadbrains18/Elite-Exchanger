@@ -397,7 +397,7 @@ const StakingTable = () => {
     {enable === 1 && (
           <ConfirmPopup
             setEnable={setEnable}
-            type="number"  
+            type="number" 
             data={formData}
             session={session}
             snedOtpToUser={snedOtpToUser}

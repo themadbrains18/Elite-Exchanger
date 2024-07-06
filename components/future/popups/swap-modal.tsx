@@ -65,17 +65,17 @@ const SwapModal = (props: showPopup) => {
           {/* <RangeSlider inputId={'slider_input4'} thumbId={'slider_thumb4'} lineId={'slider_line4'} rangetype={'X'} /> */}
           <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative z-[4] p-[10px] rounded-[5px] '>
             <p className='top-label min-w-max'>Open Price</p>
-            <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' />
+            <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' />
             <p className='top-label min-w-max'>USDT</p>
           </div>
           <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative z-[4] p-[10px] rounded-[5px] '>
             <p className='top-label min-w-max'>Close Price</p>
-            <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' />
+            <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' />
             <p className='top-label min-w-max'>USDT</p>
           </div>
           <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative z-[4] p-[10px] rounded-[5px] justify-between'>
             <p className='top-label min-w-max'>Amount</p>
-            <input type="number" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' />
+            <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' />
             <p className='top-label min-w-max'>{selectVal ? selectVal : 'USDT'}</p>
           </div>
           <button className="py-[10.5px] px-[10px] w-full max-w-full mt-[15px] solid-button rounded-[5px]">Calculate</button>

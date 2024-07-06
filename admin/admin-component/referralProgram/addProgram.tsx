@@ -196,7 +196,7 @@ const AddReferralProgram = (props: ActiveSession) => {
                 <div className=" relative ">
                     <p className="sm-text mb-3 mt-3">Amount</p>
                     <input
-                        type="number"  
+                        type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
                         // 
                         {...register("amount")}
                         name="amount"
