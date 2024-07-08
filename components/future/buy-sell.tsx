@@ -424,7 +424,7 @@ const router= useRouter()
 
       if (prefernceSymbol === "Qty" && confirmOrderData?.qty > props?.maxTrade) {
 
-        toast.error("Order failed. Order quantity>maximum open quantity", { autoClose: 2000 })
+        toast.error("Order failed. Order quantity is greatr than maximum order quantity", { autoClose: 2000 })
 
         setButtonStyle(false);
         props?.refreshWalletAssets();
@@ -438,7 +438,7 @@ const router= useRouter()
         // setSizeValue(truncateNumber(finalvalue,6))
       }
       else if (prefernceSymbol === "Value" && (entryPrice * props?.maxTrade) < sizeValue) {
-        toast.error("Order failed. Order quantity>maximum open quantity", { autoClose: 2000 })
+        toast.error("Order failed. Order quantity is greatr than maximum order quantity", { autoClose: 2000 })
 
         setButtonStyle(false);
         props?.refreshWalletAssets();

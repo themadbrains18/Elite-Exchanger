@@ -317,14 +317,14 @@ input[type=date]::-webkit-calendar-picker-indicator {
   @apply w-[25px] h-[25px] border border-primary text-primary rounded-5 flex
 }
 .history_pagination li.previous a {
-  @apply  ml-[3px]
+  @apply  mt-[-1px]
 }
 
 .history_pagination li.next {
   @apply border border-primary text-primary rounded-5 
 }
 .history_pagination li.next a {
-  @apply mt-[-1px] ml-[3px]
+  @apply mt-[-1px] 
 }
 .history_pagination  li.disabled {
   @apply  text-beta
