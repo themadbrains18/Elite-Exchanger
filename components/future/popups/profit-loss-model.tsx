@@ -209,7 +209,7 @@ const ProfitLossModal = (props: showPopup) => {
     return (
         <div ref={wrapperRef} className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[720px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.modelPopup == 1 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
             <div className="flex items-center justify-between mb-[20px]">
-                <p className="sec-title !text-[20px]">TP/SL for entire position </p>
+                <p className="sec-title !text-[20px]">Add TP/SL</p>
                 <svg
                     onClick={() => {
                         setProfit(0);

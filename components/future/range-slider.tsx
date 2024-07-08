@@ -50,9 +50,6 @@ const RangeSlider: React.FC<UniqueIds> = ({ inputId, thumbId, lineId, onChangeSi
       sliderThumb.style.left = `${bulletPosition * space}px`;
       sliderLine.style.width = `${(value / max) * 100}%`;
 
-      // console.log(sliderLine, value, max);
-      
-
       const inputPercent = document.querySelector('.inputPercent') as HTMLInputElement;
       if (inputPercent) {
         inputPercent.value = `${ Math.trunc( (value / max) * 100)}X`;
