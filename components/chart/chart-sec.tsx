@@ -1,35 +1,30 @@
-// import CandleStickChart from './candleStickChart';
-// import priceData from '../../jsonData/price-data.json';
-// import { AdvancedChart } from "react-tradingview-embed";
 import React, { useContext, useEffect } from "react";
 import { AdvancedRealTimeChart } from "react-ts-tradingview-widgets";
 import Context from "@/components/contexts/context";
-// import DemoChart from "@/pages/demochart";
 
-interface propsData {
+interface PropsData {
   slug: string,
   view?: string
 }
-const ChartSec = (props: propsData) => {
-  let { mode } = useContext(Context);
 
-  useEffect(() => {
-  }, [mode])
+const ChartSec = (props: PropsData) => {
+  const { mode } = useContext(Context);
+
+  useEffect(() => {}, [mode]);
 
   return (
-    <div className=' rounded-10  bg-white dark:bg-d-bg-primary'>
-      {/* <CandleStickChart hloc_data={priceData} /> */}
+    <div className='rounded-10 bg-white dark:bg-d-bg-primary'>
       <AdvancedRealTimeChart
-        symbol={`${props.slug}`}
+        key={props.slug} // Use slug as key to re-mount component when slug changes
+        symbol={props.slug}
         interval="D"
         theme={mode === "dark" ? "dark" : "light"}
         height={800}
-        width={'100%'}
+        width="100%"
         container_id={`tradingview_46b68${props.view}`}
-      ></AdvancedRealTimeChart>
-      {/* <DemoChart /> */}
+      />
     </div>
-  )
+  );
 }
 
-export default ChartSec
+export default ChartSec;

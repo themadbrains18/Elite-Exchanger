@@ -10,6 +10,7 @@ import AES from 'crypto-js/aes';
 import { useWebSocket } from '@/libs/WebSocketContext';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import ConfirmationClouserModel from '@/components/snippets/confirm-clouser';
+import { truncateNumber } from '@/libs/subdomain';
 
 interface propsData {
   positions?: any;
@@ -229,19 +230,19 @@ const PositionsTable = (props: propsData) => {
                       <p className="top-label !font-[600] !text-buy">{item?.size}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(item?.entry_price?.toFixed(5))}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(truncateNumber(item?.entry_price,5))}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.token !== null ? currencyFormatter(item?.token?.price?.toFixed(5)) : currencyFormatter(item?.global_token?.price?.toFixed(5))}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.token !== null ? currencyFormatter(truncateNumber(item?.token?.price,5)) : currencyFormatter(truncateNumber(item?.global_token?.price,5))}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(item?.liq_price?.toFixed(5))}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(truncateNumber(item?.liq_price,5))}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.margin}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{truncateNumber(item?.margin,6)}</p>
                       <p className="top-label !font-[600] dark:!text-white !text-black">{item?.leverage_type}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
