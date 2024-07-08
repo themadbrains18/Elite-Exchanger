@@ -79,7 +79,7 @@ const BuySell = (props: fullWidth) => {
   const [assetsList, setAssetsList] = useState();
   const [percentage, setPercentage] = useState(0)
 
-  const [leverage, setLerverage] = useState(0)
+  const [leverage, setLerverage] = useState(false)
 
   const [shortConfirm, setShortConfirm] = useState(false);
   const [active, setActive] = useState(false);
@@ -424,7 +424,7 @@ const BuySell = (props: fullWidth) => {
 
       if (prefernceSymbol === "Qty" && confirmOrderData?.qty > props?.maxTrade) {
 
-        toast.error("Order failed. Order quantity is greatr than maximum order quantity", { autoClose: 2000 })
+        toast.error("Order failed. Order quantity is greater than maximum order quantity", { autoClose: 2000 })
 
         setButtonStyle(false);
         props?.refreshWalletAssets();
@@ -438,7 +438,7 @@ const BuySell = (props: fullWidth) => {
         // setSizeValue(truncateNumber(finalvalue,6))
       }
       else if (prefernceSymbol === "Value" && (entryPrice * props?.maxTrade) < sizeValue) {
-        toast.error("Order failed. Order quantity is greatr than maximum order quantity", { autoClose: 2000 })
+        toast.error("Order failed. Order quantity is greater than maximum order quantity", { autoClose: 2000 })
 
         setButtonStyle(false);
         props?.refreshWalletAssets();
@@ -578,8 +578,10 @@ const BuySell = (props: fullWidth) => {
   // =====Validation in case of amount more than enter wallet value=====//
   // ===================================================================//
   const onChangeSizeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLerverage(0)
+   
+    
     const value = parseFloat(e.target.value) == 0 ? 0.00 : parseFloat(e.target.value);
+    console.log(value,"==value");
 
     if (isNaN(value)) {
       setSizeValue(''); // Reset sizeValue to its current state
@@ -951,6 +953,9 @@ const BuySell = (props: fullWidth) => {
                   value={sizeValue}
                   placeholder="0.00"
                   onChange={onChangeSizeValue}
+                  // onInput={()=>{
+                  //   setLerverage(true)
+                  // }}
                   step="any"
                   min={props?.minTrade}
                   name="token_amount"
@@ -974,6 +979,7 @@ const BuySell = (props: fullWidth) => {
           rangetype="X"
           step={1}
           levrageValue={leverage}
+          setLeverageValue={setLerverage}
         />
 
         {/* ================================= */}
@@ -1030,7 +1036,7 @@ const BuySell = (props: fullWidth) => {
                 </p>
               </div>
             </div>
-            <p className="errorMessage">{entryPriceValidate}</p>
+            <p className="errorMessage">{entryPriceValidate}</p>  
 
             <div className="mt-10 z-[5] rounded-5 py-[6px] px-[10px] flex border items-center justify-between gap-[15px] dark:border-[#25262a] border-[#e5e7eb] relative dark:bg-[#373d4e] bg-[#e5ecf0]">
               <div>
@@ -1039,6 +1045,7 @@ const BuySell = (props: fullWidth) => {
                   type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                   placeholder="0"
                   onChange={(e) => {
+                    
                     setSizeValue(
                       e.target.value === "" ? 0 : parseFloat(e.target.value)
                     );
