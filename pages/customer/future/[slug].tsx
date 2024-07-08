@@ -163,7 +163,7 @@ const [maxTrade, setMaxTrade] = useState()
 
                 }
                 else {
-                    console.log(positionData?.data,"=======positionData?.data");
+                    
                     
                     setOpenOrders(positionData?.data);
                 }
