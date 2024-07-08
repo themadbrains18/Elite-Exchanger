@@ -578,40 +578,54 @@ const BuySell = (props: fullWidth) => {
   // =====Validation in case of amount more than enter wallet value=====//
   // ===================================================================//
   const onChangeSizeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLerverage(0)
-    const value = parseFloat(e.target.value) == 0 ? 0.00 : parseFloat(e.target.value);
+    setLerverage(0);
+    let sliderThumb = document.getElementById("rangeThumb") as HTMLDivElement;
+    let rangeLine = document.getElementById("rangeLine") as HTMLDivElement;
+    let inputPercent = document.querySelector('.inputPercent') as HTMLInputElement;
 
-    if (isNaN(value)) {
-      setSizeValue(''); // Reset sizeValue to its current state
-      return; // Exit early without updating state or applying further logic
+    if(leverage == 0){
+      sliderThumb.setAttribute("style",'left:0;');
+      sliderThumb.innerText = "0X";
+      inputPercent?.value == "0";
+      rangeLine.setAttribute("style",'width:0;');
     }
 
-    else if (value !== 0 && value < props?.minTrade) {
-      setSizeValidate(`Minimum value: ${props?.minTrade}`)
-      // console.log(sizeValue,"==sizeValue");
-
-      return;
-    }
-    else {
-      setSizeValidate('')
-      setSizeValue(value);
-      setButtonStyle(false);
-
-      const leverage = props.marginMode.leverage;
-
-      if (value > avaibalance * leverage || value / leverage > avaibalance) {
-        setButtonStyle(true);
+      const value = parseFloat(e.target.value) == 0 ? 0.00 : parseFloat(e.target.value);
+  
+      if (isNaN(value)) {
+        setSizeValue(''); // Reset sizeValue to its current state
+        return; // Exit early without updating state or applying further logic
       }
-
-      const openPositionFee = (value * 0.055) / 100;
-      const longClosePositionFee = ((value * (leverage - 1)) / leverage * 0.055) / 100;
-      const shortClosePositionFee = (value * ((leverage + 1) / leverage) * 0.055) / 100;
-
-      const longCost = value / leverage + openPositionFee + longClosePositionFee;
-      const shortCost = value / leverage + openPositionFee + shortClosePositionFee;
-
-      console.log({ longCost, shortCost }); // Example, remove if not needed
-    }
+  
+      else if (value !== 0 && value < props?.minTrade) {
+        setSizeValidate(`Minimum value: ${props?.minTrade}`)
+        // console.log(sizeValue,"==sizeValue");
+  
+        return;
+      }
+      else {
+        setSizeValidate('')
+        setSizeValue(value);
+        setButtonStyle(false);
+  
+        let leverage = props.marginMode.leverage;
+  
+        if (value > avaibalance * leverage || value / leverage > avaibalance) {
+          setButtonStyle(true);
+        }
+  
+        const openPositionFee = (value * 0.055) / 100;
+        const longClosePositionFee = ((value * (leverage - 1)) / leverage * 0.055) / 100;
+        const shortClosePositionFee = (value * ((leverage + 1) / leverage) * 0.055) / 100;
+  
+        const longCost = value / leverage + openPositionFee + longClosePositionFee;
+        const shortCost = value / leverage + openPositionFee + shortClosePositionFee;
+  
+      }
+    
+    
+    // console.log("this is aloo!!");
+    
   };
 
   // ===================================================================//
@@ -719,7 +733,6 @@ const BuySell = (props: fullWidth) => {
     setActive(false);
     submitForm();
   }
-
 
 
   return (
@@ -947,14 +960,16 @@ const BuySell = (props: fullWidth) => {
               <div>
                 <p className="top-label">Amount</p>
                 <input
-                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
+                  type="number"
+                  onWheel={(e) => (e.target as HTMLElement).blur()}
                   value={sizeValue}
                   placeholder="0.00"
                   onChange={onChangeSizeValue}
                   step="any"
                   min={props?.minTrade}
                   name="token_amount"
-                  className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px]"
+                  
+                  className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] asdsadsad"
                 />
               </div>
               <div className="cursor-default">

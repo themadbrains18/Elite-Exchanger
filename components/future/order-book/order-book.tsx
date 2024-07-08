@@ -25,7 +25,7 @@ setPrevPrice(props?.positionRecord[0])
 
 
     return (
-        <div className={`w-full bg-[#fafafa] dark:bg-[#1a1b1f] min-[990px]:border-l max-[991px]:border-t border-b dark:border-[#25262a] border-[#e5e7eb] ${props.widthFull ? "max-w-full" : "max-w-[350px]"}  `}>
+        <div className={`w-full bg-[#fafafa] dark:bg-[#1a1b1f] min-[990px]:border-l max-[991px]:border-t dark:border-[#25262a] border-[#e5e7eb] ${props.widthFull ? "max-w-full" : "max-w-[350px]"}  `}>
             {/* order book head */}
             <div className='flex items-center gap-4'>
 
@@ -139,14 +139,13 @@ setPrevPrice(props?.positionRecord[0])
             </div>
             {
                 props.show === 2 &&
-                <BuyTableFuture fullHeight={true} showPrice={true} currentToken={props.currentToken} positionRecord={props?.positionRecord} />
+                <BuyTableFuture fullHeight={true} showPrice={true} currentToken={props.currentToken} positionRecord={props?.positionRecord}  />
             }
             {
                 props.show === 1 &&
                 <>
                     <BuyTableFuture currentToken={props.currentToken} positionRecord={props?.positionRecord} />
                     <div className='bg-card-bg py-[6px] px-[20px] flex items-center justify-between dark:bg-omega bg-white my-[10px]'>
-
                         <div className='flex items-center gap-1'>
                             <svg
                                 enableBackground="new 0 0 32 32"

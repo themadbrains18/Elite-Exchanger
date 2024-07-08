@@ -201,7 +201,7 @@ const ProfitLossModal = (props: showPopup) => {
         setTakeProfitValue(0);
         props.setModelOverlay(false);
         props.setModelPopup(0);
-        props.setProfitLossConfirm && props.setProfitLossConfirm(false)
+        props?.setProfitLossConfirm && props?.setProfitLossConfirm(false)
     }
     const wrapperRef = useRef(null);
     clickOutSidePopupClose({ wrapperRef, closePopup });
@@ -216,9 +216,9 @@ const ProfitLossModal = (props: showPopup) => {
                         setLoss(0);
                         setStopLossValue(0);
                         setTakeProfitValue(0);
-                        props.setModelOverlay(false);
-                        props.setModelPopup(0);
-                        props.setProfitLossConfirm(false)
+                        props?.setModelOverlay && props?.setModelOverlay(false);
+                        props?.setModelPopup && props?.setModelPopup(0);
+                        props?.setProfitLossConfirm && props?.setProfitLossConfirm(false)
 
                     }}
                     enableBackground="new 0 0 60.963 60.842"

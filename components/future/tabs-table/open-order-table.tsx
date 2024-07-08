@@ -150,8 +150,8 @@ const OpenOrderTable = (props: propsData) => {
                             </th>
                             <th className="py-[10px]">
                                 <div className="flex ">
-                                    <p className="text-start top-label dark:text-gamma">Action</p>
-                                    <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                                    <p className="  top-label dark:!text-[#cccc56] !font-[600]">Close All Positions</p>
+                                    {/* <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" /> */}
                                 </div>
                             </th>
                         </tr>
@@ -202,7 +202,8 @@ const OpenOrderTable = (props: propsData) => {
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <div className='cursor-pointer' onClick={() => { closeOpenOrder(item?.id) }}>
-                                                <IconsComponent type='deleteIcon' />
+                                                
+                                                <p className="top-label dark:!text-[#cccc56] !font-[600] pr-[20px]">Close Position</p>
                                             </div>
                                         </td>
                                     </tr>

@@ -48,13 +48,13 @@ const FutureTrading = (props: Session) => {
     const [positions, setPositionData] = useState([]);
     const [openOrders, setOpenOrders] = useState([]);
     const [allAssets, setAllAssets] = useState(props?.assets);
-const [minTrade, setMinTrade] = useState()
-const [maxTrade, setMaxTrade] = useState()
+    const [minTrade, setMinTrade] = useState()
+    const [maxTrade, setMaxTrade] = useState()
     const [positionHistoryData, setPositionHistoryData] = useState([]);
     const [openOrderHistoryData, setOpenOrderHistoryData] = useState([]);
     const [topHLOCData, setTopHLOCData] = useState(Object);
     const [positionRecord, setPositionRecord] = useState([]);
-    const [opnlong,setOpnlong] = useState('long');
+    const [opnlong, setOpnlong] = useState('long');
 
     const [rewardsTotalPoint, setRewardsTotalPoint] = useState(props?.totalPoint);
     const wbsocket = useWebSocket();
@@ -64,10 +64,10 @@ const [maxTrade, setMaxTrade] = useState()
             return item.coin_symbol + item.usdt_symbol === props?.serverSlug
         })
 
-        
-        if(ccurrentToken && ccurrentToken?.length>0){
-            setMinTrade(ccurrentToken[0]?.coin_min_trade) 
-            setMaxTrade(ccurrentToken[0]?.coin_max_trade) 
+
+        if (ccurrentToken && ccurrentToken?.length > 0) {
+            setMinTrade(ccurrentToken[0]?.coin_min_trade)
+            setMaxTrade(ccurrentToken[0]?.coin_max_trade)
         }
         setCurrentToken(ccurrentToken);
         getUserFuturePositionData();
@@ -164,8 +164,8 @@ const [maxTrade, setMaxTrade] = useState()
 
                 }
                 else {
-                    console.log(positionData?.data,"=======positionData?.data");
-                    
+
+
                     setOpenOrders(positionData?.data);
                 }
 
@@ -285,11 +285,11 @@ const [maxTrade, setMaxTrade] = useState()
         }
     }
 
-    
+
 
     return (
         <>
-            <ToastContainer limit={1} position='top-center'/>
+            <ToastContainer limit={1} position='top-center' />
             {/* For Desktop use */}
             <div className='max-[991px]:hidden flex max-[1023px]:mt-[57px] mt-[69px]'>
                 <div className='w-full max-w-[calc(100%-300px)]'>
@@ -298,7 +298,7 @@ const [maxTrade, setMaxTrade] = useState()
                     <div className='flex'>
                         <div className='w-full max-w-full'>
                             <div className='flex relative w-full max-w-full'>
-                                <div className={`w-full max-w-[380px]  absolute duration-300 z-[4] top-[-12px] hover:left-0  ${show1 ? 'left-0':'left-[-100%]'}`} >
+                                <div className={`w-full max-w-[380px]  absolute duration-300 z-[4] top-[-12px] hover:left-0  ${show1 ? 'left-0' : 'left-[-100%]'}`} >
                                     <CoinTypes coins={allCoins} />
                                 </div>
                                 {/* Future chart */}
@@ -308,21 +308,19 @@ const [maxTrade, setMaxTrade] = useState()
                             </div>
                         </div>
                         <div className='w-full max-w-[300px] bg-[#fafafa] dark:bg-[#1a1b1f] '>
-                        <div className='flex items-center '>
-                
+                            <div className='flex items-center '>
+                                <div className={`flex  flex-col justify-between gap-[10px] bg-[#fafafa] dark:bg-[#1a1b1f]  px-[16px] cursor-pointer `}>
+                                    <h3 className={`top-label dark:!text-white !text-[#000] max-[991px]:hidden ${active === 1 ? 'border-primary' : 'border-[transparent]'} border-b py-[10px]`} onClick={() => { setActive(1) }}>Order Book</h3>
 
-                <div className={`flex  flex-col justify-between gap-[10px] bg-[#fafafa] dark:bg-[#1a1b1f]  px-[16px] cursor-pointer `}>
-                    <h3 className={`top-label dark:!text-white !text-[#000] max-[991px]:hidden ${active===1?'border-primary':'border-[transparent]'} border-b py-[10px]`} onClick={()=>{setActive(1)}}>Order Book</h3>
-                    
-                </div>
-                <div className={` bg-[#fafafa] dark:bg-[#1a1b1f]     px-[16px]  cursor-pointer`}>
-                    <h3 className={` ${active===2?'border-primary':'border-[transparent]'} border-b py-[10px]  top-label dark:!text-white !text-[#000] max-[991px]:hidden`} onClick={()=>{setActive(2)}}>Market Trades</h3>
-                </div>
-            </div>
+                                </div>
+                                <div className={` bg-[#fafafa] dark:bg-[#1a1b1f]     px-[16px]  cursor-pointer`}>
+                                    <h3 className={` ${active === 2 ? 'border-primary' : 'border-[transparent]'} border-b py-[10px]  top-label dark:!text-white !text-[#000] max-[991px]:hidden`} onClick={() => { setActive(2) }}>Market Trades</h3>
+                                </div>
+                            </div>
                             {/* order Book compoenent */}
-                          {active===1 &&  <OrderBookFuture setShow={setShow} show={show} currentToken={currentToken[0]} positionRecord={positionRecord} />}
+                            {active === 1 && <OrderBookFuture setShow={setShow} show={show} currentToken={currentToken[0]} positionRecord={positionRecord} />}
                             {/* Market trade listing component */}
-                           {active===2 && <MarketTrades setShow={setShow} show={show} widthFull={true} currentToken={currentToken[0]} positionRecord={positionRecord} />}
+                            {active === 2 && <MarketTrades setShow={setShow} show={show} widthFull={true} currentToken={currentToken[0]} positionRecord={positionRecord} />}
                         </div>
                     </div>
                     {/* position,open order and trade history table */}
@@ -330,8 +328,8 @@ const [maxTrade, setMaxTrade] = useState()
                 </div>
                 <div className='bg-[#fff] dark:bg-[#1a1b1f]  border-l  dark:border-[#25262a] border-[#e5e7eb] '>
                     {/* Buy/Sell open short traading component */}
-                    <BuySell inputId={'slider_input1'} setOpnlong={setOpnlong} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets?.data?.data} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} minTrade= {minTrade} maxTrade= {maxTrade}/>
-                    <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode}  balance={allAssets?.data?.totalAmount}/>
+                    <BuySell inputId={'slider_input1'} setOpnlong={setOpnlong} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets?.data?.data} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} minTrade={minTrade} maxTrade={maxTrade} />
+                    <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} balance={allAssets?.data?.totalAmount} />
                 </div>
             </div>
 
@@ -366,7 +364,7 @@ const [maxTrade, setMaxTrade] = useState()
                 </div>
 
                 <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} positionHistoryData={positionHistoryData} openOrderHistoryData={openOrderHistoryData} />
-                <BuySell setOpnlong={setOpnlong} setOverlay={setOverlay} inputId={'slider_input2'} minTrade= {minTrade} maxTrade= {maxTrade} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets?.data?.data} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} />
+                <BuySell setOpnlong={setOpnlong} setOverlay={setOverlay} inputId={'slider_input2'} minTrade={minTrade} maxTrade={maxTrade} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets?.data?.data} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} />
                 <MarginRatio fullWidth={true} heightAuto={true} setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
             </div>
 
@@ -376,13 +374,13 @@ const [maxTrade, setMaxTrade] = useState()
             {/* Leverage and margin type popup component */}
             {popupMode === 1 ?
 
-                <MarginMode setOverlay={setOverlay} opnlong={opnlong} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setPopupMode={setPopupMode} popupMode={popupMode} setMarginModeAndLeverage={setMarginModeAndLeverage} leverage={marginMode?.leverage} currentToken={currentToken[0]}/>
+                <MarginMode setOverlay={setOverlay} opnlong={opnlong} inputId={'slider_input3'} thumbId={'slider_thumb3'} lineId={'slider_line3'} setPopupMode={setPopupMode} popupMode={popupMode} setMarginModeAndLeverage={setMarginModeAndLeverage} leverage={marginMode?.leverage} currentToken={currentToken[0]} />
                 :
                 popupMode === 2 ?
                     <SwapModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
                     :
                     popupMode === 3 ?
-                        <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets?.data?.data} refreshWalletAssets={refreshWalletAssets} type="future"/>
+                        <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets?.data?.data} refreshWalletAssets={refreshWalletAssets} type="future" />
                         : popupMode === 4 && <TradingFeeMadal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
             }
 
