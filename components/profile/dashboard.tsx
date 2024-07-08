@@ -132,7 +132,11 @@ const Dashboard = (props: fixSection) => {
             }
           </div>
           <div className="py-[30px] md:py-[50px]">
-            <form onSubmit={handleSubmit(onHandleSubmit)}>
+            <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
               <div className="mt-[30px]">
                 <div className="flex md:flex-row flex-col gap-[30px]">
                   <div className="w-full">
