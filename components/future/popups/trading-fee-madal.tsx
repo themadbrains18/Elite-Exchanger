@@ -39,11 +39,11 @@ const TradingFeeMadal = (props:showPopup) => {
         <div className='flex gap-[40px]'>
             <div>
                 <p className='top-label'>Maker</p>
-                <p className='top-label !text-[18px] !text-white'>0.02%</p>
+                <p className='top-label !text-[18px]  dark:!text-white'>0.02%</p>
             </div>
             <div>
                 <p className='top-label'>Taker</p>
-                <p className='top-label !text-[18px] !text-white'>0.06%</p>
+                <p className='top-label !text-[18px] dark:!text-white'>0.06%</p>
             </div>
         </div>
     </div>
