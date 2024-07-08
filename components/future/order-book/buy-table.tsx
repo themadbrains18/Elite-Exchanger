@@ -1,4 +1,5 @@
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
+import { truncateNumber } from '@/libs/subdomain';
 import React from 'react'
 interface setState {
     show?: number;
@@ -35,7 +36,7 @@ const BuyTableFuture = (props: setState) => {
                         <div className='grid grid-cols-3 gap-[10px] bg-[#25e39e0a] rounded mb-[4px]'>
                             <p className={`top-label text-start ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{currencyFormatter(item?.entry_price?.toFixed(6))}</p>
                             <p className='top-label text-center !text-black dark:!text-white'>{currencyFormatter(item?.qty?.toFixed(6))}</p>
-                            <p className='top-label text-end !text-black dark:!text-white'>{item?.margin}</p>
+                            <p className='top-label text-end !text-black dark:!text-white'>{truncateNumber(item?.margin,6)}</p>
                         </div>
                     </>
                 })}

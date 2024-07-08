@@ -184,14 +184,14 @@ const [maxTrade, setMaxTrade] = useState()
     // Get Refresh user wallet assets after order create //
     // ================================================= //
     const refreshWalletAssets = async () => {
-        let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${props?.session?.user?.user_id}`, {
+        let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${props?.session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
             method: "GET",
             headers: {
                 "Authorization": props?.session?.user?.access_token
             },
         }).then(response => response.json());
 
-        setAllAssets(userAssets);
+        setAllAssets(userAssets?.data?.data);
 
         let rewardsList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/rewards?userid=${props?.session?.user?.user_id}`, {
             method: "GET",
@@ -284,6 +284,8 @@ const [maxTrade, setMaxTrade] = useState()
         }
     }
 
+    
+
     return (
         <>
             <ToastContainer limit={1} position='top-center'/>
@@ -316,8 +318,8 @@ const [maxTrade, setMaxTrade] = useState()
                 </div>
                 <div className='bg-[#fff] dark:bg-[#1a1b1f]  border-l  dark:border-[#25262a] border-[#e5e7eb] '>
                     {/* Buy/Sell open short traading component */}
-                    <BuySell inputId={'slider_input1'} setOpnlong={setOpnlong} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} minTrade= {minTrade} maxTrade= {maxTrade}/>
-                    <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
+                    <BuySell inputId={'slider_input1'} setOpnlong={setOpnlong} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets?.data?.data} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} minTrade= {minTrade} maxTrade= {maxTrade}/>
+                    <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode}  balance={allAssets?.data?.totalAmount}/>
                 </div>
             </div>
 
@@ -352,7 +354,7 @@ const [maxTrade, setMaxTrade] = useState()
                 </div>
 
                 <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} positionHistoryData={positionHistoryData} openOrderHistoryData={openOrderHistoryData} />
-                <BuySell setOpnlong={setOpnlong} setOverlay={setOverlay} inputId={'slider_input2'} minTrade= {minTrade} maxTrade= {maxTrade} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} />
+                <BuySell setOpnlong={setOpnlong} setOverlay={setOverlay} inputId={'slider_input2'} minTrade= {minTrade} maxTrade= {maxTrade} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets?.data?.data} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} />
                 <MarginRatio fullWidth={true} heightAuto={true} setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
             </div>
 
@@ -368,7 +370,7 @@ const [maxTrade, setMaxTrade] = useState()
                     <SwapModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
                     :
                     popupMode === 3 ?
-                        <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets} refreshWalletAssets={refreshWalletAssets} type="future"/>
+                        <TransferModal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets?.data?.data} refreshWalletAssets={refreshWalletAssets} type="future"/>
                         : popupMode === 4 && <TradingFeeMadal setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
             }
 
@@ -396,7 +398,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     let userAssets: any = [];
     let rewardsList: any = [];
     if (session) {
-        userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${session?.user?.user_id}`, {
+        userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
             method: "GET",
             headers: {
                 "Authorization": session?.user?.access_token

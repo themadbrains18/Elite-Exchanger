@@ -37,7 +37,7 @@ interface fullWidth {
   totalPoint?: any;
   minTrade?: any;
   maxTrade?: any;
-  setOpnlong?:Function;
+  setOpnlong?: Function;
 }
 
 const BuySell = (props: fullWidth) => {
@@ -78,8 +78,8 @@ const BuySell = (props: fullWidth) => {
   const [assetsBalance, setAssetsBalance] = useState(0);
   const [assetsList, setAssetsList] = useState();
   const [percentage, setPercentage] = useState(0)
-  
-const [leverage, setLerverage] = useState(0)
+
+  const [leverage, setLerverage] = useState(0)
 
   const [shortConfirm, setShortConfirm] = useState(false);
   const [active, setActive] = useState(false);
@@ -114,7 +114,7 @@ const [leverage, setLerverage] = useState(0)
     profit: openOrderObj,
     stopls: openOrderObj,
   });
-const router= useRouter()
+  const router = useRouter()
   // ------------------------------
   // Initial market price
   // ------------------------------
@@ -124,12 +124,12 @@ const router= useRouter()
       : props?.currentToken?.global_token?.price;
 
 
-      useEffect(()=>{
-        if(showNes===2){
+  useEffect(() => {
+    if (showNes === 2) {
 
-          onChangeSizeInPercentage(percentage)
-        }
-      },[marketPrice])
+      onChangeSizeInPercentage(percentage)
+    }
+  }, [marketPrice])
 
 
 
@@ -161,8 +161,8 @@ const router= useRouter()
     // ---------------------------------------
     // Rewards points add to derivative
     // ---------------------------------------
-    
-    
+
+
     let rewardsAmount = 0;
     if (symbol === "USDT") {
       rewardsAmount = props?.totalPoint || 0;
@@ -175,8 +175,8 @@ const router= useRouter()
         setButtonStyle(false);
       }
 
-      let bal = truncateNumber(Number(asset[0].balance) + rewardsAmount  , 6);
-      
+      let bal = truncateNumber(Number(asset[0].balance) + rewardsAmount, 6);
+
       let assetbal = truncateNumber(Number(asset[0].balance), 6)
 
       setAssetsBalance(assetbal);
@@ -240,31 +240,31 @@ const router= useRouter()
   // asset amount value using range slider //
   // ===================================================================//
   const onChangeSizeInPercentage = (value: number) => {
-    
+
     setPercentage(Math.trunc(value));
 
     let finalValue = 0;
 
 
-    if(showNes===1){
+    if (showNes === 1) {
 
       if (prefernceSymbol === "Qty") {
-  
+
         finalValue = (props.maxTrade) * (value / 100);
         setSizeValue(truncateNumber(finalValue, 6));
       } else {
-  
+
         finalValue = (entryPrice * props.maxTrade) * (value / 100);
         setSizeValue(truncateNumber(finalValue, 6));
       }
     }
-    else{
+    else {
       if (prefernceSymbol === "Qty") {
-  
+
         finalValue = (props.maxTrade) * (value / 100);
         setSizeValue(truncateNumber(finalValue, 6));
       } else {
-  
+
         finalValue = (truncateNumber(marketPrice, 6) * props.maxTrade) * (value / 100);
         setSizeValue(truncateNumber(finalValue, 6));
       }
@@ -285,7 +285,7 @@ const router= useRouter()
         setSizeValidate("Amount must be greater than '0'");
         return;
       }
-      
+
       // let entry_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
       let Liquidation_Price: any =
         (marketPrice * (1 - 0.01)) / props?.marginMode?.leverage;
@@ -300,14 +300,14 @@ const router= useRouter()
 
       let qty: any = sizeValue / marketPrice;
       qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
-    
-      
+
+
       if (orderType === "qty") {
         qty = sizeValue.toString();
       }
-      
-      if(qty< props?.minTrade){
-        toast.error('Order cost falls below the min. amount.', {autoClose:2000})
+
+      if (qty < props?.minTrade) {
+        toast.error('Order cost falls below the min. amount.', { autoClose: 2000 })
         return;
       }
       let value: any = (qty * 0.055).toFixed(5);
@@ -341,20 +341,20 @@ const router= useRouter()
       };
     }
     else {
-      console.log(sizeValue,"=sizeValue");
-      
+      console.log(sizeValue, "=sizeValue");
 
-      if (entryPrice == undefined || entryPrice == null || entryPrice === 0 || entryPrice < 0 || entryPrice==="") {
+
+      if (entryPrice == undefined || entryPrice == null || entryPrice === 0 || entryPrice < 0 || entryPrice === "") {
         setEntryPriceValidate("Price must be greater than '0'");
         return;
       }
 
-      if (sizeValue == undefined || sizeValue == null ||sizeValue === 0 || sizeValue < 0 || sizeValue==="") {
+      if (sizeValue == undefined || sizeValue == null || sizeValue === 0 || sizeValue < 0 || sizeValue === "") {
         setSizeValidate("Amount must be greater than '0'");
         return;
       }
 
-      
+
       let Liquidation_Price: any =
         (entryPrice * (1 - 0.01)) / props?.marginMode?.leverage;
 
@@ -369,18 +369,18 @@ const router= useRouter()
       let qty: any = sizeValue / marketPrice;
       qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
 
-   
+
       if (orderType === "qty") {
         qty = sizeValue.toString();
-        console.log(qty,"==qty", props?.minTrade,"==props?.minTrade");
-      
-        
+        console.log(qty, "==qty", props?.minTrade, "==props?.minTrade");
+
+
       }
-      if(qty< props?.minTrade){
-        toast.error('Order cost falls below the min. threshold.', {autoClose:2000})
+      if (qty < props?.minTrade) {
+        toast.error('Order cost falls below the min. threshold.', { autoClose: 2000 })
         return;
       }
-      
+
 
       let enter_Price: any = entryPrice;
       let amount: any = qty * entryPrice;
@@ -579,37 +579,37 @@ const router= useRouter()
   // ===================================================================//
   const onChangeSizeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLerverage(0)
-    const value = parseFloat(e.target.value)==0 ? 0.00 : parseFloat(e.target.value);
-  
+    const value = parseFloat(e.target.value) == 0 ? 0.00 : parseFloat(e.target.value);
+
     if (isNaN(value)) {
       setSizeValue(''); // Reset sizeValue to its current state
       return; // Exit early without updating state or applying further logic
     }
 
-    else if (value !==0 && value < props?.minTrade) {
+    else if (value !== 0 && value < props?.minTrade) {
       setSizeValidate(`Minimum value: ${props?.minTrade}`)
       // console.log(sizeValue,"==sizeValue");
-      
-      return; 
+
+      return;
     }
-    else{
+    else {
       setSizeValidate('')
       setSizeValue(value);
       setButtonStyle(false);
-  
+
       const leverage = props.marginMode.leverage;
-  
+
       if (value > avaibalance * leverage || value / leverage > avaibalance) {
         setButtonStyle(true);
       }
-  
+
       const openPositionFee = (value * 0.055) / 100;
       const longClosePositionFee = ((value * (leverage - 1)) / leverage * 0.055) / 100;
       const shortClosePositionFee = (value * ((leverage + 1) / leverage) * 0.055) / 100;
-  
+
       const longCost = value / leverage + openPositionFee + longClosePositionFee;
       const shortCost = value / leverage + openPositionFee + shortClosePositionFee;
-  
+
       console.log({ longCost, shortCost }); // Example, remove if not needed
     }
   };
@@ -878,11 +878,11 @@ const router= useRouter()
           <p className="admin-body-text !text-[12px] dark:!text-white"> {prefernceSymbol === "Qty" ? props?.currentToken?.coin_symbol : symbol}</p>
           <div
             onClick={() => {
-              if(session?.user){
+              if (session?.user) {
                 props.setOverlay(true);
                 props.setPopupMode(3);
               }
-              else{
+              else {
                 router.push('/login')
               }
             }}
@@ -901,7 +901,7 @@ const router= useRouter()
               <div>
                 <p className="top-label">Price </p>
                 <input
-                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
+                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                   placeholder="$0"
                   step="0.000001"
                   value={entryPrice}
@@ -947,7 +947,7 @@ const router= useRouter()
               <div>
                 <p className="top-label">Amount</p>
                 <input
-                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
+                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                   value={sizeValue}
                   placeholder="0.00"
                   onChange={onChangeSizeValue}
@@ -985,7 +985,7 @@ const router= useRouter()
               <div>
                 <p className="top-label">Stop Price </p>
                 <input
-                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
+                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                   placeholder="0"
                   onChange={(e) => {
                     setStopPrice(e.target?.value);
@@ -1009,10 +1009,10 @@ const router= useRouter()
               <div>
                 <p className="top-label">Price </p>
                 <input
-                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
+                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                   placeholder="0"
                   onChange={(e) => {
-                    
+
                     setEntryPrice(
                       e.target.value === "" ? '' : parseFloat(e.target.value)
                     );
@@ -1036,7 +1036,7 @@ const router= useRouter()
               <div>
                 <p className="top-label">Amount</p>
                 <input
-                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
+                  type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                   placeholder="0"
                   onChange={(e) => {
                     setSizeValue(
@@ -1204,8 +1204,11 @@ const router= useRouter()
                 <div className="flex gap-5 items-center justify-between mt-[5px]">
                   <p className="top-label">Max</p>
                   <p className="top-label !text-[#000] dark:!text-[#fff]">
-                    {truncateNumber(avaibalance * props?.marginMode?.leverage, 5)} {symbol}
+                    {orderType === "qty"
+                      ? `${props?.maxTrade} ${props?.currentToken?.coin_symbol}`
+                      : `${truncateNumber(avaibalance * props?.marginMode?.leverage, 5)} ${symbol}`}
                   </p>
+
                 </div>
               </div>
             )}

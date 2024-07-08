@@ -50,13 +50,13 @@ const Banner = (props: propsData): any => {
                   show == true ? <span> ${props.assets !=0 ? currencyFormatter(props?.assets.toFixed(4)) :'0.00' }</span> :  <span>$ {props.assets !=0 ?star.repeat(props.assets.toFixed(4)?.length):star.repeat(4)}</span>
                 }
               </p>
-              <div className="p-[5px] bg-primary-100 dark:bg-black-v-1 rounded flex gap-[10px] items-center cursor-pointer" onClick={() => { setShow(!show) }}>
-                <p className="sm-text dark:text-white">Hide Price</p>
+              <div className="p-[5px] rounded flex gap-[10px] items-center cursor-pointer" onClick={() => { setShow(!show) }}>
+                {/* <p className="sm-text dark:text-white">Hide Price</p> */}
                 {
                   show == true ?
-                    <Image src='/assets/market/open-eye.svg' width={20} height={20} alt="eye icon" />
+                    <Image src='/assets/market/open-eye.svg' width={25} height={25} alt="eye icon" />
                     :
-                    <Image src='/assets/market/eye.svg' width={20} height={20} alt="eye icon" />
+                    <Image src='/assets/market/eye.svg' width={25} height={25} alt="eye icon" />
                 }
               </div>
             </div>
