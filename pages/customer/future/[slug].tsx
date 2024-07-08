@@ -37,6 +37,7 @@ const FutureTrading = (props: Session) => {
     const slug = props?.serverSlug// router.query;
 
     const [show, setShow] = useState(1);
+    const [active, setActive] = useState(1)
     const [marginMode, setMarginMode] = useState({ margin: 'Isolated', leverage: 10 });
     const [popupMode, setPopupMode] = useState(0);
     const [overlay, setOverlay] = useState(false);
@@ -307,10 +308,21 @@ const [maxTrade, setMaxTrade] = useState()
                             </div>
                         </div>
                         <div className='w-full max-w-[300px] bg-[#fafafa] dark:bg-[#1a1b1f] '>
+                        <div className='flex items-center '>
+                
+
+                <div className={`flex  flex-col justify-between gap-[10px] bg-[#fafafa] dark:bg-[#1a1b1f]  px-[16px] cursor-pointer `}>
+                    <h3 className={`top-label dark:!text-white !text-[#000] max-[991px]:hidden ${active===1?'border-primary':'border-[transparent]'} border-b py-[10px]`} onClick={()=>{setActive(1)}}>Order Book</h3>
+                    
+                </div>
+                <div className={` bg-[#fafafa] dark:bg-[#1a1b1f]     px-[16px]  cursor-pointer`}>
+                    <h3 className={` ${active===2?'border-primary':'border-[transparent]'} border-b py-[10px]  top-label dark:!text-white !text-[#000] max-[991px]:hidden`} onClick={()=>{setActive(2)}}>Market Trades</h3>
+                </div>
+            </div>
                             {/* order Book compoenent */}
-                            <OrderBookFuture setShow={setShow} show={show} currentToken={currentToken[0]} positionRecord={positionRecord} />
+                          {active===1 &&  <OrderBookFuture setShow={setShow} show={show} currentToken={currentToken[0]} positionRecord={positionRecord} />}
                             {/* Market trade listing component */}
-                            <MarketTrades setShow={setShow} show={show} widthFull={true} currentToken={currentToken[0]} positionRecord={positionRecord} />
+                           {active===2 && <MarketTrades setShow={setShow} show={show} widthFull={true} currentToken={currentToken[0]} positionRecord={positionRecord} />}
                         </div>
                     </div>
                     {/* position,open order and trade history table */}

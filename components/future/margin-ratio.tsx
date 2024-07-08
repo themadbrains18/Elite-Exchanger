@@ -12,7 +12,7 @@ interface fullWidth{
 }
 const MarginRatio = (props:fullWidth) => {
   return (
-    <div className={`bg-[#fff] overflow-y-auto dark:bg-[#1a1b1f] py-[14px] px-[16px] ${props.fullWidth ? 'max-w-full':'max-w-[300px]'} w-full`}>
+    <div className={`bg-[#fff] overflow-y-auto dark:bg-[#1a1b1f] py-[14px] px-[16px] ${props.fullWidth ? 'max-w-full':'max-w-[350px]'} w-full`}>
         <p className='top-label dark:!text-white !text-[#000]'>Margin</p>
         <div className='flex gap-5 items-center justify-between mt-[10px] mb-[15px]'>
             <p className="top-label">Margin Ratio </p>
