@@ -243,7 +243,7 @@ const SignUp = () => {
                       />
                     </div>
                     {errors.confirmPassword && <p className="errorMessage">{errors.confirmPassword.message}</p>}
-                    <input type="text" {...register('refeer_code')} disabled={queryParams !== null ? true : false} placeholder="Referal Code(Optional)" className="input-cta" />
+                    <input type="text" {...register('refeer_code')} maxLength={10 } disabled={queryParams !== null ? true : false} placeholder="Referal Code(Optional)" className="input-cta" />
                   </div>
                   <div className="flex mt-[30px] gap-[10px] items-start">
                     <input type="checkbox" id="checkbox" {...register('agree')} className="mt-[3px]"/>

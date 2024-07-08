@@ -327,7 +327,7 @@ input[type=date]::-webkit-calendar-picker-indicator {
   @apply mt-[-1px] ml-[3px]
 }
 .history_pagination  li.disabled {
-  @apply border-[transparent] text-beta
+  @apply  text-beta
 }
 
 .history_pagination li.selected{

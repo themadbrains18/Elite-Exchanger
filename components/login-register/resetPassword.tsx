@@ -83,7 +83,10 @@ const ResetPassword = () => {
         }, 3000);
 
       }
-    } catch (error) { }
+    } catch (error) {
+      console.log(error);
+      
+     }
   };
 
   useEffect(() => {

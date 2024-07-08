@@ -83,29 +83,35 @@ const PositionsTable = (props: propsData) => {
   }
 
   const closeAllPosition = async () => {
-
-    let obj = { "userid": session?.user?.user_id };
-
-    let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeallposition`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": session?.user?.access_token
-      },
-      body: JSON.stringify(obj)
-    }).then(response => response.json());
-
-    if (closeReponse?.data?.status === 200) {
-      if (wbsocket) {
-        let position = {
-          ws_type: 'position'
-        }
-        wbsocket.send(JSON.stringify(position));
-      }
-      toast.success('closed all position successfully!!.');
-      setActive(false);
-      setShow(false);
-      setPositionId('');
+    try {
+      
+          let obj = { "userid": session?.user?.user_id };
+      
+          let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeallposition`, {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+              "Authorization": session?.user?.access_token
+            },
+            body: JSON.stringify(obj)
+          }).then(response => response.json());
+      
+          if (closeReponse?.data?.status === 200) {
+            if (wbsocket) {
+              let position = {
+                ws_type: 'position'
+              }
+              wbsocket.send(JSON.stringify(position));
+            }
+            toast.success('closed all position successfully!!.');
+            setActive(false);
+            setShow(false);
+            setPositionId('');
+          }
+      
+    } catch (error) {
+      console.log(error,"=error in close position");
+      
     }
   }
 

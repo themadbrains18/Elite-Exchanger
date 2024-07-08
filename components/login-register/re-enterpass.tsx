@@ -91,33 +91,39 @@ const ReEnterpass = (props: propsData) => {
   };
 
   const confirmOtp = async () => {
-    setConfirmation(false)
-    setLayout(false)
-    setBtnDisabled(true);
-    const ciphertext = AES.encrypt(
-      JSON.stringify(formData),
-      `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
-    ).toString();
-    let record = encodeURIComponent(ciphertext.toString());
-
-    let responseData = await fetch(`/api/user/forget`, {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(record),
-    });
-
-    let res = await responseData.json();
-
-    if (res?.data?.status === 200) {
-      setSuccessModal(true)
-    } else {
-      toast.error(res.data.message,{autoClose:2500});
-      setTimeout(() => {
-        setBtnDisabled(false);  
-      }, 3000);
+    try {
+      
+      setConfirmation(false)
+      setLayout(false)
+      setBtnDisabled(true);
+      const ciphertext = AES.encrypt(
+        JSON.stringify(formData),
+        `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+      ).toString();
+      let record = encodeURIComponent(ciphertext.toString());
+  
+      let responseData = await fetch(`/api/user/forget`, {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(record),
+      });
+  
+      let res = await responseData.json();
+  
+      if (res?.data?.status === 200) {
+        setSuccessModal(true)
+      } else {
+        toast.error(res.data.message,{autoClose:2500});
+        setTimeout(() => {
+          setBtnDisabled(false);  
+        }, 3000);
+      }
+    } catch (error) {
+      console.log(error,"error in re enter password ");
+      
     }
   }
 

@@ -30,36 +30,42 @@ const OpenOrderTable = (props: propsData) => {
     }
 
     const actionPerform = async () => {
-        let obj = { "id": positionId };
-        const ciphertext = AES.encrypt(
-            JSON.stringify(obj),
-            `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
-        );
-        let record = encodeURIComponent(ciphertext.toString());
-
-        let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeopenorder`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json',
-                "Authorization": session?.user?.access_token
-            },
-            body: JSON.stringify(record)
-        }).then(response => response.json());
-
-        if (closeReponse?.data?.status !== 200) {
-            toast.error(closeReponse?.data?.message);
-        }
-        else {
-            if (wbsocket) {
-                let position = {
-                    ws_type: 'position'
-                }
-                wbsocket.send(JSON.stringify(position));
+        try {
+            let obj = { "id": positionId };
+            const ciphertext = AES.encrypt(
+                JSON.stringify(obj),
+                `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+            );
+            let record = encodeURIComponent(ciphertext.toString());
+    
+            let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeopenorder`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": session?.user?.access_token
+                },
+                body: JSON.stringify(record)
+            }).then(response => response.json());
+    
+            if (closeReponse?.data?.status !== 200) {
+                toast.error(closeReponse?.data?.message);
             }
-            toast.success(closeReponse?.data?.message);
-            setPositionId('');
-            setActive(false);
-            setShow(false);
+            else {
+                if (wbsocket) {
+                    let position = {
+                        ws_type: 'position'
+                    }
+                    wbsocket.send(JSON.stringify(position));
+                }
+                toast.success(closeReponse?.data?.message);
+                setPositionId('');
+                setActive(false);
+                setShow(false);
+            }
+            
+        } catch (error) {
+            console.log(error,"==error");
+            
         }
     }
 
@@ -171,7 +177,7 @@ const OpenOrderTable = (props: propsData) => {
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item?.type}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.side}</p>
+                                            <p className={`top-label !font-[600]  ${item?.side === 'open long' ? '!text-buy' : '!text-sell'}`}>{item?.side}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(item?.price_usdt)}</p>
