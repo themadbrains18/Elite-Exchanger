@@ -32,54 +32,61 @@ const ChartBanner = () => {
   }
 
   const refreshTokenList = async () => {
-    let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
-      method: "GET"
-    }).then(response => response.json());
-
-    let ccurrentToken = tokenList?.data?.filter((item: any) => {
-      return item.symbol === slug
-    })
-
-    let obj: any = [
-      {
-        "cardTitle": "Market Cap",
-        "titleIcon": "marketCap",
-        "cardPrice": "$" + `${ccurrentToken[0]?.totalSupply && ccurrentToken[0]?.totalSupply?.toLocaleString('en-US')}`,
-        "cardLowHigh": "+2%",
-        "bg": "blue",
-      },
-      {
-        "cardTitle": "Full Diluted",
-        "titleIcon": "infoIcon",
-        "cardPrice": "$" + ccurrentToken[0]?.totalSupply?.toLocaleString('en-US'),
-        "cardLowHigh": "+2%",
-        "bg": "red",
-      },
-      {
-        "cardTitle": "24 Volume",
-        "titleIcon": "watchIcon",
-        "cardPrice": "$" + ccurrentToken[0]?.circulatingSupply?.toLocaleString('en-US'),
-        "cardLowHigh": "+2%",
-        "bg": "green",
-      },
-      {
-        "cardTitle": "Circulating Supply",
-        "titleIcon": "infoIcon",
-        "cardPrice": ccurrentToken[0]?.circulatingSupply?.toLocaleString('en-US'),
-        "cardLowHigh": "+2%",
-        "bg": "lightblue",
+    try {
+      
+      let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
+        method: "GET"
+      }).then(response => response.json());
+  
+      let ccurrentToken = tokenList?.data?.filter((item: any) => {
+        return item.symbol === slug
+      })
+  
+      let obj: any = [
+        {
+          "cardTitle": "Market Cap",
+          "titleIcon": "marketCap",
+          "cardPrice": "$" + `${ccurrentToken[0]?.totalSupply && ccurrentToken[0]?.totalSupply?.toLocaleString('en-US')}`,
+          "cardLowHigh": "+2%",
+          "bg": "blue",
+        },
+        {
+          "cardTitle": "Full Diluted",
+          "titleIcon": "infoIcon",
+          "cardPrice": "$" + ccurrentToken[0]?.totalSupply?.toLocaleString('en-US'),
+          "cardLowHigh": "+2%",
+          "bg": "red",
+        },
+        {
+          "cardTitle": "24 Volume",
+          "titleIcon": "watchIcon",
+          "cardPrice": "$" + ccurrentToken[0]?.circulatingSupply?.toLocaleString('en-US'),
+          "cardLowHigh": "+2%",
+          "bg": "green",
+        },
+        {
+          "cardTitle": "Circulating Supply",
+          "titleIcon": "infoIcon",
+          "cardPrice": ccurrentToken[0]?.circulatingSupply?.toLocaleString('en-US'),
+          "cardLowHigh": "+2%",
+          "bg": "lightblue",
+        }
+      ]
+      setCurrentToken(ccurrentToken[0]);
+      setCardsData(obj);
+  
+      let favItems = localStorage.getItem('favToken');
+      if (favItems) {
+        favItems = JSON.parse(favItems);
       }
-    ]
-    setCurrentToken(ccurrentToken[0]);
-    setCardsData(obj);
-
-    let favItems = localStorage.getItem('favToken');
-    if (favItems) {
-      favItems = JSON.parse(favItems);
+      if (favItems && favItems.indexOf(ccurrentToken[0]?.id) !== -1) {
+        setFillFav(true);
+      }
+    } catch (error) {
+    console.log(error,"=eror");
+    
     }
-    if (favItems && favItems.indexOf(ccurrentToken[0]?.id) !== -1) {
-      setFillFav(true);
-    }
+      
   }
 
   return (

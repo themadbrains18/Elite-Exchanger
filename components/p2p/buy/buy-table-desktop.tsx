@@ -43,7 +43,6 @@ const BuyTableDesktop = (props: activeSection) => {
       if (itemOffset === undefined) {
         itemOffset = 0;
       }
-      console.log("=here");
       
       let posts = await fetch(
         `/api/p2p/buy?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,

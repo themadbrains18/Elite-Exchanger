@@ -304,107 +304,112 @@ const BuySellExpress = (props: propsData) => {
    */
   const onHandleSubmit = async (data: any) => {
 
-
-
-    let pmId = getValues("p_method")
-    // p2p/postad
-    if (active1 === 2) {
-
-      console.log(data,"==daa");
-      
-
-      let pmMethod = props.masterPayMethod.filter((item: any) => item?.id === pmId)
-      console.log(pmMethod);
-
-
-      if (filterAsset?.balance == undefined) {
-        setError("spend_amount", {
-          type: "custom",
-          message: `Insufficient balance.`,
-        });
-        return;
-      }
-
-      if (data?.spend_amount > filterAsset?.balance) {
-        setError("spend_amount", {
-          type: "custom",
-          message: `Insufficient balance.`,
-        });
-        return;
-      }
-      let tokenID = selectedSecondToken?.id;
-      if (session?.user?.kyc !== 'approve' || session?.user?.TwoFA === false || (session?.user?.tradingPassword === '' || session?.user?.tradingPassword === null) || (session?.user?.email === '' || session?.user?.email === null)) {
-        setShow(true);
-        setActive(true)
-      }
-      else {
-        route.push(`/p2p/postad?token_id=${tokenID}&qty=${data?.spend_amount}&price=${usdtToInr}&pmid=${pmId}`);
-      }
-      return;
-    }
-
-    if (data.spend_amount < finalPost?.min_limit) {
+try {
+  let pmId = getValues("p_method")
+  // p2p/postad
+  if (active1 === 2) {
+  
+    console.log(data,"==daa");
+    
+  
+    let pmMethod = props.masterPayMethod.filter((item: any) => item?.id === pmId)
+    console.log(pmMethod);
+  
+  
+    if (filterAsset?.balance == undefined) {
       setError("spend_amount", {
         type: "custom",
-        message: `Note: There's an order available in the range  ${finalPost?.min_limit} - ${finalPost?.max_limit}. Order within the range.`,
+        message: `Insufficient balance.`,
       });
       return;
     }
-
-    if (status === 'authenticated') {
-      let obj = {
-        post_id: finalPost?.id,
-        sell_user_id: finalPost?.user?.id,
-        buy_user_id: session?.user?.user_id,
-        token_id: finalPost?.token_id,
-        price: finalPost?.price,
-        quantity: data?.receive_amount,
-        spend_amount: data?.spend_amount,
-        receive_amount: data?.receive_amount,
-        spend_currency: 'INR',
-        receive_currency: finalPost?.token !== null ? finalPost?.token?.symbol : finalPost?.global_token?.symbol,
-        p_method: '',
-        type: 'buy',
-        status: 'isProcess'
-      }
-
-      const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-      let record = encodeURIComponent(ciphertext.toString());
-
-      let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/buy`, {
-        method: "POST",
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": session?.user?.access_token
-        },
-        body: JSON.stringify(record)
-      })
-
-      let res = await responseData.json();
-
-      if (res.data.status === 200) {
-        toast.success(res?.data?.data?.message);
-        if (wbsocket) {
-          let buy = {
-            ws_type: 'buy',
-            sellerid: finalPost?.User?.id
-          }
-          wbsocket.send(JSON.stringify(buy));
-        }
-
-        setTimeout(() => {
-          route.push(`/p2p/my-orders?buy=${res?.data?.data?.result?.id}`);
-        }, 3000);
-
-      }
-      else {
-        toast.error(res?.data?.data);
-      }
-    }
-    else {
-      toast.error('Unauthenticated User. Please Login to buy any assets');
+  
+    if (data?.spend_amount > filterAsset?.balance) {
+      setError("spend_amount", {
+        type: "custom",
+        message: `Insufficient balance.`,
+      });
       return;
     }
+    let tokenID = selectedSecondToken?.id;
+    if (session?.user?.kyc !== 'approve' || session?.user?.TwoFA === false || (session?.user?.tradingPassword === '' || session?.user?.tradingPassword === null) || (session?.user?.email === '' || session?.user?.email === null)) {
+      setShow(true);
+      setActive(true)
+    }
+    else {
+      route.push(`/p2p/postad?token_id=${tokenID}&qty=${data?.spend_amount}&price=${usdtToInr}&pmid=${pmId}`);
+    }
+    return;
+  }
+  
+  if (data.spend_amount < finalPost?.min_limit) {
+    setError("spend_amount", {
+      type: "custom",
+      message: `Note: There's an order available in the range  ${finalPost?.min_limit} - ${finalPost?.max_limit}. Order within the range.`,
+    });
+    return;
+  }
+  
+  if (status === 'authenticated') {
+    let obj = {
+      post_id: finalPost?.id,
+      sell_user_id: finalPost?.user?.id,
+      buy_user_id: session?.user?.user_id,
+      token_id: finalPost?.token_id,
+      price: finalPost?.price,
+      quantity: data?.receive_amount,
+      spend_amount: data?.spend_amount,
+      receive_amount: data?.receive_amount,
+      spend_currency: 'INR',
+      receive_currency: finalPost?.token !== null ? finalPost?.token?.symbol : finalPost?.global_token?.symbol,
+      p_method: '',
+      type: 'buy',
+      status: 'isProcess'
+    }
+  
+    const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+    let record = encodeURIComponent(ciphertext.toString());
+  
+    let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/buy`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": session?.user?.access_token
+      },
+      body: JSON.stringify(record)
+    })
+  
+    let res = await responseData.json();
+  
+    if (res.data.status === 200) {
+      toast.success(res?.data?.data?.message);
+      if (wbsocket) {
+        let buy = {
+          ws_type: 'buy',
+          sellerid: finalPost?.User?.id
+        }
+        wbsocket.send(JSON.stringify(buy));
+      }
+  
+      setTimeout(() => {
+        route.push(`/p2p/my-orders?buy=${res?.data?.data?.result?.id}`);
+      }, 3000);
+  
+    }
+    else {
+      toast.error(res?.data?.data);
+    }
+  }
+  else {
+    toast.error('Unauthenticated User. Please Login to buy any assets');
+    return;
+  }
+  
+} catch (error) {
+  console.log(error,"==error");
+  
+}
+
 
   }
 

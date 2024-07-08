@@ -11,7 +11,7 @@ const FooterCopywrite = () => {
     <>
         <div className='flex items-center flex-col gap-30 lg:flex-row justify-between mt-[50px] py-[30px] lg:py-[5px] border-t border-[#2B3144]'>
                 <div className='flex flex-col md:flex-row items-center  lg:gap-[40px] gap-[30px]'>
-                    <p className='text-center footer-text !text-footer-text'>© {cuurentDate} dynamic. All rights reserved</p>
+                    <p className='text-center footer-text !text-footer-text'>© {cuurentDate}. All rights reserved</p>
                     <div className='grid grid-cols-3 place-items-center lg:my-[26px] gap-[32px] lg:gap-[40px]'>
                         <Link href="#" className='pl-[20px] border-l !text-footer-text  border-gamma footer-text hover:!text-primary '>Privacy</Link>
                         <Link href="#" className='pl-[20px] border-l !text-footer-text  border-gamma footer-text hover:!text-primary'>Terms</Link>

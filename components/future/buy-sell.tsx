@@ -14,6 +14,7 @@ import ConfirmationModel from "../snippets/confirmation";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { truncateNumber } from "@/libs/subdomain";
 import { currencyFormatter } from "../snippets/market/buySellCard";
+import { useRouter } from "next/router";
 
 interface fullWidth {
   fullWidth?: boolean;
@@ -113,7 +114,7 @@ const [leverage, setLerverage] = useState(0)
     profit: openOrderObj,
     stopls: openOrderObj,
   });
-
+const router= useRouter()
   // ------------------------------
   // Initial market price
   // ------------------------------
@@ -299,14 +300,16 @@ const [leverage, setLerverage] = useState(0)
 
       let qty: any = sizeValue / marketPrice;
       qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
-      if(qty< props?.minTrade){
-        toast.error('Order cost falls below the min. threshold.', {autoClose:2000})
-        return;
-      }
+    
+      
       if (orderType === "qty") {
         qty = sizeValue.toString();
       }
-
+      
+      if(qty< props?.minTrade){
+        toast.error('Order cost falls below the min. amount.', {autoClose:2000})
+        return;
+      }
       let value: any = (qty * 0.055).toFixed(5);
       let releazedPnl: any = (marketPrice * value) / 100;
       let size: any = truncateNumber(qty * marketPrice, 5);
@@ -366,13 +369,16 @@ const [leverage, setLerverage] = useState(0)
       let qty: any = sizeValue / marketPrice;
       qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
 
+   
+      if (orderType === "qty") {
+        qty = sizeValue.toString();
+        console.log(qty,"==qty", props?.minTrade,"==props?.minTrade");
+      
+        
+      }
       if(qty< props?.minTrade){
         toast.error('Order cost falls below the min. threshold.', {autoClose:2000})
         return;
-      }
-
-      if (orderType === "qty") {
-        qty = sizeValue.toString();
       }
       
 
@@ -418,7 +424,7 @@ const [leverage, setLerverage] = useState(0)
 
       if (prefernceSymbol === "Qty" && confirmOrderData?.qty > props?.maxTrade) {
 
-        toast.error("Order failed. Order quantity>maximum open quantity", { autoClose: 2000 })
+        toast.error("Order failed. Order quantity is greatr than maximum order quantity", { autoClose: 2000 })
 
         setButtonStyle(false);
         props?.refreshWalletAssets();
@@ -432,7 +438,7 @@ const [leverage, setLerverage] = useState(0)
         // setSizeValue(truncateNumber(finalvalue,6))
       }
       else if (prefernceSymbol === "Value" && (entryPrice * props?.maxTrade) < sizeValue) {
-        toast.error("Order failed. Order quantity>maximum open quantity", { autoClose: 2000 })
+        toast.error("Order failed. Order quantity is greatr than maximum order quantity", { autoClose: 2000 })
 
         setButtonStyle(false);
         props?.refreshWalletAssets();
@@ -854,7 +860,7 @@ const [leverage, setLerverage] = useState(0)
               Stop Limit
             </button> */}
           </div>
-          <div
+          {/* <div
             className="cursor-pointer"
             onClick={() => {
               props.setOverlay(true);
@@ -862,7 +868,7 @@ const [leverage, setLerverage] = useState(0)
             }}
           >
             <IconsComponent type="swap-calender" />
-          </div>
+          </div> */}
         </div>
         {/* available Balance*/}
         <div className="flex items-center gap-[8px] mt-10">
@@ -870,14 +876,19 @@ const [leverage, setLerverage] = useState(0)
             Available: {avaibalance}
           </p>
           <p className="admin-body-text !text-[12px] dark:!text-white"> {prefernceSymbol === "Qty" ? props?.currentToken?.coin_symbol : symbol}</p>
-          {/* <div
+          <div
             onClick={() => {
-              props.setOverlay(true);
-              props.setPopupMode(3);
+              if(session?.user){
+                props.setOverlay(true);
+                props.setPopupMode(3);
+              }
+              else{
+                router.push('/login')
+              }
             }}
           >
             <IconsComponent type="swap-calender-with-circle" />
-          </div> */}
+          </div>
         </div>
 
         {/* ================================= */}
@@ -1115,9 +1126,9 @@ const [leverage, setLerverage] = useState(0)
                       {showNes === 1
                         ? sizeValue === 0
                           ? 0.00
-                          : isNaN(truncateNumber(sizeValue / entryPrice, 6))
+                          : isNaN(truncateNumber(sizeValue / entryPrice, 3))
                             ? 0.00
-                            : truncateNumber(sizeValue / entryPrice, 6)
+                            : truncateNumber(sizeValue / entryPrice, 3)
                         : isNaN(truncateNumber(sizeValue / marketPrice, 3))
                           ? 0.00
                           : truncateNumber(sizeValue / marketPrice, 3)}{" "}

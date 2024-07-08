@@ -399,7 +399,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
         } */}
       </div>
       <div className='mt-[40px]'>
-        <p className='text-center sec-text text-gamma'>© 2023 dynamic. All rights reserved</p>
+        <p className='text-center sec-text text-gamma'>© 2023. All rights reserved</p>
         <div className='grid grid-cols-3 place-items-center my-[20px]'>
           <Link href="#" className='pl-[20px] border-l sec-text text-gamma border-gamma'>Privacy</Link>
           <Link href="#" className='pl-[20px] border-l sec-text text-gamma border-gamma'>Terms</Link>

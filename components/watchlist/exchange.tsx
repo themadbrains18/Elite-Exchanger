@@ -271,6 +271,8 @@ const Exchange = (props: DynamicId): any => {
           setBtnDisabled2(false);
           setAmount(0);
           setReceivedAmount(0);
+          setFirstCurrency('')
+          setSecondCurrency('')
           setIsConvert(false);
           reset()
           if (wbsocket) {
@@ -288,6 +290,8 @@ const Exchange = (props: DynamicId): any => {
           toast.error(res.data.data, {
             position: 'top-center'
           });
+          setFirstCurrency('')
+          setSecondCurrency('')
           setIsConvert(false)
           setAmount(0);
           setReceivedAmount(0);

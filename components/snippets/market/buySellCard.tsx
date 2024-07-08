@@ -552,7 +552,7 @@ const BuySellCard = (props: DynamicId) => {
                   </div>
                   <div className="flex gap-2">
                     <p className="sm-text dark:text-white">Max Trade:</p>
-                    <p className="sm-text dark:text-white">{selectedToken?.tradepair?.maxTrade}</p>
+                    <p className="sm-text dark:text-white">{selectedToken?.tradepair?.maxTrade || '0.00'}</p>
                   </div>
                 </div>
                 <div className="mt-5 flex gap-2">
