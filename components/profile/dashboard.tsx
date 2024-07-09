@@ -179,7 +179,7 @@ const Dashboard = (props: FixSection) => {
                     <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}   `}>
                       <input type="text" maxLength={20} {...register('uName')} placeholder="Enter user name" className="sm-text bg-[transparent] outline-none input-cta2  w-full" />
                     </div>
-                      {editable && <p className='sm-text !text-primary text-end pt-[2px] cursor-pointer'>Verify</p>}
+                      {/* {editable && <p className='sm-text !text-primary text-end pt-[2px] cursor-pointer' onClick={()=>{verifyUserName}}>Verify</p>} */}
                     {errors.uName && <p className="errorMessage">{errors.uName.message}</p>}
                   </div>
                 </div>
