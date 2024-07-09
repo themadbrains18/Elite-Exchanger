@@ -171,6 +171,7 @@ const BuyTableDesktop = (props: activeSection) => {
 
     }
   }
+  const startIndex = itemOffset + 1; // Starting index for the current page
 
   return (
     <>
@@ -241,7 +242,7 @@ const BuyTableDesktop = (props: activeSection) => {
                     <td className="group-hover:bg-[#FAFAFA] dark:group-hover:bg-black-v-1 ">
                       <div className="flex items-center gap-[10px]">
                         {/* <Image src='/assets/market/star.svg' width={24} height={24} alt="star" /> */}
-                        <p className="info-14-18 ">{index + 1}</p>
+                        <p className="info-14-18 ">{startIndex+index}</p>
                       </div>
                     </td>
 

@@ -21,6 +21,8 @@ const Spot = (props: propsData) => {
     const router = useRouter();
     const { mode } = useContext(Context);
     const [token, setToken] = useState(Object);
+    const [imgSrc, setImgSrc] = useState(false);
+
 
     let itemsPerPage = 10;
     const endOffset = itemOffset + itemsPerPage;
@@ -89,7 +91,8 @@ const Spot = (props: propsData) => {
 
                                     <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                                            <Image src={item.image} width={30} height={30} alt="coins" />
+                                        <Image src={`${imgSrc?'/assets/history/Coin.svg':item.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)}/>
+
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                                 <p className="info-14-18 dark:text-white">{item.symbol}/USDT</p>
                                                 {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p> */}

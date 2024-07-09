@@ -18,6 +18,7 @@ const WithdrawTable = (props: propsData) => {
   const [itemOffset, setItemOffset] = useState(0);
   const [total, setTotal] = useState(0)
   const [totalRecord, setTotalRecord] = useState([]);
+  const [imgSrc, setImgSrc] = useState(false);
 
   const { mode } = useContext(Context)
 
@@ -140,7 +141,7 @@ const WithdrawTable = (props: propsData) => {
                 <tr key={index}>
                   <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                      <Image src={`${item?.token != null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" />
+                    <Image src={`${imgSrc?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)}/>
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                         <p className="info-14-18 dark:text-white">{item?.token?.fullName}</p>
                         <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.token?.symbol}</p>

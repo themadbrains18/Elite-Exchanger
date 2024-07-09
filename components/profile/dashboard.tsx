@@ -1,23 +1,22 @@
-import Image from "next/image";
-import React, { useEffect, useState } from "react";
-import IconsComponent from "../snippets/icons";
-
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useForm } from "react-hook-form";
-
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import Image from 'next/image';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import AES from 'crypto-js/aes';
-import moment from "moment";
-import { useWebSocket } from "@/libs/WebSocketContext";
+import moment from 'moment';
+import { useWebSocket } from '@/libs/WebSocketContext';
+import { toast } from 'react-toastify';
+import IconsComponent from '../snippets/icons';
 
 const schema = yup.object().shape({
   fName: yup.string().optional(),
   lName: yup.string().optional(),
-  dName: yup.string().min(4, "Display name must be at least '4' characters.").max(20, "Display name must be at most '20' characters.").required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
-  uName: yup.string().min(4, "User name must be at least '4' characters").max(20, "User name must be at most '20' characters.").required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
+  dName: yup.string().min(4, 'Display name must be at least 4 characters.').max(20, 'Display name must be at most 20 characters.').required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
+  uName: yup.string().min(4, 'User name must be at least 4 characters').max(20, 'User name must be at most 20 characters.').required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
 });
 
-interface fixSection {
+interface FixSection {
   fixed?: boolean;
   show?: number;
   setShow?: Function;
@@ -26,139 +25,142 @@ interface fixSection {
   userDetail?: any;
 }
 
-const Dashboard = (props: fixSection) => {
+const Dashboard = (props: FixSection) => {
   const [editable, setEditable] = useState(false);
-  const [initialValues, setInitialValues] = useState({
-    fName: '',
-    lName: '',
-    dName: '',
-    uName: ''
-  });
-
-  const { register, setValue, getValues, handleSubmit, reset, formState: { errors } } = useForm({
+  const [userDetails, setUserDetails] = useState(props.userDetail);
+  const { register, handleSubmit, reset, formState: { errors },getValues } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const wbsocket = useWebSocket();
+  const websocket = useWebSocket();
 
-  useEffect(() => {
-    if (props.userDetail) {
-      const initialData = {
-        fName: props.userDetail.fName || '',
-        lName: props.userDetail.lName || '',
-        dName: props.userDetail.dName || '',
-        uName: props.userDetail.uName || ''
-      };
-      setInitialValues(initialData);
-      reset(initialData); // Initialize form values
+  useLayoutEffect(() => {
+    if (userDetails) {
+      reset(userDetails);
     }
-  }, [props.userDetail, reset]);
+  }, [userDetails, reset]);
 
   const onHandleSubmit = async (data: any) => {
-    const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
-    let record = encodeURIComponent(ciphertext.toString());
+    // Create a new object with only the required fields
+    const filteredData = {
+      fName: data.fName,
+      lName: data.lName,
+      dName: data.dName,
+      uName: data.uName,
+    };
 
-    let response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASEURL}/profile/dashboard`,
-      {
-        method: "POST",
+    const ciphertext = AES.encrypt(JSON.stringify(filteredData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
+    const record = encodeURIComponent(ciphertext.toString());
+
+    // Log the filtered data being sent
+    // console.log('Submitting data:', filteredData);
+
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/dashboard`, {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": props?.session?.user?.access_token
+          'Content-Type': 'application/json',
+          'Authorization': props?.session?.user?.access_token,
         },
         body: JSON.stringify(record),
-      }
-    ).then((response) => response.json());
+      }).then(response => response.json());
 
-    if (response?.data?.status === 200) {
-      setEditable(false);
-      setInitialValues(data); // Update initial values to the new data
-      if (wbsocket) {
-        let profile = {
-          ws_type: 'profile',
-          user_id: props?.session?.user?.user_id,
+      if (response?.data?.status === 200) {
+        setEditable(false);
+        setUserDetails(filteredData);  // Update userDetails state with the latest data
+        reset(filteredData);  // Reset form with the latest data
+        if (websocket) {
+          websocket.send(JSON.stringify({
+            ws_type: 'profile',
+            user_id: props?.session?.user?.user_id,
+          }));
         }
-        wbsocket.send(JSON.stringify(profile));
+      } else {
+        // Log and show error messages from the server
+        console.error('Error response:', response);
+        toast.error(`Error: ${response?.data?.message || 'Unknown error'}`);
       }
+    } catch (error:any) {
+      console.error('Submission error:', error);
+      toast.error(`Submission error: ${error.message}`);
     }
   };
 
   const handleCancel = () => {
     setEditable(false);
-    reset(initialValues); // Revert to initial values
+    reset(userDetails);  // Reset form with the latest userDetails state
   };
+
+
+  const verifyUserName=async()=>{
+    try {
+      
+      let uName= getValues('uName')
+      const ciphertext = AES.encrypt(JSON.stringify(uName), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
+      const record = encodeURIComponent(ciphertext.toString());
+  
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/dashboard`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': props?.session?.user?.access_token,
+        },
+        body: JSON.stringify(record),
+      }).then(response => response.json());
+
+      console.log(response,"==response");
+      
+    } catch (error) {
+      console.error('Error response:', error);
+    }
+
+  }
+
 
   return (
     <>
-      <section
-        className={`${props.show == 1 && "!left-[50%]"} ${props.fixed &&
-          "duration-300 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary overflow-y-scroll"
-          } p-5 md:p-40 `}
-      >
-        {/* only for mobile view */}
-        <div className="lg:hidden flex dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 bg-black-v-1 w-full  rounded-bl-[20px] rounded-br-[20px]  z-[6] dark:bg-omega bg-white  h-[105px]">
+      <section className={`${props.show == 1 && "!left-[50%]"} ${props.fixed && "duration-300 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary overflow-y-scroll"} p-5 md:p-40`}>
+        {/* Mobile Header */}
+        <div className="lg:hidden flex dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 bg-black-v-1 w-full rounded-bl-[20px] rounded-br-[20px] z-[6] dark:bg-omega bg-white h-[105px]">
           <div className="grid grid-cols-[auto_1fr_auto] m-auto w-full px-[20px] items-center">
-            <div
-              onClick={() => {
-                props?.setShow !== undefined && props.setShow(0);
-              }}
-            >
+            <div onClick={() => props?.setShow?.(0)}>
               <IconsComponent type="backIcon" hover={false} active={false} />
             </div>
             <div className="text-center">
               <p className="sec-title">My Profile</p>
             </div>
-            {editable === false &&
-              <div onClick={() => { setEditable(true) }} className="cursor-pointer">
+            {editable === false && (
+              <div onClick={() => setEditable(true)} className="cursor-pointer">
                 <IconsComponent type="editIcon" hover={false} active={false} />
               </div>
-            }
+            )}
           </div>
         </div>
 
         <div className="max-[1023px] lg:p-0 p-20 dark:bg-omega bg-white rounded-[10px]">
           <div className="flex items-center gap-5 justify-between">
             <p className="sec-title">My Profile</p>
-            {editable === false &&
-              <div className="py-[13px] px-[15px] border dark:border-opacity-[15%] border-grey-v-1 items-center rounded-5 hidden md:flex gap-[10px] cursor-pointer solid-button" onClick={() => { setEditable(true) }}>
-                <Image
-                  src="/assets/profile/edit.svg"
-                  width={24}
-                  height={24}
-                  alt="edit"
-                />
-                <p className="">Edit</p>
+            {editable === false && (
+              <div className="py-[13px] px-[15px] border dark:border-opacity-[15%] border-grey-v-1 items-center rounded-5 hidden md:flex gap-[10px] cursor-pointer solid-button" onClick={() => setEditable(true)}>
+                <Image src="/assets/profile/edit.svg" width={24} height={24} alt="edit" />
+                <p>Edit</p>
               </div>
-            }
+            )}
           </div>
           <div className="py-[30px] md:py-[50px]">
-            <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+            <form onSubmit={handleSubmit(onHandleSubmit)}>
               <div className="mt-[30px]">
                 <div className="flex md:flex-row flex-col gap-[30px]">
                   <div className="w-full">
                     <p className="sm-text mb-[10px]">First Name</p>
-                    <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}>
-                      <input
-                        type="text"
-                        {...register('fName')} name="fName"
-                        placeholder={editable ? "Enter first name" : "Enter first name"}
-                        className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
-                      />
+                    <div className={editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}>
+                      <input type="text" {...register('fName')} placeholder="Enter first name" className="sm-text input-cta2 w-full" />
                     </div>
                   </div>
                   <div className="w-full">
                     <p className="sm-text mb-[10px]">Last Name</p>
-                    <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}>
-                      <input
-                        type="text"
-                        {...register('lName')} name="lName"
-                        placeholder={editable ? "Enter Last name" : "Enter Last name"}
-                        className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
-                      />
+                    <div className={editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}>
+                      <input type="text" {...register('lName')} placeholder="Enter last name" className="sm-text input-cta2 w-full" />
                     </div>
                   </div>
                 </div>
@@ -166,29 +168,18 @@ const Dashboard = (props: fixSection) => {
                   <div className="w-full">
                     <p className="sm-text mb-[10px]">Display Name<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
                     <div className="relative">
-                      <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}>
-                        <input
-                          type="text"
-                          maxLength={20}
-                          {...register('dName')} name="dName"
-                          placeholder={editable ? "Enter display name" : "Enter display name"}
-                          className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
-                        />
+                      <div className={editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}>
+                        <input type="text" maxLength={20} {...register('dName')} placeholder="Enter display name" className="sm-text input-cta2 w-full" />
                       </div>
                       {errors.dName && <p className="errorMessage">{errors.dName.message}</p>}
                     </div>
                   </div>
                   <div className="w-full">
                     <p className="sm-text mb-[10px]">User Name<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
-                    <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed'}`}>
-                      <input
-                        type="text"
-                        {...register('uName')} name="uName"
-                        maxLength={20}
-                        placeholder={editable ? "Enter user name" : "Enter user name"}
-                        className={`sm-text input-cta2 w-full ${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}`}
-                      />
+                    <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}   `}>
+                      <input type="text" maxLength={20} {...register('uName')} placeholder="Enter user name" className="sm-text bg-[transparent] outline-none input-cta2  w-full" />
                     </div>
+                      {editable && <p className='sm-text !text-primary text-end pt-[2px] cursor-pointer'>Verify</p>}
                     {errors.uName && <p className="errorMessage">{errors.uName.message}</p>}
                   </div>
                 </div>
@@ -197,21 +188,8 @@ const Dashboard = (props: fixSection) => {
                     <p className="sm-text mb-[10px]">Email</p>
                     <div className="cursor-not-allowed">
                       <div className="relative pointer-events-none">
-                        <input
-                          id="dashEmail"
-                          name="dashEmail"
-                          type="email"
-                          value={props.session?.user?.email || ''}
-                          placeholder="AllieGrater12345644@gmail.com"
-                          className={`sm-text input-cta2 w-full cursor-not-allowed focus:outline-none focus:border-none`}
-                        />
-                        <Image
-                          src="/assets/profile/mail.svg"
-                          alt="mail"
-                          width={22}
-                          height={22}
-                          className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                        />
+                        <input id="dashEmail" name="dashEmail" type="email" defaultValue={props.session?.user?.email || ''} placeholder="AllieGrater12345644@gmail.com" className="sm-text input-cta2 w-full cursor-not-allowed focus:outline-none focus:border-none" />
+                        <Image src="/assets/profile/mail.svg" alt="mail" width={22} height={22} className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]" />
                       </div>
                     </div>
                   </div>
@@ -219,22 +197,8 @@ const Dashboard = (props: fixSection) => {
                     <p className="sm-text mb-[10px]">Phone Number</p>
                     <div className="cursor-not-allowed">
                       <div className="relative pointer-events-none">
-                        <input
-                          id="dashNumber"
-                          name="dashNumber"
-                          type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
-                          value={props.session?.user?.number || ''}
-                          placeholder="Enter phone number"
-                          className={`sm-text input-cta2 w-full cursor-not-allowed`}
-                          readOnly
-                        />
-                        <Image
-                          src="/assets/profile/phone.svg"
-                          alt="phone"
-                          width={22}
-                          height={22}
-                          className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                        />
+                        <input id="dashNumber" name="dashNumber" type="number" onWheel={(e) =>(e.target as HTMLElement).blur()} defaultValue={props.session?.user?.number || ''} placeholder="Enter phone number" className="sm-text input-cta2 w-full cursor-not-allowed" readOnly />
+                        <Image src="/assets/profile/phone.svg" alt="phone" width={22} height={22} className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]" />
                       </div>
                     </div>
                   </div>
@@ -243,13 +207,11 @@ const Dashboard = (props: fixSection) => {
               {editable && (
                 <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-between pt-5 md:pt-[30px]">
                   <p className="sm-text">
-                    This account was created on {moment(props.session?.user?.createdAt).format("YYYY-MM-DD HH:mm:ss A")}
+                    This account was created on {moment(props.session?.user?.createdAt).format('YYYY-MM-DD HH:mm:ss A')}
                   </p>
                   <div className="flex gap-[30px]">
                     <button type="button" className="solid-button2" onClick={handleCancel}>Cancel</button>
-                    <button type="submit" className="solid-button px-[23px] md:px-[51px]">
-                      Save Changes
-                    </button>
+                    <button type="submit" className="solid-button px-[23px] md:px-[51px]">Save Changes</button>
                   </div>
                 </div>
               )}

@@ -9,6 +9,7 @@ import AES from "crypto-js/aes";
 import moment from "moment";
 import { currencyFormatter } from "../snippets/market/buySellCard";
 import { useWebSocket } from "@/libs/WebSocketContext";
+import token from "@/pages/api/token";
 
 interface propsData {
   coinsList: any;
@@ -34,10 +35,14 @@ const ChartTabs = (props: propsData) => {
   const [title, setTitle] = useState("Cancel Order");
   const [orderId, setOrderId] = useState("");
   const wbsocket = useWebSocket();
+  const [imgSrc, setImgSrc] = useState(false);
+  const [imgSrc2, setImgSrc2] = useState(false);
+  const [imgSrc3, setImgSrc3] = useState(false);
+
   let data = props.coinsList; //token list
 
   let itemsPerPage = 10;
-
+  const fallbackImage = '/assets/history/Coin.svg';
   // Coin List paggination code
   const endOffset = itemOffset + itemsPerPage;
   const currentItems = data.slice(itemOffset, endOffset);
@@ -85,7 +90,7 @@ const ChartTabs = (props: propsData) => {
   const pageTradeCount = Math.ceil(props.tradehistory && props.tradehistory.length / itemsPerPage);
 
   const handleTradePageClick = async (event: any) => {
-    const newOffset =(event.selected * itemsPerPage) % (props.tradehistory && props.tradehistory.length);
+    const newOffset = (event.selected * itemsPerPage) % (props.tradehistory && props.tradehistory.length);
     setTradeItemOffset(newOffset);
   };
 
@@ -275,7 +280,9 @@ const ChartTabs = (props: propsData) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentItems && currentItems.length>0 && currentItems?.map((item: any, index: number) => {
+                  {currentItems && currentItems.length > 0 && currentItems?.map((item: any, index: number) => {
+                      const tokenImage = item?.image;
+
                     return (
                       <tr
                         key={index}
@@ -288,13 +295,8 @@ const ChartTabs = (props: propsData) => {
                       >
                         <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                           <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                            <Image
-                              src={`${item.image}`}
-                              width={30}
-                              height={30}
-                              alt="coins"
-                              className="w-[30px] h-[30px]"
-                            />
+                            <Image src={`${imgSrc3 ? fallbackImage :tokenImage}`} width={30} height={30} alt="coins" onError={() => setImgSrc3(true)} className="w-[30px] h-[30px]" />
+
                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                               <p className="info-14-18 dark:text-white">
                                 {item.symbol}
@@ -496,6 +498,8 @@ const ChartTabs = (props: propsData) => {
                 <tbody>
                   {currentOpenItems && currentOpenItems.length > 0 &&
                     currentOpenItems?.map((item: any, index: number) => {
+                      const tokenImage = item.token?.image ?? item.global_token?.image;
+
                       return (
                         <tr
                           key={index}
@@ -503,16 +507,8 @@ const ChartTabs = (props: propsData) => {
                         >
                           <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                             <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                              <Image
-                                src={`${item?.token
-                                  ? item?.token.image
-                                  : item?.global_token.image
-                                  }`}
-                                width={30}
-                                height={30}
-                                alt="coins"
-                                className="min-w-[30px]"
-                              />
+                              <Image src={`${imgSrc ? fallbackImage :  tokenImage}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className="min-w-[30px]" />
+
                               <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                 <p className="info-14-18 dark:text-white">
                                   {item?.token
@@ -726,6 +722,8 @@ const ChartTabs = (props: propsData) => {
                       return b.entry_id - a.entry_id
                     })
 
+
+                    const tokenImage = item.token?.image ?? item.global_token?.image;
                     return (
                       <div
                         key={index}
@@ -735,15 +733,8 @@ const ChartTabs = (props: propsData) => {
                           className={`grid grid-cols-3 relative md:grid-cols-9 items-center  justify-between `}
                         >
                           <div className="flex gap-2 md:col-span-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                            <Image
-                              src={`${item?.token !== null
-                                ? item?.token?.image
-                                : item?.global_token?.image
-                                }`}
-                              width={30}
-                              height={30}
-                              alt="coins"
-                            />
+                            <Image src={`${imgSrc2 ? fallbackImage : tokenImage}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)} />
+
                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                               <p className="info-14-18 dark:text-white">
                                 {item?.token !== null
@@ -881,7 +872,7 @@ const ChartTabs = (props: propsData) => {
                         }
                         <div className={`h-0 overflow-hidden duration-300 flex flex-col-reverse`} >
 
-                          {sortBlogPostsByDate && sortBlogPostsByDate.length>0 &&  sortBlogPostsByDate?.map((elm: any, ind: number) => {
+                          {sortBlogPostsByDate && sortBlogPostsByDate.length > 0 && sortBlogPostsByDate?.map((elm: any, ind: number) => {
 
                             let classByStatus = "";
                             let status = "";

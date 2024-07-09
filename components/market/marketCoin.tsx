@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -20,6 +20,7 @@ interface propsData {
 
 const MarketCoin = (props: propsData) => {
   const cardData = props.bannerCoinList;
+  const [imgSrc, setImgSrc] = useState(false);
 
 
 
@@ -70,7 +71,8 @@ const MarketCoin = (props: propsData) => {
                     <div>
                       <div className="flex items-center gap-[15px] mb-[10px]">
                         <span className="block coinCard_logo">
-                          <Image src={`${elem.image}`} alt="Coin Logo" width={30} height={30} />
+                        <Image src={`${imgSrc?'/assets/history/Coin.svg':elem?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)}/>
+
                         </span>
                         <span className="coinCard_fname  leading-24 text-[18px] dark:text-white !font-normal"> {elem.fullName}</span>
                       </div>

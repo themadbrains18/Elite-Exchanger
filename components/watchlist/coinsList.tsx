@@ -14,6 +14,7 @@ const CoinList = (props: propsData) => {
   const { mode } = useContext(Context)
   const [itemOffset, setItemOffset] = useState(0);
   const [currentItems, setCurrentItems] = useState([]);
+  const [imgSrc, setImgSrc] = useState(false);
 
   let data = props?.watchList;
 
@@ -49,7 +50,7 @@ const CoinList = (props: propsData) => {
     setCurrentItems(currentItems);
 
   }
-  
+
   return (
     <section className="">
       <div className="p-20 md:p-40 rounded-10  bg-white dark:bg-d-bg-primary">
@@ -105,7 +106,7 @@ const CoinList = (props: propsData) => {
                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                   </div>
                 </th>
-                 <th className="max-[1023px]:hidden py-5">
+                <th className="max-[1023px]:hidden py-5">
                   <div className="flex lg:justify-start justify-end">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Created At</p>
                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
@@ -140,7 +141,7 @@ const CoinList = (props: propsData) => {
                     }}>
                     <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                       <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                        <Image src={item?.token !== null ? item?.token?.image : item?.global_token?.image} width={30} height={30} alt="coins" />
+                        <Image src={imgSrc ? '/assets/history/Coin.svg' : item?.token !== null ? item?.token?.image : item?.global_token?.image} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} />
                         <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                           <p className="info-14-18 dark:text-white">{item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                           <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
@@ -150,7 +151,7 @@ const CoinList = (props: propsData) => {
                     <td className=" lg:text-start text-end">
                       <p className="info-14-18 dark:text-white">${item?.token !== null ? item?.token?.price : item?.global_token?.price}</p>
                     </td>
-                     <td className="max-[1023px]:hidden">
+                    <td className="max-[1023px]:hidden">
                       <div className={` items-center gap-[10px] flex`}>
                         <p className={`info-14-18 dark:text-white `}>{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
                         <IconsComponent type={item.status} active={false} hover={false} />

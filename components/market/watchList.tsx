@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import IconsComponent from "../snippets/icons";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -10,6 +10,8 @@ interface propsData {
 const WatchList = (props: propsData) => {
   let data = props.coinList;
   const router = useRouter()
+  const [imgSrc, setImgSrc] = useState(false);
+
 
   return (
     <div className="p-20 md:p-40 rounded-10 mt-30 bg-white dark:bg-d-bg-primary">
@@ -48,7 +50,7 @@ const WatchList = (props: propsData) => {
                 <tr key={index} className="dark:hover:bg-black-v-1 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => router.push(`/chart/${item.symbol}`)}>
                   <td className="">
                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                      <Image src={`${item.image}`} width={30} height={30} alt="coins" />
+                    <Image src={`${imgSrc?'/assets/history/Coin.svg':item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)}/>
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-1">
                         {/* <p className="info-14-18 dark:text-white">{item.name}</p> */}
                         <p className="info-12 !text-primary py-0 md:py-[2px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>

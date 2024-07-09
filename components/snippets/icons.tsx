@@ -614,10 +614,10 @@ const IconsComponent = (props: svgType) => {
         </svg>
       )}
       {props.type === "safetyLogo" && (
-        <svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect
-            width={70}
-            height={70}
+            width="78.9362"
+            height="70"
             rx={10}
             fill={mode == "dark" ? "#080808" : "#E2F2FF"}
           />
@@ -649,7 +649,7 @@ const IconsComponent = (props: svgType) => {
         </svg>
       )}
       {props.type === "easyDeposit" && (
-        <svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect
             x="0.148926"
             y="0.178711"
@@ -673,7 +673,7 @@ const IconsComponent = (props: svgType) => {
         </svg>
       )}
       {props.type === "lowCharges" && (
-        <svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect
             x="0.106689"
             y="0.178711"
@@ -713,7 +713,7 @@ const IconsComponent = (props: svgType) => {
         </svg>
       )}
       {props.type === "BonusRefferal" && (
-        <svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect
             x="0.0637207"
             y="0.178711"
@@ -729,7 +729,7 @@ const IconsComponent = (props: svgType) => {
         </svg>
       )}
       {props.type === "FastTransactions" && (
-        <svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect
             x="0.191406"
             y="0.700195"
@@ -781,7 +781,7 @@ const IconsComponent = (props: svgType) => {
         </svg>
       )}
       {props.type === "DeepEncryption" && (
-        <svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect
             x="0.148682"
             y="0.700195"
@@ -813,7 +813,7 @@ const IconsComponent = (props: svgType) => {
         </svg>
       )}
       {props.type === "FastKYC" && (
-        <svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect
             x="0.106445"
             y="0.700195"
@@ -849,7 +849,7 @@ const IconsComponent = (props: svgType) => {
         </svg>
       )}
       {props.type === "Support" && (
-        <svg viewBox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg viewBox="0 0 80 70" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect
             x="0.0639648"
             y="0.700195"

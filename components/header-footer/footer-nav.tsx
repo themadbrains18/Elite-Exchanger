@@ -91,7 +91,7 @@ const FooterNav = () => {
     <div>
         <div className='flex items-start gap-y-[40px] md:gap-[20px] justify-between xl:justify-unset flex-wrap xl:flex-nowrap '>
             <div className='max-w-[calc(50%-10px)] md:max-w-[23%] xl:max-w-[17%] w-full'>
-                <h4 className='footer-heading !text-white mb-[21px] md:mb-[51px]'>Exchange</h4>
+                <h4 className='footer-heading !text-white mb-[21px] md:mb-[31px]'>Exchange</h4>
                 <ul>
                     {
                         Exchange.map((elem,ind)=>{
@@ -109,7 +109,7 @@ const FooterNav = () => {
                 </ul>
             </div>
             <div className='max-w-[calc(50%-10px)] md:max-w-[23%] xl:max-w-[17%] w-full'>
-                <h4 className='footer-heading !text-white mb-[21px] md:mb-[51px]'>Support</h4>
+                <h4 className='footer-heading !text-white mb-[21px] md:mb-[31px]'>Support</h4>
                 <ul>
                     {
                         Support.map((elem,ind)=>{
@@ -127,7 +127,7 @@ const FooterNav = () => {
                 </ul>
             </div>
             <div className='max-w-[calc(50%-10px)] md:max-w-[23%] xl:max-w-[17%] w-full'>
-                <h4 className='footer-heading !text-white mb-[21px] md:mb-[51px]'>Company</h4>
+                <h4 className='footer-heading !text-white mb-[21px] md:mb-[31px]'>Company</h4>
                 <ul>
                     {
                         Company.map((elem,ind)=>{
@@ -145,7 +145,7 @@ const FooterNav = () => {
                 </ul>
             </div>
             <div className='max-w-[calc(50%-10px)] md:max-w-[23%] xl:max-w-[17%] w-full'>
-                <h4 className='footer-heading !text-white mb-[21px] md:mb-[51px]'>Resources</h4>
+                <h4 className='footer-heading !text-white mb-[21px] md:mb-[31px]'>Resources</h4>
                 <ul>
                     {
                         Resources.map((elem,ind)=>{
@@ -164,7 +164,7 @@ const FooterNav = () => {
             </div>
             <div className='max-w-full xl:max-w-[32%] w-full'>
                 {/* <div>
-                    <h4 className='footer-heading !text-white mb-[21px] md:mb-[51px]'>NewsLetter</h4>
+                    <h4 className='footer-heading !text-white mb-[21px] md:mb-[31px]'>NewsLetter</h4>
                     <form>
                         <div className='flex gap-[5px]'>
                             <input id='newslatter' name='newslatter' type="email" placeholder='Enter your email' className='sm-text text-[14px] !text-white px-10 py-[13px] md:py-[15px] max-w-[321px] w-full block bg-[transparent] border border-[#8AC8FF] rounded-5 focus:outline-none' />
