@@ -128,7 +128,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
                 <div className=" cursor-pointer max-w-full w-full">
                   <div className={`${`coin-dropdown` + props?.dropdown} pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] cursor-pointer flex justify-between items-center`} >
                     <li className='flex items-center gap-[5px] rounded-[5px] mr-[15px]'>
-                      <Image src={`${(image === 'Coin.svg' && (props?.value === null || props?.value === undefined)) ? `/assets/history/Coin.svg` : drop1Image !== '' ? drop1Image : drop2Image !== '' ? drop2Image : image}`} alt="error" width={20} height={20} />
+                      <Image src={`${(image === 'Coin.svg' && (props?.value === null || props?.value === undefined)) ? `/assets/history/Coin.svg` : drop1Image !== '' ? drop1Image : drop2Image !== '' ? drop2Image : image}`} alt="error" width={20} height={20} className={`${text === 'XRP' || text === 'ETH' ? 'bg-white rounded-full' : ''}`}/>
                       <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text ${props.dropdown == 2 ? ' two' : ' one'}`}>{text}</p>
                     </li>
                     <IconsComponent type="downArrow" hover={false} active={false} />
@@ -148,7 +148,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
                   {filterCoin !== undefined && filterCoin.map((item: any, index: number) => {
                     return (
                       <li key={index} onClick={() => { setImage(item.image); setText(item.symbol); setShowSecond(false); props?.setCurrencyName && props?.setCurrencyName(item.symbol, props.dropdown); props?.setCurrency && props.setCurrency(item, props.dropdown) }} className='cursor-pointer  flex items-center gap-10 p-10 py-[6px] hover:bg-grey dark:hover:bg-d-bg-primary rounded-[5px]'>
-                        <Image src={`${imgSrc?'/assets/history/Coin.svg':item.image}`} alt="error" width={20} height={20} onError={() => setImgSrc(true)}/>
+                        <Image src={`${imgSrc?'/assets/history/Coin.svg':item.image}`} alt="error" width={20} height={20} onError={() => setImgSrc(true)} className={`${item.symbol === 'XRP' || item.symbol === 'ETH' ? 'bg-white rounded-full' : ''}`}/>
                         <p className={`sm-text rounded-[5px] dark:!text-d-nav-secondary   !text-banner-text`}>{item.symbol}</p>
                       </li>
                     )

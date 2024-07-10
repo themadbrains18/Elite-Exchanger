@@ -256,7 +256,7 @@ const Header = (props: propsData) => {
                                       })} */}
                                     <Link href={`/chart/${item?.tradepair?.symbolOne}`}>
                                       <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full cursor-pointer" onClick={() => { router?.push(`/chart/${item?.tradepair?.symbolOne}`) }}>
-                                      <Image src={`${imgSrc2?'/assets/history/Coin.svg':item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)} className="min-w-[30px]"/>
+                                      <Image src={`${imgSrc2?'/assets/history/Coin.svg':item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)} className={`min-w-[30px] ${item?.symbol==="XRP"&&"bg-white rounded-full "}`}/>
 
                                         <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                           <p className="info-14-18 dark:text-white">{item?.tradepair?.symbolOne}/{item?.tradepair?.symbolTwo}</p>
@@ -280,7 +280,7 @@ const Header = (props: propsData) => {
                                   <li key={nesIndex + Date.now()} className="mb-[10px]">
                                     <Link href={`/future/${symbol}${item?.futuretradepair?.usdt_symbol}`} >
                                       <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                      <Image src={`${imgSrc?'/assets/history/Coin.svg':item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className="min-w-[30px]"/>
+                                      <Image src={`${imgSrc?'/assets/history/Coin.svg':item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)}  className={`min-w-[30px] ${item?.symbol==="XRP"&&"bg-white rounded-full "}`}/>
 
                                         <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                           <p className="info-14-18 dark:text-white">{symbol}{item?.futuretradepair?.usdt_symbol}</p>

@@ -71,7 +71,7 @@ const MarketCoin = (props: propsData) => {
                     <div>
                       <div className="flex items-center gap-[15px] mb-[10px]">
                         <span className="block coinCard_logo">
-                        <Image src={`${imgSrc?'/assets/history/Coin.svg':elem?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)}/>
+                        <Image src={`${imgSrc?'/assets/history/Coin.svg':elem?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${elem?.symbol==="XRP"&&"bg-white rounded-full"}`}/>
 
                         </span>
                         <span className="coinCard_fname  leading-24 text-[18px] dark:text-white !font-normal"> {elem.fullName}</span>

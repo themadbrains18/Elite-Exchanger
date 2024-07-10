@@ -229,7 +229,7 @@ const FutureList = (props: propsData) => {
                                 <div key={index} className="rounded-5 group grid grid-cols-3  gap-x-[10px]  items-center">
                                     <div className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                        <Image src={`${imgSrc?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={28} height={28} alt="coins" className="max-w-[20px] md:max-w-[30px] w-full" onError={() => setImgSrc(true)}/>
+                                        <Image src={`${imgSrc?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={28} height={28} alt="coins" className={`${(item?.token?.symbol || item?.global_token?.symbol)==="XRP"&&"bg-white rounded-full"} max-w-[20px] md:max-w-[30px] w-full`} onError={() => setImgSrc(true)}/>
 
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                                 <p className="info-14-18 dark:text-white">{item.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>

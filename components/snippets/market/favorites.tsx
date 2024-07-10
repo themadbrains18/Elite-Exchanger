@@ -90,7 +90,7 @@ const Favorites = (props: propsData) => {
 
                                     <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                                        <Image src={`${imgSrc?'/assets/history/Coin.svg':item?.image}`} width={28} height={28} alt="coins" className="max-w-[20px] md:max-w-[30px] w-full" onError={() => setImgSrc(true)}/>
+                                        <Image src={`${imgSrc?'/assets/history/Coin.svg':item?.image}`} width={28} height={28} alt="coins" className={`max-w-[20px] md:max-w-[30px] w-full ${item?.symbol==="XRP"&&"bg-white rounded-full"}`} onError={() => setImgSrc(true)}/>
 
                           
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">

@@ -13,6 +13,7 @@ import AES from 'crypto-js/aes';
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { currencyFormatter } from "./market/buySellCard";
+import { truncateNumber } from "@/libs/subdomain";
 
 const schema = yup.object().shape({
   spend_amount: yup.number().positive("Spend amount must be greater than '0'.").required('Please enter amount in INR.').typeError('Please enter amount in INR.'),
@@ -241,15 +242,15 @@ const BuyPopup = (props: activeSection) => {
               <div className="mt-30 md:mt-50 grid md:grid-cols-1 grid-cols-2">
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Available :</p>
-                  <p className="sm-text w-full">{props?.selectedPost?.quantity} {props?.selectedPost?.token !== null ? props?.selectedPost?.token?.symbol : props?.selectedPost?.global_token?.symbol}</p>
+                  <p className="sm-text w-full">{truncateNumber(props?.selectedPost?.quantity,6)} {props?.selectedPost?.token !== null ? props?.selectedPost?.token?.symbol : props?.selectedPost?.global_token?.symbol}</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Limit :</p>
-                  <p className="sm-text w-full">{currencyFormatter(props?.selectedPost?.min_limit)} INR ~ {currencyFormatter(props?.selectedPost?.max_limit)} INR</p>
+                  <p className="sm-text w-full">{currencyFormatter(truncateNumber(props?.selectedPost?.min_limit,6))} INR ~ {currencyFormatter(truncateNumber(props?.selectedPost?.max_limit,6))} INR</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Price :</p>
-                  <p className="sm-text w-full">{currencyFormatter(props?.selectedPost?.price)} INR</p>
+                  <p className="sm-text w-full">{currencyFormatter(truncateNumber(props?.selectedPost?.price,6))} INR</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Payment Methods :</p>
@@ -282,8 +283,8 @@ const BuyPopup = (props: activeSection) => {
                         }
                         // setSpendAmount(e.target.value);
                         let receiveAmount: any = (e?.target?.value / props?.selectedPost?.price);
-                        setReceiveAmount(receiveAmount.toFixed(6));
-                        setValue('receive_amount', receiveAmount.toFixed(6));
+                        setReceiveAmount(truncateNumber(receiveAmount,6));
+                        setValue('receive_amount', truncateNumber(receiveAmount,6));
                         clearErrors('spend_amount')
                         clearErrors('receive_amount')
                       }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full  dark:text-white" placeholder="0" />
@@ -306,9 +307,9 @@ const BuyPopup = (props: activeSection) => {
                           setReceiveAmount(e?.target?.value);
                         }
                         let spendAmount: any = props?.selectedPost?.price * e.target.value;
-                        setSpendAmount(spendAmount.toFixed(2));
+                        setSpendAmount(truncateNumber(spendAmount,2));
                         // setReceiveAmount(e.target.value);
-                        setValue('spend_amount', spendAmount.toFixed(2));
+                        setValue('spend_amount', truncateNumber(spendAmount,2));
                         clearErrors('spend_amount')
                         clearErrors('receive_amount')
                       }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full dark:text-white" placeholder="0" />

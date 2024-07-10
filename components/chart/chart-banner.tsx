@@ -163,7 +163,7 @@ const ChartBanner = (props: propsData) => {
                     <div className='flex items-center gap-[20px] lg:max-w-[50%] lg:justify-start justify-between mt-[15px]'>
                       <p className="info-14-18 dark:text-white">${currentToken?.price!==undefined? currencyFormatter(currentToken?.price?.toFixed(5)):'0.0'}</p>
                       {/* <h4 className='md-heading dark:text-white'>${`${currentToken?.price?.toFixed(5)}`}</h4> */}
-                      <div className={` items-center gap-[10px] flex`}>
+                      <div className={` items-center gap-[4px] flex`}>
                         <p className={`footer-text-secondary ${Number(props?.hlocData?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(props?.hlocData?.changeRate) > 0 ? '+' : ''}{props?.hlocData?.changeRate !== undefined ? (Number(props?.hlocData?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
                         {Number(props?.hlocData?.changeRate) > 0 &&
                           <IconsComponent type="high" active={false} hover={false} />
@@ -180,7 +180,7 @@ const ChartBanner = (props: propsData) => {
               <div className='max-w-full lg:max-w-[50%] w-full lg:mt-0 mt-20'>
 
                 <div className='flex items-center justify-between '>
-                  <div className='flex items-center gap-[10px]'>
+                  <div className='flex items-center gap-[4px]'>
                     <IconsComponent type='exchange' hover={false} active={false} />
                     <p className="info-10-14 !text-gamma">High / Low Price</p>
                   </div>
@@ -225,7 +225,7 @@ const ChartBanner = (props: propsData) => {
                 return (
                   <Fragment key={ind} >
                     <div className={`dark:bg-black-v-1 p-10 rounded-[5px] ${ele.bg === "blue" ? "bg-[#B9DDFF]" : ele.bg === "red" ? "bg-[#FEE2E2]" : ele.bg === "green" ? "bg-[#D1FAE5]" : "bg-[#E2F2FF]"}`} >
-                      <div className='flex items-center gap-[10px] lg:mb-[15px] mb-[18px]'>
+                      <div className='flex items-center gap-[4px] lg:mb-[15px] mb-[18px]'>
                         <IconsComponent type={ele.titleIcon} hover={false} active={false} />
                         <p className='info-10-14 !text-gamma'>{ele.cardTitle}</p>
                       </div>

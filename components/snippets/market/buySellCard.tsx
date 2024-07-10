@@ -14,6 +14,7 @@ import Link from "next/link";
 import ConfirmBuy from "../confirmBuy";
 import Pusher from 'pusher-js';
 import { useWebSocket } from "@/libs/WebSocketContext";
+import { truncateNumber } from "@/libs/subdomain";
 
 const pusher = new Pusher('b275b2f9e51725c09934', {
   cluster: 'ap2'
@@ -43,17 +44,17 @@ export function currencyFormatter(amount: any) {
   // Split the number into integer and decimal parts
   const [integerPart, decimalPart] = number.toString().split('.');
 
-  
+
 
   // Format the integer part using toLocaleString
   const formattedInteger = Number(integerPart).toLocaleString('en-IN');
 
   // Combine the formatted integer part and the decimal part
-  if(formattedInteger!=='NaN'){
-    return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger +'.00';
+  if (formattedInteger !== 'NaN') {
+    return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger + '.00';
 
   }
-  else{
+  else {
     return 0.00
   }
 }
@@ -124,7 +125,7 @@ const BuySellCard = (props: DynamicId) => {
       clearErrors('token_amount');
       setFirstCurrency(symbol);
 
-      let token = list && list?.length>0 && list?.filter((item: any) => {
+      let token = list && list?.length > 0 && list?.filter((item: any) => {
         return item.symbol === symbol && item?.tradepair !== null
       });
 
@@ -172,54 +173,68 @@ const BuySellCard = (props: DynamicId) => {
 
   const onHandleSubmit = async (data: any) => {
     try {
-      
-      let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
+      if (show === 1 && selectedToken?.tradepair?.limit_trade === false) {
+        setDisabled(true)
 
-      if (firstCurrency === '') {
-        setError('token_amount', { type: 'custom', message: 'Please select coin that you want to buy.' });
-        return
-      }
-      if (active1 === 1 && totalAmount > price) {
-        setDisabled(true);
-        toast.error('Insufficient balance.', { autoClose: 2000 });
-        setTimeout(() => {
-          setDisabled(false);
-        }, 3000);
+        toast.error(`Limit orders are unavailable for ${selectedToken?.symbol} at the moment. Please check later`, { autoClose: 2000 })
+        setTimeout(()=>{
+          setDisabled(false)
+
+        },3000)
         return;
       }
-      else if (active1 === 2 && data.token_amount > price) {
-        setDisabled(true);
-        toast.error('Insufficient balance.', { autoClose: 2000 });
-        setTimeout(() => {
-          setDisabled(false);
-        }, 3000);
-        return;
+      else {
+        let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
+
+        if (firstCurrency === '') {
+          setError('token_amount', { type: 'custom', message: 'Please select coin that you want to buy.' });
+          return
+        }
+        if (active1 === 1 && totalAmount > price) {
+          setDisabled(true);
+          toast.error('Insufficient balance.', { autoClose: 2000 });
+          setTimeout(() => {
+            setDisabled(false);
+          }, 3000);
+          return;
+        }
+        else if (active1 === 2 && data.token_amount > price) {
+          setDisabled(true);
+          toast.error('Insufficient balance.', { autoClose: 2000 });
+          setTimeout(() => {
+            setDisabled(false);
+          }, 3000);
+          return;
+        }
+
+        if (selectedToken?.tradepair?.maxTrade < data.token_amount) {
+          setError("token_amount", {
+            type: "custom",
+            message: "you can trade less than max amount " + `'${selectedToken?.tradepair?.maxTrade}.'`,
+          });
+          return;
+        }
+
+        let obj = {
+          "user_id": props.session.user.user_id,
+          "token_id": selectedToken?.id,
+          "market_type": type?.value,
+          "order_type": active1 === 1 ? 'buy' : 'sell',
+          "limit_usdt": data.limit_usdt,
+          "volume_usdt": totalAmount,
+          "token_amount": data.token_amount,
+          "fee": active1 === 1 ? data.token_amount * 0.00075 : data.token_amount * data.limit_usdt * 0.00075,
+          "is_fee": false,
+          "status": false,
+          "isCanceled": false,
+          "queue": false
+        }
+        setObjData(obj)
+        setActive(true)
       }
 
-      if (selectedToken?.tradepair?.maxTrade < data.token_amount) {
-        setError("token_amount", {
-          type: "custom",
-          message: "you can trade less than max amount " + `'${selectedToken?.tradepair?.maxTrade}.'`,
-        });
-        return;
-      }
 
-      let obj = {
-        "user_id": props.session.user.user_id,
-        "token_id": selectedToken?.id,
-        "market_type": type?.value,
-        "order_type": active1 === 1 ? 'buy' : 'sell',
-        "limit_usdt": data.limit_usdt,
-        "volume_usdt": totalAmount,
-        "token_amount": data.token_amount,
-        "fee": active1 === 1 ? data.token_amount * 0.00075 : data.token_amount * data.limit_usdt * 0.00075,
-        "is_fee": false,
-        "status": false,
-        "isCanceled": false,
-        "queue": false
-      }
-      setObjData(obj)
-      setActive(true)
+
     } catch (error: any) {
       toast.error(error);
     }
@@ -410,7 +425,14 @@ const BuySellCard = (props: DynamicId) => {
             Sell
           </button>
         </div>
-        <form onSubmit={handleSubmit(onHandleSubmit)}>
+        <form onSubmit={handleSubmit(onHandleSubmit)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}
+
+        >
           <div className="py-20">
             <div className="flex lg:gap-30 gap-10">
               <div className={`flex  gap-5 justify-center items-center  w-full cursor-pointer border rounded-5 border-grey-v-1 dark:border-opacity-[15%] bg-[transparent] ${show === 1 && 'bg-primary-100 dark:bg-black-v-1 border-primary'}`} onClick={() => {
@@ -492,20 +514,20 @@ const BuySellCard = (props: DynamicId) => {
 
             {(show === 1 || show === 2) &&
               <>
-                <div className="mt-5 flex gap-[18px] items-center">
+                <div className="mt-5 flex gap-[10px] items-center">
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
                   <p className="md-text w-full">{currencyFormatter(Number(price.toFixed(6)))}({active1 === 1 ? 'USDT' : firstCurrency})</p>
-                  <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className="min-w-[24px]" alt="wallet2" width={24} height={24} />
+                  <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className={`${selectedToken?.symbol === "XRP" && "bg-white rounded-full"} min-w-[24px]`} alt="wallet2" width={24} height={24} />
                   {router.pathname.includes("/chart") && <p className="md-text">
                     $
                     {props?.token !== undefined && props?.token?.price !== undefined
-                      ? props?.token?.price?.toFixed(6)
+                      ? truncateNumber(props?.token?.price, 6)
                       : "0.00"}
                   </p>
                   }
                   {router.pathname.includes("/market") && props.coins && props.coins.map((item: any) => {
                     if (item.symbol === selectedToken?.symbol) {
-                      return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? currencyFormatter(item?.price?.toFixed(6)) : '0.00'}</p>
+                      return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? currencyFormatter(truncateNumber(item?.price, 6)) : '0.00'}</p>
                     }
                   })}
                 </div>
@@ -515,14 +537,15 @@ const BuySellCard = (props: DynamicId) => {
                   <div className="mt-30 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
 
                     <div className="">
-                      <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
-                      <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="$0" step="any" {...register('limit_usdt', {
+                      {/* <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p> */}
+                      <p className="sm-text dark:text-white">Order Price</p>
+                      <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} placeholder="$0" step="any" {...register('limit_usdt', {
                         onChange: () => { convertTotalAmount() }
                       })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
                     </div>
 
                     <div className="relative">
-                      <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} />
+                      <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency}  disabled={true}/>
                     </div>
                   </div>
                 }
@@ -531,8 +554,8 @@ const BuySellCard = (props: DynamicId) => {
                 {/* coin quantity Inputs */}
                 <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
                   <div className="">
-                    <p className="sm-text dark:text-white">Quantity({firstCurrency})</p>
-                    <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="0" min={0} step=".00001" {...register('token_amount', {
+                    <p className="sm-text dark:text-white">Quantity</p>
+                    <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} placeholder="0" min={0} step=".00001" {...register('token_amount', {
                       onChange: () => { convertTotalAmount() }
                     })} name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text " />
                   </div>
@@ -544,25 +567,25 @@ const BuySellCard = (props: DynamicId) => {
                           <Image src={`${props?.token?.image !== undefined ? props?.token?.image : '/assets/home/coinLogo.png'}`} alt="error" width={20} height={20} />
                           <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text`}>{props?.token?.fullName}</p>
                         </div> :
-                        <FilterSelectMenuWithCoin data={qtylist} border={false} setCurrencyName={setCurrencyName} dropdown={1} value={firstCurrency}/>
+                        <FilterSelectMenuWithCoin data={qtylist} border={false} setCurrencyName={setCurrencyName} dropdown={1} value={firstCurrency} />
                     }
                   </div>
                 </div>
                 {errors.token_amount && <p className="errorMessage">{errors?.token_amount?.message}</p>}
                 <div className="mt-5 flex gap-2 justify-between">
-                  <div className=" flex gap-2">
+                  <div className=" flex gap-1">
                     <p className="sm-text dark:text-white">Total:</p>
-                    <p className="sm-text dark:text-white">{totalAmount.toFixed(6)}</p>
+                    <p className="sm-text dark:text-white">{truncateNumber(totalAmount, 6) || '0.000000'}</p>
 
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1">
                     <p className="sm-text dark:text-white">Max Trade:</p>
                     <p className="sm-text dark:text-white">{selectedToken?.tradepair?.maxTrade || '0.00'}</p>
                   </div>
                 </div>
-                <div className="mt-5 flex gap-2">
+                <div className="mt-5 flex gap-1">
                   <p className="sm-text dark:text-white">Est. Fee:</p>
-                  <p className="sm-text dark:text-white">{estimateFee}</p>
+                  <p className="sm-text dark:text-white">{estimateFee || '0.00'}</p>
 
                 </div>
               </>
@@ -572,7 +595,7 @@ const BuySellCard = (props: DynamicId) => {
           {(show === 1 || show === 2) &&
             <>
               {props?.session ?
-                <button type="submit" className={`solid-button w-full ${disabled === true?'opacity-70 cursor-not-allowed':''}`} disabled={disabled}>{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
+                <button type="submit" className={`solid-button w-full ${disabled === true ? 'opacity-70 cursor-not-allowed' : ''}`} disabled={disabled}>{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
                 :
                 <Link href="/login" className="solid-button w-full block text-center">Login</Link>
               }

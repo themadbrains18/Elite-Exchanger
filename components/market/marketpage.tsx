@@ -16,12 +16,14 @@ const Marketpage = (props: propsData) => {
   const watchCoinList = props.coinList.slice(0, 8);
   const marketCoinList = props.coinList.slice(0, 6);
   const [coins, setCoins] = useState([]);
+  const [filter, setFilter] = useState('')
 
   useEffect(()=>{
     setCoins(props.coinList)
   },[props.coinList]);
 
   const filterCoins = (e:any)=>{
+    setFilter(e.target.value.toLowerCase())
     let records = props?.coinList?.filter((item:any)=>{
       return item.symbol.toLowerCase().includes(e.target.value.toLowerCase());
     }) 
@@ -33,7 +35,7 @@ const Marketpage = (props: propsData) => {
       <div className="container flex flex-wrap gap-30">
         <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
           <MarketCoin bannerCoinList={marketCoinList} setCoins={setCoins} allCoins={props.coinList}/>
-          <CoinList coins={coins} networks={props?.networks} session={props.session} filterCoins={filterCoins}/>
+          <CoinList coins={coins} networks={props?.networks} session={props.session} filterCoins={filterCoins} filterList={filter}/>
         </div>
         <div className="lg:max-w-[432px] w-full md:block hidden">
           <div className="lg:block hidden ">

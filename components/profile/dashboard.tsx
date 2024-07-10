@@ -27,20 +27,23 @@ interface FixSection {
 
 const Dashboard = (props: FixSection) => {
   const [editable, setEditable] = useState(false);
+  const [disabled, setDisabled] = useState(false);
   const [userDetails, setUserDetails] = useState(props.userDetail);
-  const { register, handleSubmit, reset, formState: { errors },getValues } = useForm({
+  const { register, handleSubmit, reset, formState: { errors }, getValues } = useForm({
     resolver: yupResolver(schema),
   });
 
   const websocket = useWebSocket();
 
-  useLayoutEffect(() => {
+  useEffect(() => {
+    // console.log('userDetails:', userDetails);  // Log userDetails to verify data
     if (userDetails) {
       reset(userDetails);
     }
   }, [userDetails, reset]);
 
   const onHandleSubmit = async (data: any) => {
+    setDisabled(true)
     // Create a new object with only the required fields
     const filteredData = {
       fName: data.fName,
@@ -66,21 +69,31 @@ const Dashboard = (props: FixSection) => {
       }).then(response => response.json());
 
       if (response?.data?.status === 200) {
-        setEditable(false);
-        setUserDetails(filteredData);  // Update userDetails state with the latest data
-        reset(filteredData);  // Reset form with the latest data
-        if (websocket) {
-          websocket.send(JSON.stringify({
-            ws_type: 'profile',
-            user_id: props?.session?.user?.user_id,
-          }));
+        if (response?.data?.data?.status === false) {
+          toast.error(response?.data?.data?.message, { autoClose: 2000 })
+          setTimeout(() => {
+            setDisabled(false)
+          }, 3000)
+        }
+        else {
+
+          setEditable(false)
+          setDisabled(false)
+          setUserDetails(filteredData);  // Update userDetails state with the latest data
+          reset(filteredData);  // Reset form with the latest data
+          if (websocket) {
+            websocket.send(JSON.stringify({
+              ws_type: 'profile',
+              user_id: props?.session?.user?.user_id,
+            }));
+          }
         }
       } else {
         // Log and show error messages from the server
         console.error('Error response:', response);
         toast.error(`Error: ${response?.data?.message || 'Unknown error'}`);
       }
-    } catch (error:any) {
+    } catch (error: any) {
       console.error('Submission error:', error);
       toast.error(`Submission error: ${error.message}`);
     }
@@ -92,29 +105,7 @@ const Dashboard = (props: FixSection) => {
   };
 
 
-  const verifyUserName=async()=>{
-    try {
-      
-      let uName= getValues('uName')
-      const ciphertext = AES.encrypt(JSON.stringify(uName), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
-      const record = encodeURIComponent(ciphertext.toString());
-  
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/dashboard`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': props?.session?.user?.access_token,
-        },
-        body: JSON.stringify(record),
-      }).then(response => response.json());
 
-      console.log(response,"==response");
-      
-    } catch (error) {
-      console.error('Error response:', error);
-    }
-
-  }
 
 
   return (
@@ -148,7 +139,13 @@ const Dashboard = (props: FixSection) => {
             )}
           </div>
           <div className="py-[30px] md:py-[50px]">
-            <form onSubmit={handleSubmit(onHandleSubmit)}>
+            <form onSubmit={handleSubmit(onHandleSubmit)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                }
+              }}
+            >
               <div className="mt-[30px]">
                 <div className="flex md:flex-row flex-col gap-[30px]">
                   <div className="w-full">
@@ -177,9 +174,8 @@ const Dashboard = (props: FixSection) => {
                   <div className="w-full">
                     <p className="sm-text mb-[10px]">User Name<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
                     <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}   `}>
-                      <input type="text" maxLength={20} {...register('uName')} placeholder="Enter user name" className="sm-text bg-[transparent] outline-none input-cta2  w-full" />
+                      <input type="text" maxLength={20} {...register('uName')} placeholder="Enter user name" className="sm-text  input-cta2  w-full" />
                     </div>
-                      {/* {editable && <p className='sm-text !text-primary text-end pt-[2px] cursor-pointer' onClick={()=>{verifyUserName}}>Verify</p>} */}
                     {errors.uName && <p className="errorMessage">{errors.uName.message}</p>}
                   </div>
                 </div>
@@ -197,7 +193,7 @@ const Dashboard = (props: FixSection) => {
                     <p className="sm-text mb-[10px]">Phone Number</p>
                     <div className="cursor-not-allowed">
                       <div className="relative pointer-events-none">
-                        <input id="dashNumber" name="dashNumber" type="number" onWheel={(e) =>(e.target as HTMLElement).blur()} defaultValue={props.session?.user?.number || ''} placeholder="Enter phone number" className="sm-text input-cta2 w-full cursor-not-allowed" readOnly />
+                        <input id="dashNumber" name="dashNumber" type="number" onWheel={(e) => (e.target as HTMLElement).blur()} defaultValue={props.session?.user?.number || ''} placeholder="Enter phone number" className="sm-text input-cta2 w-full cursor-not-allowed" readOnly />
                         <Image src="/assets/profile/phone.svg" alt="phone" width={22} height={22} className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]" />
                       </div>
                     </div>
@@ -211,7 +207,12 @@ const Dashboard = (props: FixSection) => {
                   </p>
                   <div className="flex gap-[30px]">
                     <button type="button" className="solid-button2" onClick={handleCancel}>Cancel</button>
-                    <button type="submit" className="solid-button px-[23px] md:px-[51px]">Save Changes</button>
+                    <button type="submit" disabled={disabled} className={`solid-button px-[23px] md:px-[51px] ${disabled ? "cursor-not-allowed" : ""}`}>   {disabled &&
+                      <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
+                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />
+                      </svg>
+                    }Save Changes</button>
                   </div>
                 </div>
               )}
