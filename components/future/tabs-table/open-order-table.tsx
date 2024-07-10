@@ -158,7 +158,7 @@ const OpenOrderTable = (props: propsData) => {
                     </thead>
                     <tbody>
                         {
-                            props?.openOrders && props?.openOrders.length > 0 && props?.openOrders?.map((item: any, index: number) => {
+                            session && props?.openOrders && props?.openOrders.length > 0 && props?.openOrders?.map((item: any, index: number) => {
                                 return (
                                     <tr key={index}>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>

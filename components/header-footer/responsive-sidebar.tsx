@@ -9,9 +9,6 @@ import { useRouter } from 'next/router';
 interface defaultStates {
   showMenu: boolean;
   setShowMenu: Function;
-  session: {
-    user: any
-  },
   userDetail?: any;
   spotTrade?: any;
   futureTrade?: any;
@@ -175,14 +172,14 @@ const ResponsiveSidebar = (props: defaultStates) => {
           <div>
             <p className='nav-text-lg'>{duserName}</p>
             <p className='nav-text-lg !text-gamma '>{demail}</p>
-            {props.session?.user?.kyc === 'approve' &&
+            {session?.user?.kyc === 'approve' &&
               <div className="flex justify-start text-center items-center gap-[3px]">
                 <IconsComponent type="kycComplete" hover={false} active={false} width={14} height={14} />
                 <p className="top-label">Verified</p>
               </div>
 
             }
-            {props.session?.user?.kyc !== 'approve' &&
+            {session?.user?.kyc !== 'approve' &&
               <div className="flex justify-start text-center items-center gap-[3px]" >
                 <IconsComponent type="kychold" hover={false} active={false} width={14} height={14} />
                 <p className="top-label">Unverified</p>
@@ -271,7 +268,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
                   )
                 })
               }
-              {props.session &&
+              {session &&
                 <>
                   <li key="Trade" className='flex items-center justify-between mb-[36px] last:mb-0 relative' onClick={() => { props.setShowMenu(false) }}>
                     <div className='flex items-center gap-[15px]'>
@@ -336,49 +333,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
             </ul>
           </nav>
         </div>
-        {/* <div className='pt-[20px] mt-[30px] border-t border-[#E9EAF0] dark:border-[#e9eaf00f]'>
-          <div className='flex items-center justify-between' onClick={showList}>
-            <div className='flex items-center gap-[15px]'>
-              <svg
-                width={25}
-                height={24}
-                viewBox="0 0 25 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M17.8515 18.318C17.6795 17.885 17.4355 17.507 17.2215 17.184C17.1135 17.022 17.0025 16.857 16.9055 16.687C16.5165 16.011 16.6505 15.737 17.2815 14.68L17.3835 14.507C17.8945 13.646 17.9225 12.82 17.9485 12.092C17.9605 11.734 17.9725 11.397 18.0415 11.08C18.2025 10.348 19.7495 10.153 20.7085 10.038C20.8695 10.667 20.9625 11.322 20.9625 12C20.9625 14.569 19.7405 16.853 17.8515 18.318ZM5.92542 15.799C6.56141 15.961 7.25041 16.073 7.95142 16.073C9.03141 16.073 10.1344 15.809 11.0884 15.062C12.8044 13.72 12.8044 12.004 12.8044 10.624C12.8044 9.732 12.8044 8.963 13.1764 8.28C13.3764 7.914 13.8024 7.66 14.2954 7.365C14.5974 7.184 14.9104 6.998 15.2104 6.762C15.8534 6.259 16.3314 5.612 16.6274 4.896C18.0274 5.621 19.1874 6.744 19.9534 8.119C18.5254 8.317 16.4984 8.785 16.0894 10.652C15.9814 11.146 15.9644 11.611 15.9514 12.022C15.9304 12.605 15.9144 13.066 15.6644 13.488L15.5644 13.656C14.9174 14.739 14.1854 15.967 15.1724 17.684C15.2914 17.892 15.4244 18.092 15.5554 18.291C15.8994 18.807 16.0684 19.092 16.0694 19.372C15.1144 19.776 14.0644 20 12.9634 20C9.92642 20 7.28042 18.298 5.92542 15.799ZM12.9625 4C13.5785 4 14.1735 4.076 14.7495 4.208C14.5805 4.58 14.3195 4.919 13.9755 5.188C13.7575 5.36 13.5125 5.503 13.2695 5.648C12.6185 6.036 11.8815 6.476 11.4195 7.322C10.8035 8.452 10.8035 9.606 10.8035 10.624C10.8035 11.979 10.7595 12.78 9.85553 13.487C8.48653 14.56 6.39153 13.961 5.09553 13.416C5.01353 12.955 4.96253 12.483 4.96253 12C4.96253 7.589 8.55153 4 12.9625 4ZM12.9625 2C7.44852 2 2.96252 6.486 2.96252 12C2.96252 17.513 7.44852 22 12.9625 22C18.4765 22 22.9625 17.513 22.9625 12C22.9625 6.486 18.4765 2 12.9625 2Z"
-                  fill="#9295A6"
-                />
-              </svg>
-              <button className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary '>
-                English | USD
-              </button>
-            </div>
-            <svg
-              className='rotate-[90deg]'
-              width={7}
-              height={12}
-              viewBox="0 0 7 12"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M0.303884 9.73692C0.000451519 10.1004 0.0501666 10.6404 0.4136 10.9438C0.777033 11.2472 1.3179 11.1975 1.62047 10.8341L5.90624 6.54831C5.94053 6.50802 5.95681 6.46002 5.98253 6.41545C6.0031 6.38031 6.0271 6.34945 6.04253 6.31088C6.08196 6.21059 6.1051 6.10602 6.1051 5.99973C6.1051 5.89345 6.08196 5.78887 6.04253 5.68858C6.0271 5.65001 6.0031 5.61916 5.98253 5.58401C5.95681 5.53944 5.94053 5.49144 5.90624 5.45115L1.62047 1.16538C1.3179 0.801093 0.777033 0.752236 0.4136 1.05567C0.0501662 1.35824 0.000451161 1.89825 0.303884 2.26254L3.41792 5.14258L4.275 5.99965L3.41585 6.85881L0.303884 9.73692Z"
-                fill="#9295A6"
-              />
-            </svg>
-
-          </div>
-          <div ref={showLists} className='h-0 overflow-hidden duration-300  '>
-            <div className=' mt-[31px]'>
-              <LanguageCurrency />
-            </div>
-          </div>
-        </div> */}
-        {props.session === null ?
+        {session === null ?
           <div className='flex items-center gap-[15px] pt-[20px] mt-[30px] border-t border-[#E9EAF0] dark:border-[#e9eaf00f]'>
             <Link className='solid-button w-full text-center !text-primary dark:!bg-white !bg-grey' href="/login">Sign In</Link>
             <Link className='solid-button w-full text-center' href="/register">Register</Link>
@@ -390,13 +345,6 @@ const ResponsiveSidebar = (props: defaultStates) => {
             </button>
           </div>
         }
-        {/* {props?.session &&
-         <div className='flex items-center gap-[15px] pt-[20px] mt-[30px] border-t border-[#E9EAF0] dark:border-[#e9eaf00f]'>
-          <button className=' bg-primary text-white py-[15px] px-[5px]  w-full rounded-[12px]' onClick={() => { signOut() }}>
-            Sign Out
-          </button>
-          </div>
-        } */}
       </div>
       <div className='mt-[40px]'>
         <p className='text-center sec-text text-gamma'>© 2023. All rights reserved</p>

@@ -14,6 +14,7 @@ const TopBar = (props: showSidebar) => {
 
     const Ref: any = useRef(null);
     const [timer, setTimer] = useState("00:00:00");
+    const [highlow, setHighlow] = useState<any>(true);
 
     const [sessionTimePeriod, setSessionTimePeriod] = useState(1);
 
@@ -178,7 +179,7 @@ const TopBar = (props: showSidebar) => {
                     {/* coin price */}
                     
                     
-                    <p className='admin-component-heading !text-buy'>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price,6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price,6))}</p>
+                    <p className={`admin-component-heading ${highlow ? '!text-buy':'!text-sell'}`}>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price,6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price,6))}</p>
                     <div>
                         <p className='top-label'>Mark</p>
                         <p className='top-label !text-[#000] dark:!text-[#fff]'>{props?.currentToken?.token !== null ? currencyFormatter(props?.currentToken?.token?.price.toFixed(5)) : currencyFormatter(props?.currentToken?.global_token?.price.toFixed(5))}</p>

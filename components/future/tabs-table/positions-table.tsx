@@ -18,41 +18,30 @@ interface propsData {
 }
 
 const PositionsTable = (props: propsData) => {
-
-  // console.log(props.positions,"=========props.positions");
-  // console.log(props.currentToken,"======props.currentToken");
-  
   const [modelPopup, setModelPopup] = useState(0);
   const [modelOverlay, setModelOverlay] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState(Object);
   const { status, data: session } = useSession();
-
-  // console.log(selectedPosition ,"======pselectedPosition");
-
   const [active, setActive] = useState(false);
   const [show, setShow] = useState(false);
   const [positionId, setPositionId] = useState('');
-  let [positionData,setPositionData] = useState();
+  let [positionData, setPositionData] = useState();
   const wbsocket = useWebSocket();
 
   const closePositionOrder = async (id: string) => {
-      
-      
-      props?.positions.map((item:any,index:number)=>{
-        if(item.id == id){
-          setPositionData(item);
-          console.log("test done");
-        }
-      });
-      
+    props?.positions.map((item: any, index: number) => {
+      if (item.id == id) {
+        setPositionData(item);
+        console.log("test done");
+      }
+    });
+
     setActive(true);
     setShow(true);
   }
 
   const actionPerform = async () => {
     let obj = { "id": positionId };
-    // console.log(positionId);
-
     const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
     let record = encodeURIComponent(ciphertext.toString());
 
@@ -85,34 +74,32 @@ const PositionsTable = (props: propsData) => {
 
   const closeAllPosition = async () => {
     try {
-      
-          let obj = { "userid": session?.user?.user_id };
-      
-          let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeallposition`, {
-            method: "POST",
-            headers: {
-              'Content-Type': 'application/json',
-              "Authorization": session?.user?.access_token
-            },
-            body: JSON.stringify(obj)
-          }).then(response => response.json());
-      
-          if (closeReponse?.data?.status === 200) {
-            if (wbsocket) {
-              let position = {
-                ws_type: 'position'
-              }
-              wbsocket.send(JSON.stringify(position));
-            }
-            toast.success('closed all position successfully!!.');
-            setActive(false);
-            setShow(false);
-            setPositionId('');
+      let obj = { "userid": session?.user?.user_id };
+      let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeallposition`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": session?.user?.access_token
+        },
+        body: JSON.stringify(obj)
+      }).then(response => response.json());
+
+      if (closeReponse?.data?.status === 200) {
+        if (wbsocket) {
+          let position = {
+            ws_type: 'position'
           }
-      
+          wbsocket.send(JSON.stringify(position));
+        }
+        toast.success('closed all position successfully!!.');
+        setActive(false);
+        setShow(false);
+        setPositionId('');
+      }
+
     } catch (error) {
-      console.log(error,"=error in close position");
-      
+      console.log(error, "=error in close position");
+
     }
   }
 
@@ -199,7 +186,7 @@ const PositionsTable = (props: propsData) => {
           </thead>
           <tbody>
             {
-              props?.positions && props?.positions.length > 0 && props?.positions?.map((item: any, index: number) => {
+              session && props?.positions && props?.positions.length > 0 && props?.positions?.map((item: any, index: number) => {
 
                 let tpsl = '--';
                 {
@@ -215,34 +202,34 @@ const PositionsTable = (props: propsData) => {
                 return (
                   <tr key={index}>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <div className='pl-[5px] pt-[5px] border-l-[5px] border-[#03A66D] flex gap-[8px] items-center'>
+                      <div className={`pl-[5px] pt-[5px] border-l-[5px] ${item?.direction === 'long' ? 'border-[#03A66D]' : 'border-[#f74646]'} flex gap-[8px] items-center`}>
                         <div>
                           <p className="info-14 !text-[12px] dark:text-white">{item.symbol}</p>
-                          <p className="top-label">Perpetual</p>
+                          <p className={`top-label ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.leverage_type} {item.leverage}x</p>
                         </div>
-                        <p className="bg-[#13c2c21f] px-[5px] text-[#13c2c2] text-[12px]">{item.leverage}x</p>
+                        {/* <p className="bg-[#13c2c21f] px-[5px] text-[#13c2c2] text-[12px]">{item.leverage}x</p> */}
                       </div>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] !text-buy">{item?.qty}</p>
+                      <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction !== 'long' ? '-' : ''}{item?.qty}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] !text-buy">{item?.size}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.size}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(truncateNumber(item?.entry_price,5))}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(truncateNumber(item?.entry_price, 6))}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.token !== null ? currencyFormatter(truncateNumber(item?.token?.price,5)) : currencyFormatter(truncateNumber(item?.global_token?.price,5))}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.token !== null ? currencyFormatter(truncateNumber(item?.token?.price, 6)) : currencyFormatter(truncateNumber(item?.global_token?.price, 5))}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(truncateNumber(item?.liq_price,5))}</p>
+                      <p className="top-label !text-[#f7a600] !font-[600]">{currencyFormatter(truncateNumber(item?.liq_price, 6))}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{truncateNumber(item?.margin,6)}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">{truncateNumber(item?.margin, 6)}</p>
                       <p className="top-label !font-[600] dark:!text-white !text-black">{item?.leverage_type}</p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
@@ -265,20 +252,21 @@ const PositionsTable = (props: propsData) => {
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%] cursor-pointer'>
                       <div className='flex items-center'>
-                        <p className='top-label dark:!text-[#cccc56] !font-[600] pr-[20px]' onClick={() => {closePositionOrder(item?.id); setPositionId(item?.id);}}>Close Position</p>
-                        {/* <div className='flex items-center gap-[20px]'>
-                          <p className='top-label dark:!text-[#cccc56] !font-[600] pl-[20px] border-l border-grey-v-3 dark:border-opacity-[15%]'>Limit</p>
-                          <div className='flex items-center gap-[5px]'>
-                            <p className='top-label !font-[600] p-[4px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer'>{item.ClosePositions1}</p>
-                            <p className='top-label !font-[600] p-[4px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer'>{item.ClosePositions2}</p>
-                          </div>
-                        </div> */}
+                        <p className='top-label dark:!text-[#cccc56] !font-[600] pr-[20px]' onClick={() => { closePositionOrder(item?.id); setPositionId(item?.id); }}>Close Position</p>
+
                       </div>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <div className='flex items-center gap-[5px]'>
                         <div>
-                          <p className="top-label !font-[600] ">{tpsl}</p>
+                          {item?.profitlosses && item?.profitlosses.length > 0 &&
+                            <div className="top-label !font-[600] flex ">
+                              <p className='!text-buy'>{item?.profitlosses[0]?.trigger_profit}</p>/<p className='!text-sell'>{item?.profitlosses[0]?.trigger_loss}</p>
+                            </div>
+                          }
+                          {item?.profitlosses && item?.profitlosses.length === 0 &&
+                            <div className="top-label !font-[600] flex ">--</div>
+                          }
                         </div>
                         <div className='cursor-pointer' onClick={() => { setModelPopup(1); setModelOverlay(true); setSelectedPosition(item) }}>
                           <IconsComponent type='editIcon' />
@@ -295,7 +283,7 @@ const PositionsTable = (props: propsData) => {
       </div>
       {/* overlay */}
       <div className={`bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${modelOverlay && '!opacity-[70%] !visible'}`}></div>
-      <ProfitLossModal setModelOverlay={setModelOverlay} setModelPopup={setModelPopup} modelPopup={modelPopup} modelOverlay={modelOverlay} currentToken={props?.currentToken} entryPrice={selectedPosition?.entry_price} leverage={selectedPosition?.leverage} sizeValue={selectedPosition?.size} show={selectedPosition?.direction} actionType="position" positionId={selectedPosition?.id} />
+      <ProfitLossModal setModelOverlay={setModelOverlay} setModelPopup={setModelPopup} modelPopup={modelPopup} modelOverlay={modelOverlay} currentToken={props?.currentToken} entryPrice={selectedPosition?.entry_price} leverage={selectedPosition?.leverage} sizeValue={selectedPosition?.size} show={selectedPosition?.direction} actionType="position" position={selectedPosition} />
       {active === true &&
         <ConfirmationClouserModel setActive={setActive} positionData={positionData} setShow={setShow} title='Confirm Position Closure' message='Are you sure to want to close this position.' actionPerform={actionPerform} show={show} />
       }
