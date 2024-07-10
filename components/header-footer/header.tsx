@@ -194,7 +194,7 @@ const Header = (props: propsData) => {
     let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {
       method: "GET",
       headers: {
-        "Authorization": props.session?.user?.access_token
+        "Authorization": session?.user?.access_token
       },
     }).then(response => response.json());
 
@@ -305,7 +305,7 @@ const Header = (props: propsData) => {
             <div className="w-full ">
               {/* if user not logged in */}
 
-              {props.session === null || props.session === undefined ? (
+              {session === null || session === undefined ? (
                 <div className="flex items-center gap-[30px] justify-end">
                   <Link
                     className="nav-text-lg text-[18px] !text-primary whitespace-nowrap dark:hover:!text-white hover:!text-black"
@@ -363,14 +363,14 @@ const Header = (props: propsData) => {
                         <p id="username" data-testid="username" className="nav-text-lg !text-gamma hidden xl:block">
                           {userDetail !== null && duserName}
                         </p>
-                        {props.session?.user?.kyc === 'approve' &&
+                        {session?.user?.kyc === 'approve' &&
                           <div className="flex justify-start text-center items-center gap-[3px]">
                             <IconsComponent type="kycComplete" hover={false} active={false} width={14} height={14} />
                             <p className="top-label !text-gamma hidden xl:block">Verified</p>
                           </div>
 
                         }
-                        {props.session?.user?.kyc !== 'approve' &&
+                        {session?.user?.kyc !== 'approve' &&
                           <div className="flex justify-start text-center items-center gap-[3px]" >
                             <IconsComponent type="kychold" hover={false} active={false} width={14} height={14} />
                             <p className="top-label !text-gamma hidden xl:block">Unverified</p>
@@ -485,7 +485,6 @@ const Header = (props: propsData) => {
             <ResponsiveSidebar
               showMenu={showMenu}
               setShowMenu={setShowMenu}
-              session={props.session}
               userDetail={userDetail}
               spotTrade={spotTrade}
               futureTrade={futureTrade}

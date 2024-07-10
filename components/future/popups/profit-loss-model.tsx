@@ -4,6 +4,8 @@ import { useSession } from 'next-auth/react';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import clickOutSidePopupClose from '@/components/snippets/clickOutSidePopupClose';
 import { truncateNumber } from '@/libs/subdomain';
+import { toast } from 'react-toastify';
+import { AES } from 'crypto-js';
 
 interface showPopup {
     modelPopup?: number;
@@ -17,8 +19,8 @@ interface showPopup {
     show?: any;
     setTpSl?: any;
     actionType?: any;
-    positionId?: any;
     setProfitLossConfirm?: any;
+    position?: any;
 }
 
 const ProfitLossModal = (props: showPopup) => {
@@ -35,163 +37,144 @@ const ProfitLossModal = (props: showPopup) => {
 
 
     useEffect(() => {
-        setTakeProfitValue(0)
-        setStopLossValue(0)
-        setProfit(0)
-        setLoss(0)
-    }, [])
+        if (props?.position && props?.position?.profitlosses && props?.position?.profitlosses.length > 0) {
+            setTakeProfitValue(props?.position?.profitlosses[0]?.trigger_profit)
+            setStopLossValue(props?.position?.profitlosses[0]?.trigger_loss)
+            setProfit(props?.position?.profitlosses[0]?.profit_value)
+            setLoss(props?.position?.profitlosses[0]?.loss_value)
+        }
 
+    }, [props?.position]);
 
     const findTakeProfit = (e: any) => {
-        let marketPrice = e?.target?.value;
-        setTakeProfitValue(e?.target?.value);
-        if (props?.show === 'long') {
-            //=====================================
-            //=========== Coin PnL ================
-            //=====================================
-            let coin_pnl: any = (((1 / parseFloat(marketPrice)) - (1 / props?.entryPrice)) * 100).toFixed(5);
-
-            //=====================================
-            //=========== USDT PnL ================
-            //=====================================
-            let usdt_pnl: any = (coin_pnl * parseFloat(marketPrice)).toFixed(5);
-            setProfit(usdt_pnl);
+        if (e?.target?.value < 0) {
+            return;
         }
-        else if (props?.show === 'short') {
-
-
-            //=====================================
-            //=========== Coin PnL ================
-            //=====================================
-            let coin_pnl: any = (((1 / props?.entryPrice) - (1 / parseFloat(marketPrice))) * (100 * -1)).toFixed(5);
-
-            //=====================================
-            //=========== USDT PnL ================
-            //=====================================
-            let usdt_pnl: any = (coin_pnl * parseFloat(marketPrice)).toFixed(5);
-            setProfit(usdt_pnl);
-
+        let newPriceValue = e?.target?.value;
+        if (newPriceValue > 0) {
+            setTakeProfitValue(e?.target?.value);
+            if (props?.show === 'long') {
+                //=========== USDT PnL ================
+                let usdt_pnl: any = props?.position?.qty * (newPriceValue - parseFloat(props?.entryPrice));
+                setProfit(truncateNumber(usdt_pnl, 6));
+            }
+            else if (props?.show === 'short') {
+                //=========== USDT PnL ================
+                let usdt_pnl: any = props?.position?.qty * (parseFloat(props?.entryPrice) - newPriceValue);
+                setProfit(truncateNumber(usdt_pnl, 6));
+            }
         }
+        else {
+            setTakeProfitValue(0);
+            setProfit(0)
+        }
+
     }
 
     const findStopLoss = (e: any) => {
         if (e?.target?.value < 0) {
             return;
         }
-        let marketPrice = e?.target?.value;
-        setStopLossValue(e?.target?.value);
-
-        if (props?.show === 'long') {
-            //=====================================
-            //=========== Coin PnL ================
-            //=====================================
-            let coin_pnl: any = (((1 / parseFloat(marketPrice)) - (1 / props?.entryPrice)) * 100).toFixed(5);
-
-            //=====================================
-            //=========== USDT PnL ================
-            //=====================================
-            let usdt_pnl: any = (coin_pnl * parseFloat(marketPrice)).toFixed(5);
-            setLoss(usdt_pnl);
+        let newPriceValue = e?.target?.value;
+        if(newPriceValue > 0){
+            setStopLossValue(e?.target?.value);
+            if (props?.show === 'long') {
+                //=========== USDT PnL ================
+                let usdt_pnl: any = props?.position?.qty * (parseFloat(props?.entryPrice) - newPriceValue);
+                setLoss(truncateNumber(usdt_pnl, 6));
+            }
+            else if (props?.show === 'short') {
+                //=========== USDT PnL ================
+                let usdt_pnl: any = props?.position?.qty * (newPriceValue - parseFloat(props?.entryPrice));
+                setLoss(truncateNumber(usdt_pnl, 6));
+            }
         }
-        else if (props?.show === 'short') {
-
-
-            //=====================================
-            //=========== Coin PnL ================
-            //=====================================
-            let coin_pnl: any = (((1 / props?.entryPrice) - (1 / parseFloat(marketPrice))) * (100 * -1)).toFixed(5);
-
-            //=====================================
-            //=========== USDT PnL ================
-            //=====================================
-            let usdt_pnl: any = (coin_pnl * parseFloat(marketPrice)).toFixed(5);
-            setLoss(usdt_pnl);
+        else{
+            setStopLossValue(0);
+            setLoss(0);
         }
+        
     }
 
     const storeProfitLossData = async () => {
         try {
-            let profitobj = {
-                "position_id": "--",
-                "user_id": session?.user?.user_id,
-                "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
-                "side": props?.show === 'long' ? "Close Long" : 'Close Short',
-                "type": 'take profit market', //e.g limit, take profit market, stop market
-                "amount": 'close position', // limit order amount, close position
-                "price_usdt": props.entryPrice, // limit order price
-                "trigger": takeProfirValue.toString(), // TP/SL posiotion amount , limit order --
-                "reduce_only": "Yes", // TP/SL case Yes, limit order No
-                "post_only": "No", //No
-                "status": false,
-                "leverage": props?.leverage,
-                "margin": props?.sizeValue / props?.leverage,
-                "liq_price": 0.0,
-                "market_price": props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price,
-                "order_type": "value",
-                "leverage_type": '--',
-                "coin_id": props?.currentToken?.coin_id,
+
+            let token = props?.currentToken?.token !== null ? props?.currentToken?.token : props?.currentToken?.global_token;
+            let currentPrice = token?.price;
+
+            if (props?.show === 'long') {
+                if (currentPrice > takeProfirValue && takeProfirValue > 0) {
+                    toast.error('Take-Profit price must be better than market Price', { position: 'top-center' })
+                    return;
+                }
+                if (currentPrice < stopLossValue || stopLossValue > parseFloat(props?.entryPrice) && stopLossValue > 0) {
+                    toast.error('Stop loss price should be lower than market price or last entry price.', { position: 'top-center' });
+                    return;
+                }
             }
 
-            let stoplossobj = {
-                "position_id": "--",
-                "user_id": session?.user?.user_id,
-                "symbol": props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
-                "side": props?.show === 'long' ? "Close Long" : 'Close Short',
-                "type": 'stop market', //e.g limit, take profit market, stop market
-                "amount": 'close position', // limit order amount, close position
-                "price_usdt": props?.entryPrice, // limit order price
-                "trigger": stopLossValue.toString(), // TP/SL posiotion amount , limit order --
-                "reduce_only": "Yes", // TP/SL case Yes, limit order No
-                "post_only": "No", //No
-                "status": false,
-                "leverage": props?.leverage,
-                "margin": props?.sizeValue / props?.leverage,
-                "liq_price": 0.0,
-                "market_price": props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price,
-                "order_type": "value",
-                "leverage_type": '--',
-                "coin_id": props?.currentToken?.coin_id,
+            if (props?.show === 'short') {
+                if (currentPrice < takeProfirValue && takeProfirValue > 0) {
+                    toast.error('Take-Profit price should be lower than Last market Price', { position: 'top-center' });
+                    return;
+                }
+                if (currentPrice > stopLossValue && stopLossValue > 0) {
+                    toast.error('Stop loss price should be higher than market price.', { position: 'top-center' });
+                    return;
+                }
+            }
+
+            let profitobj = {
+                contract: props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
+                position_id: '--',
+                user_id: session?.user?.user_id,
+                qty: 'Entire Position',
+                trigger_profit: takeProfirValue,
+                trigger_loss: stopLossValue,
+                profit_value: profit,
+                loss_value: loss,
+                trade_type: props?.show === 'short' ? 'Close Short' : 'Close Long',
             }
 
             if (props?.actionType === 'buysell') {
-                props.setTpSl({ profit: profitobj, stopls: stoplossobj });
-
+                props.setTpSl({ profit: profitobj });
             }
             else {
-
-                profitobj.position_id = props?.positionId;
-                stoplossobj.position_id = props?.positionId;
-                let profitreponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`, {
+                // Make Take Profit loss request
+                profitobj.position_id = props?.position?.id;
+                const ciphertext = AES.encrypt(
+                    JSON.stringify(profitobj),
+                    `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+                );
+                let record = encodeURIComponent(ciphertext.toString());
+                let reponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/profitlossorder`, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json',
                         "Authorization": session?.user?.access_token
                     },
-                    body: JSON.stringify(profitobj)
+                    body: JSON.stringify(record)
                 }).then(response => response.json());
 
-                let stopreponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/openorder`, {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json',
-                        "Authorization": session?.user?.access_token
-                    },
-                    body: JSON.stringify(stoplossobj)
-                }).then(response => response.json());
+                if (reponse && reponse?.data?.status !== 200) {
+                    toast.error(reponse?.data?.data?.message);
+                    return
+                }
+                else {
+                    setProfit(0);
+                    setLoss(0);
+                    setStopLossValue(0);
+                    setTakeProfitValue(0);
+                    props.setModelOverlay(false);
+                    props.setModelPopup(0);
+                }
             }
 
-            setProfit(0);
-            setLoss(0);
-            setStopLossValue(0);
-            setTakeProfitValue(0);
-            props.setModelOverlay(false);
-            props.setModelPopup(0);
+
 
         } catch (error) {
             console.log(error, "=error");
-
         }
-
     }
 
     const closePopup = () => {
@@ -201,7 +184,9 @@ const ProfitLossModal = (props: showPopup) => {
         setTakeProfitValue(0);
         props.setModelOverlay(false);
         props.setModelPopup(0);
-        props?.setProfitLossConfirm && props?.setProfitLossConfirm(false)
+        if (props.setProfitLossConfirm) {
+            props.setProfitLossConfirm(false)
+        }
     }
     const wrapperRef = useRef(null);
     clickOutSidePopupClose({ wrapperRef, closePopup });
@@ -216,9 +201,11 @@ const ProfitLossModal = (props: showPopup) => {
                         setLoss(0);
                         setStopLossValue(0);
                         setTakeProfitValue(0);
-                        props?.setModelOverlay && props?.setModelOverlay(false);
-                        props?.setModelPopup && props?.setModelPopup(0);
-                        props?.setProfitLossConfirm && props?.setProfitLossConfirm(false)
+                        props.setModelOverlay(false);
+                        props.setModelPopup(0);
+                        if (props.setProfitLossConfirm) {
+                            props.setProfitLossConfirm(false)
+                        }
 
                     }}
                     enableBackground="new 0 0 60.963 60.842"
@@ -246,6 +233,10 @@ const ProfitLossModal = (props: showPopup) => {
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Symbol</p>
                     <p className='dark:text-white text-black'>{props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol} Perpetual <span className='lowercase'>{props?.leverage}x</span></p>
+                </div>
+                <div className='flex justify-between items-center mb-[10px]'>
+                    <p className='dark:text-white text-black'>Qty</p>
+                    <p className='dark:text-white text-black'>{truncateNumber(props?.position?.qty, 3)}</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Entry Price</p>
@@ -280,7 +271,9 @@ const ProfitLossModal = (props: showPopup) => {
 
                     </div>
                     <div className='mt-[10px]'>
-                        <p className='top-label !text-[14px]'>When Market Price reaches {takeProfirValue}, it will trigger Take Profit Market order to close this position. Estimated PNL will be {isNaN(profit) ? 0 : profit} USDT</p>
+                        <p className='top-label !text-[14px]'>
+                            Last Traded Price to {takeProfirValue} will trigger market Take Profit order; your expected {profit < 0 ?'loss' : 'profit'} will be {isNaN(profit) ? 0 : profit} USDT
+                        </p>
                     </div>
                     <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative p-[15px] rounded-[5px] justify-between'>
                         <p className='top-label min-w-max'>Stop Loss</p>
@@ -306,13 +299,15 @@ const ProfitLossModal = (props: showPopup) => {
                         )
                     }
                     <div className='mt-[10px]'>
-                        <p className='top-label !text-[14px]'>When Market Price reaches {stopLossValue}, it will trigger Stop Market order to close this position. Estimated PNL will be {isNaN(loss) ? 0 : loss} USDT</p>
+                        <p className='top-label !text-[14px]'>
+                            Last Traded Price to {stopLossValue} will trigger market Stop Loss order; your expected loss will be {isNaN(loss) ? 0 : loss} USDT
+                        </p>
                     </div>
 
-                    <div className='mt-[30px]'>
+                    {/* <div className='mt-[30px]'>
                         <p className='top-label !text-[14px]'>This setting applies to the entire position. Take Profit and Stop-loss automatically cancel after closing the position. A Market order is triggered when the stop price is reached. The order will be rejected if the position size exceeds the Max Market Order Qty limit.</p>
-                    </div>
-                    <button className=" w-full max-w-full mt-[15px] solid-button" onClick={storeProfitLossData}>Confirm</button>
+                    </div> */}
+                    <button disabled={takeProfirValue === 0 && stopLossValue === 0? true : false} className={`w-full max-w-full mt-[15px] solid-button ${takeProfirValue === 0 && stopLossValue === 0?'cursor-not-allowed opacity-25' : ''}`} onClick={storeProfitLossData}>Confirm</button>
                 </div>
             </div>
         </div>

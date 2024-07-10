@@ -13,7 +13,7 @@ interface activeSection {
     show?: boolean;
     actionPerform?: any;
     hideVisibility?: boolean;
-    positionData?:any;
+    positionData?: any;
 }
 
 const ConfirmationClouserModel = (props: activeSection) => {
@@ -21,9 +21,6 @@ const ConfirmationClouserModel = (props: activeSection) => {
     const [btnDisabled, setBtnDisabled] = useState(false)
     const text: any = props.message;
     const newText = text.split('\n');
-
-    console.log(props.positionData,"========positionData");
-    
 
     const sendOtp = async () => {
         try {
@@ -87,27 +84,31 @@ const ConfirmationClouserModel = (props: activeSection) => {
                         return <p className={`py-1  info-14-18 my-[10px] mb-[30px]`}>{item}</p>
                     })}
 
-                    <div className="flex justify-between items-center mb-[10px]">
-                        <p className="dark:text-white text-black">Symbol</p>
-                        <p className="text-black dark:text-[#6a6d7d]">{props?.positionData?.symbol}</p>
-                    </div>
-                    <div className="flex justify-between items-center mb-[10px]">
-                        <p className="dark:text-white text-black">Position Size</p>
-                        <p className="dark:text-[#6a6d7d] text-black">${truncateNumber(props?.positionData?.size,6)}</p>
-                    </div>
+                    {props?.positionData &&
+                        <>
+                            <div className="flex justify-between items-center mb-[10px]">
+                                <p className="dark:text-white text-black">Symbol</p>
+                                <p className="text-black dark:text-[#6a6d7d]">{props?.positionData?.symbol}</p>
+                            </div>
+                            <div className="flex justify-between items-center mb-[10px]">
+                                <p className="dark:text-white text-black">Position Size</p>
+                                <p className="dark:text-[#6a6d7d] text-black">${truncateNumber(props?.positionData?.size, 6)}</p>
+                            </div>
 
-                    <div className="flex justify-between items-center mb-[10px]">
-                        <p className="dark:text-white text-black">Entry Price</p>
-                        <p className="dark:text-[#6a6d7d] text-black">${truncateNumber(props?.positionData?.entry_price,6)}</p>
-                    </div>
-                    <div className="flex justify-between items-center mb-[10px]">
-                        <p className="dark:text-white text-black">Current Price</p>
-                        <p className="dark:text-[#6a6d7d] text-black">${truncateNumber(props?.positionData?.global_token?.price,6) ?? truncateNumber(props?.positionData?.token?.price,6)}</p>
-                    </div>
-                    <div className="flex justify-between items-center mb-[10px]">
-                        <p className="dark:text-white text-black">Profit/Loss</p>
-                        <p className={`${props?.positionData?.pnl > 0 ? 'text-buy':'text-sell'}`}>{props?.positionData?.pnl > 0 ? '+':'-'}${truncateNumber(Math.abs(props?.positionData?.pnl),6)}</p>
-                    </div>
+                            <div className="flex justify-between items-center mb-[10px]">
+                                <p className="dark:text-white text-black">Entry Price</p>
+                                <p className="dark:text-[#6a6d7d] text-black">${truncateNumber(props?.positionData?.entry_price, 6)}</p>
+                            </div>
+                            <div className="flex justify-between items-center mb-[10px]">
+                                <p className="dark:text-white text-black">Current Price</p>
+                                <p className="dark:text-[#6a6d7d] text-black">${truncateNumber(props?.positionData?.global_token?.price, 6) ?? truncateNumber(props?.positionData?.token?.price, 6)}</p>
+                            </div>
+                            <div className="flex justify-between items-center mb-[10px]">
+                                <p className="dark:text-white text-black">Profit/Loss</p>
+                                <p className={`${props?.positionData?.pnl > 0 ? 'text-buy' : 'text-sell'}`}>{props?.positionData?.pnl > 0 ? '+' : '-'}${truncateNumber(Math.abs(props?.positionData?.pnl), 6)}</p>
+                            </div>
+                        </>
+                    }
 
                     <div className="flex items-center gap-10 mt-[40px]">
                         <button

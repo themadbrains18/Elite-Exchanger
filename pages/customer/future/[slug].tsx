@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { getProviders, signOut } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext } from 'next'
@@ -12,7 +12,6 @@ import OrderBookFuture from '@/components/future/order-book/order-book';
 import MarketTrades from '@/components/future/order-book/market-trade-table';
 import CoinTypes from '@/components/future/coin-types';
 import ChartTabsFuture from '@/components/future/chart-tabs-future';
-// import FutureChart from '@/components/future/future-chart';
 import MarginMode from '@/components/future/popups/margin-mode';
 import SwapModal from '@/components/future/popups/swap-modal';
 import ChartSec from '@/components/chart/chart-sec';
@@ -59,11 +58,9 @@ const FutureTrading = (props: Session) => {
     const [rewardsTotalPoint, setRewardsTotalPoint] = useState(props?.totalPoint);
     const wbsocket = useWebSocket();
     useEffect(() => {
-        socket();
         let ccurrentToken = props.coinList.filter((item: any) => {
             return item.coin_symbol + item.usdt_symbol === props?.serverSlug
         })
-
 
         if (ccurrentToken && ccurrentToken?.length > 0) {
             setMinTrade(ccurrentToken[0]?.coin_min_trade)
@@ -77,35 +74,47 @@ const FutureTrading = (props: Session) => {
         getCoinHLOCData();
         getPositionOrderBook();
 
-    }, [props?.serverSlug, wbsocket]);
+    }, [props?.serverSlug]);
 
+    const socketListenerRef = useRef<(event: MessageEvent) => void>();
+    useEffect(() => {
+        const handleSocketMessage = async (event: any) => {
+            const data = JSON.parse(event.data).data;
+            let eventDataType = JSON.parse(event.data).type;
 
-    const socket = () => {
-        if (wbsocket) {
-            wbsocket.onmessage = async (event) => {
-                const data = JSON.parse(event.data).data;
-                let eventDataType = JSON.parse(event.data).type;
-
-                if (eventDataType === "price") {
-                    await refreshTokenList();
-                    getUserFuturePositionData();
-                    getUserOpenOrderData();
-                    getUserFuturePositionHistoryData();
-                    getUserFutureOpenOrderHistoryData();
-                }
-
-                if (eventDataType === 'position') {
-                    refreshWalletAssets();
-                    getUserFuturePositionData();
-                    getUserOpenOrderData();
-                    getUserFuturePositionHistoryData();
-                    getUserFutureOpenOrderHistoryData();
-                    getCoinHLOCData();
-                    getPositionOrderBook();
-                }
+            if (eventDataType === "price") {
+                await refreshTokenList();
+                getUserFuturePositionData();
+                getUserOpenOrderData();
+                getUserFuturePositionHistoryData();
+                getUserFutureOpenOrderHistoryData();
             }
+
+            if (eventDataType === 'position') {
+                refreshWalletAssets();
+                getUserFuturePositionData();
+                getUserOpenOrderData();
+                getUserFuturePositionHistoryData();
+                getUserFutureOpenOrderHistoryData();
+                getCoinHLOCData();
+                getPositionOrderBook();
+            }
+        };
+
+        if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
+            if (socketListenerRef.current) {
+                wbsocket.removeEventListener('message', socketListenerRef.current);
+            }
+            socketListenerRef.current = handleSocketMessage;
+            wbsocket.addEventListener('message', handleSocketMessage);
         }
-    }
+
+        return () => {
+            if (wbsocket) {
+                wbsocket.removeEventListener('message', handleSocketMessage);
+            }
+        };
+    }, [wbsocket]);
 
     // ===================================== //
     // Refresh token list after price update //
@@ -164,8 +173,6 @@ const FutureTrading = (props: Session) => {
 
                 }
                 else {
-
-
                     setOpenOrders(positionData?.data);
                 }
 
@@ -285,8 +292,6 @@ const FutureTrading = (props: Session) => {
         }
     }
 
-
-
     return (
         <>
             <ToastContainer limit={1} position='top-center' />
@@ -329,7 +334,7 @@ const FutureTrading = (props: Session) => {
                 <div className='bg-[#fff] dark:bg-[#1a1b1f]  border-l  dark:border-[#25262a] border-[#e5e7eb] '>
                     {/* Buy/Sell open short traading component */}
                     <BuySell inputId={'slider_input1'} setOpnlong={setOpnlong} thumbId={'slider_thumb1'} lineId={'slider_line1'} radioId={'one'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} setOverlay={setOverlay} assets={allAssets?.data?.data} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} minTrade={minTrade} maxTrade={maxTrade} />
-                    <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} balance={allAssets?.data?.totalAmount} />
+                    <MarginRatio setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets?.data?.data} positions={positions} openOrders={openOrders} />
                 </div>
             </div>
 
@@ -365,7 +370,7 @@ const FutureTrading = (props: Session) => {
 
                 <ChartTabsFuture positions={positions} openOrders={openOrders} currentToken={currentToken[0]} positionHistoryData={positionHistoryData} openOrderHistoryData={openOrderHistoryData} />
                 <BuySell setOpnlong={setOpnlong} setOverlay={setOverlay} inputId={'slider_input2'} minTrade={minTrade} maxTrade={maxTrade} thumbId={'slider_thumb2'} lineId={'slider_line2'} fullWidth={true} radioId={'two'} positions={positions} openOrders={openOrders} setPopupMode={setPopupMode} popupMode={popupMode} assets={allAssets?.data?.data} currentToken={currentToken[0]} marginMode={marginMode} refreshWalletAssets={refreshWalletAssets} totalPoint={rewardsTotalPoint} />
-                <MarginRatio fullWidth={true} heightAuto={true} setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} />
+                <MarginRatio fullWidth={true} heightAuto={true} setOverlay={setOverlay} setPopupMode={setPopupMode} popupMode={popupMode} positions={positions} openOrders={openOrders} />
             </div>
 
             {/* overlay */}
