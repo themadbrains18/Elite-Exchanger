@@ -33,6 +33,10 @@ const ChartTabs = (props: propsData) => {
   const [message, setMessage] = useState(
     "Are you sure you want to delete your order?"
   );
+  const [imgSrc, setImgSrc] = useState(false);
+  const [imgSrc2, setImgSrc2] = useState(false);
+  const [imgSrc3, setImgSrc3] = useState(false);
+
   const [title, setTitle] = useState("Cancel Order");
   const [orderId, setOrderId] = useState("");
 
@@ -303,12 +307,8 @@ const ChartTabs = (props: propsData) => {
                       >
                         <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                           <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                            <Image
-                              src={`${item.image}`}
-                              width={30}
-                              height={30}
-                              alt="coins"
-                            />
+                          <Image src={`${imgSrc3?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc3(true)}  />
+
                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                               <p className="info-14-18 dark:text-white">
                                 {item.symbol}
@@ -520,16 +520,9 @@ const ChartTabs = (props: propsData) => {
                         >
                           <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                             <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                              <Image
-                                src={`${item?.token
-                                  ? item?.token.image
-                                  : item?.global_token.image
-                                  }`}
-                                width={30}
-                                height={30}
-                                alt="coins"
-                                className="min-w-[30px]"
-                              />
+                            <Image src={`${imgSrc2?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)}  className="min-w-[30px]"/>
+
+                            
                               <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                 <p className="info-14-18 dark:text-white">
                                   {item?.token
@@ -752,15 +745,9 @@ const ChartTabs = (props: propsData) => {
                           className={`grid grid-cols-9 items-center  justify-between `}
                         >
                           <div className="flex gap-2 col-span-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                            <Image
-                              src={`${item?.token !== null
-                                ? item?.token?.image
-                                : item?.global_token?.image
-                                }`}
-                              width={30}
-                              height={30}
-                              alt="coins"
-                            />
+                          <Image src={`${imgSrc?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)}/>
+
+                         
                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                               <p className="info-14-18 dark:text-white">
                                 {item?.token !== null

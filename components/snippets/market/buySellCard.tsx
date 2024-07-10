@@ -124,7 +124,7 @@ const BuySellCard = (props: DynamicId) => {
       clearErrors('token_amount');
       setFirstCurrency(symbol);
 
-      let token = list.filter((item: any) => {
+      let token = list && list?.length>0 && list?.filter((item: any) => {
         return item.symbol === symbol && item?.tradepair !== null
       });
 
@@ -242,11 +242,16 @@ const BuySellCard = (props: DynamicId) => {
 
       if (reponse.data.status === 200) {
         toast.success(reponse.data?.data?.message);
-        setFirstCurrency('BTCB');
+        setFirstCurrency('');
         setSecondCurrency('USDT');
         setSelectedToken('')
         setEstimateFee(0)
-    
+        reset({
+          limit_usdt: 0,
+          token_amount: 0.00,
+        })
+        setEstimateFee(0.00)
+        setTotalAmount(0.0)
         setActive(false);
         if (wbsocket) {
           let withdraw = {
@@ -539,7 +544,7 @@ const BuySellCard = (props: DynamicId) => {
                           <Image src={`${props?.token?.image !== undefined ? props?.token?.image : '/assets/home/coinLogo.png'}`} alt="error" width={20} height={20} />
                           <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text`}>{props?.token?.fullName}</p>
                         </div> :
-                        <FilterSelectMenuWithCoin data={qtylist} border={false} setCurrencyName={setCurrencyName} dropdown={1} />
+                        <FilterSelectMenuWithCoin data={qtylist} border={false} setCurrencyName={setCurrencyName} dropdown={1} value={firstCurrency}/>
                     }
                   </div>
                 </div>

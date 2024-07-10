@@ -22,6 +22,9 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
   const [image, setImage] = useState('Coin.svg');
   const [text, setText] = useState((props?.value === null || props?.value === '' || props?.value === undefined) ? 'Select' : props?.value);
   const [filterCoin, setFilterCoin] = useState(props.data);
+  const [imgSrc, setImgSrc] = useState(false);
+  const [imgSrc2, setImgSrc2] = useState(false);
+
   // const [open, setOpen] = useState(false)
   // const [openSecond, setOpenSecond] = useState(false)
   // const [eleCallBack] =  useIsClickOut(setOpen)
@@ -60,7 +63,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
   }, [props?.dropdown])
 
   useEffect(() => {
-    console.log(props.value,"==props.value");
+    // console.log(props.value,"==props.value");
     
     if (props.value === '') {
       setText('Select');
@@ -105,7 +108,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
                   {filterCoin !== undefined && filterCoin.map((item: any, index: number) => {
                     return (
                       <li key={index} onClick={() => { setImage(item.image); setText(item.symbol); setShow(false); props?.setCurrencyName && props?.setCurrencyName(item.symbol, props.dropdown); props?.setCurrency && props.setCurrency(item, props.dropdown); props.filterNetworkListByCoin && props.filterNetworkListByCoin(item) }} className='cursor-pointer  flex items-center gap-10 p-10 py-[6px] hover:bg-grey dark:hover:bg-d-bg-primary rounded-[5px]'>
-                        <Image src={`${item.image}`} alt="error" width={20} height={20} className={`${item.symbol === 'XRP' || item.symbol === 'ETH' ? 'bg-white rounded-full' : ''}`} />
+                        <Image src={`${imgSrc2?'/assets/history/Coin.svg':item.image}`} alt="error" width={20} height={20} className={`${item.symbol === 'XRP' || item.symbol === 'ETH' ? 'bg-white rounded-full' : ''}`} onError={() => setImgSrc2(true)}/>
                         <p className={`sm-text rounded-[5px] dark:!text-d-nav-secondary   !text-banner-text`}>{item.symbol}</p>
                       </li>
                     )
@@ -145,7 +148,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
                   {filterCoin !== undefined && filterCoin.map((item: any, index: number) => {
                     return (
                       <li key={index} onClick={() => { setImage(item.image); setText(item.symbol); setShowSecond(false); props?.setCurrencyName && props?.setCurrencyName(item.symbol, props.dropdown); props?.setCurrency && props.setCurrency(item, props.dropdown) }} className='cursor-pointer  flex items-center gap-10 p-10 py-[6px] hover:bg-grey dark:hover:bg-d-bg-primary rounded-[5px]'>
-                        <Image src={`${item.image}`} alt="error" width={20} height={20} />
+                        <Image src={`${imgSrc?'/assets/history/Coin.svg':item.image}`} alt="error" width={20} height={20} onError={() => setImgSrc(true)}/>
                         <p className={`sm-text rounded-[5px] dark:!text-d-nav-secondary   !text-banner-text`}>{item.symbol}</p>
                       </li>
                     )

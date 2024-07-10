@@ -26,6 +26,8 @@ const FutureList = (props: propsData) => {
     const [show1, setShow1] = useState(0);
     const [selectedCoinBalance, setSelectedCoinBalance] = useState(0.00);
     const router = useRouter();
+      const [imgSrc, setImgSrc] = useState(false);
+    const [imgSrc2, setImgSrc2] = useState(false);
 
     let itemsPerPage = 10;
 
@@ -130,7 +132,7 @@ const FutureList = (props: propsData) => {
                                 <tr key={index} className="rounded-5 group ">
                                     <td className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                            <Image src={`${item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" />
+                                        <Image src={`${imgSrc2?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)}/>
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                                 <p className="info-14-18 dark:text-white">{item.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                                 {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p> */}
@@ -227,7 +229,8 @@ const FutureList = (props: propsData) => {
                                 <div key={index} className="rounded-5 group grid grid-cols-3  gap-x-[10px]  items-center">
                                     <div className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                            <Image src={`${item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={28} height={28} alt="coins" className="max-w-[20px] md:max-w-[30px] w-full" />
+                                        <Image src={`${imgSrc?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={28} height={28} alt="coins" className="max-w-[20px] md:max-w-[30px] w-full" onError={() => setImgSrc(true)}/>
+
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                                 <p className="info-14-18 dark:text-white">{item.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                                 <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>

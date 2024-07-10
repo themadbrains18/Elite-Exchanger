@@ -25,6 +25,7 @@ const SideBar = (props: profileSec) => {
     const router = useRouter()
     const [enableDp, setEnableDP] = useState(false);
     const { status, data: session } = useSession();
+    const [imgSrc, setImgSrc] = useState(false);
 
     const [duserName, setduserName] = useState('');
     const [demail, setdemail] = useState('');
@@ -219,11 +220,12 @@ const SideBar = (props: profileSec) => {
                                     >
                                         {profileImg && (
                                             <Image
-                                                src={profileImg}
+                                                src={imgSrc?process.env.NEXT_PUBLIC_AVATAR_PROFILE : profileImg}
                                                 width={125}
                                                 height={125}
                                                 alt="selfie Image"
                                                 className="w-[133px] object-cover h-[133px] object-top"
+                                                onError={() => setImgSrc(true)}
                                             />
                                         )}
                                     </div>

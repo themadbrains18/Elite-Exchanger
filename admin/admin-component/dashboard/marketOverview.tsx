@@ -13,6 +13,8 @@ const MarketOverview = (props: list) => {
   const [list, setList] = useState([])
   const { data: session } = useSession()
   const { mode } = useContext(Context)
+  const [imgSrc, setImgSrc] = useState(false);
+
   let itemsPerPage = 10;
 
   useEffect(() => {
@@ -77,10 +79,11 @@ const MarketOverview = (props: list) => {
                   <tr key={index} className=" border-b-[0.5px] border-[#ECF0F3] dark:border-[#ffffff1a]  hover:bg-[#3699ff14] dark:hover:bg-[#90caf929]">
                     <td className="px-1 py-[10px] flex gap-[10px] items-center admin-table-data">
                       <Image
-                        src={`${item?.image}`}
+                        src={`${imgSrc?'/assets/admin/coin1.svg':item?.image}`}
                         width={24}
                         height={24}
                         alt="coins"
+                        onError={() => setImgSrc(true)}
                       />
                       <div>
                         <p>{item?.symbol}</p>

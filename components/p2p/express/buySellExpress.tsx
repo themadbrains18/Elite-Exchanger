@@ -14,6 +14,7 @@ import { useSession } from "next-auth/react";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { currencyFormatter } from "@/components/snippets/market/buySellCard";
 import AuthenticationModelPopup from "@/components/snippets/authenticationPopup";
+import { truncateNumber } from "@/libs/subdomain";
 
 const schema = yup.object().shape({
   spend_amount: yup.number().positive("Spend amount must be greater than '0'.").required('This field must be required.').typeError('This field must be required.'),
@@ -109,7 +110,7 @@ const BuySellExpress = (props: propsData) => {
 
       let data = await responseData?.json();
 
-      setUsdtToInr(data?.rate?.toFixed(6));
+      setUsdtToInr(truncateNumber(data?.rate,6));
       setLoader(false)
 
       return data;
@@ -133,7 +134,7 @@ const BuySellExpress = (props: propsData) => {
 
     clearErrors("spend_amount")
     clearErrors("receive_amount")
- 
+
     reset()
     if (active1 === 1) {
       if (dropdown === 1) {
@@ -254,7 +255,7 @@ const BuySellExpress = (props: propsData) => {
         if (amount !== undefined) {
           let spend_amount: any = getValues('spend_amount') * data?.rate
           setReceivedAmount(spend_amount)
-          setValue('receive_amount', spend_amount.toFixed(6));
+          setValue('receive_amount', truncateNumber(spend_amount,6));
         }
         else {
           setReceivedAmount(0.00)
@@ -304,111 +305,111 @@ const BuySellExpress = (props: propsData) => {
    */
   const onHandleSubmit = async (data: any) => {
 
-try {
-  let pmId = getValues("p_method")
-  // p2p/postad
-  if (active1 === 2) {
-  
-    console.log(data,"==daa");
-    
-  
-    let pmMethod = props.masterPayMethod.filter((item: any) => item?.id === pmId)
-    console.log(pmMethod);
-  
-  
-    if (filterAsset?.balance == undefined) {
-      setError("spend_amount", {
-        type: "custom",
-        message: `Insufficient balance.`,
-      });
-      return;
-    }
-  
-    if (data?.spend_amount > filterAsset?.balance) {
-      setError("spend_amount", {
-        type: "custom",
-        message: `Insufficient balance.`,
-      });
-      return;
-    }
-    let tokenID = selectedSecondToken?.id;
-    if (session?.user?.kyc !== 'approve' || session?.user?.TwoFA === false || (session?.user?.tradingPassword === '' || session?.user?.tradingPassword === null) || (session?.user?.email === '' || session?.user?.email === null)) {
-      setShow(true);
-      setActive(true)
-    }
-    else {
-      route.push(`/p2p/postad?token_id=${tokenID}&qty=${data?.spend_amount}&price=${usdtToInr}&pmid=${pmId}`);
-    }
-    return;
-  }
-  
-  if (data.spend_amount < finalPost?.min_limit) {
-    setError("spend_amount", {
-      type: "custom",
-      message: `Note: There's an order available in the range  ${finalPost?.min_limit} - ${finalPost?.max_limit}. Order within the range.`,
-    });
-    return;
-  }
-  
-  if (status === 'authenticated') {
-    let obj = {
-      post_id: finalPost?.id,
-      sell_user_id: finalPost?.user?.id,
-      buy_user_id: session?.user?.user_id,
-      token_id: finalPost?.token_id,
-      price: finalPost?.price,
-      quantity: data?.receive_amount,
-      spend_amount: data?.spend_amount,
-      receive_amount: data?.receive_amount,
-      spend_currency: 'INR',
-      receive_currency: finalPost?.token !== null ? finalPost?.token?.symbol : finalPost?.global_token?.symbol,
-      p_method: '',
-      type: 'buy',
-      status: 'isProcess'
-    }
-  
-    const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-    let record = encodeURIComponent(ciphertext.toString());
-  
-    let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/buy`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": session?.user?.access_token
-      },
-      body: JSON.stringify(record)
-    })
-  
-    let res = await responseData.json();
-  
-    if (res.data.status === 200) {
-      toast.success(res?.data?.data?.message);
-      if (wbsocket) {
-        let buy = {
-          ws_type: 'buy',
-          sellerid: finalPost?.User?.id
+    try {
+      let pmId = getValues("p_method")
+      // p2p/postad
+      if (active1 === 2) {
+
+        console.log(data, "==daa");
+
+
+        let pmMethod = props.masterPayMethod.filter((item: any) => item?.id === pmId)
+        console.log(pmMethod);
+
+
+        if (filterAsset?.balance == undefined) {
+          setError("spend_amount", {
+            type: "custom",
+            message: `Insufficient balance.`,
+          });
+          return;
         }
-        wbsocket.send(JSON.stringify(buy));
+
+        if (data?.spend_amount > filterAsset?.balance) {
+          setError("spend_amount", {
+            type: "custom",
+            message: `Insufficient balance.`,
+          });
+          return;
+        }
+        let tokenID = selectedSecondToken?.id;
+        if (session?.user?.kyc !== 'approve' || session?.user?.TwoFA === false || (session?.user?.tradingPassword === '' || session?.user?.tradingPassword === null) || (session?.user?.email === '' || session?.user?.email === null)) {
+          setShow(true);
+          setActive(true)
+        }
+        else {
+          route.push(`/p2p/postad?token_id=${tokenID}&qty=${data?.spend_amount}&price=${usdtToInr}&pmid=${pmId}`);
+        }
+        return;
       }
-  
-      setTimeout(() => {
-        route.push(`/p2p/my-orders?buy=${res?.data?.data?.result?.id}`);
-      }, 3000);
-  
+
+      if (data.spend_amount < finalPost?.min_limit) {
+        setError("spend_amount", {
+          type: "custom",
+          message: `Note: There's an order available in the range  ${finalPost?.min_limit} - ${finalPost?.max_limit}. Order within the range.`,
+        });
+        return;
+      }
+
+      if (status === 'authenticated') {
+        let obj = {
+          post_id: finalPost?.id,
+          sell_user_id: finalPost?.user?.id,
+          buy_user_id: session?.user?.user_id,
+          token_id: finalPost?.token_id,
+          price: finalPost?.price,
+          quantity: data?.receive_amount,
+          spend_amount: data?.spend_amount,
+          receive_amount: data?.receive_amount,
+          spend_currency: 'INR',
+          receive_currency: finalPost?.token !== null ? finalPost?.token?.symbol : finalPost?.global_token?.symbol,
+          p_method: '',
+          type: 'buy',
+          status: 'isProcess'
+        }
+
+        const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+        let record = encodeURIComponent(ciphertext.toString());
+
+        let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/buy`, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            "Authorization": session?.user?.access_token
+          },
+          body: JSON.stringify(record)
+        })
+
+        let res = await responseData.json();
+
+        if (res.data.status === 200) {
+          toast.success(res?.data?.data?.message);
+          if (wbsocket) {
+            let buy = {
+              ws_type: 'buy',
+              sellerid: finalPost?.User?.id
+            }
+            wbsocket.send(JSON.stringify(buy));
+          }
+
+          setTimeout(() => {
+            route.push(`/p2p/my-orders?buy=${res?.data?.data?.result?.id}`);
+          }, 3000);
+
+        }
+        else {
+          toast.error(res?.data?.data);
+        }
+      }
+      else {
+        toast.error('Unauthenticated User. Please Login to buy any assets');
+        return;
+      }
+
+    } catch (error) {
+      console.log(error, "==error");
+
     }
-    else {
-      toast.error(res?.data?.data);
-    }
-  }
-  else {
-    toast.error('Unauthenticated User. Please Login to buy any assets');
-    return;
-  }
-  
-} catch (error) {
-  console.log(error,"==error");
-  
-}
 
 
   }
@@ -419,7 +420,7 @@ try {
    * @param token 
    */
   const filterSellerAds = (id: string, token: any) => {
-   
+
     clearErrors("spend_amount")
     clearErrors("receive_amount")
     setValue('p_method', id);
@@ -608,7 +609,7 @@ try {
                       I want to {active1 === 1 ? "pay ≈" : "sell ≈"}
                     </p>
                     <input
-                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
+                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="$0"
                       step="any"
                       {...register('spend_amount')}
@@ -617,9 +618,9 @@ try {
                           setAmount(e?.target?.value);
                         }
                         let receiveAmount: any = parseFloat(e?.target?.value) / usdtToInr;
-                        setReceivedAmount(receiveAmount.toFixed(6));
+                        setReceivedAmount(truncateNumber(receiveAmount,6));
 
-                        setValue('receive_amount', receiveAmount.toFixed(6));
+                        setValue('receive_amount', truncateNumber(receiveAmount,6));
                         clearErrors('spend_amount');
                         clearErrors('receive_amount');
                         if (Object.keys(finalPost).length > 0) {
@@ -673,7 +674,7 @@ try {
                   <div className="">
                     <p className="sm-text dark:text-white">I will receive ≈</p>
                     <input
-                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
+                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="$0"
                       step="any"
                       {...register('receive_amount')}
@@ -682,8 +683,8 @@ try {
                           setReceivedAmount(e?.target?.value);
                         }
                         let spendAmount: any = parseFloat(e.target.value) * usdtToInr;
-                        setAmount(spendAmount?.toFixed(2));
-                        setValue('spend_amount', spendAmount?.toFixed(2));
+                        setAmount(truncateNumber(spendAmount,2));
+                        setValue('spend_amount', truncateNumber(spendAmount,2));
                         clearErrors('receive_amount');
                         clearErrors('spend_amount')
                       }}
@@ -708,7 +709,7 @@ try {
 
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">
-                    Estimated price: 1 {secondCurrency} = {currencyFormatter(Number(Number(usdtToInr)?.toFixed(2)))} INR
+                    Estimated price: 1 {secondCurrency} = {currencyFormatter(Number(truncateNumber(Number(usdtToInr),2)))} INR
                   </p>
                 </div>
                 <div className="mt-5 flex gap-2">
@@ -741,7 +742,7 @@ try {
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
 
                   <p className="sm-text dark:text-white">
-                    {filterAsset !== undefined ? currencyFormatter(parseFloat(filterAsset?.balance.toFixed(6))) : '0.0'}
+                    {filterAsset !== undefined ? currencyFormatter(truncateNumber(parseFloat(filterAsset?.balance),6)) : '0.0'}
                   </p>
                 </div>
                 {/* First Currency Inputs */}
@@ -752,7 +753,7 @@ try {
                       I want to sell ≈
                     </p>
                     <input
-                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
+                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="$0"
                       step="any"
                       {...register('spend_amount')}
@@ -761,9 +762,9 @@ try {
                           setAmount(e?.target?.value);
                         }
                         let receiveAmount: any = parseFloat(e?.target?.value) * usdtToInr;
-                        setReceivedAmount(receiveAmount.toFixed(2));
+                        setReceivedAmount(truncateNumber(receiveAmount,2));
                         // setReceivedAmount(parseFloat(e?.target?.value) * usdtToInr);
-                        setValue('receive_amount', receiveAmount.toFixed(2));
+                        setValue('receive_amount', truncateNumber(receiveAmount,2));
                         clearErrors('spend_amount');
                         clearErrors('receive_amount');
                       }}
@@ -800,7 +801,7 @@ try {
                   <div className="">
                     <p className="sm-text dark:text-white">I will receive ≈</p>
                     <input
-                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
+                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="$0"
                       step="any"
                       {...register('receive_amount')}
@@ -809,8 +810,8 @@ try {
                           setReceivedAmount((e?.target?.value));
                         }
                         let spendAmount: any = parseFloat(e.target.value) / usdtToInr;
-                        setAmount(spendAmount.toFixed(6));
-                        setValue('spend_amount', spendAmount.toFixed(6));
+                        setAmount(truncateNumber(spendAmount,6));
+                        setValue('spend_amount', truncateNumber(spendAmount,6));
                         clearErrors('spend_amount');
                         clearErrors('receive_amount');
                       }}
@@ -835,7 +836,7 @@ try {
 
                 <div className="mt-5 flex gap-2 ">
                   <div className=" flex items-center relative">
-                    <p className="sm-text dark:text-white">  Estimated price: 1 {secondCurrency}={currencyFormatter(Number(Number(usdtToInr)?.toFixed(2)))} INR</p>
+                    <p className="sm-text dark:text-white">  Estimated price: 1 {secondCurrency}={currencyFormatter(Number(truncateNumber(Number(usdtToInr),2)))} INR</p>
 
                   </div>
                 </div>

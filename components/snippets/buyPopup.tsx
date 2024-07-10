@@ -34,6 +34,7 @@ const BuyPopup = (props: activeSection) => {
   const { status, data: session } = useSession();
   const wbsocket = useWebSocket();
   const [totalOrder, setTotalOrder] = useState(0);
+  const [imgSrc, setImgSrc] = useState(false);
 
   
   
@@ -313,7 +314,9 @@ const BuyPopup = (props: activeSection) => {
                       }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full dark:text-white" placeholder="0" />
                     </div>
                     <div className="pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] flex gap-[5px] items-center">
-                      <Image src={props?.selectedPost?.token !== null ? props?.selectedPost?.token?.image : props?.selectedPost?.global_token?.image} alt="error" width={20} height={20} />
+                    <Image src={`${imgSrc?'/assets/history/Coin.svg':props?.selectedPost.token !== null ? props?.selectedPost?.token?.image : props?.selectedPost?.global_token?.image}`} width={20} height={20} alt="coins" onError={() => setImgSrc(true)}/>
+
+                  
                       <p className={`sm-text rounded-[5px]   !text-banner-text`}>{props?.selectedPost?.token !== null ? props?.selectedPost?.token?.symbol : props?.selectedPost?.global_token?.symbol}</p>
                     </div>
                   </div>

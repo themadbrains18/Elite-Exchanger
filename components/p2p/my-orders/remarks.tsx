@@ -70,7 +70,7 @@ const Remarks = (props: propsData) => {
      * @param e 
      */
     const calculateTimeLeft = (e: any) => {
-        console.log(props.userOrder?.status,"========= time update");
+        // console.log(props.userOrder?.status,"========= time update");
         let { total, minutes, seconds }
             = getTimeRemaining(e);
         

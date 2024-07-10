@@ -1,22 +1,17 @@
-import React, { Fragment } from 'react'
-import SectionHead from '../snippets/sectionHead'
+import React, { Fragment, useEffect, useState } from 'react';
+import SectionHead from '../snippets/sectionHead';
 import CoinCard from '../snippets/coinCard';
-
-// Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
-// import Swiper core and required modules
-
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
-
 import { Pagination } from 'swiper/modules';
 
 interface propsData {
-  coinList: any
+  coinList: any;
 }
 
 const CryptoCoin = (props: propsData) => {
+  const [cardData, setCardData] = useState<any[]>([]);
 
   const headData = {
     title: 'Top Market',
@@ -27,54 +22,70 @@ const CryptoCoin = (props: propsData) => {
     hidden: false
   };
 
-  let coins = props?.coinList?.filter((item:any)=>{
-    return item?.symbol!=="USDT"
-  });
+  useEffect(() => {
+    const fetchHLCOData = async () => {
+      let coins = props?.coinList?.filter((item: any) => item?.symbol !== "USDT");
+      let limitedCoins = coins?.slice(0, 4);
 
-  let cardData = coins?.slice(0, 4);
-  cardData?.forEach(function (element:any) {
-    element.chartImg = "ChartImage";
-    element.status = 'high';
-    element.change24h = '4'
-  });
+      const fetchDataForCoin = async (coin: any) => {
+        
+        const slug = coin.symbol;
+        try {
+          let hlocv = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/hloc?slug=${slug}`, {
+            method: "GET"
+          }).then(response => response.json());
 
-  
+          return {
+            ...coin,
+            chartImg: "ChartImage",
+            status: 'high',
+            change24h: '4',
+            hlocv:hlocv?.data?.data
+          };
+        } catch (error) {
+          console.error(`Error fetching HLCO data for ${slug}:`, error);
+          return {
+            ...coin,
+            chartImg: "ChartImage",
+            status: 'high',
+            change24h: '4',
+            hlocv: null
+          };
+        }
+      };
+
+      const updatedCardData = await Promise.all(limitedCoins.map(fetchDataForCoin));
+      setCardData(updatedCardData);
+    };
+
+    fetchHLCOData();
+  }, [props.coinList]);
+
   return (
-    <>
-      <section className='py-[30px] md:py-[100px]'>
-        <div className='container'>
-          <SectionHead headData={headData} center={true} />
-          <div className='cryptoCoin_cards hidden lg:mt-[60px] mt-[50px] md:flex items-center flex-wrap justify-center gap-[30px]'>
-            {
-             cardData && cardData.length>0 && cardData?.map((elem: any, ind: any) => {
-                return (
-                  <Fragment key={ind}>
-                    <CoinCard coinCardData={elem} />
-                  </Fragment>
-                )
-              })
-            }
-          </div>
-          <div className='block md:hidden mt-[50px]'>
-            <Swiper slidesPerView={1.2} spaceBetween={20} pagination={true} modules={[Pagination]} className="mySwiper tmb-swiper">
-              {
-               cardData && cardData.length>0 && cardData.map((elem: any, ind: any) => {
-                  return (
-                    <Fragment key={ind}>
-                      <SwiperSlide key={ind}>
-                        <CoinCard coinCardData={elem} />
-                      </SwiperSlide>
-                    </Fragment>
-                  )
-                })
-              }
-
-            </Swiper>
-          </div>
+    <section className='py-[30px] md:py-[100px]'>
+      <div className='container'>
+        <SectionHead headData={headData} center={true} />
+        <div className='cryptoCoin_cards hidden lg:mt-[60px] mt-[50px] md:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center flex-wrap justify-center gap-[20px] xl:gap-[30px]'>
+          {cardData && cardData.length > 0 && cardData.map((elem: any, ind: any) => (
+            <Fragment key={ind}>
+              <CoinCard coinCardData={elem} />
+            </Fragment>
+          ))}
         </div>
-      </section>
-    </>
-  )
-}
+        <div className='block md:hidden mt-[50px]'>
+          <Swiper slidesPerView={1.2} spaceBetween={20} pagination={true} modules={[Pagination]} className="mySwiper tmb-swiper">
+            {cardData && cardData.length > 0 && cardData.map((elem: any, ind: any) => (
+              <Fragment key={ind}>
+                <SwiperSlide key={ind}>
+                  <CoinCard coinCardData={elem} />
+                </SwiperSlide>
+              </Fragment>
+            ))}
+          </Swiper>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-export default CryptoCoin
+export default CryptoCoin;

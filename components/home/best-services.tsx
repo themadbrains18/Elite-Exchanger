@@ -14,7 +14,7 @@ const BestServices = () => {
 const cardsData = [
     {
         "svgType":"safetyLogo",
-        "cardHeading":"Safty Comes First",
+        "cardHeading":"Safety Comes First",
         "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
     },
     {
@@ -29,7 +29,7 @@ const cardsData = [
     },
     {
         "svgType":"BonusRefferal",
-        "cardHeading":"Bonus & Refferal",
+        "cardHeading":"Bonus & Referral",
         "cardInfo":"Lorem ipsum dolor sit amet, dui  consectetur adipiscing elit. Nibh aenean dui aliquet amet."
     },
     {

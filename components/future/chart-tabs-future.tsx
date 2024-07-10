@@ -17,7 +17,7 @@ const ChartTabsFuture = (props: propsData) => {
     const [show, setShow] = useState(1);
     const { status, data: session } = useSession();
     return (
-        <div className='bg-[#fafafa] dark:bg-[#1a1b1f] border-t border-b dark:border-[#25262a] border-[#e5e7eb] py-[14px] px-[16px] max-w-full w-full'>
+        <div className='bg-[#fafafa] dark:bg-[#1a1b1f]  border-t border-b dark:border-[#25262a] border-[#e5e7eb] py-[14px] px-[16px] max-w-full w-full'>
             {/* tabs */}
             <div className='overflow-x-auto hide-scroller border-b border-grey-v-3 dark:border-opacity-[15%]'>
                 <div className='flex items-center gap-[20px] mb-[10px] w-max'>

@@ -37,6 +37,7 @@ const RangeSlider: React.FC<UniqueIds> = ({
   }, [levrageValue, levrage, inputId]);
 
   const showSliderValue = () => {
+    
     const sliderInput = document.getElementById(inputId) as HTMLInputElement;
     const sliderThumb = document.getElementById(thumbId) as HTMLDivElement;
     const sliderLine = document.getElementById(lineId) as HTMLDivElement;
@@ -57,7 +58,10 @@ const RangeSlider: React.FC<UniqueIds> = ({
         inputPercent.value = `${Math.trunc((value / max) * 100)}X`;
       }
 
+      
       onChangeSizeInPercentage(value);
+
+ 
     }
   };
 

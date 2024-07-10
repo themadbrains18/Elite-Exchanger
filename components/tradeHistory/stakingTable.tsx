@@ -25,7 +25,8 @@ const StakingTable = () => {
     const [formData, setFormData] = useState();
     const [show, setShow] = useState(false);
     const [confirmation, setConfirmation] = useState(false)
-  
+    const [imgSrc, setImgSrc] = useState(false);
+
     const [selectedStake, setSelectedStake] = useState(Object);
     const { mode } = useContext(Context)
   
@@ -301,7 +302,9 @@ const StakingTable = () => {
               <tr key={index}>
                 <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
                   <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                    <Image src={`${item?.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" />
+                    
+                  <Image src={`${imgSrc?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)}/>
+
                     <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                       <p className="info-14-18 dark:text-white">{item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                     </div>

@@ -8,17 +8,30 @@ interface setHeight {
     setShow?: any;
     widthFull?: boolean;
     currentToken?: any;
-    positionRecord?:any;
+    positionRecord?: any;
 }
 const OrderBookFuture = (props: setHeight) => {
-    const [highlow, setHighlow] = useState<any>(true);
+    const [highlow, setHighlow] = useState<boolean>(true);
+
+    const [prevPrice, setPrevPrice] = useState<any>();
+
+    useEffect(() => {
+
+setPrevPrice(props?.positionRecord[0])
+
+    }, [props?.positionRecord]);
+
+
+
 
     return (
-        <div className={`w-full bg-[#fafafa] dark:bg-[#1a1b1f] min-[990px]:border-l max-[991px]:border-t border-b dark:border-[#25262a] border-[#e5e7eb] ${props.widthFull ? "max-w-full" : "max-w-[300px]"}  `}>
+        <div className={`w-full bg-[#fafafa] dark:bg-[#1a1b1f] min-[990px]:border-l max-[991px]:border-t dark:border-[#25262a] border-[#e5e7eb] ${props.widthFull ? "max-w-full" : "max-w-[350px]"}  `}>
             {/* order book head */}
-            <div className='flex items-center justify-between gap-[10px] bg-[#fafafa] dark:bg-[#1a1b1f] border-b dark:border-[#25262a] border-[#e5e7eb] py-[10px]  px-[16px]  w-full'>
-                <h3 className='top-label dark:!text-white !text-[#000] max-[991px]:hidden'>Order Book</h3>
-                <div className='flex items-center justify-between gap-[10px] '>
+            <div className='flex items-center gap-4'>
+
+
+
+                <div className='flex items-center justify-between gap-[10px] p-[10px]'>
                     <button className={`p-[5px] border border-[#ffffff26] rounded  ${props.show === 1 ? "dark:bg-[#373d4e] bg-[#e5ecf0]" : "bg-transparent"}`} onClick={() => { props.setShow(1) }}>
                         <svg
                             width={16}
@@ -122,17 +135,17 @@ const OrderBookFuture = (props: setHeight) => {
                         </svg>
                     </button>
                 </div>
+
             </div>
             {
                 props.show === 2 &&
-                <BuyTableFuture fullHeight={true} showPrice={true} currentToken={props.currentToken} positionRecord={props?.positionRecord}/>
+                <BuyTableFuture fullHeight={true} showPrice={true} currentToken={props.currentToken} positionRecord={props?.positionRecord}  />
             }
             {
                 props.show === 1 &&
                 <>
-                    <BuyTableFuture currentToken={props.currentToken} positionRecord={props?.positionRecord}/>
+                    <BuyTableFuture currentToken={props.currentToken} positionRecord={props?.positionRecord} />
                     <div className='bg-card-bg py-[6px] px-[20px] flex items-center justify-between dark:bg-omega bg-white my-[10px]'>
-                        
                         <div className='flex items-center gap-1'>
                             <svg
                                 enableBackground="new 0 0 32 32"
@@ -140,13 +153,13 @@ const OrderBookFuture = (props: setHeight) => {
                                 viewBox="0 0 32 32"
                                 xmlSpace="preserve"
                                 xmlns="http://www.w3.org/2000/svg"
-                                className={`w-3 ${highlow ? 'rotate-180':''}`}
+                                className={`w-3 ${prevPrice?.direction==="long" ? 'rotate-180' : ''}`}
                                 xmlnsXlink="http://www.w3.org/1999/xlink"
-                                >
+                            >
                                 <path
                                     clipRule="evenodd"
                                     d="M26.704,20.393  c-0.394-0.39-1.034-0.391-1.428,0l-8.275,8.193V1c0-0.552-0.452-1-1.01-1s-1.01,0.448-1.01,1v27.586l-8.275-8.192  c-0.394-0.391-1.034-0.391-1.428,0c-0.394,0.391-0.394,1.024,0,1.414l9.999,9.899c0.39,0.386,1.039,0.386,1.429,0l9.999-9.899  C27.099,21.417,27.099,20.784,26.704,20.393C26.31,20.003,27.099,20.784,26.704,20.393z"
-                                    className={`${highlow ? 'fill-buy':'fill-sell'}`}
+                                    className={`${prevPrice?.direction==="long" ? 'fill-buy' : 'fill-sell'}`}
                                     fillRule="evenodd"
                                 />
                                 <g />
@@ -157,16 +170,16 @@ const OrderBookFuture = (props: setHeight) => {
                                 <g />
                             </svg>
 
-                            <p className={`info-18 ${highlow ? 'text-buy':'text-sell'}`}>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price,6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price,6))}</p>
+                            <p className={`info-18 ${prevPrice?.direction==="long" ? 'text-buy' : 'text-sell'}`}>{currencyFormatter(truncateNumber(prevPrice ? prevPrice?.entry_price:0, 6))}</p>
                         </div>
-                        <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price,6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price,6))}</p>
+                        <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price, 6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price, 6))}</p>
                     </div>
-                    <SelltableFuture currentToken={props.currentToken} positionRecord={props?.positionRecord}/>
+                    <SelltableFuture currentToken={props.currentToken} positionRecord={props?.positionRecord} />
                 </>
             }
             {
                 props.show === 3 &&
-                <SelltableFuture show={props.show} fullHeight={true} showPrice={true} currentToken={props.currentToken} positionRecord={props?.positionRecord}/>
+                <SelltableFuture show={props.show} fullHeight={true} showPrice={true} currentToken={props.currentToken} positionRecord={props?.positionRecord} />
             }
         </div>
     )
