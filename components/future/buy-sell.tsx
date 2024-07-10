@@ -1018,7 +1018,7 @@ const BuySell = (props: fullWidth) => {
         {/* ================================= */}
         {(showNes === 1 || showNes === 2) && (
           <>
-            <div className="flex items-center justify-between mt-[20px]">
+            {/* <div className="flex items-center justify-between mt-[20px]">
               <div
                 className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent] prefrence`}
               >
@@ -1059,7 +1059,7 @@ const BuySell = (props: fullWidth) => {
                   <p className="ml-2 md-text !text-[14px]">TP/SL</p>
                 </label>
               </div>
-            </div>
+            </div> */}
             {session && (
               <div className="mt-[20px]">
                 {orderType === "value" && (
