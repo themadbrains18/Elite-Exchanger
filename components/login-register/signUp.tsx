@@ -19,14 +19,15 @@ import StrengthCheck2 from "../snippets/strengthCheck2";
 
 const schema = yup.object().shape({
   username: yup.string()
-    .required('Email / Phone is required.').matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+){0,1}\.[a-zA-Z]{2,4}$/, "Please enter valid email(letters, number and period('.')) or phone number."),
+    .required('Email / Phone is required.').matches(/^[a-zA-Z0-9]+(?:[._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+){0,1}\.[a-zA-Z]{2,4}$/
+, "Please enter valid email(letters, number and period('.')) or phone number."),
   // .test('email_or_phone', 'Email / Phone is invalid', (value) => {
   //   return yupValidateEmail(value) || validatePhone(value);
   // }),
-  password: yup.string().min(8).max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter.")
+  password: yup.string().min(8,"Password must have at least 8 characters").max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter.")
     .matches(/\w*[A-Z]\w*/, "Password must have a capital letter.")
     .matches(/\d/, "Password must have a number.")
-    .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character.")
+    .matches(/[!+@#$%^&*()\-_"=+{}; ?:,<.>]/, "Password must have a special character.")
     .matches(/^\S*$/, "Whitespaces are not allowed."),
   confirmPassword: yup.string().oneOf([yup.ref('password'), ''], 'Passwords must match.').required('Confirm password is required.'),
   refeer_code: yup.string().optional(),
@@ -85,6 +86,14 @@ const SignUp = () => {
       let isEmailExist = await validateEmail(data.username);
 
       const [localPart, domainPart] = data.username.includes('@') && data.username.split('@');
+
+      console.log(localPart.length,"=local pat");
+      
+      if(localPart.length<6 || localPart.length>32){
+        setError('username',{message:"Username must be between 6 and 30 characters long."})
+        setBtnDisabled(false)
+        return;
+      }
 
       // Convert the domain part to lowercase
       const normalizedDomainPart = domainPart.toLowerCase();
@@ -213,16 +222,16 @@ const SignUp = () => {
                 {/**Form Start  */}
                 <form onSubmit={handleSubmit(onHandleSubmit)} autoComplete="new-password">
                   <div className="flex flex-col gap-[15px] lg:gap-10">
-                    <input type="email" autoComplete="new-password" placeholder="Enter Email / Phone Number" {...register('username')} name="username" className="input-cta" />
+                    <input type="text" autoComplete="new-password"  placeholder="Enter Email / Phone Number" {...register('username')} name="username" className="input-cta" />
                     {errors.username && <p className="errorMessage">{errors.username.message}</p>}
                     <div className="relative text-end">
                       <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
                     </div>
                     <div
-                      className="relative flex justify-between gap-2 items-center input-cta" onFocus={() => { setChecker(true) }} onBlur={() => { setChecker(false) }}
+                      className="relative " onFocus={() => { setChecker(true) }} onBlur={() => { setChecker(false) }}
                     >
                       <input type={`${show === true ? "text" : "password"}`} {...register('password')}
-                        name="password" placeholder="Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta dark:shadow-[inset_0_50px_0_#121318] shadow-[inset_0_50px_0_#e2f2ff]" maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)} />
+                        name="password" placeholder="Password" className=" w-full password-input  focus:outline-none input-cta !text-beta  " maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)} />
                       <Image
                         data-testid="show-hide"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
@@ -232,7 +241,7 @@ const SignUp = () => {
                         onClick={() => {
                           setShow(!show);
                         }}
-                        className="cursor-pointer "
+                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                       />
                       {checker &&
                         <StrengthCheck2 password={pswd} />}
@@ -259,8 +268,8 @@ const SignUp = () => {
                   </div>
                   <div className="flex mt-[30px] gap-[10px] items-start">
                     <input type="checkbox" id="checkbox" {...register('agree')} className="mt-[3px]" />
-                    <label htmlFor="checkbox" className=" cursor-pointer sm-text text-[14px] md:text-[16px] text-gamma dark:text-white ">
-                      By Register i agree that i’m 18 years of age or older, ot the{" "}
+                    <label htmlFor="checkbox" className=" cursor-pointer sm-text text-[14px] md:text-[16px] text-gamma dark:text-white leading-[24px]">
+                    By registering, I agree that I am 18 years of age or older and accept the{" "}
                       <Link href="#" className="!text-primary">
                         User Agreements, Privacy Policy, Cookie Policy.
                       </Link>

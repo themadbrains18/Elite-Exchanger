@@ -342,7 +342,7 @@ const SecurityCode = (props: propsData) => {
                   </div>
                   <p className="lg:mt-[20px] md-text errorMessage" >{otpMessage}</p>
                   <div className={`flex  ${enable === true ? '' : 'hidden'}`}>
-                    <p className={`info-10-14 px-2 pl-0 text-end mt-[15px]  md-text`}>Your OTP will expire within </p>
+                    <p className={`info-10-14 px-2 pl-0 text-end  md-text`}>Your OTP will expire within </p>
                     <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
                   </div>
 
