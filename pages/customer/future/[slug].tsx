@@ -121,7 +121,7 @@ const FutureTrading = (props: Session) => {
     // ===================================== //
     const refreshTokenList = async () => {
 
-        let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future`, {
+        let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future?qu=all`, {
             method: "GET"
         }).then(response => response.json());
 
@@ -411,9 +411,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future?qu=all`, {
         method: "GET"
     }).then(response => response.json());
-
-    console.log(tokenList,"==tokenList");
-    
 
 
     let userAssets: any = [];

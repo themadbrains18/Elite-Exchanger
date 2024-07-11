@@ -48,6 +48,7 @@ const ResetPassword = () => {
     try {
       
       let isEmailExist = await validateEmail(data.username);
+      data.username= data.username.toLowerCase()
       setIsEmail(isEmailExist);
 
       data.otp = "";

@@ -15,7 +15,7 @@ import ResetSuccessful from "../snippets/resetSuccessful";
 
 
 const schema = yup.object().shape({
-  new_password: yup.string().min(8).max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter.")
+  new_password: yup.string().min(8,"New password must be at least 8 characters").max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter.")
     .matches(/\w*[A-Z]\w*/, "Password must have a capital letter.")
     .matches(/\d/, "Password must have a number.")
     .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character.")
