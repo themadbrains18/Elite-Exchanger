@@ -24,6 +24,7 @@ const CoinList = (props: propsData) => {
 
   const [spotTrade, SetSpotTrade] = useState([]);
   const [futureTrade, SetFutureTrade] = useState([]);
+  const [search, setSearch] = useState('all');
 
   let tabsData = [
     {
@@ -74,16 +75,16 @@ const CoinList = (props: propsData) => {
 
     //Get future trade token list
     getFutureTardeList();
-
-    // Get top gainer token list
-    // getTopGainersList();
   }, [props?.coins]);
 
-  
+  useEffect(()=>{
+    getFutureTardeList();
+  },[search]);
 
+  
   const getFutureTardeList = async () => {
     try {
-      let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future`, {
+      let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future?qu=${search}`, {
         method: "GET"
       }).then(response => response.json());
 
@@ -92,7 +93,6 @@ const CoinList = (props: propsData) => {
 
     }
   }
-
 
 
   return (
@@ -115,14 +115,8 @@ const CoinList = (props: propsData) => {
           </div>
             <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[331px] w-full py-[13px] px-[10px] ">
           <Image src="/assets/history/search.svg" alt="search" width={24} height={24} />
-          <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" onChange={(e)=>props?.filterCoins(e)}/>
+          <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" onChange={(e)=>{setSearch(e.target.value!==""? e.target.value.toLowerCase():'all'), props?.filterCoins(e)}}/>
         </div>
-          {/* <div className="flex items-center gap-5">
-            <div className="p-[5px] flex gap-[10px] items-center">
-              <p className="nav-text-sm">Show 10</p>
-              <Image src="/assets/profile/downarrow.svg" width={24} height={24} alt="arrow" />
-            </div>
-          </div> */}
         </div>
         {active1 === 1 &&
           <Favorites coins={favouriteToken} networks={props?.networks} session={props?.session}/>

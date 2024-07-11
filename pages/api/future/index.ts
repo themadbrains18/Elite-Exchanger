@@ -16,8 +16,9 @@ export const config = {
 router
     .get(async (req, res) => {
         try {
+
             // Call the API using a helper function and pass the necessary parameters.
-            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/future`);
+            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/future/${req.query.qu}`);
 
             // Respond with a 200 status and send the retrieved data.
             return res.status(200).send({ data });

@@ -29,13 +29,13 @@ const Market = ({ session, coinList, assets, networks }: Session) => {
   const [allCoins, setAllCoins] = useState(coinList);
 
   const wbsocket = useWebSocket();
-  
+
   useEffect(() => {
     socket();
   }, [wbsocket])
 
-  const socket=()=>{
-    if(wbsocket){
+  const socket = () => {
+    if (wbsocket) {
       wbsocket.onmessage = (event) => {
         const data = JSON.parse(event.data).data;
         let eventDataType = JSON.parse(event.data).type;
@@ -73,6 +73,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
     method: "GET"
   }).then(response => response.json());
+
   let networkList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/network`, {
     method: "GET"
   }).then(response => response.json());
@@ -96,11 +97,5 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       networks: networkList?.data || [],
       assets: userAssets
     },
-  };
-  // if (session) {
-
-  // }
-  // return {
-  //   redirect: { destination: "/" },
-  // };
+  }
 }
