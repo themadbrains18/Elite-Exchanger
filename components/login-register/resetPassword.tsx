@@ -23,7 +23,7 @@ const validateEmail = (email: string | undefined) => {
 
 const ResetPassword = () => {
   const { mode } = useContext(Context);
-  const [step, setStep] = useState(3);
+  const [step, setStep] = useState(0);
   const router = useRouter();
   const [isEmail, setIsEmail] = useState(false);
   const [formData, setFormData] = useState({ username: "" });
