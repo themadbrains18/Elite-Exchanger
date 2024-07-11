@@ -514,7 +514,7 @@ const BuySellCard = (props: DynamicId) => {
 
             {(show === 1 || show === 2) &&
               <>
-                <div className="mt-5 flex gap-[10px] items-center">
+                <div className="mt-5 flex gap-[5px] items-center">
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
                   <p className="md-text w-full">{currencyFormatter(Number(price.toFixed(6)))}({active1 === 1 ? 'USDT' : firstCurrency})</p>
                   <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className={`${selectedToken?.symbol === "XRP" && "bg-white rounded-full"} min-w-[24px]`} alt="wallet2" width={24} height={24} />

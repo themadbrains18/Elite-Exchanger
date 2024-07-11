@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import IconsComponent from "../snippets/icons";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { currencyFormatter } from "../snippets/market/buySellCard";
+import { truncateNumber } from "@/libs/subdomain";
 
 interface propsData {
   coinList: any
@@ -11,7 +12,6 @@ const WatchList = (props: propsData) => {
   let data = props.coinList;
   const router = useRouter()
   const [imgSrc, setImgSrc] = useState(false);
-
 
   return (
     <div className="p-20 md:p-40 rounded-10 mt-30 bg-white dark:bg-d-bg-primary">
@@ -45,7 +45,7 @@ const WatchList = (props: propsData) => {
             </tr>
           </thead>
           <tbody>
-            {data?.map((item: any, index: any) => {
+            {props.coinList && props.coinList?.length>0 && props.coinList?.map((item: any, index: any) => {
               return (
                 <tr key={index} className="dark:hover:bg-black-v-1 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => router.push(`/chart/${item.symbol}`)}>
                   <td className="">
@@ -58,12 +58,20 @@ const WatchList = (props: propsData) => {
                     </div>
                   </td>
                   <td>
-                    <p className="nav-text-sm dark:text-white ">${currencyFormatter(item.price.toFixed(3))}</p>
+                    <p className="nav-text-sm dark:text-white ">${currencyFormatter(truncateNumber(item.price,3))}</p>
                   </td>
                   <td>
                     <div className={` items-center gap-[10px] md:flex hidden`}>
-                      <p className={`nav-text-sm  ${item.status == "high" ? "!text-[#03A66D]" : "!text-[#DC2626]"}`}>{item.totalSupply && currencyFormatter(item.totalSupply)}</p>
-                      <IconsComponent type={item.status} active={false} hover={false} />
+                    <div className={`flex items-center gap-[4px] flex-wrap`}>
+                                <p className={`footer-text-secondary  ${Number(item?.hlocv?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(item?.hlocv?.changeRate) > 0 ? '+' : ''}{item?.hlocv?.changeRate !== undefined ? (Number(item?.hlocv?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
+
+                                {Number(item?.hlocv?.changeRate) > 0 &&
+                                    <IconsComponent type="high" active={false} hover={false} />
+                                }
+                                {Number(item?.hlocv?.changeRate) < 0 &&
+                                    <IconsComponent type="low" active={false} hover={false} />
+                                }
+                            </div>
                     </div>
                   </td>
                 </tr>

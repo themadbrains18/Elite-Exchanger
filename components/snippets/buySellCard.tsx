@@ -14,6 +14,7 @@ import Link from "next/link";
 import ConfirmBuy from "./confirmBuy";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { currencyFormatter } from "./market/buySellCard";
+import { truncateNumber } from "@/libs/subdomain";
 
 const schema = yup.object().shape({
   token_amount: yup.number().positive("Amount must be greater than '0'.").required('Please enter quantity.').typeError('Please enter quantity.'),
@@ -540,7 +541,7 @@ const BuySellCard = (props: DynamicId) => {
                   <div className="flex gap-2">
                     <p data-testid="total" className="sm-text dark:text-white">Total:</p>
                     {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
-                    <p className="sm-text dark:text-white">{totalAmount}</p>
+                    <p className="sm-text dark:text-white">{truncateNumber(totalAmount, 6) || '0.000000'}</p>
                   </div>
                   <div className="flex gap-2">
                     <p className="sm-text dark:text-white">Max Trade:</p>
@@ -551,7 +552,7 @@ const BuySellCard = (props: DynamicId) => {
                 </div>
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">Est. Fee:</p>
-                  <p className="sm-text dark:text-white">{estimateFee}</p>
+                  <p className="sm-text dark:text-white">{estimateFee || '0.00'}</p>
 
                 </div>
               </>

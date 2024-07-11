@@ -187,12 +187,12 @@ const ReEnterpass = (props: propsData) => {
             <div className="mt-0 lg:mt-[200px] lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
               <h1 className="lg-heading mb-5">Password Recovery</h1>
               <p className="mb-5  lg:mb-[20px] md-text">
-                Enter your email/number to recover your password
+                Create new password
               </p>
               {/**Form Start  */}
               <form onSubmit={handleSubmit(onHandleSubmit)}>
 
-                <div className="relative text-end">
+                <div className="relative text-end mb-[10px]">
                   <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
                 </div>
                 <div
@@ -251,7 +251,7 @@ const ReEnterpass = (props: propsData) => {
       </section>
       {
         confirmation &&
-        <ConfirmationModel title="Reset Password" message="After reset password, Withdrawal will be restricted for 24 hours." actionPerform={confirmOtp}  setShow={setLayout} setActive={setConfirmation} />
+        <ConfirmationModel title="Reset Password" message="After reset password, Withdrawal will be restricted for 24 hours. Are you sure want to proceed?" actionPerform={confirmOtp}  setShow={setLayout} setActive={setConfirmation} />
       }
        {
         successModal &&

@@ -50,9 +50,9 @@ const ConfirmationModel = (props: activeSection) => {
             }
             <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show ? " opacity-20 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow(false) }}></div>
             <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full  z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
-                <div className="p-5 md:p-40 relative">
-                    <div className="">
-                        <p className="sec-title text-center mt-5">{props?.title}</p>
+                <div className="p-5 md:p-40 ">
+                    <div className="flex justify-between items-center mb-[25px]">
+                        <p className="sec-title text-center ">{props?.title}</p>
                         <svg
                             onClick={() => {
                                 props.setShow(false), props.setActive(false);
@@ -66,7 +66,7 @@ const ConfirmationModel = (props: activeSection) => {
                             y="0px"
                             viewBox="0 0 60.963 60.842"
                             xmlSpace="preserve"
-                            className="max-w-[18px] cursor-pointer w-full absolute top-5 right-[20px]"
+                            className="max-w-[18px] cursor-pointer w-full "
                         >
                             <path
                                 fill={mode === "dark" ? "#fff" : "#9295A6"}
@@ -80,7 +80,7 @@ const ConfirmationModel = (props: activeSection) => {
                     </div>
                     {/* <p className={`py-20 info-14-18`}></p> */}
                     {newText && newText.length > 0 && newText.map((item: any) => {
-                        return <p className={`py-1 info-14-18 my-[10px]`}>{item}</p>
+                        return <p className={`py-1 info-14-18 mb-[25px] mt-[10px]`}>{item}</p>
                     })}
                     <div className="flex items-center gap-10">
                         <button

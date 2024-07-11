@@ -17,14 +17,48 @@ const Marketpage = (props: propsData) => {
   const marketCoinList = props.coinList.slice(0, 6);
   const [coins, setCoins] = useState([]);
   const [filter, setFilter] = useState('')
+  const [cardData, setCardData] = useState<any[]>([]);
 
-  useEffect(()=>{
-    setCoins(props.coinList)
-  },[props.coinList]);
+  useEffect(() => {
+    const fetchHLCOData = async () => {
+      let coins = props?.coinList?.filter((item: any) => item?.symbol !== "USDT");
+
+
+      const fetchDataForCoin = async (coin: any) => {
+        
+        const slug = coin.symbol;
+        try {
+          let hlocv = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/hloc?slug=${slug}`, {
+            method: "GET"
+          }).then(response => response.json())
+          return {
+            ...coin,
+            hlocv:hlocv?.data?.data
+          };
+        } catch (error) {
+          console.error(`Error fetching HLCO data for ${slug}:`, error);
+          return {
+            ...coin,
+            hlocv: null
+          };
+        }
+      };
+
+      const updatedCardData:any = await Promise.all(coins.map(fetchDataForCoin));
+      console.log(updatedCardData,"=updatedCardData");
+      
+      setCardData(updatedCardData)
+      setCoins(updatedCardData)
+    };
+
+    fetchHLCOData();
+  }, [props.coinList]);
+
 
   const filterCoins = (e:any)=>{
+    
     setFilter(e.target.value.toLowerCase())
-    let records = props?.coinList?.filter((item:any)=>{
+    let records:any = cardData?.filter((item:any)=>{
       return item.symbol.toLowerCase().includes(e.target.value.toLowerCase());
     }) 
     setCoins(records)
@@ -34,14 +68,14 @@ const Marketpage = (props: propsData) => {
     <section className=" bg-light-v-1 py-[20px] md:py-[80px]  dark:bg-black-v-1">
       <div className="container flex flex-wrap gap-30">
         <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
-          <MarketCoin bannerCoinList={marketCoinList} setCoins={setCoins} allCoins={props.coinList}/>
+          <MarketCoin bannerCoinList={marketCoinList} setCoins={setCoins} allCoins={cardData?.slice(0,6)}/>
           <CoinList coins={coins} networks={props?.networks} session={props.session} filterCoins={filterCoins} />
         </div>
         <div className="lg:max-w-[432px] w-full md:block hidden">
           <div className="lg:block hidden ">
             <BuySellCard id={0} coins={props.coinList} session={props.session} assets={props.assets} />
           </div>
-          <WatchList coinList={watchCoinList} />
+          <WatchList coinList={cardData?.slice(0, 8)} />
         </div>
       </div>
       {/* <div className="lg:hidden">

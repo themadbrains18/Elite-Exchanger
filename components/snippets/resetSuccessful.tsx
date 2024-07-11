@@ -28,9 +28,9 @@ const ResetSuccessful = (props:propsData) => {
       ></div>
       <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
         <div className="flex items-center justify-center ">
-          <Image src='/assets/profile/successful.gif' width={60} height={60} alt="success" />
+          <Image src='/assets/profile/successful.gif' width={100} height={100} alt="success" />
         </div>
-        <p className="py-30 info-14-18 text-center">Password Reset Succeeded</p>
+        <p className="pb-30 info-14-18 text-center">Password Reset Succeeded</p>
 
         <button
           className="solid-button w-full hover:bg-primary-800"

@@ -70,12 +70,12 @@ const AllCrypto = (props: propsData) => {
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
-                            {/* <th className="max-[1023px]:hidden py-5">
+                            <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Chart</p>
+                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">24%</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
-                            </th> */}
+                            </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
                                     <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Deposit</p>
@@ -91,7 +91,7 @@ const AllCrypto = (props: propsData) => {
 
                                     <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                                        <Image src={`${imgSrc?'/assets/history/Coin.svg':item.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol==="XRP"&&"bg-white rounded-full"}`}/>
+                                            <Image src={`${imgSrc ? '/assets/history/Coin.svg' : item.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol === "XRP" && "bg-white rounded-full"}`} />
 
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                                 <p className="info-14-18 dark:text-white">{item.symbol}</p>
@@ -115,11 +115,18 @@ const AllCrypto = (props: propsData) => {
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(item.maxSupply) || 0}</p>
                                     </td>
-                                    {/* <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
-                                            <Image src="/assets/market/Graph.svg" width={114} height={48} alt="graph" />
-                                        </p>
-                                    </td> */}
+                                    <td className="max-[1023px]:hidden">
+                                        <div className={`flex items-center gap-[4px] flex-wrap`}>
+                                            <p className={`footer-text-secondary  ${Number(item?.hlocv?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(item?.hlocv?.changeRate) > 0 ? '+' : ''}{item?.hlocv?.changeRate !== undefined ? (Number(item?.hlocv?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
+
+                                            {Number(item?.hlocv?.changeRate) > 0 &&
+                                                <IconsComponent type="high" active={false} hover={false} />
+                                            }
+                                            {Number(item?.hlocv?.changeRate) < 0 &&
+                                                <IconsComponent type="low" active={false} hover={false} />
+                                            }
+                                        </div>
+                                    </td>
                                     <td className="">
                                         <button onClick={(e) => { e.stopPropagation(); setToken(item); setShow1(1) }} className=" w-full  py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                             {/* <span className="text-primary block">Deposit</span> */}

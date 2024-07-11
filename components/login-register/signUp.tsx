@@ -90,16 +90,16 @@ const SignUp = () => {
       console.log(localPart.length,"=local pat");
       
       if(localPart.length<6 || localPart.length>32){
-        setError('username',{message:"Username must be between 6 and 30 characters long."})
+        setError('username',{message:"Username must be between 6 and 32 characters long."})
         setBtnDisabled(false)
         return;
       }
 
       // Convert the domain part to lowercase
-      const normalizedDomainPart = domainPart.toLowerCase();
+      const normalizedDomainPart = data.username.toLowerCase();
 
       // Combine the local part and the normalized domain part
-      data.username = `${localPart}@${normalizedDomainPart}`;
+      data.username = normalizedDomainPart;
 
       data.confirmPassword = true;
       data.otp = "string";
