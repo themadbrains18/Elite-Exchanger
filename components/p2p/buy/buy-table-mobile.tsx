@@ -33,9 +33,11 @@ const BuyTableMobile = (props: activeSection) => {
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
+            let paymentMethod= props?.paymentId !== undefined && props?.paymentId !== "" ?props?.paymentId:"all"
+                 let currency= props?.selectedToken !== undefined && props?.selectedToken !== "" ?props?.selectedToken?.id:"all"
             let posts = await fetch(
-                `/api/p2p/buy?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
-                {
+                `/api/p2p/buy?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency}&pmMethod=${paymentMethod}`,
+        {
                     method: "GET",
                     headers: {
                         "Authorization": session?.user?.access_token

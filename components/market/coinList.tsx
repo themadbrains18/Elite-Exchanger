@@ -12,6 +12,7 @@ interface propsData {
   networks:any,  
   session:any,  
   filterCoins:any
+  filterList?:any
 
 }
 
@@ -78,17 +79,7 @@ const CoinList = (props: propsData) => {
     // getTopGainersList();
   }, [props?.coins]);
 
-  // const getTopGainersList = async () => {
-  //   try {
-  //     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token/topgainer`, {
-  //       method: "GET"
-  //     }).then(response => response.json());
-
-  //     setTopGainers(tokenList);
-  //   } catch (error) {
-
-  //   }
-  // }
+  
 
   const getFutureTardeList = async () => {
     try {

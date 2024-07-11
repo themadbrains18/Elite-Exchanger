@@ -5,6 +5,7 @@ import Context from "../../contexts/context";
 import { useSession } from 'next-auth/react';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import BuyAuthenticationModelPopup from '@/components/snippets/buyAuthenticationModelPopup';
+import { truncateNumber } from '@/libs/subdomain';
 
 interface activeSection {
   setShow1: any;
@@ -36,16 +37,22 @@ const BuyTableDesktop = (props: activeSection) => {
   }, [itemOffset, props?.firstCurrency, props?.paymentId]);
 
 
-  
+
 
   const getAllPosts = async (itemOffset: number) => {
     try {
+      console.log("=hereere", itemOffset);
+
       if (itemOffset === undefined) {
         itemOffset = 0;
       }
-      
+
+      let paymentMethod = props?.paymentId !== undefined && props?.paymentId !== "" ? props?.paymentId : "all"
+      let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
+
+
       let posts = await fetch(
-        `/api/p2p/buy?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
+        `/api/p2p/buy?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}`,
         {
           method: "GET",
           headers: {
@@ -53,7 +60,10 @@ const BuyTableDesktop = (props: activeSection) => {
           },
         }
       ).then((response) => response.json());
-      setList(posts?.data?.data);
+
+
+      console.log(posts?.data?.data,"=posts?.data?.data");
+      
 
       for (const post of posts?.data?.data) {
         let payment_method: any = [];
@@ -67,31 +77,42 @@ const BuyTableDesktop = (props: activeSection) => {
         post.user_p_method = payment_method;
       }
 
-      let postData = [];
-      let filter_posts = posts?.data?.data;
-      postData= filter_posts
-      if (props?.firstCurrency !== "") {
-        filter_posts = posts?.data?.data?.filter((item: any) => {
-          return props?.selectedToken?.id === item?.token_id;
-        });
-        postData = filter_posts;
-      }
-       if (props?.paymentId !== "") {
-        let filterRecord=[]
+      console.log(posts, "==posts");
+      // Filter out posts where user_p_method array is empty
+      posts.data.data = posts.data.data.filter((post: any) => post.user_p_method.length > 0);
 
-        for (const post of filter_posts) {
-          for (const upid of post.user_p_method) {
-            
-            if (props?.paymentId === upid?.pmid) {
-              filterRecord.push(post);
-            }
-          }
-        }
-        postData = filterRecord;
-      } else {
-        postData = filter_posts;
-      }
-      setList(postData)
+      // Update totalLength based on filtered data length
+      const totalLength = posts.data.data.length;
+      setTotal(totalLength);
+
+      setList(posts.data.data);
+
+      // let postData = [];
+      // let filter_posts = posts?.data?.data;
+      // postData= filter_posts
+      // if (props?.firstCurrency !== "") {
+      //   filter_posts = posts?.data?.data?.filter((item: any) => {
+      //     return props?.selectedToken?.id === item?.token_id;
+      //   });
+      //   postData = filter_posts;
+      // }
+      //  if (props?.paymentId !== "") {
+      //   let filterRecord=[]
+
+      //   for (const post of filter_posts) {
+      //     for (const upid of post.user_p_method) {
+
+      //       if (props?.paymentId === upid?.pmid) {
+      //         filterRecord.push(post);
+      //       }
+      //     }
+      //   }
+      //   postData = filterRecord;
+
+      // } else {
+      //   postData = filter_posts;
+      // }
+      // setList(postData)
       setTotal(posts?.data?.totalLength)
     } catch (error) {
       console.log("error in get token list", error);
@@ -139,12 +160,12 @@ const BuyTableDesktop = (props: activeSection) => {
             setActive(true)
           }
           else {
-            
+
             props.setShow1(true); props.setSelectedPost(item);
           }
         }
         else if (item?.min_btc === true) {
-          let btcBalanceItem = props?.assets?.find((item: any) => item?.token_id === "30c72375-b3a7-49ea-a17e-b6b530023cb7" && item?.account_type==="Main Account")
+          let btcBalanceItem = props?.assets?.find((item: any) => item?.token_id === "30c72375-b3a7-49ea-a17e-b6b530023cb7" && item?.account_type === "Main Account")
           let btcBalance = btcBalanceItem ? btcBalanceItem.balance : 0;
 
           if (btcBalance < 0.01) {
@@ -157,7 +178,7 @@ const BuyTableDesktop = (props: activeSection) => {
           }
 
         }
-       
+
         else {
           props.setShow1(true); props.setSelectedPost(item);
         }
@@ -242,7 +263,7 @@ const BuyTableDesktop = (props: activeSection) => {
                     <td className="group-hover:bg-[#FAFAFA] dark:group-hover:bg-black-v-1 ">
                       <div className="flex items-center gap-[10px]">
                         {/* <Image src='/assets/market/star.svg' width={24} height={24} alt="star" /> */}
-                        <p className="info-14-18 ">{startIndex+index}</p>
+                        <p className="info-14-18 ">{startIndex + index}</p>
                       </div>
                     </td>
 
@@ -261,17 +282,17 @@ const BuyTableDesktop = (props: activeSection) => {
                     </td>
 
                     <td>
-                      <p className="info-14-18 dark:text-white  ">{`${currencyFormatter(item?.min_limit)} ~ ${currencyFormatter(item?.max_limit)} INR`}</p>
+                      <p className="info-14-18 dark:text-white  ">{`${currencyFormatter(truncateNumber(item?.min_limit, 6))} ~ ${currencyFormatter(truncateNumber(item?.max_limit, 6))} INR`}</p>
                     </td>
 
                     <td>
-                      <p className="info-14-18 dark:text-white  ">{Number(item?.quantity).toFixed(4)} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
+                      <p className="info-14-18 dark:text-white  ">{truncateNumber(Number(item?.quantity), 6)} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                     </td>
 
                     <td>
                       <div className='flex items-center '>
                         {
-                         payment_method && payment_method?.length>0 && payment_method?.map((elem: any, ind: any) => {
+                          payment_method && payment_method?.length > 0 && payment_method?.map((elem: any, ind: any) => {
                             return (
                               <Fragment key={ind}>
                                 <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className='ml-[-10px]' />

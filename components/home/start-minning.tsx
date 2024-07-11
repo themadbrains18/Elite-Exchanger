@@ -14,7 +14,7 @@ const StartMinning = () => {
                     <p className='sec-text !text-white'>Join now with us to get the latest news and start mining now</p>
                 </div>
                 <div className='flex flex-col sm:flex-row items-center gap-[42px] max-w-full md:max-w-[598px] w-full justify-center lg:justify-end'>
-                    <input type="text" id='miningEmail' name='miningEmail' placeholder='Enter your email' className='pb-[10px] sec-text text-[16px] md:text-[18px] !text-white outline-none border-b placeholder:text-white dark:border-white border-[#ffffff66] bg-[transparent] max-w-[396px] w-full' />
+                    <input type="email" id='miningEmail' name='miningEmail' placeholder='Enter your email' className='pb-[10px] sec-text text-[16px] md:text-[18px] !text-white outline-none border-b placeholder:text-white dark:border-white border-[#ffffff66] bg-[transparent] max-w-[396px] w-full' />
                     <button type='submit' className='w-full sm:w-auto pill-solid-button hover:text-primary'>Subscribe</button>
                 </div>
             </div>
