@@ -46,7 +46,7 @@ const Verification = (props: propsData) => {
 
       if (props?.api === "forget") {
         if (userExist.status === 200) {
-          toast.success(userExist?.data?.message);
+          toast.success(userExist?.data?.message,{autoClose:2000});
           props.setSendOtpRes(userExist?.data?.otp);
           props.setStep(2);
         } else {
@@ -54,7 +54,7 @@ const Verification = (props: propsData) => {
         }
       } else {
         if (userExist.data.status === 200) {
-          toast.success(userExist?.data?.data?.message);
+          toast.success(userExist?.data?.data?.message,{autoClose:2000});
           props.setSendOtpRes(userExist?.data?.data?.otp);
           props.setStep(2);
         } else {
