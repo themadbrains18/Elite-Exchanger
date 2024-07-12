@@ -167,7 +167,11 @@ const EditPaymentMethod = (props: activeSection) => {
   return (
     <>
       <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-      <form onSubmit={handleSubmit(onHandleSubmit)}>
+      <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
         <div className="mt-40">
           <div className="p-[15px] md:p-40 border rounded-10 border-grey-v-1 dark:border-opacity-[15%]">
             <p className="pb-6 border-b border-grey-v-3 sec-title dark:border-opacity-[15%]">Select Up to 5 methods</p>

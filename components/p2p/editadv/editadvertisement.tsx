@@ -132,7 +132,11 @@ const EditAdverstisement = (props: propsData) => {
       {step == 1 && (
         <div className="mt-30 md:mt-40">
           <p className="sec-title">Set Asset Type and Price</p>
-          <form onSubmit={handleSubmit(onHandleSubmit)}>
+          <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
             <div className="mt-40 flex md:flex-row flex-col first-letter:  gap-30 items-start">
               <div className="max-w-[1048px] w-full">
                 <div className=" md:p-40 border border-grey-v-1 dark:border-opacity-20 rounded-[6px]">

@@ -75,7 +75,11 @@ const PinLock = (props: activeSection) => {
             />
           </svg>
         </div>
-        <form>
+        <form onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
           <div className="py-20">
             <div className="flex flex-col  gap-20 mb-30">
               <label className="sm-text">Enter PIN</label>

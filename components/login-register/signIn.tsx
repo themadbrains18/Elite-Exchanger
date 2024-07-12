@@ -154,7 +154,11 @@ const SignIn = (Props: loginType) => {
                 <h1 className="lg-heading mb-5 lg:mb-[70px]">Sign In</h1>
 
                 {/**Form Start  */}
-                <form onSubmit={handleSubmit(onHandleSubmit)}>
+                <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
                   <div className="flex flex-col gap-[15px] lg:gap-10">
                     <input type="text" placeholder="Enter Email or Phone Number" {...register('username')} name="username" className="input-cta" maxLength={50}/>
                     {errors.username && <p className="errorMessage">{errors.username.message}</p>}

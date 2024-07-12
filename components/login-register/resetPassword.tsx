@@ -110,7 +110,7 @@ const ResetPassword = () => {
                 width={848}
                 height={631}
                 alt="signup"
-                className="object-cover h-screen block w-full"
+                className="object-cover h-[1080px] sadasdsa min-h-screen block w-full"
               />
             </div>
             <div className="max-w-full lg:max-w-[50%] flex flex-col justify-center w-full">
@@ -139,7 +139,11 @@ const ResetPassword = () => {
                   Enter your email/number to recover your password
                 </p>
                 {/**Form Start  */}
-                <form onSubmit={handleSubmit(onHandleSubmit)}>
+                <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
                   <div className="flex flex-col gap-[15px] lg:gap-10 relative">
                     <input
                       type="text"

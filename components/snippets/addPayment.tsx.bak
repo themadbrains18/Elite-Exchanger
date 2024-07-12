@@ -43,7 +43,11 @@ const AddPayment = (props:activeSection) => {
       </div>
         <p className="pt-40 info-14-18">When you sell your cryptocurrency, the added payment method will be shown to the buyer during the transaction. To accept cash transfer, please make sure the information is correct.</p>
 
-      <form>
+      <form onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
         <div className="py-30 md:py-40">
           <div className="flex flex-col mb-[15px] md:mb-5 gap-10">
             <label className="sm-text">Name</label>

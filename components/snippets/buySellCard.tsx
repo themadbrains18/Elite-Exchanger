@@ -383,7 +383,11 @@ const BuySellCard = (props: DynamicId) => {
             Sell
           </button>
         </div>
-        <form onSubmit={handleSubmit(onHandleSubmit)}>
+        <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
           <div className="py-20">
             <div className="flex lg:gap-30 gap-10">
               <div className={`flex  gap-5 justify-center items-center  w-full cursor-pointer border rounded-5 border-grey-v-1 dark:border-opacity-[15%] bg-[transparent] ${show === 1 && 'bg-primary-100 dark:bg-black-v-1 border-primary'}`} onClick={() => {

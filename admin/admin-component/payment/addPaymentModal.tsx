@@ -178,7 +178,11 @@ const AddPaymentModal = (props: any) => {
       <div
         className={`max-h-[610px] overflow-auto duration-300 max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-[20px] z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}
       >
-        <form onSubmit={handleSubmit(submitForm)}>
+        <form onSubmit={handleSubmit(submitForm)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
           <div className="px-3 py-2 max-w-3xl mx-auto">
             <div className="flex justify-between items-center mb-4">
               <h6 className="sec-title"> Payment Method</h6>

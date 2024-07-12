@@ -38,7 +38,11 @@ const AddCard = (props: activeSection) => {
           />
         </svg>
       </div>
-      <form>
+      <form onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
         <div className="py-30 md:py-10">
           <div className="flex flex-col mb-[15px] md:mb-5 gap-[6px]">
             <label className="sm-text">Number</label>

@@ -184,7 +184,11 @@ const Password = (props: activeSection) => {
         </svg>
       </div>
 
-      <form onSubmit={handleSubmit(onHandleSubmit)}>
+      <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
         <div className="py-30 md:py-40">
           <div className="flex flex-col mb-[15px] md:mb-30 gap-20">
             <label className="sm-text">

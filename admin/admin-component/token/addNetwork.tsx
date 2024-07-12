@@ -193,7 +193,11 @@ const AddNetwork = (props: activeSection) => {
                         />
                     </svg>
                 </div>
-                <form onSubmit={handleSubmit(onHandleSubmit)}>
+                <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
                     <div className="pt-30">
 
                         <div className="pt-[30px]">

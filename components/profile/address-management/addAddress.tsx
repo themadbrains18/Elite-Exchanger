@@ -322,7 +322,11 @@ const AddAddress = (props: activeSection) => {
               />
             </svg>
           </div>
-          <form onSubmit={handleSubmit(onHandleSubmit)}>
+          <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
             <div className="py-30 md:py-10">
               <div className="mb-[15px] md:mb-5">
                 <label className="sm-text ">Address label</label>

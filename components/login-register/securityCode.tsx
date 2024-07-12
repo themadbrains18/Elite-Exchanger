@@ -291,7 +291,7 @@ const SecurityCode = (props: propsData) => {
       <section className="bg-primary-300 lg:dark:bg-black-v-1 xl:h-full  lg:bg-bg-primary ">
         <div className="flex min-h-screen h-full gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
           <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
-            <Image src={props.api === 'forget' ? '/assets/register/forget.png' : "/assets/register/register.png"} width={1018} height={1100} alt="signup" className="object-cover h-screen block w-full" />
+            <Image src={props.api === 'forget' ? '/assets/register/forget.png' : "/assets/register/register.png"} width={1018} height={1100} alt="signup" className="object-cover h-[1080px] min-h-screen block w-full" />
           </div>
           <div className={`max-w-full lg:max-w-[50%] flex flex-col justify-center w-full ${props.api === 'forget' ? 'items-center' : ''}`}>
             <div className="max-w-[460px] w-full] max-[1023px]:mx-auto">

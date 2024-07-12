@@ -608,7 +608,11 @@ const SecuritySettings = (props: fixSection) => {
                   </div>
                   <div className="h-[1px] w-full bg-grey-v-2 dark:bg-opacity-[15%]"></div>
 
-                  <form onSubmit={handleSubmit(onHandleSubmit)}>
+                  <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
                     <div className="py-[30px] md:py-[50px] lg:px-0 px-20">
                       <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
                         Change Password
