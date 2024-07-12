@@ -226,7 +226,7 @@ const SignUp = () => {
               }
             }} autoComplete="new-password">
                   <div className="flex flex-col gap-[15px] lg:gap-10">
-                    <input type="text" autoComplete="new-password"  placeholder="Enter Email / Phone Number" {...register('username')} name="username" className="input-cta" />
+                    <input type="text" autoComplete="new-password"  placeholder="Enter Email / Phone Number" autoCorrect="off" autoCapitalize="none" spellCheck="false" {...register('username')} name="username" className="input-cta !normal-case  "  style={{ textTransform: 'none' }}/>
                     {errors.username && <p className="errorMessage">{errors.username.message}</p>}
                     <div className="relative text-end">
                       <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>

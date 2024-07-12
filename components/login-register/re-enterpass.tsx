@@ -127,13 +127,9 @@ const ReEnterpass = (props: propsData) => {
     }
   }
 
-console.log(errors,"===errors");
-
-
   const onHandleSubmit = async (data: any) => {
     try {
-      console.log(data,"==adatd");
-      
+
       setLayout(true)
       setConfirmation(true)
       data.otp = props?.formData?.otp;

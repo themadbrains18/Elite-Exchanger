@@ -79,14 +79,11 @@ const SignIn = (Props: loginType) => {
       data.step = 1;
       setIsEmail(isEmailExist);
       if (isEmailExist) {
-        console.log("=here");
         data.username=data?.username.toLowerCase();
         data.email = data.username
         data.number = "string"
       }
       else {
-        console.log("=here1");
-        
         data.email = "string";
         data.number = data.username
       }

@@ -94,11 +94,8 @@ const SecurityCode = (props: propsData) => {
   const matchUserOtp = async () => {
     try {
       setBtnDisabled(true);
-      if (reqCount >= 3) {
-        toast.error('Too many try with wrong code. Please request a new verification code.', { position: "top-center" });
-        setTimeout(() => {
-          router.reload()
-        }, 4000);
+      if (reqCount >= 5) {
+        setOtpMessage("Too many attempts");
       }
       props.formData.step = 3;
       props.formData.otp = fillOtp;
@@ -150,12 +147,13 @@ const SecurityCode = (props: propsData) => {
           // router.push('/login');
         }
       }
+
       else {
-        toast.error(response.data.message !== undefined ? response.data.message : response.data.data, { autoClose: 2500 });
+        toast.error(response.data.message !== undefined ? response.data.message : response.data.data, { position: "top-center" });
         setTimeout(() => {
           setBtnDisabled(false);
           setReqCount(reqCount + 1);
-        }, 3000);
+        }, 5000);
       }
     } catch (error) {
       console.log(error);
@@ -305,30 +303,29 @@ const SecurityCode = (props: propsData) => {
               </div>
               <div className="mt-0 lg:mt-[180px]  max-[1023px]:!mx-auto lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[460px] w-full">
                 <h1 className="lg-heading  mb-5">Enter your security code</h1>
-                {props.isEmail && 
-                <div className="relative">
-                  <p className="mb-5  md-text">We texted your code to {props.formData?.username !== null && emailSplit}</p>
-                  <div className="flex gap-[10px] md:gap-[30px] justify-between items-center input_wrapper">
-                    <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-1`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
-                    <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-2`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
-                    <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-3`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code3" />
-                    <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-4`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code4" />
-                    <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-5`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code5" />
-                    <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-6`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code6" />
-                  </div>
-                  
-                  <div className={`flex mt-[15px]  ${enable === true ? '' : 'hidden'}`}>
-                    <p className={`info-10-14 text-end  px-2 pl-0 md-text `}>Your OTP will expire within </p>
-                    <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
-                  </div>
+                {props.isEmail &&
+                  <div className="relative">
+                    <p className="mb-5  md-text">We texted your code to {props.formData?.username !== null && emailSplit}</p>
+                    <div className="flex gap-[10px] md:gap-[30px] justify-between items-center input_wrapper">
+                      <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-1`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
+                      <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-2`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
+                      <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-3`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code3" />
+                      <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-4`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code4" />
+                      <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-5`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code5" />
+                      <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-6`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code6" />
+                    </div>
+                    <div className={`flex mt-[15px]  ${enable === true ? '' : 'hidden'}`}>
+                      <p className={`info-10-14 text-end  px-2 pl-0 md-text `}>Your OTP will expire within </p>
+                      <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
+                    </div>
 
-                  <p className=" errorMessage absolute top-[calc(100%+5px)]">{otpMessage}</p>
+                    <p className=" md-text errorMessage absolute top-[calc(100%+5px)]">{otpMessage}</p>
 
-                  <p className={`info-10-14 text-end mt-[10px] cursor-pointer  !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp() }}>
-                    Resend OTP
-                  </p>
+                    <p className={`info-10-14 text-end mt-[10px] cursor-pointer  !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp() }}>
+                      Resend OTP
+                    </p>
 
-                </div>}
+                  </div>}
 
 
                 {(props?.isEmail == false || (props.data !== undefined && props.data?.number !== null)) && <div className="mt-[20px]">
