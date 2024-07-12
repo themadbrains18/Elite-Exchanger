@@ -33,7 +33,6 @@ const Notification = (props: propsData) => {
 
     } catch (error) {
       console.log("error in notification", error);
-
     }
   }
 
@@ -46,10 +45,8 @@ const Notification = (props: propsData) => {
     <div className="max-w-full border dark:border-[#25262a] border-[#e5e7eb] lg:min-w-[352px] rounded-10 w-full bg-white dark:bg-d-bg-primary shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px] ">
       <div className="p-[19px] w-full overflow-y-auto max-h-[450px]">
         <div className='hidden lg:block'>
-          
           {
             props.notificationData?.map((item: any, index: number) => {
-
               let isImage = containsImageUrl(item?.message?.message);
               return (
                 // <div className="pb-3 mb-3 dark:border-[#25262a] border-[#e5e7eb] border-b">
