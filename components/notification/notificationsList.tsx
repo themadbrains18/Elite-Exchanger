@@ -1,6 +1,8 @@
 import moment from "moment";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState } from "react";
+import IconsComponent from "../snippets/icons";
 
 interface propsData {
   notificationData: any;
@@ -22,13 +24,13 @@ const NotificationsList = (props: propsData) => {
         <div className="p-5 md:p-40 rounded-10  bg-white dark:bg-d-bg-primary">
           <div className="flex justify-between gap-5 mb-[26px] md:mb-40">
             <p className="sec-title">Notification</p>
-            <Image
+            {/* <Image
               src="/assets/history/dots.svg"
               width={24}
               height={24}
               alt="dots"
               className="cursor-pointer md:hidden block"
-            />
+            /> */}
             <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] py-[13px] px-[10px] ">
               <Image
                 src="/assets/history/search.svg"
@@ -54,107 +56,29 @@ const NotificationsList = (props: propsData) => {
               >
                 All
               </button>
-              {/* <button
-                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 2 && "border-primary !text-primary"
-                  }`}
-                onClick={() => {
-                  setActive(2);
-                }}
-              >
-                System Notification
-              </button>
-              <button
-                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 3 && "border-primary !text-primary"
-                  }`}
-                onClick={() => {
-                  setActive(3);
-                }}
-              >
-                Latest Events
-              </button>
-              <button
-                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 4 && "border-primary !text-primary"
-                  }`}
-                onClick={() => {
-                  setActive(4);
-                }}
-              >
-                Announcements
-              </button>
-              <button
-                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 5 && "border-primary !text-primary"
-                  }`}
-                onClick={() => {
-                  setActive(5);
-                }}
-              >
-                Rewards
-              </button>
-              <button
-                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 6 && "border-primary !text-primary"
-                  }`}
-                onClick={() => {
-                  setActive(6);
-                }}
-              >
-                TradingView Alerts
-              </button>
-              <button
-                className={`pb-20  nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 7 && "border-primary !text-primary"
-                  }`}
-                onClick={() => {
-                  setActive(7);
-                }}
-              >
-                News
-              </button> */}
+           
             </div>
-            {/* <div className="hidden lg:flex gap-5">
-              <div className="p-[5px] flex items-center gap-[10px] cursor-pointer">
-                <Image
-                  src="/assets/history/calender.svg"
-                  width={24}
-                  height={24}
-                  alt="calender"
-                />
-                <p className="nav-text-sm">Month</p>
-                <Image
-                  src="/assets/profile/downarrow.svg"
-                  width={24}
-                  height={24}
-                  alt="dropdown"
-                />
-              </div>
-              <div className="p-[5px] flex items-center gap-[10px] cursor-pointer">
-                <Image
-                  src="/assets/history/filter.svg"
-                  width={24}
-                  height={24}
-                  alt="filter"
-                />
-                <p className="nav-text-sm">Filter</p>
-                <Image
-                  src="/assets/profile/downarrow.svg"
-                  width={24}
-                  height={24}
-                  alt="dropdown"
-                />
-              </div>
-              <Image
-                src="/assets/history/dots.svg"
-                width={24}
-                height={24}
-                alt="dots"
-                className="cursor-pointer"
-              />
-            </div> */}
+           
           </div>
 
-          <ul>
+          <ul className="mt-7">
+            
             {props?.notificationData.length > 0 &&
               props.notificationData?.map((item: any, index: number) => {
                 let isImage = containsImageUrl(item?.message?.message);
                 return (
+                  // <li className="pb-3 mb-3 dark:border-[#25262a] border-[#e5e7eb] border-b">
+                  //     <div className="flex items-center gap-3 mb-3">
+                  //       <div className="w-6">
+                  //         <IconsComponent type="MessageIcon" />
+                  //       </div>
+                  //         <p className="admin-table-data !text-base">New Message from</p>
+                  //     </div>
+                  //     <div className="flex items-center gap-3 justify-between ">
+                  //       <p className="info-14-18 text-sm dark:text-[#a0a1a7]">2024-07-02 10:50:52</p>
+                  //       <Link href="#" className="info-14-18 text-sm dark:text-[#a0a1a7] hover:!text-primary">View More</Link>
+                  //     </div>
+                  // </li>
                   <li
                     key={index}
                     className={`block  w-full cursor-pointer mb-[15px] items-center group md:mb-[10px] 
@@ -195,7 +119,7 @@ const NotificationsList = (props: propsData) => {
                     </div>
                   </li>
                 );
-              })}
+              })} 
           </ul>
         </div>
       </div>

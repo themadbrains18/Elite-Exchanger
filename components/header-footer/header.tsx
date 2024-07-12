@@ -416,11 +416,12 @@ const Header = (props: propsData) => {
                       </span>
                     </div>
 
-                    {notificationData?.length > 0 &&
+                    {/* {notificationData?.length > 0 && */}
                       <div data-testid="notification-panel" className="absolute top-[96px] opacity-0 invisible duration-300  right-[0px] hover:block dropdown_wrapper notification-panel" >
-                        <Notification notificationData={notificationData} getUserNotification={getUserNotification} />
+                      {/* <div data-testid="notification-panel" className="absolute top-[96px] duration-300  right-[0px] block dropdown_wrapper notification-panel" > */}
+                          <Notification notificationData={notificationData} getUserNotification={getUserNotification} />
                       </div>
-                    }
+                    {/* } */}
 
                   </div>
                 </div>
