@@ -139,7 +139,11 @@ const ResetPassword = () => {
                   Enter your email/number to recover your password
                 </p>
                 {/**Form Start  */}
-                <form onSubmit={handleSubmit(onHandleSubmit)}>
+                <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
                   <div className="flex flex-col gap-[15px] lg:gap-10 relative">
                     <input
                       type="text"

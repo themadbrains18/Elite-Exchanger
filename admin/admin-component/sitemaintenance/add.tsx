@@ -97,7 +97,11 @@ const AddList = (props: ActiveSession) => {
           />
         </svg>
       </div>
-      <form className="pt-30" onSubmit={handleSubmit(onHandleSubmit)}>
+      <form className="pt-30" onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
         <div className=" relative ">
           <p className="sm-text mb-2">Title</p>
           <input

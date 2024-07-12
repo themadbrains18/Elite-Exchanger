@@ -195,16 +195,10 @@ const BuyPopup = (props: activeSection) => {
       <form 
           onSubmit={handleSubmit(onHandleSubmit)}  
           onKeyDown={(e) => {
-            
-            if (e.key.includes('Enter') ) {
+            if (e.key === 'Enter') {
               e.preventDefault();
-                // console.log(e,"===========");
-                // console.log(spendAmount,"====");
-                // console.log(receiveAmount,"====");
-                // if(!spendAmount || !receiveAmount){
-                // }
-              }
-            }}
+            }
+          }}
           >
 
         <div className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[951px] w-full z-10 fixed rounded-10 md:p-0 p-20 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] ${props.show1 ? " translate-y-[-50%] opacity-1 visible" : " translate-y-[-55%] opacity-0 invisible"}`}>

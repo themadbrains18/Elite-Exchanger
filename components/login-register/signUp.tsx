@@ -220,7 +220,11 @@ const SignUp = () => {
                 <h1 className="lg-heading mb-5 lg:mb-[70px]">Create an account</h1>
 
                 {/**Form Start  */}
-                <form onSubmit={handleSubmit(onHandleSubmit)} autoComplete="new-password">
+                <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }} autoComplete="new-password">
                   <div className="flex flex-col gap-[15px] lg:gap-10">
                     <input type="text" autoComplete="new-password"  placeholder="Enter Email / Phone Number" {...register('username')} name="username" className="input-cta" />
                     {errors.username && <p className="errorMessage">{errors.username.message}</p>}

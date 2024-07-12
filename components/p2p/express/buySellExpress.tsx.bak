@@ -89,7 +89,11 @@ const BuySellExpress = (props: propsData) => {
             Sell
           </button>
         </div>
-        <form>
+        <form onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
           <div className="py-20">
             {/* First Currency Inputs */}
             <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">

@@ -769,6 +769,11 @@ const KycAuth = (props: fixSection) => {
 
         <form
           onSubmit={handleSubmit(onHandleSubmit)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}
           className="max-[1023px] dark:bg-omega bg-white  rounded-[10px]"
         >
           <div className="flex items-center gap-5 justify-between">

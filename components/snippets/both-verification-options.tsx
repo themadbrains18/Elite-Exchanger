@@ -89,7 +89,11 @@ const BothVerificationOptions = (props: activeSection) => {
             />
           </svg>
         </div>
-        <form>
+        <form onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
           <div className="py-30 md:py-40">
 
 

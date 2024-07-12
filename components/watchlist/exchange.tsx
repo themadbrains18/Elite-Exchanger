@@ -334,7 +334,11 @@ const Exchange = (props: DynamicId): any => {
           })}
         </div>
 
-        <form onSubmit={handleSubmit(onHandleSubmit)}>
+        <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
           <div className="mt-20 rounded-5 p-[10px] justify-between flex border items-center border-grey-v-1 dark:border-opacity-[15%] relative">
             <div className="">
               <p className="sm-text dark:text-white">Quantity</p>

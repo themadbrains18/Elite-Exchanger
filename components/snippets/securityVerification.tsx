@@ -148,7 +148,7 @@ const SecurityVerification = (props: activeSection) => {
     document.execCommand('copy')
     document.body.removeChild(input)
 
-    toast.success('copy to clipboard',{autoClose:2000});
+    toast.success('copy to clipboard', { autoClose: 2000 });
     setTimeout(() => {
       setBtnDisabledCopy(false);
     }, 3000);
@@ -205,11 +205,11 @@ const SecurityVerification = (props: activeSection) => {
           </svg>
         </div>
 
-        <form onSubmit={handleSubmit(onHandleSubmit)}  onKeyDown={(e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-    }
-  }}>
+        <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+          }
+        }}>
           <div className="py-30 md:py-40">
 
             <div className="py-30 md:py-40">
@@ -223,7 +223,7 @@ const SecurityVerification = (props: activeSection) => {
               <div className="pt-5 md:pt-30">
                 <div className="mt-[5px] md:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
                   <p className="sec-text text-ellipsis overflow-hidden">{secret?.base32}</p>
-                  <button type="button" className={`solid-button py-2 sec-text font-normal ${btnDisabledCopy === true?'cursor-not-allowed':''}`} onClick={() => {
+                  <button type="button" className={`solid-button py-2 sec-text font-normal ${btnDisabledCopy === true ? 'cursor-not-allowed' : ''}`} onClick={() => {
                     // navigator.clipboard.writeText(secret?.base32);
                     btnDisabledCopy === false ? copyCode() : ''
                   }}>Copy</button>
@@ -242,7 +242,7 @@ const SecurityVerification = (props: activeSection) => {
                 {...register("code")}
               />
               {errors.code && (
-                <p  className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px] errorMessage">{errors.code.message}</p>
+                <p className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px] errorMessage">{errors.code.message}</p>
               )}
             </div>
 
@@ -268,7 +268,7 @@ const SecurityVerification = (props: activeSection) => {
                 />
               </div>
               {errors.password && (
-                <p  className="absolute top-[100%] text-[10px] md:text-[12px] errorMessage">{errors.password.message}</p>
+                <p className="absolute top-[100%] text-[10px] md:text-[12px] errorMessage">{errors.password.message}</p>
               )}
             </div>
           </div>

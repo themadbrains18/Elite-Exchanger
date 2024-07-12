@@ -316,12 +316,13 @@ const SecurityCode = (props: propsData) => {
                     <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-5`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code5" />
                     <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-6`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code6" />
                   </div>
+                  
                   <div className={`flex mt-[15px]  ${enable === true ? '' : 'hidden'}`}>
                     <p className={`info-10-14 text-end  px-2 pl-0 md-text `}>Your OTP will expire within </p>
                     <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
                   </div>
 
-                  <p className=" md-text errorMessage absolute top-[calc(100%+5px)]">{otpMessage}</p>
+                  <p className=" errorMessage absolute top-[calc(100%+5px)]">{otpMessage}</p>
 
                   <p className={`info-10-14 text-end mt-[10px] cursor-pointer  !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { setEnable(true); sendOtp() }}>
                     Resend OTP

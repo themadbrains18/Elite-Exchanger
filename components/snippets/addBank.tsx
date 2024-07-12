@@ -37,7 +37,11 @@ const AddBank = (props: activeSection) => {
           />
         </svg>
       </div>
-      <form>
+      <form onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
         <div className="py-30 md:py-10">
 
             <div className="border border-grey-v-1 dark:border-opacity-[15%] mb-[15px] md:mb-5 gap-[15px] items-center flex rounded-5 p-[11px] md:p-[15px]">

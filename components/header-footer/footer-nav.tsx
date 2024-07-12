@@ -165,7 +165,11 @@ const FooterNav = () => {
             <div className='max-w-full xl:max-w-[32%] w-full'>
                 {/* <div>
                     <h4 className='footer-heading !text-white mb-[21px] md:mb-[31px]'>NewsLetter</h4>
-                    <form>
+                    <form onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
                         <div className='flex gap-[5px]'>
                             <input id='newslatter' name='newslatter' type="email" placeholder='Enter your email' className='sm-text text-[14px] !text-white px-10 py-[13px] md:py-[15px] max-w-[321px] w-full block bg-[transparent] border border-[#8AC8FF] rounded-5 focus:outline-none' />
                             <button className='solid-button !text-[16px] rounded-[5px] md:rounded-[10px] p-[13px] md:p-[15px]'>Send</button>
