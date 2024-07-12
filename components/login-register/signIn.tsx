@@ -159,10 +159,10 @@ const SignIn = (Props: loginType) => {
                 {/**Form Start  */}
                 <form onSubmit={handleSubmit(onHandleSubmit)}>
                   <div className="flex flex-col gap-[15px] lg:gap-10">
-                    <input type="text" placeholder="Enter Email or Phone Number" {...register('username')} name="username" className="input-cta" />
+                    <input type="text" placeholder="Enter Email or Phone Number" {...register('username')} name="username" className="input-cta" maxLength={50}/>
                     {errors.username && <p className="errorMessage">{errors.username.message}</p>}
                     <div className="relative">
-                      <input type={`${show === true ? "text" : "password"}`} placeholder="Password" {...register('password')} name="password" className="input-cta w-full" />
+                      <input type={`${show === true ? "text" : "password"}`} placeholder="Password" maxLength={32} {...register('password')} name="password" className="input-cta w-full" />
 
                       <Image
                         data-testid="show-hide"

@@ -42,13 +42,13 @@ const ResetPassword = () => {
     resolver: yupResolver(schema),
   });
 
-  
+
 
   const onHandleSubmit = async (data: any) => {
     try {
-      
+
       let isEmailExist = await validateEmail(data.username);
-      data.username= data.username.toLowerCase()
+      data.username = data.username.toLowerCase()
       setIsEmail(isEmailExist);
 
       data.otp = "";
@@ -67,7 +67,7 @@ const ResetPassword = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body:JSON.stringify(record),
+        body: JSON.stringify(record),
       });
       let res = await responseData.json();
 
@@ -86,8 +86,8 @@ const ResetPassword = () => {
       }
     } catch (error) {
       console.log(error);
-      
-     }
+
+    }
   };
 
   useEffect(() => {
@@ -136,7 +136,7 @@ const ResetPassword = () => {
               <div className="mt-0 lg:mt-[200px] lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
                 <h1 className="lg-heading mb-5">Password Recovery</h1>
                 <p className="mb-5  lg:mb-[20px] md-text">
-                  Create new password
+                  Enter your email/number to recover your password
                 </p>
                 {/**Form Start  */}
                 <form onSubmit={handleSubmit(onHandleSubmit)}>
@@ -148,7 +148,7 @@ const ResetPassword = () => {
                       name="username"
                       className="input-cta"
                     />
-                      {/* <p className="errorMessage absolute top-[100%] left-0">skkfsdfs;d sfsd f;lk</p> */}
+                    {/* <p className="errorMessage absolute top-[100%] left-0">skkfsdfs;d sfsd f;lk</p> */}
                     {errors.username && (
                       <p className="errorMessage absolute top-[calc(100%+5px)] left-0">{errors.username.message}</p>
                     )}

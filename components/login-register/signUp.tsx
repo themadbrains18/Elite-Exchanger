@@ -267,7 +267,7 @@ const SignUp = () => {
                     <input type="text" {...register('refeer_code')} maxLength={10} disabled={queryParams !== null ? true : false} placeholder="Referal Code(Optional)" className="input-cta" />
                   </div>
                   <div className="flex mt-[30px] gap-[10px] items-start">
-                    <input type="checkbox" id="checkbox" {...register('agree')} className="mt-[3px]" />
+                    <input type="checkbox" id="checkbox" {...register('agree')} className="mt-[6px]" />
                     <label htmlFor="checkbox" className=" cursor-pointer sm-text text-[14px] md:text-[16px] text-gamma dark:text-white leading-[24px]">
                     By registering, I agree that I am 18 years of age or older and accept the{" "}
                       <Link href="#" className="!text-primary">

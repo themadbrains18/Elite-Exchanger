@@ -21,7 +21,7 @@ const schema = yup.object().shape({
     .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character.")
     .matches(/^\S*$/, "Whitespaces are not allowed."),
   confirmPassword: yup.string()
-    .oneOf([yup.ref('new_password'),''], 'Passwords must match.'),
+    .oneOf([yup.ref('new_password'),''], 'Passwords must match.').required('Confirm password is required'),
 });
 
 interface propsData {
@@ -127,8 +127,13 @@ const ReEnterpass = (props: propsData) => {
     }
   }
 
+console.log(errors,"===errors");
+
+
   const onHandleSubmit = async (data: any) => {
     try {
+      console.log(data,"==adatd");
+      
       setLayout(true)
       setConfirmation(true)
       data.otp = props?.formData?.otp;
@@ -151,6 +156,7 @@ const ReEnterpass = (props: propsData) => {
     }, 3000);
 
   }, [errors]);
+
 
   return (
     <>
@@ -190,7 +196,11 @@ const ReEnterpass = (props: propsData) => {
                 Create new password
               </p>
               {/**Form Start  */}
-              <form onSubmit={handleSubmit(onHandleSubmit)}>
+              <form onSubmit={handleSubmit(onHandleSubmit)}  onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+              }
+            }}>
 
                 <div className="relative text-end mb-[10px]">
                   <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
@@ -217,6 +227,7 @@ const ReEnterpass = (props: propsData) => {
                     </div>
                     <StrengthCheck password={pswd} />
                 {errors.new_password && <p className="errorMessage">{errors.new_password.message}</p>}
+                <div className="relative">
                 <div className="relative mt-[10px]">
                   <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
                   <Image
@@ -230,7 +241,9 @@ const ReEnterpass = (props: propsData) => {
                     className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                   />
                 </div>
-                {errors.confirmPassword && <p className="errorMessage">{errors.confirmPassword.message}</p>}
+
+                {errors.confirmPassword && <p className="errorMessage absolute">{errors.confirmPassword.message}</p>}
+                </div>
 
                 <button
                   type="submit" disabled={btnDisabled}
