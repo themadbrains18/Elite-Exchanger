@@ -110,7 +110,7 @@ const ResetPassword = () => {
                 width={848}
                 height={631}
                 alt="signup"
-                className="object-cover h-[1080px] min-h-screen block w-full"
+                className="object-cover h-[1080px] sadasdsa min-h-screen block w-full"
               />
             </div>
             <div className="max-w-full lg:max-w-[50%] flex flex-col justify-center w-full">

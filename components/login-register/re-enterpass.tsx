@@ -161,15 +161,15 @@ console.log(errors,"===errors");
   return (
     <>
       <ToastContainer limit={1}/>
-      <section className="bg-primary-300 lg:dark:bg-black-v-1 h-screen xl:h-full  lg:bg-bg-primary ">
-        <div className="flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none h-screen">
+      <section className="bg-primary-300 lg:dark:bg-black-v-1 xl:h-full  lg:bg-bg-primary ">
+        <div className="flex h-full min-h-full gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
           <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
             <Image
               src="/assets/register/forget.png"
               width={848}
               height={631}
               alt="signup"
-              className="object-cover h-screen xl:h-full block w-full"
+              className="object-cover min-h-screen h-[1080px] block w-full"
             />
           </div>
           <div className="max-w-full lg:max-w-[50%] w-full ">
@@ -210,7 +210,7 @@ console.log(errors,"===errors");
                       onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}}
                     >
                       <input type={`${show === true ? "text" : "password"}`} {...register('new_password')}
-                        name="new_password" placeholder="New Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta dark:shadow-[inset_0_50px_0_#121318] shadow-[inset_0_50px_0_#e2f2ff]" maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)}  />
+                        name="new_password" placeholder="New Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta lg:dark:shadow-[inset_0_50px_0_#121318] dark:shadow-[inset_0_50px_0_#080808] shadow-[inset_0_50px_0_#e2f2ff]" maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)}  />
                       <Image
                         data-testid="show-hide"
                         src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
