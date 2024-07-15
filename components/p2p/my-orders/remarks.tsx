@@ -53,6 +53,8 @@ const Remarks = (props: propsData) => {
         
         if (currentTime < deadline && props.userOrder?.status === 'isProcess') {
             if (Ref.current) clearInterval(Ref.current);
+            console.log("in cancel 2");
+            
             const timer = setInterval(() => {
                 calculateTimeLeft(deadline);
             }, 1000);
@@ -60,6 +62,8 @@ const Remarks = (props: propsData) => {
         }
         
         else if (currentTime > deadline && props.userOrder?.status === 'isProcess') {
+            console.log("order cancel 1");
+            
             // return;
             await orderCancel();
         }
@@ -82,6 +86,8 @@ const Remarks = (props: propsData) => {
         }
         else {
             if (Ref.current) clearInterval(Ref.current);
+            console.log(props.userOrder,"=props.userOrder");
+            
             if (props.userOrder?.status === 'isProcess') {
                 // return;
                 orderCancel();
@@ -130,8 +136,11 @@ const Remarks = (props: propsData) => {
                 body: JSON.stringify(record)
             })
 
+
             let res = await responseData.json();
             if (res.data.status === 200) {
+                console.log("==here");
+                
                 props.getUserOrders();
                 if (wbsocket) {
                     let orderData = {
@@ -225,8 +234,6 @@ const Remarks = (props: propsData) => {
         try {
 
             finalFormData.fundcode = pass;
-
-            console.log(finalFormData,"==aJSON.parse(formData)");
             
 
             if (status === 'authenticated') {
