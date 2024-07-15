@@ -84,50 +84,6 @@ const DesktopTable = (props: dataTypes) => {
             setTotal(userAllOrderList?.data?.totalLength);
             setPostList(userAllOrderList?.data?.data);
 
-
-
-
-            // let postData:any = [];
-            // let filterRecord = userAllOrderList?.data?.data;
-            // postData= filterRecord
-            //     if (props?.firstCurrency !== '') {
-
-            //         filterRecord = filterRecord.filter((item: any) => {
-            //             return props?.selectedToken?.id === item?.token_id
-            //         });
-            //       postData = filterRecord;
-            //     }
-
-            //     if (props?.paymentId !== '') {
-
-            //         let filter_posts=[]
-            //         for (const post of filterRecord) {
-            //             for (const upid of post.user_p_method) {
-            //                 if (props?.paymentId === upid?.pmid) {
-            //                     filter_posts.push(post);
-            //                 }
-            //             }
-            //         }
-            //         postData = filter_posts;
-            //     }
-
-            //     if (props?.startDate !== null && props?.startDate !== undefined) {
-            //         let filter_posts=[]
-            //         filter_posts = filterRecord.filter((item: any) => {
-            //             let postDate = moment(item?.createdAt).format('LL');
-            //             let compareDate = moment(props?.startDate).format('LL');
-            //             if (compareDate === postDate) {
-            //                 return item
-            //             }
-            //         });
-            //         postData = filter_posts;
-            //     }
-
-
-
-
-            // setPostList(postData)
-
         } catch (error) {
             console.log("error in get token list", error);
 

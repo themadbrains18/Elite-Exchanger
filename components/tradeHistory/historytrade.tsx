@@ -129,7 +129,7 @@ const Historytrade = (props: propsData) => {
                     setCurrencyName={setCurrencyName}
                   />
                 </div>
-                <div className="p-[5px] flex items-center gap-[10px] cursor-pointer" onClick={clearAll}><p className="nav-text-sm">Clear Filter</p></div>
+                <div className="p-[5px] flex items-center gap-[10px] cursor-pointer" onClick={clearAll}><p className="nav-text-sm hover:!text-primary">Clear Filter</p></div>
               </div>
             </div>
             {active === 1 && (

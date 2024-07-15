@@ -75,7 +75,7 @@ const BuyCoinsTabs = (props: activeSection) => {
             />
           </div>
           <div className="p-[5px] flex items-center gap-[10px] cursor-pointer" onClick={clearAll}>
-            <p className="nav-text-sm whitespace-nowrap">Clear Filter</p>
+            <p className="nav-text-sm whitespace-nowrap hover:!text-primary">Clear Filter</p>
           </div>
         </div>
       </div>
