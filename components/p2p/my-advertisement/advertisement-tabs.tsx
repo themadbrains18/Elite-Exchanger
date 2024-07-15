@@ -47,6 +47,7 @@ const AdvertisementTabs = (props: propsData) => {
                 return item.symbol === symbol
             });
             setSelectedToken(token[0]);
+            setValue(symbol)
         }
     }
 
