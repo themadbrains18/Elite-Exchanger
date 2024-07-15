@@ -224,7 +224,7 @@ const ChatBox = (props: PropsData) => {
 
     return (
         <>
-            <div className={`bg-black z-[8] duration-300 fixed top-0 left-0 h-full w-full ${show ? 'opacity-80 visible' : 'opacity-0 invisible'}`}></div>
+            <div className={`bg-black z-[8] duration-300 fixed top-0 left-0 h-full w-full  ${show ? 'opacity-80 visible' : 'opacity-0 invisible'}`} onClick={() => setShow(!show)}></div>
             <div className={`${show ? 'max-[1200px]:opacity-1 max-[1200px]:visible' : 'max-[1200px]:opacity-0 max-[1200px]:invisible'} duration-300 max-w-[25%] w-full max-[1200px]:z-[8] max-[1200px]:max-w-[345px] max-[1200px]:bottom-[105px] max-[1200px]:left-[50%] max-[1200px]:translate-x-[-50%] max-[1200px]:fixed rounded-[10px] overflow-hidden dark:bg-black-v-1 bg-[#F9FAFA] border dark:border-opacity-[15%] border-grey-v-1`}>
                 <div className="flex items-center gap-[10px] grow-[1.6] p-[14px] pb-[30px] dark:bg-[url(/assets/order/chat-head-bg-dark.png)] bg-[url(/assets/order/chat-head-bg.png)] no-reapeat bg-cover bg-bottom">
                     <div className="w-[36px] h-[36px] rounded-full bg-[#e8f6f7] dark:bg-[#8ed0d9] border border-white flex relative">
@@ -301,7 +301,7 @@ const ChatBox = (props: PropsData) => {
                 </div>
             </div>
             <div
-                className="max-[1200px]:block hidden fixed bottom-[15px] z-[7] translate-y-[-50%] right-[10px] rounded-[8px] bg-primary-400 flex w-[50px] h-[50px] p-[10px] cursor-pointer"
+                className="max-[1200px]:block hidden fixed bottom-[15px] z-[9] translate-y-[-50%] right-[10px] rounded-[8px] bg-primary-400 flex w-[50px] h-[50px] p-[10px] cursor-pointer"
                 onClick={() => setShow(!show)}
             >
                 {show ? <IconsComponent type="Whiteclose" hover={false} active={false} /> : <IconsComponent type="chatIcon" hover={false} active={false} />}
