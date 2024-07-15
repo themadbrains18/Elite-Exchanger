@@ -8,30 +8,31 @@ import FilterSelectMenuWithCoin from '@/components/snippets/filter-select-menu-w
 interface propsData {
     orderList?: any;
     setOrderId?: any;
-    coinList?:any;
+    coinList?: any;
     masterPayMethod?: any;
     userPaymentMethod?: any;
 }
 
 const OrdersTabs = (props: propsData) => {
-    
+
     const [active, setActive] = useState(1);
 
     const [firstCurrency, setFirstCurrency] = useState('');
     const [selectedToken, setSelectedToken] = useState(Object);
     const [paymentId, setPaymentId] = useState('');
-    const [startDate, setStartDate] = useState();
+    const [startDate, setStartDate] = useState<any>();
+    const [value, setValue] = useState(""); // For currency dropdown
 
-    
+
     const setCurrencyName = (symbol: string, dropdown: number) => {
-        
+
         if (dropdown === 1) {
             setFirstCurrency(symbol);
             let token = props?.coinList?.filter((item: any) => {
                 return item.symbol === symbol
             });
             setSelectedToken(token[0]);
-            
+
         }
     }
 
@@ -41,6 +42,12 @@ const OrdersTabs = (props: propsData) => {
 
     const handleDate = (date: any) => {
         setStartDate(date);
+    };
+
+    const clearAll = () => {
+        setValue('')
+        setSelectedToken('')
+        setStartDate(null)
     };
 
     return (
@@ -82,9 +89,9 @@ const OrdersTabs = (props: propsData) => {
                 </div>
                 <div className='flex md:flex-nowrap flex-wrap items-center gap-10 w-full lg:w-auto md:p-0 pb-[15px] md:!border-none border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2'>
                     <div className='relative max-w-full md:max-w-[50%] w-full'>
-                        <FilterSelectMenuWithCoin data={props?.coinList} border={true} dropdown={1} setCurrencyName={setCurrencyName} />
+                        <FilterSelectMenuWithCoin data={props?.coinList} border={true} dropdown={1} setCurrencyName={setCurrencyName} value={value}/>
                     </div>
-                   
+
                     <div className=' max-w-full md:max-w-[50%] w-full'>
                         <ReactDatePicker
                             placeholderText={'MM/DD/YYYY'}
@@ -98,18 +105,23 @@ const OrdersTabs = (props: propsData) => {
                         />
                         {/* <input type="date" className='md:w-fit w-full border w-full border-grey-v-1 dark:border-[#ccced94d] dark:bg-d-bg-primary  dark:!text-white  bg-transparent rounded-[5px] py-[8px] px-[15px]' /> */}
                     </div>
+
+                    <div className="p-[5px] flex items-center gap-[10px] cursor-pointer" onClick={clearAll}>
+                        <p className="nav-text-sm whitespace-nowrap">Clear Filter</p>
+                    </div>
+
                 </div>
             </div>
 
             {/* Table Data */}
-                <div>
-                    <div className='md:block hidden'>
-                        <OrdersTableDesktop active={active} setOrderId={props.setOrderId} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate} />
-                    </div>
-                    <div className='md:hidden'>
-                        <OrdersTableMobile active={active} setOrderId={props.setOrderId} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate} />
-                    </div>
+            <div>
+                <div className='md:block hidden'>
+                    <OrdersTableDesktop active={active} setOrderId={props.setOrderId} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate} />
                 </div>
+                <div className='md:hidden'>
+                    <OrdersTableMobile active={active} setOrderId={props.setOrderId} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate} />
+                </div>
+            </div>
             {/* {
                 active === 1 &&
             }

@@ -41,7 +41,6 @@ const BuyTableDesktop = (props: activeSection) => {
 
   const getAllPosts = async (itemOffset: number) => {
     try {
-      console.log("=hereere", itemOffset);
 
       if (itemOffset === undefined) {
         itemOffset = 0;
@@ -62,9 +61,6 @@ const BuyTableDesktop = (props: activeSection) => {
       ).then((response) => response.json());
 
 
-      console.log(posts?.data?.data,"=posts?.data?.data");
-      
-
       for (const post of posts?.data?.data) {
         let payment_method: any = [];
         for (const upid of post.p_method) {
@@ -77,15 +73,18 @@ const BuyTableDesktop = (props: activeSection) => {
         post.user_p_method = payment_method;
       }
 
-      console.log(posts, "==posts");
       // Filter out posts where user_p_method array is empty
-      posts.data.data = posts.data.data.filter((post: any) => post.user_p_method.length > 0);
+      // posts.data.data = posts.data.data.filter((post: any) => post.user_p_method.length > 0);
 
       // Update totalLength based on filtered data length
-      const totalLength = posts.data.data.length;
-      setTotal(totalLength);
+      // const totalLength = posts.data.data.length;
+      // setTotal(totalLength);
 
       setList(posts.data.data);
+
+      if(posts?.data?.totalLength<=10){
+        setItemOffset(0)
+      }
 
       // let postData = [];
       // let filter_posts = posts?.data?.data;

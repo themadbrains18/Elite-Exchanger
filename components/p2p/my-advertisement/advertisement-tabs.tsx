@@ -15,6 +15,7 @@ interface propsData {
     userPaymentMethod?: any;
     coinList?: any;
     masterPayMethod?: any;
+    session?: any;
 }
 
 const AdvertisementTabs = (props: propsData) => {
@@ -33,7 +34,10 @@ const AdvertisementTabs = (props: propsData) => {
 
     const [adsHistory, setAdsHistory] = useState(props?.posts);
 
-    const [startDate, setStartDate] = useState();
+    const [startDate, setStartDate] = useState<any>();
+    const [value, setValue] = useState(""); // For currency dropdown
+    const [resetValue, setResetValue] = useState(false)
+
 
     const setCurrencyName = (symbol: string, dropdown: number) => {
 
@@ -54,9 +58,17 @@ const AdvertisementTabs = (props: propsData) => {
 
     const handleDate = (date: any) => {
         setStartDate(date);
-       
+
     };
 
+    const clearAll = () => {
+        setValue('');
+        setPaymentId('');
+        setSelectedToken('');
+        setFirstCurrency("");
+        setStartDate(null)
+        setResetValue(true);
+    };
     return (
         <>
             <div className='flex flex-wrap gap-20 items-center justify-between  mt-30 md:mt-40'>
@@ -88,13 +100,16 @@ const AdvertisementTabs = (props: propsData) => {
                 </div>
                 <div className='flex md:flex-nowrap flex-wrap items-center gap-10 w-full lg:w-auto md:p-0 pb-[15px] md:!border-none border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2'>
                     <div className='relative max-w-full md:max-w-[40%] w-full'>
-                        <FilterSelectMenuWithCoin data={props.coinList} border={true} dropdown={1} setCurrencyName={setCurrencyName} />
+                        <FilterSelectMenuWithCoin data={props.coinList} border={true} dropdown={1} setCurrencyName={setCurrencyName} value={value} />
                     </div>
                     <div className=' max-w-full md:max-w-[40%] min-w-[250px] w-full'>
                         <FiliterSelectMenu data={props.masterPayMethod}
                             placeholder="Choose Payment Method"
                             auto={false}
-                            widthFull={false} type="pmethod" onPaymentMethodChange={onPaymentMethodChange} />
+                            widthFull={false} type="pmethod"
+                            onPaymentMethodChange={onPaymentMethodChange}
+                            resetValue={resetValue} // Controlled value for the currency dropdown
+                        />
                     </div>
                     <div className=' max-w-full md:max-w-[20%] w-full'>
                         <DatePicker
@@ -109,6 +124,9 @@ const AdvertisementTabs = (props: propsData) => {
                         />
                         {/* <input type="date" className='md:w-fit w-full border w-full border-grey-v-1 dark:border-[#ccced94d] dark:bg-d-bg-primary  dark:!text-white  bg-transparent rounded-[5px] py-[8px] px-[15px]' /> */}
                     </div>
+                    <div className="p-[5px] flex items-center gap-[10px] cursor-pointer" onClick={clearAll}>
+                        <p className="nav-text-sm whitespace-nowrap">Clear Filter</p>
+                    </div>
                 </div>
             </div>
 
@@ -117,10 +135,10 @@ const AdvertisementTabs = (props: propsData) => {
                 active === 1 && */}
             <div>
                 <div className='md:block hidden'>
-                    <DesktopTable active={active} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate} />
+                    <DesktopTable active={active} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} session={props?.session} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate} />
                 </div>
                 <div className='md:hidden'>
-                    <MobileTable active={active} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate} />
+                    <MobileTable active={active} userPaymentMethod={props?.userPaymentMethod} selectedToken={selectedToken} session={props?.session} firstCurrency={firstCurrency} paymentId={paymentId} startDate={startDate} />
                 </div>
             </div>
             {/* 

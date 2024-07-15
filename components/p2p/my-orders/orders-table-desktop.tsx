@@ -43,47 +43,22 @@ const OrdersTableDesktop = (props: dataTypes) => {
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
-            let userAllOrderList:any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/status?userid=${session?.user?.user_id}&status=${props?.active===1?"all":props?.active===2?"isProcess":props?.active===3?"isReleased":props?.active===4?"isCanceled":"all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+                let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
+            let date = props?.startDate !== undefined && props?.startDate !== "" ?new Date(props?.startDate).toISOString() : "all"
+            let userAllOrderList:any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/status?userid=${session?.user?.user_id}&status=${props?.active===1?"all":props?.active===2?"isProcess":props?.active===3?"isReleased":props?.active===4?"isCanceled":"all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}}&currency=${currency || "all"}&date=${date}`, {
                 method: "GET",
                 headers: {
                   "Authorization": session?.user?.access_token
                 },
               }).then(response => response.json());
                 
-
+              if(userAllOrderList?.data?.totalLength<=10){
+                setItemOffset(0)
+              }
                 setTotal(userAllOrderList?.data?.total)
                 setList(userAllOrderList?.data?.data);
 
-                let postData:any = [];
-                let filterRecord = userAllOrderList?.data?.data;
-                postData = filterRecord;
-
-                
-                
-                if (props?.firstCurrency !== '') {
-                    
-                    filterRecord = filterRecord.filter((item: any) => {
-                        return props?.selectedToken?.id === item?.token_id
-                    });
-                    postData = filterRecord;
-
-                    setList(postData);
-                }
-                if (props?.startDate !== null && props?.startDate !== undefined) {
-                    let filter_posts=[]
-                    filter_posts = filterRecord.filter((item: any) => {
-
-                        let postDate = moment(item?.createdAt).format('LL');
-
-                        let compareDate = moment(props?.startDate).format('LL');
-                        if (compareDate === postDate) {
-                            return item
-                        }
-                    });
-                    postData = filter_posts;
-                }
-
-                setList(postData);
+               
 
         } catch (error) {
             console.log("error in get token list", error);

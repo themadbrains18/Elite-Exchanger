@@ -53,6 +53,8 @@ const FiliterSelectMenu = (props: dataList) => {
   useEffect(()=>{
     
     if(props?.resetValue){
+      console.log("=hererer");
+      
       
       setActive('')
     }

@@ -21,6 +21,7 @@ interface dataTypes {
     userPaymentMethod?: any;
     selectedToken?: any;
     active?: any;
+    session?: any;
 }
 const DesktopTable = (props: dataTypes) => {
     const { mode } = useContext(Context);
@@ -47,64 +48,86 @@ const DesktopTable = (props: dataTypes) => {
 
     const getAds = async (itemOffset: number) => {
         try {
-            // console.log("called");
-            
+            console.log("called");
+            let paymentMethod = props?.paymentId !== undefined && props?.paymentId !== "" ? props?.paymentId : "all"
+            let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
+            let date = props?.startDate !== undefined && props?.startDate !== "" ?new Date(props?.startDate).toISOString() : "all"
 
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
-            let userAllOrderList: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/advertisement?status=${props?.active === 1 ? true : props?.active === 2 ? false : "all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+          
+        
+            let userAllOrderList: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/advertisement?status=${props?.active === 1 ? true : props?.active === 2 ? false : "all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}&date=${date}`, {
                 method: "GET",
                 headers: {
-                    "Authorization": session?.user?.access_token
+                    "Authorization": props?.session?.user?.access_token
                 },
             }).then(response => response.json());
 
+            if(userAllOrderList?.data?.totalLength<=10){
+                setItemOffset(0)
+              }
+            for (const post of userAllOrderList?.data?.data) {
+                let payment_method: any = [];
+                for (const upid of post.p_method) {
+                    props.userPaymentMethod.filter((item: any) => {
+                        if (item.id === upid?.upm_id) {
+                            payment_method.push(item);
+
+                        }
+                    })
+                }
+                post.user_p_method = payment_method;
+            }
+
             setTotal(userAllOrderList?.data?.totalLength);
             setPostList(userAllOrderList?.data?.data);
-        
 
-            let postData:any = [];
-            let filterRecord = userAllOrderList?.data?.data;
-            postData= filterRecord
-                if (props?.firstCurrency !== '') {
-                    
-                    filterRecord = filterRecord.filter((item: any) => {
-                        return props?.selectedToken?.id === item?.token_id
-                    });
-                  postData = filterRecord;
-                }
-             
-                if (props?.paymentId !== '') {
-                    
-                    let filter_posts=[]
-                    for (const post of filterRecord) {
-                        for (const upid of post.user_p_method) {
-                            if (props?.paymentId === upid?.pmid) {
-                                filter_posts.push(post);
-                            }
-                        }
-                    }
-                    postData = filter_posts;
-                }
-                   
-                if (props?.startDate !== null && props?.startDate !== undefined) {
-                    let filter_posts=[]
-                    filter_posts = filterRecord.filter((item: any) => {
-                        let postDate = moment(item?.createdAt).format('LL');
-                        let compareDate = moment(props?.startDate).format('LL');
-                        if (compareDate === postDate) {
-                            return item
-                        }
-                    });
-                    postData = filter_posts;
-                }
-            
-                
-             
-              
-                setPostList(postData)
-              
+
+
+
+            // let postData:any = [];
+            // let filterRecord = userAllOrderList?.data?.data;
+            // postData= filterRecord
+            //     if (props?.firstCurrency !== '') {
+
+            //         filterRecord = filterRecord.filter((item: any) => {
+            //             return props?.selectedToken?.id === item?.token_id
+            //         });
+            //       postData = filterRecord;
+            //     }
+
+            //     if (props?.paymentId !== '') {
+
+            //         let filter_posts=[]
+            //         for (const post of filterRecord) {
+            //             for (const upid of post.user_p_method) {
+            //                 if (props?.paymentId === upid?.pmid) {
+            //                     filter_posts.push(post);
+            //                 }
+            //             }
+            //         }
+            //         postData = filter_posts;
+            //     }
+
+            //     if (props?.startDate !== null && props?.startDate !== undefined) {
+            //         let filter_posts=[]
+            //         filter_posts = filterRecord.filter((item: any) => {
+            //             let postDate = moment(item?.createdAt).format('LL');
+            //             let compareDate = moment(props?.startDate).format('LL');
+            //             if (compareDate === postDate) {
+            //                 return item
+            //             }
+            //         });
+            //         postData = filter_posts;
+            //     }
+
+
+
+
+            // setPostList(postData)
+
         } catch (error) {
             console.log("error in get token list", error);
 
@@ -134,7 +157,7 @@ const DesktopTable = (props: dataTypes) => {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
-                    "Authorization": session?.user?.access_token
+                    "Authorization": props?.session?.user?.access_token
                 },
                 body: JSON.stringify(record)
             }).then(response => response.json());
@@ -203,7 +226,7 @@ const DesktopTable = (props: dataTypes) => {
 
     return (
         <>
-            <ToastContainer limit={1}/>
+            <ToastContainer limit={1} />
             <div className='mt-20 asdasdasdasd'>
                 <table width="100%">
                     <thead>
@@ -276,7 +299,7 @@ const DesktopTable = (props: dataTypes) => {
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(item.price)} INR</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(item.quantity,6)} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(item.quantity, 6)} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
@@ -287,7 +310,7 @@ const DesktopTable = (props: dataTypes) => {
                                                         item?.user_p_method?.map((elem: any, ind: any) => {
                                                             return (
                                                                 <Fragment key={ind}>
-                                                                    <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className='ml-[-10px]'/>
+                                                                    <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className='ml-[-10px]' />
                                                                 </Fragment>
                                                             )
                                                         })
