@@ -259,7 +259,7 @@ const EditPaymentMethod = (props: activeSection) => {
                   )}
                 </div>
                 <div className="mt-10">
-                  <p className="info-10-14 text-end"> = {truncateNumber(reduceValue,6)} {props?.selectedAssets?.symbol}
+                  <p className="info-10-14 text-end"> = {truncateNumber(reduceValue,6)} {props?.selectedAssets?.symbol}</p>
                 </div>
               </div>
               <div className="w-full">
