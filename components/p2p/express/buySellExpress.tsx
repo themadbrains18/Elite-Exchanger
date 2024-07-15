@@ -709,7 +709,7 @@ const BuySellExpress = (props: propsData) => {
 
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">
-                    Estimated price: 1 {secondCurrency} = {currencyFormatter(Number(truncateNumber(Number(usdtToInr),2)))} INR
+                    Estimated price: 1 {secondCurrency} = {currencyFormatter(Number(truncateNumber(Number(usdtToInr),6)))} INR
                   </p>
                 </div>
                 <div className="mt-5 flex gap-2">

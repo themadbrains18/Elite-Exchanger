@@ -12,16 +12,16 @@ interface propsData {
   masterPayMethod?: any;
   userPaymentMethod?: any;
   coinList?:any;
+  session?:any;
 }
 
 const MyAdvertisement = (props: propsData) => {
 
   const router= useRouter()
-  
 
   return (
     <P2pLayout>
-      <AdvertisementTabs userPaymentMethod={props.userPaymentMethod} coinList={props?.coinList} masterPayMethod={props.masterPayMethod}/>
+      <AdvertisementTabs userPaymentMethod={props.userPaymentMethod} coinList={props?.coinList} masterPayMethod={props.masterPayMethod} session={props?.session}/>
     </P2pLayout>
 
   )
@@ -48,12 +48,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   if (session) {
 
-    // let userPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/advertisement?itemOffset=0&itemsPerPage=20`, {
-    //   method: "GET",
-    //   headers: {
-    //     "Authorization": session?.user?.access_token
-    //   },
-    // }).then(response => response.json());
 
     let userPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod`, {
       method: "GET",
@@ -65,7 +59,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       props: {
         providers: providers,
-        sessions: session,
+        session: session,
         // posts: userPosts?.data || [],
         masterPayMethod: masterPaymentMethod?.data || [],
         userPaymentMethod: userPaymentMethod?.data || [],

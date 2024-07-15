@@ -20,10 +20,13 @@ router.get(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         // Retrieve the authorization token from the request headers.
         let token = req.headers.authorization;
+
+        console.log(token,"==here token");
+        
         // Destructure and retrieve variables from the query parameters.
-        let { status, itemOffset, itemsPerPage } = req.query;
+        let { status, itemOffset, itemsPerPage,currency,pmMethod,date } = req.query;
         // Call the API using a helper function and pass the necessary parameters.
-        let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/post/get/${status}/${itemOffset}/${itemsPerPage}`, token);
+        let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/post/get/${status}/${itemOffset}/${itemsPerPage}/${currency}/${pmMethod}/${date}`, token);
         // Respond with a 200 status and send the retrieved data.
         return res.status(200).send({ data });
     } catch (error: any) {

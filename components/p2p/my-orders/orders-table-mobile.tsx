@@ -41,13 +41,18 @@ const OrdersTableMobile = (props: dataTypes) => {
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
-            let userAllOrderList:any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/status?userid=${session?.user?.user_id}&status=${props?.active===1?"all":props?.active===2?"isProcess":props?.active===3?"isReleased":props?.active===4?"isCanceled":"all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+            let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
+            let date = props?.startDate !== undefined && props?.startDate !== "" ?new Date(props?.startDate).toISOString() : "all"
+            let userAllOrderList:any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/status?userid=${session?.user?.user_id}&status=${props?.active===1?"all":props?.active===2?"isProcess":props?.active===3?"isReleased":props?.active===4?"isCanceled":"all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}}&currency=${currency || "all"}&date=${date}`, {
                 method: "GET",
                 headers: {
                   "Authorization": session?.user?.access_token
                 },
               }).then(response => response.json());
-
+                
+              if(userAllOrderList?.data?.totalLength<=10){
+                setItemOffset(0)
+              }
               setTotal(userAllOrderList?.data?.total)
             setList(userAllOrderList?.data?.data);
            
