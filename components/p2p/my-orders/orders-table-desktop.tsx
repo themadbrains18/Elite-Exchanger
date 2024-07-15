@@ -1,5 +1,6 @@
 import Context from '@/components/contexts/context';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
+import { truncateNumber } from '@/libs/subdomain';
 import moment from 'moment';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -142,7 +143,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(item?.price)}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{item?.quantity?.toFixed(8)}</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(item?.quantity,6)}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{moment(item?.createdAt).format("YYYY-MM-DD hh:mm:ss A")}</p>
