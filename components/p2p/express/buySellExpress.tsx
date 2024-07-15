@@ -57,6 +57,7 @@ const BuySellExpress = (props: propsData) => {
   const wbsocket = useWebSocket();
   const hasRun = useRef(false);
 
+
   useEffect(() => {
     if (active1) {
       reset()
@@ -611,9 +612,11 @@ const BuySellExpress = (props: propsData) => {
                     <input
                       type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="$0"
+                      maxLength={10}
                       step="any"
                       {...register('spend_amount')}
                       onChange={(e: any) => {
+
                         if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
                           setAmount(e?.target?.value);
                         }
@@ -639,6 +642,7 @@ const BuySellExpress = (props: propsData) => {
                             });
                           }
                         }
+
                       }}
                       name="spend_amount"
                       className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text "

@@ -33,13 +33,13 @@ const Successfull = (props: activeSection) => {
         ref={wrapperRef}
         className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
       >
-        <div className="flex items-center justify-between relative">
+        <div className="flex items-center justify-between  ">
 
-          <p className="sec-title mb-8">
+          <p className="sec-title">
 
             {props?.type === "success"
               ? "Payment Method"
-              : props?.type === "release" ? "Assets Release"
+              : props?.type === "release" ? "Assets Released"
                 : "Risk Warning"}
 
           </p>
@@ -57,7 +57,7 @@ const Successfull = (props: activeSection) => {
             y="0px"
             viewBox="0 0 60.963 60.842"
             xmlSpace="preserve"
-            className="max-w-[18px] cursor-pointer w-full absolute top-[-6px] md:top-[-17px] right-[-5px] md:right-[-10px]"
+            className="max-w-[18px] cursor-pointer w-full "
           >
             <path
               fill={mode === "dark" ? "#fff" : "#9295A6"}
@@ -69,12 +69,12 @@ const Successfull = (props: activeSection) => {
             />
           </svg>
         </div>
-        {props?.type === "release" && <div className="flex items-center justify-center ">
+        {props?.type === "release" && <div className="flex items-center justify-center mt-8">
           <Image src='/assets/profile/success-icon.svg' width={40} height={40} alt="success" />
         </div>}
         <p className={`py-[20px] md:py-40 info-14-18 ${props?.type === "release" ? 'text-center' : ''}`}>
           {props?.type === "success"
-            ? "New payment method has been added successfully."
+            ? "Your new payment method has been added successfully."
             : props?.type === "release" ? "Assets has been released successfully."
               : "Before releasing the crypto, please confirm that you have received the payment and have checked if the amount and payers name match those of the order if payment information is inconsistent or there arise a dispute , please immediatly contact the customer support and do not release the crypto."}
         </p>
@@ -92,9 +92,9 @@ const Successfull = (props: activeSection) => {
             >
               OK
             </button>
-            <button onClick={() => { router.push('/p2p/buy') }} className={`solid-button max-w-full w-full `}>
+            {/* <button onClick={() => { router.push('/p2p/buy') }} className={`solid-button max-w-full w-full `}>
               Place another order
-          </button>
+          </button> */}
         </div>
         ) : (
           <div>

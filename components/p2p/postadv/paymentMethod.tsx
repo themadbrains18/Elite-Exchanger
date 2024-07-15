@@ -69,7 +69,7 @@ const PaymentMethod = (props: activeSection) => {
   const [maxInputValue, setMaxInputValue] = useState(0.000000);
   const [verified, setVerified] = useState(false);
   const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
-  const [reduceValue,setReduceValue] = useState<Number>(props.assetsBalance || 0);
+  const [reduceValue,setReduceValue] = useState<Number | any>(props.assetsBalance || 0);
   // let list = props.userPaymentMethod;
 
   const router = useRouter();
@@ -359,7 +359,7 @@ const PaymentMethod = (props: activeSection) => {
                       </div>
                     )}
                     <div className="flex gap-2 items-center justify-between w-full">
-                      <div className={`flex gap-20 items-center ${isCheckboxDisabled(item.id) ? "disabled-text" : ""}`}>
+                      <div className={`flex gap-10 items-center ${isCheckboxDisabled(item.id) ? "disabled-text" : ""}`}>
                         <div className="flex gap-10 items-center w-full max-w-[145px]">
 
                           <p className="sec-text !text-h-primary dark:!text-white !font-medium">

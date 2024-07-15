@@ -38,7 +38,7 @@ const EditPaymentMethod = (props: activeSection) => {
   const [minInputValue, setMinInputValue] = useState(props?.editPost?.min_limit);
   const [maxInputValue, setMaxInputValue] = useState(props?.editPost?.price !== props.price ? props.price * props?.editPost?.quantity : props?.editPost?.max_limit);
   const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
-  const [reduceValue,setReduceValue] = useState<Number>(props.assetsBalance || 0);
+  const [reduceValue,setReduceValue] = useState<Number|any>(props.assetsBalance || 0);
 
   useEffect(() => {
     setValue('quantity', props?.editPost?.quantity);
@@ -216,7 +216,7 @@ const EditPaymentMethod = (props: activeSection) => {
                     ">
                       </label>
                     </div>
-                    <div className={`flex gap-20 items-center ${isCheckboxDisabled(item.id) ? "disabled-text" : ""}`}>
+                    <div className={`flex gap-10 items-center ${isCheckboxDisabled(item.id) ? "disabled-text" : ""}`}>
                       <p className="sec-text !text-h-primary dark:!text-white !font-medium">{item?.pm_name}</p>
                       <Image src={`${item?.master_payment_method?.icon}`} alt="payment image" width={32} height={32} />
                     </div>

@@ -31,8 +31,8 @@ const UserCenterProfile = (props: propsData) => {
 
                         </div>
                         <div className='md:text-start text-center'>
-                            <p className='sec-title'>{props?.userDetail ? props?.userDetail.fName : session?.user?.name}</p>
-                            <p className='sec-text !text-gamma'>{props?.userDetail ? props?.userDetail.dName : session?.user?.name}</p>
+                            <p className='sec-title'>{props?.userDetail ? props?.userDetail.dName : session?.user?.name}</p>
+                            <p className='sec-text !text-gamma'>{props?.userDetail ? props?.userDetail.uName : session?.user?.name}</p>
                         </div>
                     </div>
 
