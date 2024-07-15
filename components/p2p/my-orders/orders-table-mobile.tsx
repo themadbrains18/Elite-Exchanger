@@ -5,6 +5,7 @@ import Context from '@/components/contexts/context';
 import { useSession } from 'next-auth/react';
 import ReactPaginate from 'react-paginate';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
+import { truncateNumber } from '@/libs/subdomain';
 
 interface dataTypes {
     active: any;
@@ -111,7 +112,7 @@ const OrdersTableMobile = (props: dataTypes) => {
                                     </div>
                                     <div className='mt-[15px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Qty</p>
-                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity}</p>
+                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(item.quantity,6)}</p>
                                     </div>
                                     <div className='text-end mt-[15px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Date / Time </p>

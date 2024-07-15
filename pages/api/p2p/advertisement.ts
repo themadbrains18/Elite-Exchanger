@@ -21,7 +21,7 @@ router.get(async (req: NextApiRequest, res: NextApiResponse) => {
         // Retrieve the authorization token from the request headers.
         let token = req.headers.authorization;
 
-        console.log(token,"==here token");
+        // console.log(token,"==here token");
         
         // Destructure and retrieve variables from the query parameters.
         let { status, itemOffset, itemsPerPage,currency,pmMethod,date } = req.query;
