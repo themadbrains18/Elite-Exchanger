@@ -340,14 +340,14 @@ const Remarks = (props: propsData) => {
 
                     {
                         (props?.userOrder?.status === 'isProcess' || props?.userOrder?.status === 'isCompleted') && props?.userOrder?.buy_user_id === session?.user?.user_id &&
-                        <button className={`solid-button2 max-w-full sm:max-w-[220px] w-full `} onClick={() => { setShow(true); setConfirmation(true) }}>
+                        <button className={` w-full max-w-[200px] rounded-10 info-16-18  bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800 py-[19px] px-[18px]`} onClick={() => { setShow(true); setConfirmation(true) }}>
                             Cancel Order
                         </button>
                     }
 
                     {
                         props?.userOrder?.status === 'isCanceled' &&
-                        <button onClick={() => { router.push('/p2p/buy') }} className={`solid-button2 cursor-pointer dark:bg-black-v-1 dark:text-primary max-w-full sm:max-w-[400px] w-full `}>
+                        <button onClick={() => { router.push('/p2p/buy') }} className={`w-full max-w-[350px] rounded-10 info-16-18  bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800 py-[19px] px-[18px]`}>
                             Go back and place another order
                         </button>
                     }

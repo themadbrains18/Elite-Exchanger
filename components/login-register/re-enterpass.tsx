@@ -170,12 +170,14 @@ const ReEnterpass = (props: propsData) => {
           </div>
           <div className="max-w-full lg:max-w-[50%] w-full ">
             <div
-              className="py-[30px] lg:py-[40px]  max-w-[710px] w-full my-0 mx-auto pr-5 flex justify-end items-center cursor-pointer"
+              className="my-[30px] lg:my-[40px]  max-w-[710px] w-full mx-auto cursor-pointer"
               onClick={() => {
                 router.push("/");
               }}
             >
-              <HeaderLogo />
+              <div className="max-w-[183px] w-full max-[1023px]:mx-auto lg:ml-auto">
+                <HeaderLogo />
+              </div>
             </div>
             <div className="lg:hidden block">
               <Image

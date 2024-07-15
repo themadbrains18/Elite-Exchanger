@@ -291,7 +291,7 @@ const EditResponse = (props: activeSection) => {
           </div>
           <div className="mt-50 flex gap-30">
             <button type="button"
-              className="solid-button2 max-w-[262px] w-full"
+              className="w-full max-w-[200px] rounded-10 info-16-18  bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800 py-[19px] px-[18px]"
               onClick={() => {
                 props?.setStep(2);
               }}

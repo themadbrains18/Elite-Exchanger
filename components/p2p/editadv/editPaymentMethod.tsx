@@ -38,10 +38,12 @@ const EditPaymentMethod = (props: activeSection) => {
   const [minInputValue, setMinInputValue] = useState(props?.editPost?.min_limit);
   const [maxInputValue, setMaxInputValue] = useState(props?.editPost?.price !== props.price ? props.price * props?.editPost?.quantity : props?.editPost?.max_limit);
   const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
+  const [reduceValue,setReduceValue] = useState<Number>(props.assetsBalance || 0);
 
   useEffect(() => {
     setValue('quantity', props?.editPost?.quantity);
     setValue('min_limit', props?.editPost?.min_limit);
+    setReduceValue(props.assetsBalance - props?.editPost?.quantity);
     let max_limit = props?.editPost?.price !== props.price ? props.price * props?.editPost?.quantity : props?.editPost?.max_limit
     setValue('max_limit', max_limit.toFixed(2));
 
@@ -243,7 +245,7 @@ const EditPaymentMethod = (props: activeSection) => {
                   <div className="border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px]">
                     <div className="flex items-center cursor-pointer">
                       <div className="w-full">
-                        <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   id="quantity" step={0.000001} value={inputValue}  {...register('quantity')} name="quantity" onChange={(e) => checkBalnce(e)} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Quntity" />
+                        <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   id="quantity" step={0.000001} value={inputValue}  {...register('quantity')} name="quantity" onInput={ (e:any)=>{  setReduceValue(props.assetsBalance - Number(e.target.value))}} onChange={(e) =>{checkBalnce(e);} } className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Quntity" />
                       </div>
 
                       <div className="pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] flex items-center">
@@ -257,7 +259,7 @@ const EditPaymentMethod = (props: activeSection) => {
                   )}
                 </div>
                 <div className="mt-10">
-                  <p className="info-10-14 text-end"> = {props.assetsBalance} {props?.selectedAssets?.symbol}</p>
+                  <p className="info-10-14 text-end"> = {truncateNumber(reduceValue,6)} {props?.selectedAssets?.symbol}
                 </div>
               </div>
               <div className="w-full">
@@ -310,7 +312,7 @@ const EditPaymentMethod = (props: activeSection) => {
               <p className="sec-text !text-h-primary dark:!text-white">15:00 Minutes </p>
             </div>
             <div className="md:mt-50 mt-20 flex sm:gap-30 gap-10 sm:flex-row flex-col">
-              <button type="button" className="solid-button2 max-w-full sm:max-w-[262px] w-full" onClick={() => { props?.setStep(1) }}>Previous</button>
+              <button type="button" className="w-full max-w-[200px] rounded-10 info-16-18  bg-grey-v-2 !text-primary hover:!text-white hover:!bg-primary-800 py-[19px] px-[18px]" onClick={() => { props?.setStep(1) }}>Previous</button>
               <button className="solid-button max-w-full  sm:max-w-[220px] w-full">Next</button>
 
             </div>

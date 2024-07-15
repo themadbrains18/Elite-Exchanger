@@ -69,7 +69,7 @@ const PaymentMethod = (props: activeSection) => {
   const [maxInputValue, setMaxInputValue] = useState(0.000000);
   const [verified, setVerified] = useState(false);
   const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
-
+  const [reduceValue,setReduceValue] = useState<Number>(props.assetsBalance || 0);
   // let list = props.userPaymentMethod;
 
   const router = useRouter();
@@ -86,6 +86,7 @@ const PaymentMethod = (props: activeSection) => {
       let pmid: any = router?.query?.pmid;
       setValue("quantity", qty);
       setValue("max_limit", props.price * qty);
+      setReduceValue(props.assetsBalance - qty)
       const paymentMethodName = getPaymentMethodName(pmid);
       getAllPayments(paymentMethodName)
 
@@ -437,6 +438,7 @@ const PaymentMethod = (props: activeSection) => {
                               {...register("quantity")}
                               name="quantity"
                               onChange={(e) => checkBalnce(e)}
+                              onInput={ (e:any)=>{  setReduceValue(props.assetsBalance - Number(e.target.value))}}
                               className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white"
                               placeholder="Enter Quntity"
                             />
@@ -460,7 +462,7 @@ const PaymentMethod = (props: activeSection) => {
                     <div className="mt-10">
                       <p className="info-10-14 text-end">
                         {" "}
-                        = {Number(props.assetsBalance).toFixed(6)} {props?.selectedAssets?.symbol}
+                        = {truncateNumber(reduceValue,6)} {props?.selectedAssets?.symbol}
                       </p>
                     </div>
                   </div>
@@ -549,7 +551,7 @@ const PaymentMethod = (props: activeSection) => {
                 <div className="md:mt-50 mt-20 flex sm:gap-30 gap-10 sm:flex-row flex-col">
                   <button
                     type="button"
-                    className="solid-button2 dark:bg-black-v-1 dark:text-primary max-w-full sm:max-w-[262px] w-full"
+                    className="w-full max-w-[200px] rounded-10 info-16-18  bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800 py-[19px] px-[18px]"
                     onClick={() => {
                       props?.setStep(1);
                     }}
