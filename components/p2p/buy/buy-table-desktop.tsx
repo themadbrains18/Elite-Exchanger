@@ -14,6 +14,7 @@ interface activeSection {
   selectedToken?: any;
   firstCurrency?: string;
   assets?: any;
+  session?: any;
 
 }
 
@@ -33,10 +34,10 @@ const BuyTableDesktop = (props: activeSection) => {
 
 
   useEffect(() => {
-    if(session){
+ 
       getAllPosts(itemOffset);
-    }
-  }, [itemOffset, props?.firstCurrency, props?.paymentId,session]);
+    
+  }, [itemOffset, props?.firstCurrency, props?.paymentId]);
 
   const getAllPosts = async (itemOffset: number) => {
     try {
@@ -50,11 +51,11 @@ const BuyTableDesktop = (props: activeSection) => {
 
 
       let posts = await fetch(
-        `/api/p2p/buy?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}`,
+        `/api/p2p/buy?user_id=${props?.session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}`,
         {
           method: "GET",
           headers: {
-            "Authorization": session?.user?.access_token
+            "Authorization": props?.session?.user?.access_token
           },
         }
       ).then((response) => response.json());

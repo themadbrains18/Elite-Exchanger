@@ -11,6 +11,7 @@ interface activeSection {
   setSelectedPost?: any;
   masterPayMethod?: any;
   assets?: any;
+  session?: any;
 }
 
 const BuyCoinsTabs = (props: activeSection) => {
@@ -90,6 +91,7 @@ const BuyCoinsTabs = (props: activeSection) => {
             selectedToken={selectedToken}
             firstCurrency={firstCurrency}
             setSelectedPost={props.setSelectedPost}
+            session={props?.session}
           />
         </div>
         <div className="md:hidden">
@@ -98,6 +100,7 @@ const BuyCoinsTabs = (props: activeSection) => {
             paymentId={paymentId}
             selectedToken={selectedToken}
             firstCurrency={firstCurrency}
+            session={props?.session}
             setSelectedPost={props.setSelectedPost}
           />
         </div>
