@@ -33,11 +33,10 @@ const BuyTableDesktop = (props: activeSection) => {
 
 
   useEffect(() => {
-    getAllPosts(itemOffset);
-  }, [itemOffset, props?.firstCurrency, props?.paymentId]);
-
-
-
+    if(session){
+      getAllPosts(itemOffset);
+    }
+  }, [itemOffset, props?.firstCurrency, props?.paymentId,session]);
 
   const getAllPosts = async (itemOffset: number) => {
     try {

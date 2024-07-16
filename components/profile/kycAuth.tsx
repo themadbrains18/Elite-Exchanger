@@ -427,18 +427,7 @@ const KycAuth = (props: fixSection) => {
   const onHandleSubmit = async (data: UserSubmitForm) => {
     try {
 
-      // var formData = new FormData();
-      // formData.append("idback", formBackImg);
-      // formData.append("idfront", formFrontImg);
-      // formData.append("statement", formSelfieImg);
-      // formData.append("country", data?.country);
-      // formData.append("fname", data?.fname);
-      // // formData.append("lname", "asdasdass");
-      // formData.append("doctype", data?.doctype);
-      // formData.append("docnumber", data?.docnumber);
-      // formData.append("userid", session?.user?.user_id);
-      // formData.append("username", session?.user?.email);
-      // formData.append("dob", data?.dob.toString());
+
       const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record = encodeURIComponent(ciphertext.toString());
 

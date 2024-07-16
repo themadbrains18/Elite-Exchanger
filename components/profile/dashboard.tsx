@@ -46,10 +46,10 @@ const Dashboard = (props: FixSection) => {
     setDisabled(true)
     // Create a new object with only the required fields
     const filteredData = {
-      fName: data.fName,
-      lName: data.lName,
-      dName: data.dName,
-      uName: data.uName,
+      fName: data.fName.trim(),
+      lName: data.lName.trim(),
+      dName: data.dName.trim(),
+      uName: data.uName.trim(),
     };
 
     const ciphertext = AES.encrypt(JSON.stringify(filteredData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
