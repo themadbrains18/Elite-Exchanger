@@ -98,7 +98,7 @@ const CancelOrder = (props: activeSection) => {
                     <button
                         className="solid-button w-full"
                         onClick={() => {
-                            props?.actionPerform()
+                            props?.actionPerform('mannual')
                             props.setEnable(false);
                             // setActive(true)
                         }}

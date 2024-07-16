@@ -65,7 +65,7 @@ const Remarks = (props: propsData) => {
             // console.log("order cancel 1");
             
             // return;
-            await orderCancel();
+            await orderCancel('auto');
         }
     }
 
@@ -90,7 +90,7 @@ const Remarks = (props: propsData) => {
             
             if (props.userOrder?.status === 'isProcess') {
                 // return;
-                orderCancel();
+                orderCancel('auto');
             }
 
         }
@@ -168,11 +168,12 @@ const Remarks = (props: propsData) => {
      * Order canceled by buyer or order canceled auto after time complete without paid payment
      * @returns 
      */
-    const orderCancel = async () => {
+    const orderCancel = async (type: string) => {
         
         let obj = {
             "order_id": props.orderid,
-            "user_id": props.userOrder?.buy_user_id
+            "user_id": props.userOrder?.buy_user_id,
+            "cancelType" : type
         }
 
         if (status === 'authenticated') {

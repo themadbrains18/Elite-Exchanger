@@ -245,8 +245,8 @@ const EditPaymentMethod = (props: activeSection) => {
                   <div className="border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[13px] px-[15px]">
                     <div className="flex items-center cursor-pointer">
                       <div className="w-full">
-                        <input type="text"
-                        maxLength={11}
+                        <input type="number"
+                        
                           id="quantity" step={0.000001} value={inputValue}  {...register('quantity')} name="quantity"
                           onWheel={(e) => (e.target as HTMLElement).blur()}
                           onInput={(e: any) => {
