@@ -38,6 +38,8 @@ const OrdersTableDesktop = (props: dataTypes) => {
         getAllOrders(itemOffset);
     }, [itemOffset, props?.active, props?.selectedToken,props?.startDate]);
 
+    console.log(session?.user.user_id)
+
 
     const getAllOrders = async (itemOffset: number) => {
         try {
@@ -122,7 +124,8 @@ const OrdersTableDesktop = (props: dataTypes) => {
                     <tbody>
                         {
                           list && list?.length>0 && list?.map((item: any, ind: number) => {
-                              
+                              {console.log(item,"============item");
+                              }
                                 return (
                                     
                                     <Fragment key={ind}>
@@ -131,7 +134,8 @@ const OrdersTableDesktop = (props: dataTypes) => {
                                             route.push(`/p2p/my-orders?buy=${item?.id}`);
                                         }} className='cursor-pointer'>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'><span className={`${item?.type === "sell" ? "text-cancel" : "text-buy"} capitalize`}>{item?.type}</span>&nbsp;{item?.receive_currency}</p>
+                                                
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'><span className={`${item?.sell_user_id === session?.user.user_id ? "text-cancel" : "text-buy"} capitalize`}>{ item?.sell_user_id === session?.user.user_id ? "Sell":"Buy" }</span>&nbsp;{item?.receive_currency}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className={`info-14-18   ${(item?.status === "isCompleted" || item?.status === "isReleased") && "!text-buy"}  ${item?.status === "isProcess" && "!text-body-primary"} ${item?.status === "isCanceled" && "!text-cancel"}`}>{item.status === "isProcess" ? "In Process" : item.status === "isReleased" ? "Released" : item.status === "isCompleted" ? "Completed" : "Canceled"}</p>
