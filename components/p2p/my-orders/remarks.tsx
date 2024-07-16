@@ -47,13 +47,13 @@ const Remarks = (props: propsData) => {
 
     const orderTimeCalculation = async () => {
         let deadline = new Date(props.userOrder?.createdAt);
-        deadline.setMinutes(deadline.getMinutes() + 2);
+        deadline.setMinutes(deadline.getMinutes() + 15);
         deadline.setSeconds(deadline.getSeconds() + 5);
         let currentTime = new Date();
         
         if (currentTime < deadline && props.userOrder?.status === 'isProcess') {
             if (Ref.current) clearInterval(Ref.current);
-            console.log("in cancel 2");
+            // console.log("in cancel 2");
             
             const timer = setInterval(() => {
                 calculateTimeLeft(deadline);
@@ -62,7 +62,7 @@ const Remarks = (props: propsData) => {
         }
         
         else if (currentTime > deadline && props.userOrder?.status === 'isProcess') {
-            console.log("order cancel 1");
+            // console.log("order cancel 1");
             
             // return;
             await orderCancel();

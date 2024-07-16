@@ -556,19 +556,6 @@ const BuySellExpress = (props: propsData) => {
     }
   }
 
-
-  const [valueTmb, setValueTmb] = useState<string>('');
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    // Regular expression to allow only numbers and floating point numbers
-    const regex = /^-?\d*\.?\d*$/;
-
-    if (regex.test(newValue) || newValue === '') {
-      setValueTmb(newValue);
-    }
-  };
-
   return (
     <>
 
@@ -623,38 +610,44 @@ const BuySellExpress = (props: propsData) => {
                       I want to {active1 === 1 ? "pay ≈" : "sell ≈"}
                     </p>
                     <input
-                      type="text" onWheel={(e) => (e.target as HTMLElement).blur()}
+                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="$0"
                       maxLength={10}
-                      value={valueTmb}
                       step="any"
                       {...register('spend_amount')}
                       onChange={(e: any) => {
-                        handleChange(e);
-                        if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
-                          setAmount(e?.target?.value);
-                        }
-                        let receiveAmount: any = parseFloat(e?.target?.value) / usdtToInr;
-                        setReceivedAmount(truncateNumber(receiveAmount,6));
 
-                        setValue('receive_amount', truncateNumber(receiveAmount,6));
-                        clearErrors('spend_amount');
-                        clearErrors('receive_amount');
-                        if (Object.keys(finalPost).length > 0) {
-                          if (finalPost?.max_limit < parseFloat(e?.target?.value)) {
-                            setError("spend_amount", {
-                              type: "custom",
-                              message: `Note: There's an order available in the range  ${finalPost?.min_limit} - ${finalPost?.max_limit}. Order within the range.`,
-                            });
+                        const value = e.target.value;
+                        const regex = /^\d{0,11}(\.\d{0,6})?$/;
+                        if (regex.test(value) || value === "") {
+                           
+                          if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
+                            setAmount(e?.target?.value);
                           }
-
-                          let receiveAmount = parseFloat(e?.target?.value) / usdtToInr;
-                          if (finalPost?.quantity < receiveAmount) {
-                            setError("receive_amount", {
-                              type: "custom",
-                              message: `Quantity available is ${finalPost?.quantity}`,
-                            });
+                          let receiveAmount: any = parseFloat(e?.target?.value) / usdtToInr;
+                          setReceivedAmount(truncateNumber(receiveAmount,6));
+  
+                          setValue('receive_amount', truncateNumber(receiveAmount,6));
+                          clearErrors('spend_amount');
+                          clearErrors('receive_amount');
+                          if (Object.keys(finalPost).length > 0) {
+                            if (finalPost?.max_limit < parseFloat(e?.target?.value)) {
+                              setError("spend_amount", {
+                                type: "custom",
+                                message: `Note: There's an order available in the range  ${finalPost?.min_limit} - ${finalPost?.max_limit}. Order within the range.`,
+                              });
+                            }
+  
+                            let receiveAmount = parseFloat(e?.target?.value) / usdtToInr;
+                            if (finalPost?.quantity < receiveAmount) {
+                              setError("receive_amount", {
+                                type: "custom",
+                                message: `Quantity available is ${finalPost?.quantity}`,
+                              });
+                            }
                           }
+                        } else {
+                            e.target.value = value.slice(0, -1);
                         }
 
                       }}
@@ -692,22 +685,27 @@ const BuySellExpress = (props: propsData) => {
                   <div className="">
                     <p className="sm-text dark:text-white">I will receive ≈</p>
                     <input
-                      type="text" onWheel={(e) => (e.target as HTMLElement).blur()}
+                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="$0"
-                      value={valueTmb}
-                      maxLength={11}
                       step="any"
                       {...register('receive_amount')}
                       onChange={(e: any) => {
-                        handleChange(e);
-                        if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
-                          setReceivedAmount(e?.target?.value);
+
+                        const value = e.target.value;
+                        const regex = /^\d{0,10}(\.\d{0,6})?$/;
+                        if (regex.test(value) || value === "") {
+                          if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
+                            setReceivedAmount(e?.target?.value);
+                          }
+                          let spendAmount: any = parseFloat(e.target.value) * usdtToInr;
+                          setAmount(truncateNumber(spendAmount,2));
+                          setValue('spend_amount', truncateNumber(spendAmount,2));
+                          clearErrors('receive_amount');
+                          clearErrors('spend_amount')
+                        } else {
+                            e.target.value = value.slice(0, -1);
                         }
-                        let spendAmount: any = parseFloat(e.target.value) * usdtToInr;
-                        setAmount(truncateNumber(spendAmount,2));
-                        setValue('spend_amount', truncateNumber(spendAmount,2));
-                        clearErrors('receive_amount');
-                        clearErrors('spend_amount')
+
                       }}
                       name="receive_amount"
                       className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full "
@@ -774,22 +772,26 @@ const BuySellExpress = (props: propsData) => {
                       I want to sell ≈
                     </p>
                     <input
-                      type="text" maxLength={11} onWheel={(e) => (e.target as HTMLElement).blur()}
+                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="$0"
                       step="any"
                       {...register('spend_amount')}
-                      value={valueTmb}
                       onChange={(e: any) => {
-                        handleChange(e);
-                        if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
-                          setAmount(e?.target?.value);
+                        const value = e.target.value;
+                        const regex = /^\d{0,10}(\.\d{0,6})?$/;
+                        if (regex.test(value) || value === "") {
+                          if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
+                            setAmount(e?.target?.value);
+                          }
+                          let receiveAmount: any = parseFloat(e?.target?.value) * usdtToInr;
+                          setReceivedAmount(truncateNumber(receiveAmount,2));
+                          // setReceivedAmount(parseFloat(e?.target?.value) * usdtToInr);
+                          setValue('receive_amount', truncateNumber(receiveAmount,2));
+                          clearErrors('spend_amount');
+                          clearErrors('receive_amount');
+                        } else {
+                            e.target.value = value.slice(0, -1);
                         }
-                        let receiveAmount: any = parseFloat(e?.target?.value) * usdtToInr;
-                        setReceivedAmount(truncateNumber(receiveAmount,2));
-                        // setReceivedAmount(parseFloat(e?.target?.value) * usdtToInr);
-                        setValue('receive_amount', truncateNumber(receiveAmount,2));
-                        clearErrors('spend_amount');
-                        clearErrors('receive_amount');
                       }}
                       name="spend_amount"
                       className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text "
@@ -824,22 +826,28 @@ const BuySellExpress = (props: propsData) => {
                   <div className="">
                     <p className="sm-text dark:text-white">I will receive ≈</p>
                     <input
-                      type="text" onWheel={(e) => (e.target as HTMLElement).blur()}
+                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="$0"
                       step="any"
-                      value={valueTmb}
-                      maxLength={11}
                       {...register('receive_amount')}
                       onChange={(e: any) => {
-                        handleChange(e);
-                        if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
-                          setReceivedAmount((e?.target?.value));
+
+                        const value = e.target.value;
+                        const regex = /^\d{0,10}(\.\d{0,6})?$/;
+                        if (regex.test(value) || value === "") {
+                          if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
+                            setReceivedAmount((e?.target?.value));
+                          }
+                          let spendAmount: any = parseFloat(e.target.value) / usdtToInr;
+                          setAmount(truncateNumber(spendAmount,6));
+                          setValue('spend_amount', truncateNumber(spendAmount,6));
+                          clearErrors('spend_amount');
+                          clearErrors('receive_amount');
+                        } else {
+                            e.target.value = value.slice(0, -1);
                         }
-                        let spendAmount: any = parseFloat(e.target.value) / usdtToInr;
-                        setAmount(truncateNumber(spendAmount,6));
-                        setValue('spend_amount', truncateNumber(spendAmount,6));
-                        clearErrors('spend_amount');
-                        clearErrors('receive_amount');
+
+
                       }}
                       name="limit_usdt"
                       className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full "
