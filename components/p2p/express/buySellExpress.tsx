@@ -556,6 +556,19 @@ const BuySellExpress = (props: propsData) => {
     }
   }
 
+
+  const [valueTmb, setValueTmb] = useState<string>('');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = event.target.value;
+    // Regular expression to allow only numbers and floating point numbers
+    const regex = /^-?\d*\.?\d*$/;
+
+    if (regex.test(newValue) || newValue === '') {
+      setValueTmb(newValue);
+    }
+  };
+
   return (
     <>
 
@@ -610,13 +623,14 @@ const BuySellExpress = (props: propsData) => {
                       I want to {active1 === 1 ? "pay ≈" : "sell ≈"}
                     </p>
                     <input
-                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
+                      type="text" onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="$0"
                       maxLength={10}
+                      value={valueTmb}
                       step="any"
                       {...register('spend_amount')}
                       onChange={(e: any) => {
-
+                        handleChange(e);
                         if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
                           setAmount(e?.target?.value);
                         }
@@ -678,11 +692,14 @@ const BuySellExpress = (props: propsData) => {
                   <div className="">
                     <p className="sm-text dark:text-white">I will receive ≈</p>
                     <input
-                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
+                      type="text" onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="$0"
+                      value={valueTmb}
+                      maxLength={11}
                       step="any"
                       {...register('receive_amount')}
                       onChange={(e: any) => {
+                        handleChange(e);
                         if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                           setReceivedAmount(e?.target?.value);
                         }
@@ -757,11 +774,13 @@ const BuySellExpress = (props: propsData) => {
                       I want to sell ≈
                     </p>
                     <input
-                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
+                      type="text" maxLength={11} onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="$0"
                       step="any"
                       {...register('spend_amount')}
+                      value={valueTmb}
                       onChange={(e: any) => {
+                        handleChange(e);
                         if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                           setAmount(e?.target?.value);
                         }
@@ -805,11 +824,14 @@ const BuySellExpress = (props: propsData) => {
                   <div className="">
                     <p className="sm-text dark:text-white">I will receive ≈</p>
                     <input
-                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
+                      type="text" onWheel={(e) => (e.target as HTMLElement).blur()}
                       placeholder="$0"
                       step="any"
+                      value={valueTmb}
+                      maxLength={11}
                       {...register('receive_amount')}
                       onChange={(e: any) => {
+                        handleChange(e);
                         if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
                           setReceivedAmount((e?.target?.value));
                         }

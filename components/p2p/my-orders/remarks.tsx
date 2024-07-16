@@ -47,7 +47,7 @@ const Remarks = (props: propsData) => {
 
     const orderTimeCalculation = async () => {
         let deadline = new Date(props.userOrder?.createdAt);
-        deadline.setMinutes(deadline.getMinutes() + 15);
+        deadline.setMinutes(deadline.getMinutes() + 2);
         deadline.setSeconds(deadline.getSeconds() + 5);
         let currentTime = new Date();
         
@@ -169,8 +169,6 @@ const Remarks = (props: propsData) => {
      * @returns 
      */
     const orderCancel = async () => {
-
-        console.log("=====================order cancel==============");
         
         let obj = {
             "order_id": props.orderid,

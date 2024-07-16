@@ -147,22 +147,24 @@ const BuyPopup = (props: activeSection) => {
           route.push(`/p2p/my-orders?buy=${res?.data?.data?.result?.id}`);
         }, 3000);
 
+        setTimeout(()=>{
+          setBtnDisabled(false);
+        },5000)
+
       }
       else {
         toast.error(res?.data?.data?.message !== undefined ? res?.data?.data?.message : res?.data?.data,{autoClose:2000});
         setTimeout(()=>{
           setBtnDisabled(false)
-        },2500)
+        },5000)
       }
-      setTimeout(()=>{
-        setBtnDisabled(false);
-      },2500)
+     
     }
     else {
       toast.error('Unauthenticated User. Please Login to buy any assets',{autoClose:2000});
       setTimeout(()=>{
         setBtnDisabled(false)
-      },2500)
+      },5000)
       return;
     }
 

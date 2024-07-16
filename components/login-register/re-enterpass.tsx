@@ -170,7 +170,7 @@ const ReEnterpass = (props: propsData) => {
           </div>
           <div className="max-w-full lg:max-w-[50%] w-full ">
             <div
-              className="my-[30px] lg:my-[40px]  max-w-[710px] w-full mx-auto cursor-pointer"
+              className="my-[30px] lg:my-[40px]  max-w-[600px] w-full mx-auto cursor-pointer"
               onClick={() => {
                 router.push("/");
               }}
@@ -188,7 +188,7 @@ const ReEnterpass = (props: propsData) => {
                 className="mx-auto"
               />
             </div>
-            <div className="mt-0 lg:mt-[200px] lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
+            <div className="mt-0 lg:mt-[250px] lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
               <h1 className="lg-heading mb-5">Password Recovery</h1>
               <p className="mb-5  lg:mb-[20px] md-text">
                 Create new password

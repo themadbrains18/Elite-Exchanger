@@ -293,7 +293,7 @@ const SecurityCode = (props: propsData) => {
           <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
             <Image src={props.api === 'forget' ? '/assets/register/forget.png' : "/assets/register/register.png"} width={1018} height={1100} alt="signup" className="object-cover h-[1080px] min-h-screen block w-full" />
           </div>
-          <div className={`max-w-full lg:max-w-[50%]  w-full ${props.api === 'forget' ? 'items-center' : ''}`}>
+          <div className={`max-w-full lg:max-w-[50%] lg:flex lg:justify-center w-full ${props.api === 'forget' ? 'items-center' : ''}`}>
             <div className="h-full">
               <div className="my-[30px] lg:my-[40px] w-full  lg:max-w-[600px] max-[1023px]:mx-auto">
                 <div className="max-w-[183px] mt-9 w-full max-[1023px]:mx-auto lg:ml-auto cursor-pointer" onClick={() => { router.push("/"); }}>
@@ -303,10 +303,10 @@ const SecurityCode = (props: propsData) => {
               <div className="lg:hidden block">
                 <Image src="/assets/register/loginmobile.svg" alt="forget" width={398} height={198} className="mx-auto" />
               </div>
-              <div className="lg:h-full lg:flex ">  
+              <div className="lg:h-full lg:flex lg:justify-center">  
                 <div className="max-[1023px]:max-w-[460px] max-[1023px]:mx-auto max-[1023px]:w-full  lg:my-auto">
                   <div className="max-[1023px]:!mx-auto lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[460px] w-full">
-                    <h1 className="lg-heading  mb-5">Enter your security code</h1>
+                    <h1 className="lg-heading mb-5">Enter your security code</h1>
                     {props.isEmail &&
                       <div className="relative">
                         <p className="mb-5  md-text">We texted your code to {props.formData?.username !== null && emailSplit}</p>
