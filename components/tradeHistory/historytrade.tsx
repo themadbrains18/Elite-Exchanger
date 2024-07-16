@@ -19,7 +19,7 @@ const Historytrade = (props: propsData) => {
 
   const [filter, setFilter] = useState("")
   const [firstCurrency, setFirstCurrency] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState<any>();
   const [symbol, setSymbol] = useState('')
 
   const filterData = async (e: any) => {
@@ -39,7 +39,7 @@ const Historytrade = (props: propsData) => {
   };
 
   const clearAll=()=>{
-    setStartDate(new Date());
+    setStartDate(null);
     setFirstCurrency('');
     setSymbol('')
   }
@@ -106,8 +106,6 @@ const Historytrade = (props: propsData) => {
               </div>
               <div className="hidden lg:flex gap-5">
                 <div className="p-[5px] flex items-center gap-[10px] cursor-pointer">
-                  <Image src="/assets/history/calender.svg" width={24} height={24} alt="calender" />
-                  <p className="nav-text-sm">Month</p>
                   <DatePicker
                     selected={startDate}
                     onChange={(date: any) => handleStartDate(date)}

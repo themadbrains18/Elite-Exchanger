@@ -11,6 +11,7 @@ interface activeSection {
     paymentId?: string;
     selectedToken?: any;
     firstCurrency?: string;
+    session?: any;
 }
 
 const BuyTableMobile = (props: activeSection) => {
@@ -41,11 +42,11 @@ const BuyTableMobile = (props: activeSection) => {
     
     
           let posts = await fetch(
-            `/api/p2p/buy?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}`,
+            `/api/p2p/buy?user_id=${props?.session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}`,
             {
               method: "GET",
               headers: {
-                "Authorization": session?.user?.access_token
+                "Authorization": props?.session?.user?.access_token
               },
             }
           ).then((response) => response.json());

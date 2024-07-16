@@ -14,7 +14,7 @@ interface propsData {
   coinList: any,
   networks: any,
   assets: any,
-  sessions: any,
+  session: any,
   posts?: any,
   masterPayMethod?: any;
 }
@@ -30,7 +30,7 @@ const P2pBuy = (props: propsData) => {
   const wbsocket = useWebSocket();
 
   useEffect(() => {
-    socket(props?.sessions?.user?.user_id);
+    socket(props?.session?.user?.user_id);
   }, [wbsocket])
 
 
@@ -66,7 +66,7 @@ const P2pBuy = (props: propsData) => {
 
   return (
     <P2pLayout>
-      <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} assets={props?.assets} posts={newPosts?.length > 0 ? newPosts : props?.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} />
+      <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} assets={props?.assets} posts={newPosts?.length > 0 ? newPosts : props?.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} session={props?.session}/>
       {show1 === true &&
         <BuyPopup show1={show1} setShow1={setShow1} selectedPost={selectedPost} />
       }
@@ -110,7 +110,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       props: {
         providers: providers,
-        sessions: session,
+        session: session,
         coinList: tokenList?.data || [],
         assets: userAssets || [],
         posts: allPosts?.data || [],
@@ -122,7 +122,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return {
     props: {
       providers: providers,
-      sessions: session,
+      session: session,
       coinList: tokenList?.data,
       assets: [],
       posts: allPosts?.data || [],

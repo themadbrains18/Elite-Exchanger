@@ -51,7 +51,7 @@ const OrdersTableMobile = (props: dataTypes) => {
                 },
               }).then(response => response.json());
                 
-              if(userAllOrderList?.data?.totalLength<=10){
+              if(userAllOrderList?.data?.total<=10){
                 setItemOffset(0)
               }
               setTotal(userAllOrderList?.data?.total)
