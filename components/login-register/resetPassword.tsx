@@ -114,7 +114,7 @@ const ResetPassword = () => {
               />
             </div>
             <div className="max-w-full lg:max-w-[50%] w-full">
-              <div className="lg:max-w-[700px] w-full mx-auto">
+              <div className="lg:max-w-[600px] w-full mx-auto">
                 <div
                   className="my-[30px] lg:my-[40px] max-w-[183px] w-full max-[1023px]:mx-auto lg:ml-auto cursor-pointer"
                   onClick={() => {
@@ -134,7 +134,7 @@ const ResetPassword = () => {
                 />
               </div>
               <div className="lg:flex lg:h-full">
-                <div className="lg:p-0 p-5 m-auto max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
+                <div className="lg:p-0 p-5 m-auto max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[522px] w-full">
                   <h1 className="lg-heading mb-5">Password Recovery</h1>
                   <p className="mb-5  lg:mb-[20px] md-text">
                     Enter your email/number to recover your password

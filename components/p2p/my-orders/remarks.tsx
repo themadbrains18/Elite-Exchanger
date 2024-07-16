@@ -47,13 +47,13 @@ const Remarks = (props: propsData) => {
 
     const orderTimeCalculation = async () => {
         let deadline = new Date(props.userOrder?.createdAt);
-        deadline.setMinutes(deadline.getMinutes() + 2);
+        deadline.setMinutes(deadline.getMinutes() + 15);
         deadline.setSeconds(deadline.getSeconds() + 5);
         let currentTime = new Date();
         
         if (currentTime < deadline && props.userOrder?.status === 'isProcess') {
             if (Ref.current) clearInterval(Ref.current);
-            console.log("in cancel 2");
+            // console.log("in cancel 2");
             
             const timer = setInterval(() => {
                 calculateTimeLeft(deadline);
@@ -62,10 +62,10 @@ const Remarks = (props: propsData) => {
         }
         
         else if (currentTime > deadline && props.userOrder?.status === 'isProcess') {
-            console.log("order cancel 1");
+            // console.log("order cancel 1");
             
             // return;
-            await orderCancel();
+            await orderCancel('auto');
         }
     }
 
@@ -90,7 +90,7 @@ const Remarks = (props: propsData) => {
             
             if (props.userOrder?.status === 'isProcess') {
                 // return;
-                orderCancel();
+                orderCancel('auto');
             }
 
         }
@@ -168,11 +168,12 @@ const Remarks = (props: propsData) => {
      * Order canceled by buyer or order canceled auto after time complete without paid payment
      * @returns 
      */
-    const orderCancel = async () => {
+    const orderCancel = async (type: string) => {
         
         let obj = {
             "order_id": props.orderid,
-            "user_id": props.userOrder?.buy_user_id
+            "user_id": props.userOrder?.buy_user_id,
+            "cancelType" : type
         }
 
         if (status === 'authenticated') {

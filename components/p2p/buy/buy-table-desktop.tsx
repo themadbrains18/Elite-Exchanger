@@ -140,18 +140,16 @@ const BuyTableDesktop = (props: activeSection) => {
   const handlePageClick = async (event: any) => {
     // console.log(event.selected * itemsPerPage);
 
+
+
     const newOffset = (event.selected * itemsPerPage) % total;
     setItemOffset(newOffset);
   };
 
   const handleBuy = (item: any) => {
     try {
-
-
       if (session) {
-
         if (item?.complete_kyc === true) {
-
           if (session?.user?.kyc !== "approve") {
             setType('kyc')
             setShow(true)
@@ -307,7 +305,6 @@ const BuyTableDesktop = (props: activeSection) => {
                   </tr>
                 );
               }
-
             })}
 
             {list?.length === 0 &&
@@ -322,7 +319,6 @@ const BuyTableDesktop = (props: activeSection) => {
                     />
                     <p > No Record Found </p>
                   </div>
-
                 </td>
               </tr>
             }
