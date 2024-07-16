@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate';
 import Context from '../contexts/context';
 import { currencyFormatter } from '../snippets/market/buySellCard';
+import { truncateNumber } from '@/libs/subdomain';
 
 interface propsData {
   filter: string;
@@ -25,9 +26,11 @@ const OrderTable = (props: propsData) => {
   let itemsPerPage = 10;
 
   useEffect(() => {
-    getOrders()
+    if(session){
+      getOrders()
+    }
 
-  }, [itemOffset, props?.filter])
+  }, [itemOffset, props?.filter, session])
 
   useEffect(() => {
 
@@ -51,7 +54,9 @@ const OrderTable = (props: propsData) => {
 
 
   async function getOrders() {
-    let tradeHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/history/trade?userid=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+     let currency = props.coin !== undefined && props.coin !== "" ? props.coin: "all"
+     let date =  props.date !== undefined  ?new Date( props.date).toISOString() : "all"
+    let tradeHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/history/trade?userid=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency}&date=${date}`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token
@@ -190,16 +195,16 @@ const OrderTable = (props: propsData) => {
                     <p className="info-14-18 dark:text-white  md:block hidden">{item.market_type}</p>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white md:block hidden">${item?.token !== null ? currencyFormatter(item?.token?.price.toFixed(4)) : currencyFormatter(item?.global_token?.price.toFixed(4))}</p>
+                    <p className="info-14-18 dark:text-white md:block hidden">${item?.token !== null ? currencyFormatter(truncateNumber(item?.token?.price,6)) : currencyFormatter(truncateNumber(item?.global_token?.price,6))}</p>
                   </td>
                   <td>
                     <p className="info-14-18 dark:text-white md:block hidden">{currencyFormatter(item.limit_usdt)}</p>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white md:block hidden">${item.volume_usdt.toFixed(2)}</p>
+                    <p className="info-14-18 dark:text-white md:block hidden">${truncateNumber(item.volume_usdt,2)}</p>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white md:block hidden">{item.token_amount}</p>
+                    <p className="info-14-18 dark:text-white md:block hidden">{truncateNumber(item.token_amount,6)}</p>
                   </td>
                   <td>
                     <p className={`info-14-18  ${item.status === true ? "text-buy" : item.isCanceled === true ? "text-cancel" : "text-gamma"}`}>{item?.status === false ? item?.isCanceled === true ? 'Canceled' : 'Pending' : 'Success'}</p>

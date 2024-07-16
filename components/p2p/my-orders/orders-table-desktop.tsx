@@ -20,7 +20,7 @@ interface dataTypes {
 
 const OrdersTableDesktop = (props: dataTypes) => {
     // console.log(props.selectedToken,"========selectedToken");
-    
+
     const route = useRouter();
     const { mode } = useContext(Context);
 
@@ -36,7 +36,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
 
     useEffect(() => {
         getAllOrders(itemOffset);
-    }, [itemOffset, props?.active, props?.selectedToken,props?.startDate]);
+    }, [itemOffset, props?.active, props?.selectedToken, props?.startDate]);
 
 
     const getAllOrders = async (itemOffset: number) => {
@@ -44,23 +44,20 @@ const OrdersTableDesktop = (props: dataTypes) => {
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
-                let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
-            let date = props?.startDate !== undefined && props?.startDate !== "" ?new Date(props?.startDate).toISOString() : "all"
-            let userAllOrderList:any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/status?userid=${session?.user?.user_id}&status=${props?.active===1?"all":props?.active===2?"isProcess":props?.active===3?"isReleased":props?.active===4?"isCanceled":"all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}}&currency=${currency || "all"}&date=${date}`, {
+            let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
+            let date = props?.startDate !== undefined && props?.startDate !== "" ? new Date(props?.startDate).toISOString() : "all"
+            let userAllOrderList: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/status?userid=${session?.user?.user_id}&status=${props?.active === 1 ? "all" : props?.active === 2 ? "isProcess" : props?.active === 3 ? "isReleased" : props?.active === 4 ? "isCanceled" : "all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&date=${date}`, {
                 method: "GET",
                 headers: {
-                  "Authorization": session?.user?.access_token
+                    "Authorization": session?.user?.access_token
                 },
-              }).then(response => response.json());
-                
-              if(userAllOrderList?.data?.totalLength<=10){
+            }).then(response => response.json());
+
+            if (userAllOrderList?.data?.total <= 10) {
                 setItemOffset(0)
-              }
-                setTotal(userAllOrderList?.data?.total)
-                setList(userAllOrderList?.data?.data);
-
-               
-
+            }
+            setTotal(userAllOrderList?.data?.total)
+            setList(userAllOrderList?.data?.data);
         } catch (error) {
             console.log("error in get token list", error);
 
@@ -121,10 +118,10 @@ const OrdersTableDesktop = (props: dataTypes) => {
                     </thead>
                     <tbody>
                         {
-                          list && list?.length>0 && list?.map((item: any, ind: number) => {
-                              
+                            list && list?.length > 0 && list?.map((item: any, ind: number) => {
+
                                 return (
-                                    
+
                                     <Fragment key={ind}>
                                         <tr onClick={() => {
                                             props?.setOrderId(item?.id);
@@ -143,7 +140,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(item?.price)}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(item?.quantity,6)}</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(item?.quantity, 6)}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{moment(item?.createdAt).format("YYYY-MM-DD hh:mm:ss A")}</p>

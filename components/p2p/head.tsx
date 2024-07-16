@@ -139,7 +139,7 @@ const Head = () => {
         }
       </div>
       {show &&
-          <AuthenticationModelPopup title='Confirmation' message='Please complete your kyc' setShow={setShow} setActive={setActive} show={show} />
+          <AuthenticationModelPopup title='Verification Status' message='Please complete your kyc' setShow={setShow} setActive={setActive} show={show} />
       }
     </>
   );
