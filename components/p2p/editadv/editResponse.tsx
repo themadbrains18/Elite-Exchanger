@@ -298,6 +298,7 @@ const EditResponse = (props: activeSection) => {
             >
               Previous
             </button>
+            
             <button disabled={disable} className={`solid-button max-w-[220px] text-center w-full ${disable === true ? 'opacity-50 cursor-not-allowed' : ''}`}>
               {disable === true &&
                 <svg className="w-5 h-5 mx-auto text-white animate-spin " xmlns="http://www.w3.org/2000/svg" fill="none"
