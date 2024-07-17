@@ -82,7 +82,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
                         <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">
                             <th className="bg-white dark:bg-d-bg-primary py-5">
                                 <div className="flex ">
-                                    <p className="nav-text-sm">Order Id</p>
+                                    <p className="nav-text-sm">Asset/Type</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
