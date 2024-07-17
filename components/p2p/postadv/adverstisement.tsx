@@ -355,7 +355,7 @@ const Adverstisement = (props: propsData) => {
                   {errors?.price && (
                     <p className="errorMessage">{errors?.price?.message}</p>
                   )}
-                  <p className="py-2 info-10-14 text-right">Bal. {assetsBalance.toFixed(4)}</p>
+                  <p className="py-2 info-10-14 text-right">Bal. {truncateNumber(assetsBalance,6)}</p>
                 </div>
 
                 <button
