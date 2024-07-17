@@ -104,10 +104,14 @@ const EditAdverstisement = (props: propsData) => {
         let data = await responseData.json();
         setInrPrice(truncateNumber(item?.price * data?.rate, 4));
       }
+
+
       setSelectedAssets(item);
       let balances = props?.assets?.filter((e: any) => {
-        return e.token_id === item?.id;
+        return e.token_id === item?.id && e.walletTtype === 'main_wallet';
       });
+
+
       setAssetsBalance(balances[0]?.balance);
       setLoading(false);
     } catch (error:any) {
