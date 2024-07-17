@@ -225,8 +225,8 @@ const EditPaymentMethod = (props: activeSection) => {
                 );
               })}
               {errors?.p_method && (
-                <p className="errorMessage">{errors?.p_method?.message}</p>
-              )}
+                <p className="errorMessage asdasdasd">{errors?.p_method?.message}</p>
+              )} 
               <div className="md:mt-50 mt-10">
                 <button type="button" className="outline-button border-primary text-primary max-w-full sm:max-w-[176px] w-full" onClick={() => {
                   setShow(!show);
@@ -247,7 +247,7 @@ const EditPaymentMethod = (props: activeSection) => {
                       <div className="w-full">
                         <input type="number"
                         
-                          id="quantity" step={0.000001} value={inputValue}  {...register('quantity')} name="quantity"
+                          id="quantity" step={0.000001} value={truncateNumber(inputValue,6)}  {...register('quantity')} name="quantity"
                           onWheel={(e) => (e.target as HTMLElement).blur()}
                           onInput={(e: any) => {
                             setReduceValue(props.assetsBalance - Number(e.target.value));
