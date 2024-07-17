@@ -253,7 +253,7 @@ const PaymentMethod = (props: activeSection) => {
   const checkInput = (e: any, type: string) => {
     const value = e.target.value;
     if (/^\d*\.?\d{0,6}$/.test(value)) {
-      type === "min" ? setMinInputValue(value) : setMaxInputValue(value);
+      type === "min" ? setMinInputValue(value) :  (value);
     }
     if (type === "min" && maxInputValue > 0) {
       value > maxInputValue ? setError('min_limit', { type: "custom", message: "Min limit must be less than max limit." }) : clearErrors('min_limit'); setMinInputValue(value)

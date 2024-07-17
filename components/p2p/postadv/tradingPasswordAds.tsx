@@ -10,6 +10,7 @@ interface activeSection {
     setShow: Function;
     finalSubmitAds: Function;
     show: any;
+    setDisable?:Function
 }
 
 const TradingPasswordAds = (props: activeSection) => {
@@ -19,46 +20,11 @@ const TradingPasswordAds = (props: activeSection) => {
     const [showNew, setShowNew] = useState(false);
     const [disable, setDisabled] = useState(false)
 
-    // useEffect(() => {
-    //     const inputElements = document.querySelectorAll(".input_wrapper input");
-
-    //     inputElements.forEach((ele, index) => {
-    //         ele.addEventListener("keydown", (e: any) => {
-    //             if (e.keyCode === 8 && e.target.value === "") {
-    //                 (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
-    //             }
-    //         });
-    //         ele.addEventListener("input", (e: any) => {
-    //             const [first, ...rest] = e.target.value;
-    //             e.target.value = first ?? "";
-    //             const lastInputBox = index === inputElements.length - 1;
-    //             const didInsertContent = first !== undefined;
-    //             if (didInsertContent && !lastInputBox) {
-    //                 // continue to input the rest of the string
-    //                 (inputElements[index + 1] as HTMLElement).focus();
-    //                 (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
-    //                 inputElements[index + 1].dispatchEvent(new Event("input"));
-    //             } else {
-    //                 setPassCode((inputElements[0] as HTMLInputElement).value +
-    //                     "" +
-    //                     (inputElements[1] as HTMLInputElement).value +
-    //                     "" +
-    //                     (inputElements[2] as HTMLInputElement).value +
-    //                     "" +
-    //                     (inputElements[3] as HTMLInputElement).value +
-    //                     "" +
-    //                     (inputElements[4] as HTMLInputElement).value +
-    //                     "" +
-    //                     (inputElements[5] as HTMLInputElement).value)
-    //             }
-    //         });
-    //     });
-
-    // }, []);
 
     const closePopup = () => {
         props?.setShow(false);
-        props.setActive(false)
+        props.setActive(false);
+        props.setDisable &&  props.setDisable(false)
     }
     const wrapperRef: any = useRef(null);
     clickOutSidePopupClose({ wrapperRef, closePopup });
@@ -77,6 +43,7 @@ const TradingPasswordAds = (props: activeSection) => {
                         onClick={() => {
                             props?.setShow(false);
                             props.setActive(false)
+                            props.setDisable &&  props.setDisable(false)                            
                         }}
                         enableBackground="new 0 0 60.963 60.842"
                         version="1.1"

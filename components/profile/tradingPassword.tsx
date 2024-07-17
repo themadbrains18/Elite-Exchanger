@@ -10,6 +10,7 @@ import Image from "next/image";
 import clickOutSidePopupClose from '../snippets/clickOutSidePopupClose';
 import ConfirmPopupNew from '../snippets/confirm-popup-new';
 import VerificationNew from '../snippets/verificationNew';
+import Link from 'next/link';
 
 interface activeSection {
   setShow?: any;
@@ -68,6 +69,8 @@ const TradingPassword = (props: activeSection) => {
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [disabled, setDisabled] = useState(false);
+  const [showReset, setShowReset] = useState(true);
+
   let {
     register,
     setValue,
@@ -302,42 +305,44 @@ const TradingPassword = (props: activeSection) => {
                 e.preventDefault();
               }
             }}>
-            <div className="py-[30px] md:py-[50px] ">
-              <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
-                Trading Password
-              </p>
-              <p className="sm-text ">
+            <div className="py-[30px] md:py-[50px] md:pt-[30px]">
+              <p className="sm-text">
                 Set a unique password to protect your trading.
               </p>
               <div className="mt-[30px] ">
-                <div className={` md:flex-row flex-col gap-[30px] ${(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? 'hidden' : "flex"}`}>
-                  <div className=" w-full">
-                    <p className="sm-text mb-[10px]">Old Trading Password</p>
-                    <div className='relative'>
-                      <input
-                        type={`${showOld === true ? "text" : "password"}`}
-                        {...register("old_password")}
-                        name='old_password'
-                        minLength={8}
-                        maxLength={32}
-                        placeholder="Enter Old password"
-                        className="sm-text input-cta2 w-full"
-                      />
-                      <Image
-                        src={`/assets/register/${showOld === true ? "show.svg" : "hide.svg"}`}
-                        alt="eyeicon"
-                        width={24}
-                        height={24}
-                        onClick={() => {
-                          setShowOld(!showOld);
-                        }}
-                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                      />
-                    </div>
+                {
+                  showReset && (
+                    <div className={` md:flex-row flex-col gap-[30px] ${(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? 'hidden' : "flex"}`}>
+                      <div className=" w-full">
+                        <p className="sm-text mb-[10px]">Old Trading Password</p>
+                        <div className='relative'>
+                          <input
+                            type={`${showOld === true ? "text" : "password"}`}
+                            {...register("old_password")}
+                            name='old_password'
+                            minLength={8}
+                            maxLength={32}
+                            placeholder="Enter Old password"
+                            className="sm-text input-cta2 w-full"
+                          />
+                          <Image
+                            src={`/assets/register/${showOld === true ? "show.svg" : "hide.svg"}`}
+                            alt="eyeicon"
+                            width={24}
+                            height={24}
+                            onClick={() => {
+                              setShowOld(!showOld);
+                            }}
+                            className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                          />
+                        </div>
 
-                  </div>
-                </div>
-                {(props?.session?.user?.tradingPassword !== null) && errors.old_password && (
+                      </div>
+                    </div>
+                  )
+                }
+
+                {( showReset && props?.session?.user?.tradingPassword !== null) && errors.old_password && (
                   <p className="errorMessage">
                     {errors.old_password.message}
                   </p>
@@ -421,7 +426,10 @@ const TradingPassword = (props: activeSection) => {
                     <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />
                   </svg>
                 }Next</button>
+
             </div>
+
+            <Link onClick={(e)=>{e.preventDefault(); setShowReset(false)}} className="sec-text text-[14px] md:text-[16px] !text-primary mt-2 inline-block" href="#">Forget trading password?</Link>
           </form>
         </div>
       }

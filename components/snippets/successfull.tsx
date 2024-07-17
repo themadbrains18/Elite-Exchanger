@@ -69,9 +69,13 @@ const Successfull = (props: activeSection) => {
             />
           </svg>
         </div>
-        {props?.type === "release" && <div className="flex items-center justify-center mt-8">
-          <Image src='/assets/profile/success-icon.svg' width={40} height={40} alt="success" />
-        </div>}
+
+        {props?.type === "release" && (
+            <div className="flex items-center justify-center mt-8">
+              <Image src='/assets/profile/success-icon.svg' width={40} height={40} alt="success" />
+            </div>
+          )
+        }
         <p className={`py-[20px] md:py-40 info-14-18 ${props?.type === "release" ? 'text-center' : ''}`}>
           {props?.type === "success"
             ? "Your new payment method has been added successfully."

@@ -356,7 +356,7 @@ const Response = (props: activeSection) => {
 
       </form>
       {active &&
-        <TradingPasswordAds setActive={setActive} setShow={setShow} show={show} finalSubmitAds={finalSubmitAds} />
+        <TradingPasswordAds setActive={setActive} setDisable={setDisable} setShow={setShow} show={show} finalSubmitAds={finalSubmitAds} />
       }
 
     </>
