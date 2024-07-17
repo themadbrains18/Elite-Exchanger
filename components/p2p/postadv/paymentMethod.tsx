@@ -69,7 +69,7 @@ const PaymentMethod = (props: activeSection) => {
   const [maxInputValue, setMaxInputValue] = useState(0.000000);
   const [verified, setVerified] = useState(false);
   const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
-  const [reduceValue,setReduceValue] = useState<Number | any>(props.assetsBalance || 0);
+  const [reduceValue, setReduceValue] = useState<Number | any>(props.assetsBalance || 0);
   // let list = props.userPaymentMethod;
 
   const router = useRouter();
@@ -110,6 +110,7 @@ const PaymentMethod = (props: activeSection) => {
   });
 
   const getAllPayments = async (name: string | undefined) => {
+
     let userPaymentMethod = await fetch(
       `${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod`,
       {
@@ -128,6 +129,8 @@ const PaymentMethod = (props: activeSection) => {
 
     setList(sortedPaymentMethods);
 
+
+
     if (name !== '') {
       let method: any = userPaymentMethod?.data?.find((item: any) => item?.pm_name === name)
 
@@ -141,8 +144,18 @@ const PaymentMethod = (props: activeSection) => {
   };
 
   const onHandleSubmit = async (data: any) => {
-    console.log(data,"==daa");
+
+    console.log("data",data);
     
+
+    if (data.p_method.length === 0 || data.p_method[0] === "false") {
+      setError("p_method", {
+        type: "custom",
+        message: `Please select at least 1 payment method.`,
+      });
+      setFocus("p_method");
+      return;
+    }
     if (data.quantity > props.assetsBalance) {
       setError("quantity", {
         type: "custom",
@@ -164,7 +177,7 @@ const PaymentMethod = (props: activeSection) => {
     if (ans === false) {
       data.p_method = [data.p_method];
     }
-    if (data.p_method === "false") {
+    if (data.p_method.length === 0 || data.p_method[0] === "false" || data.p_method === "false") {
       setError("p_method", {
         type: "custom",
         message: `Please select at least 1 payment method.`,
@@ -203,13 +216,13 @@ const PaymentMethod = (props: activeSection) => {
 
   const handleDelete = async () => {
     try {
-      console.log(props?.userPosts,"==id");
-      
+      console.log(props?.userPosts, "==id");
+
 
       let paymentMethodRelation = [];
       for (const post of props?.userPosts?.data) {
-        console.log(post,"==");
-        
+        console.log(post, "==");
+
         post?.p_method.filter((itm: any) => {
           if (itm.upm_id === id) {
             paymentMethodRelation.push(itm);
@@ -253,7 +266,7 @@ const PaymentMethod = (props: activeSection) => {
   const checkInput = (e: any, type: string) => {
     const value = e.target.value;
     if (/^\d*\.?\d{0,6}$/.test(value)) {
-      type === "min" ? setMinInputValue(value) :  (value);
+      type === "min" ? setMinInputValue(value) : (value);
     }
     if (type === "min" && maxInputValue > 0) {
       value > maxInputValue ? setError('min_limit', { type: "custom", message: "Min limit must be less than max limit." }) : clearErrors('min_limit'); setMinInputValue(value)
@@ -262,11 +275,11 @@ const PaymentMethod = (props: activeSection) => {
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
-    console.log(value, checked,"==checked");
-    
-   
+    console.log(value, checked, "==checked");
+
+
     if (checked) {
-    
+
       if (selectedMethods.length < 5) {
         setSelectedMethods([...selectedMethods, value]);
         setValue('p_method', [...selectedMethods, value]);
@@ -290,10 +303,10 @@ const PaymentMethod = (props: activeSection) => {
           }`}
       ></div>
       <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+        if (e.key === 'Enter') {
+          e.preventDefault();
+        }
+      }}>
         <div className="mt-40">
           <div className="p-[15px] md:p-40 border rounded-10 border-grey-v-1 dark:border-opacity-[15%]">
             <p className="pb-6 border-b border-grey-v-3 sec-title dark:border-opacity-[15%]">
@@ -316,7 +329,7 @@ const PaymentMethod = (props: activeSection) => {
                           name="p_method"
                           id={`checkbox${item?.id}`}
                           value={item?.id}
-                          
+
                           defaultChecked={
                             selectedMethods.includes(item.id) ??
                             false
@@ -432,7 +445,7 @@ const PaymentMethod = (props: activeSection) => {
                         <div className="flex items-center cursor-pointer">
                           <div className="w-full">
                             <input
-                              type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
+                              type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                               id="quantity"
                               step={0.000001}
                               {...register("quantity")}
@@ -446,7 +459,7 @@ const PaymentMethod = (props: activeSection) => {
                                   e.target.value = value.slice(0, -1);
                                 }
                               }}
-                              onInput={ (e:any)=>{  setReduceValue(props.assetsBalance - Number(e.target.value))}}
+                              onInput={(e: any) => { setReduceValue(props.assetsBalance - Number(e.target.value)) }}
                               className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white"
                               placeholder="Enter Quntity"
                             />
@@ -470,7 +483,7 @@ const PaymentMethod = (props: activeSection) => {
                     <div className="mt-10">
                       <p className="info-10-14 text-end">
                         {" "}
-                        = {truncateNumber(reduceValue,6)} {props?.selectedAssets?.symbol}
+                        = {truncateNumber(reduceValue, 6)} {props?.selectedAssets?.symbol}
                       </p>
                     </div>
                   </div>
@@ -482,7 +495,7 @@ const PaymentMethod = (props: activeSection) => {
                         <div className="flex items-center cursor-pointer ">
                           <div className="w-full">
                             <input
-                              type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
+                              type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                               id="min_limit"
                               step={0.000001}
                               {...register("min_limit")}
@@ -518,7 +531,7 @@ const PaymentMethod = (props: activeSection) => {
                           <div className="w-full">
                             <input
                               disabled={true}
-                              type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
+                              type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                               id="max_limit"
                               step={0.000001}
                               {...register("max_limit")}
