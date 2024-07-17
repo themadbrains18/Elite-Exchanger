@@ -43,7 +43,7 @@ const EditPaymentMethod = (props: activeSection) => {
   useEffect(() => {
     setValue('quantity', props?.editPost?.quantity);
     setValue('min_limit', props?.editPost?.min_limit);
-    setReduceValue(props.assetsBalance - props?.editPost?.quantity);
+    setReduceValue(props.assetsBalance);
     let max_limit = props?.editPost?.price !== props.price ? props.price * props?.editPost?.quantity : props?.editPost?.max_limit
     setValue('max_limit', max_limit.toFixed(2));
 
