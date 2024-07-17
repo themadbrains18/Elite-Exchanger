@@ -40,10 +40,14 @@ const EditPaymentMethod = (props: activeSection) => {
   const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
   const [reduceValue, setReduceValue] = useState<Number | any>(props.assetsBalance || 0);
 
+
+  
+  
   useEffect(() => {
+    console.log(props.assetsBalance,"=props.assetsBalance");
     setValue('quantity', props?.editPost?.quantity);
     setValue('min_limit', props?.editPost?.min_limit);
-    setReduceValue(props.assetsBalance - props?.editPost?.quantity);
+    setReduceValue(props.assetsBalance);
     let max_limit = props?.editPost?.price !== props.price ? props.price * props?.editPost?.quantity : props?.editPost?.max_limit
     setValue('max_limit', max_limit.toFixed(2));
 
@@ -250,7 +254,7 @@ const EditPaymentMethod = (props: activeSection) => {
                           id="quantity" step={0.000001} value={inputValue}  {...register('quantity')} name="quantity"
                           onWheel={(e) => (e.target as HTMLElement).blur()}
                           onInput={(e: any) => {
-                            setReduceValue(props.assetsBalance - Number(e.target.value));
+                            setReduceValue(props.assetsBalance + Number(props?.editPost?.quantity) - Number(e.target.value));
                           }}
                           onChange={(e) => {
                             checkBalnce(e);
