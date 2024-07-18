@@ -36,7 +36,7 @@ const DesktopTable = (props: dataTypes) => {
     const [show, setShow] = useState(false);
     const [message, setMessage] = useState('Are you sure you want to delete your ads with remaining quantity?');
     const [title, setTitle] = useState('Delete Ads');
-
+const [disable, setDisable]= useState(false)
     const { status, data: session } = useSession();
 
     const route = useRouter();
@@ -105,6 +105,7 @@ const DesktopTable = (props: dataTypes) => {
     const actionPerform = async () => {
 
         if (status === 'authenticated') {
+            setDisable(true)
             let obj = {
                 post_id: postId,
                 user_id: session?.user?.user_id
@@ -124,16 +125,25 @@ const DesktopTable = (props: dataTypes) => {
 
             if (postResponse?.data) {
 
+                if(postResponse?.data?.message){
+                    toast.warning(postResponse?.data?.message,{autoClose:2000})
+                }
+
                 let remainingPost = postList.filter((item: any) => {
                     return item.id !== postResponse?.data?.id
                 })
-
+                setTimeout(()=>{
+                    setDisable(false)
+                },3000)
                 setPostList(remainingPost);
                 setShowPopup(false);
                 setShow(false);
             }
             else {
-                toast.error(postResponse?.data)
+                toast.error(postResponse?.data, {autoClose:2000})
+                setTimeout(()=>{
+                    setDisable(false)
+                },3000)
             }
         }
         else if (status === 'unauthenticated') {
@@ -142,39 +152,53 @@ const DesktopTable = (props: dataTypes) => {
         }
     }
 
-    const updateAdsStatus = async (postid: string) => {
+    const updateAdsStatus = async (postid: any) => {
 
         if (status === 'authenticated') {
-            let obj = {
-                post_id: postid,
-                user_id: session?.user?.user_id
-            }
-
-            const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-            let record = encodeURIComponent(ciphertext.toString());
-
-            let putResponse: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/editadvertisement`, {
-                method: "PUT",
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": session?.user?.access_token
-                },
-                body: JSON.stringify(record)
-            }).then(response => response.json());
-
-            if (putResponse?.data) {
-
-                let remainingPost = postList.filter((item: any) => {
-                    return item.id !== putResponse?.data?.result?.id
-                })
-                getAds(0)
-                toast.success(`Post ${putResponse?.data?.result?.status === true ? "Active" : "Inactive"}  successfully`)
-                setPostList(remainingPost);
-                setActive(0);
-                setShow(false);
+            setDisable(true)
+            if (postid?.quantity == 0) {
+                setDisable(false)
+                return
             }
             else {
-                toast.error(putResponse?.data)
+                let obj = {
+                    post_id: postid?.id,
+                    user_id: session?.user?.user_id
+                }
+
+                const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
+                let record = encodeURIComponent(ciphertext.toString());
+
+                let putResponse: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/editadvertisement`, {
+                    method: "PUT",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        "Authorization": session?.user?.access_token
+                    },
+                    body: JSON.stringify(record)
+                }).then(response => response.json());
+
+                if (putResponse?.data) {
+
+                    let remainingPost = postList.filter((item: any) => {
+                        return item.id !== putResponse?.data?.result?.id
+                    })
+                    getAds(0)
+                    toast.success(`Post ${putResponse?.data?.result?.status === true ? "Active" : "Inactive"}  successfully`,{autoClose:2000})
+                    setTimeout(()=>{
+                        setDisable(false)
+                    },3000)
+                    setPostList(remainingPost);
+                    setActive(0);
+                    setShow(false);
+                }
+                else {
+                    toast.error(putResponse?.data,{autoClose:2000})
+                    setTimeout(()=>{
+                        setDisable(false)
+                    },3000)
+                }
+
             }
         }
         else if (status === 'unauthenticated') {
@@ -256,7 +280,7 @@ const DesktopTable = (props: dataTypes) => {
                                                 <p className={`info-14-18 !text-buy`}>BUY</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(truncateNumber(item.price,2))} INR</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(truncateNumber(item.price, 2))} INR</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(parseFloat(item?.quantity), 6)}  {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
@@ -283,8 +307,8 @@ const DesktopTable = (props: dataTypes) => {
 
                                                 <div className="flex items-center justify-start w-full" >
                                                     <label htmlFor={item?.id} className="flex items-center cursor-pointer">
-                                                        <input type="checkbox" id={item?.id} className="sr-only peer" checked={item?.status} onChange={() => { (props.active === undefined && props.active !== 3 && item?.quantity!=0 ) && updateAdsStatus(item?.id) }} />
-                                                        <div className={`block relative bg-[#CCCED9] w-[50px] h-[25px] p-1 rounded-full before:absolute before:top-[3px] before:bg-blue-600 before:w-[19px] before:h-[19px] before:p-1 before:rounded-full before:transition-all before:duration-500 before:left-1 peer-checked:before:left-[27px] before:bg-white peer-checked:!bg-primary peer-checked:before:!bg-white `} ></div>
+                                                        <input type="checkbox" id={item?.id} disabled={disable} className={`sr-only peer `} checked={item?.status} onChange={() => { (props.active === undefined || props.active !== 3) && updateAdsStatus(item) }} />
+                                                        <div className={`block relative bg-[#CCCED9] w-[50px] h-[25px] p-1 rounded-full before:absolute before:top-[3px] ${disable && 'cursor-not-allowed'} before:bg-blue-600 before:w-[19px] before:h-[19px] before:p-1 before:rounded-full before:transition-all before:duration-500 before:left-1 peer-checked:before:left-[27px] before:bg-white peer-checked:!bg-primary peer-checked:before:!bg-white `} ></div>
                                                     </label>
                                                 </div>
                                             </td>
@@ -297,7 +321,7 @@ const DesktopTable = (props: dataTypes) => {
                                                                 <IconsComponent type='editIcon' hover={false} active={false} />
                                                             </button>
                                                         }
-                                                        <button onClick={() => { setShowPopup(true); setShow(true); setPostId(item?.id) }}>
+                                                        <button className={` ${disable && 'cursor-not-allowed'}`} disabled={disable} onClick={() => { setShowPopup(true); setShow(true); setPostId(item?.id) }}>
                                                             <IconsComponent type='deleteIcon' hover={false} active={false} />
                                                         </button>
                                                     </div>
@@ -339,7 +363,7 @@ const DesktopTable = (props: dataTypes) => {
                     marginPagesDisplayed={2}
                     pageCount={pageCount}
                     previousLabel="<"
-                    renderOnZeroPageCount={null} 
+                    renderOnZeroPageCount={null}
                     forcePage={Math.floor(itemOffset / itemsPerPage)} />
             </div>
             {showPopup &&
