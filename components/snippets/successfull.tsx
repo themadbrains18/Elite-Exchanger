@@ -10,6 +10,7 @@ interface activeSection {
   setShow: Function;
   type: string;
   hideVisibility?: boolean
+  sellerUser?:string
 }
 
 const Successfull = (props: activeSection) => {
@@ -39,7 +40,7 @@ const Successfull = (props: activeSection) => {
 
             {props?.type === "success"
               ? "Payment Method"
-              : props?.type === "release" ? "Assets Released"
+              : props?.type === "release" ? `Assets ${props?.sellerUser || 'Released'}`
                 : "Risk Warning"}
 
           </p>
@@ -79,7 +80,7 @@ const Successfull = (props: activeSection) => {
         <p className={`py-[20px] md:py-40 info-14-18 ${props?.type === "release" ? 'text-center' : ''}`}>
           {props?.type === "success"
             ? "Your new payment method has been added successfully."
-            : props?.type === "release" ? "Assets has been released successfully."
+            : props?.type === "release" ? `Assets has been ${props?.sellerUser || 'released'} successfully.`
               : "Before releasing the crypto, please confirm that you have received the payment and have checked if the amount and payers name match those of the order if payment information is inconsistent or there arise a dispute , please immediatly contact the customer support and do not release the crypto."}
         </p>
 
@@ -96,9 +97,9 @@ const Successfull = (props: activeSection) => {
             >
               OK
             </button>
-            {/* <button onClick={() => { router.push('/p2p/buy') }} className={`solid-button max-w-full w-full `}>
+            <button onClick={() => { router.push('/p2p/buy') }} className={`solid-button max-w-full w-full `}>
               Place another order
-          </button> */}
+          </button>
         </div>
         ) : (
           <div>

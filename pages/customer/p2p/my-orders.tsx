@@ -129,7 +129,7 @@ const MyOrders = (props: propsData) => {
               </div>
               {
                 active1 &&
-                <Successfull setShow={setShow} setActive1={setActive1} type="release" />
+                <Successfull setShow={setShow} setActive1={setActive1} type="release" sellerUser={order?.user_post?.user?.id === props.session?.user?.user_id ? "released" : "recieved"} />
               }
             </>
             :
