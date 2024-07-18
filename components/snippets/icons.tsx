@@ -2119,7 +2119,7 @@ const IconsComponent = (props: svgType) => {
             r="7"
             fill="#EEBB0F"
             stroke="#56B2FF"
-            stroke-width="2"
+            strokeWidth="2"
           />
         </svg>
       )}

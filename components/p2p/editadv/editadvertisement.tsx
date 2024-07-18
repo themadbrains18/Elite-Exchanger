@@ -152,7 +152,7 @@ const EditAdverstisement = (props: propsData) => {
                       return (
                         <div
                           key={index}
-                          className="flex items-center md:mr-4 md:py-2 md:px-[18px] "
+                          className="flex items-center md:mr-4 md:py-2 md:px-[18px] max-w-[130px] w-full"
                         >
                           <input
                             id={`radio${item.id}`}

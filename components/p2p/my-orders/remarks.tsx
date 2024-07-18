@@ -39,7 +39,7 @@ const Remarks = (props: propsData) => {
     const wbsocket = useWebSocket();
 
     useEffect(() => {
-        if( props.userOrder?.status === 'isProcess'){
+        if (props.userOrder?.status === 'isProcess') {
             orderTimeCalculation();
 
         }
@@ -50,20 +50,20 @@ const Remarks = (props: propsData) => {
         deadline.setMinutes(deadline.getMinutes() + 15);
         deadline.setSeconds(deadline.getSeconds() + 5);
         let currentTime = new Date();
-        
+
         if (currentTime < deadline && props.userOrder?.status === 'isProcess') {
             if (Ref.current) clearInterval(Ref.current);
             // console.log("in cancel 2");
-            
+
             const timer = setInterval(() => {
                 calculateTimeLeft(deadline);
             }, 1000);
             Ref.current = timer;
         }
-        
+
         else if (currentTime > deadline && props.userOrder?.status === 'isProcess') {
             // console.log("order cancel 1");
-            
+
             // return;
             await orderCancel('auto');
         }
@@ -77,7 +77,7 @@ const Remarks = (props: propsData) => {
         // console.log(props.userOrder?.status,"========= time update");
         let { total, minutes, seconds }
             = getTimeRemaining(e);
-        
+
         if (total >= 0) {
             setTimer(
                 (minutes > 9 ? minutes : '0' + minutes) + ':'
@@ -86,8 +86,8 @@ const Remarks = (props: propsData) => {
         }
         else {
             if (Ref.current) clearInterval(Ref.current);
-            console.log(props.userOrder,"=props.userOrder");
-            
+            console.log(props.userOrder, "=props.userOrder");
+
             if (props.userOrder?.status === 'isProcess') {
                 // return;
                 orderCancel('auto');
@@ -140,7 +140,7 @@ const Remarks = (props: propsData) => {
             let res = await responseData.json();
             if (res.data.status === 200) {
                 console.log("==here");
-                
+
                 props.getUserOrders();
                 if (wbsocket) {
                     let orderData = {
@@ -169,11 +169,11 @@ const Remarks = (props: propsData) => {
      * @returns 
      */
     const orderCancel = async (type: string) => {
-        
+
         let obj = {
             "order_id": props.orderid,
             "user_id": props.userOrder?.buy_user_id,
-            "cancelType" : type
+            "cancelType": type
         }
 
         if (status === 'authenticated') {
@@ -228,12 +228,12 @@ const Remarks = (props: propsData) => {
         setActive(true);
     }
 
-    
+
     const finalSubmitAds = async (pass: string) => {
         try {
 
             finalFormData.fundcode = pass;
-            
+
 
             if (status === 'authenticated') {
                 const ciphertext = AES.encrypt(JSON.stringify(finalFormData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
@@ -288,15 +288,15 @@ const Remarks = (props: propsData) => {
                         <div className='border-b dark:border-opacity-[15%] border-grey-v-1 md:pb-30 pb-[15px] md:mb-30 mb-[15px]'>
                             <p className="text-[19px] md:text-[23px]  leading-7 font-medium   dark:!text-white  !text-h-primary">Remarks</p>
                         </div>
-                        
-                        
-                        {props?.userOrder?.sell_user_id === session?.user?.user_id ? 
-                        <p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You can pay me on my registered payment methods</p>
-                        :<p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You can pay me on above listed payment methods</p> }
+
+
+                        {props?.userOrder?.sell_user_id === session?.user?.user_id ?
+                            <p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You can pay me on my registered payment methods</p>
+                            : <p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You can pay me on above listed payment methods</p>}
                     </>
                 }
                 {
-                    
+
                     <p className='nav-text-sm mb-[15px] md:mb-[24px]'>{props?.userOrder?.user_post?.remarks ? props?.userOrder?.user_post?.remarks : `The exchange offers a seamless trading experience with intuitive navigation and quick transaction times. Highly recommend for both beginners and experienced traders!`}</p>
                 }
                 {
@@ -309,7 +309,7 @@ const Remarks = (props: propsData) => {
                 }
                 {
                     props?.userOrder?.status === 'isCompleted' &&
-            
+
                     (props?.userOrder?.buy_user_id === session?.user?.user_id ?
                         <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The payment is done. Please wait for the seller to release the crypto</p>
                         :
@@ -317,10 +317,10 @@ const Remarks = (props: propsData) => {
                     )
                 }
                 {
-                    props?.userOrder?.status === 'isReleased' && 
+                    props?.userOrder?.status === 'isReleased' &&
                     (props?.userOrder?.sell_user_id === session?.user?.user_id ?
-                    <><p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! You have released your coins. Your P2P order #{props.orderid} has been successfully completed</p></>
-                    :<p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! Your P2P order #{props.orderid} has been successfully completed. The assets have been transferred to your wallet.</p>)
+                        <><p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! You have released your coins. Your P2P order #{props.orderid} has been successfully completed</p></>
+                        : <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! Your P2P order #{props.orderid} has been successfully completed. The assets have been transferred to your wallet.</p>)
                 }
                 {
                     props?.userOrder?.status === 'isCanceled' &&

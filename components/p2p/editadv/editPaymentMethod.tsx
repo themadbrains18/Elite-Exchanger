@@ -99,8 +99,12 @@ const EditPaymentMethod = (props: activeSection) => {
       setFocus("min_limit");
       return;
     }
+    // console.log(data.quantity,"=data.quantity", typeof data.quantity);
+    // console.log(props.assetsBalance,"=props.assetsBalance", typeof props.assetsBalance);
+    // console.log(props?.editPost?.quantity,"=props?.editPost?.quantity", typeof props?.editPost?.quantity);
+    
 
-    if (data.quantity < props.assetsBalance || data.quantity == props?.editPost?.quantity) {
+    if (data.quantity <= (props.assetsBalance+truncateNumber(Number(props?.editPost?.quantity),6)) || data.quantity == props?.editPost?.quantity) {
       props.setPaymentMethod(data);
       props.setStep(3);
 
@@ -120,7 +124,7 @@ const EditPaymentMethod = (props: activeSection) => {
     if (/^\d*\.?\d{0,6}$/.test(value)) {
       setInputValue(value);
     }
-    if (e.target.value < props.assetsBalance || e.target.value == props?.editPost?.quantity) {
+    if (e.target.value <= (props.assetsBalance+props?.editPost?.quantity) || e.target.value == props?.editPost?.quantity) {
 
       let maxLimit = truncateNumber(props.price * e.target.value, 2);
       setValue('max_limit', maxLimit);
@@ -335,7 +339,7 @@ const EditPaymentMethod = (props: activeSection) => {
         </div>
       </form>
       {active == 1 &&
-        <AddPayment setShow={setShow} setActive={setActive} masterPayMethod={props.masterPayMethod} setFormMethod={setFormMethod} />
+        <AddPayment setShow={setShow} setActive={setActive} masterPayMethod={props.masterPayMethod} setFormMethod={setFormMethod} list={list}/>
       }
       {active == 2 &&
         <TradingPassword setShow={setShow} setActive={setActive} formMethod={formMethod} setList={setList} list={setList} />

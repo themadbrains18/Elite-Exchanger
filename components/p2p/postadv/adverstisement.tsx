@@ -173,7 +173,7 @@ const Adverstisement = (props: propsData) => {
                   <div className="mt-20 mb-20 md:mb-0 md:mt-30 grid grid-cols-3 md:flex flex-wrap gap-x-10 gap-y-30 md:gap-20 p-10 md:p-0">
                     {assets?.map((item: any, index: any) => {
                       return (
-                        <div key={index} className="flex items-center md:mr-4 md:py-2 md:px-[18px] cursor-pointer">
+                        <div key={index} className="flex items-center md:mr-4 md:py-2 md:px-[18px] cursor-pointer max-w-[130px] w-full">
                           <input id={`radio${item.id}`} {...register('token_id')} onChange={() => selectToken(item)} type="radio" value={item.id} name="token_id" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                           <label
                             htmlFor={`radio${item.id}`}
@@ -350,12 +350,23 @@ const Adverstisement = (props: propsData) => {
                   </div> */}
                   <div className="md:mt-30 mt-20">
                     <p className="info-10-14">{show === 1 ? "Fixed" : "Floating"} (INR)</p>
-                    <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   step={0.000001} {...register('price', { required: true })} name="price" disabled={show === 2 ? true : false} placeholder="Enter Amount" className="py-[14px] px-[15px] border rounded-5 border-grey-v-1 mt-[10px] w-full bg-[transparent] dark:border-opacity-20 outline-none info-16-18" />
+                    <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} 
+                      step={0.000001} {...register('price', { required: true })} name="price" disabled={show === 2 ? true : false} placeholder="Enter Amount" className="py-[14px] px-[15px] border rounded-5 border-grey-v-1 mt-[10px] w-full bg-[transparent] dark:border-opacity-20 outline-none info-16-18"  onChange={(e) => {
+                        const value = e.target.value;
+                        const regex = /^\d{0,10}(\.\d{0,6})?$/;
+                        if (regex.test(value) || value === "") {
+                              console.log("ok");
+                              
+                        } else {
+                          e.target.value = value.slice(0, -1);
+                        }
+                   
+                    }} />
                   </div>
                   {errors?.price && (
                     <p className="errorMessage">{errors?.price?.message}</p>
                   )}
-                  <p className="py-2 info-10-14 text-right">Bal. {truncateNumber(assetsBalance,6)}</p>
+                  <p className="py-2 info-10-14 text-right">Bal: {truncateNumber(assetsBalance,6)}</p>
                 </div>
 
                 <button

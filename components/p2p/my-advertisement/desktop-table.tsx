@@ -42,6 +42,10 @@ const DesktopTable = (props: dataTypes) => {
     const route = useRouter();
 
     useEffect(() => {
+        setItemOffset(0); // Reset itemOffset to 0 when filters change
+    }, [props.active, props?.firstCurrency, props?.paymentId, props?.startDate]);
+
+    useEffect(() => {
         getAds(itemOffset);
     }, [props.active, itemOffset, props?.firstCurrency, props?.paymentId, props?.startDate])
 
@@ -51,13 +55,13 @@ const DesktopTable = (props: dataTypes) => {
             console.log("called");
             let paymentMethod = props?.paymentId !== undefined && props?.paymentId !== "" ? props?.paymentId : "all"
             let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
-            let date = props?.startDate !== undefined && props?.startDate !== "" ?new Date(props?.startDate).toISOString() : "all"
+            let date = props?.startDate !== undefined && props?.startDate !== "" ? new Date(props?.startDate).toISOString() : "all"
 
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
-          
-        
+
+
             let userAllOrderList: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/advertisement?status=${props?.active === 1 ? true : props?.active === 2 ? false : "all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}&date=${date}`, {
                 method: "GET",
                 headers: {
@@ -65,9 +69,9 @@ const DesktopTable = (props: dataTypes) => {
                 },
             }).then(response => response.json());
 
-            if(userAllOrderList?.data?.totalLength<=10){
+            if (userAllOrderList?.data?.totalLength <= 10) {
                 setItemOffset(0)
-              }
+            }
             for (const post of userAllOrderList?.data?.data) {
                 let payment_method: any = [];
                 for (const upid of post.p_method) {
@@ -258,15 +262,16 @@ const DesktopTable = (props: dataTypes) => {
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(parseFloat(item?.quantity), 6)}  {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{moment(item?.updatedAt).format('YYYY-MM-DD HH:mm:ss')}</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <div className='flex items-center '>
                                                     {
-                                                        item?.user_p_method?.map((elem: any, ind: any) => {
+                                                        item?.user_p_method && item?.user_p_method.length > 0 && item?.user_p_method.map((elem: any, ind: number) => {
+                                                            const iconClass = ind === 0 ? 'mr-[10px]' : 'ml-[-20px]';
                                                             return (
                                                                 <Fragment key={ind}>
-                                                                    <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className='ml-[-10px]' />
+                                                                    <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className={iconClass} />
                                                                 </Fragment>
                                                             )
                                                         })
@@ -334,7 +339,8 @@ const DesktopTable = (props: dataTypes) => {
                     marginPagesDisplayed={2}
                     pageCount={pageCount}
                     previousLabel="<"
-                    renderOnZeroPageCount={null} />
+                    renderOnZeroPageCount={null} 
+                    forcePage={Math.floor(itemOffset / itemsPerPage)} />
             </div>
             {showPopup &&
                 <ConfirmationModel setActive={setShowPopup} setShow={setShow} title={title} message={message} show={show} actionPerform={actionPerform} />

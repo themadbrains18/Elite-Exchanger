@@ -332,7 +332,7 @@ const VerificationNew = (props: activeSection) => {
                                         name="code6"
                                     />
                                 </div>
-                                <p className="mb-5 text-center lg:mt-[20px] md-text errorMessage" >{otpMessage}</p>
+                                <p className="mb-5  lg:mt-[20px] md-text errorMessage" >{otpMessage}</p>
                             </div>
                             <div className={`flex  ${showTime === true ? '' : 'hidden'}`}>
                                 <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>

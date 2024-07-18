@@ -32,6 +32,9 @@ const BuyTableDesktop = (props: activeSection) => {
 
   let itemsPerPage = 10;
 
+  useEffect(() => {
+    setItemOffset(0); // Reset itemOffset to 0 when filters change
+}, [props?.firstCurrency, props?.paymentId]);
 
   useEffect(() => {
  
@@ -288,15 +291,16 @@ const BuyTableDesktop = (props: activeSection) => {
 
                     <td>
                       <div className='flex items-center '>
-                        {
-                          payment_method && payment_method?.length > 0 && payment_method?.map((elem: any, ind: any) => {
-                            return (
-                              <Fragment key={ind}>
-                                <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className='ml-[-10px]' />
-                              </Fragment>
-                            )
-                          })
-                        }
+                      {
+                      payment_method && payment_method.length>0 && payment_method.map((elem: any, ind: number) => {
+                        const iconClass = ind === 0 ? 'mr-[10px]' : 'ml-[-20px]';
+                        return (
+                          <Fragment key={ind}>
+                            <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className={iconClass} />
+                          </Fragment>
+                        )
+                      })
+                    }
                       </div>
                     </td>
 
@@ -336,7 +340,9 @@ const BuyTableDesktop = (props: activeSection) => {
           marginPagesDisplayed={2}
           pageCount={pageCount}
           previousLabel="<"
-          renderOnZeroPageCount={null} />
+          renderOnZeroPageCount={null} 
+          forcePage={Math.floor(itemOffset / itemsPerPage)} />
+
       </div>
 
       {show &&

@@ -138,9 +138,14 @@ const AddPayment = (props: activeSection) => {
       // setError("phonenumber",{ type: "custom", message: "Number contain 10 digits" })
     }
     else {
+      console.log(props?.list,"=props?.list");
+      
       let pmt = props?.list?.filter((item: any) => {
         return item.pm_name === data?.selectPayment?.payment_method && item.pmObject.phonenumber === data.phonenumber
       })
+console.log(pmt,"=pmt");
+
+
 
       if (pmt.length > 0) {
         toast.error("This Number is already added.", { autoClose: 2000 });

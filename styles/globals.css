@@ -662,7 +662,7 @@ input:-webkit-autofill {
 }
 
 .errorMessage {
-  @apply text-[12px] text-[#ff0000d1]
+  @apply text-[12px] !text-[#ff0000d1]
 }
 [disabled] {
   pointer-events: none;

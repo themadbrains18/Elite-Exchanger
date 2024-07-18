@@ -32,6 +32,9 @@ const OrdersTableDesktop = (props: dataTypes) => {
 
 
     let itemsPerPage = 10;
+    useEffect(() => {
+        setItemOffset(0); // Reset itemOffset to 0 when filters change
+    }, [props.active, props.selectedToken, props.startDate]);
 
 
     useEffect(() => {
@@ -182,7 +185,8 @@ const OrdersTableDesktop = (props: dataTypes) => {
                     marginPagesDisplayed={2}
                     pageCount={pageCount}
                     previousLabel="<"
-                    renderOnZeroPageCount={null} />
+                    renderOnZeroPageCount={null}
+                    forcePage={Math.floor(itemOffset / itemsPerPage)} />
             </div>
         </>
     )

@@ -121,7 +121,7 @@ const EditResponse = (props: activeSection) => {
           setDisable(false);
         },3000)
 
-        route.push('/p2p/my-advertisement');
+        route.push('/p2p/my-advertisement?t=2');
       }
       else {
         toast.error(res.data.data,{autoClose:2000});

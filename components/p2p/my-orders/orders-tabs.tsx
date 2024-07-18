@@ -94,7 +94,7 @@ const OrdersTabs = (props: propsData) => {
 
                     <div className=' max-w-full md:max-w-[50%] w-full'>
                         <ReactDatePicker
-                            placeholderText={'MM/DD/YYYY'}
+                            placeholderText={'Select Date'}
                             selected={startDate}
                             onChange={(date: any) => handleDate(date)}
                             peekNextMonth

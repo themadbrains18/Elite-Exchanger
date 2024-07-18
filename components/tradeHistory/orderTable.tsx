@@ -34,23 +34,28 @@ const OrderTable = (props: propsData) => {
 
   useEffect(() => {
 
-    let history: any = totalRecord;
-    if (props.coin !== "" && props.coin !== undefined && history?.length>0) {
-      history = history?.filter((item: any) => {
-        return item.token_id === props.coin;
-      });
-    }
-    const targetDate = new Date(props.date).setHours(0, 0, 0, 0);
-    const currentDate = new Date().setHours(0, 0, 0, 0);
-    if (targetDate !== currentDate && history?.length>0) {
-      history = history?.filter((item: any) => {
-        const itemDate = new Date(item.createdAt).setHours(0, 0, 0, 0);
-        return itemDate === targetDate;
-      });
-    }
-    setCurrentItems(history);
+    // let history: any = totalRecord;
+    // if (props.coin !== "" && props.coin !== undefined && history?.length>0) {
+    //   history = history?.filter((item: any) => {
+    //     return item.token_id === props.coin;
+    //   });
+    // }
+    // const targetDate = new Date(props.date).setHours(0, 0, 0, 0);
+    // const currentDate = new Date().setHours(0, 0, 0, 0);
+    // if (targetDate !== currentDate && history?.length>0) {
+    //   history = history?.filter((item: any) => {
+    //     const itemDate = new Date(item.createdAt).setHours(0, 0, 0, 0);
+    //     return itemDate === targetDate;
+    //   });
+    // }
+    // setCurrentItems(history);
 
-  }, [props.coin, props.date])
+    if(session){
+      getOrders()
+    }
+
+
+  }, [props.coin, props.date, session])
 
 
   async function getOrders() {
@@ -62,24 +67,31 @@ const OrderTable = (props: propsData) => {
         "Authorization": session?.user?.access_token
       },
     }).then(response => response.json());
+    console.log(tradeHistory,"==tradeHistory");
+    
     setTotal(tradeHistory?.data?.total)
 
+    if(tradeHistory?.data?.total<=10){
+      setItemOffset(0)
+    }
     if (tradeHistory?.data?.data?.message !== undefined) {
       tradeHistory = [];
     }
     else {
+      console.log("=here");
+      
       tradeHistory = tradeHistory?.data?.data;
     }
     setTotalRecord(tradeHistory)
-    if (props?.filter !== "") {
-      let data = currentItems?.filter((item: any) => {
-        return item.token !== null ? item.token?.symbol.toLowerCase().includes(props?.filter.toLowerCase()) : item.global_token?.symbol.toLowerCase().includes(props?.filter.toLowerCase());
-      })
-      setCurrentItems(data)
-    } else {
-      setCurrentItems(tradeHistory);
+    // if (props?.filter !== "") {
+    //   let data = currentItems?.filter((item: any) => {
+    //     return item.token !== null ? item.token?.symbol.toLowerCase().includes(props?.filter.toLowerCase()) : item.global_token?.symbol.toLowerCase().includes(props?.filter.toLowerCase());
+    //   })
+    //   setCurrentItems(data)
+    // } else {
+    //   setCurrentItems(tradeHistory);
 
-    }
+    // }
   }
 
   const pageCount = Math.ceil(total / itemsPerPage);
@@ -146,7 +158,7 @@ const OrderTable = (props: propsData) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: number) => {
+            {totalRecord && totalRecord?.length > 0 && totalRecord?.map((item: any, index: number) => {
               return (
                 <tr key={index}  >
                   <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
@@ -213,7 +225,7 @@ const OrderTable = (props: propsData) => {
               );
             })}
 
-            {currentItems && currentItems?.length === 0 &&
+            {totalRecord && totalRecord?.length === 0 &&
               <tr>
                 <td colSpan={8}>
                   <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
