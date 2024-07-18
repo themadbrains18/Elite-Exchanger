@@ -261,7 +261,13 @@ const EditPaymentMethod = (props: activeSection) => {
                             setReduceValue(props.assetsBalance + Number(props?.editPost?.quantity) - Number(e.target.value));
                           }}
                           onChange={(e) => {
-                            checkBalnce(e);
+                            const value = e.target.value;
+                                const regex = /^\d{0,10}(\.\d{0,6})?$/;
+                                if (regex.test(value) || value === "") {
+                                  checkBalnce(e);
+                                } else {
+                                  e.target.value = value.slice(0, -1);
+                                }
 
                           }}
                           className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Quntity" />
