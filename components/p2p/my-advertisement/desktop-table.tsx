@@ -256,7 +256,7 @@ const DesktopTable = (props: dataTypes) => {
                                                 <p className={`info-14-18 !text-buy`}>BUY</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(item.price)} INR</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(truncateNumber(item.price,2))} INR</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(parseFloat(item?.quantity), 6)}  {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
@@ -268,7 +268,7 @@ const DesktopTable = (props: dataTypes) => {
                                                 <div className='flex items-center '>
                                                     {
                                                         item?.user_p_method && item?.user_p_method.length > 0 && item?.user_p_method.map((elem: any, ind: number) => {
-                                                            const iconClass = ind === 0 ? 'mr-[10px]' : 'ml-[-20px]';
+                                                            const iconClass = ind === 0 ? '' : 'ml-[-10px]';
                                                             return (
                                                                 <Fragment key={ind}>
                                                                     <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className={iconClass} />
@@ -283,7 +283,7 @@ const DesktopTable = (props: dataTypes) => {
 
                                                 <div className="flex items-center justify-start w-full" >
                                                     <label htmlFor={item?.id} className="flex items-center cursor-pointer">
-                                                        <input type="checkbox" id={item?.id} className="sr-only peer" checked={item?.status} onChange={() => { (props.active === undefined || props.active !== 3) && updateAdsStatus(item?.id) }} />
+                                                        <input type="checkbox" id={item?.id} className="sr-only peer" checked={item?.status} onChange={() => { (props.active === undefined && props.active !== 3 && item?.quantity!=0 ) && updateAdsStatus(item?.id) }} />
                                                         <div className={`block relative bg-[#CCCED9] w-[50px] h-[25px] p-1 rounded-full before:absolute before:top-[3px] before:bg-blue-600 before:w-[19px] before:h-[19px] before:p-1 before:rounded-full before:transition-all before:duration-500 before:left-1 peer-checked:before:left-[27px] before:bg-white peer-checked:!bg-primary peer-checked:before:!bg-white `} ></div>
                                                     </label>
                                                 </div>

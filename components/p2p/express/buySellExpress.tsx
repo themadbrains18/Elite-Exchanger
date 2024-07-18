@@ -618,7 +618,7 @@ const BuySellExpress = (props: propsData) => {
                       onChange={(e: any) => {
 
                         const value = e.target.value;
-                        const regex = /^\d{0,11}(\.\d{0,6})?$/;
+                        const regex = /^\d{0,11}(\.\d{0,2})?$/;
                         if (regex.test(value) || value === "") {
                            
                           if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
@@ -833,7 +833,7 @@ const BuySellExpress = (props: propsData) => {
                       onChange={(e: any) => {
 
                         const value = e.target.value;
-                        const regex = /^\d{0,10}(\.\d{0,6})?$/;
+                        const regex = /^\d{0,10}(\.\d{0,2})?$/;
                         if (regex.test(value) || value === "") {
                           if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
                             setReceivedAmount((e?.target?.value));
@@ -870,7 +870,7 @@ const BuySellExpress = (props: propsData) => {
 
                 <div className="mt-5 flex gap-2">
                   <div className=" flex items-center relative">
-                    <p className="sm-text dark:text-white">  Estimated price: 1 {secondCurrency}={currencyFormatter(Number(truncateNumber(Number(usdtToInr),6)))} INR</p>
+                    <p className="sm-text dark:text-white">  Estimated price: 1 {secondCurrency}={currencyFormatter(Number(truncateNumber(Number(usdtToInr),2)))} INR</p>
 
                   </div>
                 </div>

@@ -242,18 +242,18 @@ const BuyPopup = (props: activeSection) => {
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Limit :</p>
-                  <p className="sm-text w-full">{currencyFormatter(truncateNumber(props?.selectedPost?.min_limit,6))} INR ~ {currencyFormatter(truncateNumber(props?.selectedPost?.max_limit,6))} INR</p>
+                  <p className="sm-text w-full">{currencyFormatter(truncateNumber(props?.selectedPost?.min_limit,2))} INR ~ {currencyFormatter(truncateNumber(props?.selectedPost?.max_limit,2))} INR</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Price :</p>
-                  <p className="sm-text w-full">{currencyFormatter(truncateNumber(props?.selectedPost?.price,6))} INR</p>
+                  <p className="sm-text w-full">{currencyFormatter(truncateNumber(props?.selectedPost?.price,2))} INR</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Payment Methods :</p>
                   <div className="w-full flex">
                     {
                       payment_method && payment_method.map((elem: any, ind: number) => {
-                        const iconClass = ind === 0 ? 'mr-[10px]' : 'ml-[-20px]';
+                        const iconClass = ind === 0 ? '' : 'ml-[-10px]';
                         return (
                           <Fragment key={ind}>
                             <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className={iconClass} />

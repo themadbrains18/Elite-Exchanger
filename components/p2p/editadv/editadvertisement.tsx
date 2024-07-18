@@ -313,7 +313,7 @@ const EditAdverstisement = (props: propsData) => {
                     onClick={() => {
                       setShow(2);
                       selectToken(selectedAssets);
-                      let currentPrice = truncateNumber(inrPrice, 4)
+                      let currentPrice = truncateNumber(inrPrice, 2)
                       setValue('price', currentPrice)
                     }}
                     type="button"
@@ -367,7 +367,7 @@ const EditAdverstisement = (props: propsData) => {
                         <div className='loader relative w-[35px] z-[2] h-[35px] top-0 right-0 border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
                         :
                         <p className="sec-title md:!text-[18px] !text-[14px]">
-                          ₹{" "}{currencyFormatter(truncateNumber(inrPrice, 4))}
+                          ₹{" "}{currencyFormatter(truncateNumber(inrPrice, 2))}
                         </p>
 
                     }

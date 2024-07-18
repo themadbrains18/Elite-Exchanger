@@ -1,5 +1,6 @@
 import Context from '@/components/contexts/context';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
+import { truncateNumber } from '@/libs/subdomain';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import React, { Fragment, useContext, useEffect, useState } from 'react';
@@ -158,11 +159,11 @@ const BuyTableMobile = (props: activeSection) => {
                                     </div>
                                     <div className='mt-[12px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Price:</p>
-                                        <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{currencyFormatter(item?.price)} <span className='sm-text !text-[10px] dark:!text-[#9295A6] !text-banner-text'>INR/USDT</span></p>
+                                        <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{currencyFormatter(truncateNumber(item?.price,2))} <span className='sm-text !text-[10px] dark:!text-[#9295A6] !text-banner-text'>INR/USDT</span></p>
                                     </div>
                                     <div className='mt-[12px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Limit:</p>
-                                        <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{currencyFormatter(item?.min_limit)} ~ ${currencyFormatter(item?.max_limit)}<span className='sm-text !text-[14px] !text-h-primary dark:!text-beta'>INR</span></p>
+                                        <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{`${currencyFormatter(truncateNumber(item?.min_limit, 2))} ~ ${currencyFormatter(truncateNumber(item?.max_limit, 2))}`}<span className='sm-text !text-[14px] !text-h-primary dark:!text-beta'>INR</span></p>
                                     </div>
                                     <div className='mt-[12px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Available:</p>
