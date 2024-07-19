@@ -10,7 +10,7 @@ interface activeSection {
   setShow: Function;
   type: string;
   hideVisibility?: boolean
-  sellerUser?:string
+  sellerUser?: string
 }
 
 const Successfull = (props: activeSection) => {
@@ -72,10 +72,10 @@ const Successfull = (props: activeSection) => {
         </div>
 
         {props?.type === "release" && (
-            <div className="flex items-center justify-center mt-8">
-              <Image src='/assets/profile/success-icon.svg' width={40} height={40} alt="success" />
-            </div>
-          )
+          <div className="flex items-center justify-center mt-8">
+            <Image src='/assets/profile/success-icon.svg' width={40} height={40} alt="success" />
+          </div>
+        )
         }
         <p className={`py-[20px] md:py-40 info-14-18 ${props?.type === "release" ? 'text-center' : ''}`}>
           {props?.type === "success"
@@ -97,10 +97,10 @@ const Successfull = (props: activeSection) => {
             >
               OK
             </button>
-            <button onClick={() => { router.push('/p2p/buy') }} className={`solid-button max-w-full w-full `}>
+            {props?.type === "release" && <button onClick={() => { router.push('/p2p/buy') }} className={`solid-button max-w-full w-full `}>
               Place another order
-          </button>
-        </div>
+            </button>}
+          </div>
         ) : (
           <div>
             <button

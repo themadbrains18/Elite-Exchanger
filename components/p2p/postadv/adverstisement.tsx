@@ -14,6 +14,7 @@ interface propsData {
   masterPayMethod?: any;
   userPaymentMethod?: any;
   tokenList?: any;
+  session?: any;
   assets?: any;
 }
 
@@ -381,7 +382,7 @@ const Adverstisement = (props: propsData) => {
         </div>
       )}
       {step === 2 && <PaymentMethod step={step} setStep={setStep} setPaymentMethod={setPaymentMethod} masterPayMethod={props.masterPayMethod} userPaymentMethod={props.userPaymentMethod} selectedAssets={selectedAssets} assetsBalance={assetsBalance} price={step1Data.price} />}
-      {step === 3 && <Response step={step} setStep={setStep} step1Data={step1Data} step2Data={step2Data} />}
+      {step === 3 && <Response step={step} setStep={setStep} step1Data={step1Data} step2Data={step2Data} session={props?.session}/>}
     </>
   );
 };

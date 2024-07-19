@@ -227,8 +227,8 @@ const EditPaymentMethod = (props: activeSection) => {
                     <div className={`flex gap-10 items-center ${isCheckboxDisabled(item.id) ? "disabled-text" : ""}`}>
                       <p className="sec-text !text-h-primary dark:!text-white !font-medium">{item?.pm_name}</p>
                       <Image src={`${item?.master_payment_method?.icon}`} alt="payment image" width={32} height={32} />
-                    </div>
                     <p className="md:block hidden sec-text !text-banner-text dark:!text-white">({item?.pmObject?.phonenumber})</p>
+                    </div>
                   </div>
                 );
               })}

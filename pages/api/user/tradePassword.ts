@@ -22,6 +22,10 @@ router
             let formData = AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
             // Retrieve the authorization token from the request headers.
             let token = req.headers.authorization;
+            
+            console.log(formData, req.headers.authorization,"=token");
+            
+
             // Call the API using a helper function and pass the necessary parameters.
             let data = await putData(`${process.env.NEXT_PUBLIC_APIURL}/user/trading-password`, JSON.parse(formData), token);
             // Respond with a 200 status and send the retrieved data.

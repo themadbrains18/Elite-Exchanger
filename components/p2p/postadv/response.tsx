@@ -23,6 +23,7 @@ interface activeSection {
   setStep: any;
   step1Data?: any;
   step2Data?: any;
+  session?: any;
 }
 
 const Response = (props: activeSection) => {
@@ -356,7 +357,7 @@ const Response = (props: activeSection) => {
 
       </form>
       {active &&
-        <TradingPasswordAds setActive={setActive} setDisable={setDisable} setShow={setShow} show={show} finalSubmitAds={finalSubmitAds} />
+        <TradingPasswordAds setActive={setActive} setDisable={setDisable} setShow={setShow} show={show} finalSubmitAds={finalSubmitAds} session={props?.session}/>
       }
 
     </>
