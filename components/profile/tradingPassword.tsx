@@ -219,8 +219,9 @@ const TradingPassword = (props: activeSection) => {
         setTimeout(() => {
           setEnable(1);
           props?.setEnable && props.setEnable(0);
-          props.setTradePassword(true);
-          props.setShow(false);
+          props.setTradePassword && props.setTradePassword(true);
+          props.setShow && props.setShow(false);
+          props?.setShowForgetPopup && props?.setShowForgetPopup(false)
           setDisabled(false);
         }, 3000);
         return true
@@ -440,7 +441,7 @@ const TradingPassword = (props: activeSection) => {
 
             </div>
 
-            <Link onClick={(e)=>{e.preventDefault(); setShowReset(false)}} className="sec-text text-[14px] md:text-[16px] !text-primary mt-2 inline-block" href="#">Forget trading password?</Link>
+          {!forgetPassword &&  <Link onClick={(e)=>{e.preventDefault(); setForgetPassword(true)}} className="sec-text text-[14px]  !text-primary mt-2 inline-block" href="#">Forget trading password?</Link>}
           </form>
         </div>
       }

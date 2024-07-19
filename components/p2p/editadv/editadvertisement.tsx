@@ -86,7 +86,7 @@ const EditAdverstisement = (props: propsData) => {
         });
         let data = await responseData.json();
         setLoading(false);
-        setInrPrice(truncateNumber(data?.rate, 4));
+        setInrPrice(truncateNumber(data?.rate, 6));
       }
       else {
         let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
@@ -102,7 +102,7 @@ const EditAdverstisement = (props: propsData) => {
           }),
         });
         let data = await responseData.json();
-        setInrPrice(truncateNumber(item?.price * data?.rate, 4));
+        setInrPrice(truncateNumber(item?.price * data?.rate, 6));
       }
 
 
@@ -313,7 +313,7 @@ const EditAdverstisement = (props: propsData) => {
                     onClick={() => {
                       setShow(2);
                       selectToken(selectedAssets);
-                      let currentPrice = truncateNumber(inrPrice, 2)
+                      let currentPrice = truncateNumber(inrPrice, 6)
                       setValue('price', currentPrice)
                     }}
                     type="button"
@@ -367,7 +367,7 @@ const EditAdverstisement = (props: propsData) => {
                         <div className='loader relative w-[35px] z-[2] h-[35px] top-0 right-0 border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
                         :
                         <p className="sec-title md:!text-[18px] !text-[14px]">
-                          ₹{" "}{currencyFormatter(truncateNumber(inrPrice, 2))}
+                          ₹{" "}{currencyFormatter(truncateNumber(inrPrice, 6))}
                         </p>
 
                     }
@@ -397,6 +397,8 @@ const EditAdverstisement = (props: propsData) => {
                       {errors?.price?.message}
                     </p>
                   )}
+                                    <p className="py-2 info-10-14 text-right">Bal: {truncateNumber(assetsBalance,6)}</p>
+
                 </div>
                 <button className="solid-button w-full text-center">
                   Next

@@ -23,7 +23,7 @@ router
             // Retrieve the authorization token from the request headers.
             let token = req.headers.authorization;
             
-            console.log(formData, req.headers.authorization,"=token");
+            // console.log(formData, req.headers.authorization,"=token");
             
 
             // Call the API using a helper function and pass the necessary parameters.
