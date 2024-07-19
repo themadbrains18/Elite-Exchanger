@@ -405,7 +405,7 @@ const PaymentMethod = (props: activeSection) => {
                 );
               })}
               {errors?.p_method && (
-                <p className="errorMessage">
+                <p className="errorMessage mt-3">
                   {errors?.p_method?.message}
                 </p>
               )}
