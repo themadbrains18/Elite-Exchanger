@@ -233,7 +233,7 @@ const EditPaymentMethod = (props: activeSection) => {
                 );
               })}
               {errors?.p_method && (
-                <p className="errorMessage asdasdasd">{errors?.p_method?.message}</p>
+                <p className="errorMessage mt-3">{errors?.p_method?.message}</p>
               )} 
               <div className="md:mt-50 mt-10">
                 <button type="button" className="outline-button border-primary text-primary max-w-full sm:max-w-[176px] w-full" onClick={() => {
