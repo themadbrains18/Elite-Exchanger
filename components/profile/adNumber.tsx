@@ -332,9 +332,9 @@ const AdNumber = (props: activeSection) => {
           toast.error(res?.data?.message, { autoClose: 2000 });
           setTimeout(() => {
             setBtnDisabled(false);
-            if (Ref.current) clearInterval(Ref.current);
-            setShowTime(false);
-            setStatuss(true);
+            // if (Ref.current) clearInterval(Ref.current);
+            // setShowTime(false);
+            // setStatuss(true);
             const inputElements = document.querySelectorAll(".input_wrapper input");
             inputElements.forEach((ele, index) => {
               (inputElements[index] as HTMLInputElement).value = ""
@@ -526,8 +526,36 @@ const AdNumber = (props: activeSection) => {
                         name="code6"
                       />
                     </div>
-                    <p className={` text-center lg:mt-[20px] md-text errorMessage ${otpMessage === '' ? 'hidden' : ''}`} >{otpMessage}</p>
+                    <p className={` text-center lg:mt-[10px] md-text errorMessage ${otpMessage === '' ? 'hidden' : ''}`} >{otpMessage}</p>
                   </div>
+                <div className="mt-2">
+                      <div className={`flex ${showTime === true ? '' : 'hidden'}`}>
+                        <p className={`info-10-14 px-2 text-start  md-text`}>Your OTP will expire within </p>
+                        <p className={`info-10-14 text-start md-text`}> {timeLeft}</p>
+                      </div>
+                      <div className="text-end">
+                        {isOtp === false &&
+                          <button
+                            type="button"
+                            className={`info-10-14 text-end  !text-primary ${disabled === true ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                            onClick={() => disabled === false ? sendOtp() : ''}
+                            disabled={disabled}
+                          >
+                            Send OTP
+                          </button>
+                        }
+                        {statuss &&
+                          <button
+                            type="button"
+                            className={`info-10-14 text-end  !text-primary ${disabled === true ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                            onClick={() => disabled === false ? sendOtp() : ''}
+                            disabled={disabled}
+                          >
+                            Resend OTP
+                          </button>
+                        }
+                      </div>
+                    </div>
                 </div>
                 <div className="flex gap-[20px]">
                   <button

@@ -73,6 +73,17 @@ const BuySellExpress = (props: propsData) => {
     }
   }, [])
 
+
+  console.log(paymentMethod,"=paymentMethod");
+  
+
+  useEffect(()=>{
+    console.log("inside heree");
+    
+    filterSellerAds(paymentMethod, selectedSecondToken);
+
+  },[amount])
+
   let {
     register,
     setValue,
@@ -421,6 +432,8 @@ const BuySellExpress = (props: propsData) => {
    * @param token 
    */
   const filterSellerAds = (id: string, token: any) => {
+    console.log(id,"==id");
+    
     setPaymentMethod(id);
     clearErrors("spend_amount")
     clearErrors("receive_amount")
@@ -443,13 +456,18 @@ const BuySellExpress = (props: propsData) => {
 
     }
     if (props?.posts && props?.posts.length > 0) {
+      console.log("inside this", props?.posts);
+      console.log("inside this2", token?.id);
+      
+
+
 
       let seller = props?.posts?.filter((item: any) => {
         return item?.token_id === token?.id && session?.user?.user_id !== item?.user_id
       })
 
       if (seller.length > 0) {
-        console.log("=here", amount);
+        // console.log("=here", amount);
 
         let nearestObject: any = null;
         let minDifference = Infinity;
@@ -468,7 +486,7 @@ const BuySellExpress = (props: propsData) => {
           })
 
           if (sellerPost.length > 0) {
-            console.log("here ia m ",spendAmount,amount);
+            // console.log("here ia m ",spendAmount,amount);
 
             if (spendAmount > 0 && (spendAmount < parseFloat(post.min_limit) || spendAmount > parseFloat(post.max_limit))) {
               flag = true;
@@ -491,6 +509,9 @@ const BuySellExpress = (props: propsData) => {
             }
           }
           else {
+            console.log("i am here");
+        
+            setUsdtToInr(0.00)
             setFinalPost({});
           }
         }
@@ -518,8 +539,9 @@ const BuySellExpress = (props: propsData) => {
                 nearestObject = item;
               }
             }
+            
           });
-          setPaymentMethod('')
+          // setPaymentMethod('')
           setError("spend_amount", {
             type: "custom",
             message: `Note: There's an order available in the range  ${nearestObject?.min_limit} - ${nearestObject?.max_limit}. Order within the range. `,
@@ -529,6 +551,9 @@ const BuySellExpress = (props: propsData) => {
       }
 
       else {
+        console.log("i am here2");
+        
+        setUsdtToInr(0.00)
         setFinalPost({});
       }
 
@@ -754,7 +779,7 @@ const BuySellExpress = (props: propsData) => {
                     Payment Method
                   </p>
                 </div>
-                <div className="mt-2 flex gap-2" >
+                <div className={`mt-2 flex gap-2 ${amount==0?'opacity-70 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}>
                   <FiliterSelectMenu
                     data={props.masterPayMethod}
                     placeholder="Select Payment Method"
@@ -762,6 +787,7 @@ const BuySellExpress = (props: propsData) => {
                     auto={false}
                     widthFull={true}
                     onPaymentMethodChange={filterSellerAds}
+                    // value={paymentMethod}
                   />
                 </div>
                 {errors?.p_method && (
@@ -898,7 +924,7 @@ const BuySellExpress = (props: propsData) => {
                     Payment Method
                   </p>
                 </div>
-                <div className="mt-2 flex gap-2">
+                <div className={`mt-2 flex gap-2`}>
                   <FiliterSelectMenu
                     data={props.masterPayMethod}
                     placeholder="Select Payment Method"
