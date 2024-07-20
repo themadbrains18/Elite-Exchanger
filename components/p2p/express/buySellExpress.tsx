@@ -111,7 +111,7 @@ const BuySellExpress = (props: propsData) => {
 
       let data = await responseData?.json();
 
-      setUsdtToInr(truncateNumber(data?.rate,6));
+      setUsdtToInr(truncateNumber(data?.rate, 6));
       setLoader(false)
 
       return data;
@@ -256,7 +256,7 @@ const BuySellExpress = (props: propsData) => {
         if (amount !== undefined) {
           let spend_amount: any = getValues('spend_amount') * data?.rate
           setReceivedAmount(spend_amount)
-          setValue('receive_amount', truncateNumber(spend_amount,6));
+          setValue('receive_amount', truncateNumber(spend_amount, 6));
         }
         else {
           setReceivedAmount(0.00)
@@ -421,7 +421,7 @@ const BuySellExpress = (props: propsData) => {
    * @param token 
    */
   const filterSellerAds = (id: string, token: any) => {
-
+    setPaymentMethod(id);
     clearErrors("spend_amount")
     clearErrors("receive_amount")
     setValue('p_method', id);
@@ -449,8 +449,8 @@ const BuySellExpress = (props: propsData) => {
       })
 
       if (seller.length > 0) {
-        console.log("=here");
-        
+        console.log("=here", amount);
+
         let nearestObject: any = null;
         let minDifference = Infinity;
         let flag = false;
@@ -468,8 +468,8 @@ const BuySellExpress = (props: propsData) => {
           })
 
           if (sellerPost.length > 0) {
-            console.log("here ia m ");
-            
+            console.log("here ia m ",spendAmount,amount);
+
             if (spendAmount > 0 && (spendAmount < parseFloat(post.min_limit) || spendAmount > parseFloat(post.max_limit))) {
               flag = true;
             }
@@ -478,12 +478,12 @@ const BuySellExpress = (props: propsData) => {
               setPaymentMethod(id);
               setFinalPost(post);
               setUsdtToInr(post?.price);
-              if(amount){
+              if (amount) {
 
-                // console.log("==here", amount,"post?.price",post?.price);
-                
+                console.log("==here", amount,"post?.price",post?.price);
+
                 let receiveAmount: any = amount / post?.price;
-                setValue('receive_amount', truncateNumber(receiveAmount,6));
+                setValue('receive_amount', truncateNumber(receiveAmount, 6));
 
               }
               clearErrors('spend_amount');
@@ -628,20 +628,26 @@ const BuySellExpress = (props: propsData) => {
                       step="any"
                       {...register('spend_amount')}
                       onChange={(e: any) => {
-
+                        
                         const value = e.target.value;
                         const regex = /^\d{0,11}(\.\d{0,2})?$/;
                         if (regex.test(value) || value === "") {
-                           
+                          
                           if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
                             setAmount(e?.target?.value);
+                            setValue("spend_amount", e?.target?.value);
                           }
                           let receiveAmount: any = parseFloat(e?.target?.value) / usdtToInr;
-                          setReceivedAmount(truncateNumber(receiveAmount,6));
-  
-                          setValue('receive_amount', truncateNumber(receiveAmount,6));
+                          setReceivedAmount(truncateNumber(receiveAmount, 6));
+
+                          setValue('receive_amount', truncateNumber(receiveAmount, 6));
                           clearErrors('spend_amount');
                           clearErrors('receive_amount');
+                          console.log(paymentMethod,"=paymentMethod",selectedSecondToken,"=selectedSecondToken")
+                            
+                          if (paymentMethod && selectedSecondToken) {
+                            filterSellerAds(paymentMethod, selectedSecondToken);
+                          }
                           if (Object.keys(finalPost).length > 0) {
                             if (finalPost?.max_limit < parseFloat(e?.target?.value)) {
                               setError("spend_amount", {
@@ -649,7 +655,7 @@ const BuySellExpress = (props: propsData) => {
                                 message: `Note: There's an order available in the range  ${finalPost?.min_limit} - ${finalPost?.max_limit}. Order within the range.`,
                               });
                             }
-  
+                          
                             let receiveAmount = parseFloat(e?.target?.value) / usdtToInr;
                             if (finalPost?.quantity < receiveAmount) {
                               setError("receive_amount", {
@@ -659,7 +665,7 @@ const BuySellExpress = (props: propsData) => {
                             }
                           }
                         } else {
-                            e.target.value = value.slice(0, -1);
+                          e.target.value = value.slice(0, -1);
                         }
 
                       }}
@@ -710,12 +716,12 @@ const BuySellExpress = (props: propsData) => {
                             setReceivedAmount(e?.target?.value);
                           }
                           let spendAmount: any = parseFloat(e.target.value) * usdtToInr;
-                          setAmount(truncateNumber(spendAmount,6));
-                          setValue('spend_amount', truncateNumber(spendAmount,2));
+                          setAmount(truncateNumber(spendAmount, 6));
+                          setValue('spend_amount', truncateNumber(spendAmount, 2));
                           clearErrors('receive_amount');
                           clearErrors('spend_amount')
                         } else {
-                            e.target.value = value.slice(0, -1);
+                          e.target.value = value.slice(0, -1);
                         }
 
                       }}
@@ -740,7 +746,7 @@ const BuySellExpress = (props: propsData) => {
 
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white sdasdasdsad">
-                    Estimated price: 1 {secondCurrency} = {currencyFormatter(Number(truncateNumber(Number(usdtToInr),6)))} INR
+                    Estimated price: 1 {secondCurrency} = {currencyFormatter(Number(truncateNumber(Number(usdtToInr), 6)))} INR
                   </p>
                 </div>
                 <div className="mt-5 flex gap-2">
@@ -748,7 +754,7 @@ const BuySellExpress = (props: propsData) => {
                     Payment Method
                   </p>
                 </div>
-                <div className="mt-2 flex gap-2">
+                <div className="mt-2 flex gap-2" >
                   <FiliterSelectMenu
                     data={props.masterPayMethod}
                     placeholder="Select Payment Method"
@@ -773,7 +779,7 @@ const BuySellExpress = (props: propsData) => {
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
 
                   <p className="sm-text dark:text-white">
-                    {filterAsset !== undefined ? currencyFormatter(truncateNumber(parseFloat(filterAsset?.balance),6)) : '0.0'}
+                    {filterAsset !== undefined ? currencyFormatter(truncateNumber(parseFloat(filterAsset?.balance), 6)) : '0.0'}
                   </p>
                 </div>
                 {/* First Currency Inputs */}
@@ -796,13 +802,13 @@ const BuySellExpress = (props: propsData) => {
                             setAmount(e?.target?.value);
                           }
                           let receiveAmount: any = parseFloat(e?.target?.value) * usdtToInr;
-                          setReceivedAmount(truncateNumber(receiveAmount,2));
+                          setReceivedAmount(truncateNumber(receiveAmount, 2));
                           // setReceivedAmount(parseFloat(e?.target?.value) * usdtToInr);
-                          setValue('receive_amount', truncateNumber(receiveAmount,6));
+                          setValue('receive_amount', truncateNumber(receiveAmount, 6));
                           clearErrors('spend_amount');
                           clearErrors('receive_amount');
                         } else {
-                            e.target.value = value.slice(0, -1);
+                          e.target.value = value.slice(0, -1);
                         }
                       }}
                       name="spend_amount"
@@ -851,12 +857,12 @@ const BuySellExpress = (props: propsData) => {
                             setReceivedAmount((e?.target?.value));
                           }
                           let spendAmount: any = parseFloat(e.target.value) / usdtToInr;
-                          setAmount(truncateNumber(spendAmount,6));
-                          setValue('spend_amount', truncateNumber(spendAmount,6));
+                          setAmount(truncateNumber(spendAmount, 6));
+                          setValue('spend_amount', truncateNumber(spendAmount, 6));
                           clearErrors('spend_amount');
                           clearErrors('receive_amount');
                         } else {
-                            e.target.value = value.slice(0, -1);
+                          e.target.value = value.slice(0, -1);
                         }
 
 
@@ -882,7 +888,7 @@ const BuySellExpress = (props: propsData) => {
 
                 <div className="mt-5 flex gap-2">
                   <div className=" flex items-center relative">
-                    <p className="sm-text dark:text-white">  Estimated price: 1 {secondCurrency}={currencyFormatter(Number(truncateNumber(Number(usdtToInr),6)))} INR</p>
+                    <p className="sm-text dark:text-white">  Estimated price: 1 {secondCurrency}={currencyFormatter(Number(truncateNumber(Number(usdtToInr), 6)))} INR</p>
 
                   </div>
                 </div>

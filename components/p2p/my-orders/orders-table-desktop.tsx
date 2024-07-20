@@ -41,7 +41,7 @@ const OrdersTableDesktop = (props: dataTypes) => {
         getAllOrders(itemOffset);
     }, [itemOffset, props?.active, props?.selectedToken, props?.startDate]);
 
-    console.log(session?.user.user_id)
+    // console.log(session?.user.user_id)
 
 
     const getAllOrders = async (itemOffset: number) => {

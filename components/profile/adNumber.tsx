@@ -465,50 +465,25 @@ const AdNumber = (props: activeSection) => {
                 <div className="py-30 md:py-40">
                   <div className="flex flex-col mb-[15px] md:mb-20 gap-20">
                     <div>
-                      <label className="sm-text mb-[6px]">
+                      {/* <label className="sm-text mb-[6px]">
                         {props?.type === "email"
                           ? "Enter Email Address"
                           : "Enter Mobile Number"}
-                      </label>
+                      </label> */}
                       <input
                         type="text"
                         {...register("uname")}
                         name="uname"
-                        placeholder="Enter text"
+                        placeholder={props?.type === "email"
+                          ? "Enter Email Address"
+                          : "Enter Mobile Number"}
                         className="sm-text input-cta2 w-full"
                       />
                       {errors.uname && (
                         <p className="errorMessage">{errors.uname.message}</p>
                       )}
                     </div>
-                    <div>
-                      <div className={`flex ${showTime === true ? '' : 'hidden'}`}>
-                        <p className={`info-10-14 px-2 text-start  md-text`}>Your OTP will expire within </p>
-                        <p className={`info-10-14 text-start md-text`}> {timeLeft}</p>
-                      </div>
-                      <div className="text-end">
-                        {isOtp === false &&
-                          <button
-                            type="button"
-                            className={`info-10-14 text-end  !text-primary ${disabled === true ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                            onClick={() => disabled === false ? sendOtp() : ''}
-                            disabled={disabled}
-                          >
-                            Send OTP
-                          </button>
-                        }
-                        {statuss &&
-                          <button
-                            type="button"
-                            className={`info-10-14 text-end  !text-primary ${disabled === true ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                            onClick={() => disabled === false ? sendOtp() : ''}
-                            disabled={disabled}
-                          >
-                            Resend OTP
-                          </button>
-                        }
-                      </div>
-                    </div>
+                   
 
                   </div>
                   <div className="flex flex-col  gap-20">
