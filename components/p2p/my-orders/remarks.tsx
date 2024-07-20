@@ -87,7 +87,7 @@ const Remarks = (props: propsData) => {
         }
         else {
             if (Ref.current) clearInterval(Ref.current);
-            console.log(props.userOrder, "=props.userOrder");
+            // console.log(props.userOrder, "=props.userOrder");
 
             if (props.userOrder?.status === 'isProcess') {
                 // return;
