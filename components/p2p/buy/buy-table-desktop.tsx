@@ -278,11 +278,11 @@ const BuyTableDesktop = (props: activeSection) => {
                     </td>
 
                     <td>
-                      <p className="info-14-18 dark:text-white  ">{currencyFormatter(truncateNumber(item?.price,2))} INR</p>
+                      <p className="info-14-18 dark:text-white  ">{currencyFormatter(truncateNumber(item?.price,6))} INR</p>
                     </td>
 
                     <td>
-                      <p className="info-14-18 dark:text-white  ">{`${currencyFormatter(truncateNumber(item?.min_limit, 2))} ~ ${currencyFormatter(truncateNumber(item?.max_limit, 2))} INR`}</p>
+                      <p className="info-14-18 dark:text-white  ">{`${currencyFormatter(truncateNumber(item?.min_limit, 6))} ~ ${currencyFormatter(truncateNumber(item?.max_limit, 6))} INR`}</p>
                     </td>
 
                     <td>

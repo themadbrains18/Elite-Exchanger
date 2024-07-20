@@ -280,7 +280,7 @@ const [disable, setDisable]= useState(false)
                                                 <p className={`info-14-18 !text-buy`}>BUY</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(truncateNumber(item.price, 2))} INR</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(truncateNumber(item.price, 6))} INR</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(parseFloat(item?.quantity), 6)}  {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
