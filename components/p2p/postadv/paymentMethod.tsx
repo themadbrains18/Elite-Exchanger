@@ -145,9 +145,6 @@ const PaymentMethod = (props: activeSection) => {
 
   const onHandleSubmit = async (data: any) => {
 
-    console.log("data",data);
-    
-
     if (data.p_method.length === 0 || data.p_method[0] === "false") {
       setError("p_method", {
         type: "custom",
@@ -275,9 +272,7 @@ const PaymentMethod = (props: activeSection) => {
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
-    console.log(value, checked, "==checked");
-
-
+ 
     if (checked) {
 
       if (selectedMethods.length < 5) {

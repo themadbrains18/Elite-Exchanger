@@ -18,6 +18,8 @@ interface activeSection {
   session?: any;
   setEnable?: any;
   tradePassword?: any
+  setShowForgetPopup?: any
+  showForgetPopup?: any
 }
 
 type UserSubmitForm = {
@@ -37,21 +39,7 @@ type UserSubmitForm = {
 //     .string()
 //     .oneOf([yup.ref("new_password")], "Passwords must match"),
 // });
-const schema2 = yup.object().shape({
-  exist_password: yup.boolean(),
-  old_password: yup.string().when('exist_password', {
-    is: true,
-    then(schema) {
-      return schema.required('Must enter old password.');
-    },
-  }),
-  new_password: yup
-    .string()
-    .required("This field is required.").min(8,"Password must be at least of '8' characters.").max(32,"Password length maximum '32' character"),
-  confirmPassword: yup
-    .string().required("This field is required.")
-    .oneOf([yup.ref("new_password")], "Passwords must match."),
-});
+
 
 // .when('exist_password', {
 //   is: true,
@@ -70,7 +58,23 @@ const TradingPassword = (props: activeSection) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [showReset, setShowReset] = useState(true);
+  const [forgetPassword, setForgetPassword] = useState(props?.showForgetPopup||false);
 
+  const schema2 = yup.object().shape({
+    exist_password: yup.boolean(),
+    old_password: yup.string().when('exist_password', {
+      is: true,
+      then(schema) {
+        return forgetPassword ? schema.notRequired() : schema.required('Must enter old password.');
+      },
+    }),
+    new_password: yup
+      .string()
+      .required("This field is required.").min(8,"Password must be at least of '8' characters.").max(32,"Password length maximum '32' character"),
+    confirmPassword: yup
+      .string().required("This field is required.")
+      .oneOf([yup.ref("new_password")], "Passwords must match."),
+  });
   let {
     register,
     setValue,
@@ -85,6 +89,10 @@ const TradingPassword = (props: activeSection) => {
     resolver: yupResolver(schema2),
   });
 
+
+  console.log(forgetPassword,"=forgetPassword");
+  
+
   const onHandleSubmit = async (data: any) => {
     try {
 
@@ -93,7 +101,7 @@ const TradingPassword = (props: activeSection) => {
           ? props.session?.user.email
           : props.session?.user?.number;
       let obj;
-      if ((props?.session?.user?.tradingPassword !== null && props.tradePassword === false)) {
+      if ((props?.session?.user?.tradingPassword !== null && props.tradePassword === false && !forgetPassword)) {
         if (data?.old_password === data?.new_password) {
           setError("new_password", {
             type: "custom",
@@ -170,7 +178,7 @@ const TradingPassword = (props: activeSection) => {
           : props.session?.user?.number;
       let request;
 
-      if ((props?.session?.user?.tradingPassword !== null && props.tradePassword === true)) {
+      if ((props?.session?.user?.tradingPassword !== null && props.tradePassword === true && !forgetPassword)) {
         request = {
           username: username,
           old_password: formData?.old_password,
@@ -210,7 +218,7 @@ const TradingPassword = (props: activeSection) => {
         toast.success(response.data.message, { autoClose: 2000 });
         setTimeout(() => {
           setEnable(1);
-          props.setEnable(0);
+          props?.setEnable && props.setEnable(0);
           props.setTradePassword(true);
           props.setShow(false);
           setDisabled(false);
@@ -233,7 +241,7 @@ const TradingPassword = (props: activeSection) => {
   }
 
   useEffect(() => {
-    if (props?.session?.user?.tradingPassword === null && props.tradePassword === false) {
+    if (props?.session?.user?.tradingPassword === null && props.tradePassword === false ) {
       setValue('exist_password', false);
     }
     else {
@@ -256,7 +264,8 @@ const TradingPassword = (props: activeSection) => {
 
   const closePopup = () => {
     props?.setShow(false);
-    props.setEnable(0);
+   props?.setEnable&& props.setEnable(0);
+   props?.setShowForgetPopup && props?.setShowForgetPopup(false)
   }
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
@@ -269,12 +278,13 @@ const TradingPassword = (props: activeSection) => {
         <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <div className="flex items-center justify-between ">
             <p className="sec-title">
-              {(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? "Add" : "Edit"} Trading Password
+              {(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? "Add" : forgetPassword? "Forget": "Edit"} Trading Password
             </p>
             <svg
               onClick={() => {
                 props?.setShow(false);
-                props.setEnable(0);
+                props?.setEnable&& props.setEnable(0);
+                props?.setShowForgetPopup && props?.setShowForgetPopup(false)
                 //   props.setActive(0);
               }}
               enableBackground="new 0 0 60.963 60.842"
@@ -311,7 +321,7 @@ const TradingPassword = (props: activeSection) => {
               </p>
               <div className="mt-[30px] ">
                 {
-                  showReset && (
+                  showReset && !forgetPassword && (
                     <div className={` md:flex-row flex-col gap-[30px] ${(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? 'hidden' : "flex"}`}>
                       <div className=" w-full">
                         <p className="sm-text mb-[10px]">Old Trading Password</p>
@@ -414,7 +424,8 @@ const TradingPassword = (props: activeSection) => {
                 className="solid-button2 w-full "
                 onClick={() => {
                   props?.setShow(false);
-                  props.setEnable(0)
+                  props?.setEnable&& props.setEnable(0);
+                  props?.setShowForgetPopup && props?.setShowForgetPopup(false)
                 }}
               >
                 Cancel

@@ -12,6 +12,7 @@ interface propsData {
   userPaymentMethod?: any;
   tokenList?: any;
   assets?: any;
+  session?:any
 }
 
 const Postad = (props: propsData) => {
@@ -31,7 +32,7 @@ const Postad = (props: propsData) => {
   return (
     <P2pLayout>
       {(session?.user?.kyc === 'approve' ||  session?.user?.TwoFA === true || (session?.user?.tradingPassword !== '' || session?.user?.tradingPassword !== null) || (session?.user?.email !== '' || session?.user?.email !== null)) && 
-        <Adverstisement masterPayMethod={props.masterPayMethod} userPaymentMethod={props.userPaymentMethod} tokenList={props.tokenList} assets={props.assets} />
+        <Adverstisement masterPayMethod={props.masterPayMethod} userPaymentMethod={props.userPaymentMethod} tokenList={props.tokenList} assets={props.assets} session={props?.session}/>
       }
 
       {/* {(session?.user?.kyc !== 'approve' || session?.user?.TwoFA === false || (session?.user?.tradingPassword === '' || session?.user?.tradingPassword === null) || (session?.user?.email === '' || session?.user?.email === null)) &&
@@ -80,7 +81,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       props: {
         providers: providers,
-        sessions: session,
+        session: session,
         masterPayMethod: masterPaymentMethod?.data || [],
         userPaymentMethod: userPaymentMethod?.data || [],
         tokenList: tokenList?.data || [],

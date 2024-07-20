@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { signOut } from 'next-auth/react'
 import Deposit from "../snippets/deposit";
 import { currencyFormatter } from "../snippets/market/buySellCard";
+import { truncateNumber } from "@/libs/subdomain";
 
 interface propsData {
   assets: any;
@@ -47,7 +48,7 @@ const Banner = (props: propsData): any => {
             <div className="mt-30 flex gap-10">
               <p className="md-heading dark:text-white">
                 {
-                  show == true ? <span> ${props.assets !=0 ? currencyFormatter(props?.assets.toFixed(4)) :'0.00' }</span> :  <span>$ {props.assets !=0 ?star.repeat(props.assets.toFixed(4)?.length):star.repeat(4)}</span>
+                  show == true ? <span> ${props.assets !=0 ? currencyFormatter(truncateNumber(props?.assets,6)) :'0.00' }</span> :  <span>$ {props.assets !=0 ?star.repeat(props.assets.toFixed(6)?.length):star.repeat(4)}</span>
                 }
               </p>
               <div className="p-[5px] rounded flex gap-[10px] items-center cursor-pointer" onClick={() => { setShow(!show) }}>
@@ -70,7 +71,7 @@ const Banner = (props: propsData): any => {
               </div>
               <div className="flex items-center gap-10">
                 <IconsComponent type="totalDepositBlue" hover={false} active={false} />
-                <p className="sm-text dark:!text-white">${currencyFormatter(props?.depositList?.toFixed(6))}</p>
+                <p className="sm-text dark:!text-white">${currencyFormatter(truncateNumber(props?.depositList,6))}</p>
               </div>
             </div>
             <div className="flex items-center  justify-between gap-5 flex-wrap">
@@ -80,7 +81,7 @@ const Banner = (props: propsData): any => {
               </div>
               <div className="flex items-center gap-10">
                 <IconsComponent type="totalWithdrawBlue" hover={false} active={false} />
-                <p className="sm-text dark:!text-white">${currencyFormatter(props?.withdrawList?.toFixed(6))}</p>
+                <p className="sm-text dark:!text-white">${currencyFormatter(truncateNumber(props?.withdrawList,6))}</p>
               </div>
             </div>
           </div>

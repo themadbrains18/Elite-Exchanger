@@ -4,6 +4,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import clickOutSidePopupClose from "@/components/snippets/clickOutSidePopupClose";
 import Image from "next/image";
+import TradingPassword from "@/components/profile/tradingPassword";
+
 
 interface activeSection {
     setActive: Function,
@@ -11,6 +13,7 @@ interface activeSection {
     finalSubmitAds: Function;
     show: any;
     setDisable?:Function
+    session?:any
 }
 
 const TradingPasswordAds = (props: activeSection) => {
@@ -19,7 +22,7 @@ const TradingPasswordAds = (props: activeSection) => {
     const [message, setMessage] = useState("");
     const [showNew, setShowNew] = useState(false);
     const [disable, setDisabled] = useState(false)
-
+    const [showForgetPopup, setShowForgetPopup] = useState(false)
 
     const closePopup = () => {
         props?.setShow(false);
@@ -36,6 +39,11 @@ const TradingPasswordAds = (props: activeSection) => {
                 className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props?.show ? "opacity-80 visible" : "opacity-0 invisible"
                     }`}
             ></div>
+{
+    showForgetPopup
+    ? 
+    <TradingPassword showForgetPopup={showForgetPopup} setShow={props?.setShow} setShowForgetPopup={setShowForgetPopup} session={props?.session}/>
+    :
             <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
                 <div className="flex items-center justify-between ">
                     <p className="sec-title">Enter Trading Passsword</p>
@@ -71,17 +79,6 @@ const TradingPasswordAds = (props: activeSection) => {
                 <div className="py-30 md:py-40 ">
                     <div className="flex flex-col mb-[15px] md:mb-10 gap-20">
                         <label className="sm-text">Enter Trading Password</label>
-                        {/* <div className="flex gap-10 justify-center items-center input_wrapper">
-                            <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
-                            <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
-                            <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code3" />
-                            <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code4" />
-                            <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code5" />
-                            <input type="text" autoComplete="off" className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary" name="code6" onChange={(e) => { 
-                                
-                             }} />
-                        </div> */}
-
                         <div className='relative'>
                             <input
                                 type={`${showNew === true ? "text" : "password"}`}
@@ -89,7 +86,7 @@ const TradingPasswordAds = (props: activeSection) => {
                                 maxLength={32}
                                 placeholder="Enter new password"
                                 className="sm-text input-cta2 w-full"
-                                onChange={(e) => { setPassCode(e.target.value) }}
+                                onChange={(e) => { setPassCode(e.target.value); setMessage('') }}
                             />
                             <Image
                                 src={`/assets/register/${showNew === true ? "show.svg" : "hide.svg"}`}
@@ -103,9 +100,11 @@ const TradingPasswordAds = (props: activeSection) => {
                             />
                         </div>
                     </div>
+                    <button onClick={(e)=>{e.preventDefault(); setShowForgetPopup(true)}} className="sec-text text-[14px]  !text-primary  inline-block" >Forget trading password?</button>
                     <p className="errorMessage">
                         {message}
                     </p>
+
                 </div>
 
                 <button disabled={disable} className={`solid-button w-full ${disable && 'cursor-not-allowed'}`} onClick={(e) => {
@@ -135,6 +134,9 @@ const TradingPasswordAds = (props: activeSection) => {
                     }
                     Submit</button>
             </div>
+}
+            
+            
         </>
 
     );
