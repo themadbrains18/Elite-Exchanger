@@ -18,9 +18,13 @@ export const config = {
 router.get(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         // Retrieve the authorization token from the request headers.
-        let token = req.headers.authorization;
+        // let token = req.headers.authorization;
+        console.log(req.query,"=req.query");
+        
+        let {user_id  } = req.query;
+
         // Call the API using a helper function and pass the necessary parameters.
-        let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/post/get/all`, token);
+        let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/post/get/all/${user_id}`);
         // Respond with a 200 status and send the retrieved data.
         return res.status(200).send({ data });
     } catch (error: any) {

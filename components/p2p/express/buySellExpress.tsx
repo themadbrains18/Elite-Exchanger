@@ -74,13 +74,15 @@ const BuySellExpress = (props: propsData) => {
   }, [])
 
 
-  console.log(paymentMethod,"=paymentMethod");
+  // console.log(paymentMethod,"=paymentMethod");
   
 
   useEffect(()=>{
-    console.log("inside heree");
-    
-    filterSellerAds(paymentMethod, selectedSecondToken);
+    // console.log("inside heree");
+    if(active1===1){
+      filterSellerAds(paymentMethod, selectedSecondToken);
+
+    }
 
   },[amount])
 
@@ -146,6 +148,7 @@ const BuySellExpress = (props: propsData) => {
 
     clearErrors("spend_amount")
     clearErrors("receive_amount")
+    setPaymentMethod('')
 
     reset()
     if (active1 === 1) {
@@ -192,7 +195,7 @@ const BuySellExpress = (props: propsData) => {
         // }).then(response => response.json());
 
         let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
-        await getUsdtToInrPrice(asset);
+        // await getUsdtToInrPrice(asset);
         setChangeSymbol(false);
 
       }
@@ -262,7 +265,7 @@ const BuySellExpress = (props: propsData) => {
         let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
         let data = await getUsdtToInrPrice(asset);
 
-        console.log(amount, "=amount", getValues('spend_amount'));
+        // console.log(amount, "=amount", getValues('spend_amount'));
 
         if (amount !== undefined) {
           let spend_amount: any = getValues('spend_amount') * data?.rate
@@ -289,7 +292,7 @@ const BuySellExpress = (props: propsData) => {
         });
         currentPrice = token[0]?.price * data?.rate;
         setUsdtToInr(currentPrice);
-        console.log(currentPrice, "==current");
+        // console.log(currentPrice, "==current");
 
         // if (amount !== undefined) {
         //   let spend_amount: any = amount * data?.rate
@@ -322,11 +325,11 @@ const BuySellExpress = (props: propsData) => {
       // p2p/postad
       if (active1 === 2) {
 
-        console.log(data, "==daa");
+        // console.log(data, "==daa");
 
 
         let pmMethod = props.masterPayMethod.filter((item: any) => item?.id === pmId)
-        console.log(pmMethod);
+        // console.log(pmMethod);
 
 
         if (filterAsset?.balance == undefined) {
@@ -432,7 +435,6 @@ const BuySellExpress = (props: propsData) => {
    * @param token 
    */
   const filterSellerAds = (id: string, token: any) => {
-    console.log(id,"==id");
     
     setPaymentMethod(id);
     clearErrors("spend_amount")
@@ -455,9 +457,11 @@ const BuySellExpress = (props: propsData) => {
       }
 
     }
+    console.log("hNJII",props?.posts);
+    
     if (props?.posts && props?.posts.length > 0) {
       console.log("inside this", props?.posts);
-      console.log("inside this2", token?.id);
+      // console.log("inside this2", token?.id);
       
 
 
@@ -467,7 +471,7 @@ const BuySellExpress = (props: propsData) => {
       })
 
       if (seller.length > 0) {
-        // console.log("=here", amount);
+        console.log("=here", amount);
 
         let nearestObject: any = null;
         let minDifference = Infinity;
@@ -498,7 +502,7 @@ const BuySellExpress = (props: propsData) => {
               setUsdtToInr(post?.price);
               if (amount) {
 
-                console.log("==here", amount,"post?.price",post?.price);
+                // console.log("==here", amount,"post?.price",post?.price);
 
                 let receiveAmount: any = amount / post?.price;
                 setValue('receive_amount', truncateNumber(receiveAmount, 6));
@@ -509,7 +513,7 @@ const BuySellExpress = (props: propsData) => {
             }
           }
           else {
-            console.log("i am here");
+            // console.log("i am here");
         
             setUsdtToInr(0.00)
             setFinalPost({});
@@ -551,7 +555,7 @@ const BuySellExpress = (props: propsData) => {
       }
 
       else {
-        console.log("i am here2");
+        // console.log("i am here2");
         
         setUsdtToInr(0.00)
         setFinalPost({});
@@ -592,7 +596,7 @@ const BuySellExpress = (props: propsData) => {
       setFilterAsset(asset[0]);
     }
   }
-
+  // console.log(amount,"amount")
   return (
     <>
 
@@ -655,20 +659,27 @@ const BuySellExpress = (props: propsData) => {
                       onChange={(e: any) => {
                         
                         const value = e.target.value;
-                        const regex = /^\d{0,11}(\.\d{0,2})?$/;
+                        const regex = /^\d{0,11}(\.\d{0,6})?$/;
                         if (regex.test(value) || value === "") {
                           
-                          if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
+                          if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                             setAmount(e?.target?.value);
                             setValue("spend_amount", e?.target?.value);
                           }
-                          let receiveAmount: any = parseFloat(e?.target?.value) / usdtToInr;
+                          console.log(parseFloat(e?.target?.value),usdtToInr,"=dfjdhjk");
+                          
+                          let receiveAmount: any = e?.target?.value / usdtToInr;
+                          if (/(\.\d*99\d*)$/.test(receiveAmount)) {
+                            receiveAmount = receiveAmount?.toFixed(5);
+                            // console.log((spendAmount)?.toFixed(),"=jkhkjhsjk");
+                            
+                          }
                           setReceivedAmount(truncateNumber(receiveAmount, 6));
 
                           setValue('receive_amount', truncateNumber(receiveAmount, 6));
                           clearErrors('spend_amount');
                           clearErrors('receive_amount');
-                          console.log(paymentMethod,"=paymentMethod",selectedSecondToken,"=selectedSecondToken")
+                          // console.log(paymentMethod,"=paymentMethod",selectedSecondToken,"=selectedSecondToken")
                             
                           if (paymentMethod && selectedSecondToken) {
                             filterSellerAds(paymentMethod, selectedSecondToken);
@@ -735,14 +746,26 @@ const BuySellExpress = (props: propsData) => {
                       onChange={(e: any) => {
 
                         const value = e.target.value;
-                        const regex = /^\d{0,10}(\.\d{0,6})?$/;
+                        const regex = /^\d{0,11}(\.\d{0,6})?$/;
+
+                        
                         if (regex.test(value) || value === "") {
+
+                          
                           if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                             setReceivedAmount(e?.target?.value);
                           }
                           let spendAmount: any = parseFloat(e.target.value) * usdtToInr;
+                          
+                         
+
+                          if (/(\.\d*99\d*)$/.test(spendAmount)) {
+                            spendAmount = spendAmount?.toFixed();
+                            // console.log((spendAmount)?.toFixed(),"=jkhkjhsjk");
+                            
+                          }
                           setAmount(truncateNumber(spendAmount, 6));
-                          setValue('spend_amount', truncateNumber(spendAmount, 2));
+                          setValue('spend_amount', truncateNumber(spendAmount, 6));
                           clearErrors('receive_amount');
                           clearErrors('spend_amount')
                         } else {
@@ -779,7 +802,9 @@ const BuySellExpress = (props: propsData) => {
                     Payment Method
                   </p>
                 </div>
-                <div className={`mt-2 flex gap-2 ${amount==0?'opacity-70 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}>
+           
+                <div className={`mt-2 flex gap-2 ${(amount == undefined || isNaN(amount) ||amount==0)?'opacity-70 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}>
+              
                   <FiliterSelectMenu
                     data={props.masterPayMethod}
                     placeholder="Select Payment Method"
@@ -787,6 +812,7 @@ const BuySellExpress = (props: propsData) => {
                     auto={false}
                     widthFull={true}
                     onPaymentMethodChange={filterSellerAds}
+                    resetValue={paymentMethod==""?true:false}
                     // value={paymentMethod}
                   />
                 </div>
@@ -828,7 +854,7 @@ const BuySellExpress = (props: propsData) => {
                             setAmount(e?.target?.value);
                           }
                           let receiveAmount: any = parseFloat(e?.target?.value) * usdtToInr;
-                          setReceivedAmount(truncateNumber(receiveAmount, 2));
+                          setReceivedAmount(truncateNumber(receiveAmount, 6));
                           // setReceivedAmount(parseFloat(e?.target?.value) * usdtToInr);
                           setValue('receive_amount', truncateNumber(receiveAmount, 6));
                           clearErrors('spend_amount');
@@ -877,9 +903,9 @@ const BuySellExpress = (props: propsData) => {
                       onChange={(e: any) => {
 
                         const value = e.target.value;
-                        const regex = /^\d{0,10}(\.\d{0,2})?$/;
+                        const regex = /^\d{0,10}(\.\d{0,6})?$/;
                         if (regex.test(value) || value === "") {
-                          if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
+                          if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                             setReceivedAmount((e?.target?.value));
                           }
                           let spendAmount: any = parseFloat(e.target.value) / usdtToInr;

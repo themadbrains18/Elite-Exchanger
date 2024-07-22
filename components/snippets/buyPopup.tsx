@@ -242,11 +242,11 @@ const BuyPopup = (props: activeSection) => {
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Limit :</p>
-                  <p className="sm-text w-full">{currencyFormatter(truncateNumber(props?.selectedPost?.min_limit,2))} INR ~ {currencyFormatter(truncateNumber(props?.selectedPost?.max_limit,2))} INR</p>
+                  <p className="sm-text w-full">{currencyFormatter(truncateNumber(props?.selectedPost?.min_limit,6))} INR ~ {currencyFormatter(truncateNumber(props?.selectedPost?.max_limit,6))} INR</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Price :</p>
-                  <p className="sm-text w-full">{currencyFormatter(truncateNumber(props?.selectedPost?.price,2))} INR</p>
+                  <p className="sm-text w-full">{currencyFormatter(truncateNumber(props?.selectedPost?.price,6))} INR</p>
                 </div>
                 <div className="flex md:flex-row flex-col gap-[5px] justify-between py-[10px] md:first:pt-0 md:last:pb-0 ">
                   <p className="dark:!text-grey-v-1 !text-[#232530] footer-text !font-medium w-full">Payment Methods :</p>
@@ -274,7 +274,7 @@ const BuyPopup = (props: activeSection) => {
                   <div className="flex items-center ">
                     <div className="max-w-full md:max-w-[315px] w-full">
                       <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   step={0.000001} id="spendamount" {...register('spend_amount')} name="spend_amount" value={spendAmount} onChange={(e: any) => {
-                        if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
+                        if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                           setSpendAmount(e?.target?.value);
                         }
                         // setSpendAmount(e.target.value);
@@ -303,9 +303,9 @@ const BuyPopup = (props: activeSection) => {
                           setReceiveAmount(e?.target?.value);
                         }
                         let spendAmount: any = props?.selectedPost?.price * e.target.value;
-                        setSpendAmount(truncateNumber(spendAmount,2));
+                        setSpendAmount(truncateNumber(spendAmount,6));
                         // setReceiveAmount(e.target.value);
-                        setValue('spend_amount', truncateNumber(spendAmount,2));
+                        setValue('spend_amount', truncateNumber(spendAmount,6));
                         clearErrors('spend_amount')
                         clearErrors('receive_amount')
                       }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full dark:text-white" placeholder="0" />

@@ -47,6 +47,10 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
   let userAssets: any = [];
   let allPosts: any = [];
+  allPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/all?user_id=${session?.user?.user_id}`, {
+    method: "GET",
+  
+  }).then(response => response.json());
   if (session) {
     userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${session?.user?.user_id}`, {
       method: "GET",
@@ -55,12 +59,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     }).then(response => response.json());
 
-    allPosts = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/all`, {
-      method: "GET",
-      headers: {
-        "Authorization": session?.user?.access_token
-      },
-    }).then(response => response.json());
+ 
   }
 
   // console.log(userAssets,'-----------------userAssets');

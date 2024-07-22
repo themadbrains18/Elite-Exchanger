@@ -95,7 +95,7 @@ const Adverstisement = (props: propsData) => {
         let data = await responseData.json();
         setLoading(false);
         setInrPrice(data?.rate);
-        setValue('price', truncateNumber( data?.rate,2));
+        setValue('price', truncateNumber( data?.rate,6));
       }
       else {
         // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
@@ -117,7 +117,7 @@ const Adverstisement = (props: propsData) => {
         setLoading(false);
         setInrPrice(item?.price * data?.rate);
         let price: any = item?.price * data?.rate
-        setValue('price', truncateNumber( inrPrice,2));
+        setValue('price', truncateNumber( inrPrice,6));
       }
 
       setSelectedAssets(item);
@@ -298,7 +298,7 @@ const Adverstisement = (props: propsData) => {
                     onClick={() => {
                       setShow(2);
                       selectToken(selectedAssets);
-                      let currentPrice = truncateNumber(inrPrice,2)
+                      let currentPrice = truncateNumber(inrPrice,6)
                       setValue('price', currentPrice)
                     }}
                     type="button"
@@ -341,7 +341,7 @@ const Adverstisement = (props: propsData) => {
                   <div className="flex items-center justify-between gap-2 pb-[15px] border-b border-grey-v-1 dark:border-opacity-20">
                     <p className="info-14-18 dark:!text-white">Your Price</p>
                     {loading === true ? <div className='loader relative w-[35px] z-[2] h-[35px] top-0 right-0 border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
-                      : <p className="sec-title md:!text-[18px] !text-[14px]">₹ {currencyFormatter(truncateNumber( inrPrice,2))}</p>
+                      : <p className="sec-title md:!text-[18px] !text-[14px]">₹ {currencyFormatter(truncateNumber( inrPrice,6))}</p>
                     }
 
                   </div>
@@ -354,7 +354,7 @@ const Adverstisement = (props: propsData) => {
                     <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} 
                       step={0.000001} {...register('price', { required: true })} name="price" disabled={show === 2 ? true : false} placeholder="Enter Amount" className="py-[14px] px-[15px] border rounded-5 border-grey-v-1 mt-[10px] w-full bg-[transparent] dark:border-opacity-20 outline-none info-16-18"  onChange={(e) => {
                         const value = e.target.value;
-                        const regex = /^\d{0,10}(\.\d{0,2})?$/;
+                        const regex = /^\d{0,10}(\.\d{0,6})?$/;
                         if (regex.test(value) || value === "") {
                               console.log("ok");
                               
