@@ -74,10 +74,10 @@ const TradingPassword = (props: activeSection) => {
     }),
     new_password: yup
       .string()
-      .required("This field is required.").min(8,"Password must be at least of '8' characters.").max(32,"Password length maximum '32' character"),
+      .required("This field is required.").min(8,"Password must be at least of '8' characters.").max(32,"Password length maximum '32' character").matches(/^\S*$/, "Whitespaces are not allowed."),
     confirmPassword: yup
       .string().required("This field is required.")
-      .oneOf([yup.ref("new_password")], "Passwords must match."),
+      .oneOf([yup.ref("new_password")], "Passwords must match.").matches(/^\S*$/, "Whitespaces are not allowed."),
   });
   let {
     register,
