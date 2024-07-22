@@ -40,7 +40,7 @@ const Successfull = (props: activeSection) => {
 
             {props?.type === "success"
               ? "Payment Method"
-              : props?.type === "release" ? `Assets ${props?.sellerUser || 'Released'}`
+              : props?.type === "release" ? `Assets ${props?.sellerUser || 'released'}`
                 : "Risk Warning"}
 
           </p>
@@ -83,7 +83,6 @@ const Successfull = (props: activeSection) => {
             : props?.type === "release" ? `Assets has been ${props?.sellerUser || 'released'} successfully.`
               : "Before releasing the crypto, please confirm that you have received the payment and have checked if the amount and payers name match those of the order if payment information is inconsistent or there arise a dispute , please immediatly contact the customer support and do not release the crypto."}
         </p>
-
 
         {props?.type === "success" || props?.type === "release" ? (
           <div className="flex gap-3">
