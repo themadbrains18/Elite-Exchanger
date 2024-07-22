@@ -457,10 +457,10 @@ const BuySellExpress = (props: propsData) => {
       }
 
     }
-    console.log("hNJII",props?.posts);
+    // console.log("hNJII",props?.posts);
     
     if (props?.posts && props?.posts.length > 0) {
-      console.log("inside this", props?.posts);
+      // console.log("inside this", props?.posts);
       // console.log("inside this2", token?.id);
       
 
@@ -471,7 +471,7 @@ const BuySellExpress = (props: propsData) => {
       })
 
       if (seller.length > 0) {
-        console.log("=here", amount);
+        // console.log("=here", amount);
 
         let nearestObject: any = null;
         let minDifference = Infinity;
@@ -666,7 +666,7 @@ const BuySellExpress = (props: propsData) => {
                             setAmount(e?.target?.value);
                             setValue("spend_amount", e?.target?.value);
                           }
-                          console.log(parseFloat(e?.target?.value),usdtToInr,"=dfjdhjk");
+                          // console.log(parseFloat(e?.target?.value),usdtToInr,"=dfjdhjk");
                           
                           let receiveAmount: any = e?.target?.value / usdtToInr;
                           if (/(\.\d*99\d*)$/.test(receiveAmount)) {

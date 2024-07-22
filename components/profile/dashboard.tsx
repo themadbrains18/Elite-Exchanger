@@ -29,7 +29,7 @@ const Dashboard = (props: FixSection) => {
   const [editable, setEditable] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [userDetails, setUserDetails] = useState(props.userDetail);
-  const { register, handleSubmit, reset, formState: { errors }, getValues } = useForm({
+  const { register, handleSubmit, reset, formState: { errors }, getValues,setValue } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -151,7 +151,11 @@ const Dashboard = (props: FixSection) => {
                   <div className="w-full">
                     <p className="sm-text mb-[10px]">First Name</p>
                     <div className={editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}>
-                      <input type="text" {...register('fName')} placeholder="Enter first name" className="sm-text input-cta2 w-full" />
+                      <input type="text" {...register('fName')} placeholder="Enter first name" className="sm-text input-cta2 w-full" 
+                      onChange={(e)=>{
+                        const value = e.target.value.replace(/\s/g, ''); // Remove all spaces
+                        setValue('fName', value);
+                      }}/>
                     </div>
                   </div>
                   <div className="w-full">
