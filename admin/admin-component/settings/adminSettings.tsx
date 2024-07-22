@@ -426,6 +426,7 @@ const AdminSettings = (props: fixSection) => {
                       type="password"
                       {...register("confirmPassword")}
                       placeholder="Re-Enter password"
+                      autoComplete="off"
                       className="sm-text input-cta2 w-full"
                     />
                     {errors.confirmPassword && (

@@ -694,6 +694,7 @@ const SecuritySettings = (props: fixSection) => {
                                 {...register("confirmPassword")}
                                 placeholder="Re-Enter password"
                                 className="sm-text input-cta2 w-full"
+                                autoComplete="off"
                                 maxLength={32}
                               />
                               <Image

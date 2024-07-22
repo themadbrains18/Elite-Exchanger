@@ -252,6 +252,7 @@ const SecurityVerification = (props: activeSection) => {
                 <input
                   type={showpswd === true ? "text" : "password"}
                   placeholder="Re-Enter password"
+                  autoComplete="off"
                   maxLength={32}
                   className={`sm-text w-full  input-cta2`}
                   {...register("password")}

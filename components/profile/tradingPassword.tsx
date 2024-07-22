@@ -58,9 +58,13 @@ const TradingPassword = (props: activeSection) => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [showReset, setShowReset] = useState(true);
-  const [forgetPassword, setForgetPassword] = useState(props?.showForgetPopup||false);
+  const [forgetPassword, setForgetPassword] = useState(props?.showForgetPopup || false);
 
+  console.log(props?.showForgetPopup,"============props?.showForgetPopup");
+  console.log(forgetPassword,"============forgetPassword");
+  
   const schema2 = yup.object().shape({
+  
     exist_password: yup.boolean(),
     old_password: yup.string().when('exist_password', {
       is: true,
@@ -354,7 +358,7 @@ const TradingPassword = (props: activeSection) => {
                 }
 
                 {( showReset && props?.session?.user?.tradingPassword !== null) && errors.old_password && (
-                  <p className="errorMessage">
+                  <p className="errorMessage mt-2">
                     {errors.old_password.message}
                   </p>
                 )}
@@ -382,7 +386,7 @@ const TradingPassword = (props: activeSection) => {
                   </div>
 
                   {errors.new_password && (
-                    <p className="errorMessage">
+                    <p className="errorMessage mt-2">
                       {errors.new_password.message}
                     </p>
                   )}
@@ -399,6 +403,7 @@ const TradingPassword = (props: activeSection) => {
                       maxLength={32}
                       placeholder="Re-Enter password"
                       className="sm-text input-cta2 w-full"
+                      autoComplete="off"
                     />
                     <Image
                       src={`/assets/register/${showNew === true ? "show.svg" : "hide.svg"}`}
@@ -413,7 +418,7 @@ const TradingPassword = (props: activeSection) => {
                   </div>
 
                   {errors.confirmPassword && (
-                    <p className="errorMessage">
+                    <p className="errorMessage mt-2">
                       {errors.confirmPassword.message}
                     </p>
                   )}
@@ -441,7 +446,14 @@ const TradingPassword = (props: activeSection) => {
 
             </div>
 
-          {!forgetPassword &&  <Link onClick={(e)=>{e.preventDefault(); setForgetPassword(true)}} className="sec-text text-[14px]  !text-primary mt-2 inline-block" href="#">Forget trading password?</Link>}
+                {/* {
+                  console.log(props?.session?.user,"============props?.session?.user")
+                  
+                } */}
+          {props?.session?.user?.tradingPassword != null || forgetPassword != true && (
+            <Link onClick={(e)=>{e.preventDefault(); setForgetPassword(true)}} className="sec-text text-[14px]  !text-primary mt-2 inline-block" href="#">Forget trading password?</Link>
+          )  
+          }
           </form>
         </div>
       }

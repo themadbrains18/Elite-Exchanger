@@ -202,6 +202,8 @@ const Password = (props: activeSection) => {
           }
         );
         let res = await userExist.json();
+        console.log(res,"res");
+        
 
         if (res.data.message !== undefined) {
           toast.error(res.data.message, { autoClose: 2000 });
@@ -209,6 +211,9 @@ const Password = (props: activeSection) => {
             setBtnDisabled(false);
           }, 3000);
         } else {
+          // return;
+          console.log(res,"=========res.data");
+          
           toast.success(res.data.data + ' and you will be redirect on login page in  short time,',{position : 'top-center'});
           setTimeout(() => {
             signOut();
@@ -345,6 +350,7 @@ const Password = (props: activeSection) => {
                   type={showpswd === true ? "text" : "password"}
                   placeholder="Re-Enter password"
                   maxLength={32}
+                  autoComplete="off"
                   className={`sm-text w-full  input-cta2`}
                   {...register("password")}
                 />

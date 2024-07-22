@@ -24,6 +24,8 @@ router
             let token = req.headers.authorization;
             // Call the API using a helper function and pass the necessary parameters.
             let data = await putData(`${process.env.NEXT_PUBLIC_APIURL}/user/update`, JSON.parse(formData), token);
+            console.log(data,"=========data");
+            
             // Respond with a 200 status and send the retrieved data.
             return res.status(200).send({ data });
 
