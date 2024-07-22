@@ -759,11 +759,11 @@ const BuySellExpress = (props: propsData) => {
                           
                          
 
-                          if (/(\.\d*99\d*)$/.test(spendAmount)) {
-                            spendAmount = spendAmount?.toFixed();
-                            // console.log((spendAmount)?.toFixed(),"=jkhkjhsjk");
+                          // if (/(\.\d*99\d*)$/.test(spendAmount)) {
+                          //   spendAmount = spendAmount?.toFixed();
+                          //   // console.log((spendAmount)?.toFixed(),"=jkhkjhsjk");
                             
-                          }
+                          // }
                           setAmount(truncateNumber(spendAmount, 6));
                           setValue('spend_amount', truncateNumber(spendAmount, 6));
                           clearErrors('receive_amount');
