@@ -60,8 +60,8 @@ const TradingPassword = (props: activeSection) => {
   const [showReset, setShowReset] = useState(true);
   const [forgetPassword, setForgetPassword] = useState(props?.showForgetPopup || false);
 
-  console.log(props?.showForgetPopup,"============props?.showForgetPopup");
-  console.log(forgetPassword,"============forgetPassword");
+  // console.log(props?.showForgetPopup,"============props?.showForgetPopup");
+  // console.log(forgetPassword,"============forgetPassword");
   
   const schema2 = yup.object().shape({
   
@@ -94,7 +94,7 @@ const TradingPassword = (props: activeSection) => {
   });
 
 
-  console.log(forgetPassword,"=forgetPassword");
+  // console.log(forgetPassword,"=forgetPassword");
   
 
   const onHandleSubmit = async (data: any) => {
