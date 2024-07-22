@@ -195,7 +195,7 @@ const BuySellExpress = (props: propsData) => {
         // }).then(response => response.json());
 
         let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
-        // await getUsdtToInrPrice(asset);
+        await getUsdtToInrPrice(asset);
         setChangeSymbol(false);
 
       }
@@ -515,7 +515,7 @@ const BuySellExpress = (props: propsData) => {
           else {
             // console.log("i am here");
         
-            setUsdtToInr(0.00)
+            // setUsdtToInr(0.00)
             setFinalPost({});
           }
         }
@@ -557,7 +557,7 @@ const BuySellExpress = (props: propsData) => {
       else {
         // console.log("i am here2");
         
-        setUsdtToInr(0.00)
+        // setUsdtToInr(0.00)
         setFinalPost({});
       }
 
@@ -666,21 +666,17 @@ const BuySellExpress = (props: propsData) => {
                             setAmount(e?.target?.value);
                             setValue("spend_amount", e?.target?.value);
                           }
-                          // console.log(parseFloat(e?.target?.value),usdtToInr,"=dfjdhjk");
-                          
                           let receiveAmount: any = e?.target?.value / usdtToInr;
+                          console.log("yha b ", receiveAmount);
                           if (/(\.\d*99\d*)$/.test(receiveAmount)) {
-                            receiveAmount = receiveAmount?.toFixed(5);
-                            // console.log((spendAmount)?.toFixed(),"=jkhkjhsjk");
-                            
+                            receiveAmount = receiveAmount?.toFixed(5);                         
                           }
+
                           setReceivedAmount(truncateNumber(receiveAmount, 6));
 
                           setValue('receive_amount', truncateNumber(receiveAmount, 6));
                           clearErrors('spend_amount');
-                          clearErrors('receive_amount');
-                          // console.log(paymentMethod,"=paymentMethod",selectedSecondToken,"=selectedSecondToken")
-                            
+                          clearErrors('receive_amount');                            
                           if (paymentMethod && selectedSecondToken) {
                             filterSellerAds(paymentMethod, selectedSecondToken);
                           }
@@ -747,18 +743,16 @@ const BuySellExpress = (props: propsData) => {
 
                         const value = e.target.value;
                         const regex = /^\d{0,11}(\.\d{0,6})?$/;
-
                         
                         if (regex.test(value) || value === "") {
-
+                          console.log("yha",e?.target?.value);
                           
                           if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                             setReceivedAmount(e?.target?.value);
                           }
-                          let spendAmount: any = parseFloat(e.target.value) * usdtToInr;
+                          console.log(usdtToInr,"=usdtToInr");
                           
-                         
-
+                          let spendAmount: any = e.target.value * usdtToInr;
                           if (/(\.\d*99\d*)$/.test(spendAmount)) {
                             spendAmount = spendAmount?.toFixed();
                             // console.log((spendAmount)?.toFixed(),"=jkhkjhsjk");
@@ -769,6 +763,8 @@ const BuySellExpress = (props: propsData) => {
                           clearErrors('receive_amount');
                           clearErrors('spend_amount')
                         } else {
+                          console.log("=here i am ");
+                          
                           e.target.value = value.slice(0, -1);
                         }
 
@@ -854,6 +850,8 @@ const BuySellExpress = (props: propsData) => {
                             setAmount(e?.target?.value);
                           }
                           let receiveAmount: any = parseFloat(e?.target?.value) * usdtToInr;
+           
+                          
                           setReceivedAmount(truncateNumber(receiveAmount, 6));
                           // setReceivedAmount(parseFloat(e?.target?.value) * usdtToInr);
                           setValue('receive_amount', truncateNumber(receiveAmount, 6));
@@ -903,7 +901,7 @@ const BuySellExpress = (props: propsData) => {
                       onChange={(e: any) => {
 
                         const value = e.target.value;
-                        const regex = /^\d{0,10}(\.\d{0,6})?$/;
+                        const regex = /^\d{0,11}(\.\d{0,6})?$/;
                         if (regex.test(value) || value === "") {
                           if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                             setReceivedAmount((e?.target?.value));

@@ -19,7 +19,7 @@ router.get(async (req: NextApiRequest, res: NextApiResponse) => {
     try {
         // Retrieve the authorization token from the request headers.
         // let token = req.headers.authorization;
-        console.log(req.query,"=req.query");
+        // console.log(req.query,"=req.query");
         
         let {user_id  } = req.query;
 
