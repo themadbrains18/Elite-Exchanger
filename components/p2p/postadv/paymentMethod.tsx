@@ -85,8 +85,8 @@ const PaymentMethod = (props: activeSection) => {
       let qty: any = router?.query?.qty;
       let pmid: any = router?.query?.pmid;
       setValue("quantity", qty);
-      setValue("max_limit", props.price * qty);
-      setReduceValue(props.assetsBalance - qty)
+      setValue("max_limit", truncateNumber(props.price * qty,6));
+      setReduceValue(truncateNumber(props.assetsBalance - qty,6))
       const paymentMethodName = getPaymentMethodName(pmid);
       getAllPayments(paymentMethodName)
 
