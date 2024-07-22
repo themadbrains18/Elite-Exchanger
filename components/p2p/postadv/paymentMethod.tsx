@@ -203,7 +203,7 @@ const PaymentMethod = (props: activeSection) => {
     } else {
       // setValue("max_limit", props.price * e.target.value);
       // setMaxInputValue(Number(props.price) * Number(e.target.value))
-      let maxLimit = truncateNumber(props.price * e.target.value, 2);
+      let maxLimit = truncateNumber(props.price * e.target.value, 6);
       setValue('max_limit', maxLimit);
       clearErrors('max_limit')
       setMaxInputValue(maxLimit)

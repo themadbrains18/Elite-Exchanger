@@ -124,7 +124,7 @@ const SlectPaymentMethod = (props: propsData) => {
                                         {elem?.pmObject?.qr_code!==undefined && elem?.pmObject?.qr_code!=="notValid" &&
                                             <>
                                             <Image src={elem?.pmObject?.qr_code} alt='error' width={145} height={145} className='md:max-w-[145px] w-full max-w-[70px] md:mb-20 mx-auto rounded-[5px] bg-white p-10' />
-                                            <p className='sm-text md:block hidden !text-[12px] dark:!text-[#96969A]'>My QR Code:<span className='dark:text-grey-v-1 text-black'>&nbsp;{truncateNumber(props?.userOrder?.spend_amount,2)} INR</span></p>
+                                            <p className='sm-text md:block hidden !text-[12px] dark:!text-[#96969A]'>My QR Code:<span className='dark:text-grey-v-1 text-black'>&nbsp;{truncateNumber(props?.userOrder?.spend_amount,6)} INR</span></p>
                                             </>
                                         }
                                         

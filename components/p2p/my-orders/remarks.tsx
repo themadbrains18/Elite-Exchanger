@@ -303,7 +303,7 @@ const Remarks = (props: propsData) => {
                 {
                     props?.userOrder?.status === 'isProcess' &&
                     (props?.userOrder?.buy_user_id === session?.user?.user_id ?
-                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please complete your payment within <span className='dark:text-white text-black'>{timeLeft}</span> minutes you need to pay<span className='dark:text-white text-black'> {truncateNumber(props?.userOrder?.spend_amount,2)} INR.</span></p>
+                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please complete your payment within <span className='dark:text-white text-black'>{timeLeft}</span> minutes you need to pay<span className='dark:text-white text-black'> {truncateNumber(props?.userOrder?.spend_amount,6)} INR.</span></p>
                         :
                         <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'> Payment complete within <span className='dark:text-white text-black'>{timeLeft} </span> minutes</p>
                     )

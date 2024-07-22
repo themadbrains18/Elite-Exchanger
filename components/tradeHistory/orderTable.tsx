@@ -213,7 +213,7 @@ const OrderTable = (props: propsData) => {
                     <p className="info-14-18 dark:text-white md:block hidden">{currencyFormatter(item.limit_usdt)}</p>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white md:block hidden">${truncateNumber(item.volume_usdt,2)}</p>
+                    <p className="info-14-18 dark:text-white md:block hidden">${truncateNumber(item.volume_usdt,6)}</p>
                   </td>
                   <td>
                     <p className="info-14-18 dark:text-white md:block hidden">{truncateNumber(item.token_amount,6)}</p>

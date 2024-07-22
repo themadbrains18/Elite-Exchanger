@@ -192,7 +192,7 @@ const BuySellExpress = (props: propsData) => {
         // }).then(response => response.json());
 
         let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
-        await getUsdtToInrPrice(asset);
+        // await getUsdtToInrPrice(asset);
         setChangeSymbol(false);
 
       }
@@ -655,10 +655,10 @@ const BuySellExpress = (props: propsData) => {
                       onChange={(e: any) => {
                         
                         const value = e.target.value;
-                        const regex = /^\d{0,11}(\.\d{0,2})?$/;
+                        const regex = /^\d{0,11}(\.\d{0,6})?$/;
                         if (regex.test(value) || value === "") {
                           
-                          if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
+                          if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                             setAmount(e?.target?.value);
                             setValue("spend_amount", e?.target?.value);
                           }
@@ -742,7 +742,7 @@ const BuySellExpress = (props: propsData) => {
                           }
                           let spendAmount: any = parseFloat(e.target.value) * usdtToInr;
                           setAmount(truncateNumber(spendAmount, 6));
-                          setValue('spend_amount', truncateNumber(spendAmount, 2));
+                          setValue('spend_amount', truncateNumber(spendAmount, 6));
                           clearErrors('receive_amount');
                           clearErrors('spend_amount')
                         } else {
@@ -828,7 +828,7 @@ const BuySellExpress = (props: propsData) => {
                             setAmount(e?.target?.value);
                           }
                           let receiveAmount: any = parseFloat(e?.target?.value) * usdtToInr;
-                          setReceivedAmount(truncateNumber(receiveAmount, 2));
+                          setReceivedAmount(truncateNumber(receiveAmount, 6));
                           // setReceivedAmount(parseFloat(e?.target?.value) * usdtToInr);
                           setValue('receive_amount', truncateNumber(receiveAmount, 6));
                           clearErrors('spend_amount');
@@ -877,9 +877,9 @@ const BuySellExpress = (props: propsData) => {
                       onChange={(e: any) => {
 
                         const value = e.target.value;
-                        const regex = /^\d{0,10}(\.\d{0,2})?$/;
+                        const regex = /^\d{0,10}(\.\d{0,6})?$/;
                         if (regex.test(value) || value === "") {
-                          if (/^\d*\.?\d{0,2}$/.test(e?.target?.value)) {
+                          if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                             setReceivedAmount((e?.target?.value));
                           }
                           let spendAmount: any = parseFloat(e.target.value) / usdtToInr;
