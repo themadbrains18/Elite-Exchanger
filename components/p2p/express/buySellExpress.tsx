@@ -79,8 +79,10 @@ const BuySellExpress = (props: propsData) => {
 
   useEffect(()=>{
     console.log("inside heree");
-    
-    filterSellerAds(paymentMethod, selectedSecondToken);
+    if(active1===1){
+      filterSellerAds(paymentMethod, selectedSecondToken);
+
+    }
 
   },[amount])
 
