@@ -214,7 +214,7 @@ const Verification = (props: activeSection) => {
                   : "Enter SMS Verification Code"}
               </label>
               <div>
-                <div className="flex gap-10 justify-center items-center input_wrapper3 relative">
+                <div className="flex gap-10 justify-between items-center input_wrapper3 relative">
                   <input
                     type="text"
                     autoComplete="off"
@@ -252,16 +252,21 @@ const Verification = (props: activeSection) => {
                     name="code6"
                   />
                 </div>
-                <p className="mb-5 lg:mt-[20px] md-text errorMessage" >{otpMessage}</p>
+                
               </div>
-              <div className={`flex  ${enable === true ? '' : 'hidden'}`}>
-                <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>
+              <div className={`flex gap-1 ${enable === true ? '' : 'hidden'}`}>
+                <p className={`info-10-14 text-end md-text`}>Your OTP will expire within </p>
                 <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
               </div>
 
               <p className={`info-10-14 text-end cursor-pointer !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { props?.snedOtpToUser(); setOtp('') }}>
                 Resend OTP
               </p>
+              {
+                otpMessage && (
+                  <p className="md-text errorMessage" >{otpMessage}</p>
+                )
+              }
             </div>}
             {/* {props.session?.user?.number !== "null" && <div className="flex flex-col mt-[20px] gap-20">
               <label className="sm-text">

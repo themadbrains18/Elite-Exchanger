@@ -266,7 +266,7 @@ const AddAddress = (props: activeSection) => {
       ).then((response) => response.json());
 
       if (response.data.status === 200) {
-        toast.success("Whitelist address created successfully.");
+        toast.success("Address successfully added to whitelist.");
 
         setTimeout(() => {
           reset();
@@ -298,7 +298,7 @@ const AddAddress = (props: activeSection) => {
         <div ref={wrapperRef} className="max-h-[614px] lg:max-h-fit overflow-y-auto max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <div className="flex items-center justify-between pb-[10px] md:pb-[15px] border-b border-grey-v-2 dark:border-opacity-[15%] dark:border-beta">
             <p className="sec-title">Add Withdrawal Address</p>
-            {/* <svg
+            <svg
               onClick={() => {
                 props.setActive(false);
               }}
@@ -321,7 +321,7 @@ const AddAddress = (props: activeSection) => {
                           l22.502-22.502l22.501,22.502c0.913,0.913,2.109,1.369,3.306,1.369s2.393-0.456,3.306-1.369
                           C61.42,57.647,61.42,54.687,59.595,52.861z"
               />
-            </svg> */}
+            </svg>
           </div>
           <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
               if (e.key === 'Enter') {

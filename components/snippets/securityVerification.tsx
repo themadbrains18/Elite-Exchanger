@@ -212,7 +212,7 @@ const SecurityVerification = (props: activeSection) => {
         }}>
           <div className="py-30 md:py-40">
 
-            <div className="py-30 md:py-40">
+            <div className="pb-30 md:pb-40">
               <div className="py-[10px]">
                 <p className="info-14-18 text-center dark:text-white text-black">Scan Qr From Google Authenticator App</p>
                 <div className="mt-[15px] p-5 max-w-[154px] bg-white rounded-5 shadow-card mx-auto">
@@ -231,7 +231,7 @@ const SecurityVerification = (props: activeSection) => {
               </div>
             </div>
 
-            <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
+            <div className="flex flex-col mb-[25px] md:mb-40 gap-[10px] relative">
               <label className="sm-text">GA 6 Digit Security Code</label>
               <input
                 type="text"
@@ -242,11 +242,11 @@ const SecurityVerification = (props: activeSection) => {
                 {...register("code")}
               />
               {errors.code && (
-                <p className="absolute top-[calc(100%+3px)] left-0 text-[10px] md:text-[12px] errorMessage">{errors.code.message}</p>
+                <p className="absolute top-[calc(100%+5px)] left-0 text-[10px] md:text-[12px] errorMessage">{errors.code.message}</p>
               )}
             </div>
 
-            <div className="flex flex-col mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative">
+            <div className="flex flex-col mb-[25px] md:mb-40 gap-[10px] relative">
               <label className="sm-text">Account Password</label>
               <div className={` relative `}>
                 <input
@@ -254,7 +254,7 @@ const SecurityVerification = (props: activeSection) => {
                   placeholder="Re-Enter password"
                   autoComplete="off"
                   maxLength={32}
-                  className={`sm-text w-full  input-cta2`}
+                  className={`sm-text input-cta2 w-full  ${errors.password && 'border-1 border-[#ff0000]'}`}
                   {...register("password")}
                 />
                 <Image
@@ -269,7 +269,7 @@ const SecurityVerification = (props: activeSection) => {
                 />
               </div>
               {errors.password && (
-                <p className="absolute top-[100%] text-[10px] md:text-[12px] errorMessage">{errors.password.message}</p>
+                <p className="absolute top-[calc(100%+5px)] text-[10px] md:text-[12px] errorMessage">{errors.password.message}</p>
               )}
             </div>
           </div>

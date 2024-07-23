@@ -80,7 +80,7 @@ const ConfirmationModel = (props: activeSection) => {
                     </div>
                     {/* <p className={`py-20 info-14-18`}></p> */}
                     {newText && newText.length > 0 && newText.map((item: any) => {
-                        return <p className={`py-1 info-14-18 mb-[25px] mt-[10px]`}>{item}</p>
+                        return <p className={`py-1 info-14-18 mb-[35px] mt-[10px]`}>{item}</p>
                     })}
                     <div className="flex items-center gap-10">
                         <button

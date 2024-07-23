@@ -26,7 +26,7 @@ const AddressManagement = (props: fixSection) => {
   const [confirm, setConfirm] = useState(false);
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState('Are you sure you want to delete from your address book?');
-  const [title, setTitle] = useState('Are you sure you want to delete this address?');
+  const [title, setTitle] = useState('Delete address');
   const [postId, setPostId] = useState('');
   const [address, setAddress] = useState('');
   const [showSVG, setShowSVG] = useState(false);
@@ -140,7 +140,7 @@ const AddressManagement = (props: fixSection) => {
       }).then(response => response.json());
 
       if (postResponse?.data) {
-        toast.success('Address delted successfully', { autoClose: 2000 });
+        toast.success('Address deleted successfully', { autoClose: 2000 });
         getAllWhitelistAddress(0);
         setConfirm(false);
         setShow(false);
@@ -421,7 +421,7 @@ const AddressManagement = (props: fixSection) => {
         <AddAddress active={active} setActive={setActive} networks={data} session={session} refreshData={getAllWhitelistAddress} token={tokens} />
       }
       {confirm &&
-        <ConfirmationModel setActive={setConfirm} setShow={setShow} title={title} message="" show={show} actionPerform={actionPerform} />
+        <ConfirmationModel setActive={setConfirm} setShow={setShow} title={title} message="Are you sure you want to delete this address?" show={show} actionPerform={actionPerform} />
       }
       {showSVG && (
         <>
