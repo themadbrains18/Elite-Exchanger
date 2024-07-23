@@ -8,6 +8,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { truncateNumber } from "@/libs/subdomain";
+import { ToastContainer } from "react-toastify";
 
 const schema = yup.object().shape({
   p_method: yup.array().min(1, "Please select atleast '1' payment method.").required().max(5, "Only '5' payment methods are allowed.").typeError("Please select atleast '1' payment method."),
@@ -176,6 +177,7 @@ const EditPaymentMethod = (props: activeSection) => {
 
   return (
     <>
+    {/* {props?.page === "user-center" && <ToastContainer position="top-center" limit={1} />} */}
       <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
       <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
         if (e.key === 'Enter') {
@@ -255,7 +257,7 @@ const EditPaymentMethod = (props: activeSection) => {
                       <div className="w-full">
                         <input type="number"
                         
-                          id="quantity" step={0.000001} value={truncateNumber(inputValue,6)}  {...register('quantity')} name="quantity"
+                          id="quantity" step={0.000001} value={inputValue!=0?truncateNumber(inputValue,6):''}  {...register('quantity')} name="quantity"
                           onWheel={(e) => (e.target as HTMLElement).blur()}
                           onInput={(e: any) => {
                             setReduceValue(props.assetsBalance + Number(props?.editPost?.quantity) - Number(e.target.value));

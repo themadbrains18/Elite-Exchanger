@@ -73,18 +73,15 @@ const BuySellExpress = (props: propsData) => {
     }
   }, [])
 
+      
 
-  // console.log(paymentMethod,"=paymentMethod");
-  
+  // useEffect(()=>{
+  //   if(active1===1){
+  //     filterSellerAds(paymentMethod, selectedSecondToken);
 
-  useEffect(()=>{
-    // console.log("inside heree");
-    if(active1===1){
-      filterSellerAds(paymentMethod, selectedSecondToken);
+  //   }
 
-    }
-
-  },[amount])
+  // },[amount])
 
   let {
     register,
@@ -325,12 +322,7 @@ const BuySellExpress = (props: propsData) => {
       // p2p/postad
       if (active1 === 2) {
 
-        // console.log(data, "==daa");
-
-
-        let pmMethod = props.masterPayMethod.filter((item: any) => item?.id === pmId)
-        // console.log(pmMethod);
-
+         let pmMethod = props.masterPayMethod.filter((item: any) => item?.id === pmId)
 
         if (filterAsset?.balance == undefined) {
           setError("spend_amount", {
@@ -457,22 +449,14 @@ const BuySellExpress = (props: propsData) => {
       }
 
     }
-    // console.log("hNJII",props?.posts);
     
     if (props?.posts && props?.posts.length > 0) {
-      // console.log("inside this", props?.posts);
-      // console.log("inside this2", token?.id);
-      
-
-
 
       let seller = props?.posts?.filter((item: any) => {
         return item?.token_id === token?.id && session?.user?.user_id !== item?.user_id
       })
 
       if (seller.length > 0) {
-        // console.log("=here", amount);
-
         let nearestObject: any = null;
         let minDifference = Infinity;
         let flag = false;
@@ -490,7 +474,6 @@ const BuySellExpress = (props: propsData) => {
           })
 
           if (sellerPost.length > 0) {
-            // console.log("here ia m ",spendAmount,amount);
 
             if (spendAmount > 0 && (spendAmount < parseFloat(post.min_limit) || spendAmount > parseFloat(post.max_limit))) {
               flag = true;
@@ -513,9 +496,7 @@ const BuySellExpress = (props: propsData) => {
             }
           }
           else {
-            // console.log("i am here");
-        
-            // setUsdtToInr(0.00)
+
             setFinalPost({});
           }
         }
@@ -667,7 +648,6 @@ const BuySellExpress = (props: propsData) => {
                             setValue("spend_amount", e?.target?.value);
                           }
                           let receiveAmount: any = e?.target?.value / usdtToInr;
-                          console.log("yha b ", receiveAmount);
                           if (/(\.\d*99\d*)$/.test(receiveAmount)) {
                             receiveAmount = receiveAmount?.toFixed(5);                         
                           }
@@ -745,26 +725,23 @@ const BuySellExpress = (props: propsData) => {
                         const regex = /^\d{0,11}(\.\d{0,6})?$/;
                         
                         if (regex.test(value) || value === "") {
-                          console.log("yha",e?.target?.value);
-                          
+                   
                           if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                             setReceivedAmount(e?.target?.value);
                           }
-                          console.log(usdtToInr,"=usdtToInr");
+                       
                           
                           let spendAmount: any = e.target.value * usdtToInr;
                           if (/(\.\d*99\d*)$/.test(spendAmount)) {
                             spendAmount = spendAmount?.toFixed();
-                            // console.log((spendAmount)?.toFixed(),"=jkhkjhsjk");
-                            
+                          
                           }
                           setAmount(truncateNumber(spendAmount, 6));
                           setValue('spend_amount', truncateNumber(spendAmount, 6));
                           clearErrors('receive_amount');
                           clearErrors('spend_amount')
                         } else {
-                          console.log("=here i am ");
-                          
+                      
                           e.target.value = value.slice(0, -1);
                         }
 

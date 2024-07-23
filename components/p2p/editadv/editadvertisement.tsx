@@ -7,7 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { truncateNumber } from "@/libs/subdomain";
 import { currencyFormatter } from "@/components/snippets/market/buySellCard";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 interface propsData {
   masterPayMethod?: any;
@@ -133,6 +133,7 @@ const EditAdverstisement = (props: propsData) => {
 
   return (
     <>
+       <ToastContainer limit={1} position="top-center"/>
       {step == 1 && (
         <div className="mt-30 md:mt-40">
           <p className="sec-title">Set Asset Type and Price</p>
