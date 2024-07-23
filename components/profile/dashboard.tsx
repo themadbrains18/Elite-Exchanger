@@ -10,10 +10,10 @@ import { toast } from 'react-toastify';
 import IconsComponent from '../snippets/icons';
 
 const schema = yup.object().shape({
-  fName: yup.string().optional(),
-  lName: yup.string().optional(),
-  dName: yup.string().min(4, 'Display name must be at least 4 characters.').max(20, 'Display name must be at most 20 characters.').required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
-  uName: yup.string().min(4, 'User name must be at least 4 characters').max(20, 'User name must be at most 20 characters.').required('This field is required.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
+  fName: yup.string().optional().nullable(),
+  lName: yup.string().optional().nullable(),
+  dName: yup.string().required('This field is required.').min(4, 'Display name must be at least 4 characters.').max(20, 'Display name must be at most 20 characters.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
+  uName: yup.string().required('This field is required.').min(4, 'User name must be at least 4 characters').max(20, 'User name must be at most 20 characters.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
 });
 
 interface FixSection {
@@ -43,11 +43,13 @@ const Dashboard = (props: FixSection) => {
   }, [userDetails, reset]);
 
   const onHandleSubmit = async (data: any) => {
+    console.log("here i am");
+    
     setDisabled(true)
     // Create a new object with only the required fields
     const filteredData = {
-      fName: data.fName.trim(),
-      lName: data.lName.trim(),
+      fName: data.fName?.trim(),
+      lName: data.lName?.trim(),
       dName: data.dName.trim(),
       uName: data.uName.trim(),
     };
@@ -161,7 +163,11 @@ const Dashboard = (props: FixSection) => {
                   <div className="w-full">
                     <p className="sm-text mb-[10px]">Last Name</p>
                     <div className={editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}>
-                      <input type="text" {...register('lName')} placeholder="Enter last name" className="sm-text input-cta2 w-full" />
+                      <input type="text" {...register('lName')} placeholder="Enter last name" className="sm-text input-cta2 w-full" 
+                       onChange={(e)=>{
+                        const value = e.target.value.replace(/\s/g, ''); // Remove all spaces
+                        setValue('lName', value);
+                      }}/>
                     </div>
                   </div>
                 </div>
@@ -170,7 +176,11 @@ const Dashboard = (props: FixSection) => {
                     <p className="sm-text mb-[10px]">Display Name<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
                     <div className="relative">
                       <div className={editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}>
-                        <input type="text" maxLength={20} {...register('dName')} placeholder="Enter display name" className="sm-text input-cta2 w-full" />
+                        <input type="text" maxLength={20} {...register('dName')} placeholder="Enter display name" className="sm-text input-cta2 w-full"  
+                         onChange={(e)=>{
+                          const value = e.target.value.replace(/\s/g, ''); // Remove all spaces
+                          setValue('dName', value);
+                        }}/>
                       </div>
                       {errors.dName && <p className="errorMessage">{errors.dName.message}</p>}
                     </div>
@@ -178,7 +188,11 @@ const Dashboard = (props: FixSection) => {
                   <div className="w-full">
                     <p className="sm-text mb-[10px]">User Name<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
                     <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}   `}>
-                      <input type="text" maxLength={20} {...register('uName')} placeholder="Enter user name" className="sm-text  input-cta2  w-full" />
+                      <input type="text" maxLength={20} {...register('uName')} placeholder="Enter user name" className="sm-text  input-cta2  w-full" 
+                       onChange={(e)=>{
+                        const value = e.target.value.replace(/\s/g, ''); // Remove all spaces
+                        setValue('uName', value);
+                      }}/>
                     </div>
                     {errors.uName && <p className="errorMessage">{errors.uName.message}</p>}
                   </div>
