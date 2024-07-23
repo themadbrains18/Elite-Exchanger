@@ -30,45 +30,56 @@ const Verification = (props: activeSection) => {
   const [popup, setPopup] = useState(false);
   const [otpMessage, setOtpMessage] = useState('');
 
-  useEffect(() => {
-    
-    const inputElements = document.querySelectorAll(".input_wrapper3 input");
-    
-    inputElements?.forEach((ele, index) => {
-      ele.addEventListener("keydown", (e: any) => {
-        if (e.keyCode === 8 && e.target.value === "") {
-          (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
-        }
-      });
-      ele.addEventListener("input", (e: any) => {
-        const [first, ...rest] = e.target.value;
-        e.target.value = first ?? "";
-        const lastInputBox = index === inputElements.length - 1;
-        const didInsertContent = first !== undefined;
-        if (didInsertContent && !lastInputBox) {
-          (inputElements[index + 1] as HTMLElement).focus();
-          (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
-          inputElements[index + 1].dispatchEvent(new Event("input"));
-        } else {
-          setOtp(
-            (inputElements[0] as HTMLInputElement).value +
-            "" +
-            (inputElements[1] as HTMLInputElement).value +
-            "" +
-            (inputElements[2] as HTMLInputElement).value +
-            "" +
-            (inputElements[3] as HTMLInputElement).value +
-            "" +
-            (inputElements[4] as HTMLInputElement).value +
-            "" +
-            (inputElements[5] as HTMLInputElement).value
-          );
-        }
-      });
-    });
-    orderTimeCalculation();
-    // console.log("=====================calling");
 
+  useEffect(() => {
+    const inputElements = document.querySelectorAll(".input_wrapper3 input");
+
+    const handleKeyDown = (e: any, index: number) => {
+      if (e.keyCode === 8 && e.target.value === "") {
+        (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
+      }
+    };
+
+    const handleInput = (e: any, index: number) => {
+      const [first, ...rest] = e.target.value;
+      e.target.value = first ?? "";
+      const lastInputBox = index === inputElements.length - 1;
+      const didInsertContent = first !== undefined;
+      if (didInsertContent && !lastInputBox) {
+        (inputElements[index + 1] as HTMLElement).focus();
+        (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
+        inputElements[index + 1].dispatchEvent(new Event("input"));
+      } else {
+        setOtp(
+          (inputElements[0] as HTMLInputElement).value +
+          "" +
+          (inputElements[1] as HTMLInputElement).value +
+          "" +
+          (inputElements[2] as HTMLInputElement).value +
+          "" +
+          (inputElements[3] as HTMLInputElement).value +
+          "" +
+          (inputElements[4] as HTMLInputElement).value +
+          "" +
+          (inputElements[5] as HTMLInputElement).value
+        );
+      }
+    };
+
+    inputElements?.forEach((ele, index) => {
+      ele.addEventListener("keydown", (e: any) => handleKeyDown(e, index));
+      ele.addEventListener("input", (e: any) => handleInput(e, index));
+    });
+
+    orderTimeCalculation();
+
+    // Cleanup event listeners on component unmount or re-render
+    return () => {
+      inputElements?.forEach((ele, index) => {
+        ele.removeEventListener("keydown", (e: any) => handleKeyDown(e, index));
+        ele.removeEventListener("input", (e: any) => handleInput(e, index));
+      });
+    };
   }, [props?.sendOtpRes]);
 
   const orderTimeCalculation = async () => {
@@ -166,11 +177,12 @@ const Verification = (props: activeSection) => {
   const resetTimer = () => {
 
     setDisabled(false);
+
     const inputElements = document.querySelectorAll(".input_wrapper3 input");
-    inputElements?.forEach((ele, index) => {
-        (ele as HTMLInputElement).value = "";
-    });
-};
+    inputElements.forEach((ele, index) => {
+      (inputElements[index] as HTMLInputElement).value = ""
+    })
+  };
 
   return (
     <>
@@ -252,14 +264,14 @@ const Verification = (props: activeSection) => {
                     name="code6"
                   />
                 </div>
-                
+
               </div>
               <div className={`flex gap-1 ${enable === true ? '' : 'hidden'}`}>
                 <p className={`info-10-14 text-end md-text`}>Your OTP will expire within </p>
                 <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
               </div>
 
-              <p className={`info-10-14 text-end cursor-pointer !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { props?.snedOtpToUser();resetTimer(); setOtp('') }}>
+              <p className={`info-10-14 text-end cursor-pointer !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { props?.snedOtpToUser(); resetTimer(); setOtp('') }}>
                 Resend OTP
               </p>
               {
