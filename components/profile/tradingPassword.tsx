@@ -446,12 +446,9 @@ const TradingPassword = (props: activeSection) => {
 
             </div>
 
-                {/* {
-                  console.log(props?.session?.user,"============props?.session?.user")
-                  
-                } */}
-          {props?.session?.user?.tradingPassword != null || forgetPassword != true && (
-            <Link onClick={(e)=>{e.preventDefault(); setForgetPassword(true)}} className="sec-text text-[14px]  !text-primary mt-2 inline-block" href="#">Forget trading password?</Link>
+              
+          { !forgetPassword  && (
+            <Link onClick={(e)=>{e.preventDefault(); setForgetPassword(true)}} className={`sec-text text-[14px]  !text-primary mt-2  ${(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? 'hidden' : "inline-block"}`} href="#">Forget trading password?</Link>
           )  
           }
           </form>
