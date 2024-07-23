@@ -294,7 +294,7 @@ const VerificationNew = (props: activeSection) => {
                                     : "Enter SMS Verification Code"}
                             </label>
                             <div>
-                                <div className="flex gap-10 justify-center items-center input_wrapper3 relative">
+                                <div className="flex gap-10 justify-between items-center input_wrapper3 relative">
                                     <input
                                         type="text"
                                         autoComplete="off"
@@ -332,16 +332,20 @@ const VerificationNew = (props: activeSection) => {
                                         name="code6"
                                     />
                                 </div>
-                                <p className="mb-5  lg:mt-[20px] md-text errorMessage" >{otpMessage}</p>
                             </div>
-                            <div className={`flex  ${showTime === true ? '' : 'hidden'}`}>
-                                <p className={`info-10-14 px-2 text-end md-text`}>Your OTP will expire within </p>
+                            <div className={`flex gap-1 ${showTime === true ? '' : 'hidden'}`}>
+                                <p className={`info-10-14 text-end md-text`}>Your OTP will expire within </p>
                                 <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
                             </div>
                             {isOtp === false &&
                                 <p className={`info-10-14 text-end  !text-primary ${optEnable === true ? 'cursor-not-allowed opacity-25' : 'cursor-pointer'}`} onClick={() => { optEnable === false ? snedOtpToUser() : '' }}>
                                     Send OTP
                                 </p>
+                            }
+                            {
+                                otpMessage && (
+                                    <p className="md-text errorMessage" >{otpMessage}</p>
+                                )
                             }
                             <p className={`info-10-14 text-end cursor-pointer !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { snedOtpToUser() }}>
                                 Resend OTP

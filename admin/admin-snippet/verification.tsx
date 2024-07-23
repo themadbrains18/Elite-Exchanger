@@ -153,13 +153,13 @@ const Verification = (props: activeSection) => {
         </div>
 
         <div className="py-30 md:py-40">
-          <div className="flex flex-col  gap-20">
+          <div className="flex flex-col gap-20">
             <label className="sm-text">
               {props?.type === "email"
                 ? "Enter Email Verification Code"
                 : "Enter SMS Verification Code"}
             </label>
-            <div className="flex gap-10 justify-center items-center input_wrapper">
+            <div className="flex gap-10  justify-center items-center input_wrapper">
               <input
                 type="text"
                 autoComplete="off"

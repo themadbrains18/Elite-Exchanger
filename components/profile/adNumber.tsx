@@ -127,6 +127,19 @@ const AdNumber = (props: activeSection) => {
     }, 3000);
   }, [!show, errors]);
 
+
+   // State to hold OTP values
+   
+  //  // State to manage the active input box
+  //  const [activeInput, setActiveInput] = useState<number>(0);
+  //  // Reference to store input elements
+  //  const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
+
+  //  // Use effect to focus on the current active input
+  //  useEffect(() => {
+  //      inputsRef.current[activeInput]?.focus();
+  //  }, [activeInput]);
+
   
 
   const sendOtp = async () => {
@@ -408,6 +421,50 @@ const AdNumber = (props: activeSection) => {
   };
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
+  
+  // const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
+
+//   const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+
+//     const paste = event.clipboardData.getData("text").slice(0, 6).split("");
+//     console.log(paste,"==========paste");
+    
+//     setOtp(paste);
+//   };
+
+//   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>, index: number) => {
+//     if (event.key === "Backspace") {
+//         const newOtp = [...fillOtp];
+//         console.log(newOtp,"newOtp out of the if block");
+        
+//         if (!fillOtp[index]) {
+//             // Move to previous input if the current one is empty
+//             setActiveInput(Math.max(activeInput - 1, 0));
+//             console.log(activeInput,"============activeInput in the if");
+//         } else {
+//             // Clear the current input value
+//             newOtp[index] = "";
+//             setOtp(newOtp);
+//             console.log(fillOtp,"============fillOtp in the else part");
+//         }
+//     }
+// };
+
+// const handleChange = (element: HTMLInputElement, index: number) => {
+//   const value = element.value.replace(/[^0-9]/g, "");
+//   if (value.length > 1) {
+//       return;
+//   }
+
+//   const newOtp = [...fillOtp];
+//   newOtp[index] = value;
+//   setOtp(newOtp);
+
+//   // Move to next input if the current one has a value
+//   if (value) {
+//       setActiveInput(Math.min(activeInput + 1, fillOtp.length - 1));
+//   }
+// };
 
 
   return (
@@ -488,51 +545,84 @@ const AdNumber = (props: activeSection) => {
                   </div>
                   <div className="flex flex-col  gap-20">
                     <label className="sm-text">Enter 6 Digit OTP</label>
-                    <div className="flex gap-10 justify-center items-center input_wrapper">
+                    <div className="flex gap-10 justify-between items-center input_wrapper">
                       <input
                         type="text"
                         autoComplete="off"
                         className="block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                         name="code1"
+                        // onPaste={()=>{handlePaste}}
+                        // onKeyDown={(e) => handleKeyDown(e, 1)}
+                        // maxLength={1}
+                        // ref={(el: any) => (inputsRef.current[1] = el)}
+                        // onChange={(e) => handleChange(e.target, 1)}
                       />
                       <input
                         type="text"
                         autoComplete="off"
                         className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                         name="code2"
+                        // onPaste={()=>{handlePaste}}
+                        // maxLength={1}
+                        // onKeyDown={(e) => handleKeyDown(e, 2)}
+                        // ref={(el: any) => (inputsRef.current[2] = el)}
+                        // onChange={(e) => handleChange(e.target, 2)}
                       />
                       <input
                         type="text"
                         autoComplete="off"
                         className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                         name="code3"
+                        // onPaste={()=>{handlePaste}}
+                        // onKeyDown={(e) => handleKeyDown(e, 3)}
+                        // ref={(el: any) => (inputsRef.current[3] = el)}
+                        // maxLength={1}
+                        // onChange={(e) => handleChange(e.target, 3)}
                       />
                       <input
                         type="text"
                         autoComplete="off"
                         className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                         name="code4"
+                        // onPaste={()=>{handlePaste}}
+                        // ref={(el: any) => (inputsRef.current[4] = el)}
+                        // onKeyDown={(e) => handleKeyDown(e, 4)}
+                        // onChange={(e) => handleChange(e.target, 4)}
+
+                        maxLength={1}
                       />
                       <input
                         type="text"
                         autoComplete="off"
                         className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                         name="code5"
+                        // onPaste={()=>{handlePaste}}
+                        // ref={(el: any) => (inputsRef.current[5] = el)}
+                        // onKeyDown={(e) => handleKeyDown(e, 5)}
+                        // maxLength={1}
+                        // onChange={(e) => handleChange(e.target, 5)}
                       />
                       <input
                         type="text"
                         autoComplete="off"
                         className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                         name="code6"
+                        maxLength={1}
+                        
+                        // onPaste={()=>{handlePaste}}
+                        // onKeyDown={(e) => handleKeyDown(e, 6)}
+                        // ref={(el: any) => (inputsRef.current[6] = el)}
+                        // onChange={(e) => handleChange(e.target, 6)}
                       />
                     </div>
-                    <p className={` text-center lg:mt-[10px] md-text errorMessage ${otpMessage === '' ? 'hidden' : ''}`} >{otpMessage}</p>
+                    
                   </div>
                 <div className="mt-2">
-                      <div className={`flex ${showTime === true ? '' : 'hidden'}`}>
-                        <p className={`info-10-14 px-2 text-start  md-text`}>Your OTP will expire within </p>
+                      <div className={`flex gap-1 ${showTime === true ? '' : 'hidden'}`}>
+                        <p className={`info-10-14 text-start  md-text`}>Your OTP will expire within </p>
                         <p className={`info-10-14 text-start md-text`}> {timeLeft}</p>
                       </div>
+                      <p className={`lg:mt-[10px] md-text errorMessage ${otpMessage === '' ? 'hidden' : ''}`} >{otpMessage}</p>
                       <div className="text-end">
                         {isOtp === false &&
                           <button
@@ -557,6 +647,7 @@ const AdNumber = (props: activeSection) => {
                       </div>
                     </div>
                 </div>
+                
                 <div className="flex gap-[20px]">
                   <button
                     className="solid-button2 w-full "
