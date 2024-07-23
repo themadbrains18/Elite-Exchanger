@@ -834,7 +834,7 @@ const SecuritySettings = (props: fixSection) => {
       }
       {
         confirmation &&
-        <ConfirmationModel title="Reset Password" message="After reset password, Withdrawal will be restricted for 24 hours." actionPerform={confirmOtp} setShow={setShow} setActive={setConfirmation} />
+        <ConfirmationModel title="Reset Password" message="After reset password, Withdrawal will be restricted for 24 hours. Are you sure want to proceed?" actionPerform={confirmOtp} setShow={setShow} setActive={setConfirmation} />
       }
     </>
   );
