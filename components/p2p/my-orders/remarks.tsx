@@ -120,7 +120,8 @@ const Remarks = (props: propsData) => {
 
         let obj = {
             "order_id": props.orderid,
-            "p_method": props.paymentMethod
+            "p_method": props.paymentMethod,
+            "user_id": session?.user?.user_id
         }
 
         if (status === 'authenticated') {
@@ -146,7 +147,8 @@ const Remarks = (props: propsData) => {
                 if (wbsocket) {
                     let orderData = {
                         ws_type: 'order',
-                        orderid: props.orderid
+                        orderid: props.orderid,
+                        user_id: session?.user?.user_id
                     }
                     wbsocket.send(JSON.stringify(orderData));
                 }
@@ -196,7 +198,8 @@ const Remarks = (props: propsData) => {
                 if (wbsocket) {
                     let orderData = {
                         ws_type: 'order',
-                        orderid: props.orderid
+                        orderid: props.orderid,
+                        user_id: session?.user?.user_id
                     }
                     wbsocket.send(JSON.stringify(orderData));
                 }
