@@ -145,10 +145,11 @@ const Verification = (props: activeSection) => {
       props.finalOtpVerification(fillOtp);
       setOtp('');
       setTimeout(() => {
-        const inputElements = document.querySelectorAll(".input_wrapper input");
-        inputElements.forEach((ele, index) => {
-          (inputElements[index] as HTMLInputElement).value = ""
-        })
+        resetTimer()
+        // const inputElements = document.querySelectorAll(".input_wrapper input");
+        // inputElements.forEach((ele, index) => {
+        //   (inputElements[index] as HTMLInputElement).value = ""
+        // })
         setDisabled(false)
       }, 4000)
     } catch (error) {
@@ -162,6 +163,14 @@ const Verification = (props: activeSection) => {
   }
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
+  const resetTimer = () => {
+
+    setDisabled(false);
+    const inputElements = document.querySelectorAll(".input_wrapper3 input");
+    inputElements?.forEach((ele, index) => {
+        (ele as HTMLInputElement).value = "";
+    });
+};
 
   return (
     <>
@@ -250,7 +259,7 @@ const Verification = (props: activeSection) => {
                 <p className={`info-10-14 text-end md-text`}> {timeLeft}</p>
               </div>
 
-              <p className={`info-10-14 text-end cursor-pointer !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { props?.snedOtpToUser() }}>
+              <p className={`info-10-14 text-end cursor-pointer !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { props?.snedOtpToUser(); setOtp('') }}>
                 Resend OTP
               </p>
             </div>}

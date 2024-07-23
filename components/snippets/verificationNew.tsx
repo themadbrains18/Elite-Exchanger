@@ -343,7 +343,7 @@ const VerificationNew = (props: activeSection) => {
                                     Send OTP
                                 </p>
                             }
-                            <p className={`info-10-14 text-end cursor-pointer !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { snedOtpToUser() }}>
+                            <p className={`info-10-14 text-end cursor-pointer !text-primary ${enable === true ? 'hidden' : ''}`} onClick={() => { snedOtpToUser();}}>
                                 Resend OTP
                             </p>
                         </div>}

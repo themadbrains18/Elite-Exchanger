@@ -131,6 +131,7 @@ const AdNumber = (props: activeSection) => {
 
   const sendOtp = async () => {
     try {
+      setOtp('')
       let uname = getValues("uname");
       if (uname !== "") {
         clearErrors();

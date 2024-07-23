@@ -14,6 +14,7 @@ import ConfirmPopup from "@/pages/customer/profile/confirm-popup";
 import Verification from "../../snippets/verification";
 import clickOutSidePopupClose from "../../snippets/clickOutSidePopupClose";
 import FilterSelectMenuWithCoin from "@/components/snippets/filter-select-menu-with-coin";
+import VerificationNew from "@/components/snippets/verificationNew";
 
 const schema = yup.object().shape({
   tokenID: yup.string().optional().default(""),
