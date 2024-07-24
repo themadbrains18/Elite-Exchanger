@@ -45,7 +45,7 @@ const ConfirmationModel = (props: activeSection) => {
         <>
             {props?.hideVisibility !== true &&
                 <div
-                    className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80`}
+                    className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-20`}
                 ></div>
             }
             <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show ? " opacity-20 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow(false) }}></div>

@@ -31,9 +31,10 @@ const Verification = (props: activeSection) => {
   const [otpMessage, setOtpMessage] = useState('');
 
   useEffect(() => {
+    console.log("heererere");
     
     const inputElements = document.querySelectorAll(".input_wrapper3 input");
-    
+
     inputElements?.forEach((ele, index) => {
       ele.addEventListener("keydown", (e: any) => {
         if (e.keyCode === 8 && e.target.value === "") {
@@ -66,10 +67,17 @@ const Verification = (props: activeSection) => {
         }
       });
     });
-    orderTimeCalculation();
+ 
     // console.log("=====================calling");
 
-  }, [props?.sendOtpRes]);
+  }, []);
+
+  useEffect(()=>{
+    console.log("herereer2");
+    
+    setOtp('')
+    orderTimeCalculation();
+  },[props?.sendOtpRes])
 
   const orderTimeCalculation = async () => {
     setEnable(true);
@@ -166,10 +174,11 @@ const Verification = (props: activeSection) => {
   const resetTimer = () => {
 
     setDisabled(false);
-    const inputElements = document.querySelectorAll(".input_wrapper3 input");
-    inputElements?.forEach((ele, index) => {
-        (ele as HTMLInputElement).value = "";
-    });
+   
+   const inputElements = document.querySelectorAll(".input_wrapper3 input");
+        inputElements.forEach((ele, index) => {
+          (inputElements[index] as HTMLInputElement).value = ""
+        })
 };
 
   return (
