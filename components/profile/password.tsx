@@ -88,8 +88,13 @@ const Password = (props: activeSection) => {
         }
       });
     });
+  }, []);
+
+
+  useEffect(()=>{
     orderTimeCalculation(props.secondExpireTime);
-  }, [props.secondExpireTime]);
+
+  },[props.secondExpireTime])
 
   const orderTimeCalculation = async (expireTime: any) => {
     setShowTime(true);
