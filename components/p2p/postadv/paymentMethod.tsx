@@ -213,13 +213,10 @@ const PaymentMethod = (props: activeSection) => {
 
   const handleDelete = async () => {
     try {
-      console.log(props?.userPosts, "==id");
-
-
+      // console.log(props?.userPosts, "==id");
       let paymentMethodRelation = [];
       for (const post of props?.userPosts?.data) {
-        console.log(post, "==");
-
+        // console.log(post, "==");
         post?.p_method.filter((itm: any) => {
           if (itm.upm_id === id) {
             paymentMethodRelation.push(itm);

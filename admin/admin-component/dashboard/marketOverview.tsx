@@ -73,7 +73,7 @@ const MarketOverview = (props: list) => {
           <tbody >
             {
               list && list?.length > 0 && list?.map((item: any, index: number) => {
-                console.log(item?.image);
+                // console.log(item?.image);
                 
                 return (
                   <tr key={index} className=" border-b-[0.5px] border-[#ECF0F3] dark:border-[#ffffff1a]  hover:bg-[#3699ff14] dark:hover:bg-[#90caf929]">

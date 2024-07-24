@@ -356,7 +356,7 @@ const Adverstisement = (props: propsData) => {
                         const value = e.target.value;
                         const regex = /^\d{0,10}(\.\d{0,6})?$/;
                         if (regex.test(value) || value === "") {
-                              console.log("ok");
+                              // console.log("ok");
                               
                         } else {
                           e.target.value = value.slice(0, -1);

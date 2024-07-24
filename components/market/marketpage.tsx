@@ -45,7 +45,7 @@ const Marketpage = (props: propsData) => {
       };
 
       const updatedCardData:any = await Promise.all(coins.map(fetchDataForCoin));
-      console.log(updatedCardData,"=updatedCardData");
+      // console.log(updatedCardData,"=updatedCardData");
       
       setCardData(updatedCardData)
       setCoins(updatedCardData)

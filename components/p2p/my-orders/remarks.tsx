@@ -141,7 +141,7 @@ const Remarks = (props: propsData) => {
 
             let res = await responseData.json();
             if (res.data.status === 200) {
-                console.log("==here");
+                // console.log("==here");
 
                 props.getUserOrders();
                 if (wbsocket) {

@@ -52,7 +52,7 @@ const [disable, setDisable]= useState(false)
 
     const getAds = async (itemOffset: number) => {
         try {
-            console.log("called");
+            // console.log("called");
             let paymentMethod = props?.paymentId !== undefined && props?.paymentId !== "" ? props?.paymentId : "all"
             let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
             let date = props?.startDate !== undefined && props?.startDate !== "" ? new Date(props?.startDate).toISOString() : "all"

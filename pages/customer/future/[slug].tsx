@@ -260,9 +260,6 @@ const FutureTrading = (props: Session) => {
                 return item.coin_symbol + item.usdt_symbol === props?.serverSlug
             })
 
-            console.log(props.coinList,"==ccurentToken");
-            
-
             let hlocData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/topbarhloc?coinid=${ccurrentToken[0]?.coin_id}`, {
                 method: "GET",
                 headers: {

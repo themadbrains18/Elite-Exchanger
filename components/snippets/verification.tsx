@@ -31,7 +31,7 @@ const Verification = (props: activeSection) => {
   const [otpMessage, setOtpMessage] = useState('');
 
   useEffect(() => {
-    console.log("heererere");
+    // console.log("heererere");
     
     const inputElements = document.querySelectorAll(".input_wrapper3 input");
 
@@ -73,7 +73,7 @@ const Verification = (props: activeSection) => {
   }, []);
 
   useEffect(()=>{
-    console.log("herereer2");
+    // console.log("herereer2");
     
     setOtp('')
     orderTimeCalculation();

@@ -45,7 +45,7 @@ const EditPaymentMethod = (props: activeSection) => {
   
   
   useEffect(() => {
-    console.log(props.assetsBalance,"=props.assetsBalance");
+    // console.log(props.assetsBalance,"=props.assetsBalance");
     setValue('quantity', props?.editPost?.quantity);
     setValue('min_limit', props?.editPost?.min_limit);
     setReduceValue(props.assetsBalance);

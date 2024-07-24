@@ -144,7 +144,7 @@ const TransferModal = (props: showPopup) => {
 
   const onHandleSubmit = async (data: any) => {
     try {
-      console.log(data?.amount, userAsset?.balance.toFixed(6), "==data");
+      // console.log(data?.amount, userAsset?.balance.toFixed(6), "==data");
 
 
       if (data?.amount > userAsset?.balance.toFixed(6)) {
