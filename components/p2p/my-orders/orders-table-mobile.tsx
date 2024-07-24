@@ -30,34 +30,37 @@ const OrdersTableMobile = (props: dataTypes) => {
 
     let itemsPerPage = 10;
 
+    useEffect(() => {
+        setItemOffset(0); // Reset itemOffset to 0 when filters change
+    }, [props.active, props.selectedToken, props.startDate]);
+
 
     useEffect(() => {
         getAllOrders(itemOffset);
-    }, [itemOffset, props?.active]);
+    }, [itemOffset, props?.active, props?.selectedToken, props?.startDate]);
+
+    // console.log(session?.user.user_id)
 
 
     const getAllOrders = async (itemOffset: number) => {
         try {
-            
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
             let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
-            let date = props?.startDate !== undefined && props?.startDate !== "" ?new Date(props?.startDate).toISOString() : "all"
-            let userAllOrderList:any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/status?userid=${session?.user?.user_id}&status=${props?.active===1?"all":props?.active===2?"isProcess":props?.active===3?"isReleased":props?.active===4?"isCanceled":"all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}}&currency=${currency || "all"}&date=${date}`, {
+            let date = props?.startDate !== undefined && props?.startDate !== "" ? new Date(props?.startDate).toISOString() : "all"
+            let userAllOrderList: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/status?userid=${session?.user?.user_id}&status=${props?.active === 1 ? "all" : props?.active === 2 ? "isProcess" : props?.active === 3 ? "isReleased" : props?.active === 4 ? "isCanceled" : "all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&date=${date}`, {
                 method: "GET",
                 headers: {
-                  "Authorization": session?.user?.access_token
+                    "Authorization": session?.user?.access_token
                 },
-              }).then(response => response.json());
-                
-              if(userAllOrderList?.data?.total<=10){
-                setItemOffset(0)
-              }
-              setTotal(userAllOrderList?.data?.total)
-            setList(userAllOrderList?.data?.data);
-           
+            }).then(response => response.json());
 
+            if (userAllOrderList?.data?.total <= 10) {
+                setItemOffset(0)
+            }
+            setTotal(userAllOrderList?.data?.total)
+            setList(userAllOrderList?.data?.data);
         } catch (error) {
             console.log("error in get token list", error);
 
@@ -70,7 +73,6 @@ const OrdersTableMobile = (props: dataTypes) => {
         setItemOffset(newOffset);
 
     };
-
     function formatDate(date: Date) {
         const options: {} = {
             day: "2-digit",

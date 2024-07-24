@@ -212,7 +212,7 @@ const TopBar = (props: showSidebar) => {
                     </div>
                     {/* 24h Volume(BTC) */}
                     <div>
-                        <p className='top-label'>open</p>
+                        <p className='top-label'>Open</p>
                         <p className='top-label !text-[#000] dark:!text-[#fff]'>{currencyFormatter(props?.topHLOCData?.open?.toFixed(4))}</p>
                     </div>
                     {/* 24h Volume(USDT) */}

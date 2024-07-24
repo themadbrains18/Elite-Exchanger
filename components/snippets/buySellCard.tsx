@@ -484,7 +484,7 @@ const BuySellCard = (props: DynamicId) => {
                   {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
                   <p className="md-text w-full">{currencyFormatter(Number(price.toFixed(6)))}({active1 === 1 ? 'USDT' : firstCurrency})</p>
 
-                  <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className="min-w-[24px]" alt="wallet2" width={24} height={24} />
+                  <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className={ `min-w-[24px] ${selectedToken?.symbol==="XRP"&&"bg-white rounded-full "}`} alt="wallet2" width={24} height={24} />
                   {router.pathname.includes("/chart") && <p className="md-text">
                     $
                     {props?.token !== undefined && props?.token?.price !== undefined
@@ -532,7 +532,7 @@ const BuySellCard = (props: DynamicId) => {
                       router.pathname.includes('/chart') ?
 
                         <div className='flex  items-center gap-[5px] rounded-[5px] mr-[15px] pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d]'>
-                          <Image src={`${props?.token?.image !== undefined ? props?.token?.image : '/assets/home/coinLogo.png'}`} alt="error" width={20} height={20} />
+                          <Image src={`${props?.token?.image !== undefined ? props?.token?.image : '/assets/home/coinLogo.png'}`} alt="error" width={20} height={20}  className={`${props?.token?.symbol==="XRP"&&"bg-white rounded-full "}`}/>
                           <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text`}>{props?.token?.fullName}</p>
                         </div> :
                         <FilterSelectMenuWithCoin data={list} border={false} setCurrencyName={setCurrencyName} dropdown={1} />
