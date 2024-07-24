@@ -85,7 +85,7 @@ const AdNumber = (props: activeSection) => {
   });
 
   useEffect(() => {
-    const inputElements = document.querySelectorAll(".input_wrapper input");
+    const inputElements = document.querySelectorAll(".input_wrapper4 input");
     inputElements.forEach((ele, index) => {
       ele.addEventListener("keydown", (e: any) => {
         if (e.keyCode === 8 && e.target.value === "") {
@@ -120,14 +120,17 @@ const AdNumber = (props: activeSection) => {
       });
     });
 
+  
+  }, [ ]);
+
+
+  useEffect(()=>{
     setTimeout(() => {
       if(errors.uname){
         clearErrors('uname');
       }
     }, 3000);
-  }, [!show, errors]);
-
-
+  },[errors])
   
 
   const sendOtp = async () => {
@@ -248,7 +251,7 @@ const AdNumber = (props: activeSection) => {
     else if (currentTime > deadline) {
       setShowTime(false);
       setStatuss(true);
-      const inputElements = document.querySelectorAll(".input_wrapper input");
+      const inputElements = document.querySelectorAll(".input_wrapper4 input");
       inputElements.forEach((ele, index) => {
         (inputElements[index] as HTMLInputElement).value = ""
       })
@@ -269,7 +272,7 @@ const AdNumber = (props: activeSection) => {
       if (Ref.current) clearInterval(Ref.current);
       setShowTime(false);
       setStatuss(true);
-      const inputElements = document.querySelectorAll(".input_wrapper input");
+      const inputElements = document.querySelectorAll(".input_wrapper4 input");
       inputElements.forEach((ele, index) => {
         (inputElements[index] as HTMLInputElement).value = ""
       })
@@ -337,7 +340,7 @@ const AdNumber = (props: activeSection) => {
             // if (Ref.current) clearInterval(Ref.current);
             // setShowTime(false);
             // setStatuss(true);
-            const inputElements = document.querySelectorAll(".input_wrapper input");
+            const inputElements = document.querySelectorAll(".input_wrapper4 input");
             inputElements.forEach((ele, index) => {
               (inputElements[index] as HTMLInputElement).value = ""
             })
@@ -487,34 +490,30 @@ const AdNumber = (props: activeSection) => {
                   </div>
                   <div className="flex flex-col  gap-20">
                     <label className="sm-text">Enter 6 Digit OTP</label>
-                    <div className="flex gap-10 adsdsdasda justify-between items-center input_wrapper">
+                    <div className="flex gap-10 adsdsdasda justify-between items-center input_wrapper4">
                       <input
                         type="text"
                         autoComplete="off"
                         className="block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                         name="code1"
-                        maxLength={1}
                       />
                       <input
                         type="text"
                         autoComplete="off"
                         className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                         name="code2"
-                        maxLength={1}
                       />
                       <input
                         type="text"
                         autoComplete="off"
                         className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                         name="code3"
-                        maxLength={1}
                       />
                       <input
                         type="text"
                         autoComplete="off"
                         className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                         name="code4"
-                        maxLength={1}
                       />
                       <input
                         type="text"
@@ -527,7 +526,6 @@ const AdNumber = (props: activeSection) => {
                         autoComplete="off"
                         className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
                         name="code6"
-                        maxLength={1}
                       />
                     </div>
                     
