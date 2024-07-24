@@ -85,8 +85,9 @@ const AdNumber = (props: activeSection) => {
   });
 
   useEffect(() => {
-    const inputElements = document.querySelectorAll(".input_wrapper input");
-    inputElements.forEach((ele, index) => {
+    const inputElements = document.querySelectorAll(".input_wrapper4 input");
+
+    inputElements?.forEach((ele, index) => {
       ele.addEventListener("keydown", (e: any) => {
         if (e.keyCode === 8 && e.target.value === "") {
           (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
@@ -98,7 +99,6 @@ const AdNumber = (props: activeSection) => {
         const lastInputBox = index === inputElements.length - 1;
         const didInsertContent = first !== undefined;
         if (didInsertContent && !lastInputBox) {
-          // continue to input the rest of the string
           (inputElements[index + 1] as HTMLElement).focus();
           (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
           inputElements[index + 1].dispatchEvent(new Event("input"));
@@ -120,15 +120,18 @@ const AdNumber = (props: activeSection) => {
       });
     });
 
+
+  }, [!show]);
+
+
+  useEffect(() => {
     setTimeout(() => {
-      if(errors.uname){
+      if (errors.uname) {
         clearErrors('uname');
       }
     }, 3000);
-  }, [!show, errors]);
+  }, [errors])
 
-
-  
 
   const sendOtp = async () => {
     try {
@@ -248,7 +251,7 @@ const AdNumber = (props: activeSection) => {
     else if (currentTime > deadline) {
       setShowTime(false);
       setStatuss(true);
-      const inputElements = document.querySelectorAll(".input_wrapper input");
+      const inputElements = document.querySelectorAll(".input_wrapper4 input");
       inputElements.forEach((ele, index) => {
         (inputElements[index] as HTMLInputElement).value = ""
       })
@@ -269,7 +272,7 @@ const AdNumber = (props: activeSection) => {
       if (Ref.current) clearInterval(Ref.current);
       setShowTime(false);
       setStatuss(true);
-      const inputElements = document.querySelectorAll(".input_wrapper input");
+      const inputElements = document.querySelectorAll(".input_wrapper4 input");
       inputElements.forEach((ele, index) => {
         (inputElements[index] as HTMLInputElement).value = ""
       })
@@ -337,7 +340,7 @@ const AdNumber = (props: activeSection) => {
             // if (Ref.current) clearInterval(Ref.current);
             // setShowTime(false);
             // setStatuss(true);
-            const inputElements = document.querySelectorAll(".input_wrapper input");
+            const inputElements = document.querySelectorAll(".input_wrapper4 input");
             inputElements.forEach((ele, index) => {
               (inputElements[index] as HTMLInputElement).value = ""
             })
@@ -397,7 +400,7 @@ const AdNumber = (props: activeSection) => {
             setDisabled(false);
           }, 3000);
         }
-      } 
+      }
     } catch (error) {
       console.log(error);
     }
@@ -410,8 +413,8 @@ const AdNumber = (props: activeSection) => {
   };
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
-  
- 
+
+
 
   return (
     <>
@@ -461,14 +464,14 @@ const AdNumber = (props: activeSection) => {
                 </svg>
               </div>
               <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                }
+              }}>
                 <div className="py-30 md:py-40">
                   <div className="flex flex-col mb-[15px] md:mb-20 gap-20">
                     <div>
-                      
+
                       <input
                         type="text"
                         {...register("uname")}
@@ -482,87 +485,82 @@ const AdNumber = (props: activeSection) => {
                         <p className="errorMessage">{errors.uname.message}</p>
                       )}
                     </div>
-                   
+
 
                   </div>
                   <div className="flex flex-col  gap-20">
                     <label className="sm-text">Enter 6 Digit OTP</label>
-                    <div className="flex gap-10 adsdsdasda justify-between items-center input_wrapper">
+                    <div className="flex gap-10 justify-between items-center input_wrapper4 relative">
                       <input
                         type="text"
                         autoComplete="off"
-                        className="block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                        className={`block px-2 font-noto md:px-5  w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none `}
                         name="code1"
-                        maxLength={1}
                       />
                       <input
                         type="text"
                         autoComplete="off"
-                        className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                        className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary  `}
                         name="code2"
-                        maxLength={1}
                       />
                       <input
                         type="text"
                         autoComplete="off"
-                        className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                        className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary `}
                         name="code3"
-                        maxLength={1}
                       />
                       <input
                         type="text"
                         autoComplete="off"
-                        className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                        className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid   text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary  `}
                         name="code4"
-                        maxLength={1}
                       />
                       <input
                         type="text"
                         autoComplete="off"
-                        className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                        className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary`}
                         name="code5"
                       />
                       <input
                         type="text"
                         autoComplete="off"
-                        className="block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-solid border border-black dark:border-white  text-center  rounded min-h-[40px] md:min-h-[62px] text-black dark:text-white outline-none focus:!border-primary"
+                        className={`block px-2 font-noto md:px-5 w-40 md:w-[60px] dark:bg-black bg-primary-100 border-black dark:border-white border border-solid  text-center  rounded min-h-[40px] md:min-h-[60px] text-black dark:text-white outline-none focus:!border-primary `}
                         name="code6"
-                        maxLength={1}
                       />
                     </div>
-                    
+
                   </div>
-                <div className="mt-2">
-                      <div className={`flex gap-1 ${showTime === true ? '' : 'hidden'}`}>
-                        <p className={`info-10-14 text-start  md-text`}>Your OTP will expire within </p>
-                        <p className={`info-10-14 text-start md-text`}> {timeLeft}</p>
-                      </div>
-                      <p className={`lg:mt-[10px] md-text errorMessage ${otpMessage === '' ? 'hidden' : ''}`} >{otpMessage}</p>
-                      <div className="text-end">
-                        {isOtp === false &&
-                          <button
-                            type="button"
-                            className={`info-10-14 text-end  !text-primary ${disabled === true ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                            onClick={() => disabled === false ? sendOtp() : ''}
-                            disabled={disabled}
-                          >
-                            Send OTP
-                          </button>
-                        }
-                        {statuss &&
-                          <button
-                            type="button"
-                            className={`info-10-14 text-end  !text-primary ${disabled === true ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-                            onClick={() => disabled === false ? sendOtp() : ''}
-                            disabled={disabled}
-                          >
-                            Resend OTP
-                          </button>
-                        }
-                      </div>
+                  <div className="mt-2">
+                    <div className={`flex gap-1 ${showTime === true ? '' : 'hidden'}`}>
+                      <p className={`info-10-14 text-start  md-text`}>Your OTP will expire within </p>
+                      <p className={`info-10-14 text-start md-text`}> {timeLeft}</p>
                     </div>
+                    <p className={`lg:mt-[10px] md-text errorMessage ${otpMessage === '' ? 'hidden' : ''}`} >{otpMessage}</p>
+                    <div className="text-end">
+                      {isOtp === false &&
+                        <button
+                          type="button"
+                          className={`info-10-14 text-end  !text-primary ${disabled === true ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                          onClick={() => disabled === false ? sendOtp() : ''}
+                          disabled={disabled}
+                        >
+                          Send OTP
+                        </button>
+                      }
+                      {statuss &&
+                        <button
+                          type="button"
+                          className={`info-10-14 text-end  !text-primary ${disabled === true ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                          onClick={() => disabled === false ? sendOtp() : ''}
+                          disabled={disabled}
+                        >
+                          Resend OTP
+                        </button>
+                      }
+                    </div>
+                  </div>
                 </div>
-                
+
                 <div className="flex gap-[20px]">
                   <button
                     className="solid-button2 w-full "
@@ -572,7 +570,7 @@ const AdNumber = (props: activeSection) => {
                   >
                     Cancel
                   </button>
-                  <button disabled={btnDisabled === true || isOtp === false || statuss === true ? true:false} className={`solid-button px-[51px] w-full ${isOtp === false || statuss === true?'cursor-not-allowed opacity-25':''} ${btnDisabled === true ? 'cursor-not-allowed' : ''}`}>{btnDisabled &&
+                  <button disabled={btnDisabled === true || isOtp === false || statuss === true ? true : false} className={`solid-button px-[51px] w-full ${isOtp === false || statuss === true ? 'cursor-not-allowed opacity-25' : ''} ${btnDisabled === true ? 'cursor-not-allowed' : ''}`}>{btnDisabled &&
                     <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
                       <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />

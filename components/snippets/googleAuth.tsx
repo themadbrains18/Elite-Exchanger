@@ -257,7 +257,7 @@ const GoogleAuth = (props: activeSection) => {
       <div className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[600px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${popup===false  ?"opacity-100":"opacity-0"}
       }`}>
         <div className="flex items-center justify-between">
-          <p className="sec-title " style={{ fontSize: '18px'}}>Set Up Google Two-Factor Authentication</p>
+          <p className="sec-title !text-[18px]">Set Up Google Two-Factor Authentication</p>
           <svg
             onClick={() => {
               props.setShow(false);
@@ -282,7 +282,7 @@ const GoogleAuth = (props: activeSection) => {
                             l22.502-22.502l22.501,22.502c0.913,0.913,2.109,1.369,3.306,1.369s2.393-0.456,3.306-1.369
                             C61.42,57.647,61.42,54.687,59.595,52.861z"
               />
-            </svg>
+          </svg>
           </div>
           <div className="flex flex-col mt-[25px] mb-[25px] md:mb-30 gap-[10px] md:gap-20 relative ">
             <label className="sm-text">A verification code will be sent to {props?.session?.user?.email.split("@")[0].substring(0, 3)}***@{props?.session?.user?.email.split("@")[1]}</label>
