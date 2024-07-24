@@ -48,7 +48,7 @@ const PaymentList = () => {
       mainInput.addEventListener("click", () => {
         for (let i of allInputs) {
           if (i instanceof HTMLInputElement) {
-            console.log(i.value);
+            // console.log(i.value);
           }
 
 

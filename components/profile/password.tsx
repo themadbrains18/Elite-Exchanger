@@ -207,7 +207,7 @@ const Password = (props: activeSection) => {
           }
         );
         let res = await userExist.json();
-        console.log(res,"res");
+        // console.log(res,"res");
         
 
         if (res.data.message !== undefined) {
@@ -217,7 +217,7 @@ const Password = (props: activeSection) => {
           }, 3000);
         } else {
           // return;
-          console.log(res,"=========res.data");
+          // console.log(res,"=========res.data");
           
           toast.success(res.data.data + ' and you will be redirect on login page in  short time,',{position : 'top-center'});
           setTimeout(() => {

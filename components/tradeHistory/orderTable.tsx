@@ -67,7 +67,7 @@ const OrderTable = (props: propsData) => {
         "Authorization": session?.user?.access_token
       },
     }).then(response => response.json());
-    console.log(tradeHistory,"==tradeHistory");
+    // console.log(tradeHistory,"==tradeHistory");
     
     setTotal(tradeHistory?.data?.total)
 
@@ -78,7 +78,7 @@ const OrderTable = (props: propsData) => {
       tradeHistory = [];
     }
     else {
-      console.log("=here");
+      // console.log("=here");
       
       tradeHistory = tradeHistory?.data?.data;
     }

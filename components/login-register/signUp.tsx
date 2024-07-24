@@ -87,7 +87,7 @@ const SignUp = () => {
 
       const [localPart, domainPart] = data.username.includes('@') && data.username.split('@');
 
-      console.log(localPart.length,"=local pat");
+      // console.log(localPart.length,"=local pat");
       
       if(localPart.length<6 || localPart.length>32){
         setError('username',{message:"Username must be between 6 and 32 characters long."})

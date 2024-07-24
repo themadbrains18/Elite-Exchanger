@@ -32,7 +32,7 @@ const PositionsTable = (props: propsData) => {
     props?.positions.map((item: any, index: number) => {
       if (item.id == id) {
         setPositionData(item);
-        console.log("test done");
+        // console.log("test done");
       }
     });
 

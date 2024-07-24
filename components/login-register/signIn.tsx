@@ -87,7 +87,7 @@ const SignIn = (Props: loginType) => {
         data.email = "string";
         data.number = data.username
       }
-      console.log(data, "==data");
+      // console.log(data, "==data");
 
 
       if (Props.loginType === "admin") {

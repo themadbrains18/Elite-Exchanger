@@ -43,7 +43,7 @@ const Dashboard = (props: FixSection) => {
   }, [userDetails, reset]);
 
   const onHandleSubmit = async (data: any) => {
-    console.log("here i am");
+    // console.log("here i am");
     
     setDisabled(true)
     // Create a new object with only the required fields

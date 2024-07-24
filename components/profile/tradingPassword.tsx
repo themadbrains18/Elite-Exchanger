@@ -233,7 +233,7 @@ const TradingPassword = (props: activeSection) => {
 
 
         toast.error(`${response.data.message}`, { autoClose: 2000 });
-        console.log("sdhfsdfhksh");
+        // console.log("sdhfsdfhksh");
         
         setTimeout(() => {
           setDisabled(false);

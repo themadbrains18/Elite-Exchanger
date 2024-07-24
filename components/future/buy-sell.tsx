@@ -359,7 +359,7 @@ const BuySell = (props: fullWidth) => {
 
       if (orderType === "qty") {
         qty = sizeValue.toString();
-        console.log(qty, "==qty", props?.minTrade, "==props?.minTrade");
+        // console.log(qty, "==qty", props?.minTrade, "==props?.minTrade");
 
       }
       if (qty < props?.minTrade) {

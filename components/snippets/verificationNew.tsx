@@ -213,7 +213,7 @@ const VerificationNew = (props: activeSection) => {
             }
 
            let res= await props.finalOtpVerification(fillOtp);
-           console.log("==res");
+        //    console.log("==res");
            
            if(!res){
             setTimeout(()=>{
