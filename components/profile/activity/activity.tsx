@@ -304,7 +304,7 @@ const Activity = (props: fixSection) => {
                         />
                     </svg>
                   </div>
-                  <p className="text-[16px] md:text-[18px] dark:text-grey-v-1 leading-4 md:leading-5 text-center my-40">Are You Sure You want to clear all history?</p>
+                  <p className="text-[16px] md:text-[18px] dark:text-grey-v-1 leading-4 md:leading-5 text-center my-40">Are You Sure you want to clear all history?</p>
                   <div className="flex items-center gap-10 mt-6">
                     <button className="solid-button2 w-full" onClick={ ()=>{setConfirmDelete(false)} }>Cancel</button>
                     <button className="solid-button w-full" onClick={() => {clearActivity();setConfirmDelete(false)}}>Delete</button>
