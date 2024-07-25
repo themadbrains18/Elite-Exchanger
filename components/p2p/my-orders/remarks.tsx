@@ -81,19 +81,19 @@ const Remarks = (props: propsData) => {
     }
 
     useEffect(() => {
-        if (props.userOrder?.status === 'isProcess') {
+        if (orderDetail?.status === 'isProcess') {
             orderTimeCalculation();
 
         }
-    }, [props?.orderid, props.userOrder, wbsocket]);
+    }, [query?.buy, orderDetail, wbsocket]);
 
     const orderTimeCalculation = async () => {
-        let deadline = new Date(props.userOrder?.createdAt);
+        let deadline = new Date(orderDetail?.createdAt);
         deadline.setMinutes(deadline.getMinutes() + 15);
         deadline.setSeconds(deadline.getSeconds() + 5);
         let currentTime = new Date();
 
-        if (currentTime < deadline && props.userOrder?.status === 'isProcess') {
+        if (currentTime < deadline && orderDetail?.status === 'isProcess') {
             if (Ref.current) clearInterval(Ref.current);
             // console.log("in cancel 2");
 
@@ -103,7 +103,7 @@ const Remarks = (props: propsData) => {
             Ref.current = timer;
         }
 
-        else if (currentTime > deadline && props.userOrder?.status === 'isProcess') {
+        else if (currentTime > deadline && orderDetail?.status === 'isProcess') {
             // console.log("order cancel 1");
 
             // return;
@@ -116,7 +116,7 @@ const Remarks = (props: propsData) => {
      * @param e 
      */
     const calculateTimeLeft = (e: any) => {
-        // console.log(props.userOrder?.status,"========= time update");
+        // console.log(orderDetail?.status,"========= time update");
         let { total, minutes, seconds }
             = getTimeRemaining(e);
 
@@ -128,9 +128,9 @@ const Remarks = (props: propsData) => {
         }
         else {
             if (Ref.current) clearInterval(Ref.current);
-            // console.log(props.userOrder, "=props.userOrder");
+            // console.log(orderDetail, "=orderDetail");
 
-            if (props.userOrder?.status === 'isProcess') {
+            if (orderDetail?.status === 'isProcess') {
                 // return;
                 orderCancel('auto');
             }
@@ -153,6 +153,7 @@ const Remarks = (props: propsData) => {
      * @returns 
      */
     const updatePaymentMethod = async () => {
+        console.log(orderDetail?.id,"=orderDetail?.id");
 
         if (props.paymentMethod === '') {
             toast.error('Please select one payment method');
@@ -160,7 +161,7 @@ const Remarks = (props: propsData) => {
         }
 
         let obj = {
-            "order_id": props.orderid,
+            "order_id": orderDetail?.id,
             "p_method": props.paymentMethod,
             "user_id": session?.user?.user_id
         }
@@ -188,7 +189,7 @@ const Remarks = (props: propsData) => {
                 if (wbsocket) {
                     let orderData = {
                         ws_type: 'order',
-                        orderid: props.orderid,
+                        orderid: orderDetail?.id,
                         user_id: session?.user?.user_id
                     }
                     wbsocket.send(JSON.stringify(orderData));
@@ -214,9 +215,11 @@ const Remarks = (props: propsData) => {
      */
     const orderCancel = async (type: string) => {
 
+        console.log(orderDetail?.id,"=orderDetail?.id");
+        
         let obj = {
-            "order_id": props.orderid,
-            "user_id": props.userOrder?.buy_user_id,
+            "order_id": orderDetail?.id,
+            "user_id": orderDetail?.buy_user_id,
             "cancelType": type
         }
 
@@ -239,7 +242,7 @@ const Remarks = (props: propsData) => {
                 if (wbsocket) {
                     let orderData = {
                         ws_type: 'order',
-                        orderid: props.orderid,
+                        orderid: orderDetail?.id,
                         user_id: session?.user?.user_id
                     }
                     wbsocket.send(JSON.stringify(orderData));
@@ -264,7 +267,7 @@ const Remarks = (props: propsData) => {
      */
     const orderReleased = async () => {
         let obj = {
-            "order_id": props.orderid,
+            "order_id": orderDetail?.id,
             "user_id": session?.user?.user_id,
             "fundcode": ''
         }
@@ -303,7 +306,7 @@ const Remarks = (props: propsData) => {
                     if (wbsocket) {
                         let orderData = {
                             ws_type: 'order',
-                            orderid: props.orderid
+                            orderid: orderDetail?.id
                         }
                         wbsocket.send(JSON.stringify(orderData));
                     }
@@ -364,8 +367,8 @@ const Remarks = (props: propsData) => {
                 {
                     orderDetail?.status === 'isReleased' && query && query?.buy === orderDetail?.id &&
                     (orderDetail?.sell_user_id === session?.user?.user_id ?
-                        <><p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! You have released your coins. Your P2P order #{props.orderid} has been successfully completed</p></>
-                        : <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! Your P2P order #{props.orderid} has been successfully completed. The assets have been transferred to your wallet.</p>)
+                        <><p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! You have released your coins. Your P2P order #{orderDetail?.id} has been successfully completed</p></>
+                        : <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! Your P2P order #{orderDetail?.id} has been successfully completed. The assets have been transferred to your wallet.</p>)
                 }
                 {
                     orderDetail?.status === 'isCanceled' && query && query?.buy === orderDetail?.id &&
@@ -420,7 +423,7 @@ const Remarks = (props: propsData) => {
                         <button className='solid-button max-w-full sm:max-w-[220px] w-full' onClick={() => { orderReleased() }}>Release Crypto</button>
                     }
                     {/* {
-                        props?.userOrder?.status === 'isReleased' && props?.userOrder?.sell_user_id === session?.user?.user_id &&
+                        orderDetail?.status === 'isReleased' && orderDetail?.sell_user_id === session?.user?.user_id &&
                         <button disabled={true} className='solid-button max-w-full sm:max-w-[220px] w-full cursor-not-allowed'>Order Completed</button>
                     } */}
 
