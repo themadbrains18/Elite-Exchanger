@@ -304,7 +304,7 @@ const FutureTrading = (props: Session) => {
                         <div className='w-full max-w-full'>
                             <div className='flex relative w-full max-w-full'>
                                 <div className={`w-full max-w-[380px]  absolute duration-300 z-[4] top-[-12px] hover:left-0  ${show1 ? 'left-0' : 'left-[-100%]'}`} >
-                                    <CoinTypes coins={allCoins} />
+                                    <CoinTypes coins={allCoins} show1={show1} />
                                 </div>
                                 {/* Future chart */}
                                 <div className='max-[1499px]:pl-[20px] w-full max-w-full  bg-[#fafafa] dark:bg-[#1a1b1f] '>

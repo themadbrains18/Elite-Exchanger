@@ -21,6 +21,7 @@ const ChartBanner = (props: propsData) => {
   let [fillFav, setFillFav] = useState(false);
   const [currentToken, setCurrentToken] = useState<any>(Object);
   const [cardsData, setCardsData] = useState([]);
+  // let [barWidth, setBarWidth] = useState(0);
   const router = useRouter();
   const { slug } = router.query;
 
@@ -84,15 +85,49 @@ const ChartBanner = (props: propsData) => {
     ]
     setCurrentToken(ccurrentToken[0]);
     setCardsData(obj);
-
+   
     let favItems = localStorage.getItem('favToken');
     if (favItems) {
       favItems = JSON.parse(favItems);
     }
     if (favItems && favItems.indexOf(ccurrentToken[0]?.id) !== -1) {
       setFillFav(true);
+    } else {
+      setFillFav(false);
     }
+
+  
   }
+
+  // const styles = {
+  //   width: `${barWidth}%`,
+  // };
+
+  // const BarWidth = () =>{
+
+  //   const highPrice = props?.hlocData?.high;
+  //   const lowPrice = props?.hlocData?.low;
+  //   let currentPrice = currentToken?.price?.toFixed(5); 
+    
+  //   // Calculate ranges
+  //   const totalRange = highPrice - lowPrice;
+  //   // Check for negative price and set to 0 if negative
+  //   if (currentPrice < 0) {
+  //       currentPrice = 0;
+  //   }
+  //   const currentRange = currentPrice - lowPrice;
+  //   console.log(currentRange,"==========currentRange");
+    
+  //   // Calculate bar width percentage
+  //   const barWidthPercentage = (currentRange / totalRange) * 100;
+  //   setBarWidth(barWidthPercentage);
+  // }
+  // useEffect(()=>{
+    
+  //     BarWidth();
+    
+  // },[props])
+
 
   return (
     <div className='p-20 rounded-10  bg-white dark:bg-d-bg-primary'>
@@ -127,7 +162,7 @@ const ChartBanner = (props: propsData) => {
                         viewBox="0 0 24 24"
                         fill="none"
                         xmlns="http://www.w3.org/2000/svg"
-                        className='md:m-auto'
+                        className='md:m-auto cursor-pointer'
                         onClick={() => {
                           let existItem: any = localStorage.getItem('favToken');
                           if (existItem) {
@@ -192,7 +227,7 @@ const ChartBanner = (props: propsData) => {
                   </p>
                 </div>
                 <div className='mb-[15px] mt-[15px] w-full h-[5px] rounded-[5px] bg-grey-v-2'>
-                  <div className='w-[40%] h-[5px] rounded-[5px] bg-primary'></div>
+                  <div className={`w-[40%] h-[5px] rounded-[5px] bg-primary`}></div>
                 </div>
                 <div className='flex items-center justify-between'>
                   <p className="info-10-14 !text-gamma">Low : ${props?.hlocData?.changeRate !== undefined ? currencyFormatter(props?.hlocData?.low ): 0.0}</p>

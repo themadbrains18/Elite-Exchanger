@@ -306,10 +306,16 @@ const TransferModal = (props: showPopup) => {
             className="outline-none  bg-[#e5ecf0] dark:bg-[#373d4e]"
             placeholder="0"
             onChange={(e: any) => {
-              const value = e.target.value;
-              if (/^\d*\.?\d{0,6}$/.test(value)) {
-                setAmount(value);
-              }
+                const value = e.target.value;
+                const regex = /^\d{0,11}(\.\d{0,6})?$/;
+                if (regex.test(value) || value === "") {
+
+                  if (/^\d*\.?\d{0,6}$/.test(value)) {
+                    setAmount(value);
+                  }
+                }else{
+                  e.target.value = value.slice(0, -1);
+                }
             }}
           />
           <p className="top-label dark:!text-primary cursor-pointer" onClick={() => setValue('amount', userAsset !== undefined && userAsset !== null ? userAsset?.balance?.toFixed(6) : 0)}>All</p>
@@ -325,7 +331,7 @@ const TransferModal = (props: showPopup) => {
         </p>
         <button
           disabled={status === "unauthenticated" ? true : false || btnDisabled}
-          className={`border bg-primary hover:bg-primary-800 text-white dark:border-[#616161] border-[#e5e7eb] text-[14px] rounded-[4px] py-[10.5px] px-[10px] w-full max-w-full mt-[15px] ${status === "unauthenticated" || btnDisabled === true
+          className={`mt-[15px] solid-button w-full  ${status === "unauthenticated" || btnDisabled === true
             ? "cursor-not-allowed opacity-50"
             : ""
             }`}
