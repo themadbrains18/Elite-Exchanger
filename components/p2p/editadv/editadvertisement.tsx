@@ -382,7 +382,7 @@ const EditAdverstisement = (props: propsData) => {
                     </p>
                   </div> */}
                   <div className="md:mt-30 mt-20">
-                    <p className="info-10-14">{show === 1 ? "Fixed" : "Floating"}</p>
+                    <p className="info-10-14">{show === 1 ? "Fixed (INR)" : "Floating (INR)"}</p>
                     <input
                       type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
                       step={0.000001}

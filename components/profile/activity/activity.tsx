@@ -278,7 +278,7 @@ const Activity = (props: fixSection) => {
           confirmDelete && (
             <>
               <div className="bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible" onClick={ ()=>{setConfirmDelete(false)} }></div>
-              <div className="max-w-[calc(100%-30px)] md:max-w-[350px] w-full p-5  z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+              <div className="max-w-[calc(100%-30px)] md:max-w-[350px] w-full p-[40px]  z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
                   <div className="flex items-center justify-between ">
                     <p className="sec-title">Delete History</p>
                     <svg
