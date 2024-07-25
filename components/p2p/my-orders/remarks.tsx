@@ -21,7 +21,7 @@ interface propsData {
 
 const Remarks = (props: propsData) => {
 
-    
+
     const [timeLeft, setTimer] = useState('');
 
     const { status, data: session } = useSession();
@@ -32,6 +32,8 @@ const Remarks = (props: propsData) => {
     const router = useRouter();
     const { query } = router;
 
+    const [orderDetail, setOrderDetail] = useState<any>({});
+
     const Ref: any = useRef(null);
 
     const [finalFormData, setFinalFormData] = useState({
@@ -41,12 +43,45 @@ const Remarks = (props: propsData) => {
     });
 
     const wbsocket = useWebSocket();
+    const socketListenerRef = useRef<(event: MessageEvent) => void>();
 
     useEffect(() => {
         if (query) {
-          console.log('Query parameters:', query?.buy, props?.userOrder?.id);
+            getOrderByOrderId(query?.buy, 'onload');
         }
-      }, [query]);
+        const handleSocketMessage = (event: any) => {
+            const data = JSON.parse(event.data).data;
+            let eventDataType = JSON.parse(event.data).type;
+            if (eventDataType === "order") {
+                getOrderByOrderId(query && query?.buy, 'socket');
+            }
+        };
+
+        // wbsocket.addEventListener('message', handleSocketMessage);
+        if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
+            if (socketListenerRef.current) {
+                wbsocket.removeEventListener('message', socketListenerRef.current);
+            }
+            socketListenerRef.current = handleSocketMessage;
+            wbsocket.addEventListener('message', handleSocketMessage);
+        }
+
+        return () => {
+            if (wbsocket) {
+                wbsocket.removeEventListener('message', handleSocketMessage);
+            }
+        };
+    }, [query, wbsocket]);
+
+    const getOrderByOrderId = async (orderid: any, type: string) => {
+        let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {
+            method: "GET",
+            headers: {
+                "Authorization": session?.user?.access_token
+            },
+        }).then(response => response.json());
+        setOrderDetail(userOrder?.data);
+    }
 
     useEffect(() => {
         if (props.userOrder?.status === 'isProcess') {
@@ -296,47 +331,47 @@ const Remarks = (props: propsData) => {
         <>
             <div className='p-[15px] md:p-[40px] md:pb-20 border dark:border-opacity-[15%] border-grey-v-1 rounded-10 mt-30'>
                 {
-                    props?.userOrder?.status !== 'isCanceled' && query && query?.buy === props?.userOrder?.id &&
+                    orderDetail?.status !== 'isCanceled' &&
                     <>
                         <div className='border-b dark:border-opacity-[15%] border-grey-v-1 md:pb-30 pb-[15px] md:mb-30 mb-[15px]'>
                             <p className="text-[19px] md:text-[23px]  leading-7 font-medium   dark:!text-white  !text-h-primary">Remarks</p>
                         </div>
 
 
-                        {props?.userOrder?.sell_user_id === session?.user?.user_id ?
+                        {orderDetail?.sell_user_id === session?.user?.user_id ?
                             <p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You can pay me on my registered payment methods</p>
                             : <p className='sm-heading !text-banner-text mb-[15px] md:mb-[24px] dark:!text-grey-v-1'>You can pay me on above listed payment methods</p>}
                     </>
                 }
                 {
 
-                    <p className='nav-text-sm mb-[15px] md:mb-[24px]'>{props?.userOrder?.user_post?.remarks ? props?.userOrder?.user_post?.remarks : `The exchange offers a seamless trading experience with intuitive navigation and quick transaction times. Highly recommend for both beginners and experienced traders!`}</p>
+                    <p className='nav-text-sm mb-[15px] md:mb-[24px]'>{orderDetail?.user_post?.remarks ? orderDetail?.user_post?.remarks : `The exchange offers a seamless trading experience with intuitive navigation and quick transaction times. Highly recommend for both beginners and experienced traders!`}</p>
                 }
                 {
-                    props?.userOrder?.status === 'isProcess' && query && query?.buy === props?.userOrder?.id &&
-                    (props?.userOrder?.buy_user_id === session?.user?.user_id ?
-                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please complete your payment within <span className='dark:text-white text-black'>{timeLeft}</span> minutes you need to pay<span className='dark:text-white text-black'> {truncateNumber(props?.userOrder?.spend_amount, 6)} INR.</span></p>
+                    orderDetail?.status === 'isProcess' && query && query?.buy === orderDetail?.id &&
+                    (orderDetail?.buy_user_id === session?.user?.user_id ?
+                        <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please complete your payment within <span className='dark:text-white text-black'>{timeLeft}</span> minutes you need to pay<span className='dark:text-white text-black'> {truncateNumber(orderDetail?.spend_amount, 6)} INR.</span></p>
                         :
                         <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'> Payment complete within <span className='dark:text-white text-black'>{timeLeft} </span> minutes</p>
                     )
                 }
                 {
-                    props?.userOrder?.status === 'isCompleted' && query && query?.buy === props?.userOrder?.id &&
+                    orderDetail?.status === 'isCompleted' && query && query?.buy === orderDetail?.id &&
 
-                    (props?.userOrder?.buy_user_id === session?.user?.user_id ?
+                    (orderDetail?.buy_user_id === session?.user?.user_id ?
                         <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The payment is done. Please wait for the seller to release the crypto</p>
                         :
                         <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The payment is done. Please release the crypto</p>
                     )
                 }
                 {
-                    props?.userOrder?.status === 'isReleased' && query && query?.buy === props?.userOrder?.id &&
-                    (props?.userOrder?.sell_user_id === session?.user?.user_id ?
+                    orderDetail?.status === 'isReleased' && query && query?.buy === orderDetail?.id &&
+                    (orderDetail?.sell_user_id === session?.user?.user_id ?
                         <><p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! You have released your coins. Your P2P order #{props.orderid} has been successfully completed</p></>
                         : <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! Your P2P order #{props.orderid} has been successfully completed. The assets have been transferred to your wallet.</p>)
                 }
                 {
-                    props?.userOrder?.status === 'isCanceled' && query && query?.buy === props?.userOrder?.id &&
+                    orderDetail?.status === 'isCanceled' && query && query?.buy === orderDetail?.id &&
                     <>
                         <div className='inline-flex items-center gap-[7px] px-10 py-[8px] bg-[#FAFAFA] md:mb-30 mb-[15px] dark:bg-orange rounded-[4px]'>
                             <div className='min-w-[24px]'>
@@ -348,7 +383,7 @@ const Remarks = (props: propsData) => {
                     </>
                 }
                 {
-                    props?.userOrder?.status !== 'isCanceled' && query && query?.buy === props?.userOrder?.id &&
+                    orderDetail?.status !== 'isCanceled' && query && query?.buy === orderDetail?.id &&
                     <p className='nav-text-sm'>
                         <span className='text-black dark:text-white'>Notice: </span>
                         Please don't leave sensitive information when transferring funds. By making a payment, you agree to our terms and conditions.
@@ -358,33 +393,33 @@ const Remarks = (props: propsData) => {
                 <div className='flex items-center sm:gap-30 gap-[15px] md:mt-50 mt-30 md:flex-row flex-col'>
 
                     {
-                        (props?.userOrder?.status === 'isProcess' || props?.userOrder?.status === 'isCompleted') && props?.userOrder?.buy_user_id === session?.user?.user_id && query?.buy === props?.userOrder &&
+                        (orderDetail?.status === 'isProcess' || orderDetail?.status === 'isCompleted') && orderDetail?.buy_user_id === session?.user?.user_id && query?.buy === orderDetail?.id &&
                         <button className={` w-full max-w-full md:max-w-[200px] rounded-10 info-16-18  bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800 p-[15px] md:py-[19px] md:px-[18px]`} onClick={() => { setShow(true); setConfirmation(true) }}>
                             Cancel Order
                         </button>
                     }
 
                     {
-                        props?.userOrder?.status === 'isCanceled' && query && query?.buy === props?.userOrder?.id &&
+                        orderDetail?.status === 'isCanceled' && query && query?.buy === orderDetail?.id &&
                         <button onClick={() => { router.push('/p2p/buy') }} className={`w-full max-w-[350px] rounded-10 info-16-18  bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800 py-[19px] px-[18px]`}>
                             Go back and place another order
                         </button>
                     }
 
                     {
-                        props?.userOrder?.status === 'isProcess' && query && query?.buy === props?.userOrder?.id && props?.userOrder?.buy_user_id === session?.user?.user_id &&
+                        orderDetail?.status === 'isProcess' && query && query?.buy === orderDetail?.id && orderDetail?.buy_user_id === session?.user?.user_id &&
                         <button className='solid-button max-w-full sm:max-w-[220px] w-full' onClick={() => { updatePaymentMethod() }}>Mark as Paid</button>
                     }
                     {
-                        props?.userOrder?.status === 'isCompleted' && query && query?.buy === props?.userOrder?.id && props?.userOrder?.buy_user_id === session?.user?.user_id &&
+                        orderDetail?.status === 'isCompleted' && query && query?.buy === orderDetail?.id && orderDetail?.buy_user_id === session?.user?.user_id &&
                         <button disabled className='solid-button max-w-full sm:max-w-[220px] w-full cursor-not-allowed'>I Have Paid</button>
                     }
                     {
-                        props?.userOrder?.status === 'isProcess' && query && query?.buy === props?.userOrder?.id && props?.userOrder?.sell_user_id === session?.user?.user_id &&
+                        orderDetail?.status === 'isProcess' && query && query?.buy === orderDetail?.id && orderDetail?.sell_user_id === session?.user?.user_id &&
                         <button className='solid-button max-w-fit  w-full' >Payment under process</button>
                     }
                     {
-                        props?.userOrder?.status === 'isCompleted' && query && query?.buy === props?.userOrder?.id && props?.userOrder?.sell_user_id === session?.user?.user_id &&
+                        orderDetail?.status === 'isCompleted' && query && query?.buy === orderDetail?.id && orderDetail?.sell_user_id === session?.user?.user_id &&
                         <button className='solid-button max-w-full sm:max-w-[220px] w-full' onClick={() => { orderReleased() }}>Release Crypto</button>
                     }
                     {/* {
