@@ -44,7 +44,7 @@ const Remarks = (props: propsData) => {
 
     useEffect(() => {
         if (query) {
-          console.log('Query parameters:', query?.buy);
+          console.log('Query parameters:', query?.buy, props?.userOrder?.id);
         }
       }, [query]);
 
@@ -296,7 +296,7 @@ const Remarks = (props: propsData) => {
         <>
             <div className='p-[15px] md:p-[40px] md:pb-20 border dark:border-opacity-[15%] border-grey-v-1 rounded-10 mt-30'>
                 {
-                    props?.userOrder?.status !== 'isCanceled' && query && query?.buy === props?.userOrder &&
+                    props?.userOrder?.status !== 'isCanceled' && query && query?.buy === props?.userOrder?.id &&
                     <>
                         <div className='border-b dark:border-opacity-[15%] border-grey-v-1 md:pb-30 pb-[15px] md:mb-30 mb-[15px]'>
                             <p className="text-[19px] md:text-[23px]  leading-7 font-medium   dark:!text-white  !text-h-primary">Remarks</p>
@@ -313,7 +313,7 @@ const Remarks = (props: propsData) => {
                     <p className='nav-text-sm mb-[15px] md:mb-[24px]'>{props?.userOrder?.user_post?.remarks ? props?.userOrder?.user_post?.remarks : `The exchange offers a seamless trading experience with intuitive navigation and quick transaction times. Highly recommend for both beginners and experienced traders!`}</p>
                 }
                 {
-                    props?.userOrder?.status === 'isProcess' && query && query?.buy === props?.userOrder &&
+                    props?.userOrder?.status === 'isProcess' && query && query?.buy === props?.userOrder?.id &&
                     (props?.userOrder?.buy_user_id === session?.user?.user_id ?
                         <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Please complete your payment within <span className='dark:text-white text-black'>{timeLeft}</span> minutes you need to pay<span className='dark:text-white text-black'> {truncateNumber(props?.userOrder?.spend_amount, 6)} INR.</span></p>
                         :
@@ -321,7 +321,7 @@ const Remarks = (props: propsData) => {
                     )
                 }
                 {
-                    props?.userOrder?.status === 'isCompleted' && query && query?.buy === props?.userOrder &&
+                    props?.userOrder?.status === 'isCompleted' && query && query?.buy === props?.userOrder?.id &&
 
                     (props?.userOrder?.buy_user_id === session?.user?.user_id ?
                         <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>The payment is done. Please wait for the seller to release the crypto</p>
@@ -330,13 +330,13 @@ const Remarks = (props: propsData) => {
                     )
                 }
                 {
-                    props?.userOrder?.status === 'isReleased' && query && query?.buy === props?.userOrder &&
+                    props?.userOrder?.status === 'isReleased' && query && query?.buy === props?.userOrder?.id &&
                     (props?.userOrder?.sell_user_id === session?.user?.user_id ?
                         <><p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! You have released your coins. Your P2P order #{props.orderid} has been successfully completed</p></>
                         : <p className='dark:!text-[#96969A] !text-banner-text mb-20 sec-text'>Order completed! Your P2P order #{props.orderid} has been successfully completed. The assets have been transferred to your wallet.</p>)
                 }
                 {
-                    props?.userOrder?.status === 'isCanceled' && query && query?.buy === props?.userOrder &&
+                    props?.userOrder?.status === 'isCanceled' && query && query?.buy === props?.userOrder?.id &&
                     <>
                         <div className='inline-flex items-center gap-[7px] px-10 py-[8px] bg-[#FAFAFA] md:mb-30 mb-[15px] dark:bg-orange rounded-[4px]'>
                             <div className='min-w-[24px]'>
@@ -348,7 +348,7 @@ const Remarks = (props: propsData) => {
                     </>
                 }
                 {
-                    props?.userOrder?.status !== 'isCanceled' && query && query?.buy === props?.userOrder &&
+                    props?.userOrder?.status !== 'isCanceled' && query && query?.buy === props?.userOrder?.id &&
                     <p className='nav-text-sm'>
                         <span className='text-black dark:text-white'>Notice: </span>
                         Please don't leave sensitive information when transferring funds. By making a payment, you agree to our terms and conditions.
@@ -365,26 +365,26 @@ const Remarks = (props: propsData) => {
                     }
 
                     {
-                        props?.userOrder?.status === 'isCanceled' && query && query?.buy === props?.userOrder &&
+                        props?.userOrder?.status === 'isCanceled' && query && query?.buy === props?.userOrder?.id &&
                         <button onClick={() => { router.push('/p2p/buy') }} className={`w-full max-w-[350px] rounded-10 info-16-18  bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800 py-[19px] px-[18px]`}>
                             Go back and place another order
                         </button>
                     }
 
                     {
-                        props?.userOrder?.status === 'isProcess' && query && query?.buy === props?.userOrder && props?.userOrder?.buy_user_id === session?.user?.user_id &&
+                        props?.userOrder?.status === 'isProcess' && query && query?.buy === props?.userOrder?.id && props?.userOrder?.buy_user_id === session?.user?.user_id &&
                         <button className='solid-button max-w-full sm:max-w-[220px] w-full' onClick={() => { updatePaymentMethod() }}>Mark as Paid</button>
                     }
                     {
-                        props?.userOrder?.status === 'isCompleted' && query && query?.buy === props?.userOrder && props?.userOrder?.buy_user_id === session?.user?.user_id &&
+                        props?.userOrder?.status === 'isCompleted' && query && query?.buy === props?.userOrder?.id && props?.userOrder?.buy_user_id === session?.user?.user_id &&
                         <button disabled className='solid-button max-w-full sm:max-w-[220px] w-full cursor-not-allowed'>I Have Paid</button>
                     }
                     {
-                        props?.userOrder?.status === 'isProcess' && query && query?.buy === props?.userOrder && props?.userOrder?.sell_user_id === session?.user?.user_id &&
+                        props?.userOrder?.status === 'isProcess' && query && query?.buy === props?.userOrder?.id && props?.userOrder?.sell_user_id === session?.user?.user_id &&
                         <button className='solid-button max-w-fit  w-full' >Payment under process</button>
                     }
                     {
-                        props?.userOrder?.status === 'isCompleted' && query && query?.buy === props?.userOrder && props?.userOrder?.sell_user_id === session?.user?.user_id &&
+                        props?.userOrder?.status === 'isCompleted' && query && query?.buy === props?.userOrder?.id && props?.userOrder?.sell_user_id === session?.user?.user_id &&
                         <button className='solid-button max-w-full sm:max-w-[220px] w-full' onClick={() => { orderReleased() }}>Release Crypto</button>
                     }
                     {/* {
