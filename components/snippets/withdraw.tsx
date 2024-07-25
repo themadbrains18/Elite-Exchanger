@@ -522,12 +522,21 @@ const Withdraw = (props: activeSection) => {
                 <label htmlFor="amount" className="sm-text ">Amount</label>
                 <div className="border border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px]">
                   <input
-                    type="text"
+                    type="number"
                     id="amount"
                     {...register("amount")}
                     name="amount"
                     placeholder="Enter Amount"
                     className="outline-none sm-text w-full bg-[transparent]"
+                    onChange={(e)=>{
+                      const value = e.target.value;
+                      const regex = /^\d{0,11}(\.\d{0,6})?$/;
+                      if (regex.test(value) || value === "") {
+
+                      }else{
+                        e.target.value = value.slice(0, -1);
+                      }
+                    }}
                   />
                 </div>
                 {errors.amount && (

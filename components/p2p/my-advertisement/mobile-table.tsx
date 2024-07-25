@@ -72,46 +72,6 @@ const MobileTable = (props: dataTypes) => {
 
             setTotal(userAllOrderList?.data?.totalLength);
             setPostList(userAllOrderList?.data?.data);
-            // let postData:any = [];
-            // let filterRecord = userAllOrderList?.data?.data;
-            // postData= filterRecord
-            //     if (props?.firstCurrency !== '') {
-                    
-            //         filterRecord = filterRecord.filter((item: any) => {
-            //             return props?.selectedToken?.id === item?.token_id
-            //         });
-            //       postData = filterRecord;
-            //     }
-             
-            //     if (props?.paymentId !== '') {
-                    
-            //         let filter_posts=[]
-            //         for (const post of filterRecord) {
-            //             for (const upid of post.user_p_method) {
-            //                 if (props?.paymentId === upid?.pmid) {
-            //                     filter_posts.push(post);
-            //                 }
-            //             }
-            //         }
-            //         postData = filter_posts;
-            //     }
-                   
-            //      if (props?.startDate !== null && props?.startDate !== undefined) {
-            //         let filter_posts=[]
-            //         filter_posts = filterRecord.filter((item: any) => {
-            //             let postDate = moment(item?.createdAt).format('LL');
-            //             let compareDate = moment(props?.startDate).format('LL');
-            //             if (compareDate === postDate) {
-            //                 return item
-            //             }
-            //         });
-            //         postData = filter_posts;
-            //     }
-            
-                
-             
-              
-            //     setPostList(postData)
         } catch (error) {
             console.log("error in get token list", error);
 
@@ -205,6 +165,8 @@ const MobileTable = (props: dataTypes) => {
 
     }
 
+    // console.log(postList,"============postList");
+    
 
     return (
         <>
@@ -214,15 +176,6 @@ const MobileTable = (props: dataTypes) => {
                    postList && postList.length > 0 && postList?.map((item:any, ind:any) => {
                         return (
                             <Fragment key={ind}>
-
-                                {/* assets:"6",
-                                currency:"USDT",
-                                type:"BUY",
-                                exchangeRate:"80.54 INR ",
-                                remaining:"15.25641 USDT",
-                                createTime:"20 Mar, 2022 ( 22:40 )",
-                                PaymentMethod: ['phonepay.png','paytm.png','gpay.png'] */}
-
                                 <div className='grid grid-cols-2 py-[15px] border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2'>
                                     <div className=''>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Assets</p>
@@ -237,19 +190,19 @@ const MobileTable = (props: dataTypes) => {
                                         <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity} {item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
                                     </div>
                                     {/* <div  className='text-end mt-[15px]'>
-                                <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Payment</p>
-                                <div className='flex items-center gap-10 justify-end'>
-                                    {
-                                        item.PaymentMethod.map((elem,ind)=>{
-                                            return(
-                                                <Fragment key={ind}>
-                                                    <Image src={`/assets/payment-methods/${elem}`} alt='error' width={16} height={16} />
-                                                </Fragment>
-                                            )
-                                        })
-                                    }
-                                </div>
-                            </div> */}
+                                        <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Payment</p>
+                                        <div className='flex items-center gap-10 justify-end'>
+                                            {
+                                                item?.p_method?.map((elem:any,ind:number)=>{
+                                                    return(
+                                                        <Fragment key={ind}>
+                                                            <Image src={`/assets/payment-methods/${elem}`} alt='error' width={16} height={16} />
+                                                        </Fragment>
+                                                    )
+                                                })
+                                            }
+                                        </div>
+                                    </div> */}
                                     <div className='mt-[15px] text-end'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Create Time </p>
                                         <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.createdAt}</p>
@@ -257,11 +210,11 @@ const MobileTable = (props: dataTypes) => {
                                     <div className='mt-[15px] '>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Status</p>
                                         <div className="flex items-center justify-start w-full" >
-                                                    <label htmlFor={item?.id} className="flex items-center cursor-pointer">
-                                                        <input type="checkbox" id={item?.id} className="sr-only peer" checked={item?.status} onChange={() => { (props.active === undefined || props.active !== 3) && updateAdsStatus(item?.id) }} />
-                                                        <div className={`block relative bg-[#CCCED9] w-[50px] h-[25px] p-1 rounded-full before:absolute before:top-[3px] before:bg-blue-600 before:w-[19px] before:h-[19px] before:p-1 before:rounded-full before:transition-all before:duration-500 before:left-1 peer-checked:before:left-[27px] before:bg-white peer-checked:!bg-primary peer-checked:before:!bg-white `} ></div>
-                                                    </label>
-                                                </div>
+                                            <label htmlFor={item?.id} className="flex items-center cursor-pointer">
+                                                <input type="checkbox" id={item?.id} className="sr-only peer" checked={item?.status} onChange={() => { (props.active === undefined || props.active !== 3) && updateAdsStatus(item?.id) }} />
+                                                <div className={`block relative bg-[#CCCED9] w-[50px] h-[25px] p-1 rounded-full before:absolute before:top-[3px] before:bg-blue-600 before:w-[19px] before:h-[19px] before:p-1 before:rounded-full before:transition-all before:duration-500 before:left-1 peer-checked:before:left-[27px] before:bg-white peer-checked:!bg-primary peer-checked:before:!bg-white `} ></div>
+                                            </label>
+                                        </div>
                                     </div>
                                     <div className=' mt-[15px] text-end'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Actions</p>

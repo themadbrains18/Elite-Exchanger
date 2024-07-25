@@ -5,6 +5,7 @@ import { currencyFormatter } from '../snippets/market/buySellCard';
 
 interface propsData {
     coins?: any;
+    show1?:boolean
     // setNewSlug?:any;
 }
 
@@ -12,7 +13,7 @@ const CoinTypes = (props: propsData) => {
     const [show, setShow] = useState(1);
     const [fill, setFill] = useState(false);
     const [favCoin, setfavCoin] = useState([]);
-
+    
     let { mode } = useContext(Context);
 
     const router = useRouter();
@@ -65,10 +66,17 @@ const CoinTypes = (props: propsData) => {
         localStorage.setItem('futurefavToken', JSON.stringify(existItem));
     }
 
+    const filterCoin = (e:any) =>{
+        let record = favCoin.filter((item: any) => {
+            return item.coin_symbol.toLowerCase().includes(e.target.value.toLowerCase()) || item.usdt_symbol.toLowerCase().includes(e.target.value.toLowerCase())
+        })
+        setfavCoin(record);
+    }
+
     return (
         <div className='h-[780px] max-[1499px]:overflow-x-auto p-[16px] dark:bg-[#1f2127] bg-[#fff] max-w-[380px] w-full max-[991px]:border-b border-r dark:border-[#25262a] border-[#e5e7eb]'>
             <div className='mb-[15px]'>
-                <input type="search" placeholder='search...' className='max-w-full w-full  dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] py-[6px] outline-none dark:text-white text-black text-[12px] px-[10px]' />
+                <input type="search" onChange={(e)=>{filterCoin(e)}}  placeholder='search...' className='max-w-full w-full dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] py-[6px] outline-none dark:text-white text-black text-[12px] px-[10px]' />
             </div>
 
             <div className='h-[480px] overflow-y-auto'>
@@ -109,7 +117,7 @@ const CoinTypes = (props: propsData) => {
 
                     {show == 1 &&
                         <>
-                            {favCoin && favCoin.length > 0 && favCoin.map((item: any) => {
+                            {favCoin && favCoin.length > 0 ? favCoin.map((item: any) => {
                                 return <a href={`/future/${item.coin_symbol}${item.usdt_symbol}`}><div className='flex gap-[20px]'>
                                     
                                     <div  className='grid grid-cols-4 gap-[10px]rounded mb-[4px] cursor-pointer w-full'>
@@ -122,7 +130,12 @@ const CoinTypes = (props: propsData) => {
                                     </div>
                                 </div></a>
 
-                            })}
+                            }
+                        ) :
+
+                        <p className='top-label text-center mt-2 !text-black dark:!text-white '>No record Found</p>
+                    
+                    }
                         </>
                     }
                     {show == 2 &&

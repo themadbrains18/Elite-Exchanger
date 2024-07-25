@@ -540,7 +540,9 @@ const BuySellCard = (props: DynamicId) => {
                       {/* <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p> */}
                       <p className="sm-text dark:text-white">Order Price</p>
                       <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} placeholder="$0" step="any" {...register('limit_usdt', {
-                        onChange: () => { convertTotalAmount() }
+                        onChange: (e) => { 
+                          convertTotalAmount();
+                         }
                       })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
                     </div>
 
