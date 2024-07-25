@@ -1,7 +1,10 @@
 import IconsComponent from '@/components/snippets/icons';
 import { truncateNumber } from '@/libs/subdomain';
+import { useWebSocket } from '@/libs/WebSocketContext';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import React, { Fragment, useEffect, useState } from 'react'
+import { useRouter } from 'next/router';
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 
 interface propsData {
     userOrder?: any;
@@ -10,6 +13,8 @@ interface propsData {
 
 const SlectPaymentMethod = (props: propsData) => {
 
+    const { status, data: session } = useSession();
+    const [sellerUser, setSellerUser] = useState<any>({});
     const showOpt = (e: any) => {
         let parent = e?.currentTarget?.closest(".parent");
         let nextSiblibg = parent?.nextElementSibling;
@@ -21,14 +26,52 @@ const SlectPaymentMethod = (props: propsData) => {
             nextSiblibg?.removeAttribute("style");
         }
     }
-
-    let sellerUser = props?.userOrder?.user_post?.user;
-
     const [payment_method, setPaymentMethod] = useState([]);
+    
+    const [orderDetail, setOrderDetail] = useState<any>({});
+    const router = useRouter();
+    const { query } = router;
+    const wbsocket = useWebSocket();
+    const socketListenerRef = useRef<(event: MessageEvent) => void>();
 
     useEffect(() => {
-        let orderPost = props?.userOrder?.user_post;
+        if (query) {
+            getOrderByOrderId(query?.buy, 'onload');
+        }
+        const handleSocketMessage = (event: any) => {
+            const data = JSON.parse(event.data).data;
+            let eventDataType = JSON.parse(event.data).type;
+            if (eventDataType === "order") {
+                getOrderByOrderId(query && query?.buy, 'socket');
+            }
+        };
+
+        if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
+            if (socketListenerRef.current) {
+                wbsocket.removeEventListener('message', socketListenerRef.current);
+            }
+            socketListenerRef.current = handleSocketMessage;
+            wbsocket.addEventListener('message', handleSocketMessage);
+        }
+
+        return () => {
+            if (wbsocket) {
+                wbsocket.removeEventListener('message', handleSocketMessage);
+            }
+        };
+    }, [query, wbsocket]);
+
+    const getOrderByOrderId = async (orderid: any, type: string) => {
+        let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {
+            method: "GET",
+            headers: {
+                "Authorization": session?.user?.access_token
+            },
+        }).then(response => response.json());
+        setOrderDetail(userOrder?.data);
+        setSellerUser(userOrder?.data?.user_post?.user);
         let payment_method: any = [];
+        let orderPost = userOrder?.data?.user_post;
         if (orderPost !== null && orderPost != undefined) {
             for (const upid of orderPost?.p_method) {
                 orderPost?.user?.user_payment_methods.filter((item: any) => {
@@ -38,9 +81,8 @@ const SlectPaymentMethod = (props: propsData) => {
                 })
             }
         }
-
         setPaymentMethod(payment_method);
-    }, []);
+    }
 
     return (
         <div className='p-[15px] md:p-[40px] md:pb-20 border dark:border-opacity-[15%] border-grey-v-1 rounded-10 mt-30'>
@@ -55,10 +97,10 @@ const SlectPaymentMethod = (props: propsData) => {
                         <div key={ind}>
                             <div className='parent flex items-center gap-10 justify-between py-20 '>
                                 <div className="flex items-center mr-4 ">
-                                    {props?.userOrder?.p_method !== '' &&
-                                        <input id={`radio-${elem?.id}`} type="radio" checked={(props?.userOrder?.p_method !== '' && props?.userOrder?.p_method === elem?.id) ? true : false} disabled={(props?.userOrder?.p_method !== '' && props?.userOrder?.p_method !== elem?.id) ? true : false} value="" onChange={() => props?.setPaymentMethod(elem?.id)} name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                                    {orderDetail?.p_method !== '' &&
+                                        <input id={`radio-${elem?.id}`} type="radio" checked={(orderDetail?.p_method !== '' && orderDetail?.p_method === elem?.id) ? true : false} disabled={(orderDetail?.p_method !== '' && orderDetail?.p_method !== elem?.id) ? true : false} value="" onChange={() => props?.setPaymentMethod(elem?.id)} name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                                     }
-                                    {props?.userOrder?.p_method === '' &&
+                                    {orderDetail?.p_method === '' &&
                                         <input id={`radio-${elem?.id}`} type="radio" value="" onChange={() => props.setPaymentMethod(elem?.id)} name="colored-radio-dd" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                                     }
                                     <label htmlFor={`radio-${elem?.id}`} className="
@@ -124,7 +166,7 @@ const SlectPaymentMethod = (props: propsData) => {
                                         {elem?.pmObject?.qr_code!==undefined && elem?.pmObject?.qr_code!=="notValid" &&
                                             <>
                                             <Image src={elem?.pmObject?.qr_code} alt='error' width={145} height={145} className='md:max-w-[145px] w-full max-w-[70px] md:mb-20 mx-auto rounded-[5px] bg-white p-10' />
-                                            <p className='sm-text md:block hidden !text-[12px] dark:!text-[#96969A]'>My QR Code:<span className='dark:text-grey-v-1 text-black'>&nbsp;{truncateNumber(props?.userOrder?.spend_amount,6)} INR</span></p>
+                                            <p className='sm-text md:block hidden !text-[12px] dark:!text-[#96969A]'>My QR Code:<span className='dark:text-grey-v-1 text-black'>&nbsp;{truncateNumber(orderDetail?.spend_amount,6)} INR</span></p>
                                             </>
                                         }
                                         
