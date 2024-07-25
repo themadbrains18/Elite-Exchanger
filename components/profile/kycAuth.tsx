@@ -791,7 +791,7 @@ const KycAuth = (props: fixSection) => {
                 onDocumentChange={getDocumentDetail}
               />
               {errors.doctype && (
-                <p className="errorMessage">{errors.doctype.message}</p>
+                <p className="errorMessage mt-10">{errors.doctype.message}</p>
               )}
             </div>
 
@@ -807,7 +807,7 @@ const KycAuth = (props: fixSection) => {
                     className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"
                   />
                   {errors.docnumber && (
-                    <p className="errorMessage">
+                    <p className="errorMessage mt-10">
                       {errors.docnumber.message}
                     </p>
                   )}
@@ -825,7 +825,7 @@ const KycAuth = (props: fixSection) => {
                     className="sm-text input-cta2 w-full  focus:bg-primary-100 dark:focus:bg-[transparent]"
                   />
                   {errors?.fname && (
-                    <p className="errorMessage">
+                    <p className="errorMessage mt-10">
                       {errors?.fname.message}
                     </p>
                   )}
@@ -847,7 +847,7 @@ const KycAuth = (props: fixSection) => {
                     className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"
                   />
                   {errors?.dob && (
-                    <p className="errorMessage">{errors?.dob.message}</p>
+                    <p className="errorMessage mt-10">{errors?.dob.message}</p>
                   )}
                 </div>
                 <div className="max-w-full md:max-w-[50%] w-full">
@@ -858,7 +858,7 @@ const KycAuth = (props: fixSection) => {
                     onCountryChange={getCountryChange}
                   />
                   {errors?.country && (
-                    <p className="errorMessage">
+                    <p className="errorMessage mt-10">
                       {errors?.country.message}
                     </p>
                   )}
@@ -932,7 +932,7 @@ const KycAuth = (props: fixSection) => {
                 </div>
               </div>
               {errors?.idfront && (
-                <p className="errorMessage">{errors?.idfront.message?.toString()}</p>
+                <p className="errorMessage mt-10">{errors?.idfront.message?.toString()}</p>
               )}
             </div>
 
@@ -995,7 +995,7 @@ const KycAuth = (props: fixSection) => {
                 </div>
               </div>
               {errors?.idback && (
-                <p className="errorMessage">{errors?.idback.message?.toString()}</p>
+                <p className="errorMessage mt-10">{errors?.idback.message?.toString()}</p>
               )}
             </div>
             <div className="w-full">
@@ -1065,7 +1065,7 @@ const KycAuth = (props: fixSection) => {
                 </div>
               </div>
               {errors?.statement && (
-                <p className="errorMessage">
+                <p className="errorMessage mt-10">
                   {errors?.statement.message?.toString()}
                 </p>
               )}

@@ -128,8 +128,9 @@ const EditPaymentMethod = (props: activeSection) => {
     if (e.target.value <= (props.assetsBalance+truncateNumber(Number(props?.editPost?.quantity),6)) || e.target.value == inputValue) {
 
       let maxLimit = truncateNumber(props.price * e.target.value, 6);
+      
       setValue('max_limit', maxLimit);
-      setMaxInputValue(maxLimit)
+      setMaxInputValue(maxLimit);
       clearErrors('quantity');
 
     }
