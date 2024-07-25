@@ -177,10 +177,10 @@ const BuySellCard = (props: DynamicId) => {
         setDisabled(true)
 
         toast.error(`Limit orders are unavailable for ${selectedToken?.symbol} at the moment. Please check later`, { autoClose: 2000 })
-        setTimeout(()=>{
+        setTimeout(() => {
           setDisabled(false)
 
-        },3000)
+        }, 3000)
         return;
       }
       else {
@@ -540,14 +540,21 @@ const BuySellCard = (props: DynamicId) => {
                       {/* <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p> */}
                       <p className="sm-text dark:text-white">Order Price</p>
                       <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} placeholder="$0" step="any" {...register('limit_usdt', {
-                        onChange: (e) => { 
-                          convertTotalAmount();
-                         }
+                        onChange: (e) => {
+                          const value = e.target.value;
+                          const regex = /^\d{0,11}(\.\d{0,6})?$/;
+                          if (regex.test(value) || value === "") {
+                            convertTotalAmount();
+                          }
+                          else {
+                            e.target.value = value.slice(0, -1);
+                          }
+                        }
                       })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
                     </div>
 
                     <div className="relative">
-                      <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency}  disabled={true}/>
+                      <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} disabled={true} />
                     </div>
                   </div>
                 }
@@ -558,7 +565,14 @@ const BuySellCard = (props: DynamicId) => {
                   <div className="">
                     <p className="sm-text dark:text-white">Quantity</p>
                     <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} placeholder="0" min={0} step=".00001" {...register('token_amount', {
-                      onChange: () => { convertTotalAmount() }
+                      onChange: (e) => {
+                        const value = e.target.value;
+                        const regex = /^\d{0,10}(\.\d{0,6})?$/;
+                        if (regex.test(value) || value === "") { convertTotalAmount() }
+                        else {
+                          e.target.value = value.slice(0, -1);
+                        }
+                      }
                     })} name="token_amount" className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] mt-[10px] md-text " />
                   </div>
                   <div>
