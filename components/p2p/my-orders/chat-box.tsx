@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import AES from 'crypto-js/aes';
 import { toast } from 'react-toastify';
 import { useWebSocket } from '@/libs/WebSocketContext';
+import { useRouter } from 'next/router';
 
 interface PropsData {
     sellerUser?: any;
@@ -35,13 +36,24 @@ const ChatBox = (props: PropsData) => {
     const [shownNotifications, setShownNotifications] = useState(new Set());
     const chatFeedRef = useRef<HTMLDivElement>(null);
 
+    const [orderDetail, setOrderDetail] = useState<any>({});
+    const [sellerUser, setSellerUser] = useState<any>({});
+    const router = useRouter();
+    const { query } = router;
+
     useEffect(() => {
-        getChatByOrderId();
+        if (query) {
+            getOrderByOrderId(query?.buy, 'onload');
+            getChatByOrderId();
+        }
         const handleSocketMessage = (event: any) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
+            if (eventDataType === "order") {
+                getOrderByOrderId(query && query?.buy, 'socket');
+            }
 
-            if (eventDataType === 'chat' && data[0]?.orderid === props?.order?.id) {
+            if (eventDataType === 'chat' && data[0]?.orderid === query?.buy) {
                 if (shownNotifications.has(data[0]?.orderid)) {
                     return;
                 }
@@ -51,6 +63,7 @@ const ChatBox = (props: PropsData) => {
             }
         };
 
+        // wbsocket.addEventListener('message', handleSocketMessage);
         if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
             if (socketListenerRef.current) {
                 wbsocket.removeEventListener('message', socketListenerRef.current);
@@ -64,7 +77,18 @@ const ChatBox = (props: PropsData) => {
                 wbsocket.removeEventListener('message', handleSocketMessage);
             }
         };
-    }, [props.order?.id, wbsocket]);
+    }, [query, wbsocket]);
+
+    const getOrderByOrderId = async (orderid: any, type: string) => {
+        let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {
+            method: "GET",
+            headers: {
+                "Authorization": session?.user?.access_token
+            },
+        }).then(response => response.json());
+        setOrderDetail(userOrder?.data);
+        setSellerUser(userOrder?.data?.user_post?.user?.id === session?.user?.user_id ? userOrder?.data?.user : userOrder?.data?.user_post?.user)
+    }
 
     useEffect(() => {
         if (chatFeedRef.current) {
@@ -72,10 +96,9 @@ const ChatBox = (props: PropsData) => {
         }
       }, [orderChat]);
 
-
     const getChatByOrderId = async () => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/chat?orderid=${props?.order?.id}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/chat?orderid=${query && query?.buy}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': session?.user?.access_token
@@ -121,12 +144,12 @@ const ChatBox = (props: PropsData) => {
         try {
             if (msg !== '') {
                 const obj = {
-                    post_id: props.order?.post_id,
-                    sell_user_id: props.order?.sell_user_id,
-                    buy_user_id: props.order?.buy_user_id,
+                    post_id: orderDetail?.post_id,
+                    sell_user_id: orderDetail?.sell_user_id,
+                    buy_user_id: orderDetail?.buy_user_id,
                     from: session?.user?.user_id,
-                    to: props?.sellerUser?.id,
-                    orderid: props.order?.id,
+                    to: sellerUser?.id,
+                    orderid: orderDetail?.id,
                     chat: msg
                 };
 
@@ -151,16 +174,16 @@ const ChatBox = (props: PropsData) => {
                     if (wbsocket) {
                         const chat = {
                             ws_type: 'chat',
-                            orderid: props?.order?.id
+                            orderid: orderDetail?.id
                         };
                         const chat_notify = {
                             ws_type: 'user_notify',
-                            user_id: props?.sellerUser?.id,
+                            user_id: sellerUser?.id,
                             type: 'chat',
                             message: {
                                 message: `${msg}`
                             },
-                            url: `/p2p/my-orders?buy=${props?.order?.id}`
+                            url: `/p2p/my-orders?buy=${orderDetail?.id}`
                         };
 
                         wbsocket.send(JSON.stringify(chat));
@@ -220,7 +243,7 @@ const ChatBox = (props: PropsData) => {
     };
     
     
-    const profileImg = props?.sellerUser?.profile?.image ?? `${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`;
+    const profileImg = sellerUser?.profile?.image ?? `${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`;
 
     return (
         <>
@@ -234,16 +257,16 @@ const ChatBox = (props: PropsData) => {
                         </div>
                     </div>
                     <div>
-                        <p className="info-14 !text-start !text-white">{props?.sellerUser?.profile?.fName || props?.sellerUser?.user_kyc?.fname || props?.sellerUser?.profile?.dName}</p>
+                        <p className="info-14 !text-start !text-white">{sellerUser?.profile?.fName || sellerUser?.user_kyc?.fname || sellerUser?.profile?.dName}</p>
                         <p className="info-12 !text-start !text-white">Online</p>
                     </div>
                 </div>
                 <div id="chat-feed" ref={chatFeedRef} className="p-[14px] max-h-[300px] h-full overflow-x-auto flex flex-col gap-[10px] chatContainor  scroll-smooth">
 
-                    {(props?.order?.user_post && props?.order?.user_post?.auto_reply !== "" && props?.order?.user_post?.auto_reply !== null) &&
-                        <div className={`gap-[4px] ${session?.user?.user_id == props?.order?.sell_user_id ? 'right' : 'left'}`} >
+                    {(orderDetail?.user_post && orderDetail?.user_post?.auto_reply !== "" && orderDetail?.user_post?.auto_reply !== null) &&
+                        <div className={`gap-[4px] ${session?.user?.user_id == orderDetail?.sell_user_id ? 'right' : 'left'}`} >
                             <div className="mt-[4px] p-[10px] ml-[auto] rounded-lg min-w-[60px] max-w-fit w-full dark:bg-[#232530] bg-primary-600 bottom-right">
-                                <p className="info-12 text-white">{props?.order?.user_post?.auto_reply}</p>
+                                <p className="info-12 text-white">{orderDetail?.user_post?.auto_reply}</p>
                             </div>
                         </div>
                     }

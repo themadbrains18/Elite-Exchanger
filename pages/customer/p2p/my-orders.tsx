@@ -15,12 +15,13 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Successfull from '@/components/snippets/successfull';
 import { useWebSocket } from '@/libs/WebSocketContext';
+import { useRouter } from 'next/router';
 
 interface propsData {
   userOrder?: any;
   orderList?: any;
   session?: any;
-  coinList?:any;
+  coinList?: any;
   masterPayMethod?: any;
   userPaymentMethod?: any;
 }
@@ -37,13 +38,15 @@ const MyOrders = (props: propsData) => {
 
   const wbsocket = useWebSocket();
   const socketListenerRef = useRef<(event: MessageEvent) => void>();
+  const router = useRouter();
+  const { query } = router;
 
   useEffect(() => {
     const handleSocketMessage = (event: any) => {
       const data = JSON.parse(event.data).data;
       let eventDataType = JSON.parse(event.data).type;
       if (eventDataType === "order") {
-        getOrderByOrderId(data?.id, 'socket');
+        getOrderByOrderId(query && query?.buy, 'socket');
       }
 
       if (eventDataType === "buy") {
@@ -69,10 +72,10 @@ const MyOrders = (props: propsData) => {
 
   useEffect(() => {
     getUserOrders();
-    if (orderId !== undefined && orderId !== '') {
-      getOrderByOrderId(orderId, 'onload');
+    if (query) {
+      getOrderByOrderId(query?.buy, 'onload');
     }
-  }, [orderId]);
+  }, [query]);
 
 
   const getOrderByOrderId = async (orderid: any, type: string) => {
@@ -121,7 +124,7 @@ const MyOrders = (props: propsData) => {
             <>
               <div className='mt-30 flex items-start gap-30'>
                 <div className='max-[1200px]:max-w-full max-w-[75%] w-full'>
-                  <OrderInfo userOrder={order} />
+                  <OrderInfo />
                   <SlectPaymentMethod userOrder={order} setPaymentMethod={setPaymentMethod} />
                   <Remarks paymentMethod={paymentMethod} orderid={order?.id} userOrder={order} getUserOrders={getUserOrders} />
                 </div>
