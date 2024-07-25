@@ -37,7 +37,7 @@ const EditPaymentMethod = (props: activeSection) => {
   const [list, setList] = useState(props.userPaymentMethod);
   const [inputValue, setInputValue] = useState(props?.editPost?.quantity);
   const [minInputValue, setMinInputValue] = useState(props?.editPost?.min_limit);
-  const [maxInputValue, setMaxInputValue] = useState(props?.editPost?.price !== props.price ? props.price * props?.editPost?.quantity : props?.editPost?.max_limit);
+  const [maxInputValue, setMaxInputValue] = useState(props?.editPost?.price !== props.price ? truncateNumber(props.price * props?.editPost?.quantity,6) : truncateNumber(props?.editPost?.max_limit,6));
   const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
   const [reduceValue, setReduceValue] = useState<Number | any>(props.assetsBalance || 0);
 
@@ -49,8 +49,8 @@ const EditPaymentMethod = (props: activeSection) => {
     setValue('quantity', props?.editPost?.quantity);
     setValue('min_limit', props?.editPost?.min_limit);
     setReduceValue(props.assetsBalance);
-    let max_limit = props?.editPost?.price !== props.price ? props.price * props?.editPost?.quantity : props?.editPost?.max_limit
-    setValue('max_limit', max_limit.toFixed(2));
+    let max_limit = props?.editPost?.price !== props.price ? truncateNumber(props.price * props?.editPost?.quantity,6) : truncateNumber(props?.editPost?.max_limit,6)
+    setValue('max_limit', truncateNumber(max_limit,6));
 
 
     let sortedPaymentMethods = props.userPaymentMethod?.sort((a: any, b: any) => {
@@ -125,7 +125,7 @@ const EditPaymentMethod = (props: activeSection) => {
     if (/^\d*\.?\d{0,6}$/.test(value)) {
       setInputValue(value);
     }
-    if (e.target.value <= (props.assetsBalance+props?.editPost?.quantity) || e.target.value == props?.editPost?.quantity) {
+    if (e.target.value <= (props.assetsBalance+truncateNumber(Number(props?.editPost?.quantity),6)) || e.target.value == inputValue) {
 
       let maxLimit = truncateNumber(props.price * e.target.value, 6);
       setValue('max_limit', maxLimit);
