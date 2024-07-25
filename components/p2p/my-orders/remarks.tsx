@@ -350,7 +350,7 @@ const Remarks = (props: propsData) => {
 
                     {
                         (props?.userOrder?.status === 'isProcess' || props?.userOrder?.status === 'isCompleted') && props?.userOrder?.buy_user_id === session?.user?.user_id &&
-                        <button className={` w-full max-w-[200px] rounded-10 info-16-18  bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800 py-[19px] px-[18px]`} onClick={() => { setShow(true); setConfirmation(true) }}>
+                        <button className={` w-full max-w-full md:max-w-[200px] rounded-10 info-16-18  bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800 p-[15px] md:py-[19px] md:px-[18px]`} onClick={() => { setShow(true); setConfirmation(true) }}>
                             Cancel Order
                         </button>
                     }
