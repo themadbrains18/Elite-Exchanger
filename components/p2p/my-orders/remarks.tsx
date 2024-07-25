@@ -29,11 +29,6 @@ const Remarks = (props: propsData) => {
     const [active1, setActive1] = useState(false);
     const [show, setShow] = useState(false);
     const [confirmation, setConfirmation] = useState(false)
-    const router = useRouter();
-    const { query } = router;
-
-    const [orderDetail, setOrderDetail] = useState<any>({});
-
     const Ref: any = useRef(null);
 
     const [finalFormData, setFinalFormData] = useState({
@@ -41,7 +36,9 @@ const Remarks = (props: propsData) => {
         "user_id": "",
         "fundcode": ''
     });
-
+    const [orderDetail, setOrderDetail] = useState<any>({});
+    const router = useRouter();
+    const { query } = router;
     const wbsocket = useWebSocket();
     const socketListenerRef = useRef<(event: MessageEvent) => void>();
 
