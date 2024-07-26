@@ -615,7 +615,7 @@ const SecuritySettings = (props: fixSection) => {
             }}>
                     <div className="py-[30px] md:py-[50px] lg:px-0 px-20">
                       <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
-                        Change Password
+                        Change Password 
                       </p>
 
                       <div className="mt-[30px] ">
@@ -655,13 +655,13 @@ const SecuritySettings = (props: fixSection) => {
                               <p className="sm-text ">New Password<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
                               <button type="button" className="!text-primary text-[14px] " onClick={() => generatePassword()}>Generate Password</button>
                             </div>
-                            <div className='relative input-cta2 flex justify-between gap-3 items-center mb-[10px]' onFocus={() => { setChecker(true) }} onBlur={() => { setChecker(false) }}>
+                            <div className='relative  flex justify-between gap-3 items-center mb-[10px]' onFocus={() => { setChecker(true) }} onBlur={() => { setChecker(false) }}>
                               <input
                                 type={`${showpswd === true ? "text" : "password"}`}
                                 {...register("new_password")}
                                 onChange={(e: any) => setpswd(e.target.value)}
                                 placeholder="Enter new password"
-                                className="sm-text bg-[transparent] focus:outline-none w-full"
+                                className="sm-text input-cta2 w-full"
                                 maxLength={32}
                               />
                               <Image
@@ -672,7 +672,7 @@ const SecuritySettings = (props: fixSection) => {
                                 onClick={() => {
                                   setShowPswd(!showpswd);
                                 }}
-                                className="cursor-pointer "
+                                className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
                               />
                               {checker &&
                                 <StrengthCheck2 password={pswd} />}

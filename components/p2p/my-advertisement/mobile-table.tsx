@@ -63,7 +63,6 @@ const MobileTable = (props: dataTypes) => {
                     props.userPaymentMethod.filter((item: any) => {
                         if (item.id === upid?.upm_id) {
                             payment_method.push(item);
-
                         }
                     })
                 }
