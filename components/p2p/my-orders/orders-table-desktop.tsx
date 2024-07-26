@@ -83,37 +83,37 @@ const OrdersTableDesktop = (props: dataTypes) => {
                 <table width="100%">
                     <thead>
                         <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">
-                            <th className="bg-white dark:bg-d-bg-primary py-5">
+                            <th className="bg-white dark:bg-d-bg-primary py-5 w-[16%]">
                                 <div className="flex ">
                                     <p className="nav-text-sm">Asset/Type</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
-                            <th className="bg-white dark:bg-d-bg-primary py-5">
+                            <th className="bg-white dark:bg-d-bg-primary py-5 w-[16%]">
                                 <div className="flex ">
                                     <p className="nav-text-sm">Status</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
-                            <th className="bg-white dark:bg-d-bg-primary py-5">
+                            <th className="bg-white dark:bg-d-bg-primary py-5 w-[16%]">
                                 <div className="flex ">
                                     <p className="nav-text-sm">Amount</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
-                            <th className="bg-white dark:bg-d-bg-primary py-5">
+                            <th className="bg-white dark:bg-d-bg-primary py-5 w-[16%]">
                                 <div className="flex ">
                                     <p className="nav-text-sm">Price</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
-                            <th className="bg-white dark:bg-d-bg-primary py-5">
+                            <th className="bg-white dark:bg-d-bg-primary py-5 w-[16%]">
                                 <div className="flex ">
                                     <p className="nav-text-sm">Qty </p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
-                            <th className="bg-white dark:bg-d-bg-primary py-5">
+                            <th className="bg-white dark:bg-d-bg-primary py-5 w-[16%]">
                                 <div className="flex ">
                                     <p className="nav-text-sm">Date / Time </p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
@@ -132,23 +132,23 @@ const OrdersTableDesktop = (props: dataTypes) => {
                                             props?.setOrderId(item?.id);
                                             route.push(`/p2p/my-orders?buy=${item?.id}`);
                                         }} className='cursor-pointer'>
-                                            <td className="bg-white dark:bg-d-bg-primary py-5">
+                                            <td className="bg-white dark:bg-d-bg-primary py-5 w-[16%]">
                                                 
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'><span className={`${item?.sell_user_id === session?.user.user_id ? "text-cancel" : "text-buy"} capitalize`}>{ item?.sell_user_id === session?.user.user_id ? "Sell":"Buy" }</span>&nbsp;{item?.receive_currency}</p>
                                             </td>
-                                            <td className="bg-white dark:bg-d-bg-primary py-5">
+                                            <td className="bg-white dark:bg-d-bg-primary py-5 w-[16%]">
                                                 <p className={`info-14-18   ${(item?.status === "isCompleted" || item?.status === "isReleased") && "!text-buy"}  ${item?.status === "isProcess" && "!text-body-primary"} ${item?.status === "isCanceled" && "!text-cancel"}`}>{item.status === "isProcess" ? "In Process" : item.status === "isReleased" ? "Released" : item.status === "isCompleted" ? "Completed" : "Canceled"}</p>
                                             </td>
-                                            <td className="bg-white dark:bg-d-bg-primary py-5">
+                                            <td className="bg-white dark:bg-d-bg-primary py-5 w-[16%]">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(item?.spend_amount)}</p>
                                             </td>
-                                            <td className="bg-white dark:bg-d-bg-primary py-5">
+                                            <td className="bg-white dark:bg-d-bg-primary py-5 w-[16%]">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{currencyFormatter(item?.price)}</p>
                                             </td>
-                                            <td className="bg-white dark:bg-d-bg-primary py-5">
+                                            <td className="bg-white dark:bg-d-bg-primary py-5 w-[16%]">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(item?.quantity, 6)}</p>
                                             </td>
-                                            <td className="bg-white dark:bg-d-bg-primary py-5">
+                                            <td className="bg-white dark:bg-d-bg-primary py-5 w-[16%]">
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{moment(item?.createdAt).format("YYYY-MM-DD hh:mm:ss A")}</p>
                                             </td>
                                         </tr>

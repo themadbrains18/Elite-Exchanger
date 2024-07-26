@@ -39,7 +39,7 @@ const KycPending = (props: fixSection) => {
         </div>
       </div>
       <div>
-        <p className='nav-text-lg !text-[18px] mb-[10px]'>Your KYC  is Under Process !</p>
+        <p className='nav-text-lg !text-[18px] mb-[10px]'>Please wait while we are verify your documents. This may take a few minutes.</p>
         <Image src="/assets/kyc/kyc-under-process.jpg" alt='image-description' width={1047} height={691} className='max-w-full w-full' />
       </div>
     </div>

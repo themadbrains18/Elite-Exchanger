@@ -322,10 +322,10 @@ const Exchange = (props: DynamicId): any => {
           </button>
         </div>
 
-        <div className="flex gap-[18px] py-5">
+        <div className="flex gap-[10px] py-5">
           <Image src="/assets/market/walletpayment.svg" alt="wallet2" width={24} height={24} />
           <p className="md-text w-full">${currencyFormatter(truncateNumber(currentTokenWalletBalance, 6)) || 0.00}</p>
-          <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} className={`${selectedToken?.symbol ==="XRP"&&"bg-white rounded-full"}`}/>
+          <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} className={`${selectedToken?.symbol ==="XRP"&&"bg-white rounded-full"} max-w-[24px] w-full`}/>
           {props.coinList && props.coinList?.map((item: any) => {
             if (item.symbol === selectedToken?.symbol) {
               return <p className="md-text">${(selectedToken !== undefined && selectedToken?.price !== undefined) ? currencyFormatter(item?.price?.toFixed(5)) : '0.00'}</p>
