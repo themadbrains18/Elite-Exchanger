@@ -10,6 +10,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { currencyFormatter } from "@/components/snippets/market/buySellCard";
+import { useWebSocket } from "@/libs/WebSocketContext";
 
 const schema = yup.object().shape({
   amount: yup.number().positive('Amount must be positive number.').required('This field is required.').typeError('This field is required.'),
@@ -39,7 +40,7 @@ const TransferModal = (props: showPopup) => {
   const [amount, setAmount] = useState(0);
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [coinDefaultValue, setCoinDefaultValue] = useState(props?.token?.symbol)
-
+  const wbsocket = useWebSocket();
   let {
     register,
     setValue,
@@ -185,6 +186,12 @@ const TransferModal = (props: showPopup) => {
         setCoinDefaultValue('Select Token');
         setSelectedCoin('');
         setUserAsset(null);
+        if (wbsocket) {
+          let withdraw = {
+            ws_type: 'transfer',
+          }
+          wbsocket.send(JSON.stringify(withdraw));
+        }
         setTimeout(() => {
           props?.refreshWalletAssets && props?.refreshWalletAssets();
           props.setOverlay(false);

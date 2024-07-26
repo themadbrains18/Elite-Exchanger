@@ -44,6 +44,9 @@ const Wallet = (props: Session) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
 
+            console.log(eventDataType,"=eventDataType");
+            
+
             if (eventDataType === "convert") {
                 if (props.session) {
                     refreshTokenList()
@@ -52,6 +55,10 @@ const Wallet = (props: Session) => {
             }
             if (eventDataType === "price") {
                 refreshTokenList()
+            }
+            if (eventDataType === "transfer") {
+                refreshTokenList()
+                refreshData();
             }
         };
         if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
