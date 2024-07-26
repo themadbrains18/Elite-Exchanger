@@ -791,14 +791,14 @@ const KycAuth = (props: fixSection) => {
                 onDocumentChange={getDocumentDetail}
               />
               {errors.doctype && (
-                <p className="errorMessage mt-10">{errors.doctype.message}</p>
+                <p className="errorMessage mt-2">{errors.doctype.message}</p>
               )}
             </div>
 
             <div className="mt-[30px]">
               <div className="flex gap-[30px] md:flex-row flex-col">
                 <div className="max-w-full md:max-w-[50%] w-full">
-                  <label htmlFor="docnumber" className="sm-text mb-[10px]">Document Number<span className="text-red-dark dark:text-[#9295a6]">*</span></label>
+                  <label htmlFor="docnumber" className="sm-text mb-[10px] block">Document Number<span className="text-red-dark dark:text-[#9295a6]">*</span></label>
                   <input
                     id="docnumber"
                     type="text"
@@ -807,13 +807,13 @@ const KycAuth = (props: fixSection) => {
                     className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"
                   />
                   {errors.docnumber && (
-                    <p className="errorMessage mt-10">
+                    <p className="errorMessage mt-2">
                       {errors.docnumber.message}
                     </p>
                   )}
                 </div>
                 <div className="max-w-full md:max-w-[50%] w-full">
-                  <label htmlFor="fname" className="sm-text mb-[10px]">
+                  <label htmlFor="fname" className="sm-text mb-[10px] block">
                     Full name on Identity<span className="text-red-dark dark:text-[#9295a6]">*</span>
                   </label>
                   <input
@@ -825,7 +825,7 @@ const KycAuth = (props: fixSection) => {
                     className="sm-text input-cta2 w-full  focus:bg-primary-100 dark:focus:bg-[transparent]"
                   />
                   {errors?.fname && (
-                    <p className="errorMessage mt-10">
+                    <p className="errorMessage mt-2">
                       {errors?.fname.message}
                     </p>
                   )}
@@ -834,7 +834,7 @@ const KycAuth = (props: fixSection) => {
 
               <div className="flex gap-[30px] md:flex-row flex-col mt-[24px]">
                 <div className="max-w-full md:max-w-[50%] w-full">
-                  <label className="sm-text mb-[10px]">Date of Birth<span className="text-red-dark dark:text-[#9295a6]">*</span></label>
+                  <label className="sm-text mb-[10px] block">Date of Birth<span className="text-red-dark dark:text-[#9295a6]">*</span></label>
                   {/* <input type="date" placeholder="Enter ID number" className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"/> */}
                   <DatePicker
                     selected={startDate}
@@ -847,11 +847,11 @@ const KycAuth = (props: fixSection) => {
                     className="sm-text input-cta2 w-full focus:bg-primary-100 dark:focus:bg-[transparent]"
                   />
                   {errors?.dob && (
-                    <p className="errorMessage mt-10">{errors?.dob.message}</p>
+                    <p className="errorMessage mt-2">{errors?.dob.message}</p>
                   )}
                 </div>
                 <div className="max-w-full md:max-w-[50%] w-full">
-                  <label className="sm-text mb-[10px]">Country<span className="text-red-dark dark:text-[#9295a6]">*</span></label>
+                  <label className="sm-text mb-[10px] block">Country<span className="text-red-dark dark:text-[#9295a6]">*</span></label>
                   <CountrylistDropdown
                     data={Countrylist}
                     placeholder="Choose Country"
@@ -1074,10 +1074,8 @@ const KycAuth = (props: fixSection) => {
 
           <div className="h-[1px] w-full bg-grey-v-2 dark:bg-opacity-[15%]"></div>
 
-          <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-end pt-5 md:pt-[30px] lg:px-0 px-20">
-            {/* <p className="sm-text">
-              This account was created on January 10, 2022, 02:12 PM
-            </p> */}
+          <div className="flex md:flex-row flex-col-reverse items-center justify-between gap-[10px] justify-end pt-5 md:pt-[30px] lg:px-0 px-20">
+            <p className="sm-text">Uploading incomplete or unclear documents may delay your KYC verification process </p>
 
             <button disabled={(btnDisabled === true || frontImg === "" || backImg === "" || selfieImg === "") ? true : false}
               type="submit"
