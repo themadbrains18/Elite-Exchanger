@@ -385,7 +385,7 @@ const Exchange = (props: DynamicId): any => {
           <div className=" rounded-5 p-[10px] justify-between flex border items-center border-grey-v-1 dark:border-opacity-[15%] relative">
             <div className="">
               <p className="sm-text dark:text-white">Buy For </p>
-              <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} value={receiveAmount > 0 ? receiveAmount?.toFixed(8) : ''} readOnly placeholder="$0" className="bg-[transparent] md-text outline-none border-l px-[5px] mt-[10px] border-h-primary" />
+              <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} value={receiveAmount > 0 ? truncateNumber(receiveAmount,6) : ''} readOnly placeholder="$0" className="bg-[transparent] md-text outline-none border-l px-[5px] mt-[10px] border-h-primary" />
             </div>
             <div>
               <FilterSelectMenuWithCoin data={list} border={false} {...register('secondCurrency')} dropdown={2} setCurrencyName={setCurrencyName} value={secondCurrency} />
