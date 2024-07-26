@@ -37,20 +37,21 @@ const EditPaymentMethod = (props: activeSection) => {
   const [list, setList] = useState(props.userPaymentMethod);
   const [inputValue, setInputValue] = useState(props?.editPost?.quantity);
   const [minInputValue, setMinInputValue] = useState(props?.editPost?.min_limit);
-  const [maxInputValue, setMaxInputValue] = useState(props?.editPost?.price !== props.price ? truncateNumber(props.price * props?.editPost?.quantity,6) : truncateNumber(props?.editPost?.max_limit,6));
+  const [maxInputValue, setMaxInputValue] = useState(props?.editPost?.price !== props.price ? truncateNumber(props.price * props?.editPost?.quantity, 6) : truncateNumber(props?.editPost?.max_limit, 6));
   const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
   const [reduceValue, setReduceValue] = useState<Number | any>(props.assetsBalance || 0);
 
 
-  
-  
+
+
   useEffect(() => {
     // console.log(props.assetsBalance,"=props.assetsBalance");
     setValue('quantity', props?.editPost?.quantity);
     setValue('min_limit', props?.editPost?.min_limit);
-    setReduceValue(props.assetsBalance);
-    let max_limit = props?.editPost?.price !== props.price ? truncateNumber(props.price * props?.editPost?.quantity,6) : truncateNumber(props?.editPost?.max_limit,6)
-    setValue('max_limit', truncateNumber(max_limit,6));
+    let total = props.assetsBalance && props.assetsBalance.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0];
+    setReduceValue(total);
+    let max_limit = props?.editPost?.price !== props.price ? truncateNumber(props.price * props?.editPost?.quantity, 6) : truncateNumber(props?.editPost?.max_limit, 6)
+    setValue('max_limit', truncateNumber(max_limit, 6));
 
 
     let sortedPaymentMethods = props.userPaymentMethod?.sort((a: any, b: any) => {
@@ -103,9 +104,9 @@ const EditPaymentMethod = (props: activeSection) => {
     // console.log(data.quantity,"=data.quantity", typeof data.quantity);
     // console.log(props.assetsBalance,"=props.assetsBalance", typeof props.assetsBalance);
     // console.log(props?.editPost?.quantity,"=props?.editPost?.quantity", typeof props?.editPost?.quantity);
-    
 
-    if (data.quantity <= (props.assetsBalance+truncateNumber(Number(props?.editPost?.quantity),6)) || data.quantity == props?.editPost?.quantity) {
+
+    if (data.quantity <= (props.assetsBalance + truncateNumber(Number(props?.editPost?.quantity), 6)) || data.quantity == props?.editPost?.quantity) {
       props.setPaymentMethod(data);
       props.setStep(3);
 
@@ -125,10 +126,10 @@ const EditPaymentMethod = (props: activeSection) => {
     if (/^\d*\.?\d{0,6}$/.test(value)) {
       setInputValue(value);
     }
-    if (e.target.value <= (props.assetsBalance+truncateNumber(Number(props?.editPost?.quantity),6)) || e.target.value == inputValue) {
+    if (e.target.value <= (props.assetsBalance + truncateNumber(Number(props?.editPost?.quantity), 6)) || e.target.value == inputValue) {
 
       let maxLimit = truncateNumber(props.price * e.target.value, 6);
-      
+
       setValue('max_limit', maxLimit);
       setMaxInputValue(maxLimit);
       clearErrors('quantity');
@@ -178,7 +179,7 @@ const EditPaymentMethod = (props: activeSection) => {
 
   return (
     <>
-    {/* {props?.page === "user-center" && <ToastContainer position="top-center" limit={1} />} */}
+      {/* {props?.page === "user-center" && <ToastContainer position="top-center" limit={1} />} */}
       <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
       <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
         if (e.key === 'Enter') {
@@ -230,14 +231,14 @@ const EditPaymentMethod = (props: activeSection) => {
                     <div className={`flex gap-10 items-center ${isCheckboxDisabled(item.id) ? "disabled-text" : ""}`}>
                       <p className="sec-text !text-h-primary dark:!text-white !font-medium">{item?.pm_name}</p>
                       <Image src={`${item?.master_payment_method?.icon}`} alt="payment image" width={32} height={32} />
-                    <p className="md:block hidden sec-text !text-banner-text dark:!text-white">({item?.pmObject?.phonenumber})</p>
+                      <p className="md:block hidden sec-text !text-banner-text dark:!text-white">({item?.pmObject?.phonenumber})</p>
                     </div>
                   </div>
                 );
               })}
               {errors?.p_method && (
                 <p className="errorMessage mt-3">{errors?.p_method?.message}</p>
-              )} 
+              )}
               <div className="md:mt-50 mt-10">
                 <button type="button" className="outline-button border-primary text-primary max-w-full sm:max-w-[176px] w-full" onClick={() => {
                   setShow(!show);
@@ -257,20 +258,21 @@ const EditPaymentMethod = (props: activeSection) => {
                     <div className="flex items-center cursor-pointer">
                       <div className="w-full">
                         <input type="number"
-                        
-                          id="quantity" step={0.000001} value={inputValue!=0?truncateNumber(inputValue,6):''}  {...register('quantity')} name="quantity"
+
+                          id="quantity" step={0.000001} value={inputValue != 0 ? truncateNumber(inputValue, 6) : ''}  {...register('quantity')} name="quantity"
                           onWheel={(e) => (e.target as HTMLElement).blur()}
-                          onInput={(e: any) => {
-                            setReduceValue(props.assetsBalance + Number(props?.editPost?.quantity) - Number(e.target.value));
-                          }}
                           onChange={(e) => {
-                            const value = e.target.value;
-                                const regex = /^\d{0,10}(\.\d{0,6})?$/;
-                                if (regex.test(value) || value === "") {
-                                  checkBalnce(e);
-                                } else {
-                                  e.target.value = value.slice(0, -1);
-                                }
+                            let value: any = e.target.value;
+                            const regex = /^\d{0,10}(\.\d{0,6})?$/;
+                            if (regex.test(value) || value === "") {
+                              let total = props.assetsBalance + Number(props?.editPost?.quantity);
+                              let factor = Math.pow(10, 6);
+                              let remaining: any = (Math.round(total * factor) - Math.round(value * factor)) / factor;
+                              setReduceValue(remaining);
+                              checkBalnce(e);
+                            } else {
+                              e.target.value = value.slice(0, -1);
+                            }
 
                           }}
                           className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full   dark:text-white" placeholder="Enter Quntity" />
@@ -287,7 +289,7 @@ const EditPaymentMethod = (props: activeSection) => {
                   )}
                 </div>
                 <div className="mt-10">
-                  <p className="info-10-14 text-end"> = {truncateNumber(reduceValue, 6)} {props?.selectedAssets?.symbol}</p>
+                  <p className="info-10-14 text-end"> = {reduceValue} {props?.selectedAssets?.symbol}</p>
                 </div>
               </div>
               <div className="w-full">
@@ -348,7 +350,7 @@ const EditPaymentMethod = (props: activeSection) => {
         </div>
       </form>
       {active == 1 &&
-        <AddPayment setShow={setShow} setActive={setActive} masterPayMethod={props.masterPayMethod} setFormMethod={setFormMethod} list={list}/>
+        <AddPayment setShow={setShow} setActive={setActive} masterPayMethod={props.masterPayMethod} setFormMethod={setFormMethod} list={list} />
       }
       {active == 2 &&
         <TradingPassword setShow={setShow} setActive={setActive} formMethod={formMethod} setList={setList} list={setList} />
