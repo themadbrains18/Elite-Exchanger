@@ -103,7 +103,7 @@ const AdvertisementTabs = (props: propsData) => {
                     <div className='relative max-w-full md:max-w-[40%] w-full'>
                         <FilterSelectMenuWithCoin data={props.coinList} border={true} dropdown={1} setCurrencyName={setCurrencyName} value={value} />
                     </div>
-                    <div className=' max-w-full md:max-w-[40%] min-w-[250px] w-full'>
+                    <div className=' max-w-full md:max-w-[40%] min-w-[250px] w-full max-[767px]:hidden'>
                         <FiliterSelectMenu data={props.masterPayMethod}
                             placeholder="Choose Payment Method"
                             auto={false}
