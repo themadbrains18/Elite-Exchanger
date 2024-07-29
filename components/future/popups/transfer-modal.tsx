@@ -120,21 +120,27 @@ const TransferModal = (props: showPopup) => {
 
   const filterAsset = (symbol: string, type: string) => {
 
+    console.log(props?.assets,"props?.assets");
     if (type == "Spot") {
+      
+      
       let asset = props?.assets?.filter((item: any) => {
         let token = item?.token !== null ? item?.token : item?.global_token;
-        return item?.walletTtype === props.wallet_type && token?.symbol === symbol;
+        return item?.walletTtype === "main_wallet" && token?.symbol === symbol;
       });
+      console.log("in spot", asset);
       setUserAsset(asset[0]);
       setValue('token_id', asset[0]?.token_id);
       clearErrors('token_id')
     } else {
+      
       let asset = props?.assets?.filter((item: any) => {
         let token = item?.token !== null ? item?.token : item?.global_token;
         return (
           item?.walletTtype === "future_wallet" && token?.symbol === symbol
         );
       });
+      console.log("in future",asset);
       setUserAsset(asset[0]);
       setValue('token_id', asset[0]?.token_id);
       clearErrors('token_id')

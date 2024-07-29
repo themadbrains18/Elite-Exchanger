@@ -138,7 +138,7 @@ const Verification = (props: activeSection) => {
 
   const matchUserOtp = async () => {
     try {
-      // console.log(fillOtp,"==fillOtp");                        
+      console.log(fillOtp,"==fillOtp");                        
       setDisabled(true)
 
       if (fillOtp === "" || fillOtp === "string" || fillOtp === null) {
@@ -151,7 +151,7 @@ const Verification = (props: activeSection) => {
       }
 
       props.finalOtpVerification(fillOtp);
-      setOtp('');
+      // setOtp('');
       setTimeout(() => {
         resetTimer()
         // const inputElements = document.querySelectorAll(".input_wrapper input");
@@ -175,10 +175,10 @@ const Verification = (props: activeSection) => {
 
     setDisabled(false);
    
-   const inputElements = document.querySelectorAll(".input_wrapper3 input");
-        inputElements.forEach((ele, index) => {
-          (inputElements[index] as HTMLInputElement).value = ""
-        })
+  //  const inputElements = document.querySelectorAll(".input_wrapper3 input");
+  //       inputElements.forEach((ele, index) => {
+  //         (inputElements[index] as HTMLInputElement).value = ""
+  //       })
 };
 
   return (

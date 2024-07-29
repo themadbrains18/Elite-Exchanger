@@ -828,7 +828,7 @@ const BuySellExpress = (props: propsData) => {
                           }
                           let receiveAmount: any = parseFloat(e?.target?.value) * usdtToInr;
            
-                          
+                         
                           setReceivedAmount(truncateNumber(receiveAmount, 6));
                           // setReceivedAmount(parseFloat(e?.target?.value) * usdtToInr);
                           setValue('receive_amount', truncateNumber(receiveAmount, 6));
@@ -906,6 +906,7 @@ const BuySellExpress = (props: propsData) => {
                       dropdown={2}
                       value="INR"
                       disabled={true}
+
                     />
                   </div>
                 </div>
@@ -933,6 +934,7 @@ const BuySellExpress = (props: propsData) => {
                     auto={false}
                     widthFull={true}
                     onPaymentMethodChange={filterBuyerAds}
+                    resetValue={paymentMethod==""?true:false}
                   />
                 </div>
                 {errors?.p_method && (

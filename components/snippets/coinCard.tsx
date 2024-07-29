@@ -23,13 +23,13 @@ const CoinCard = (props: cardData) => {
                             <span className='block coinCard_logo'>
                                 <Image src={`${imgSrc ? '/assets/history/Coin.svg' : props.coinCardData?.image}`} alt="Coin Logo" className="block w-[30px] md:w-[50px]" width={50} height={50} onError={() => setImgSrc(true)} />
                             </span>
-                            <span className='coinCard_fname block md-heading !text-[16px] md:!text-[23px] leading-[17px] md:leading-[28px]  dark:text-white !font-normal'> {props.coinCardData.fullName}</span>
+                            <span className='coinCard_fname block md-heading !text-[16px] md:!text-[23px] leading-[17px] md:leading-[28px] text-black dark:text-white !font-normal'> {props.coinCardData.fullName}</span>
                                 </div>
                             <span className='coinCard_sortName block bg-[#E9EAF0] dark:bg-[#080808] dark:text-primary rounded-[8px] px-[15px] py-[5px]'>{props.coinCardData.symbol}</span>
                         </div>
 
                         <div className='coinCard_Cost flex items-center gap-[10px] justify-between'>
-                            <h2 className="md-heading md:!text-[23px] !font-bold dark:text-white">${currencyFormatter(props.coinCardData.price?.toFixed(5))}</h2>
+                            <h2 className="md-heading md:!text-[23px] !font-bold text-black dark:text-white">${currencyFormatter(props.coinCardData.price?.toFixed(5))}</h2>
                             <div className={`flex items-center gap-[4px] flex-wrap`}>
                                 <p className={`footer-text-secondary  ${Number(props.coinCardData?.hlocv?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(props.coinCardData?.hlocv?.changeRate) > 0 ? '+' : ''}{props.coinCardData?.hlocv?.changeRate !== undefined ? (Number(props.coinCardData?.hlocv?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
 

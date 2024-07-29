@@ -169,7 +169,7 @@ const ChartBanner = () => {
 
             <div className='flex gap-30 justify-between flex-wrap xl:flex-nowrap'>
               <div className='flex items-center gap-[20px] lg:max-w-[50%] lg:justify-start justify-between'>
-                <h3 className='md-heading dark:text-white'>${`${currentToken?.price?.toFixed(5)}`}</h3>
+                <h3 className='md-heading text-black dark:text-white'>${`${currentToken?.price?.toFixed(5)}`}</h3>
                 <div className={` items-center gap-[10px] flex`}>
                   <p className={`footer-text-secondary !text-buy`}>+2%</p>
                   <IconsComponent type="high" active={false} hover={false} />
