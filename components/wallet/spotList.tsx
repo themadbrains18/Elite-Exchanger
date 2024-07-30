@@ -458,6 +458,7 @@ const SpotList = (props: propsData): any => {
       {withdrawActive === true &&
         <WithdrawAuthenticationModelPopup setActive={setWithdrawActive} setShow={setWithdrawShow} show={withdrawShow} title="Withdrawal Security Settings" />
       }
+      
     </>
   )
 }

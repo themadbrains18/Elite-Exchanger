@@ -65,6 +65,8 @@ const Withdraw = (props: activeSection) => {
   const [addressList, setAddressList] = useState([]);
   const [show, setShow] = useState(false);
   const [itemOffset, setItemOffset] = useState(0);
+  const [transFees, setTransFees] = useState(0);
+  
 
   const wbsocket = useWebSocket();
   let itemsPerPage = 50;
@@ -98,13 +100,7 @@ const Withdraw = (props: activeSection) => {
 
   }, [errors])
 
-  const list = props?.networks.filter((item: any) => {
-    if (process.env.NEXT_PUBLIC_APPLICATION_MODE === "dev") {
-      return item.network === "testnet";
-    } else {
-      return item.network === "mainnet";
-    }
-  });
+
 
   const onAddressChange = async (address: string, network: { id: string, fullname: string, symbol: string }) => {
     setSelectedNetwork(network?.id)
@@ -127,7 +123,6 @@ const Withdraw = (props: activeSection) => {
     setAddressVerified(validAddress?.data?.data?.isValid);
   }
 
-
   const getAllWhitelistAddress = async () => {
     try {
       let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list?itemOffset=${itemOffset === undefined ? 0 : itemOffset}&itemsPerPage=${itemsPerPage}`, {
@@ -137,11 +132,11 @@ const Withdraw = (props: activeSection) => {
         },
       }).then(response => response.json());
 
-      // console.log(address.data, '-----address data');
       let res = address?.data?.data?.filter((item: any) => item?.status === true)
+      
       setAddressList(res);
     } catch (error) {
-
+      
     }
   }
 
@@ -399,6 +394,23 @@ const Withdraw = (props: activeSection) => {
   }
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });  
+  
+
+  const netWorkList = props?.networks?.filter((item:any) => {
+    return props?.token?.networks?.some((titem:any) => {
+      if (item?.id === titem?.id) {
+        item.fee = titem?.fee; 
+        return true;
+      }
+      return false;
+    });
+  }).map((item: any) => {
+    const titem = props?.token?.networks?.find((titem: any) => item?.id === titem?.id);
+    return { ...item, fee: titem?.fee };
+  });
+  
+  console.log(netWorkList, "=========netWorkList");
+  // console.log(props.token, "=========props.token");
 
   return (
     <>
@@ -464,7 +476,9 @@ const Withdraw = (props: activeSection) => {
               <div className="my-20">
                 <label className="sm-text mb-[10px] block">Network</label>
                 <FiliterSelectMenu
-                  data={list}
+                  setTransFees={setTransFees}
+                  
+                  data={netWorkList}
                   placeholder="Select Network type"
                   auto={false}
                   widthFull={true}
@@ -486,22 +500,18 @@ const Withdraw = (props: activeSection) => {
                     id="withdraw_wallet"
                     {...register("withdraw_wallet")}
                     name="withdraw_wallet"
+                    autoComplete="off"
                     placeholder="Enter Address"
                     className={`outline-none max-w-full  sm-text w-full bg-[transparent] ${session?.user?.whitelist === true ? 'cursor-pointer' : ''}`}
                     readOnly={session?.user?.whitelist}
                   />
-
-
                   {/* </div> */}
                   {show && addressList?.length > 0 &&
                     <CountrylistDropdown data={addressList} address={true} show={show} onCountryChange={onAddressChange} />
                   }
-                  {/* <Image
-                    src="/assets/payment/reenter.svg"
-                    width={24}
-                    height={24}
-                    alt="reenter"
-                  /> */}
+                  <div className="pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d] absolute top-1/2 -translate-y-1/2 right-4">
+                    <IconsComponent type="downArrow" />
+                  </div>
                   {addressVerified === true &&
                     <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <g id="Icon">
@@ -543,7 +553,7 @@ const Withdraw = (props: activeSection) => {
                   <p className="errorMessage">{errors.amount.message}</p>
                 )}
                 <p className="mt-[10px] text-end sm-text">
-                  Transaction Fee {props?.token?.withdraw_fee} {props?.token?.symbol}
+                  Transaction Fee {transFees} {props?.token?.symbol}
                 </p>
                 {/* {getValues('amount') > 0 &&
                   <p className="mt-[10px] text-end sm-text">

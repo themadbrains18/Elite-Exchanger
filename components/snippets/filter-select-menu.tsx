@@ -18,6 +18,8 @@ interface dataList {
   depositToken?: any;
   setUnSelectCoinError?:any;
   resetValue?:any
+  setTransFees?:Function;
+  setTransFeesSymbol?:Function
 }
 
 const FiliterSelectMenu = (props: dataList) => {
@@ -91,7 +93,8 @@ const FiliterSelectMenu = (props: dataList) => {
             <ul>
               {props?.data && props?.data.length > 0 && props?.data.map((item: any, index: number) => {
                 return (
-                  <li key={index} onClick={() => { setActive(item?.fullname); setShow(false); props.onNetworkChange && props.onNetworkChange(item); props.onDocumentChange && props.onDocumentChange(item) }}>
+                  <li key={index} onClick={() => { props?.setTransFees && props?.setTransFees(item?.fee);
+                   setActive(item?.fullname); setShow(false); props.onNetworkChange && props.onNetworkChange(item); props.onDocumentChange && props.onDocumentChange(item) }}>
                     <p className={`sm-text px-10 py-[7px] rounded-[5px] hover:bg-grey dark:hover:bg-d-bg-primary cursor-pointer dark:!text-d-nav-secondary  !text-banner-text`}>{item?.fullname}</p>
                   </li>
                 )
