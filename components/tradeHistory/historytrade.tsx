@@ -26,7 +26,11 @@ const Historytrade = (props: propsData) => {
     setFilter(e.target.value)
   }
 
+  
+  
   const setCurrencyName = (symbol: string, dropdown: number) => {
+    // console.log(symbol,"============symbol");
+    
     setSymbol(symbol);
     let token = props?.coinList?.filter((item: any) => {
       return item.symbol === symbol;
@@ -53,10 +57,10 @@ const Historytrade = (props: propsData) => {
             <div className="flex justify-between gap-5 mb-[26px] md:mb-40">
               <p className="sec-title">Trade History</p>
               <Image src="/assets/history/dots.svg" width={24} height={24} alt="dots" className="cursor-pointer md:hidden block" />
-              <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] py-[13px] px-[10px] ">
+              {/* <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] py-[13px] px-[10px] ">
                 <Image src="/assets/history/search.svg" alt="search" width={24} height={24} />
                 <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent]" onChange={(e) => filterData(e)} />
-              </div>
+              </div> */}
             </div>
             <div className="flex justify-between border-b border-grey-v-3 dark:border-opacity-[15%]">
               <div className="flex gap-5 md:gap-30 overflow-auto trade_history_scroll">

@@ -25,7 +25,9 @@ const WithdrawTable = (props: propsData) => {
   let itemsPerPage = 10;
 
   useEffect(() => {
-    getWithdrawData()
+    getWithdrawData();
+    // console.log(currentItems,"============currentItems");
+
   }, [itemOffset])
 
   useEffect(() => {
@@ -49,13 +51,15 @@ const WithdrawTable = (props: propsData) => {
   }, [props.coin, props.date])
 
   async function getWithdrawData() {
-    let withdraw = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/list?userid=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+    let withdraw = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/list?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token
       },
     }).then(response => response.json());
 
+    console.log(withdraw,"==============withdraw");
+    
     setTotal(withdraw?.data?.total)
     setTotalRecord(withdraw?.data?.total)
     if (props?.filter !== "") {
@@ -75,6 +79,10 @@ const WithdrawTable = (props: propsData) => {
     const newOffset = (event.selected * itemsPerPage) % total;
     setItemOffset(newOffset);
   };
+
+
+  
+  
 
 
   return (
@@ -136,7 +144,6 @@ const WithdrawTable = (props: propsData) => {
           </thead>
           <tbody>
             {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: any) => {
-
               return (
                 <tr key={index}>
                   <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
@@ -186,7 +193,7 @@ const WithdrawTable = (props: propsData) => {
                     </p>
                   </td>
                   <td>
-                    <p className={`info-14-18  ${item?.status === "Completed" ? "text-buy" : item?.status === "Canceled" ? "text-cancel" : "text-gamma"}`}>{item?.status}</p>
+                    <p className={`info-14-18  capitalize ${item?.status == "success" ? '!text-buy': item?.status == "pending" ? '!text-primary':' !text-cancel'}`}>{item?.status}</p>
                   </td>
                 </tr>
               );

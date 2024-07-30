@@ -34,6 +34,8 @@ const WithdrawList = (props: propsData) => {
       },
     }).then(response => response.json());
 
+    console.log(withdrawList,"==========withdrawList");
+    
     setTotal(withdrawList?.data?.total)
     if (props?.filter !== "") {
       let data = withdrawList?.data?.data.filter((item: any) => {
