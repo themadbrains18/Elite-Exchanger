@@ -200,7 +200,7 @@ const VerificationNew = (props: activeSection) => {
 
     const matchUserOtp = async () => {
         try {
-            // console.log(fillOtp,"==fillOtp");                        
+            console.log(fillOtp,"==fillOtp");                        
             setDisabled(true)
 
             if (fillOtp === "" || fillOtp === "string" || fillOtp === null) {
@@ -246,10 +246,10 @@ const VerificationNew = (props: activeSection) => {
     const resetTimer = () => {
 
         setDisabled(false);
-        const inputElements = document.querySelectorAll(".input_wrapper3 input");
-        inputElements?.forEach((ele, index) => {
-            (ele as HTMLInputElement).value = "";
-        });
+        // const inputElements = document.querySelectorAll(".input_wrapper3 input");
+        // inputElements?.forEach((ele, index) => {
+        //     (ele as HTMLInputElement).value = "";
+        // });
     };
 
     return (

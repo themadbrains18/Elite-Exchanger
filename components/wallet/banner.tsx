@@ -46,7 +46,7 @@ const Banner = (props: propsData): any => {
               <p className="nav-text-sm !text-gamma">Wallet Balance</p>
             </div>
             <div className="mt-30 flex gap-10">
-              <p className="md-heading dark:text-white">
+              <p className="md-heading text-black dark:text-white">
                 {
                   show == true ? <span> ${props.assets !=0 ? currencyFormatter(truncateNumber(props?.assets,6)) :'0.00' }</span> :  <span>$ {props.assets !=0 ?star.repeat(props.assets.toFixed(6)?.length):star.repeat(4)}</span>
                 }

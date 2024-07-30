@@ -82,6 +82,20 @@ const WithdrawAuthenticationModelPopup = (props: activeSection) => {
 
                         </div>
                     </div>
+                    <div className="flex justify-between mt-20">
+                                <div className="md-text dark:!text-g-secondary">
+                                    {session?.user?.TwoFA === false ? 'Please set google authentication (2FA)' : 'Google authentication (2FA) '}
+                                </div>
+                                <div>
+                                    {session?.user?.TwoFA === false ? <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap" onClick={() => route.push('/profile/security')}>
+                                        Verify
+                                    </button> : <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap">
+                                        Approved
+                                    </button>}
+
+                                </div>
+                            </div>
+              
                 </div>
 
             </div>

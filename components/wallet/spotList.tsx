@@ -18,7 +18,7 @@ import { truncateNumber } from '@/libs/subdomain';
 interface propsData {
   networks: any;
   filter: string;
-  refreshData?:Function
+  refreshData?: Function
 }
 
 const SpotList = (props: propsData): any => {
@@ -43,30 +43,30 @@ const SpotList = (props: propsData): any => {
   const wbsocket = useWebSocket();
 
   const socketListenerRef = useRef<(event: MessageEvent) => void>();
-    useEffect(() => {
-        const handleSocketMessage = (event: any) => {
-            const data = JSON.parse(event.data).data;
-            let eventDataType = JSON.parse(event.data).type;
+  useEffect(() => {
+    const handleSocketMessage = (event: any) => {
+      const data = JSON.parse(event.data).data;
+      let eventDataType = JSON.parse(event.data).type;
 
-            if (eventDataType === "convert") {
-                if (session) {
-                  getSpotData();
-                }
-            }
-        };
-        if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
-            if (socketListenerRef.current) {
-                wbsocket.removeEventListener('message', socketListenerRef.current);
-            }
-            socketListenerRef.current = handleSocketMessage;
-            wbsocket.addEventListener('message', handleSocketMessage);
+      if (eventDataType === "convert") {
+        if (session) {
+          getSpotData();
         }
-        return () => {
-            if (wbsocket) {
-                wbsocket.removeEventListener('message', handleSocketMessage);
-            }
-        };
-    }, [wbsocket]);
+      }
+    };
+    if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
+      if (socketListenerRef.current) {
+        wbsocket.removeEventListener('message', socketListenerRef.current);
+      }
+      socketListenerRef.current = handleSocketMessage;
+      wbsocket.addEventListener('message', handleSocketMessage);
+    }
+    return () => {
+      if (wbsocket) {
+        wbsocket.removeEventListener('message', handleSocketMessage);
+      }
+    };
+  }, [wbsocket]);
 
   useEffect(() => {
     getSpotData()
@@ -175,7 +175,7 @@ const SpotList = (props: propsData): any => {
                 <tr key={index} className="rounded-5 group ">
                   <td className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                      <Image src={`${imgSrc2?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} className={`${item?.symbol==="XRP"&&"bg-white rounded-full "}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)}/>
+                      <Image src={`${imgSrc2 ? '/assets/history/Coin.svg' : item.token !== null ? item?.token?.image : item?.global_token?.image}`} className={`${item?.symbol === "XRP" && "bg-white rounded-full "}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)} />
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                         <p className="info-14-18 dark:text-white">{item.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                         {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p> */}
@@ -183,10 +183,10 @@ const SpotList = (props: propsData): any => {
                     </div>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white  lg:text-start text-center">{currencyFormatter(truncateNumber(item?.balance,6))}</p>
+                    <p className="info-14-18 dark:text-white  lg:text-start text-center">{currencyFormatter(truncateNumber(item?.balance, 6))}</p>
                   </td>
                   <td className="lg:text-start text-end">
-                    <p className="info-14-18 dark:text-white">${item.token !== null ? currencyFormatter(truncateNumber(item?.token?.price,6)) : currencyFormatter(truncateNumber(item?.global_token?.price,6))}</p>
+                    <p className="info-14-18 dark:text-white">${item.token !== null ? currencyFormatter(truncateNumber(item?.token?.price, 6)) : currencyFormatter(truncateNumber(item?.global_token?.price, 6))}</p>
                   </td>
 
                   <td className="max-[1023px]:hidden ">
@@ -199,16 +199,19 @@ const SpotList = (props: propsData): any => {
                         <IconsComponent type="openInNewTab" hover={false} active={false} />
                       </button>
                       <button onClick={() => {
-                        if (session?.user.TwoFA === false || (session?.user?.email === '' || session?.user?.email === null)) {
+                        if (session?.user.TwoFA === false || (session?.user?.email === '' || session?.user?.email === null) || session?.user?.TwoFA === false) {
                           setWithdrawActive(true);
                           setWithdrawShow(true);
                         }
                         else {
+
                           const expire = new Date(`${session?.user?.pwdupdatedAt}`).getTime();
                           const updateDate = Date.now();
                           let expireDate = Math.floor(expire / 1000);
                           let currentDate = Math.floor(updateDate / 1000);
-                          if (currentDate >= expireDate) {
+                  
+
+                          if (isNaN(expireDate) || currentDate >= expireDate) {
                             setSelectedCoinBalance(item?.balance);
                             setShow1(2);
                             setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
@@ -322,7 +325,7 @@ const SpotList = (props: propsData): any => {
                 <div key={index} className="rounded-5 group grid grid-cols-3  gap-x-[10px]  items-center">
                   <div className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                      <Image src={`${imgSrc?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={28} height={28} alt="coins" className={`${(item?.token?.symbol || item?.global_token?.symbol)==="XRP"&&"bg-white rounded-full"} max-w-[20px] md:max-w-[30px] w-full`} onError={() => setImgSrc(true)}/>
+                      <Image src={`${imgSrc ? '/assets/history/Coin.svg' : item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={28} height={28} alt="coins" className={`${(item?.token?.symbol || item?.global_token?.symbol) === "XRP" && "bg-white rounded-full"} max-w-[20px] md:max-w-[30px] w-full`} onError={() => setImgSrc(true)} />
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                         <p className="info-14-18 dark:text-white">{item.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                         <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
@@ -434,7 +437,7 @@ const SpotList = (props: propsData): any => {
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
 
-          <Withdraw setShow1={setShow1} networks={props.networks} session={session} token={selectedCoin} selectedCoinBalance={selectedCoinBalance} refreshData={props?.refreshData}/>
+          <Withdraw setShow1={setShow1} networks={props.networks} session={session} token={selectedCoin} selectedCoinBalance={selectedCoinBalance} refreshData={props?.refreshData} />
 
         </>
       }
@@ -442,7 +445,7 @@ const SpotList = (props: propsData): any => {
         show1 === 3 &&
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-          <StakingModel setShow1={setShow1} session={session} token={selectedCoin} selectedCoinBalance={selectedCoinBalance} refreshData={props?.refreshData}/>
+          <StakingModel setShow1={setShow1} session={session} token={selectedCoin} selectedCoinBalance={selectedCoinBalance} refreshData={props?.refreshData} />
         </>
       }
       {
@@ -453,7 +456,7 @@ const SpotList = (props: propsData): any => {
         </>
       }
       {withdrawActive === true &&
-        <WithdrawAuthenticationModelPopup setActive={setWithdrawActive} setShow={setWithdrawShow} show={withdrawShow} title="Withdrawl Security Settings" />
+        <WithdrawAuthenticationModelPopup setActive={setWithdrawActive} setShow={setWithdrawShow} show={withdrawShow} title="Withdrawal Security Settings" />
       }
     </>
   )
