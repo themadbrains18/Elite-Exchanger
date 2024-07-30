@@ -293,7 +293,7 @@ const SecurityCode = (props: propsData) => {
           <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
             <Image src={props.api === 'forget' ? '/assets/register/forget.png' : "/assets/register/register.png"} width={1018} height={1100} alt="signup" className="object-cover h-[1080px] min-h-screen block w-full" />
           </div>
-          <div className={`max-w-full lg:max-w-[50%] lg:flex lg:justify-center w-full ${props.api === 'forget' ? 'items-center' : ''}`}>
+          <div className={`max-w-full lg:max-w-[50%] lg:flex lg:mx-5 w-full ${props.api === 'forget' ? 'items-center' : ''}`}>
             <div className="h-full">
               <div className="my-[30px] lg:my-[40px] w-full  lg:max-w-[600px] max-[1023px]:mx-auto">
                 <div className="max-w-[183px] mt-9 w-full max-[1023px]:mx-auto lg:ml-auto cursor-pointer" onClick={() => { router.push("/"); }}>
