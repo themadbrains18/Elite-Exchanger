@@ -16,8 +16,9 @@ interface dataList {
   onTimeChange?: any;
   dropdown?: any;
   depositToken?: any;
-  setUnSelectCoinError?:any;
   resetValue?:any
+  setUnSelectCoinError?:any;
+  unSelectCoinError?:any;
 }
 
 const FiliterSelectMenu = (props: dataList) => {
@@ -61,7 +62,7 @@ const FiliterSelectMenu = (props: dataList) => {
 
   return (
     <>
-      <div className={`relative max-w-full ${props.widthFull ? 'max-w-full' : 'lg:max-w-[300px]'} w-full ${props.auto && 'mx-auto'}`}>
+      <div className={`relative max-w-full ${props.widthFull ? 'max-w-full' : 'lg:max-w-[300px]'} w-full ${props.auto && 'mx-auto'} ${props?.unSelectCoinError=="" ? "cursor-pointer opacity-100" :' cursor-not-allowed opacity-70'}`}>
         {/* top dropdown input */}
         <div className={`border border-grey-v-1 dark:border-[#ccced94d] rounded-[5px] py-[${props.type === 'express' ? '15px' : '8px'}] px-[15px]`} onClick={() => {
           if(props.onNetworkChange && props.depositToken === undefined && props?.setUnSelectCoinError!==undefined){

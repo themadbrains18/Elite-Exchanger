@@ -30,6 +30,7 @@ const SpotList = (props: propsData): any => {
   const [show1, setShow1] = useState(0);
   const [selectedCoin, setSelectedCoin] = useState(Object);
   const [withdrawActive, setWithdrawActive] = useState(false);
+  const [depositActive, setDepositActive] = useState(false);
   const [withdrawShow, setWithdrawShow] = useState(false);
   const [selectedCoinBalance, setSelectedCoinBalance] = useState(0.00);
   const [popupMode, setPopupMode] = useState(0);
@@ -192,7 +193,13 @@ const SpotList = (props: propsData): any => {
                   <td className="max-[1023px]:hidden ">
                     <div className="flex items-center gap-[10px]">
                       <button onClick={() => {
-                        setShow1(1); setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                         if (session?.user?.kyc !== 'approve') {
+                          setDepositActive(true);
+                          setWithdrawShow(true);
+                        }
+                        else{
+                          setShow1(1); setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
+                        }
 
                       }} className="max-w-[50%] w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                         <span className="text-primary block">Deposit</span>
@@ -456,7 +463,10 @@ const SpotList = (props: propsData): any => {
         </>
       }
       {withdrawActive === true &&
-        <WithdrawAuthenticationModelPopup setActive={setWithdrawActive} setShow={setWithdrawShow} show={withdrawShow} title="Withdrawal Security Settings" />
+        <WithdrawAuthenticationModelPopup setActive={setWithdrawActive} setShow={setWithdrawShow} show={withdrawShow} title="Withdrawal Security Settings" type="withdraw"/>
+      }
+      {depositActive === true &&
+        <WithdrawAuthenticationModelPopup setActive={setDepositActive} setShow={setWithdrawShow} show={withdrawShow} title="Deposit Security Settings" type="deposit"/>
       }
     </>
   )
