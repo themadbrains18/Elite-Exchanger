@@ -44,6 +44,7 @@ const Exchange = (props: DynamicId): any => {
   let { status, data: session } = useSession();
   let list = props?.coinList;
   let newCoinListWithBalance: any = [];
+  const [imgSrc, setImgSrc] = useState(false);
 
   const wbsocket = useWebSocket();
 
@@ -325,7 +326,7 @@ const Exchange = (props: DynamicId): any => {
         <div className="flex gap-[10px] py-5">
           <Image src="/assets/market/walletpayment.svg" alt="wallet2" width={24} height={24} />
           <p className="md-text w-full">${currencyFormatter(truncateNumber(currentTokenWalletBalance, 6)) || 0.00}</p>
-          <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} className={`${selectedToken?.symbol ==="XRP"&&"bg-white rounded-full"} max-w-[24px] w-full`}/>
+          <Image src={`${imgSrc?'/assets/history/Coin.svg':selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} className={`${selectedToken?.symbol ==="XRP"&&"bg-white rounded-full"} max-w-[24px] w-full`} onError={() => setImgSrc(true)}/>
           {props.coinList && props.coinList?.map((item: any) => {
             if (item.symbol === selectedToken?.symbol) {
               return <p className="md-text">${(selectedToken !== undefined && selectedToken?.price !== undefined) ? currencyFormatter(item?.price?.toFixed(5)) : '0.00'}</p>

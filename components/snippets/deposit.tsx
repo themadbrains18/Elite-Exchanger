@@ -92,7 +92,7 @@ const Deposit = (props: activeSection) => {
   return (
     <div ref={wrapperRef} className={`duration-300 max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
       <div className="flex items-center justify-between">
-        <p className="sec-title">{depositToken?.symbol} Deposit Address</p>
+        <p className="sec-title">{depositToken?.symbol} Deposit </p>
         <svg
           onClick={() => {
             props.setShow1(0);
@@ -127,17 +127,17 @@ const Deposit = (props: activeSection) => {
             dropdown={1}
             filterNetworkListByCoin={filterNetworkListByCoin}
           />
-          {unSelectCoinError!=="" && <p className="errorMessage">{unSelectCoinError}</p>}
+          {unSelectCoinError!=="" && <p className="errorMessage mt-[10px]">{unSelectCoinError}</p>}
         </div>
       }
       <div className="mt-20">
-        <FiliterSelectMenu data={list} placeholder="Select Network type" auto={true} widthFull={true} onNetworkChange={getAddress} depositToken={depositToken} setUnSelectCoinError={setUnSelectCoinError}/>
+        <FiliterSelectMenu data={list} placeholder="Select Network type" auto={true} widthFull={true} onNetworkChange={getAddress} depositToken={depositToken} setUnSelectCoinError={setUnSelectCoinError} unSelectCoinError={unSelectCoinError}/>
       </div>
 
       <div className="py-30 md:py-10">
         <div className="py-[10px]">
           <p className="info-14-18 text-center dark:text-white text-black">Scan QR code to Deposit</p>
-          <div className="mt-[15px] max-w-[154px] rounded-5 shadow-card mx-auto">
+          <div className={`mt-[15px] max-w-[154px] rounded-5 shadow-card mx-auto  ${address === '' && 'blur-sm'}`}>
             <SVG
               text={`${address !== '' ? address : 'Test Qr Code'}`}
               options={{
@@ -153,11 +153,12 @@ const Deposit = (props: activeSection) => {
         <div className="pt-5 md:pt-30 ">
           <p className="nav-text-sm text-black dark:text-white pb-[15px] text-center">Disclaimer</p>
           <div className="h-[1px] w-full bg-grey-v-2 mb-[10px]"></div>
-          <p className="info-12 text-center">Please deposit only {depositToken?.symbol} assets to this address. If you deposit any other coins, it will be lost forever.</p>
+          {/* <p className="info-12 text-center">Please deposit only {depositToken?.symbol} assets to this address. If you deposit any other coins, it will be lost forever.</p> */}
+          <p className="info-12 text-center">Please only deposit the specified asset to this address. Depositing any other type of cryptocurrency will result in permanent loss.</p>
         </div>
 
         <div className="pt-5 md:pt-30">
-          <p className="sm-text text-start md:text-center ">Destination</p>
+          <p className="sm-text text-start  ">Deposit address</p>
           <div className="mt-[5px] md:mt-[10px] items-center flex justify-between gap-[10px] border rounded-5 border-grey-v-1 dark:border-opacity-[15%] py-2 px-[15px]">
             <p className="sec-text text-ellipsis overflow-hidden">{address === "" ?"":address}</p>
             <button className={`solid-button py-2 sec-text font-normal ${address === '' ? 'cursor-not-allowed' : 'cursor-pointer'} `}

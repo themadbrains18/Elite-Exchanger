@@ -65,6 +65,7 @@ const Withdraw = (props: activeSection) => {
   const [addressList, setAddressList] = useState([]);
   const [show, setShow] = useState(false);
   const [itemOffset, setItemOffset] = useState(0);
+  const [imgSrc, setImgSrc] = useState(false);
   const [transFees, setTransFees] = useState(0);
   
 
@@ -412,13 +413,16 @@ const Withdraw = (props: activeSection) => {
   console.log(netWorkList, "=========netWorkList");
   // console.log(props.token, "=========props.token");
 
+  console.log(props?.token,"=props?.token");
+  
+
   return (
     <>
       <ToastContainer position="top-right" limit={1} />
       {enable === 1 && (
         <div ref={wrapperRef} className="max-h-[614px] lg:max-h-fit overflow-y-auto max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <div className="flex items-center justify-between pb-[10px] md:pb-[15px] border-b border-grey-v-2 dark:border-opacity-[15%] dark:border-beta">
-            <p className="sec-title">Withdraw Coin From Wallet to Another</p>
+            <p className="sec-title">Withdrawal</p>
             <svg
               onClick={() => {
                 props.setShow1(false);
@@ -451,14 +455,15 @@ const Withdraw = (props: activeSection) => {
             }}>
             <div className="py-30 md:py-10">
               <div className="mb-[15px] md:mb-5">
-                <label className="sm-text ">Select Coin</label>
+                {/* <label className="sm-text ">Select Coin</label> */}
                 <div className="border border-grey-v-1 dark:border-opacity-[15%] mt-[10px]  gap-[15px] items-center flex justify-between rounded-5 p-[11px] md:p-[15px]">
                   <div className="flex gap-2 ">
                     <Image
-                      src={props?.token?.image ? props?.token?.image:"/assets/history/coin.svg"}
+                      src={ imgSrc?'/assets/history/coin.svg':props?.token?.image}
                       width={25}
                       height={25}
                       alt="coins"
+                      onError={() => setImgSrc(true)}
                     />
                     <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-1">
                       <p className="info-14-18 dark:text-white">
@@ -473,8 +478,8 @@ const Withdraw = (props: activeSection) => {
                 </div>
                 <p className="mt-[10px] text-end sm-text">Transfer Network</p>
               </div>
-              <div className="my-20 relative">
-                <label className="sm-text mb-[10px] block">Network</label>
+              <div className="my-20">
+                {/* <label className="sm-text mb-[10px] block">Network</label>   */}
                 <FiliterSelectMenu
                   setTransFees={setTransFees}
                   
@@ -487,7 +492,7 @@ const Withdraw = (props: activeSection) => {
                   onNetworkChange={getNetworkDetail}
                 />
                 {errors.networkId && (
-                  <p className="errorMessage mt-2 ">{errors.networkId.message}</p>
+                  <p className="errorMessage mt-10">{errors.networkId.message}</p>
                 )}
               </div>
 
@@ -522,7 +527,7 @@ const Withdraw = (props: activeSection) => {
 
                 </div>
                 {errors.withdraw_wallet && (
-                  <p className="errorMessage mt-2">{errors.withdraw_wallet.message}</p>
+                  <p className="errorMessage mt-10">{errors.withdraw_wallet.message}</p>
                 )}
                 {/* <p className="mt-[10px] text-end text-buy sm-text">
                   Valid Address
@@ -530,7 +535,7 @@ const Withdraw = (props: activeSection) => {
               </div>
               <div className="">
                 <label htmlFor="amount" className="sm-text ">Amount</label>
-                <div className="border border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px]">
+                <div className="border border-grey-v-1 dark:border-opacity-[15%]  mt-[10px] rounded-5 p-[11px] md:p-[15px]">
                   <input
                     type="number"
                     id="amount"
@@ -550,7 +555,7 @@ const Withdraw = (props: activeSection) => {
                   />
                 </div>
                 {errors.amount && (
-                  <p className="errorMessage mt-2">{errors.amount.message}</p>
+                  <p className="errorMessage mt-10">{errors.amount.message}</p>
                 )}
                 <p className="mt-[10px] text-end sm-text">
                   Transaction Fee {transFees} {props?.token?.symbol}
@@ -563,7 +568,7 @@ const Withdraw = (props: activeSection) => {
 
               </div>
             </div>
-            <button type="submit" disabled={disable} className={`solid-button w-full flex items-center justify-center ${disable === true ? 'opacity-50 cursor-not-allowed' : ''}`}>
+            <button type="submit" disabled={disable} className={`solid-button w-full my-10 flex items-center justify-center ${disable === true ? 'opacity-50 cursor-not-allowed' : ''}`}>
               {disable === true &&
                 <svg className="w-5 h-5 mr-3 -ml-1 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none"
                   viewBox="0 0 24 24">
