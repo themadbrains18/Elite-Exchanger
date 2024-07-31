@@ -208,7 +208,7 @@ const Withdraw = (props: activeSection) => {
       data.tokenID = props.token?.id;
       data.tokenName = props.token?.fullName;
       data.symbol = props.token?.symbol;
-      data.fee = props?.token?.withdraw_fee.toString();
+      data.fee = transFees.toString();
       data.status = "pending";
       data.type = "global";
       data.otp = "string";
