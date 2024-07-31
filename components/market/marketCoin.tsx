@@ -47,10 +47,10 @@ const MarketCoin = (props: propsData) => {
       <div className="mt-30 md:mt-50">
         <Swiper
           pagination={true}
-          autoplay={true}
           observer={false}          
-          // observeParents={true}  
+          observeParents={false}  
           loop={true}
+          autoplay={{ delay: 4000 }} 
           modules={[Pagination, Autoplay]}
           breakpoints={{
             320: {
