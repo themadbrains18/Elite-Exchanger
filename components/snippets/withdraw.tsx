@@ -535,7 +535,7 @@ const Withdraw = (props: activeSection) => {
               </div>
               <div className="">
                 <label htmlFor="amount" className="sm-text ">Amount</label>
-                <div className="border border-grey-v-1 dark:border-opacity-[15%]  mt-[10px] rounded-5 p-[11px] md:p-[15px]">
+                <div className="border border-grey-v-00000001 dark:border-opacity-[15%]  mt-[10px] rounded-5 p-[11px] md:p-[15px]">
                   <input
                     type="number"
                     id="amount"

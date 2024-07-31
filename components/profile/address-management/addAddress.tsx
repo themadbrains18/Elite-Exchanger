@@ -54,6 +54,8 @@ const AddAddress = (props: activeSection) => {
   const [disable, setDisable] = useState(false);
   const [addressVerified, setAddressVerified] = useState(false);
   const [unSelectCoinError, setUnSelectCoinError] = useState('');
+  const [enableNetWork,setEnableNetWork] = useState(true);
+
 
   let {
     register,
@@ -97,6 +99,7 @@ const AddAddress = (props: activeSection) => {
           type: "custom",
           message: "Please select coin.",
         });
+        
         return;
       } else {
         if(selectedCoin!==undefined){
@@ -344,7 +347,7 @@ const AddAddress = (props: activeSection) => {
 
                 </div>
                 {errors.label && (
-                  <p className="errorMessage">{errors.label.message}</p>
+                  <p className="errorMessage mt-10">{errors.label.message}</p>
                 )}
                 {/* <p className="mt-[10px] text-end text-buy sm-text">
                   Valid Address
@@ -355,27 +358,34 @@ const AddAddress = (props: activeSection) => {
         props?.token &&
         <div className="relative max-w-full  w-full mt-20">
             <label className="sm-text mb-[10px] block">Coin</label>
-          <FilterSelectMenuWithCoin
-            data={props?.token}
-            border={true}
-            dropdown={1}
-            filterNetworkListByCoin={filterNetworkListByCoin}
-          />
-          {unSelectCoinError!=="" && <p className="errorMessage">{unSelectCoinError}</p>}
-        </div>
+            
+              <FilterSelectMenuWithCoin
+                setEnableNetWork={setEnableNetWork}
+                data={props?.token}
+                border={true}
+                dropdown={1}
+                filterNetworkListByCoin={filterNetworkListByCoin}
+              />
+              {unSelectCoinError!=="" && <p className="errorMessage mt-10">{unSelectCoinError}</p>}
+          </div>
       }
               <div className="my-20">
                 <label className="sm-text mb-[10px] block">Network</label>
-                <FiliterSelectMenu
-                  data={list}
-                  placeholder="Select Network type"
-                  auto={false}
-                  widthFull={true}
-                  onNetworkChange={getNetworkDetail}
-                  depositToken={selectedCoin} setUnSelectCoinError={setUnSelectCoinError}
-                />
+                <div className={`${enableNetWork && 'cursor-not-allowed opacity-[0.5]'}`}>
+                  <div className={`${enableNetWork && 'pointer-events-none'}`}>
+                    <FiliterSelectMenu
+                      data={list}
+                      placeholder="Select Network type"
+                      auto={false}
+                      widthFull={true}
+                      onNetworkChange={getNetworkDetail}
+                      depositToken={selectedCoin} setUnSelectCoinError={setUnSelectCoinError}
+                    />
+                  </div>
+                </div>
+
                 {errors.networkId && (
-                  <p className="errorMessage">{errors.networkId.message}</p>
+                  <p className="errorMessage mt-10">{errors.networkId.message}</p>
                 )}
               </div>
 
@@ -400,7 +410,7 @@ const AddAddress = (props: activeSection) => {
 
                 </div>
                 {errors.address && (
-                  <p className="errorMessage">{errors.address.message}</p>
+                  <p className="errorMessage mt-10">{errors.address.message}</p>
                 )}
 
               </div>

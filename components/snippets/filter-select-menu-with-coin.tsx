@@ -13,6 +13,7 @@ interface dataList {
   value?: string;
   filterNetworkListByCoin?: any;
   disabled?:boolean;
+  setEnableNetWork?:Function
 }
 
 const FilterSelectMenuWithCoin = (props: dataList) => {
@@ -90,7 +91,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
               </div>
 
               {/* dropdown */}
-              <div className={`absolute max-h-[250px] overflow-y-auto z-[1] shadow-lg shadow-[#0000000d] left-0 right-0 dark:bg-black-v-1 bg-white border border-grey-v-1 dark:border-[#ccced94d] rounded-10 p-[15px] duration-300 ${show ? "top-[calc(100%+7px)] opacity-1 visible" : "top-[calc(100%+17px)] opacity-0 invisible"}`}>
+              <div className={`absolute  max-h-[250px] overflow-y-auto z-[1] shadow-lg shadow-[#0000000d] left-0 right-0 dark:bg-black-v-1 bg-white border border-grey-v-1 dark:border-[#ccced94d] rounded-10 p-[15px] duration-300 ${show ? "top-[calc(100%+7px)] opacity-1 visible" : "top-[calc(100%+17px)] opacity-0 invisible"}`}>
                 <div className='bg-white dark:bg-d-bg-primary rounded-[5px] sticky top-0'>
                   <div className='border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-full w-full py-[8px] px-[10px] ' onClick={(e) => { e.stopPropagation() }}>
                     <Image src="/assets/history/search.svg" alt='error' width={15} height={15} />
@@ -100,7 +101,7 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
                 <ul>
                   {filterCoin !== undefined && filterCoin.map((item: any, index: number) => {
                     return (
-                      <li key={index} onClick={() => { setImage(item.image); setText(item.symbol); setShow(false); props?.setCurrencyName && props?.setCurrencyName(item.symbol, props.dropdown); props?.setCurrency && props.setCurrency(item, props.dropdown); props.filterNetworkListByCoin && props.filterNetworkListByCoin(item) }} className='cursor-pointer  flex items-center gap-10 p-10 py-[6px] hover:bg-grey dark:hover:bg-d-bg-primary rounded-[5px]'>
+                      <li key={index} onClick={() => { props?.setEnableNetWork && props?.setEnableNetWork(false); setImage(item.image); setText(item.symbol); setShow(false); props?.setCurrencyName && props?.setCurrencyName(item.symbol, props.dropdown); props?.setCurrency && props.setCurrency(item, props.dropdown); props.filterNetworkListByCoin && props.filterNetworkListByCoin(item) }} className='cursor-pointer  flex items-center gap-10 p-10 py-[6px] hover:bg-grey dark:hover:bg-d-bg-primary rounded-[5px]'>
                         <Image src={`${imgSrc2?'/assets/history/Coin.svg':item.image}`} alt="error" width={20} height={20} className={`${item.symbol === 'XRP' || item.symbol === 'ETH' ? 'bg-white rounded-full' : ''}`} onError={() => setImgSrc2(true)}/>
                         <p className={`sm-text rounded-[5px] dark:!text-d-nav-secondary   !text-banner-text`}>{item.symbol}</p>
                       </li>

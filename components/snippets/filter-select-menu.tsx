@@ -16,9 +16,8 @@ interface dataList {
   onTimeChange?: any;
   dropdown?: any;
   depositToken?: any;
-  resetValue?:any
   setUnSelectCoinError?:any;
-  unSelectCoinError?:any;
+  resetValue?:any
   setTransFees?:Function;
   setTransFeesSymbol?:Function
 }

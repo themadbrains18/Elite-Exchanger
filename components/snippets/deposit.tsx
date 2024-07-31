@@ -26,6 +26,7 @@ const Deposit = (props: activeSection) => {
   const { mode } = useContext(Context);
   const [btnDisabledCopy, setBtnDisabledCopy] = useState(false);
   const [unSelectCoinError, setUnSelectCoinError] = useState('');
+  const [enableNetWork,setEnableNetWork] = useState(true);
 
   useLayoutEffect(() => {
     filterNetworkListByCoin(props.token);
@@ -123,6 +124,7 @@ const Deposit = (props: activeSection) => {
         <div className="relative max-w-full  w-full mt-20">
           <FilterSelectMenuWithCoin
             data={props?.coinList}
+            setEnableNetWork={setEnableNetWork}
             border={true}
             dropdown={1}
             filterNetworkListByCoin={filterNetworkListByCoin}
@@ -130,8 +132,10 @@ const Deposit = (props: activeSection) => {
           {unSelectCoinError!=="" && <p className="errorMessage mt-[10px]">{unSelectCoinError}</p>}
         </div>
       }
-      <div className="mt-20">
-        <FiliterSelectMenu data={list} placeholder="Select Network type" auto={true} widthFull={true} onNetworkChange={getAddress} depositToken={depositToken} setUnSelectCoinError={setUnSelectCoinError} unSelectCoinError={unSelectCoinError}/>
+      <div className={`mt-20 ${enableNetWork && 'cursor-not-allowed opacity-[0.5]'}`}>
+        <div className={`${enableNetWork && 'pointer-events-none'}`}>
+          <FiliterSelectMenu data={list} placeholder="Select Network type" auto={true} widthFull={true} onNetworkChange={getAddress} depositToken={depositToken} setUnSelectCoinError={setUnSelectCoinError} />
+        </div>
       </div>
 
       <div className="py-30 md:py-10">
