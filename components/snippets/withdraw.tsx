@@ -16,6 +16,7 @@ import clickOutSidePopupClose from "./clickOutSidePopupClose";
 import CountrylistDropdown from "./country-list-dropdown";
 import IconsComponent from "./icons";
 import { useWebSocket } from "@/libs/WebSocketContext";
+import { truncateNumber } from "@/libs/subdomain";
 
 const schema = yup.object().shape({
   networkId: yup.string().required('This field is required.'),
@@ -67,7 +68,8 @@ const Withdraw = (props: activeSection) => {
   const [itemOffset, setItemOffset] = useState(0);
   const [imgSrc, setImgSrc] = useState(false);
   const [transFees, setTransFees] = useState(0);
-  
+  const [amount, setAmount] = useState(0);
+
 
   const wbsocket = useWebSocket();
   let itemsPerPage = 50;
@@ -134,10 +136,10 @@ const Withdraw = (props: activeSection) => {
       }).then(response => response.json());
 
       let res = address?.data?.data?.filter((item: any) => item?.status === true)
-      
+
       setAddressList(res);
     } catch (error) {
-      
+
     }
   }
 
@@ -161,6 +163,8 @@ const Withdraw = (props: activeSection) => {
     }
 
   };
+  console.log(props?.token,"=props?.token");
+  
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
     try {
@@ -190,7 +194,7 @@ const Withdraw = (props: activeSection) => {
         return;
       }
 
-      if (data?.amount <= props?.token?.withdraw_fee) {
+      if (data?.amount <= transFees) {
         setError("amount", {
           type: "custom",
           message: "Please enter amount more than your transaction fee.",
@@ -208,7 +212,7 @@ const Withdraw = (props: activeSection) => {
       data.tokenID = props.token?.id;
       data.tokenName = props.token?.fullName;
       data.symbol = props.token?.symbol;
-      data.fee = props?.token?.withdraw_fee.toString();
+      data.fee = transFees.toString();
       data.status = "pending";
       data.type = "global";
       data.otp = "string";
@@ -394,13 +398,13 @@ const Withdraw = (props: activeSection) => {
     props?.setShow1(false);
   }
   const wrapperRef = useRef(null);
-  clickOutSidePopupClose({ wrapperRef, closePopup });  
-  
+  clickOutSidePopupClose({ wrapperRef, closePopup });
 
-  const netWorkList = props?.networks?.filter((item:any) => {
-    return props?.token?.networks?.some((titem:any) => {
+
+  const netWorkList = props?.networks?.filter((item: any) => {
+    return props?.token?.networks?.some((titem: any) => {
       if (item?.id === titem?.id) {
-        item.fee = titem?.fee; 
+        item.fee = titem?.fee;
         return true;
       }
       return false;
@@ -409,12 +413,12 @@ const Withdraw = (props: activeSection) => {
     const titem = props?.token?.networks?.find((titem: any) => item?.id === titem?.id);
     return { ...item, fee: titem?.fee };
   });
-  
+
   console.log(netWorkList, "=========netWorkList");
   // console.log(props.token, "=========props.token");
 
-  console.log(props?.token,"=props?.token");
-  
+  console.log(props?.token, "=props?.token");
+
 
   return (
     <>
@@ -449,17 +453,17 @@ const Withdraw = (props: activeSection) => {
             </svg>
           </div>
           <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}>
             <div className="py-30 md:py-10">
               <div className="mb-[15px] md:mb-5">
                 {/* <label className="sm-text ">Select Coin</label> */}
                 <div className="border border-grey-v-1 dark:border-opacity-[15%] mt-[10px]  gap-[15px] items-center flex justify-between rounded-5 p-[11px] md:p-[15px]">
                   <div className="flex gap-2 ">
                     <Image
-                      src={ imgSrc?'/assets/history/coin.svg':props?.token?.image}
+                      src={imgSrc ? '/assets/history/coin.svg' : props?.token?.image}
                       width={25}
                       height={25}
                       alt="coins"
@@ -482,7 +486,7 @@ const Withdraw = (props: activeSection) => {
                 {/* <label className="sm-text mb-[10px] block">Network</label>   */}
                 <FiliterSelectMenu
                   setTransFees={setTransFees}
-                  
+
                   data={netWorkList}
                   placeholder="Select Network type"
                   auto={false}
@@ -541,14 +545,15 @@ const Withdraw = (props: activeSection) => {
                     id="amount"
                     {...register("amount")}
                     name="amount"
+                    step={0.001}
                     placeholder="Enter Amount"
                     className="outline-none sm-text w-full bg-[transparent]"
-                    onChange={(e)=>{
+                    onChange={(e) => {
                       const value = e.target.value;
                       const regex = /^\d{0,11}(\.\d{0,6})?$/;
                       if (regex.test(value) || value === "") {
-
-                      }else{
+                        setAmount(Number(value))
+                      } else {
                         e.target.value = value.slice(0, -1);
                       }
                     }}
@@ -557,9 +562,33 @@ const Withdraw = (props: activeSection) => {
                 {errors.amount && (
                   <p className="errorMessage mt-10">{errors.amount.message}</p>
                 )}
-                <p className="mt-[10px] text-end sm-text">
-                  Transaction Fee {transFees} {props?.token?.symbol}
-                </p>
+                <div className="flex justify-between mt-[10px] ">
+                  <p className=" sm-text">
+                    Transaction Fee
+                  </p>
+                  <p className=" sm-text">
+                    {transFees} {props?.token?.symbol}
+                  </p>
+
+                </div>
+                <div className="flex justify-between mt-[10px] ">
+                  <p className=" sm-text">
+                    Recieved amount
+                  </p>
+                  <p className=" sm-text">
+                   {amount !=0 ? truncateNumber(amount-transFees,6): 0}  {props?.token?.symbol}
+                  </p>
+
+                </div>
+                <div className="flex justify-between mt-[10px] ">
+                  <p className=" sm-text">
+                    Minimum Withdraw
+                  </p>
+                  <p className=" sm-text">
+                   {props?.token?.minimum_withdraw !=null? props?.token?.minimum_withdraw: props?.token?.symbol==="USDT" ?10: 0.005}  {props?.token?.symbol}
+                  </p>
+
+                </div>
                 {/* {getValues('amount') > 0 &&
                   <p className="mt-[10px] text-end sm-text">
                     You received {getValues('amount') - props?.token?.withdraw_fee} {props?.token?.symbol}
@@ -604,7 +633,7 @@ const Withdraw = (props: activeSection) => {
         <ConfirmPopup
           setEnable={setEnable}
           setShow={props.setShow1}
-          type="number" 
+          type="number"
           data={formData}
           session={props?.session}
           snedOtpToUser={snedOtpToUser}
