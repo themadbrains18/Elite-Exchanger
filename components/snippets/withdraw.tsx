@@ -492,7 +492,7 @@ const Withdraw = (props: activeSection) => {
                   onNetworkChange={getNetworkDetail}
                 />
                 {errors.networkId && (
-                  <p className="errorMessage">{errors.networkId.message}</p>
+                  <p className="errorMessage mt-10">{errors.networkId.message}</p>
                 )}
               </div>
 
@@ -527,7 +527,7 @@ const Withdraw = (props: activeSection) => {
 
                 </div>
                 {errors.withdraw_wallet && (
-                  <p className="errorMessage">{errors.withdraw_wallet.message}</p>
+                  <p className="errorMessage mt-10">{errors.withdraw_wallet.message}</p>
                 )}
                 {/* <p className="mt-[10px] text-end text-buy sm-text">
                   Valid Address
@@ -555,7 +555,7 @@ const Withdraw = (props: activeSection) => {
                   />
                 </div>
                 {errors.amount && (
-                  <p className="errorMessage">{errors.amount.message}</p>
+                  <p className="errorMessage mt-10">{errors.amount.message}</p>
                 )}
                 <p className="mt-[10px] text-end sm-text">
                   Transaction Fee {transFees} {props?.token?.symbol}

@@ -137,7 +137,7 @@ const Deposit = (props: activeSection) => {
       <div className="py-30 md:py-10">
         <div className="py-[10px]">
           <p className="info-14-18 text-center dark:text-white text-black">Scan QR code to Deposit</p>
-          <div className="mt-[15px] max-w-[154px] rounded-5 shadow-card mx-auto">
+          <div className={`mt-[15px] max-w-[154px] rounded-5 shadow-card mx-auto  ${address === '' && 'blur-sm'}`}>
             <SVG
               text={`${address !== '' ? address : 'Test Qr Code'}`}
               options={{
