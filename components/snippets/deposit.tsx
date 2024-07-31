@@ -13,6 +13,7 @@ interface activeSection {
   session: any;
   coinList?: any;
   token?: any;
+  hideDefault?:boolean;
 }
 
 
@@ -132,10 +133,11 @@ const Deposit = (props: activeSection) => {
           {unSelectCoinError!=="" && <p className="errorMessage mt-[10px]">{unSelectCoinError}</p>}
         </div>
       }
-      <div className={`mt-20 ${enableNetWork && 'cursor-not-allowed opacity-[0.5]'}`}>
-        <div className={`${enableNetWork && 'pointer-events-none'}`}>
-          <FiliterSelectMenu data={list} placeholder="Select Network type" auto={true} widthFull={true} onNetworkChange={getAddress} depositToken={depositToken} setUnSelectCoinError={setUnSelectCoinError} />
-        </div>
+      
+       <div className={`mt-20 ${ props?.hideDefault && enableNetWork && 'cursor-not-allowed opacity-[0.5]'} `}>
+        <div className={`${props?.hideDefault && enableNetWork && 'pointer-events-none'}`}>
+            <FiliterSelectMenu data={list} placeholder="Select Network type" auto={true} widthFull={true} onNetworkChange={getAddress} depositToken={depositToken} setUnSelectCoinError={setUnSelectCoinError} />
+        </div> 
       </div>
 
       <div className="py-30 md:py-10">

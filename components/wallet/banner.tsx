@@ -91,7 +91,7 @@ const Banner = (props: propsData): any => {
         show1 === 1 &&
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-          <Deposit setShow1={setShow1} networks={props.networks} session={props.session} coinList={dataCoinWallet} />
+          <Deposit setShow1={setShow1} networks={props.networks} session={props.session} coinList={dataCoinWallet} hideDefault={true} />
         </>
       }
     </>

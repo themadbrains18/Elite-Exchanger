@@ -72,13 +72,13 @@ const AllCrypto = (props: propsData) => {
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">24%</p>
+                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">24h Change</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Deposit</p>
+                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Trade</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
@@ -128,7 +128,7 @@ const AllCrypto = (props: propsData) => {
                                         </div>
                                     </td>
                                     <td className="">
-                                        <button onClick={(e) => { e.stopPropagation(); setToken(item); setShow1(1) }} className=" w-full  py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                        <button onClick={() => (item?.tradepair !== null ? router.push(`/chart/${item.symbol}`) : '')} className=" w-full  py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                             {/* <span className="text-primary block">Deposit</span> */}
                                             <IconsComponent type="openInNewTab" hover={false} active={false} />
                                         </button>

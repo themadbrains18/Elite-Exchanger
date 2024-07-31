@@ -18,7 +18,7 @@ const WatchList = (props: propsData) => {
       <div className="flex border-b pb-[10px] justify-between border-grey-v-1 dark:border-opacity-[15%]">
         <p className="sec-text">Watchlist</p>
 
-        <Image src="/assets/profile/downarrow.svg" width={24} height={24} alt="arrow" className="-rotate-90" />
+        {/* <Image src="/assets/profile/downarrow.svg" width={24} height={24} alt="arrow" className="-rotate-90" /> */}
       </div>
       <div className="overflow-x-auto">
         <table width="100%" className="">
@@ -38,7 +38,7 @@ const WatchList = (props: propsData) => {
               </th>
               <th className=" py-5">
                 <div className="hidden md:flex">
-                  <p className="text-start  info-12 dark:text-gamma">24%</p>
+                  <p className="text-start  info-12 dark:text-gamma">24h Change</p>
                   <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>

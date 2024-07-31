@@ -72,13 +72,13 @@ const Spot = (props: propsData) => {
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Chart</p>
+                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">24h Change</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Action</p>
+                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Trade</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
@@ -86,6 +86,8 @@ const Spot = (props: propsData) => {
                     </thead>
                     <tbody>
                         {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: any) => {
+                            console.log(item,"=================item");
+                            
                             return (
                                 <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => { window.location.href = `/chart/${item.symbol}`; }}>
 
@@ -94,8 +96,8 @@ const Spot = (props: propsData) => {
                                         <Image src={`${imgSrc?'/assets/history/Coin.svg':item.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol==="XRP"&&"bg-white rounded-full"}`}/>
 
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                                <p className="info-14-18 dark:text-white">{item.symbol}/USDT</p>
-                                                {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p> */}
+                                                <p className="info-14-18 dark:text-white">{item.symbol}</p>
+                                                
                                             </div>
                                         </div>
                                     </td>
@@ -113,16 +115,23 @@ const Spot = (props: propsData) => {
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(item.totalSupply)}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">$ {currencyFormatter(item?.maxSupply) || 0}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(item?.maxSupply) || 0}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
-                                            <Image src="/assets/market/Graph.svg" width={114} height={48} alt="graph" />
-                                        </p>
+                                        <div className={`flex items-center gap-[4px] flex-wrap`}>
+                                            <p className={`footer-text-secondary  ${Number(item?.hlocv?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(item?.hlocv?.changeRate) > 0 ? '+' : ''}{item?.hlocv?.changeRate !== undefined ? (Number(item?.hlocv?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
+
+                                            {Number(item?.hlocv?.changeRate) > 0 &&
+                                                <IconsComponent type="high" active={false} hover={false} />
+                                            }
+                                            {Number(item?.hlocv?.changeRate) < 0 &&
+                                                <IconsComponent type="low" active={false} hover={false} />
+                                            }
+                                        </div>
                                     </td>
                                     <td className="">
-                                        <button onClick={(e) => { e.stopPropagation(); setToken(item); setShow1(1) }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                            <span className="text-primary  md:block hidden">Deposit</span>
+                                        <button onClick={() => { window.location.href = `/chart/${item.symbol}`; }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                            
                                             <IconsComponent type="openInNewTab" hover={false} active={false} />
                                         </button>
                                     </td>

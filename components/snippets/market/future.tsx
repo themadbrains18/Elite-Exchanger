@@ -14,9 +14,9 @@ interface propsData {
     networks:any
 }
 
-interface propsData {
-    coins: any
-}
+// interface propsData {
+//     coins: any
+// }
 
 const Future = (props: propsData) => {
 
@@ -27,7 +27,8 @@ const Future = (props: propsData) => {
     const [token,setToken] = useState(Object);
     const [imgSrc, setImgSrc] = useState(false);
 
-
+    console.log(props.coins,"================props.coins");
+    
     let itemsPerPage = 10;
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = props.coins.slice(itemOffset, endOffset);
@@ -56,12 +57,7 @@ const Future = (props: propsData) => {
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
-                            <th className="max-[1023px]:hidden py-5">
-                                <div className="flex">
-                                    <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">24h Change</p>
-                                    <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
-                                </div>
-                            </th>
+                            
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
                                     <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">24h Low </p>
@@ -76,13 +72,13 @@ const Future = (props: propsData) => {
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Trade</p>
+                                    <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">24h Change</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
-                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Action</p>
+                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Trade</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
@@ -97,7 +93,6 @@ const Future = (props: propsData) => {
                             if (item?.hloc?.open === 0) {
                                 change = 0.00;
                             }
-
                             return (
                                 <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => router.push(`/future/${item?.coin_symbol}${item?.usdt_symbol}`)}>
 
@@ -106,7 +101,7 @@ const Future = (props: propsData) => {
                                         <Image src={`${imgSrc?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol==="XRP"&&"bg-white rounded-full"}`}/>
 
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                                <p className="info-14-18 dark:text-white">{item?.coin_symbol}{item?.usdt_symbol}</p>
+                                                <p className="info-14-18 dark:text-white">{item?.coin_symbol}</p>
                                                 {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p> */}
                                             </div>
                                         </div>
@@ -114,9 +109,7 @@ const Future = (props: propsData) => {
                                     <td>
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">${currencyFormatter(marketPrice)}</p>
                                     </td>
-                                    <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{change?.toFixed(4)}</p>
-                                    </td>
+                                    
 
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(item?.hloc?.low?.toFixed(4))}</p>
@@ -125,15 +118,31 @@ const Future = (props: propsData) => {
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(item?.hloc?.high?.toFixed(4))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
-                                            <Image src="/assets/market/Graph.svg" width={114} height={48} alt="graph" />
-                                        </p>
+                                        <div className={`flex items-center gap-[4px] flex-wrap`}>
+                                            {(() => {
+                                                const high = Number(item?.hloc?.high);
+                                                const low = Number(item?.hloc?.low);
+                                                if (!isNaN(high) && !isNaN(low) && low !== 0) {
+                                                    const changeRate = (high - low) / low;
+                                                    return (
+                                                        <>
+                                                            <p className={`footer-text-secondary ${changeRate > 0 ? '!text-buy' : '!text-sell'}`}>
+                                                                {changeRate > 0 ? '+' : ''}{(changeRate * 100).toFixed(3)}%
+                                                            </p>
+                                                            {changeRate > 0 && <IconsComponent type="high" active={false} hover={false} />}
+                                                            {changeRate < 0 && <IconsComponent type="low" active={false} hover={false} />}
+                                                        </>
+                                                    );
+                                                }
+                                                return <p className="footer-text-secondary">0</p>;
+                                            })()}
+                                        </div>
+
                                     </td>
                                     <td className="">
-                                    <button onClick={(e) => {e.stopPropagation(); setToken(item); setShow1(1) }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                <span className="text-primary block">Deposit</span>
-                                <IconsComponent type="openInNewTab" hover={false} active={false} />
-                              </button>
+                                        <button  onClick={() => router.push(`/future/${item?.coin_symbol}${item?.usdt_symbol}`)} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                            <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                        </button>
                                     </td>
                                 </tr>
                             );

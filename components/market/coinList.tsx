@@ -9,10 +9,10 @@ import NewListing from "../snippets/market/newListing";
 
 interface propsData {
   coins: any,
-  networks:any,  
-  session:any,  
-  filterCoins:any
-  filterList?:any
+  networks: any,
+  session: any,
+  filterCoins: any
+  filterList?: any
 
 }
 
@@ -77,11 +77,11 @@ const CoinList = (props: propsData) => {
     getFutureTardeList();
   }, [props?.coins]);
 
-  useEffect(()=>{
+  useEffect(() => {
     getFutureTardeList();
-  },[search]);
+  }, [search]);
 
-  
+
   const getFutureTardeList = async () => {
     try {
       let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future?qu=${search}`, {
@@ -113,25 +113,25 @@ const CoinList = (props: propsData) => {
               })}
             </div>
           </div>
-            <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[331px] w-full py-[13px] px-[10px] ">
-          <Image src="/assets/history/search.svg" alt="search" width={24} height={24} />
-          <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" onChange={(e)=>{setSearch(e.target.value!==""? e.target.value.toLowerCase():'all'), props?.filterCoins(e)}}/>
-        </div>
+          <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[331px] w-full py-[13px] px-[10px] ">
+            <Image src="/assets/history/search.svg" alt="search" width={24} height={24} />
+            <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent] w-full" onChange={(e) => { setSearch(e.target.value !== "" ? e.target.value.toLowerCase() : 'all'), props?.filterCoins(e) }} />
+          </div>
         </div>
         {active1 === 1 &&
-          <Favorites coins={favouriteToken} networks={props?.networks} session={props?.session}/>
+          <Favorites coins={favouriteToken} networks={props?.networks} session={props?.session} />
         }
         {active1 === 2 &&
-          <AllCrypto coins={props.coins} networks={props?.networks} session={props?.session}/>
+          <AllCrypto coins={props.coins} networks={props?.networks} session={props?.session} />
         }
         {active1 === 3 &&
-          <Spot coins={spotTrade}  networks={props?.networks} session={props?.session}/>
+          <Spot coins={spotTrade} networks={props?.networks} session={props?.session} />
         }
         {active1 === 4 &&
-          <Future coins={futureTrade}  networks={props?.networks} session={props?.session}/>
+          <Future coins={futureTrade} networks={props?.networks} session={props?.session} />
         }
         {active1 === 6 &&
-          <NewListing coins={newCoins}  networks={props?.networks} session={props?.session}/>
+          <NewListing coins={newCoins} networks={props?.networks} session={props?.session} />
         }
 
       </div>
