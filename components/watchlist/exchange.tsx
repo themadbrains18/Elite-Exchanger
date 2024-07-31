@@ -287,6 +287,7 @@ const Exchange = (props: DynamicId): any => {
           });
         }
         else {
+          setAmount(0);
           setBtnDisabled2(false);
           toast.error(res.data.data, {
             position: 'top-center'
@@ -294,12 +295,12 @@ const Exchange = (props: DynamicId): any => {
           setFirstCurrency('')
           setSecondCurrency('')
           setIsConvert(false)
-          setAmount(0);
           setReceivedAmount(0);
         }
       }
 
       else {
+        
         setBtnDisabled2(false);
         toast.error('Your session is expired!!. You are auto redirect to login page!!');
         setTimeout(() => {
@@ -366,15 +367,15 @@ const Exchange = (props: DynamicId): any => {
           </div>
           <div className="flex gap-[1px]">
             {(errors?.spend_amount && errors?.firstCurrency) ? (
-              <p className="errorMessage whitespace-nowrap">Please enter quantity and select token from quantity</p>
+              <p className="errorMessage whitespace-nowrap mt-10">Please enter quantity and select token from quantity</p>
             )
               :
               errors?.spend_amount ? (
-                <p className="errorMessage whitespace-nowrap">{errors?.spend_amount?.message}</p>
+                <p className="errorMessage whitespace-nowrap mt-10">{errors?.spend_amount?.message}</p>
               )
                 :
                 errors?.firstCurrency && (
-                  <p className="errorMessage inline-block">{errors?.firstCurrency?.message}</p>
+                  <p className="errorMessage inline-block mt-10">{errors?.firstCurrency?.message}</p>
                 )
             }
 
@@ -393,7 +394,7 @@ const Exchange = (props: DynamicId): any => {
             </div>
           </div>
           {errors?.secondCurrency && (
-            <p className="errorMessage">{errors?.secondCurrency?.message}</p>
+            <p className="errorMessage mt-10">{errors?.secondCurrency?.message}</p>
           )}
 
           <div className="mt-5 mb-5">

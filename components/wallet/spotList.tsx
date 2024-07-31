@@ -38,7 +38,7 @@ const SpotList = (props: propsData): any => {
   const router = useRouter();
   const [imgSrc, setImgSrc] = useState(false);
   const [imgSrc2, setImgSrc2] = useState(false);
-
+  
 
   let itemsPerPage = 10;
   const wbsocket = useWebSocket();
@@ -70,7 +70,7 @@ const SpotList = (props: propsData): any => {
   }, [wbsocket]);
 
   useEffect(() => {
-    getSpotData()
+    getSpotData();
   }, [itemOffset, props?.filter, popupMode])
 
 
@@ -92,10 +92,12 @@ const SpotList = (props: propsData): any => {
     }
     else {
       setCurrentItems(spotHistory?.data?.data);
-
     }
 
   }
+
+ 
+
   const setHeight = (e: any) => {
     let parent = e.currentTarget.closest(".iconParent");
     let parentHeight = parent.nextElementSibling.scrollHeight;
@@ -459,7 +461,7 @@ const SpotList = (props: propsData): any => {
         show1 === 4 &&
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-          <TransferModal setOverlay={setShow1} setPopupMode={setPopupMode} popupMode={popupMode} token={selectedCoin} assets={currentItems} wallet_type="main_wallet" />
+          <TransferModal setOverlay={setShow1} setPopupMode={setPopupMode}  popupMode={popupMode} token={selectedCoin} assets={currentItems} wallet_type="main_wallet" />
         </>
       }
       {withdrawActive === true &&

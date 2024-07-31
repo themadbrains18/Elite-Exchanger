@@ -26,7 +26,7 @@ interface showPopup {
   refreshWalletAssets?: any;
   wallet_type?: string
   token?: any;
-  type?:string
+  type?:string;
 }
 const TransferModal = (props: showPopup) => {
   const { status, data: session } = useSession();
@@ -120,10 +120,8 @@ const TransferModal = (props: showPopup) => {
 
   const filterAsset = (symbol: string, type: string) => {
 
-    console.log(props?.assets,"props?.assets");
     if (type == "Spot") {
-      
-      
+      console.log(props?.assets,"props?.assets");
       let asset = props?.assets?.filter((item: any) => {
         let token = item?.token !== null ? item?.token : item?.global_token;
         return item?.walletTtype === "main_wallet" && token?.symbol === symbol;
@@ -133,7 +131,7 @@ const TransferModal = (props: showPopup) => {
       setValue('token_id', asset[0]?.token_id);
       clearErrors('token_id')
     } else {
-      
+            
       let asset = props?.assets?.filter((item: any) => {
         let token = item?.token !== null ? item?.token : item?.global_token;
         return (
@@ -278,9 +276,9 @@ const TransferModal = (props: showPopup) => {
           </div>
         </div>
         <div
-          onClick={() => {
-            setValues();
-          }}
+          // onClick={() => {
+          //   setValues();
+          // }}
           className="dark:bg-[#373d4e] bg-[#e5ecf0] w-full flex h-[96px]  max-w-[100px] border dark:border-[#373d4e] border-[#e5e7eb] cursor-pointer "
         >
           <div className="rotate-[90deg]">
