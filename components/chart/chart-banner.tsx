@@ -128,7 +128,7 @@ const ChartBanner = (props: propsData) => {
     
   // },[props])
 
-
+  
   return (
     <div className='p-20 rounded-10  bg-white dark:bg-d-bg-primary'>
       {/* head */}
@@ -150,6 +150,7 @@ const ChartBanner = (props: propsData) => {
                     src={`${currentToken?.image !== undefined ? currentToken?.image : '/assets/home/coinLogo.png'}`}
                     className={`${currentToken?.symbol==="XRP"&&"bg-white rounded-full "}`}
                   />
+                  
                   <div>
                     <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px] ss">
                       <p className="info-14-18 dark:text-white">{`${currentToken?.fullName}`}</p>

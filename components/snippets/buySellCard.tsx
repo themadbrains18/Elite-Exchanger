@@ -482,7 +482,9 @@ const BuySellCard = (props: DynamicId) => {
                 <div className="mt-5 flex gap-[18px] items-center">
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
                   {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
-                  <p className="md-text w-full">{currencyFormatter(Number(price.toFixed(6)))}({active1 === 1 ? 'USDT' : firstCurrency})</p>
+                  <p className="md-text w-full">
+                    {currencyFormatter(Number(price.toFixed(6)))}
+                    &nbsp;{active1 === 1 ? 'USDT' : firstCurrency}</p>
 
                   <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className={ `min-w-[24px] ${selectedToken?.symbol==="XRP"&&"bg-white rounded-full "}`} alt="wallet2" width={24} height={24} />
                   {router.pathname.includes("/chart") && <p className="md-text">

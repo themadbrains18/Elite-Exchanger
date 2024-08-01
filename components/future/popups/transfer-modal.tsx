@@ -27,6 +27,7 @@ interface showPopup {
   wallet_type?: string
   token?: any;
   type?:string;
+  disableClick?:boolean;
 }
 const TransferModal = (props: showPopup) => {
   const { status, data: session } = useSession();
@@ -276,9 +277,9 @@ const TransferModal = (props: showPopup) => {
           </div>
         </div>
         <div
-          // onClick={() => {
-          //   setValues();
-          // }}
+          onClick={() => {
+            !props?.disableClick && setValues();
+          }}
           className="dark:bg-[#373d4e] bg-[#e5ecf0] w-full flex h-[96px]  max-w-[100px] border dark:border-[#373d4e] border-[#e5e7eb] cursor-pointer "
         >
           <div className="rotate-[90deg]">
@@ -337,7 +338,7 @@ const TransferModal = (props: showPopup) => {
 
         <p className="top-label !text-[16px] mt-[15px]">
           Available:{" "}
-          {userAsset !== undefined && userAsset !== null && Object.keys(userAsset).length>0  ? currencyFormatter(userAsset?.balance?.toFixed(6)) : 0}{" "}
+          {userAsset !== undefined && userAsset !== null && Object.keys(userAsset).length> 0  ? currencyFormatter(userAsset?.balance?.toFixed(6)) : `0.00`}{""}
           {selectedCoin}
         </p>
         <button
