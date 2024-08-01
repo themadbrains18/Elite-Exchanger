@@ -577,7 +577,7 @@ const BuySellCard = (props: DynamicId) => {
                 </div>
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">Est. Fee:</p>
-                  <p className="sm-text dark:text-white">{truncateNumber(estimateFee,6) || '0.00'}</p>
+                  <p className="sm-text dark:text-white">{truncateNumber(estimateFee,8) || '0.00'}</p>
 
                 </div>
               </>
