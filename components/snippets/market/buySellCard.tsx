@@ -349,6 +349,8 @@ const BuySellCard = (props: DynamicId) => {
       setTotalAmount(totalAmount);
     }
     else {
+
+      
       let qty: any = getValues('token_amount');
       let totalAmount = qty * selectedToken?.price;
       let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(6) : (selectedToken?.price * qty * 0.00075).toFixed(6);
@@ -516,7 +518,10 @@ const BuySellCard = (props: DynamicId) => {
               <>
                 <div className="mt-5 flex gap-[5px] items-center">
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
-                  <p className="md-text w-full">{currencyFormatter(Number(price.toFixed(6)))}({active1 === 1 ? 'USDT' : firstCurrency})</p>
+                  <p className="md-text w-full">
+                    {currencyFormatter(Number(price.toFixed(6)))}
+                    &nbsp;{active1 === 1 ? 'USDT' : firstCurrency}
+                  </p>
                   <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className={`${selectedToken?.symbol === "XRP" && "bg-white rounded-full"} min-w-[24px]`} alt="wallet2" width={24} height={24} />
                   {router.pathname.includes("/chart") && <p className="md-text">
                     $

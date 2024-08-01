@@ -6,18 +6,24 @@ import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { currencyFormatter } from '../snippets/market/buySellCard';
+import { toast } from 'react-toastify';
 
 interface propsData {
   filter: string,
   date: Date,
-  coin: string
+  coin: string,
+  textToCopy?: string;
 }
+
 const WithdrawTable = (props: propsData) => {
   const { data: session, status } = useSession();
   const [currentItems, setCurrentItems] = useState([]);
   const [itemOffset, setItemOffset] = useState(0);
   const [total, setTotal] = useState(0)
   const [totalRecord, setTotalRecord] = useState([]);
+  const [loading, setLoading] = useState<boolean>(false);
+
+
   const [imgSrc, setImgSrc] = useState(false);
 
   const { mode } = useContext(Context)
@@ -58,7 +64,7 @@ const WithdrawTable = (props: propsData) => {
       },
     }).then(response => response.json());
 
-    console.log(withdraw,"==============withdraw");
+    // console.log(withdraw,"==============withdraw");
     
     setTotal(withdraw?.data?.total)
     setTotalRecord(withdraw?.data?.total)
@@ -80,9 +86,34 @@ const WithdrawTable = (props: propsData) => {
     setItemOffset(newOffset);
   };
 
-
+    // Function to copy text to the clipboard
+    const copyToClipboard = async (text: string): Promise<void> => {
+      console.log("this is working=======");
+      
+      await navigator.clipboard.writeText(text);
+      toast.success('Text copied to clipboard!', { autoClose: 2000 });
+     
+      // try {
+      //   await navigator.clipboard.writeText(text);
+      //   toast.success('Text copied to clipboard!', { autoClose: 2000 });
+      // } catch {
+      //   toast.error('Failed to copy text.', { autoClose: 2000 });
+      // } finally {
+        
+      //   setLoading(false);
+       
+      // }
+    };
   
-  
+    // Event handler for clicking an address
+    const handleAddressClick = (text: string): void => {
+      if (loading) {
+        copyToClipboard(text);
+      }
+      setTimeout(()=>{
+        setLoading(false);
+      },2000);
+    };
 
 
   return (
@@ -174,7 +205,7 @@ const WithdrawTable = (props: propsData) => {
                     </div>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white  md:block hidden">{item?.withdraw_wallet.substring(0, 7) + '...'}</p>
+                    <p className="info-14-18 dark:text-white  md:block hidden cursor-pointer" onClick={() => handleAddressClick(item.withdraw_wallet)}>{item?.withdraw_wallet.substring(0, 7) + '...'}</p>
                   </td>
                   <td>
                     <p className="info-14-18 dark:text-white">{currencyFormatter(item?.amount)}</p>
@@ -186,9 +217,12 @@ const WithdrawTable = (props: propsData) => {
                     <p className="info-14-18 dark:text-white md:block hidden">{item?.network?.fullname}</p>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white ">
+                    <p className={`info-14-18 dark:text-white ${loading ? 'cursor-not-allowed':''}`}>
                       {item.tx_hash !== null &&
-                        <Link target="_blank" href={`${item?.network?.BlockExplorerURL}/tx/${item?.tx_hash}`}>{item.tx_hash && item.tx_hash !== null && item.tx_hash.substring(0, 7) + '..'}</Link>
+                        <button className={`${loading ? 'pointer-events-none':''}`} onClick={() =>{
+                          setLoading(true);
+                          handleAddressClick(item.tx_hash);
+                        }}>{item.tx_hash && item.tx_hash !== null && item.tx_hash.substring(0, 7) + '..'}</button>
                       }
                     </p>
                   </td>
