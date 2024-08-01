@@ -308,8 +308,8 @@ const BuySellCard = (props: DynamicId) => {
       let amount: any = getValues('limit_usdt');
       if (qty) {
         let totalAmount: any = qty * amount;
-        let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(8) : (amount * qty * 0.00075).toFixed(8);
-        // console.log(fee,'-----------------fees');
+        let fee: any = active1 === 1 ? (qty * 0.001).toFixed(8) : (amount * qty * 0.001).toFixed(8);
+        console.log(fee,'-----------------fees');
 
         setEstimateFee(fee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
         setTotalAmount(totalAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
