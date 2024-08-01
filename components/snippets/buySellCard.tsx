@@ -308,7 +308,7 @@ const BuySellCard = (props: DynamicId) => {
       let amount: any = getValues('limit_usdt');
       if (qty) {
         let totalAmount: any = qty * amount;
-        let fee: any = active1 === 1 ? (qty * 0.001).toFixed(8) : (amount * qty * 0.001).toFixed(8);
+        let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),8) : truncateNumber((amount * qty * 0.001),8);
         console.log(fee,'-----------------fees');
 
         setEstimateFee(fee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
@@ -320,7 +320,7 @@ const BuySellCard = (props: DynamicId) => {
       let qty: any = getValues('token_amount');
       if (qty) {
         let totalAmount: any = qty * props?.token?.price;
-        let fee: any = active1 === 1 ? (qty * 0.00075).toFixed(8) : (props?.token?.price * qty * 0.00075).toFixed(8);
+        let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),8) : truncateNumber((props?.token?.price * qty * 0.001),8);
         setEstimateFee(fee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
         setTotalAmount(totalAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
       }
