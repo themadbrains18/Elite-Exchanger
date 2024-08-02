@@ -324,7 +324,6 @@ const BuySellCard = (props: DynamicId) => {
         setEstimateFee(fee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
         setTotalAmount(totalAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
       }
-
     }
   }
 
