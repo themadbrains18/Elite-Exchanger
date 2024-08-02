@@ -196,7 +196,7 @@ const Chart = (props: Session) => {
                                 <BuySellCard id={1} coins={allCoins} session={props.session} token={currentToken[0]} slug={slug} assets={props.assets} />
                                 {/* hidden on mobile */}
                                 <div className='lg:block hidden'>
-                                    <OrderBook slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} hlocData={hlocData} />
+                                    <OrderBook slug={slug} token={currentToken[0]} allTradeHistory={userTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} hlocData={hlocData} />
                                 </div>
                             </div>
                             {/* hidden on desktop */}

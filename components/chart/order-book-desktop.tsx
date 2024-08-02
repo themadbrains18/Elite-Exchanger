@@ -13,6 +13,8 @@ interface propsData {
 }
 
 const OrderBook = (props: propsData) => {
+
+    // console.log(props?.allTradeHistory,"=allTradeHistory");  
     const [active1, setActive1] = useState(1);
     const [show, setShow] = useState(1);
     const { mode } = useContext(Context);
@@ -70,7 +72,7 @@ const OrderBook = (props: propsData) => {
                                         }
                                     })}
 
-                                    {props.BuyTrade && props.BuyTrade.length === 0 &&
+                                    {props.allTradeHistory && props.allTradeHistory.length === 0 &&
                                         <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                                             <Image
                                                 src="/assets/refer/empty.svg"
@@ -118,7 +120,7 @@ const OrderBook = (props: propsData) => {
                                             </div>
                                         }
                                     })}
-                                    {props.sellTrade && props.sellTrade.length === 0 &&
+                                    {props.allTradeHistory && props.allTradeHistory.length === 0 &&
                                         <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                                             <Image
                                                 src="/assets/refer/empty.svg"
@@ -166,7 +168,7 @@ const OrderBook = (props: propsData) => {
                                         }
                                     })}
 
-                                    {props.sellTrade && props.sellTrade.length === 0 &&
+                                    {props.allTradeHistory && props.allTradeHistory.length === 0 &&
                                         <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                                             <Image
                                                 src="/assets/refer/empty.svg"
@@ -216,7 +218,7 @@ const OrderBook = (props: propsData) => {
                                     })}
 
 
-                                    {props.BuyTrade && props.BuyTrade.length === 0 &&
+                                    {props.allTradeHistory && props.allTradeHistory.length === 0 &&
                                         <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                                             <Image
                                                 src="/assets/refer/empty.svg"
