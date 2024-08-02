@@ -577,10 +577,15 @@ const BuySellCard = (props: DynamicId) => {
                   </div>
 
                 </div>
-                <div className="mt-5 flex gap-2">
-                  <p className="sm-text dark:text-white">Est. Fee:</p>
-                  <p className="sm-text dark:text-white">{Number(estimateFee).toFixed(8) || '0.00'}</p>
-
+                <div className="flex gap-2">
+                  <div className="mt-5 flex gap-2">
+                    <p className="sm-text dark:text-white">Est. Fee:</p>
+                    <p className="sm-text dark:text-white">{Number(estimateFee).toFixed(8) || '0.00'}</p>
+                  </div>
+                  {/* <div className="mt-5 flex gap-2">
+                    <p className="sm-text dark:text-white">Minimum </p>
+                    <p className="sm-text dark:text-white">{Number(estimateFee).toFixed(8) || '0.00'}</p>
+                  </div> */}
                 </div>
               </>
             }
