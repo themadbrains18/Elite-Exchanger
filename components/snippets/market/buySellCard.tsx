@@ -343,7 +343,7 @@ const BuySellCard = (props: DynamicId) => {
       let amount: any = getValues('limit_usdt');
 
       let totalAmount = qty * amount;
-      let fee: any = active1 === 1 ? (qty * 0.001).toFixed(8) : (amount * qty * 0.001).toFixed(8);
+      let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),6) : truncateNumber((amount * qty * 0.001),6);
 
       setEstimateFee(fee);
       setTotalAmount(totalAmount);
@@ -353,7 +353,7 @@ const BuySellCard = (props: DynamicId) => {
       
       let qty: any = getValues('token_amount');
       let totalAmount = qty * selectedToken?.price;
-      let fee: any = active1 === 1 ? (qty * 0.001).toFixed(8) : (selectedToken?.price * qty * 0.001).toFixed(8);
+      let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),6) : truncateNumber((selectedToken?.price * qty * 0.001),6);
 
       setEstimateFee(fee);
       setTotalAmount(totalAmount);

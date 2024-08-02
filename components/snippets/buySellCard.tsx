@@ -308,8 +308,8 @@ const BuySellCard = (props: DynamicId) => {
       let amount: any = getValues('limit_usdt');
       if (qty) {
         let totalAmount: any = qty * amount;
-        let fee: any = active1 === 1 ? (qty * 0.001).toFixed(8) : (amount * qty * 0.001).toFixed(8);
-        console.log(fee,'-----------------fees');
+        let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),6) : truncateNumber((amount * qty * 0.001),6);
+        // console.log(fee,'-----------------fees');
       
 
         setEstimateFee(fee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
@@ -321,7 +321,7 @@ const BuySellCard = (props: DynamicId) => {
       let qty: any = getValues('token_amount');
       if (qty) {
         let totalAmount: any = qty * props?.token?.price;
-        let fee: any = active1 === 1 ? (qty * 0.001).toFixed(8) : (props?.token?.price * qty * 0.001).toFixed(8);
+        let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),6) : truncateNumber((props?.token?.price * qty * 0.001),6);
         setEstimateFee(fee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
         setTotalAmount(totalAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
       }
@@ -349,7 +349,7 @@ const BuySellCard = (props: DynamicId) => {
 
     }
   }
-  console.log(estimateFee,"=estimate fee");
+  // console.log(estimateFee,"=estimate fee");
   
 
   return (
@@ -580,7 +580,7 @@ const BuySellCard = (props: DynamicId) => {
                 </div>
                 <div className="mt-5 flex gap-2">
                   <p className="sm-text dark:text-white">Est. Fee:</p>
-                  <p className="sm-text dark:text-white">{Number(estimateFee).toFixed(8) || '0.00'}</p>
+                  <p className="sm-text dark:text-white">{truncateNumber(estimateFee,6) || '0.00'}</p>
 
                 </div>
               </>
