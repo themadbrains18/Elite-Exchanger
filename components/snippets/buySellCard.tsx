@@ -17,7 +17,7 @@ import { currencyFormatter } from "./market/buySellCard";
 import { truncateNumber } from "@/libs/subdomain";
 
 const schema = yup.object().shape({
-  token_amount: yup.number().positive("Amount must be greater than '0'.").min(0.001, "Amount must be greater than '0.001'").required('Please enter quantity.').typeError('Please enter quantity.'),
+  token_amount: yup.number().positive("Amount must be greater than '0'.").required('Please enter quantity.').typeError('Please enter quantity.'),
   limit_usdt: yup.number().positive("Limit must be greater than '0'.").required('Please enter limit amount.').typeError('Please enter limit amount.'),
   // market_type:yup.string().optional().default('limit')
 });
@@ -175,6 +175,24 @@ const BuySellCard = (props: DynamicId) => {
 
   const onHandleSubmit = async (data: any) => {
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
+    
+    
+
+    if (props.token?.tradepair?.min_trade > data.token_amount) {
+      setError("token_amount", {
+        type: "custom",
+        message: "min " + `'${props.token?.tradepair?.min_trade}' must be bought per order`,
+      });
+      return;
+    }
+    if (props.token?.tradepair?.maxTrade < data.token_amount) {
+      setError("token_amount", {
+        type: "custom",
+        message: "max " + `'${props.token?.tradepair?.maxTrade}' must be bought per order`,
+      });
+      return;
+    }
+
     if (active1 === 1 && totalAmount > price) {
       setDisabled(true);
       toast.error('Insufficient balance.', { autoClose: 2000 });
@@ -189,14 +207,6 @@ const BuySellCard = (props: DynamicId) => {
       setTimeout(() => {
         setDisabled(false);
       }, 3000);
-      return;
-    }
-
-    if (props.token?.tradepair?.maxTrade < data.token_amount) {
-      setError("token_amount", {
-        type: "custom",
-        message: "You can trade less than max amount " + `'${props.token?.tradepair?.maxTrade}.'`,
-      });
       return;
     }
 
@@ -527,7 +537,7 @@ const BuySellCard = (props: DynamicId) => {
 
                     <div className="">
                       <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
-                      <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="$0" step="0.000000" {...register('limit_usdt', {
+                      <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="$0" step="0.000001" {...register('limit_usdt', {
                         onChange: (e) => { { 
                           const value = e.target.value;
                           const regex = /^\d{0,11}(\.\d{0,6})?$/;
@@ -586,24 +596,25 @@ const BuySellCard = (props: DynamicId) => {
                     {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
                     <p className="sm-text dark:text-white">{truncateNumber(totalAmount, 6) || '0.000000'}</p>
                   </div>
-                  <div className="flex gap-2">
-                    <p className="sm-text dark:text-white">Max Trade:</p>
-                    {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
-                    <p className="sm-text dark:text-white">{props.token?.tradepair?.maxTrade || '0.00'}</p>
-                  </div>
+                  
 
                 </div>
                 <div className="mt-5 flex gap-2 justify-between">
                  
-                <div className=" flex gap-2">
+                {/* <div className=" flex gap-2">
                   <p className="sm-text dark:text-white">Est. Fee:</p>
                   <p className="sm-text dark:text-white">{truncateNumber(estimateFee,6) || '0.00'}</p>
 
-                </div>
+                </div> */}
                   <div className="flex gap-2">
                     <p className="sm-text dark:text-white">Min Trade:</p>
                     {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
-                    <p className="sm-text dark:text-white">0.001</p>
+                    <p className="sm-text dark:text-white">{props.token?.tradepair?.min_trade} {props?.token?.symbol}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <p className="sm-text dark:text-white">Max Trade:</p>
+                    {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
+                    <p className="sm-text dark:text-white">{props.token?.tradepair?.maxTrade || '0.00'} {props?.token?.symbol}</p>
                   </div>
 
                 </div>

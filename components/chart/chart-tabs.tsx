@@ -102,7 +102,7 @@ const ChartTabs = (props: propsData) => {
     };
 
     fetchHLCOData();
-  }, [props.coinsList]);
+  }, []);
 
 
   // Open order paggination code here
