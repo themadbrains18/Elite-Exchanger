@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import IconsComponent from "../snippets/icons";
 import ReactPaginate from "react-paginate";
 import Context from "../contexts/context";
@@ -38,6 +38,7 @@ const ChartTabs = (props: propsData) => {
   const [imgSrc, setImgSrc] = useState(false);
   const [imgSrc2, setImgSrc2] = useState(false);
   const [imgSrc3, setImgSrc3] = useState(false);
+  const [coins, setCoins] = useState([])
 
   let data = props.coinsList; //token list
 
@@ -66,6 +67,43 @@ const ChartTabs = (props: propsData) => {
       nexElm.setAttribute("style", `height:${nexElmHeight}px`);
     }
   };
+
+  
+  useEffect(() => {
+    const fetchHLCOData = async () => {
+      let coins = currentItems?.filter((item: any) => item?.symbol !== "USDT");
+
+
+      const fetchDataForCoin = async (coin: any) => {
+        
+        const slug = coin.symbol;
+        try {
+          let hlocv = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/hloc?slug=${slug}`, {
+            method: "GET"
+          }).then(response => response.json())
+          return {
+            ...coin,
+            hlocv:hlocv?.data?.data
+          };
+        } catch (error) {
+          console.error(`Error fetching HLCO data for ${slug}:`, error);
+          return {
+            ...coin,
+            hlocv: null
+          };
+        }
+      };
+
+      const updatedCardData:any = await Promise.all(coins.map(fetchDataForCoin));
+      // console.log(updatedCardData,"=updatedCardData");
+    
+ 
+      setCoins(updatedCardData)
+    };
+
+    fetchHLCOData();
+  }, [props.coinsList]);
+
 
   // Open order paggination code here
   const endOpenOffset = openItemOffset + itemsPerPage;
@@ -267,7 +305,7 @@ const ChartTabs = (props: propsData) => {
                     <th className="max-[1023px]:hidden py-5">
                       <div className="flex">
                         <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">
-                          Chart
+                          24h Change
                         </p>
                         <Image
                           src="/assets/history/uparrow.svg"
@@ -280,7 +318,7 @@ const ChartTabs = (props: propsData) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentItems && currentItems.length > 0 && currentItems?.map((item: any, index: number) => {
+                  {coins && coins.length > 0 && coins?.map((item: any, index: number) => {
                       const tokenImage = item?.image;
 
                     return (
@@ -348,14 +386,16 @@ const ChartTabs = (props: propsData) => {
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden ">
-                          <p className="info-14-18 dark:text-white">
-                            <Image
-                              src="/assets/market/Graph.svg"
-                              width={114}
-                              height={48}
-                              alt="graph"
-                            />
-                          </p>
+                        <div className={`flex items-center gap-[4px] flex-wrap`}>
+                                            <p className={`footer-text-secondary  ${Number(item?.hlocv?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(item?.hlocv?.changeRate) > 0 ? '+' : ''}{item?.hlocv?.changeRate !== undefined ? (Number(item?.hlocv?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
+
+                                            {Number(item?.hlocv?.changeRate) > 0 &&
+                                                <IconsComponent type="high" active={false} hover={false} />
+                                            }
+                                            {Number(item?.hlocv?.changeRate) < 0 &&
+                                                <IconsComponent type="low" active={false} hover={false} />
+                                            }
+                                        </div>
                         </td>
                       </tr>
                     );

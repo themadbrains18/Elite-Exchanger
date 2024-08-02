@@ -17,7 +17,7 @@ import { currencyFormatter } from "./market/buySellCard";
 import { truncateNumber } from "@/libs/subdomain";
 
 const schema = yup.object().shape({
-  token_amount: yup.number().positive("Amount must be greater than '0'.").required('Please enter quantity.').typeError('Please enter quantity.'),
+  token_amount: yup.number().positive("Amount must be greater than '0'.").min(0.001, "Amount must be greater than '0.001'").required('Please enter quantity.').typeError('Please enter quantity.'),
   limit_usdt: yup.number().positive("Limit must be greater than '0'.").required('Please enter limit amount.').typeError('Please enter limit amount.'),
   // market_type:yup.string().optional().default('limit')
 });
@@ -101,9 +101,11 @@ const BuySellCard = (props: DynamicId) => {
   const hasRun = useRef(false);
 
   useEffect(() => {
+    // console.log(props.slug,"=props.slug");
+    setCurrencyName(props.slug, 1);
+    
     if (props.slug && props?.coins.length > 0) {
       if (!hasRun.current) {
-        setCurrencyName(props.slug, 1);
         setPriceOnChangeType(spotType, '');
         hasRun.current = true;
       }
@@ -117,6 +119,9 @@ const BuySellCard = (props: DynamicId) => {
       let token = list.filter((item: any) => {
         return item.symbol === symbol && item?.tradepair !== null
       });
+
+      // console.log(token, symbol,"token symbol");
+      
 
       if (token.length > 0) {
         setSelectedToken(token[0]);
@@ -143,14 +148,25 @@ const BuySellCard = (props: DynamicId) => {
     if (token.length > 0) {
       if(props?.session){
         let assets: any = await getAssets();
+
+        // console.log(assets,"==assets");
+        // console.log(firstCurrency,"==token");
+        
+
         if (assets) {
           
           let selectAssets = assets.filter((item: any) => {
             return item.token_id === token[0].id && item?.walletTtype === "main_wallet"
           });
   
+          // console.log(selectAssets,"===selected assets",token[0].id);
+          
+
           if (selectAssets.length > 0) {
             setPrice(selectAssets[0].balance);
+          }
+          else{
+            setPrice(0.00)
           }
         }
       }
@@ -179,7 +195,7 @@ const BuySellCard = (props: DynamicId) => {
     if (props.token?.tradepair?.maxTrade < data.token_amount) {
       setError("token_amount", {
         type: "custom",
-        message: "you can trade less than max amount " + `'${props.token?.tradepair?.maxTrade}.'`,
+        message: "You can trade less than max amount " + `'${props.token?.tradepair?.maxTrade}.'`,
       });
       return;
     }
@@ -325,7 +341,6 @@ const BuySellCard = (props: DynamicId) => {
         setEstimateFee(fee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
         setTotalAmount(totalAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
       }
-
     }
   }
 
@@ -487,7 +502,7 @@ const BuySellCard = (props: DynamicId) => {
                   {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
                   <p className="md-text w-full">
                     {currencyFormatter(Number(price.toFixed(6)))}
-                    &nbsp;{active1 === 1 ? 'USDT' : firstCurrency}</p>
+                    &nbsp;{active1 === 1 ? 'USDT' : props?.token?.symbol}</p>
 
                   <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className={ `min-w-[24px] ${selectedToken?.symbol==="XRP"&&"bg-white rounded-full "}`} alt="wallet2" width={24} height={24} />
                   {router.pathname.includes("/chart") && <p className="md-text">
@@ -537,7 +552,7 @@ const BuySellCard = (props: DynamicId) => {
                 {/* coin quantity Inputs */}
                 <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
                   <div className="">
-                    <p className="sm-text dark:text-white">Quantity({firstCurrency})</p>
+                    <p className="sm-text dark:text-white">Quantity</p>
                     <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="0" step={0.000001} {...register('token_amount', {
                       onChange: (e) => {{ 
                         const value = e.target.value;
@@ -557,7 +572,7 @@ const BuySellCard = (props: DynamicId) => {
 
                         <div className='flex  items-center gap-[5px] rounded-[5px] mr-[15px] pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d]'>
                           <Image src={`${props?.token?.image !== undefined ? props?.token?.image : '/assets/home/coinLogo.png'}`} alt="error" width={20} height={20}  className={`${props?.token?.symbol==="XRP"&&"bg-white rounded-full "}`}/>
-                          <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text`}>{props?.token?.fullName}</p>
+                          <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text`}>{props?.token?.symbol}</p>
                         </div> :
                         <FilterSelectMenuWithCoin data={list} border={false} setCurrencyName={setCurrencyName} dropdown={1} />
                     }
@@ -578,9 +593,18 @@ const BuySellCard = (props: DynamicId) => {
                   </div>
 
                 </div>
-                <div className="mt-5 flex gap-2">
+                <div className="mt-5 flex gap-2 justify-between">
+                 
+                <div className=" flex gap-2">
                   <p className="sm-text dark:text-white">Est. Fee:</p>
                   <p className="sm-text dark:text-white">{truncateNumber(estimateFee,6) || '0.00'}</p>
+
+                </div>
+                  <div className="flex gap-2">
+                    <p className="sm-text dark:text-white">Min Trade:</p>
+                    {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
+                    <p className="sm-text dark:text-white">0.001</p>
+                  </div>
 
                 </div>
               </>

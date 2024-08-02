@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
 import { currencyFormatter } from "./market/buySellCard";
+import { truncateNumber } from "@/libs/subdomain";
 
 interface activeSection {
   setActive: Function;
@@ -34,6 +35,9 @@ const ConfirmBuy = (props: activeSection) => {
   return (
     <div ref={wrapperRef}>
       <div
+         onClick={() => {
+          props?.setActive(false);
+        }}
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible`}
       ></div>
       <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
@@ -81,12 +85,11 @@ const ConfirmBuy = (props: activeSection) => {
         </div>
         <div className="mt-40">
           <div className="flex justify-between mt-20">
-            <div className="md-text dark:!text-g-secondary  ">Order Price</div>
+            <div className="md-text dark:!text-g-secondary">Order Price</div>
             <div>
               <p className="info-10-14 ">
-                {props?.objData?.market_type === "limit"
-                  ? currencyFormatter(props?.objData?.limit_usdt)
-                  : currencyFormatter(props?.price)}
+              {/* {currencyFormatter(truncateNumber( inrPrice,6))} */}
+                {props?.objData?.market_type === "limit" ? currencyFormatter(truncateNumber(props?.objData?.limit_usdt,6)) : currencyFormatter(truncateNumber(Number(props?.price),6)) }
                 {}
               </p>
             </div>
@@ -101,14 +104,23 @@ const ConfirmBuy = (props: activeSection) => {
             <div className="md-text dark:!text-g-secondary">Order Value</div>
             <div>
               <p className="info-10-14 ">
-                {currencyFormatter(props?.objData?.volume_usdt)} {props?.secondCurrency}
+                {currencyFormatter(truncateNumber(props?.objData?.volume_usdt,6))} {props?.secondCurrency}
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-10 mt-[20px]">
+          <div className="grid grid-cols-2 items-center gap-10 mt-[20px]">
+          <button
+              className="solid-button2 w-full"
+              onClick={() => {
+                props?.setActive(false);
+                // props.setShow(0);
+              }}
+            >
+              Cancel
+            </button>
             <button
             disabled={disable}
-              className={`solid-button w-full px-[20px] py-[15px] ${disable ?'cursor-not-allowed  opacity-50':''}`}
+              className={`solid-button w-full !py-[19px] ${disable ?'cursor-not-allowed  opacity-50':''}`}
               onClick={() => {
                 props.actionPerform();
                 setDisable(true)
@@ -116,15 +128,7 @@ const ConfirmBuy = (props: activeSection) => {
             >
               {props?.active1 === 1 ? "Buy" : " Sell"}
             </button>
-            <button
-              className="outline-button w-full"
-              onClick={() => {
-                props?.setActive(false);
-                // props.setShow(0);
-              }}
-            >
-              No
-            </button>
+          
           </div>
         </div>
       </div>
