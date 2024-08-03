@@ -163,8 +163,8 @@ const Withdraw = (props: activeSection) => {
     }
 
   };
-  console.log(props?.token,"=props?.token");
-  
+  console.log(props?.token, "=props?.token");
+
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
     try {
@@ -193,8 +193,20 @@ const Withdraw = (props: activeSection) => {
         }, 3000);
         return;
       }
+      let min_withdraw = props?.token?.minimum_withdraw != null ? props?.token?.minimum_withdraw : props?.token?.symbol === "USDT" ? 10 : 0.005
+      if (data.amount < min_withdraw) {
+        setError("amount", {
+          type: "custom",
+          message: "Please enter amount more than minimum withdraw limit .",
+        });
+        setTimeout(() => {
+          clearErrors('amount')
+        }, 3000);
+        return;
+      }
+      
 
-      if (data?.amount <= transFees) {
+      if (data?.amount < (Number(transFees)+Number(min_withdraw))) {
         setError("amount", {
           type: "custom",
           message: "Please enter amount more than your transaction fee.",
@@ -539,7 +551,7 @@ const Withdraw = (props: activeSection) => {
               </div>
               <div className="">
                 <label htmlFor="amount" className="sm-text ">Amount</label>
-                <div className="border border-grey-v-00000001 dark:border-opacity-[15%]  mt-[10px] rounded-5 p-[11px] md:p-[15px]">
+                <div className="border border-grey-v-1 dark:border-opacity-[15%]  mt-[10px] rounded-5 p-[11px] md:p-[15px]">
                   <input
                     type="number"
                     id="amount"
@@ -576,7 +588,7 @@ const Withdraw = (props: activeSection) => {
                     Recieved amount
                   </p>
                   <p className=" sm-text">
-                   {amount !=0 ? truncateNumber(amount-transFees,6): 0}  {props?.token?.symbol}
+                    {amount != 0 ? truncateNumber(amount - transFees, 6) : 0}  {props?.token?.symbol}
                   </p>
 
                 </div>
@@ -585,7 +597,7 @@ const Withdraw = (props: activeSection) => {
                     Minimum Withdraw
                   </p>
                   <p className=" sm-text">
-                   {props?.token?.minimum_withdraw !=null? props?.token?.minimum_withdraw: props?.token?.symbol==="USDT" ?10: 0.005}  {props?.token?.symbol}
+                    {props?.token?.minimum_withdraw != null ? props?.token?.minimum_withdraw : props?.token?.symbol === "USDT" ? 10 : 0.005}  {props?.token?.symbol}
                   </p>
 
                 </div>

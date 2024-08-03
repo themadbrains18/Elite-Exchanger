@@ -354,12 +354,12 @@ const ChartTabs = (props: propsData) => {
 
                         <td className="max-[1023px]:hidden">
                           <p className="info-14-18 dark:text-white">
-                            ${item.totalSupply && currencyFormatter(item.totalSupply)}
+                            {item.totalSupply && currencyFormatter(item.totalSupply)}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden">
                           <p className="info-14-18 dark:text-white">
-                            ${item.maxSupply && currencyFormatter(item.maxSupply)}
+                            {item.maxSupply && currencyFormatter(item.maxSupply)}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden">

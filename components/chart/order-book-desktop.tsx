@@ -25,7 +25,7 @@ const OrderBook = (props: propsData) => {
                     Order Book
                 </button>
                 <button className={` sec-text text-center text-gamma border-b-2 border-[transparent] pb-[15px] max-w-[50%] w-full ${active1 === 2 && "!text-primary border-primary"}`} onClick={() => setActive1(2)}>
-                    Trade History
+                   Market Trades
                 </button>
             </div>
 
@@ -33,9 +33,9 @@ const OrderBook = (props: propsData) => {
                 <>
                     {/* tab content */}
                     <div className='p-10 bg-grey dark:bg-black-v-1 rounded-[5px] flex items-center gap-10'>
-                        <button className={`solid-button py-[10px] ${show === 1 ? "dark:bg-primary  dark:!text-white" : "dark:bg-d-bg-primary bg-grey !text-gamma"}  hover:!text-white rounded-[5px]`} onClick={() => { setShow(1) }}>All</button>
-                        <button className={`solid-button py-[10px] ${show === 2 ? "dark:bg-primary  dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(2) }}>Asks</button>
-                        <button className={`solid-button py-[10px] ${show === 3 ? "dark:bg-primary  dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(3) }}>Bids</button>
+                        <button className={`solid-button py-[10px] hover:!bg-primary ${show === 1 ? "dark:bg-primary  dark:!text-white" : "dark:bg-d-bg-primary bg-grey !text-gamma"}  hover:!text-white rounded-[5px]`} onClick={() => { setShow(1) }}>All</button>
+                        <button className={`solid-button py-[10px] hover:!bg-red-dark ${show === 2 ? "bg-red-dark dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(2) }}>Asks</button>
+                        <button className={`solid-button py-[10px] hover:!bg-dark-green ${show === 3 ? "bg-dark-green  dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(3) }}>Bids</button>
                     </div>
                     {
                         show === 1 &&

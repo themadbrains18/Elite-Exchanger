@@ -90,16 +90,16 @@ const TopGainers = (props: propsData) => {
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <div className={` items-center gap-[10px] flex`}>
-                                            <p className={`footer-text-secondary  !text-[14px] md:!text-[16px] ${item.status == "high" ? "!text-[#03A66D]" : "!text-[#DC2626]"}`}>{item.volume}</p>
+                                            <p className={`footer-text-secondary  !text-[14px] md:!text-[16px] `}>{item.volume}</p>
                                             <IconsComponent type={item.status} active={false} hover={false} />
                                         </div>
                                     </td>
 
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white">${item.totalSupply}</p>
+                                        <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white">{item.totalSupply}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white">${item.maxSupply}</p>
+                                        <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white">{item.maxSupply}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white">
