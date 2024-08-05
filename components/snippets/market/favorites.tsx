@@ -104,16 +104,16 @@ const Favorites = (props: propsData) => {
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <div className={` items-center gap-[10px] flex`}>
-                                            <p className={`footer-text-secondary !text-[14px] md:!text-[16px]  `}>{currencyFormatter(abbreviateNumber(item.circulatingSupply))}</p>
+                                            <p className={`footer-text-secondary !text-[14px] md:!text-[16px]  `}>{abbreviateNumber(item.circulatingSupply)}</p>
                                             <IconsComponent type={item.status} active={false} hover={false} />
                                         </div>
                                     </td>
 
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{currencyFormatter(abbreviateNumber(item.totalSupply))}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{abbreviateNumber(item.totalSupply)}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{currencyFormatter(abbreviateNumber(item.maxSupply))}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{abbreviateNumber(item.maxSupply)}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         {/* <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">

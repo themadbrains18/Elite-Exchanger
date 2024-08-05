@@ -383,7 +383,7 @@ const ChartTabs = (props: propsData) => {
                             <p
                               className={` info-14-18 dark:text-white`}
                             >
-                              {item.volume && abbreviateNumber(abbreviateNumber(item.volume))}
+                              {item.volume && abbreviateNumber((item.volume))}
                             </p>
                             <IconsComponent
                               type={item.status}
@@ -395,12 +395,12 @@ const ChartTabs = (props: propsData) => {
 
                         <td className="max-[1023px]:hidden">
                           <p className="info-14-18 dark:text-white">
-                            {item.totalSupply && currencyFormatter(abbreviateNumber(item.totalSupply))}
+                            {item.totalSupply && abbreviateNumber(item.totalSupply)}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden">
                           <p className="info-14-18 dark:text-white">
-                            {item.circulatingSupply && currencyFormatter(abbreviateNumber(item.circulatingSupply)) || 0}
+                            {item.circulatingSupply && abbreviateNumber(item.circulatingSupply) || 0}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden ">

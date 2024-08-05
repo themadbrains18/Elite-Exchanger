@@ -13,6 +13,9 @@ interface propsData {
     setSelectVal?:Function
 }
 const SelectDropdown = (props: propsData) => {
+
+    
+
     const [showDrop, setShowDrop] = useState(false);
     function changeInputVal(e: any) {
         let itemText = e.currentTarget.innerHTML;

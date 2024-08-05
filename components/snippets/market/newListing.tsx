@@ -161,7 +161,7 @@ const NewListing = (props: propsData) => {
                         <p
                           className={`footer-text-secondary  !text-[14px] md:!text-[16px] `}
                         >
-                          {currencyFormatter(abbreviateNumber(item.circulatingSupply))}
+                          {abbreviateNumber(item.circulatingSupply)}
                         </p>
                         <IconsComponent
                           type={item.status}
@@ -173,12 +173,12 @@ const NewListing = (props: propsData) => {
 
                     <td className="max-[1023px]:hidden">
                       <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
-                        {currencyFormatter(abbreviateNumber(item.totalSupply))}
+                        {abbreviateNumber(item.totalSupply)}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">
                       <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
-                        {currencyFormatter(abbreviateNumber(item.maxSupply))}
+                        {abbreviateNumber(item.maxSupply)}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">

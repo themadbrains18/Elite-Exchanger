@@ -85,6 +85,7 @@ const TransferModal = (props: showPopup) => {
         );
       }
     });
+    
     setCoinList(coins);
 
     if (props?.wallet_type === "future_wallet" || props?.type==="future") {
@@ -117,16 +118,35 @@ const TransferModal = (props: showPopup) => {
         clearErrors('token_id')
       }
     }, 3000);
-  }, [props?.assets, errors, props?.wallet_type, props?.token,props?.type]);
+  }, [props?.assets, errors, props?.wallet_type, props?.token,props?.type, userAsset]);
+
+
 
   const filterAsset = (symbol: string, type: string) => {
-
+    let coins: any = [];
     if (type == "Spot") {
       console.log(props?.assets,"props?.assets");
       let asset = props?.assets?.filter((item: any) => {
         let token = item?.token !== null ? item?.token : item?.global_token;
-        return item?.walletTtype === "main_wallet" && token?.symbol === symbol;
+        if( symbol){
+          return item?.walletTtype === "main_wallet" && token?.symbol === symbol;
+
+        }
+        else{
+           return item?.walletTtype === "main_wallet"
+        }
+
       });
+      props?.assets?.filter((item: any) => {
+        if (item?.walletTtype === "") {
+          coins.push(
+            item?.token !== null
+              ? item?.token?.symbol
+              : item?.global_token?.symbol
+          );
+        }
+      });
+      setCoinList(coins)
       console.log("in spot", asset);
       setUserAsset(asset[0]);
       setValue('token_id', asset[0]?.token_id);
@@ -290,6 +310,7 @@ const TransferModal = (props: showPopup) => {
       <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={preventEnterSubmit}>
         <div className="flex items-center justify-between px-[12px] py-[12px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[25px] relative">
           {
+            
             props?.wallet_type !== undefined ?
               <input defaultValue={coinDefaultValue} readOnly className='top-label py-[5px] px-[10px] w-full cursor-not-allowed bg-[transparent]  ' />
               :

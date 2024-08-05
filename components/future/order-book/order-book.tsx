@@ -166,7 +166,7 @@ setPrevPrice(props?.positionRecord[0])
 
                     <p className={`info-18 ${prevPrice?.direction==="long" ? 'text-buy' : 'text-sell'}`}>{currencyFormatter(truncateNumber(prevPrice ? prevPrice?.entry_price:0, 6))}</p>
                 </div>
-                <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price, 6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price, 6))}</p>
+                <p className='info-16 !text-black dark:!text-white !text-[14px] '>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price, 6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price, 6))}</p>
             </div>
                 <BuyTableFuture fullHeight={true} showPrice={true} currentToken={props.currentToken} positionRecord={props?.positionRecord}  />
                 </>
@@ -202,7 +202,7 @@ setPrevPrice(props?.positionRecord[0])
 
                             <p className={`info-18 ${prevPrice?.direction==="long" ? 'text-buy' : 'text-sell'}`}>{currencyFormatter(truncateNumber(prevPrice ? prevPrice?.entry_price:0, 6))}</p>
                         </div>
-                        <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price, 6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price, 6))}</p>
+                        <p className='info-16 !text-black dark:!text-white !text-[14px] '>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price, 6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price, 6))}</p>
                     </div>
                     <SelltableFuture currentToken={props.currentToken} positionRecord={props?.positionRecord} />
                 </>
@@ -237,7 +237,7 @@ setPrevPrice(props?.positionRecord[0])
 
                             <p className={`info-18 ${prevPrice?.direction==="long" ? 'text-buy' : 'text-sell'}`}>{currencyFormatter(truncateNumber(prevPrice ? prevPrice?.entry_price:0, 6))}</p>
                         </div>
-                        <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price, 6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price, 6))}</p>
+                        <p className='info-16 !text-black dark:!text-white !text-[14px] '>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price, 6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price, 6))}</p>
                     </div>
                 <SelltableFuture show={props.show} fullHeight={true} showPrice={true} currentToken={props.currentToken} positionRecord={props?.positionRecord} />
                 </>
