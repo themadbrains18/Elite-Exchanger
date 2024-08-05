@@ -88,9 +88,9 @@ const Future = (props: propsData) => {
                         {currentItems?.length > 0 && currentItems?.map((item: any, index: any) => {
                             let marketPrice = item?.token !== null ? item?.token?.price.toFixed(5) : item?.global_token?.price.toFixed(5);
 
-                            let change = ((marketPrice - item?.hloc?.open) / item?.hloc?.open) * 100;
+                            let change = ((item?.price - item?.hlocv?.open) / item?.hlocv?.open) * 100;
 
-                            if (item?.hloc?.open === 0) {
+                            if (item?.hlocv?.open === 0) {
                                 change = 0.00;
                             }
                             return (
@@ -98,44 +98,35 @@ const Future = (props: propsData) => {
 
                                     <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                                        <Image src={`${imgSrc?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol==="XRP"&&"bg-white rounded-full"}`}/>
+                                        <Image src={`${imgSrc?'/assets/history/Coin.svg': item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol==="XRP"&&"bg-white rounded-full"}`}/>
 
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                                                <p className="info-14-18 dark:text-white">{item?.coin_symbol}</p>
+                                                <p className="info-14-18 dark:text-white">{item?.symbol}</p>
                                                 {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p> */}
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">${currencyFormatter(marketPrice)}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">${currencyFormatter(item?.price)}</p>
                                     </td>
                                     
 
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(item?.hloc?.low?.toFixed(4))}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(Number(item?.hlocv?.low).toFixed(4))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(item?.hloc?.high?.toFixed(4))}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(Number(item?.hlocv?.high)?.toFixed(4))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <div className={`flex items-center gap-[4px] flex-wrap`}>
-                                            {(() => {
-                                                const high = Number(item?.hloc?.high);
-                                                const low = Number(item?.hloc?.low);
-                                                if (!isNaN(high) && !isNaN(low) && low !== 0) {
-                                                    const changeRate = (high - low) / low;
-                                                    return (
-                                                        <>
-                                                            <p className={`footer-text-secondary ${changeRate > 0 ? '!text-buy' : '!text-sell'}`}>
-                                                                {changeRate > 0 ? '+' : ''}{(changeRate * 100).toFixed(3)}%
-                                                            </p>
-                                                            {changeRate > 0 && <IconsComponent type="high" active={false} hover={false} />}
-                                                            {changeRate < 0 && <IconsComponent type="low" active={false} hover={false} />}
-                                                        </>
-                                                    );
-                                                }
-                                                return <p className="footer-text-secondary">0</p>;
-                                            })()}
+                                    <div className={`flex items-center gap-[4px] flex-wrap`}>
+                                            <p className={`footer-text-secondary  ${Number(item?.hlocv?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(item?.hlocv?.changeRate) > 0 ? '+' : ''}{item?.hlocv?.changeRate !== undefined ? (Number(item?.hlocv?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
+
+                                            {Number(item?.hlocv?.changeRate) > 0 &&
+                                                <IconsComponent type="high" active={false} hover={false} />
+                                            }
+                                            {Number(item?.hlocv?.changeRate) < 0 &&
+                                                <IconsComponent type="low" active={false} hover={false} />
+                                            }
                                         </div>
 
                                     </td>

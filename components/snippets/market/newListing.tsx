@@ -158,11 +158,7 @@ const NewListing = (props: propsData) => {
                     <td className="max-[1023px]:hidden">
                       <div className={` items-center gap-[10px] flex`}>
                         <p
-                          className={`footer-text-secondary  !text-[14px] md:!text-[16px] ${
-                            item.status == "high"
-                              ? "!text-[#03A66D]"
-                              : "!text-[#DC2626]"
-                          }`}
+                          className={`footer-text-secondary  !text-[14px] md:!text-[16px] `}
                         >
                           {currencyFormatter(item.circulatingSupply)}
                         </p>
@@ -176,12 +172,12 @@ const NewListing = (props: propsData) => {
 
                     <td className="max-[1023px]:hidden">
                       <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
-                        ${currencyFormatter(item.totalSupply)}
+                        {currencyFormatter(item.totalSupply)}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">
                       <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
-                        ${currencyFormatter(item.maxSupply)}
+                        {currencyFormatter(item.maxSupply)}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">

@@ -10,6 +10,7 @@ import moment from "moment";
 import { currencyFormatter } from "../snippets/market/buySellCard";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import token from "@/pages/api/token";
+import { truncateNumber } from "@/libs/subdomain";
 
 interface propsData {
   coinsList: any;
@@ -17,6 +18,18 @@ interface propsData {
   tradehistory?: any;
 
   slug?: any;
+}
+
+export function abbreviateNumber(value:number | string) {
+  const suffixes = ["", "K", "M", "B", "T"];
+  let suffixNum = 0;
+  let newValue = Number(value);
+  while (newValue >= 1000) {
+      newValue /= 1000;
+      suffixNum++;
+  }
+  
+  return newValue.toFixed(2) + suffixes[suffixNum];
 }
 
 const ChartTabs = (props: propsData) => {
@@ -38,7 +51,7 @@ const ChartTabs = (props: propsData) => {
   const [imgSrc, setImgSrc] = useState(false);
   const [imgSrc2, setImgSrc2] = useState(false);
   const [imgSrc3, setImgSrc3] = useState(false);
-  const [coins, setCoins] = useState([])
+  const [coins, setCoins] = useState(props?.coinsList || [])
 
   let data = props.coinsList; //token list
 
@@ -70,8 +83,9 @@ const ChartTabs = (props: propsData) => {
 
   
   useEffect(() => {
+
     const fetchHLCOData = async () => {
-      let coins = currentItems?.filter((item: any) => item?.symbol !== "USDT");
+      let coins = props.coinsList?.filter((item: any) => item?.symbol !== "USDT");
 
 
       const fetchDataForCoin = async (coin: any) => {
@@ -102,8 +116,10 @@ const ChartTabs = (props: propsData) => {
     };
 
     fetchHLCOData();
-  }, [props.coinsList]);
+  }, [props?.coinsList]);
 
+
+  
 
   // Open order paggination code here
   const endOpenOffset = openItemOffset + itemsPerPage;
@@ -176,6 +192,8 @@ const ChartTabs = (props: propsData) => {
       console.log("error in chart page trade history", error);
     }
   };
+
+
 
   return (
     <div className="mt-30 p-20 lg:px-30 lg:py-40 rounded-10  bg-white dark:bg-d-bg-primary">
@@ -292,7 +310,7 @@ const ChartTabs = (props: propsData) => {
                     <th className="max-[1023px]:hidden py-5">
                       <div className="flex">
                         <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                          Max Supply{" "}
+                          Circulating Supply{" "}
                         </p>
                         <Image
                           src="/assets/history/uparrow.svg"
@@ -333,15 +351,15 @@ const ChartTabs = (props: propsData) => {
                       >
                         <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                           <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                            <Image src={`${imgSrc3 ? fallbackImage :tokenImage}`} width={30} height={30} alt="coins" onError={() => setImgSrc3(true)} className="w-[30px] h-[30px]" />
+                            <Image src={`${imgSrc3 ? fallbackImage :tokenImage}`} width={30} height={30} alt="coins" onError={() => setImgSrc3(true)}  className={` w-[30px] h-[30px] ${item.symbol === 'XRP' || item.symbol === 'ETH' ? 'bg-white rounded-full' : ''}`}/>
 
                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                               <p className="info-14-18 dark:text-white">
                                 {item.symbol}
                               </p>
-                              <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">
+                              {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">
                                 {item.symbol}
-                              </p>
+                              </p> */}
                             </div>
                           </div>
                         </td>
@@ -365,7 +383,7 @@ const ChartTabs = (props: propsData) => {
                             <p
                               className={` info-14-18 dark:text-white`}
                             >
-                              {item.volume && currencyFormatter(item.volume)}
+                              {item.volume && abbreviateNumber(abbreviateNumber(item.volume))}
                             </p>
                             <IconsComponent
                               type={item.status}
@@ -377,12 +395,12 @@ const ChartTabs = (props: propsData) => {
 
                         <td className="max-[1023px]:hidden">
                           <p className="info-14-18 dark:text-white">
-                            ${item.totalSupply && currencyFormatter(item.totalSupply)}
+                            {item.totalSupply && currencyFormatter(abbreviateNumber(item.totalSupply))}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden">
                           <p className="info-14-18 dark:text-white">
-                            ${item.maxSupply && currencyFormatter(item.maxSupply) || 0}
+                            {item.circulatingSupply && currencyFormatter(abbreviateNumber(item.circulatingSupply)) || 0}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden ">
@@ -762,7 +780,6 @@ const ChartTabs = (props: propsData) => {
                       return b.entry_id - a.entry_id
                     })
 
-
                     const tokenImage = item.token?.image ?? item.global_token?.image;
                     return (
                       <div
@@ -860,12 +877,13 @@ const ChartTabs = (props: propsData) => {
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                              ${currencyFormatter(item.volume_usdt?.toFixed(6))}
+                             
+                              ${currencyFormatter(truncateNumber(item.volume_usdt,6))}
                             </p>
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                              ${currencyFormatter(item.token_amount?.toFixed(6))}
+                              ${currencyFormatter(truncateNumber(item.token_amount,6))}
                             </p>
                           </div>
 
@@ -1008,12 +1026,12 @@ const ChartTabs = (props: propsData) => {
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                                   <p className="info-14-18 dark:text-white ">
-                                    ${currencyFormatter(elm?.volume_usdt?.toFixed(2))}
+                                    ${currencyFormatter(truncateNumber(elm?.volume_usdt,6))}
                                   </p>
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                                   <p className="info-14-18 dark:text-white ">
-                                    ${currencyFormatter(elm.token_amount?.toFixed(5))}
+                                    ${currencyFormatter(truncateNumber(elm.token_amount,6))}
                                   </p>
                                 </div>
 

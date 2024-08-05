@@ -13,8 +13,6 @@ interface propsData {
 }
 
 const OrderBook = (props: propsData) => {
-
-    // console.log(props?.allTradeHistory,"=allTradeHistory");  
     const [active1, setActive1] = useState(1);
     const [show, setShow] = useState(1);
     const { mode } = useContext(Context);
@@ -27,7 +25,7 @@ const OrderBook = (props: propsData) => {
                     Order Book
                 </button>
                 <button className={` sec-text text-center text-gamma border-b-2 border-[transparent] pb-[15px] max-w-[50%] w-full ${active1 === 2 && "!text-primary border-primary"}`} onClick={() => setActive1(2)}>
-                    Trade History
+                   Market Trades
                 </button>
             </div>
 
@@ -35,9 +33,9 @@ const OrderBook = (props: propsData) => {
                 <>
                     {/* tab content */}
                     <div className='p-10 bg-grey dark:bg-black-v-1 rounded-[5px] flex items-center gap-10'>
-                        <button className={`solid-button py-[10px] ${show === 1 ? "dark:bg-primary  dark:!text-white" : "dark:bg-d-bg-primary bg-grey !text-gamma"}  hover:!text-white rounded-[5px]`} onClick={() => { setShow(1) }}>All</button>
-                        <button className={`solid-button py-[10px] ${show === 2 ? "dark:bg-primary  dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(2) }}>Asks</button>
-                        <button className={`solid-button py-[10px] ${show === 3 ? "dark:bg-primary  dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(3) }}>Bids</button>
+                        <button className={`solid-button py-[10px] hover:!bg-primary ${show === 1 ? "dark:bg-primary  dark:!text-white" : "dark:bg-d-bg-primary bg-grey !text-gamma"}  hover:!text-white rounded-[5px]`} onClick={() => { setShow(1) }}>All</button>
+                        <button className={`solid-button py-[10px] hover:!bg-red-dark ${show === 2 ? "bg-red-dark dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(2) }}>Asks</button>
+                        <button className={`solid-button py-[10px] hover:!bg-dark-green ${show === 3 ? "bg-dark-green  dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(3) }}>Bids</button>
                     </div>
                     {
                         show === 1 &&
@@ -61,7 +59,7 @@ const OrderBook = (props: propsData) => {
                                 </div>
                                 {/* table content */}
                                 <div className='mt-10'>
-                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any, index:number) => {
+                                    {props.BuyTrade && props.BuyTrade.length > 0 && props.BuyTrade.map((item: any, index:number) => {
                                         if (item.order_type === 'buy') {
                                             return <div key={index+'buy'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-buy'>$ {currencyFormatter(item?.limit_usdt?.toFixed(5))}</p>
@@ -72,7 +70,7 @@ const OrderBook = (props: propsData) => {
                                         }
                                     })}
 
-                                    {props.allTradeHistory && props.allTradeHistory.length === 0 &&
+                                    {props.BuyTrade && props.BuyTrade.length === 0 &&
                                         <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                                             <Image
                                                 src="/assets/refer/empty.svg"
@@ -110,7 +108,7 @@ const OrderBook = (props: propsData) => {
                                 </div>
                                 {/* table content */}
                                 <div className='mt-10'>
-                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any,index:number) => {
+                                    {props.sellTrade && props.sellTrade.length > 0 && props.sellTrade.map((item: any,index:number) => {
                                         if (item.order_type === 'sell') {
                                             return <div key={index+'sell'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-sell'>$ {currencyFormatter(item?.limit_usdt?.toFixed(5))}</p>
@@ -120,7 +118,7 @@ const OrderBook = (props: propsData) => {
                                             </div>
                                         }
                                     })}
-                                    {props.allTradeHistory && props.allTradeHistory.length === 0 &&
+                                    {props.sellTrade && props.sellTrade.length === 0 &&
                                         <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                                             <Image
                                                 src="/assets/refer/empty.svg"
@@ -157,7 +155,7 @@ const OrderBook = (props: propsData) => {
                                 </div>
                                 {/* table content */}
                                 <div className='mt-10'>
-                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any, index:number) => {
+                                    {props.sellTrade && props.sellTrade.length > 0 && props.sellTrade.map((item: any, index:number) => {
                                         if (item.order_type === 'sell') {
                                             return <div key={index+'sell2'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-sell'>$ {currencyFormatter(item?.limit_usdt?.toFixed(5))}</p>
@@ -168,7 +166,7 @@ const OrderBook = (props: propsData) => {
                                         }
                                     })}
 
-                                    {props.allTradeHistory && props.allTradeHistory.length === 0 &&
+                                    {props.sellTrade && props.sellTrade.length === 0 &&
                                         <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                                             <Image
                                                 src="/assets/refer/empty.svg"
@@ -206,7 +204,7 @@ const OrderBook = (props: propsData) => {
                                 </div>
                                 {/* table content */}
                                 <div className='mt-10'>
-                                    {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any, index:number) => {
+                                    {props.BuyTrade && props.BuyTrade.length > 0 && props.BuyTrade.map((item: any, index:number) => {
                                         if (item.order_type === 'buy') {
                                             return <div key={index+'buy2'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-buy'>$ {currencyFormatter(item?.limit_usdt?.toFixed(5))}</p>
@@ -218,7 +216,7 @@ const OrderBook = (props: propsData) => {
                                     })}
 
 
-                                    {props.allTradeHistory && props.allTradeHistory.length === 0 &&
+                                    {props.BuyTrade && props.BuyTrade.length === 0 &&
                                         <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                                             <Image
                                                 src="/assets/refer/empty.svg"

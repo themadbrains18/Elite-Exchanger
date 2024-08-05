@@ -157,13 +157,16 @@ const Chart = (props: Session) => {
     }
 
     const filterBuySellRecords = (data: any) => {
+// console.log(slug,"slug");
+
+
         if (data && data.length > 0) {
             let sellRecord = data.filter((item: any) => {
-                return item.order_type === 'sell'
+                return item.order_type === 'sell' && item?.global_token ? item?.global_token?.symbol===slug: item?.token?.symbol===slug
             })
 
             let buyRecord = data.filter((item: any) => {
-                return item.order_type === 'buy'
+                return item.order_type === 'buy' && item?.global_token ? item?.global_token?.symbol===slug: item?.token?.symbol===slug
             })
             setSellTrade(sellRecord);
             setBuyTrade(buyRecord);

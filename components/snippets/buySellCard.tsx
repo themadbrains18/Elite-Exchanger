@@ -17,7 +17,7 @@ import { currencyFormatter } from "./market/buySellCard";
 import { truncateNumber } from "@/libs/subdomain";
 
 const schema = yup.object().shape({
-  token_amount: yup.number().positive("Amount must be greater than '0'.").min(0.001, "Amount must be greater than '0.001'").required('Please enter quantity.').typeError('Please enter quantity.'),
+  token_amount: yup.number().positive("Amount must be greater than '0'.").required('Please enter quantity.').typeError('Please enter quantity.'),
   limit_usdt: yup.number().positive("Limit must be greater than '0'.").required('Please enter limit amount.').typeError('Please enter limit amount.'),
   // market_type:yup.string().optional().default('limit')
 });
@@ -175,6 +175,24 @@ const BuySellCard = (props: DynamicId) => {
 
   const onHandleSubmit = async (data: any) => {
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
+    
+    
+
+    if (props.token?.tradepair?.min_trade > data.token_amount) {
+      setError("token_amount", {
+        type: "custom",
+        message: "min " + `'${props.token?.tradepair?.min_trade}' must be bought per order`,
+      });
+      return;
+    }
+    if (props.token?.tradepair?.maxTrade < data.token_amount) {
+      setError("token_amount", {
+        type: "custom",
+        message: "max " + `'${props.token?.tradepair?.maxTrade}' must be bought per order`,
+      });
+      return;
+    }
+
     if (active1 === 1 && totalAmount > price) {
       setDisabled(true);
       toast.error('Insufficient balance.', { autoClose: 2000 });
@@ -192,16 +210,8 @@ const BuySellCard = (props: DynamicId) => {
       return;
     }
 
-    if (props.token?.tradepair?.maxTrade < data.token_amount) {
-      setError("token_amount", {
-        type: "custom",
-        message: "You can trade less than max amount " + `'${props.token?.tradepair?.maxTrade}.'`,
-      });
-      return;
-    }
-
     let totalUsdtAmount: any = totalAmount;
-    let transactionFee: any = active1 === 1 ? (data.token_amount * 0.00075).toFixed(8) : (data.token_amount * data.limit_usdt * 0.00075).toFixed(8);
+    let transactionFee: any = active1 === 1 ? (data.token_amount * 0.001).toFixed(8) : (data.token_amount * data.limit_usdt * 0.001).toFixed(8);
 
     let obj = {
       "user_id": props.session.user.user_id,
@@ -245,7 +255,7 @@ const BuySellCard = (props: DynamicId) => {
         setSecondCurrency('USDT');
         setActive(false);
         reset({
-          limit_usdt: props?.token?.price.toFixed(6),
+          limit_usdt: 0.00, 
           token_amount: 0.00,
         })
         setEstimateFee(0.00)
@@ -325,7 +335,9 @@ const BuySellCard = (props: DynamicId) => {
       if (qty) {
         let totalAmount: any = qty * amount;
         let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),6) : truncateNumber((amount * qty * 0.001),6);
-        // console.log(fee,'-----------------fees');
+        console.log(fee,'-----------------fees');
+
+        // return
       
 
         setEstimateFee(fee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
@@ -408,14 +420,14 @@ const BuySellCard = (props: DynamicId) => {
             }}>
           <div className="py-20">
             <div className="flex lg:gap-30 gap-10">
-              <div className={`flex  gap-5 justify-center items-center  w-full cursor-pointer border rounded-5 border-grey-v-1 dark:border-opacity-[15%] bg-[transparent] ${show === 1 && 'bg-primary-100 dark:bg-black-v-1 border-primary'}`} onClick={() => {
+              <div className={`flex  gap-5 justify-center items-center  w-full cursor-pointer border rounded-5 relative border-grey-v-1 dark:border-opacity-[15%] bg-[transparent] ${show === 1 && 'bg-primary-100 dark:bg-black-v-1 border-primary'}`} onClick={() => {
                 setShow(1); reset({
                   limit_usdt: 0.00,
                   token_amount: 0.00,
                 })
                 setTotalAmount(0.0); setEstimateFee(0.00)
               }}>
-                <input id={`custom-radio${props.id}`} data-testid="market_type" type="radio" value="limit" name="market_type" className="hidden w-5 h-5 max-w-full  bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                <input id={`custom-radio${props.id}`} data-testid="market_type" type="radio" value="limit" name="market_type" className=" cursor-pointer absolute top-0 left-0  w-full h-full opacity-0 max-w-full  bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                 <label htmlFor={`custom-radio${props.id}`}
                   className="custom-radio cursor-pointer py-5 px-[17px]  relative 
               flex gap-2 items-center pl-[60px] 
@@ -444,7 +456,7 @@ const BuySellCard = (props: DynamicId) => {
                   <p className={`info-16-18 !text-gamma ${show === 1 && '!text-primary'}`}>Limit</p>
                 </label>
               </div>
-              <div className={`flex gap-5  justify-center items-center   w-full cursor-pointer border rounded-5 border-grey-v-1 dark:border-opacity-[15%] bg-[transparent] ${show === 2 && 'bg-primary-100 dark:bg-black-v-1 border-primary'}`} onClick={() => {
+              <div className={`flex gap-5  justify-center items-center relative  w-full cursor-pointer border rounded-5 border-grey-v-1 dark:border-opacity-[15%] bg-[transparent] ${show === 2 && 'bg-primary-100 dark:bg-black-v-1 border-primary'}`} onClick={() => {
                 setShow(2);
                 reset({
                   limit_usdt: 0.00,
@@ -453,7 +465,7 @@ const BuySellCard = (props: DynamicId) => {
                 setTotalAmount(0.0); setEstimateFee(0.00)
                 setValue('limit_usdt', props?.token?.price)
               }}>
-                <input id={`custom-radio2${props.id}`} type="radio" value="market" name="market_type" className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                <input id={`custom-radio2${props.id}`} type="radio" value="market" name="market_type" className="cursor-pointer w-full h-full opacity-0 absolute max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                 <label htmlFor={`custom-radio2${props.id}`} className="
                     custom-radio relative py-5 px-[17px]  flex gap-2 items-center pl-[60px]
                     cursor-pointer
@@ -527,7 +539,7 @@ const BuySellCard = (props: DynamicId) => {
 
                     <div className="">
                       <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
-                      <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="$0" step="0.000000" {...register('limit_usdt', {
+                      <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="$0" step="0.000001" {...register('limit_usdt', {
                         onChange: (e) => { { 
                           const value = e.target.value;
                           const regex = /^\d{0,11}(\.\d{0,6})?$/;
@@ -586,24 +598,25 @@ const BuySellCard = (props: DynamicId) => {
                     {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
                     <p className="sm-text dark:text-white">{truncateNumber(totalAmount, 6) || '0.000000'}</p>
                   </div>
-                  <div className="flex gap-2">
-                    <p className="sm-text dark:text-white">Max Trade:</p>
-                    {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
-                    <p className="sm-text dark:text-white">{props.token?.tradepair?.maxTrade || '0.00'}</p>
-                  </div>
+                  
 
                 </div>
                 <div className="mt-5 flex gap-2 justify-between">
                  
-                <div className=" flex gap-2">
+                {/* <div className=" flex gap-2">
                   <p className="sm-text dark:text-white">Est. Fee:</p>
                   <p className="sm-text dark:text-white">{truncateNumber(estimateFee,6) || '0.00'}</p>
 
-                </div>
+                </div> */}
                   <div className="flex gap-2">
                     <p className="sm-text dark:text-white">Min Trade:</p>
                     {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
-                    <p className="sm-text dark:text-white">0.001</p>
+                    <p className="sm-text dark:text-white">{props.token?.tradepair?.min_trade} {props?.token?.symbol}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <p className="sm-text dark:text-white">Max Trade:</p>
+                    {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
+                    <p className="sm-text dark:text-white">{props.token?.tradepair?.maxTrade || '0.00'} {props?.token?.symbol}</p>
                   </div>
                 </div>
               </>

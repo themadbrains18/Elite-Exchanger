@@ -74,25 +74,27 @@ const CoinList = (props: propsData) => {
     SetSpotTrade(spot);
 
     //Get future trade token list
-    getFutureTardeList();
+    // spot trade token
+    let future = props.coins.filter((item: any) => {
+      return item.futuretradepair !== null
+    });
+    SetFutureTrade(future);
+    // getFutureTardeList();
   }, [props?.coins]);
 
-  useEffect(() => {
-    getFutureTardeList();
-  }, [search]);
 
 
-  const getFutureTardeList = async () => {
-    try {
-      let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future?qu=${search}`, {
-        method: "GET"
-      }).then(response => response.json());
+  // const getFutureTardeList = async () => {
+  //   try {
+  //     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future?qu=${search}`, {
+  //       method: "GET"
+  //     }).then(response => response.json());
 
-      SetFutureTrade(tokenList?.data);
-    } catch (error) {
+  //     SetFutureTrade(tokenList?.data);
+  //   } catch (error) {
 
-    }
-  }
+  //   }
+  // }
 
 
   return (
