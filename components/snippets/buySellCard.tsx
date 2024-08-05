@@ -605,7 +605,6 @@ const BuySellCard = (props: DynamicId) => {
                     {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
                     <p className="sm-text dark:text-white">0.001</p>
                   </div>
-
                 </div>
               </>
             }
