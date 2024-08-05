@@ -582,7 +582,7 @@ const BuySellCard = (props: DynamicId) => {
                     {
                       router.pathname.includes('/chart') ?
 
-                        <div className='flex  items-center gap-[5px] rounded-[5px] mr-[15px] pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d]'>
+                        <div className='flex  items-center gap-[5px] mr-[15px] pl-10 border-l border-[#D9D9D9] dark:border-[#ccced94d]'>
                           <Image src={`${props?.token?.image !== undefined ? props?.token?.image : '/assets/home/coinLogo.png'}`} alt="error" width={20} height={20}  className={`${props?.token?.symbol==="XRP"&&"bg-white rounded-full "}`}/>
                           <p className={`sm-text rounded-[5px]  cursor-pointer !text-banner-text`}>{props?.token?.symbol}</p>
                         </div> :
