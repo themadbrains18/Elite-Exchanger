@@ -5,14 +5,14 @@ import { currencyFormatter } from '../snippets/market/buySellCard';
 
 interface propsData {
     coins?: any;
-    show1?:boolean
-    // setNewSlug?:any;
+    show1?:boolean;
 }
 
 const CoinTypes = (props: propsData) => {
     const [show, setShow] = useState(1);
     const [fill, setFill] = useState(false);
     const [favCoin, setfavCoin] = useState([]);
+    const [filteredCoins, setFilteredCoins] = useState([]);
     
     let { mode } = useContext(Context);
 
@@ -30,6 +30,7 @@ const CoinTypes = (props: propsData) => {
             }
         })
         setfavCoin(coinsItem);
+        setFilteredCoins(coinsItem);
 
     }, [mode, props?.coins]);
 
@@ -63,14 +64,25 @@ const CoinTypes = (props: propsData) => {
             }
         })
         setfavCoin(coinsItem);
+        setFilteredCoins(coinsItem);
         localStorage.setItem('futurefavToken', JSON.stringify(existItem));
     }
 
     const filterCoin = (e:any) =>{
-        let record = favCoin.filter((item: any) => {
-            return item.coin_symbol.toLowerCase().includes(e.target.value.toLowerCase()) || item.usdt_symbol.toLowerCase().includes(e.target.value.toLowerCase())
-        })
-        setfavCoin(record);
+        const searchTerm = e.target.value.toLowerCase();
+
+        let record = [];
+        if (show === 1) {
+            record = favCoin.filter((item: any) => {
+                return item.coin_symbol.toLowerCase().includes(searchTerm) || item.usdt_symbol.toLowerCase().includes(searchTerm);
+            });
+        } else if (show === 2) {
+            record = props?.coins?.filter((item: any) => {
+                return item.coin_symbol.toLowerCase().includes(searchTerm) || item.usdt_symbol.toLowerCase().includes(searchTerm);
+            });
+        }
+
+        setFilteredCoins(record);
     }
 
     return (
@@ -83,15 +95,14 @@ const CoinTypes = (props: propsData) => {
                 {/* head */}
 
                 <div className='flex items-center gap-[20px] mb-[20px]'>
-                    <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-0 after:w-full after:h-[2px] ${show === 1 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShow(1) }}>Favorites</button>
-                    <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-0 after:w-full after:h-[2px] ${show === 2 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShow(2) }}>USDⓈ-M</button>
-                    {/* <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-0 after:w-full after:h-[2px] ${show === 3 ? '!text-black after:block  dark:!text-white' : '!text-[#a3a8b7] after:hidden'}`} onClick={() => { setShow(3) }}>COIN-M</button> */}
+                    <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-0 after:w-full after:h-[2px] ${show === 1 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShow(1); setFilteredCoins(favCoin); }}>Favorites</button>
+                    <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-0 after:w-full after:h-[2px] ${show === 2 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShow(2); setFilteredCoins(props.coins); }}>USDⓈ-M</button>
                 </div>
                 <div>
                     {/* head */}
-                    <div className='flex gap-[20px]'>
-                        {show === 2 &&
-                            <div className=' item-center mt-[5px] mb-[4px]'>
+                    <div className='flex gap-[20px] items-center   '>
+                  
+                            <div className='items-center  '>
                                 <svg
                                     width={11}
                                     height={10}
@@ -104,7 +115,7 @@ const CoinTypes = (props: propsData) => {
                                     <path d="M4.503.431a.7.7 0 0 1 1.293 0l1.073 2.58 2.785.223a.7.7 0 0 1 .399 1.23L7.931 6.28 8.58 9a.7.7 0 0 1-1.045.76L5.149 8.302 2.765 9.76a.7.7 0 0 1-1.046-.76l.648-2.718L.246 4.464a.7.7 0 0 1 .4-1.23l2.784-.223L4.503.43Z" />
                                 </svg>
                             </div>
-                        }
+                        
 
                         <div className='grid grid-cols-4 gap-[10px] sticky top-0 w-full'>
                             <p className='top-label text-start py-[5px]'>Symbol</p>
@@ -117,10 +128,38 @@ const CoinTypes = (props: propsData) => {
 
                     {show == 1 &&
                         <>
-                            {favCoin && favCoin.length > 0 ? favCoin.map((item: any) => {
-                                return <a href={`/future/${item.coin_symbol}${item.usdt_symbol}`}><div className='flex gap-[20px]'>
-                                    
-                                    <div  className='grid grid-cols-4 gap-[10px]rounded mb-[4px] cursor-pointer w-full'>
+                            {filteredCoins && filteredCoins.length > 0 ? filteredCoins.map((item: any) => {
+                                  let color = 'transparent';
+                                  let existItem: any = localStorage !==undefined && localStorage.getItem('futurefavToken');
+  
+                                  if (existItem) {
+                                      existItem = JSON.parse(existItem);
+                                  }
+  
+                                  if (existItem?.includes(item?.id)) {
+                                      if (mode == "dark") {
+                                          color = "fill-[#fff]";
+                                      } else {
+                                          color = "fill-[#000]"
+                                      }
+                                  }
+                                return <a key={item.id} href={`/future/${item.coin_symbol}${item.usdt_symbol}`}>
+                                     <div className='flex gap-[20px] items-center mb-[4px]'>
+                                    <div className='cursor-pointer items-center'>
+                                        <svg
+                                            onClick={(e) => {e.preventDefault(); fillSvg(e, item) }}
+                                            width={11}
+                                            height={10}
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className={`dark:stroke-white stroke-black ${color}`}
+                                            stroke-width="0.4"
+                                            fill='transparent'
+                                        >
+                                            <path d="M4.503.431a.7.7 0 0 1 1.293 0l1.073 2.58 2.785.223a.7.7 0 0 1 .399 1.23L7.931 6.28 8.58 9a.7.7 0 0 1-1.045.76L5.149 8.302 2.765 9.76a.7.7 0 0 1-1.046-.76l.648-2.718L.246 4.464a.7.7 0 0 1 .4-1.23l2.784-.223L4.503.43Z" />
+                                        </svg>
+                                    </div>
+                                    <div  className='grid grid-cols-4 gap-[10px]rounded  cursor-pointer w-full'>
+                               
                                         <p className='top-label text-start !text-black dark:!text-white flex items-center gap-[5px]'>
                                             <span>{item?.coin_symbol}{item?.usdt_symbol}</span>
                                         </p>
@@ -128,7 +167,8 @@ const CoinTypes = (props: propsData) => {
                                         <p className='top-label text-end !text-black dark:!text-white'>0.32%</p>
                                         <p className='top-label text-end !text-black dark:!text-white'>33.2M<span>USDT</span></p>
                                     </div>
-                                </div></a>
+                  </div>
+                                </a>
 
                             }
                         ) :
@@ -140,7 +180,7 @@ const CoinTypes = (props: propsData) => {
                     }
                     {show == 2 &&
                         <>
-                            {props?.coins && props?.coins.length > 0 && props?.coins.map((item: any) => {
+                            {filteredCoins && filteredCoins.length > 0 && filteredCoins.map((item: any) => {
 
                                 let color = 'transparent';
                                 let existItem: any = localStorage !==undefined && localStorage.getItem('futurefavToken');
@@ -157,24 +197,24 @@ const CoinTypes = (props: propsData) => {
                                     }
                                 }
 
-                                return <a href={`/future/${item.coin_symbol}${item.usdt_symbol}`}>
+                                return <a key={item.id} href={`/future/${item.coin_symbol}${item.usdt_symbol}`}>
                                 
-                                <div className='flex gap-[20px]'>
-                                    <div className='cursor-pointer item-center mt-[5px] mb-[4px]'>
+                                <div className='flex gap-[20px] items-center mb-[4px]'>
+                                    <div className='cursor-pointer '>
                                         <svg
-                                            onClick={(e) => { fillSvg(e, item) }}
+                                            onClick={(e) => {e.preventDefault(); fillSvg(e, item) }}
                                             width={11}
                                             height={10}
                                             xmlns="http://www.w3.org/2000/svg"
                                             className={`dark:stroke-white stroke-black ${color}`}
                                             stroke-width="0.4"
-
-                                            fill={color}
+                                            fill='transparent'
                                         >
                                             <path d="M4.503.431a.7.7 0 0 1 1.293 0l1.073 2.58 2.785.223a.7.7 0 0 1 .399 1.23L7.931 6.28 8.58 9a.7.7 0 0 1-1.045.76L5.149 8.302 2.765 9.76a.7.7 0 0 1-1.046-.76l.648-2.718L.246 4.464a.7.7 0 0 1 .4-1.23l2.784-.223L4.503.43Z" />
                                         </svg>
                                     </div>
-                                    <div className='grid grid-cols-4 gap-[10px]rounded mb-[4px] cursor-pointer w-full'>
+
+                                    <div className='grid grid-cols-4 gap-[10px] rounded  cursor-pointer w-full'>
                                         <p className='top-label text-start !text-black dark:!text-white flex items-center gap-[5px]'>
                                             <span>{item?.coin_symbol}{item?.usdt_symbol}</span>
                                         </p>
@@ -182,102 +222,12 @@ const CoinTypes = (props: propsData) => {
                                         <p className='top-label text-end !text-black dark:!text-white'>0.32%</p>
                                         <p className='top-label text-end !text-black dark:!text-white'>33.2M<span>USDT</span></p>
                                     </div>
-                                    
-                                </div></a>
+                                </div>
+                                </a>
 
-                            })}
-                        </>
-                    }
-                    {show == 3 &&
-                        <>
-                            <div className='grid grid-cols-4 gap-[10px]rounded mb-[4px]'>
-                                <p className='top-label text-start !text-black dark:!text-white flex items-center gap-[5px]'>
-                                    <div className='cursor-pointer'>
-                                        <svg
-                                            onClick={() => { setFill(!fill) }}
-                                            width={11}
-                                            height={10}
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className={`dark:stroke-white stroke-black ${fill ? "dark:fill-[#fff] fill-[#000]" : "fill-[transparent]"}`}
-                                            stroke-width="0.4"
+                            })
+                            }
 
-                                            fill='transparent'
-                                        >
-                                            <path d="M4.503.431a.7.7 0 0 1 1.293 0l1.073 2.58 2.785.223a.7.7 0 0 1 .399 1.23L7.931 6.28 8.58 9a.7.7 0 0 1-1.045.76L5.149 8.302 2.765 9.76a.7.7 0 0 1-1.046-.76l.648-2.718L.246 4.464a.7.7 0 0 1 .4-1.23l2.784-.223L4.503.43Z" />
-                                        </svg>
-                                    </div>
-                                    <span>KASUSDT</span>
-                                </p>
-                                <p className='top-label text-center !text-black dark:!text-white'>0.12920</p>
-                                <p className='top-label text-end !text-black dark:!text-white'>0.32%</p>
-                                <p className='top-label text-end !text-black dark:!text-white'>33.2M<span>USDT</span></p>
-                            </div>
-                            <div className='grid grid-cols-4 gap-[10px]rounded mb-[4px]'>
-                                <p className='top-label text-start !text-black dark:!text-white flex items-center gap-[5px]'>
-                                    <div className='cursor-pointer'>
-                                        <svg
-                                            onClick={() => { setFill(!fill) }}
-                                            width={11}
-                                            height={10}
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className={`dark:stroke-white stroke-black ${fill ? "dark:fill-[#fff] fill-[#000]" : "fill-[transparent]"}`}
-                                            stroke-width="0.4"
-
-                                            fill='transparent'
-                                        >
-                                            <path d="M4.503.431a.7.7 0 0 1 1.293 0l1.073 2.58 2.785.223a.7.7 0 0 1 .399 1.23L7.931 6.28 8.58 9a.7.7 0 0 1-1.045.76L5.149 8.302 2.765 9.76a.7.7 0 0 1-1.046-.76l.648-2.718L.246 4.464a.7.7 0 0 1 .4-1.23l2.784-.223L4.503.43Z" />
-                                        </svg>
-                                    </div>
-                                    <span>KASUSDT</span>
-                                </p>
-                                <p className='top-label text-center !text-black dark:!text-white'>0.12920</p>
-                                <p className='top-label text-end !text-black dark:!text-white'>0.32%</p>
-                                <p className='top-label text-end !text-black dark:!text-white'>33.2M<span>USDT</span></p>
-                            </div>
-                            <div className='grid grid-cols-4 gap-[10px]rounded mb-[4px]'>
-                                <p className='top-label text-start !text-black dark:!text-white flex items-center gap-[5px]'>
-                                    <div className='cursor-pointer'>
-                                        <svg
-                                            onClick={() => { setFill(!fill) }}
-                                            width={11}
-                                            height={10}
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className={`dark:stroke-white stroke-black ${fill ? "dark:fill-[#fff] fill-[#000]" : "fill-[transparent]"}`}
-                                            stroke-width="0.4"
-
-                                            fill='transparent'
-                                        >
-                                            <path d="M4.503.431a.7.7 0 0 1 1.293 0l1.073 2.58 2.785.223a.7.7 0 0 1 .399 1.23L7.931 6.28 8.58 9a.7.7 0 0 1-1.045.76L5.149 8.302 2.765 9.76a.7.7 0 0 1-1.046-.76l.648-2.718L.246 4.464a.7.7 0 0 1 .4-1.23l2.784-.223L4.503.43Z" />
-                                        </svg>
-                                    </div>
-                                    <span>KASUSDT</span>
-                                </p>
-                                <p className='top-label text-center !text-black dark:!text-white'>0.12920</p>
-                                <p className='top-label text-end !text-black dark:!text-white'>0.32%</p>
-                                <p className='top-label text-end !text-black dark:!text-white'>33.2M<span>USDT</span></p>
-                            </div>
-                            <div className='grid grid-cols-4 gap-[10px]rounded mb-[4px]'>
-                                <p className='top-label text-start !text-black dark:!text-white flex items-center gap-[5px]'>
-                                    <div className='cursor-pointer'>
-                                        <svg
-                                            onClick={() => { setFill(!fill) }}
-                                            width={11}
-                                            height={10}
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className={`dark:stroke-white stroke-black ${fill ? "dark:fill-[#fff] fill-[#000]" : "fill-[transparent]"}`}
-                                            stroke-width="0.4"
-
-                                            fill='transparent'
-                                        >
-                                            <path d="M4.503.431a.7.7 0 0 1 1.293 0l1.073 2.58 2.785.223a.7.7 0 0 1 .399 1.23L7.931 6.28 8.58 9a.7.7 0 0 1-1.045.76L5.149 8.302 2.765 9.76a.7.7 0 0 1-1.046-.76l.648-2.718L.246 4.464a.7.7 0 0 1 .4-1.23l2.784-.223L4.503.43Z" />
-                                        </svg>
-                                    </div>
-                                    <span>KASUSDT</span>
-                                </p>
-                                <p className='top-label text-center !text-black dark:!text-white'>0.12920</p>
-                                <p className='top-label text-end !text-black dark:!text-white'>0.32%</p>
-                                <p className='top-label text-end !text-black dark:!text-white'>33.2M<span>USDT</span></p>
-                            </div>
                         </>
                     }
                 </div>
@@ -285,5 +235,4 @@ const CoinTypes = (props: propsData) => {
         </div>
     )
 }
-
 export default CoinTypes;

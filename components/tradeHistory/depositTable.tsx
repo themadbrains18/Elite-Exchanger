@@ -221,7 +221,8 @@ const DepositTable = (props: propsData) => {
           marginPagesDisplayed={2}
           pageCount={pageCount}
           previousLabel="<"
-          renderOnZeroPageCount={null} />
+          renderOnZeroPageCount={null} 
+          forcePage={Math.floor(itemOffset / itemsPerPage)}/>
       </div>
     </>
   )
