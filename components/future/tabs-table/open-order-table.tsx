@@ -69,6 +69,8 @@ const OpenOrderTable = (props: propsData) => {
         }
     }
 
+    console.log(props?.openOrders,"=openOrders");
+    
 
     return (
         <>

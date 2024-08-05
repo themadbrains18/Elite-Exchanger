@@ -138,7 +138,7 @@ const TransferModal = (props: showPopup) => {
 
       });
       props?.assets?.filter((item: any) => {
-        if (item?.walletTtype === "") {
+        if (item?.walletTtype === "main_wallet") {
           coins.push(
             item?.token !== null
               ? item?.token?.symbol
@@ -159,6 +159,16 @@ const TransferModal = (props: showPopup) => {
           item?.walletTtype === "future_wallet" && token?.symbol === symbol
         );
       });
+      props?.assets?.filter((item: any) => {
+        if (item?.walletTtype === "future_wallet") {
+          coins.push(
+            item?.token !== null
+              ? item?.token?.symbol
+              : item?.global_token?.symbol
+          );
+        }
+      });
+      setCoinList(coins)
       console.log("in future",asset);
       setUserAsset(asset[0]);
       setValue('token_id', asset[0]?.token_id);
