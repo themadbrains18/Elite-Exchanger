@@ -108,6 +108,7 @@ const Historytrade = (props: propsData) => {
                   Staking History
                 </button>
               </div>
+              
               <div className="hidden lg:flex gap-5">
                 <div className="p-[5px] flex items-center gap-[10px] cursor-pointer">
                   <DatePicker

@@ -41,7 +41,7 @@ const PositionModal = (props: propsData) => {
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible`}
       ></div>
-      <div ref={wrapperRef} className="prefrence max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
+      <div ref={wrapperRef} className="prefrence max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-[#292d38] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
         <div className="flex items-center justify-between ">
           <p className={`sec-title text-[18px]`}>Position Mode</p>
           <svg
@@ -88,7 +88,7 @@ const PositionModal = (props: propsData) => {
                     className="
                 custom-radio relative  px-[17px]  flex gap-3 items-center pl-[25px]
                 cursor-pointer
-                after:dark:bg-omega
+                after:dark:bg-[#292d38]
                 after:bg-white
                 after:left-[0px]
                 after:w-[16px] 
@@ -116,7 +116,7 @@ const PositionModal = (props: propsData) => {
                   </label>
                 </div>
               </div>
-              <p className="info-12 pl-[25px]">
+              <p className="top-label pl-[25px]">
                 Under one-way mode, you can hold either a long or a short
                 position of a contract.{" "}
               </p>
@@ -141,7 +141,7 @@ const PositionModal = (props: propsData) => {
                     className="
                 custom-radio relative  px-[17px]  flex gap-3 items-center pl-[25px]
                 cursor-pointer
-                after:dark:bg-omega
+                after:dark:bg-[#292d38]
                 after:bg-white
                 after:left-[0px]
                 after:w-[16px] 
@@ -169,7 +169,7 @@ const PositionModal = (props: propsData) => {
                   </label>
                 </div>
               </div>
-              <p className="info-12 pl-[25px]">
+              <p className="top-label pl-[25px]">
                 Under hedge mode, you can hold both long and short positions
                 simultaneously of a contract.{" "}
               </p>
@@ -177,7 +177,7 @@ const PositionModal = (props: propsData) => {
           </div>
 
           <div className=" mt-20">
-            <p className="info-12 mb-[10px]">
+            <p className="top-label mb-[10px]">
             <span className="text-black dark:text-white">Note :</span>  It is not allowed to switch between one-way mode and hedge mode
               while holding position(s) or active order(s). The setting applies
               to the current Derivatives pair only.

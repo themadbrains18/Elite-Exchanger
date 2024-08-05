@@ -102,13 +102,13 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                     <div className='mt-[5px] w-full'>
                         <button
                             disabled={disable}
-                            className={` solid-button w-full !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${disable ? 'cursor-not-allowed  opacity-50' : ''}`} onClick={() => {
+                            className={` solid-button w-full !py-[19px]  ${disable ? 'cursor-not-allowed  opacity-50' : ''}`} onClick={() => {
                                 props.confirmOrder();
                                 setDisable(true)
                             }} >Confirm</button>
                     </div>
                     <div className='mt-[5px] w-full'>
-                        <button className={` solid-button w-full !bg-[#808080] !rounded-[8px] py-[10px] px-[15px] !text-[14px]`} onClick={() => {
+                        <button className={` solid-button2 w-full `} onClick={() => {
                             props.setConfirmModelOverlay(false);
                             props.setConfirmModelPopup(0);
                         }}>Cancel</button>

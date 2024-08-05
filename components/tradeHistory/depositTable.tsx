@@ -52,7 +52,8 @@ const DepositTable = (props: propsData) => {
   }, [props.coin, props.date])
 
   async function getDepositData() {
-    let depositHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+    let currency = props.coin !== undefined && props.coin !== "" ? props.coin: "all"
+    let depositHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency}&date=${props.date}`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token

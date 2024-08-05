@@ -93,7 +93,7 @@ const RangeSlider: React.FC<UniqueIds> = ({
           id={inputId}
           className="range-slider_input"
           type="range"
-          min="0"
+          min="1"
           max="100"
           step={step}
           defaultValue={inputId === "rangeInput" ? levrageValue : levrage}

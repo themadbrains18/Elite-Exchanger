@@ -15,8 +15,9 @@ interface propsData {
 const OrderBook = (props: propsData) => {
     const [active1, setActive1] = useState(1);
     const [show, setShow] = useState(1);
+    const [lastsellBid, setLastsellBid] = useState();
     const { mode } = useContext(Context);
-
+    let isLastItem;
     return (
         <div className='mt-30 px-30 py-40 rounded-10  bg-white dark:bg-d-bg-primary'>
             {/* ta cta */}
@@ -34,8 +35,8 @@ const OrderBook = (props: propsData) => {
                     {/* tab content */}
                     <div className='p-10 bg-grey dark:bg-black-v-1 rounded-[5px] flex items-center gap-10'>
                         <button className={`solid-button py-[10px] hover:!bg-primary ${show === 1 ? "dark:bg-primary  dark:!text-white" : "dark:bg-d-bg-primary bg-grey !text-gamma"}  hover:!text-white rounded-[5px]`} onClick={() => { setShow(1) }}>All</button>
-                        <button className={`solid-button py-[10px] hover:!bg-red-dark ${show === 2 ? "bg-red-dark dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(2) }}>Asks</button>
-                        <button className={`solid-button py-[10px] hover:!bg-dark-green ${show === 3 ? "bg-dark-green  dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(3) }}>Bids</button>
+                        <button className={`solid-button py-[10px] hover:!bg-red-dark ${show === 2 ? "bg-sell dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(2) }}>Asks</button>
+                        <button className={`solid-button py-[10px] hover:!bg-dark-green ${show === 3 ? "bg-buy  dark:!text-white" : " dark:bg-d-bg-primary bg-grey !text-gamma"} hover:!text-white rounded-[5px]`} onClick={() => { setShow(3) }}>Bids</button>
                     </div>
                     {
                         show === 1 &&
@@ -61,6 +62,7 @@ const OrderBook = (props: propsData) => {
                                 <div className='mt-10'>
                                     {props.BuyTrade && props.BuyTrade.length > 0 && props.BuyTrade.map((item: any, index:number) => {
                                         if (item.order_type === 'buy') {
+                                            
                                             return <div key={index+'buy'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-buy'>$ {currencyFormatter(item?.limit_usdt?.toFixed(5))}</p>
                                                 <p className='info-12 !text-[14px] z-[2]  text-center'>{currencyFormatter(item?.token_amount?.toFixed(5))}</p>
@@ -86,8 +88,11 @@ const OrderBook = (props: propsData) => {
                             </div>
 
                             <div>
-                                <button type='button' className={`solid-button w-full my-20 ${Number(props?.hlocData?.changeRate) > 0?'bg-buy ':'bg-sell '} `}>$ {currencyFormatter(props?.token?.price.toFixed(4))}</button>
+                            <button type='button' className={`solid-button w-full my-20 ${Number(props?.hlocData?.changeRate) > 0 ? 'bg-buy ':'bg-sell '} `}>
+                                $ {currencyFormatter(props.BuyTrade?.[props.BuyTrade.length - 1]?.volume_usdt?.toFixed(5))}
+                            </button>
                             </div>
+                           
 
                             {/* This is for desktop sell/bids */}
                             <div className='max-h-[320px] overflow-y-auto '>
@@ -179,6 +184,10 @@ const OrderBook = (props: propsData) => {
                                     }
                                 </div>
                             </div>
+                            <button type='button' className={`solid-button w-full my-20 ${Number(props?.hlocData?.changeRate) > 0 ? 'bg-buy ':'bg-sell '} `}>
+                                $ {currencyFormatter(props.sellTrade?.[props.sellTrade.length - 1]?.volume_usdt?.toFixed(5))}
+                            </button>
+                            
                         </>
 
                     }
@@ -229,10 +238,21 @@ const OrderBook = (props: propsData) => {
                                     }
                                 </div>
                             </div>
+                            <button type='button' className={`solid-button w-full my-20 bg-buy `}>
+                                $ {currencyFormatter(props.BuyTrade?.[props.BuyTrade.length - 1]?.volume_usdt?.toFixed(5))}
+                            </button>
                         </>
                     }
                 </>
             }
+
+
+
+
+
+
+
+
             {active1 === 2 &&
                 <>
                     {/* This is for desktop sell/bids */}
