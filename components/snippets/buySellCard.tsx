@@ -618,7 +618,6 @@ const BuySellCard = (props: DynamicId) => {
                     {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
                     <p className="sm-text dark:text-white">{props.token?.tradepair?.maxTrade || '0.00'} {props?.token?.symbol}</p>
                   </div>
-
                 </div>
               </>
             }
