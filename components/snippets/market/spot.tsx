@@ -6,6 +6,7 @@ import Context from "../../contexts/context";
 import { useRouter } from "next/router";
 import Deposit from "../deposit";
 import { currencyFormatter } from "./buySellCard";
+import { abbreviateNumber } from "@/components/chart/chart-tabs";
 
 interface propsData {
     coins: any,
@@ -106,16 +107,16 @@ const Spot = (props: propsData) => {
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <div className={` items-center gap-[10px] flex`}>
-                                            <p className={`footer-text-secondary !text-[14px] md:!text-[16px] `}>{currencyFormatter(item.circulatingSupply)}</p>
+                                            <p className={`footer-text-secondary !text-[14px] md:!text-[16px] `}>{currencyFormatter(abbreviateNumber(item.circulatingSupply))}</p>
                                             <IconsComponent type={item.status} active={false} hover={false} />
                                         </div>
                                     </td>
 
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{currencyFormatter(item.totalSupply)}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{currencyFormatter(abbreviateNumber(item.totalSupply))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{currencyFormatter(item?.maxSupply) || 0}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{currencyFormatter(abbreviateNumber(item?.maxSupply)) || 0}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <div className={`flex items-center gap-[4px] flex-wrap`}>

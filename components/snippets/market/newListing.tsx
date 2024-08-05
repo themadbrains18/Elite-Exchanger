@@ -6,6 +6,7 @@ import Context from "../../contexts/context";
 import { useRouter } from "next/router";
 import Deposit from "../deposit";
 import { currencyFormatter } from "./buySellCard";
+import { abbreviateNumber } from "@/components/chart/chart-tabs";
 
 interface propsData {
   coins: any;
@@ -160,7 +161,7 @@ const NewListing = (props: propsData) => {
                         <p
                           className={`footer-text-secondary  !text-[14px] md:!text-[16px] `}
                         >
-                          {currencyFormatter(item.circulatingSupply)}
+                          {currencyFormatter(abbreviateNumber(item.circulatingSupply))}
                         </p>
                         <IconsComponent
                           type={item.status}
@@ -172,12 +173,12 @@ const NewListing = (props: propsData) => {
 
                     <td className="max-[1023px]:hidden">
                       <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
-                        {currencyFormatter(item.totalSupply)}
+                        {currencyFormatter(abbreviateNumber(item.totalSupply))}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">
                       <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">
-                        {currencyFormatter(item.maxSupply)}
+                        {currencyFormatter(abbreviateNumber(item.maxSupply))}
                       </p>
                     </td>
                     <td className="max-[1023px]:hidden">

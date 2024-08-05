@@ -4,6 +4,7 @@ import IconsComponent from "../icons";
 import { useContext, useState } from "react";
 import Context from "../../contexts/context";
 import { useRouter } from "next/router";
+import { abbreviateNumber } from "@/components/chart/chart-tabs";
 
 interface propsData {
     coins: any
@@ -96,10 +97,10 @@ const TopGainers = (props: propsData) => {
                                     </td>
 
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white">{item.totalSupply}</p>
+                                        <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white">{abbreviateNumber(item.totalSupply)}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white">{item.maxSupply}</p>
+                                        <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white">{abbreviateNumber(item.maxSupply)}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18  !text-[14px] md:!text-[16px] dark:text-white">

@@ -9,6 +9,7 @@ import AES from "crypto-js/aes";
 import moment from "moment";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { currencyFormatter } from "@/components/snippets/market/buySellCard";
+import { abbreviateNumber } from "@/components/chart/chart-tabs";
 
 interface propsData {
   coinsList: any;
@@ -342,7 +343,7 @@ const ChartTabs = (props: propsData) => {
                                 : "!text-[#DC2626]"
                                 }`}
                             >
-                              {item.circulatingSupply && currencyFormatter(item.circulatingSupply)}
+                              {item.circulatingSupply && currencyFormatter(abbreviateNumber(item.circulatingSupply))}
                             </p>
                             <IconsComponent
                               type={item.status}
@@ -354,12 +355,12 @@ const ChartTabs = (props: propsData) => {
 
                         <td className="max-[1023px]:hidden">
                           <p className="info-14-18 dark:text-white">
-                            {item.totalSupply && currencyFormatter(item.totalSupply)}
+                            {item.totalSupply && currencyFormatter(abbreviateNumber(item.totalSupply))}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden">
                           <p className="info-14-18 dark:text-white">
-                            {item.maxSupply && currencyFormatter(item.maxSupply)}
+                            {item.maxSupply && currencyFormatter(abbreviateNumber(item.maxSupply))}
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden">
