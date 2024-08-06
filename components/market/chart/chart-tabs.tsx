@@ -419,7 +419,7 @@ const ChartTabs = (props: propsData) => {
                       </div>
                     </th>
                     <th className="lg:sticky left-0 py-5">
-                      <div className="flex justify-center">
+                      <div className="flex">
                         <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">
                           Market Type
                         </p>
