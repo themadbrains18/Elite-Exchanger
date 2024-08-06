@@ -181,14 +181,14 @@ const BuySellCard = (props: DynamicId) => {
     if (props.token?.tradepair?.min_trade > data.token_amount) {
       setError("token_amount", {
         type: "custom",
-        message: "min " + `'${props.token?.tradepair?.min_trade}' must be bought per order`,
+        message: "Minimum purchase requirement: " + `'${props.token?.tradepair?.min_trade}' per order`,
       });
       return;
     }
     if (props.token?.tradepair?.maxTrade < data.token_amount) {
       setError("token_amount", {
         type: "custom",
-        message: "max " + `'${props.token?.tradepair?.maxTrade}' must be bought per order`,
+        message: "Maximum purchase requirement: " + `'${props.token?.tradepair?.maxTrade}'  per order`,
       });
       return;
     }
@@ -335,7 +335,7 @@ const BuySellCard = (props: DynamicId) => {
       if (qty) {
         let totalAmount: any = qty * amount;
         let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),6) : truncateNumber((amount * qty * 0.001),6);
-        console.log(fee,'-----------------fees');
+        // console.log(fee,'-----------------fees');
 
         // return
       
@@ -509,7 +509,7 @@ const BuySellCard = (props: DynamicId) => {
             }
             {((show === 1 && props.token?.tradepair?.limit_trade === true) || show === 2) &&
               <>
-                <div className="mt-5 flex gap-[18px] items-center">
+                <div className="mt-5 flex gap-[10px] items-center">
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
                   {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
                   <p className="md-text w-full">

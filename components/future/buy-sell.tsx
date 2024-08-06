@@ -129,6 +129,9 @@ const BuySell = (props: fullWidth) => {
       return item.walletTtype === "future_wallet";
     });
 
+    console.log(futureAssets,"=futureAssets");
+    
+
     let asset = futureAssets?.filter((item: any) => {
       let tokenSymbol =
         item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol;
@@ -144,6 +147,8 @@ const BuySell = (props: fullWidth) => {
       rewardsAmount = props?.totalPoint || 0;
     }
 
+    console.log("here", asset);
+    
     if (asset?.length > 0) {
       if (asset[0].balance === 0) {
         setButtonStyle(true);
@@ -152,9 +157,14 @@ const BuySell = (props: fullWidth) => {
       }
       let bal = truncateNumber(Number(asset[0].balance) + rewardsAmount, 6);
       let assetbal = truncateNumber(Number(asset[0].balance), 6)
+      console.log(assetbal,"=jsdsajhdkas");
+      
       setAssetsBalance(assetbal);
       setAvailBalance(bal);
     } else {
+
+console.log("in else part");
+
       setAvailBalance(rewardsAmount);
       setButtonStyle(true);
       setAssetsBalance(0);
