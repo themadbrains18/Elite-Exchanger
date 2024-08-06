@@ -12,6 +12,9 @@ interface activeSection {
     show?: boolean;
     actionPerform?: any;
     hideVisibility?: boolean;
+    bgColor?:string;
+    textColor?:string
+
 }
 
 const ConfirmationModel = (props: activeSection) => {
@@ -49,7 +52,7 @@ const ConfirmationModel = (props: activeSection) => {
                 ></div>
             }
             <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show ? " opacity-20 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow(false) }}></div>
-            <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full  z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
+            <div ref={wrapperRef} className={`max-w-[calc(100%-30px)] md:max-w-[510px] w-full  z-10 fixed rounded-10 bg-white  top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${props?.bgColor ? `dark:bg-[${props?.bgColor}]` : 'dark:bg-omega'}`}>
                 <div className="p-5 md:p-40 ">
                     <div className="flex justify-between items-center mb-[25px]">
                         <p className="sec-title text-center ">{props?.title}</p>
@@ -80,11 +83,11 @@ const ConfirmationModel = (props: activeSection) => {
                     </div>
                     {/* <p className={`py-20 info-14-18`}></p> */}
                     {newText && newText.length > 0 && newText.map((item: any) => {
-                        return <p className={`py-1 info-14-18 mb-[35px] mt-[10px]`}>{item}</p>
+                        return <p className={`py-1  info-14-18 mb-[35px] mt-[10px] ${props?.textColor && `text-[${props?.textColor}]`}`}>{item}</p>
                     })}
-                    <div className="flex items-center gap-10">
+                    <div className="grid grid-cols-2 items-center gap-20">
                         <button
-                            className="solid-button w-full"
+                            className="solid-button2 w-full"
                             onClick={() => {
                                 props?.setActive(false);
                                 props.setShow(false);
@@ -94,7 +97,7 @@ const ConfirmationModel = (props: activeSection) => {
                         </button>
                         <button
                             disabled={btnDisabled}
-                            className={`solid-button w-full ${btnDisabled && "cursor-not-allowed"}`}
+                            className={`solid-button  !py-[19px] w-full ${btnDisabled && "cursor-not-allowed"}`}
                             onClick={() => {
                                 sendOtp()
 

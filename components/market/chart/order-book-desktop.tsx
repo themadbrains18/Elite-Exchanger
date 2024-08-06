@@ -24,7 +24,7 @@ const OrderBook = (props: propsData) => {
                     Order Book
                 </button>
                 <button className={` sec-text text-center text-gamma border-b-2 border-[transparent] pb-[15px] max-w-[50%] w-full ${active1 === 2 && "!text-primary border-primary"}`} onClick={() => setActive1(2)}>
-                    Trade History
+                    Recent Trades
                 </button>
             </div>
 

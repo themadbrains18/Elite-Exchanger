@@ -129,7 +129,7 @@ const BuySell = (props: fullWidth) => {
       return item.walletTtype === "future_wallet";
     });
 
-    console.log(futureAssets,"=futureAssets");
+    // console.log(futureAssets,"=futureAssets");
     
 
     let asset = futureAssets?.filter((item: any) => {
@@ -147,7 +147,7 @@ const BuySell = (props: fullWidth) => {
       rewardsAmount = props?.totalPoint || 0;
     }
 
-    console.log("here", asset);
+    // console.log("here", asset);
     
     if (asset?.length > 0) {
       if (asset[0].balance === 0) {
@@ -157,13 +157,13 @@ const BuySell = (props: fullWidth) => {
       }
       let bal = truncateNumber(Number(asset[0].balance) + rewardsAmount, 6);
       let assetbal = truncateNumber(Number(asset[0].balance), 6)
-      console.log(assetbal,"=jsdsajhdkas");
+      // console.log(assetbal,"=jsdsajhdkas");
       
       setAssetsBalance(assetbal);
       setAvailBalance(bal);
     } else {
 
-console.log("in else part");
+// console.log("in else part");
 
       setAvailBalance(rewardsAmount);
       setButtonStyle(true);
@@ -1309,8 +1309,14 @@ console.log("in else part");
       {isShow && <PositionModal setIsShow={setIsShow} positionMode={positionMode} setPositionMode={setPositionMode} positions={props.positions} openOrders={props.openOrders} />}
 
       {
-        shortConfirm && <ConfirmationModel setActive={setActive} setShow={setShortConfirm} title="Risk Alert"
-          message={'The current order may encounter the following circumstances.\nPlease confirm before you proceed.\n1. The current order may be executed immediately  as a market order.'} actionPerform={actionPerform} />
+        shortConfirm && 
+        (
+          <>
+            <div className="bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-[0.5]"></div>
+            <ConfirmationModel textColor={"#a3a8b7"} bgColor={'#292d38'} setActive={setActive} setShow={setShortConfirm} title="Risk Alert"
+            message={'The current order may encounter the following circumstances.\nPlease confirm before you proceed.\n1. The current order may be executed immediately  as a market order.'} actionPerform={actionPerform} />
+          </>
+        )
       }
     </>
   );
