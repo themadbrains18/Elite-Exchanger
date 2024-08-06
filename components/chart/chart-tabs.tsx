@@ -199,7 +199,7 @@ const ChartTabs = (props: propsData) => {
     <div className="mt-30 p-20 lg:px-30 lg:py-40 rounded-10  bg-white dark:bg-d-bg-primary">
       {/* ta cta */}
       <div className="overflow-x-auto">
-        <div className="flex border-b border-[#e9eaf026] gap-30 justify-start min-w-max md:min-w-[1000px]">
+        <div className="flex border-b border-[#e9eaf026] gap-30 justify-start  min-w-max md:min-w-[1000px]">
           {/* Coin List */}
           <div>
             <button
@@ -461,7 +461,7 @@ const ChartTabs = (props: propsData) => {
                       </div>
                     </th>
                     <th className="lg:sticky left-0 py-5">
-                      <div className="flex justify-center">
+                      <div className="flex">
                         <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">
                           Market Type
                         </p>
@@ -883,7 +883,7 @@ const ChartTabs = (props: propsData) => {
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                              ${currencyFormatter(truncateNumber(item.token_amount,6))}
+                              {currencyFormatter(truncateNumber(item.token_amount,6))}
                             </p>
                           </div>
 
@@ -1030,7 +1030,7 @@ const ChartTabs = (props: propsData) => {
                                   </p>
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
-                                  <p className="info-14-18 dark:text-white ">
+                                  <p className="info-14-18 dark:text-white">
                                     ${currencyFormatter(truncateNumber(elm.token_amount,6))}
                                   </p>
                                 </div>
