@@ -278,7 +278,7 @@ const Activity = (props: fixSection) => {
           confirmDelete && (
             <>
               <div className="bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible" onClick={ ()=>{setConfirmDelete(false)} }></div>
-              <div className="max-w-[calc(100%-30px)] md:max-w-[350px] w-full p-[40px]  z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+              <div className="max-w-[calc(100%-30px)] md:max-w-[500px] w-full p-[40px]  z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
                   <div className="flex items-center justify-between ">
                     <p className="sec-title">Delete History</p>
                     <svg
@@ -305,7 +305,7 @@ const Activity = (props: fixSection) => {
                     </svg>
                   </div>
                   <p className="text-[16px] md:text-[18px] dark:text-grey-v-1 leading-4 md:leading-5 text-center my-40">Are You Sure you want to clear all history?</p>
-                  <div className="flex items-center gap-10 mt-6">
+                  <div className="grid grid-cols-2 items-center gap-10 mt-6">
                     <button className="solid-button2 w-full" onClick={ ()=>{setConfirmDelete(false)} }>Cancel</button>
                     <button className="solid-button w-full" onClick={() => {clearActivity();setConfirmDelete(false)}}>Delete</button>
                   </div>

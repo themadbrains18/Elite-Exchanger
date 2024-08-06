@@ -250,7 +250,9 @@ const BuySellCard = (props: DynamicId) => {
       }).then(response => response.json());
 
       if (reponse.data.status === 200) {
+        
         toast.success(reponse.data?.data?.message);
+
         setFirstCurrency('BTCB');
         setSecondCurrency('USDT');
         setActive(false);
@@ -592,8 +594,8 @@ const BuySellCard = (props: DynamicId) => {
                 </div>
                 {errors.token_amount && <p className="errorMessage">{errors?.token_amount?.message}</p>}
 
-                <div className="mt-5 flex gap-2 justify-between">
-                  <div className="flex gap-2">
+                <div className="mt-5 flex gap-1 justify-between">
+                  <div className="flex gap-1">
                     <p data-testid="total" className="sm-text dark:text-white">Total:</p>
                     {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
                     <p className="sm-text dark:text-white">{truncateNumber(totalAmount, 6) || '0.000000'}</p>
@@ -601,19 +603,19 @@ const BuySellCard = (props: DynamicId) => {
                   
 
                 </div>
-                <div className="mt-5 flex gap-2 justify-between">
+                <div className="mt-5 flex gap-1 justify-between">
                  
-                {/* <div className=" flex gap-2">
+                {/* <div className=" flex gap-1">
                   <p className="sm-text dark:text-white">Est. Fee:</p>
                   <p className="sm-text dark:text-white">{truncateNumber(estimateFee,6) || '0.00'}</p>
 
                 </div> */}
-                  <div className="flex gap-2">
+                  <div className="flex gap-1">
                     <p className="sm-text dark:text-white">Min Trade:</p>
                     {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
                     <p className="sm-text dark:text-white">{props.token?.tradepair?.min_trade} {props?.token?.symbol}</p>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1">
                     <p className="sm-text dark:text-white">Max Trade:</p>
                     {/* <p className="sm-text dark:text-white">(+Fee 0.2)</p> */}
                     <p className="sm-text dark:text-white">{props.token?.tradepair?.maxTrade || '0.00'} {props?.token?.symbol}</p>
