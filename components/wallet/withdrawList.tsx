@@ -5,6 +5,7 @@ import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
 import { currencyFormatter } from '../snippets/market/buySellCard';
 import { truncateNumber } from '@/libs/subdomain';
+import moment from 'moment';
 
 
 interface propsData {
@@ -72,7 +73,7 @@ const WithdrawList = (props: propsData) => {
             <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">
               <th className="lg:sticky left-0 bg-white dark:bg-d-bg-primary py-5">
                 <div className="flex ">
-                  <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">Token</p>
+                  <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">Coin</p>
                   <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
@@ -113,7 +114,7 @@ const WithdrawList = (props: propsData) => {
                     <p className="info-14-18 dark:text-white  lg:text-start text-end">{currencyFormatter(truncateNumber(item?.amount,6))}</p>
                   </td>
                   <td className="max-[1023px]:hidden">
-                    <p className="info-14-18 dark:text-white">{formatDate(item?.createdAt)}</p>
+                    <p className="info-14-18 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
                   </td>
                   <td className=" text-end">
                     <p className={`info-14-18  ${item?.status == "success" ? "text-buy" : item?.status == "pending" ? "text-primary" : "text-cancel"}`}>{item?.status == "success" ? "Success" : item?.status == "pending" ? "Pending" : "Rejected"}</p>
