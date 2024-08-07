@@ -181,7 +181,7 @@ const TransferModal = (props: showPopup) => {
         }
       });
       setCoinList(coins)
-      console.log("in future",asset);
+      // console.log("in future",asset);
       setUserAsset(asset[0]);
       setValue('token_id', asset[0]?.token_id);
       clearErrors('token_id')
