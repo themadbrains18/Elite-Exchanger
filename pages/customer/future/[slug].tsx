@@ -319,7 +319,7 @@ const FutureTrading = (props: Session) => {
 
                                 </div>
                                 <div className={` bg-[#fafafa] dark:bg-[#1a1b1f]     px-[16px]  cursor-pointer`}>
-                                    <h3 className={` ${active === 2 ? 'border-primary' : 'border-[transparent]'} border-b py-[10px]  top-label dark:!text-white !text-[#000] max-[991px]:hidden`} onClick={() => { setActive(2) }}>Market Trades</h3>
+                                    <h3 className={` ${active === 2 ? 'border-primary' : 'border-[transparent]'} border-b py-[10px]  top-label dark:!text-white !text-[#000] max-[991px]:hidden`} onClick={() => { setActive(2) }}>Recent Trades</h3>
                                 </div>
                             </div>
                             {/* order Book compoenent */}
@@ -351,7 +351,7 @@ const FutureTrading = (props: Session) => {
                     <div className='flex items-center gap-[20px] w-max p-[16px] '>
                         <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[30px] after:translate-x-[-50%] after:h-[2px] ${showMob === 1 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(1) }}>Chart</button>
                         <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[30px] after:translate-x-[-50%] after:h-[2px] ${showMob === 2 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(2) }}>Order Book</button>
-                        <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[30px] after:translate-x-[-50%] after:h-[2px] ${showMob === 3 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(3) }}>Market Trades</button>
+                        <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-[30px] after:translate-x-[-50%] after:h-[2px] ${showMob === 3 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(3) }}>Recent Trades</button>
                     </div>
                     {
                         showMob === 1 &&

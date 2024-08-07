@@ -68,7 +68,7 @@ const OrderBookMobile = (props: propsData) => {
                             Order Book
                         </button>
                         <button className={`sec-text text-center text-gamma border-b-2 border-[transparent] pb-[15px] max-w-[50%] w-full ${active1Mobile === 2 && "!text-primary border-primary"}`} onClick={() => setActive1Mobile(2)}>
-                            Trade History
+                        Recent Trades
                         </button>
                     </div>
                     <IconsComponent type='dots' hover={false} active={false} />

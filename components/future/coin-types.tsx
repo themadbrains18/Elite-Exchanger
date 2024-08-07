@@ -30,15 +30,15 @@ const CoinTypes = (props: propsData) => {
             }
         })
         setfavCoin(coinsItem);
-        setFilteredCoins(coinsItem);
+        // setFilteredCoins(coinsItem);
 
     }, [mode, props?.coins]);
 
     function fillSvg(e: any, item: any) {
         if (mode == "dark") {
-            e.currentTarget.classList.add("dark:fill-[#fff]")
+            e.currentTarget.classList.add("dark:fill-[#fff]");
         } else {
-            e.currentTarget.classList.add("fill-[#000]")
+            e.currentTarget.classList.add("fill-[#000]");
         }
         setFill(!fill)
 
@@ -64,7 +64,7 @@ const CoinTypes = (props: propsData) => {
             }
         })
         setfavCoin(coinsItem);
-        setFilteredCoins(coinsItem);
+        // setFilteredCoins(coinsItem);
         localStorage.setItem('futurefavToken', JSON.stringify(existItem));
     }
 

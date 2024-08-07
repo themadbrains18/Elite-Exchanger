@@ -26,7 +26,7 @@ const OrderBook = (props: propsData) => {
                     Order Book
                 </button>
                 <button className={` sec-text text-center text-gamma border-b-2 border-[transparent] pb-[15px] max-w-[50%] w-full ${active1 === 2 && "!text-primary border-primary"}`} onClick={() => setActive1(2)}>
-                   Market Trades
+                Recent Trades
                 </button>
             </div>
 
@@ -89,7 +89,7 @@ const OrderBook = (props: propsData) => {
 
                             <div>
                             <button type='button' className={`solid-button w-full my-20 ${Number(props?.hlocData?.changeRate) > 0 ? 'bg-buy ':'bg-sell '} `}>
-                                $ {currencyFormatter(props.BuyTrade?.[props.BuyTrade.length - 1]?.volume_usdt?.toFixed(5))}
+                                $ {currencyFormatter(props.BuyTrade?.[props.BuyTrade.length - 1]?.limit_usdt?.toFixed(5))}
                             </button>
                             </div>
                            
@@ -185,7 +185,7 @@ const OrderBook = (props: propsData) => {
                                 </div>
                             </div>
                             <button type='button' className={`solid-button w-full my-20 ${Number(props?.hlocData?.changeRate) > 0 ? 'bg-buy ':'bg-sell '} `}>
-                                $ {currencyFormatter(props.sellTrade?.[props.sellTrade.length - 1]?.volume_usdt?.toFixed(5))}
+                                $ {currencyFormatter(props.sellTrade?.[props.sellTrade.length - 1]?.limit_usdt?.toFixed(5))}
                             </button>
                             
                         </>
@@ -239,7 +239,7 @@ const OrderBook = (props: propsData) => {
                                 </div>
                             </div>
                             <button type='button' className={`solid-button w-full my-20 bg-buy `}>
-                                $ {currencyFormatter(props.BuyTrade?.[props.BuyTrade.length - 1]?.volume_usdt?.toFixed(5))}
+                                $ {currencyFormatter(props.BuyTrade?.[props.BuyTrade.length - 1]?.limit_usdt?.toFixed(5))}
                             </button>
                         </>
                     }

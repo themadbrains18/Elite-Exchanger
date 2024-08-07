@@ -58,15 +58,22 @@ const TransferModal = (props: showPopup) => {
   });
 
   function setValues() {
+    // console.log(Spot,"========Spot");
+    // console.log(future,"========future");
+    
     if (Spot == "Spot") {
       setFuture("Spot");
       setSpot("Futures");
-    } else {
+    }
+     else {
       setFuture("Futures");
       setSpot("Spot");
     }
 
-    filterAsset(selectedCoin, Spot === "Spot" ? "Futures" : "Spot");
+
+    if(selectedCoin){
+      filterAsset(selectedCoin, Spot === "Spot" ? "Futures" : "Spot");
+    }
   }
 
   
@@ -76,19 +83,24 @@ const TransferModal = (props: showPopup) => {
   useEffect(() => {
 
     let coins: any = [];
+    // console.log(props?.assets,"=========props?.assets====");
+    // console.log(props?.type,"=========props.wallet_type====");
+    // console.log(props,"=====props");
+    
     props?.assets?.filter((item: any) => {
       if (item?.walletTtype === props.wallet_type) {
         coins.push(
-          item?.token !== null
-            ? item?.token?.symbol
-            : item?.global_token?.symbol
+          item?.token !== null ? item?.token?.symbol  : item?.global_token?.symbol
         );
       }
     });
-    
+
+    // console.log(coins,"=========coins=========");
+
     setCoinList(coins);
 
-    if (props?.wallet_type === "future_wallet" || props?.type==="future") {
+    // || props?.type==="future"
+    if (props?.wallet_type === "future_wallet" ) {
       setFuture("Spot");
       setSpot("Futures");
     }
@@ -169,7 +181,7 @@ const TransferModal = (props: showPopup) => {
         }
       });
       setCoinList(coins)
-      console.log("in future",asset);
+      // console.log("in future",asset);
       setUserAsset(asset[0]);
       setValue('token_id', asset[0]?.token_id);
       clearErrors('token_id')
