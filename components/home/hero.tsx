@@ -27,7 +27,7 @@ const Hero = () => {
 
 
                             <div className="hero_footer">
-                                <div className="lg:hidden">
+                                {/* <div className="lg:hidden">
                                     <Swiper
                                         className="mySwiper"
                                         slidesPerView={2}
@@ -97,7 +97,7 @@ const Hero = () => {
                                             />
                                         </SwiperSlide>
                                     </Swiper>
-                                </div>
+                                </div> */}
 
                                 <div className="lg:grid hidden overflow-x-auto gap-[30px] grid-cols-3 md:gap-x-[101px] md:gap-y-[50px]">
                                     <Image className="block m-auto aspect-[1] h-[50px] object-contain w-[157px]" src="/assets/home/bannerLogo-1.png" alt="Logo" width={251} height={50} />
