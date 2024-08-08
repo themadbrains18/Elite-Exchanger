@@ -99,6 +99,7 @@ const BuySellCard = (props: DynamicId) => {
   }, [wbsocket])
 
   const hasRun = useRef(false);
+ 
 
   useEffect(() => {
     // console.log(props.slug,"=props.slug");
@@ -259,11 +260,22 @@ const BuySellCard = (props: DynamicId) => {
 
         setFirstCurrency('BTCB');
         setSecondCurrency('USDT');
-        setActive(false);                                 
-        reset({
-          limit_usdt: 0.00,
-          token_amount: 0.00,
-        })
+        setActive(false);    
+        if(show===1){
+          reset({
+            limit_usdt: 0.00,
+            token_amount: 0.00,
+          })
+
+        }     
+        
+        else{
+          reset({
+            token_amount: 0.00,
+          })
+          setValue('limit_usdt', props?.token?.price)
+        }
+        
         setEstimateFee(0.00)
         setTotalAmount(0.0)
         if (wbsocket) {
@@ -383,6 +395,8 @@ const BuySellCard = (props: DynamicId) => {
 
     }
   }
+
+  
   // console.log(estimateFee,"=estimate fee");
 
 
@@ -542,6 +556,8 @@ const BuySellCard = (props: DynamicId) => {
 
                 {/* Price Inputs for limit order case */}
                 {show === 1 &&
+                <>
+
                   <div className="mt-30 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
 
                     <div className="">
@@ -567,8 +583,9 @@ const BuySellCard = (props: DynamicId) => {
                       <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} disabled={true} />
                     </div>
                   </div>
-                }
                 {errors.limit_usdt && <p className="errorMessage">{errors.limit_usdt.message}</p>}
+                </>
+                }
 
                 {/* coin quantity Inputs */}
                 <div className="mt-40 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
