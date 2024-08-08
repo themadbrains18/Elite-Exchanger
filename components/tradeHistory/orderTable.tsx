@@ -26,7 +26,7 @@ const OrderTable = (props: propsData) => {
   let itemsPerPage = 10;
 
   useEffect(() => {
-    if(session){
+    if (session) {
       getOrders()
     }
 
@@ -50,7 +50,7 @@ const OrderTable = (props: propsData) => {
     // }
     // setCurrentItems(history);
 
-    if(session){
+    if (session) {
       getOrders()
     }
 
@@ -59,8 +59,8 @@ const OrderTable = (props: propsData) => {
 
 
   async function getOrders() {
-     let currency = props.coin !== undefined && props.coin !== "" ? props.coin: "all"
-     let date =  props.date !== undefined  ?new Date( props.date).toISOString() : "all"
+    let currency = props.coin !== undefined && props.coin !== "" ? props.coin : "all"
+    let date = props.date !== undefined ? new Date(props.date).toISOString() : "all"
     let tradeHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/history/trade?userid=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency}&date=${date}`, {
       method: "GET",
       headers: {
@@ -68,10 +68,10 @@ const OrderTable = (props: propsData) => {
       },
     }).then(response => response.json());
     // console.log(tradeHistory,"==tradeHistory");
-    
+
     setTotal(tradeHistory?.data?.total)
 
-    if(tradeHistory?.data?.total<=10){
+    if (tradeHistory?.data?.total <= 10) {
       setItemOffset(0)
     }
     if (tradeHistory?.data?.data?.message !== undefined) {
@@ -79,7 +79,7 @@ const OrderTable = (props: propsData) => {
     }
     else {
       // console.log("=here");
-      
+
       tradeHistory = tradeHistory?.data?.data;
     }
     setTotalRecord(tradeHistory)
@@ -163,7 +163,7 @@ const OrderTable = (props: propsData) => {
                 <tr key={index}  >
                   <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                    <Image src={`${imgSrc?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`}  width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol==="XRP"&&"bg-white rounded-full"}`}/>
+                      <Image src={`${imgSrc ? '/assets/history/Coin.svg' : item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol === "XRP" && "bg-white rounded-full"}`} />
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                         <p className="info-14-18 dark:text-white">{item?.token !== null ? item?.token?.fullName : item?.global_token?.fullName}</p>
                         <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
@@ -207,16 +207,16 @@ const OrderTable = (props: propsData) => {
                     <p className="info-14-18 dark:text-white  md:block hidden">{item.market_type}</p>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white md:block hidden">${item?.token !== null ? currencyFormatter(truncateNumber(item?.token?.price,6)) : currencyFormatter(truncateNumber(item?.global_token?.price,6))}</p>
+                    <p className="info-14-18 dark:text-white md:block hidden">${item?.token !== null ? currencyFormatter(truncateNumber(item?.token?.price, 6)) : currencyFormatter(truncateNumber(item?.global_token?.price, 6))}</p>
                   </td>
                   <td>
                     <p className="info-14-18 dark:text-white md:block hidden">{currencyFormatter(item.limit_usdt)}</p>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white md:block hidden">${truncateNumber(item.volume_usdt,6)}</p>
+                    <p className="info-14-18 dark:text-white md:block hidden">${truncateNumber(item.volume_usdt, 6)}</p>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white md:block hidden">{truncateNumber(item.token_amount,6)}</p>
+                    <p className="info-14-18 dark:text-white md:block hidden">{truncateNumber(item.token_amount, 6)}</p>
                   </td>
                   <td>
                     <p className={`info-14-18  ${item.status === true ? "text-buy" : item.isCanceled === true ? "text-cancel" : "text-gamma"}`}>{item?.status === false ? item?.isCanceled === true ? 'Canceled' : 'Pending' : 'Success'}</p>
@@ -246,18 +246,20 @@ const OrderTable = (props: propsData) => {
         </table>
       </div>
       <div className="flex pt-[25px] items-center justify-end">
-
-        <ReactPaginate
-          className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null} 
-          forcePage={Math.floor(itemOffset / itemsPerPage)}/>
+        {
+          pageCount > 1 &&
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+            forcePage={Math.floor(itemOffset / itemsPerPage)} />
+        }
       </div>
     </>
   )

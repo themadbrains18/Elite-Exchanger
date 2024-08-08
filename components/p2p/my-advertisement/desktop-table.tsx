@@ -36,7 +36,7 @@ const DesktopTable = (props: dataTypes) => {
     const [show, setShow] = useState(false);
     const [message, setMessage] = useState('Are you sure you want to delete your ads with remaining quantity?');
     const [title, setTitle] = useState('Delete Ads');
-const [disable, setDisable]= useState(false)
+    const [disable, setDisable] = useState(false)
     const { status, data: session } = useSession();
 
     const route = useRouter();
@@ -125,25 +125,25 @@ const [disable, setDisable]= useState(false)
 
             if (postResponse?.data) {
 
-                if(postResponse?.data?.message){
-                    toast.warning(postResponse?.data?.message,{autoClose:2000})
+                if (postResponse?.data?.message) {
+                    toast.warning(postResponse?.data?.message, { autoClose: 2000 })
                 }
 
                 let remainingPost = postList.filter((item: any) => {
                     return item.id !== postResponse?.data?.id
                 })
-                setTimeout(()=>{
+                setTimeout(() => {
                     setDisable(false)
-                },3000)
+                }, 3000)
                 setPostList(remainingPost);
                 setShowPopup(false);
                 setShow(false);
             }
             else {
-                toast.error(postResponse?.data, {autoClose:2000})
-                setTimeout(()=>{
+                toast.error(postResponse?.data, { autoClose: 2000 })
+                setTimeout(() => {
                     setDisable(false)
-                },3000)
+                }, 3000)
             }
         }
         else if (status === 'unauthenticated') {
@@ -184,19 +184,19 @@ const [disable, setDisable]= useState(false)
                         return item.id !== putResponse?.data?.result?.id
                     })
                     getAds(0)
-                    toast.success(`Post ${putResponse?.data?.result?.status === true ? "Active" : "Inactive"}  successfully`,{autoClose:2000})
-                    setTimeout(()=>{
+                    toast.success(`Post ${putResponse?.data?.result?.status === true ? "Active" : "Inactive"}  successfully`, { autoClose: 2000 })
+                    setTimeout(() => {
                         setDisable(false)
-                    },3000)
+                    }, 3000)
                     setPostList(remainingPost);
                     setActive(0);
                     setShow(false);
                 }
                 else {
-                    toast.error(putResponse?.data,{autoClose:2000})
-                    setTimeout(()=>{
+                    toast.error(putResponse?.data, { autoClose: 2000 })
+                    setTimeout(() => {
                         setDisable(false)
-                    },3000)
+                    }, 3000)
                 }
 
             }
@@ -353,19 +353,22 @@ const [disable, setDisable]= useState(false)
                     </tbody>
                 </table>
             </div>
-            <div className="flex pt-[25px] items-center justify-end">
-                <ReactPaginate
-                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-                    breakLabel="..."
-                    nextLabel=">"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    marginPagesDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel="<"
-                    renderOnZeroPageCount={null}
-                    forcePage={Math.floor(itemOffset / itemsPerPage)} />
-            </div>
+            {
+                pageCount > 1 &&
+                <div className="flex pt-[25px] items-center justify-end">
+                    <ReactPaginate
+                        className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        marginPagesDisplayed={2}
+                        pageCount={pageCount}
+                        previousLabel="<"
+                        renderOnZeroPageCount={null}
+                        forcePage={Math.floor(itemOffset / itemsPerPage)} />
+                </div>
+            }
             {showPopup &&
                 <ConfirmationModel setActive={setShowPopup} setShow={setShow} title={title} message={message} show={show} actionPerform={actionPerform} />
             }

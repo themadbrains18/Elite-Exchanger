@@ -116,7 +116,7 @@ const PairList = (props: Session) => {
 
   return (
     <>
-      <ToastContainer limit={1}/>
+      <ToastContainer limit={1} />
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show || editShow ? "opacity-80 visible" : "opacity-0 invisible"
           }`}
@@ -309,21 +309,24 @@ const PairList = (props: Session) => {
             </tbody>
           </table>
         </div>
-        <div className="flex pt-[25px] items-center justify-end">
-          <ReactPaginate
-            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
-              }`}
-            breakLabel="..."
-            nextLabel=">"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={1}
-            marginPagesDisplayed={2}
-            pageCount={pageCount}
-            previousLabel="<"
-            renderOnZeroPageCount={null}
-            forcePage={currentPage}
-          />
-        </div>
+        {
+          pageCount > 1 &&
+          <div className="flex pt-[25px] items-center justify-end">
+            <ReactPaginate
+              className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+                }`}
+              breakLabel="..."
+              nextLabel=">"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={1}
+              marginPagesDisplayed={2}
+              pageCount={pageCount}
+              previousLabel="<"
+              renderOnZeroPageCount={null}
+              forcePage={currentPage}
+            />
+          </div>
+        }
       </div>
 
       {show && <AddPair data={props?.list} show={show} setShow={setShow} refreshPairList={refreshPairList} session={props?.session} />}

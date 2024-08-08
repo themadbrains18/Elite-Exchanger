@@ -202,7 +202,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
                     <li key={index} className='flex flex-col items-center justify-between mb-[36px] last:mb-0 relative' >
                       <div className='flex items-center justify-between w-full dropdownCta pb-[5px]' onClick={(e) => { setDropdownHeight(e) }}>
                         <div className='flex items-center gap-[15px]'>
-                          <IconsComponent type={elem.svgType} hover={false} active={false} />
+                          {/* <IconsComponent type={elem.svgType} hover={false} active={false} /> */}
                           <Link href={elem.url} className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>{elem.name}</Link>
                         </div>
 
@@ -277,7 +277,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
                 <>
                   <li key="Trade" className='flex items-center justify-between mb-[36px] last:mb-0 relative' onClick={() => { props.setShowMenu(false) }}>
                     <div className='flex items-center gap-[15px]'>
-                      <IconsComponent type='TradeHistory' hover={false} active={false} />
+                      {/* <IconsComponent type='TradeHistory' hover={false} active={false} /> */}
                       <Link href="/history" className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>Trade History</Link>
                     </div>
                     <svg
@@ -296,7 +296,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
                   </li>
                   <li key="Wallet" className='flex items-center justify-between mb-[36px] last:mb-0 relative' onClick={() => { props.setShowMenu(false) }}>
                     <div className='flex items-center gap-[15px]'>
-                      <IconsComponent type='TradeHistory' hover={false} active={false} />
+                      {/* <IconsComponent type='TradeHistory' hover={false} active={false} /> */}
                       <Link href="/wallet" className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>Wallet</Link>
                     </div>
                     <svg
@@ -315,7 +315,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
                   </li>
                   <li key="WatchList" className='flex items-center justify-between mb-[36px] last:mb-0 relative' onClick={() => { props.setShowMenu(false) }}>
                     <div className='flex items-center gap-[15px]'>
-                      <IconsComponent type='TradeHistory' hover={false} active={false} />
+                      {/* <IconsComponent type='TradeHistory' hover={false} active={false} /> */}
                       <Link href="/watchlist" className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>WatchList</Link>
                     </div>
                     <svg

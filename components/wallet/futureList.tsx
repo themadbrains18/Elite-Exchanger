@@ -26,7 +26,7 @@ const FutureList = (props: propsData) => {
     const [show1, setShow1] = useState(0);
     const [selectedCoinBalance, setSelectedCoinBalance] = useState(0.00);
     const router = useRouter();
-      const [imgSrc, setImgSrc] = useState(false);
+    const [imgSrc, setImgSrc] = useState(false);
     const [imgSrc2, setImgSrc2] = useState(false);
 
     let itemsPerPage = 10;
@@ -132,7 +132,7 @@ const FutureList = (props: propsData) => {
                                 <tr key={index} className="rounded-5 group ">
                                     <td className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                        <Image src={`${imgSrc2?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} className={`${item?.symbol==="XRP"&&"bg-white rounded-full "}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)}/>
+                                            <Image src={`${imgSrc2 ? '/assets/history/Coin.svg' : item.token !== null ? item?.token?.image : item?.global_token?.image}`} className={`${item?.symbol === "XRP" && "bg-white rounded-full "}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)} />
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                                 <p className="info-14-18 dark:text-white">{item.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                                 {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p> */}
@@ -140,10 +140,10 @@ const FutureList = (props: propsData) => {
                                         </div>
                                     </td>
                                     <td>
-                                        <p className="info-14-18 dark:text-white  lg:text-start text-center">{currencyFormatter(truncateNumber(item?.balance,6))}</p>
+                                        <p className="info-14-18 dark:text-white  lg:text-start text-center">{currencyFormatter(truncateNumber(item?.balance, 6))}</p>
                                     </td>
                                     <td className="lg:text-start text-end">
-                                        <p className="info-14-18 dark:text-white">${item.token !== null ? currencyFormatter(truncateNumber(item?.token?.price,6)) : currencyFormatter(truncateNumber(item?.global_token?.price,6))}</p>
+                                        <p className="info-14-18 dark:text-white">${item.token !== null ? currencyFormatter(truncateNumber(item?.token?.price, 6)) : currencyFormatter(truncateNumber(item?.global_token?.price, 6))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18 dark:text-white">${((item.token !== null ? item?.token?.price * item?.balance : item?.global_token?.price * item?.balance).toFixed(2))}</p>
@@ -229,7 +229,7 @@ const FutureList = (props: propsData) => {
                                 <div key={index} className="rounded-5 group grid grid-cols-3  gap-x-[10px]  items-center">
                                     <div className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                        <Image src={`${imgSrc?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={28} height={28} alt="coins" className={`${(item?.token?.symbol || item?.global_token?.symbol)==="XRP"&&"bg-white rounded-full"} max-w-[20px] md:max-w-[30px] w-full`} onError={() => setImgSrc(true)}/>
+                                            <Image src={`${imgSrc ? '/assets/history/Coin.svg' : item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={28} height={28} alt="coins" className={`${(item?.token?.symbol || item?.global_token?.symbol) === "XRP" && "bg-white rounded-full"} max-w-[20px] md:max-w-[30px] w-full`} onError={() => setImgSrc(true)} />
 
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                                 <p className="info-14-18 dark:text-white">{item.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
@@ -284,25 +284,28 @@ const FutureList = (props: propsData) => {
             </div>
             <div className="flex pt-[25px] items-center justify-between">
                 <p className="info-12 md:footer-text !text-gamma">{currentItems?.length} assets</p>
-                <ReactPaginate
-                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
-                        }`}
-                    breakLabel="..."
-                    nextLabel=">"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={1}
-                    marginPagesDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel="<"
-                    renderOnZeroPageCount={null}
-                    forcePage={currentPage}
-                />
+                {
+                    pageCount > 1 &&
+                    <ReactPaginate
+                        className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+                            }`}
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={1}
+                        marginPagesDisplayed={2}
+                        pageCount={pageCount}
+                        previousLabel="<"
+                        renderOnZeroPageCount={null}
+                        forcePage={currentPage}
+                    />
+                }
             </div>
             {
                 show1 === 4 &&
                 <>
                     <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-                    <TransferModal setOverlay={setShow1} setPopupMode={setPopupMode} popupMode={popupMode} assets={currentItems} disableClick={true} wallet_type="future_wallet" token={selectedCoin}/>
+                    <TransferModal setOverlay={setShow1} setPopupMode={setPopupMode} popupMode={popupMode} assets={currentItems} disableClick={true} wallet_type="future_wallet" token={selectedCoin} />
                 </>
             }
         </>

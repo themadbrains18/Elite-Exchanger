@@ -115,13 +115,13 @@ const NewListing = (props: propsData) => {
                     alt="uparrow"
                   />
                 </div>
-              </th>  
-               <th className="max-[1023px]:hidden py-5">
-                                <div className="flex">
-                                    <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Action</p>
-                                    <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
-                                </div>
-                            </th>
+              </th>
+              <th className="max-[1023px]:hidden py-5">
+                <div className="flex">
+                  <p className="text-center !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">Action</p>
+                  <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -139,7 +139,7 @@ const NewListing = (props: propsData) => {
                   >
                     <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky bg-white dark:bg-d-bg-primary">
                       <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                      <Image src={`${imgSrc?'/assets/history/Coin.svg':item.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)}/>
+                        <Image src={`${imgSrc ? '/assets/history/Coin.svg' : item.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} />
 
                         <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                           <p className="info-14-18 dark:text-white">
@@ -214,9 +214,8 @@ const NewListing = (props: propsData) => {
               <tr>
                 <td colSpan={6}>
                   <div
-                    className={` py-[50px] flex flex-col items-center justify-center ${
-                      mode === "dark" ? "text-[#ffffff]" : "text-[#000000]"
-                    }`}
+                    className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? "text-[#ffffff]" : "text-[#000000]"
+                      }`}
                   >
                     <Image
                       src="/assets/refer/empty.svg"
@@ -232,28 +231,29 @@ const NewListing = (props: propsData) => {
           </tbody>
         </table>
       </div>
-      <div className="flex pt-[25px] items-center justify-end">
-        <ReactPaginate
-          className={`history_pagination ${
-            mode === "dark" ? "paginate_dark" : ""
-          }`}
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null}
-        />
-      </div>
+      {
+        pageCount > 1 &&
+        <div className="flex pt-[25px] items-center justify-end">
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+              }`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+          />
+        </div>
+      }
 
       {show1 === 1 && (
         <>
           <div
-            className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${
-              show1 ? "opacity-80 visible" : "opacity-0 invisible"
-            }`}
+            className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"
+              }`}
           ></div>
           <Deposit
             setShow1={setShow1}

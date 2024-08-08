@@ -256,7 +256,7 @@ const TradeTable = (props: propData) => {
                             {formatDate(item?.createdAt)}
                           </td>
                           <td className="admin-table-data">{item?.market_type}</td>
-                          <td className={` ${item?.order_type === 'buy'?'text-buy':'text-sell'}`}>{item?.order_type}</td>
+                          <td className={` ${item?.order_type === 'buy' ? 'text-buy' : 'text-sell'}`}>{item?.order_type}</td>
                           <td className="admin-table-data">
                             {item?.token_amount}
                           </td>
@@ -306,21 +306,24 @@ const TradeTable = (props: propData) => {
                 </tbody>
               </table>
             </div>
-            <div className="flex pt-[25px] items-center justify-end">
-              <ReactPaginate
-                className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
-                  }`}
-                breakLabel="..."
-                nextLabel=">"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={1}
-                marginPagesDisplayed={2}
-                pageCount={pageCount}
-                previousLabel="<"
-                renderOnZeroPageCount={null}
-                forcePage={currentPage}
-              />
-            </div>
+            {
+              pageCount > 1 &&
+              <div className="flex pt-[25px] items-center justify-end">
+                <ReactPaginate
+                  className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+                    }`}
+                  breakLabel="..."
+                  nextLabel=">"
+                  onPageChange={handlePageClick}
+                  pageRangeDisplayed={1}
+                  marginPagesDisplayed={2}
+                  pageCount={pageCount}
+                  previousLabel="<"
+                  renderOnZeroPageCount={null}
+                  forcePage={currentPage}
+                />
+              </div>
+            }
           </div>
       }
     </>

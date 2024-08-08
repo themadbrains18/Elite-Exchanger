@@ -27,90 +27,90 @@ const BuyTableMobile = (props: activeSection) => {
 
     useEffect(() => {
         getAllPosts(itemOffset);
-    }, [itemOffset,props?.firstCurrency, props?.paymentId]);
+    }, [itemOffset, props?.firstCurrency, props?.paymentId]);
 
 
     const getAllPosts = async (itemOffset: number) => {
         try {
-        //   console.log("=hereere", itemOffset);
-    
-          if (itemOffset === undefined) {
-            itemOffset = 0;
-          }
-    
-          let paymentMethod = props?.paymentId !== undefined && props?.paymentId !== "" ? props?.paymentId : "all"
-          let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
-    
-    
-          let posts = await fetch(
-            `/api/p2p/buy?user_id=${props?.session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}`,
-            {
-              method: "GET",
-              headers: {
-                "Authorization": props?.session?.user?.access_token
-              },
+            //   console.log("=hereere", itemOffset);
+
+            if (itemOffset === undefined) {
+                itemOffset = 0;
             }
-          ).then((response) => response.json());
-    
-    
-        //   console.log(posts?.data?.data,"=posts?.data?.data");
-          
-    
-          for (const post of posts?.data?.data) {
-            let payment_method: any = [];
-            for (const upid of post.p_method) {
-              post?.user?.user_payment_methods?.filter((item: any) => {
-                if (item.id === upid?.upm_id) {
-                  payment_method.push(item);
+
+            let paymentMethod = props?.paymentId !== undefined && props?.paymentId !== "" ? props?.paymentId : "all"
+            let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
+
+
+            let posts = await fetch(
+                `/api/p2p/buy?user_id=${props?.session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization": props?.session?.user?.access_token
+                    },
                 }
-              })
+            ).then((response) => response.json());
+
+
+            //   console.log(posts?.data?.data,"=posts?.data?.data");
+
+
+            for (const post of posts?.data?.data) {
+                let payment_method: any = [];
+                for (const upid of post.p_method) {
+                    post?.user?.user_payment_methods?.filter((item: any) => {
+                        if (item.id === upid?.upm_id) {
+                            payment_method.push(item);
+                        }
+                    })
+                }
+                post.user_p_method = payment_method;
             }
-            post.user_p_method = payment_method;
-          }
-    
-        //   console.log(posts, "==posts"); 
-          // Filter out posts where user_p_method array is empty
-          // posts.data.data = posts.data.data.filter((post: any) => post.user_p_method.length > 0);
-    
-          // Update totalLength based on filtered data length
-          const totalLength = posts.data.data.length;
-          setTotal(totalLength);
-    
-          setList(posts.data.data);
-    
-          // let postData = [];
-          // let filter_posts = posts?.data?.data;
-          // postData= filter_posts
-          // if (props?.firstCurrency !== "") {
-          //   filter_posts = posts?.data?.data?.filter((item: any) => {
-          //     return props?.selectedToken?.id === item?.token_id;
-          //   });
-          //   postData = filter_posts;
-          // }
-          //  if (props?.paymentId !== "") {
-          //   let filterRecord=[]
-    
-          //   for (const post of filter_posts) {
-          //     for (const upid of post.user_p_method) {
-    
-          //       if (props?.paymentId === upid?.pmid) {
-          //         filterRecord.push(post);
-          //       }
-          //     }
-          //   }
-          //   postData = filterRecord;
-    
-          // } else {
-          //   postData = filter_posts;
-          // }
-          // setList(postData)
-          setTotal(posts?.data?.totalLength)
+
+            //   console.log(posts, "==posts"); 
+            // Filter out posts where user_p_method array is empty
+            // posts.data.data = posts.data.data.filter((post: any) => post.user_p_method.length > 0);
+
+            // Update totalLength based on filtered data length
+            const totalLength = posts.data.data.length;
+            setTotal(totalLength);
+
+            setList(posts.data.data);
+
+            // let postData = [];
+            // let filter_posts = posts?.data?.data;
+            // postData= filter_posts
+            // if (props?.firstCurrency !== "") {
+            //   filter_posts = posts?.data?.data?.filter((item: any) => {
+            //     return props?.selectedToken?.id === item?.token_id;
+            //   });
+            //   postData = filter_posts;
+            // }
+            //  if (props?.paymentId !== "") {
+            //   let filterRecord=[]
+
+            //   for (const post of filter_posts) {
+            //     for (const upid of post.user_p_method) {
+
+            //       if (props?.paymentId === upid?.pmid) {
+            //         filterRecord.push(post);
+            //       }
+            //     }
+            //   }
+            //   postData = filterRecord;
+
+            // } else {
+            //   postData = filter_posts;
+            // }
+            // setList(postData)
+            setTotal(posts?.data?.totalLength)
         } catch (error) {
-          console.log("error in get token list", error);
-    
+            console.log("error in get token list", error);
+
         }
-      };
-    
+    };
+
 
     // const endOffset = itemOffset + itemsPerPage;
     // const currentItems = data?.data?.slice(itemOffset, endOffset);
@@ -159,7 +159,7 @@ const BuyTableMobile = (props: activeSection) => {
                                     </div>
                                     <div className='mt-[12px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Price:</p>
-                                        <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{currencyFormatter(truncateNumber(item?.price,6))} <span className='sm-text !text-[10px] dark:!text-[#9295A6] !text-banner-text'>INR/USDT</span></p>
+                                        <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{currencyFormatter(truncateNumber(item?.price, 6))} <span className='sm-text !text-[10px] dark:!text-[#9295A6] !text-banner-text'>INR/USDT</span></p>
                                     </div>
                                     <div className='mt-[12px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Limit:</p>
@@ -167,7 +167,7 @@ const BuyTableMobile = (props: activeSection) => {
                                     </div>
                                     <div className='mt-[12px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Available:</p>
-                                        <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{truncateNumber(Number(item?.quantity),4)} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
+                                        <p className='sm-text !text-[14px] dark:!text-white !text-h-primary mt-[5px]'>{truncateNumber(Number(item?.quantity), 4)} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                     </div>
                                     <div className='mt-[12px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[10px]'>Payment Method:</p>
@@ -201,18 +201,21 @@ const BuyTableMobile = (props: activeSection) => {
                     <p > No Record Found </p>
                 </div>
             }
-            <div className="flex pt-[25px] items-center justify-end">
-                <ReactPaginate
-                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-                    breakLabel="..."
-                    nextLabel=">"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    marginPagesDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel="<"
-                    renderOnZeroPageCount={null} />
-            </div>
+            {
+                pageCount > 1 &&
+                <div className="flex pt-[25px] items-center justify-end">
+                    <ReactPaginate
+                        className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        marginPagesDisplayed={2}
+                        pageCount={pageCount}
+                        previousLabel="<"
+                        renderOnZeroPageCount={null} />
+                </div>
+            }
         </>
     )
 }

@@ -173,7 +173,7 @@ const AddressManagement = (props: fixSection) => {
   const closePopup = () => {
     setShowSVG(false)
   }
-  
+
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
 
@@ -206,7 +206,7 @@ const AddressManagement = (props: fixSection) => {
                 }, 3000);
               }
 
-            }} className= {`solid-button w-full hover:bg-primary-800 ${isDisabled === true?'opacity-70 cursor-not-allowed':''}`}>
+            }} className={`solid-button w-full hover:bg-primary-800 ${isDisabled === true ? 'opacity-70 cursor-not-allowed' : ''}`}>
               Add address
             </button>
           </div>
@@ -403,18 +403,21 @@ const AddressManagement = (props: fixSection) => {
             </tbody>
           </table>
         </div>
-        <div className="flex pt-[25px] items-center justify-end">
-          <ReactPaginate
-            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-            breakLabel="..."
-            nextLabel=">"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={5}
-            marginPagesDisplayed={2}
-            pageCount={pageCount}
-            previousLabel="<"
-            renderOnZeroPageCount={null} />
-        </div>
+        {
+          pageCount > 1 &&
+          <div className="flex pt-[25px] items-center justify-end">
+            <ReactPaginate
+              className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+              breakLabel="..."
+              nextLabel=">"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={5}
+              marginPagesDisplayed={2}
+              pageCount={pageCount}
+              previousLabel="<"
+              renderOnZeroPageCount={null} />
+          </div>
+        }
       </section>
       {
         active &&

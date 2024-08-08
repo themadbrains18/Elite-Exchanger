@@ -101,7 +101,7 @@ const CoinList = (props: propsData) => {
     <section className="mt-30">
       <div className="p-20 md:p-40 rounded-10  bg-white dark:bg-d-bg-primary">
         <div className="flex justify-between max-[1350px]:gap-20 max-[1350px]:flex-wrap mb-[20px]">
-          <div className="overflow-auto flex gap-30 max-[1200px]:flex-wrap justify-between items-center">
+          <div className="overflow-auto flex gap-30 max-[1200px]:flex-wrap justify-between items-center coins-tabs">
 
             <div className="flex  gap-[25px]  w-max">
               {tabsData.map((item, ind) => {

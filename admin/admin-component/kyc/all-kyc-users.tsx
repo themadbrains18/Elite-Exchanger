@@ -28,8 +28,8 @@ const AllKycUsers = () => {
   const [itemOffset, setItemOffset] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const { mode } = useContext(Context);
- const [total, setTotal] = useState(0);
- const {data: session} = useSession()
+  const [total, setTotal] = useState(0);
+  const { data: session } = useSession()
 
   let itemsPerPage = 10;
 
@@ -42,25 +42,25 @@ const AllKycUsers = () => {
       if (itemOffset === undefined) {
         itemOffset = 0;
       }
-      
+
       let users = await fetch(
         `/api/kyc/allUsers?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`,
         {
           method: "GET",
           headers: {
             "Authorization": session?.user?.access_token || ''
-        },
+          },
         }
       ).then((response) => response.json());
-  
-  
+
+
       setList(users?.data?.data);
       setTotal(users?.data?.total?.length);
     } catch (error) {
-      console.log("error in fetch list of kyc ",error);
-      
+      console.log("error in fetch list of kyc ", error);
+
     }
-  
+
   };
   const pageCount = Math.ceil(total / itemsPerPage);
 
@@ -76,14 +76,14 @@ const AllKycUsers = () => {
       let actionKyc = e.currentTarget.innerHTML;
 
       // console.log(item,'--------kyc item');
-      
+
       let obj = {
         userid: item,
         isVerified: actionKyc === "Approve" && true,
         isReject: actionKyc === "Reject" && true,
       };
       const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-      let record =  encodeURIComponent(ciphertext.toString());
+      let record = encodeURIComponent(ciphertext.toString());
       let updated = await fetch(
         `/api/kyc/status`,
         {
@@ -96,13 +96,13 @@ const AllKycUsers = () => {
           body: JSON.stringify(record),
         }
       ).then((response) => response.json());
-  
+
       setList(updated?.data?.result);
     } catch (error) {
-      console.log("error in update status of kyc user ",error);
-      
+      console.log("error in update status of kyc user ", error);
+
     }
-   
+
   };
 
   return (
@@ -111,9 +111,8 @@ const AllKycUsers = () => {
         <div className="flex items-center justify-between  mb-[26px]">
           <div className="flex items-center gap-[15px]">
             <button
-              className={`${
-                active === 1 ? "admin-solid-button" : "admin-outline-button"
-              }`}
+              className={`${active === 1 ? "admin-solid-button" : "admin-outline-button"
+                }`}
               onClick={(e) => {
                 setActive(1);
               }}
@@ -121,9 +120,8 @@ const AllKycUsers = () => {
               Pending
             </button>
             <button
-              className={`${
-                active === 2 ? "admin-solid-button" : "admin-outline-button"
-              }`}
+              className={`${active === 2 ? "admin-solid-button" : "admin-outline-button"
+                }`}
               onClick={(e) => {
                 setActive(2);
               }}
@@ -131,9 +129,8 @@ const AllKycUsers = () => {
               Approved
             </button>
             <button
-              className={`${
-                active === 3 ? "admin-solid-button" : "admin-outline-button"
-              }`}
+              className={`${active === 3 ? "admin-solid-button" : "admin-outline-button"
+                }`}
               onClick={(e) => {
                 setActive(3);
               }}
@@ -258,7 +255,7 @@ const AllKycUsers = () => {
               {list &&
                 list.length > 0 &&
                 list?.map((item: any, index: number) => {
-                  
+
                   if (active === 2 && item.isVerified === 0) {
                     return;
                   } else if (active === 3 && item.isReject === 0) {
@@ -341,28 +338,26 @@ const AllKycUsers = () => {
                       <td className="admin-table-data">
                         <div className="flex gap-[5px] items-center">
                           <div
-                            className={`w-[7px] h-[7px] mr-[5px] rounded-full ${
-                              item?.isVerified === 1
+                            className={`w-[7px] h-[7px] mr-[5px] rounded-full ${item?.isVerified === 1
                                 ? "dark:bg-[#66BB6A] bg-[#0BB783]"
                                 : item?.isReject === 1
-                                ? "dark:bg-[#F44336] bg-[#F64E60]"
-                                : "dark:bg-[#90CAF9] bg-[#3699FF]"
-                            }`}
+                                  ? "dark:bg-[#F44336] bg-[#F64E60]"
+                                  : "dark:bg-[#90CAF9] bg-[#3699FF]"
+                              }`}
                           ></div>
                           <p
-                            className={`text-[13px] font-public-sans font-normal leading-5 ${
-                              item?.isVerified === 1
+                            className={`text-[13px] font-public-sans font-normal leading-5 ${item?.isVerified === 1
                                 ? "dark:text-[#66BB6A] text-[#0BB783]"
                                 : item?.isReject === 1
-                                ? "dark:text-[#F44336] text-[#F64E60]"
-                                : "dark:text-[#90CAF9] text-[#3699FF]"
-                            }`}
+                                  ? "dark:text-[#F44336] text-[#F64E60]"
+                                  : "dark:text-[#90CAF9] text-[#3699FF]"
+                              }`}
                           >
                             {item?.isVerified === 1
                               ? "Approved"
                               : item?.isReject === 1
-                              ? "Rejected"
-                              : "Pending"}
+                                ? "Rejected"
+                                : "Pending"}
                           </p>
                         </div>
                       </td>
@@ -422,22 +417,24 @@ const AllKycUsers = () => {
             </tbody>
           </table>
         </div>
-        <div className="flex pt-[25px] items-center justify-end">
-          <ReactPaginate
-            className={`history_pagination ${
-              mode === "dark" ? "paginate_dark" : ""
-            }`}
-            breakLabel="..."
-            nextLabel=">"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={1}
-            marginPagesDisplayed={2}
-            pageCount={pageCount}
-            previousLabel="<"
-            renderOnZeroPageCount={null}
-            forcePage={currentPage}
-          />
-        </div>
+        {
+          pageCount > 1 &&
+          <div className="flex pt-[25px] items-center justify-end">
+            <ReactPaginate
+              className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+                }`}
+              breakLabel="..."
+              nextLabel=">"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={1}
+              marginPagesDisplayed={2}
+              pageCount={pageCount}
+              previousLabel="<"
+              renderOnZeroPageCount={null}
+              forcePage={currentPage}
+            />
+          </div>
+        }
       </div>
       {show && <DocumentsModal show={show} setShow={setShow} data={allUsers} />}
     </>

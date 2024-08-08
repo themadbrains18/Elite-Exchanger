@@ -38,7 +38,7 @@ const SpotList = (props: propsData): any => {
   const router = useRouter();
   const [imgSrc, setImgSrc] = useState(false);
   const [imgSrc2, setImgSrc2] = useState(false);
-  
+
 
   let itemsPerPage = 10;
   const wbsocket = useWebSocket();
@@ -96,7 +96,7 @@ const SpotList = (props: propsData): any => {
 
   }
 
- 
+
 
   const setHeight = (e: any) => {
     let parent = e.currentTarget.closest(".iconParent");
@@ -195,11 +195,11 @@ const SpotList = (props: propsData): any => {
                   <td className="max-[1023px]:hidden ">
                     <div className="flex items-center gap-[10px]">
                       <button onClick={() => {
-                         if (session?.user?.kyc !== 'approve') {
+                        if (session?.user?.kyc !== 'approve') {
                           setDepositActive(true);
                           setWithdrawShow(true);
                         }
-                        else{
+                        else {
                           setShow1(1); setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
                         }
 
@@ -218,7 +218,7 @@ const SpotList = (props: propsData): any => {
                           const updateDate = Date.now();
                           let expireDate = Math.floor(expire / 1000);
                           let currentDate = Math.floor(updateDate / 1000);
-                  
+
 
                           if (isNaN(expireDate) || currentDate >= expireDate) {
                             setSelectedCoinBalance(item?.balance);
@@ -419,19 +419,22 @@ const SpotList = (props: propsData): any => {
 
       <div className="flex pt-[25px] items-center justify-between">
         <p className="info-12 md:footer-text !text-gamma">{total} assets</p>
-        <ReactPaginate
-          className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
-            }`}
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={1}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null}
-          forcePage={currentPage}
-        />
+        {
+          pageCount > 1 &&
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+              }`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+            forcePage={currentPage}
+          />
+        }
       </div>
 
       {
@@ -461,16 +464,16 @@ const SpotList = (props: propsData): any => {
         show1 === 4 &&
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-          <TransferModal setOverlay={setShow1} setPopupMode={setPopupMode}  popupMode={popupMode} token={selectedCoin} assets={currentItems} disableClick={true} wallet_type="main_wallet" />
+          <TransferModal setOverlay={setShow1} setPopupMode={setPopupMode} popupMode={popupMode} token={selectedCoin} assets={currentItems} disableClick={true} wallet_type="main_wallet" />
         </>
       }
       {withdrawActive === true &&
-        <WithdrawAuthenticationModelPopup setActive={setWithdrawActive} setShow={setWithdrawShow} show={withdrawShow} title="Withdrawal Security Settings" type="withdraw"/>
+        <WithdrawAuthenticationModelPopup setActive={setWithdrawActive} setShow={setWithdrawShow} show={withdrawShow} title="Withdrawal Security Settings" type="withdraw" />
       }
       {depositActive === true &&
-        <WithdrawAuthenticationModelPopup setActive={setDepositActive} setShow={setWithdrawShow} show={withdrawShow} title="Deposit Security Settings" type="deposit"/>
+        <WithdrawAuthenticationModelPopup setActive={setDepositActive} setShow={setWithdrawShow} show={withdrawShow} title="Deposit Security Settings" type="deposit" />
       }
-      
+
     </>
   )
 }

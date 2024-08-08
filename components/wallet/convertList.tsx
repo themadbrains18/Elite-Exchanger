@@ -22,7 +22,7 @@ const ConvertList = (props: propsData) => {
   useEffect(() => {
     getConvertData()
 
-  }, [itemOffset,,props?.filter])
+  }, [itemOffset, , props?.filter])
 
   async function getConvertData() {
     let convertList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/convertlist?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
@@ -34,8 +34,8 @@ const ConvertList = (props: propsData) => {
 
     setTotal(convertList?.data?.total)
     if (props?.filter !== "") {
-    
-      
+
+
       const inputValue = props?.filter.toLowerCase();
       let data = convertList?.data?.data.filter((item: any) => {
         return (item.converted.toLowerCase().includes(inputValue) ||
@@ -205,19 +205,22 @@ const ConvertList = (props: propsData) => {
       </div>
       <div className="flex pt-[25px] items-center justify-between">
         <p className="info-12 md:footer-text !text-gamma">{total} assets</p>
-        <ReactPaginate
-          className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
-            }`}
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={1}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null}
-          forcePage={currentPage}
-        />
+        {
+          pageCount > 1 &&
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+              }`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+            forcePage={currentPage}
+          />
+        }
       </div>
     </>
   )

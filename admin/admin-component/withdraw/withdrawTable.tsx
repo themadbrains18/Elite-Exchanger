@@ -7,9 +7,9 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
 
-interface propData{
-  type?:string,
-  name?:string
+interface propData {
+  type?: string,
+  name?: string
 }
 
 function formatDate(date: Date) {
@@ -21,7 +21,7 @@ function formatDate(date: Date) {
   return new Date(date).toLocaleDateString("en-US", options);
 }
 
-const WithdrawTable = (props:propData) => {
+const WithdrawTable = (props: propData) => {
   const router = useRouter()
   const [list, setList] = useState([]);
   const [filterlist, setFilterList] = useState([]);
@@ -31,7 +31,7 @@ const WithdrawTable = (props:propData) => {
   const [currentPage, setCurrentPage] = useState(0);
   const { mode } = useContext(Context);
   const [total, setTotal] = useState(0);
-  const {data:session} = useSession()
+  const { data: session } = useSession()
 
   let itemsPerPage = 10;
 
@@ -44,33 +44,33 @@ const WithdrawTable = (props:propData) => {
       if (itemOffset === undefined) {
         itemOffset = 0;
       }
-       let withdraw=[];
-       
-      if(props?.type==="details"){
-         withdraw = await fetch(`/api/withdraw/listById?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+      let withdraw = [];
+
+      if (props?.type === "details") {
+        withdraw = await fetch(`/api/withdraw/listById?user_id=${router?.query?.id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
           method: "GET",
           headers: {
             "Authorization": session?.user?.access_token || ""
-        },
-        
+          },
+
         }).then(response => response.json());
       }
-      else{
-         withdraw = await fetch(`/api/withdraw/allList?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+      else {
+        withdraw = await fetch(`/api/withdraw/allList?itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
           method: "GET",
           headers: {
             "Authorization": session?.user?.access_token || ""
-        },
-        
+          },
+
         }).then(response => response.json());
-  
+
       }
       setFilterList(withdraw?.data?.data)
       setList(withdraw?.data?.data);
       setTotal(withdraw?.data?.total);
-      
+
     } catch (error) {
-      console.log("error in fetching withdraw details",error);
+      console.log("error in fetching withdraw details", error);
 
     }
   };
@@ -97,12 +97,11 @@ const WithdrawTable = (props:propData) => {
   };
   return (
     <div className=" mt-[24px] py-6 px-5  rounded-10 bg-white dark:bg-grey-v-4">
-      <div className={`${props?.name==="wallet"?'hidden':'flex'} items-center justify-between  mb-[26px]`}>
+      <div className={`${props?.name === "wallet" ? 'hidden' : 'flex'} items-center justify-between  mb-[26px]`}>
         <div className="flex items-center gap-[15px]">
           <button
-            className={`${
-              active === 1 ? "admin-solid-button" : "admin-outline-button"
-            }`}
+            className={`${active === 1 ? "admin-solid-button" : "admin-outline-button"
+              }`}
             onClick={(e) => {
               setActive(1);
               filterData(e);
@@ -111,9 +110,8 @@ const WithdrawTable = (props:propData) => {
             All
           </button>
           <button
-            className={`${
-              active === 2 ? "admin-solid-button" : "admin-outline-button"
-            }`}
+            className={`${active === 2 ? "admin-solid-button" : "admin-outline-button"
+              }`}
             onClick={(e) => {
               setActive(2);
               filterData(e);
@@ -122,9 +120,8 @@ const WithdrawTable = (props:propData) => {
             Pending
           </button>
           <button
-            className={`${
-              active === 3 ? "admin-solid-button" : "admin-outline-button"
-            }`}
+            className={`${active === 3 ? "admin-solid-button" : "admin-outline-button"
+              }`}
             onClick={(e) => {
               setActive(3);
               filterData(e);
@@ -210,7 +207,7 @@ const WithdrawTable = (props:propData) => {
                   />
                 </div>
               </th>
-             { props?.name==="wallet" && <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading ">
+              {props?.name === "wallet" && <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading ">
                 <div className="flex items-center gap-[5px]">
                   <p>TxId</p>
                   <Image
@@ -253,10 +250,10 @@ const WithdrawTable = (props:propData) => {
                 Status
               </th>
               {
-                 props?.name!=='wallet' && 
-              <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading">
-                Action
-              </th>
+                props?.name !== 'wallet' &&
+                <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading">
+                  Action
+                </th>
               }
             </tr>
           </thead>
@@ -320,7 +317,7 @@ const WithdrawTable = (props:propData) => {
                     <td className="admin-table-data">
                       {formatDate(item?.createdAt)}
                     </td>
-                  {props?.name==="wallet" &&  <td className="admin-table-data">{item?.tx_hash}</td>}
+                    {props?.name === "wallet" && <td className="admin-table-data">{item?.tx_hash}</td>}
                     <td className="admin-table-data">
                       {item?.network?.fullname}
                     </td>
@@ -334,28 +331,26 @@ const WithdrawTable = (props:propData) => {
                     <td className="admin-table-data">
                       <div className="flex gap-[5px] items-center">
                         <div
-                          className={`w-[7px] h-[7px] mr-[5px] rounded-full ${
-                            item?.status === "success"
+                          className={`w-[7px] h-[7px] mr-[5px] rounded-full ${item?.status === "success"
                               ? "dark:bg-[#66BB6A] bg-[#0BB783]"
                               : item?.status === "pending"
-                              ? "dark:bg-[#90CAF9] bg-[#3699FF] "
-                              : "dark:bg-[#F44336] bg-[#F64E60]"
-                          }`}
+                                ? "dark:bg-[#90CAF9] bg-[#3699FF] "
+                                : "dark:bg-[#F44336] bg-[#F64E60]"
+                            }`}
                         ></div>
                         <p
-                          className={`text-[13px] font-public-sans font-normal leading-5 ${
-                            item?.status === "success"
+                          className={`text-[13px] font-public-sans font-normal leading-5 ${item?.status === "success"
                               ? "dark:text-[#66BB6A] text-[#0BB783]"
                               : item?.status === "pending"
-                              ? "dark:text-[#90CAF9] text-[#3699FF] "
-                              : "dark:text-[#F44336] text-[#F64E60]"
-                          }`}
+                                ? "dark:text-[#90CAF9] text-[#3699FF] "
+                                : "dark:text-[#F44336] text-[#F64E60]"
+                            }`}
                         >
                           {item?.status === "success"
                             ? "Approved"
                             : item?.status === "pending"
-                            ? "Pending"
-                            : "Rejected"}
+                              ? "Pending"
+                              : "Rejected"}
                         </p>
                       </div>
                       {/* <span className={`border ${item?.status==="Active"?'border-[#0bb78380] dark:border-[#66bb6a1f] ':'border-[#f64e6080] dark:border-[#f443361f] '}   py-[3px] px-1 rounded-[6px] flex w-max`}>
@@ -366,17 +361,17 @@ const WithdrawTable = (props:propData) => {
                   </span> */}
                     </td>
                     {
-                      props?.name!=='wallet' &&
-                    <td className="w-[20%]">
-                      <div className="inline-flex items-center gap-10">
-                        <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap	">
-                          On Hold
-                        </button>
-                        <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap	">
-                          Blocked
-                        </button>
-                      </div>
-                    </td>
+                      props?.name !== 'wallet' &&
+                      <td className="w-[20%]">
+                        <div className="inline-flex items-center gap-10">
+                          <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap	">
+                            On Hold
+                          </button>
+                          <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap	">
+                            Blocked
+                          </button>
+                        </div>
+                      </td>
                     }
                   </tr>
                 );
@@ -384,22 +379,24 @@ const WithdrawTable = (props:propData) => {
           </tbody>
         </table>
       </div>
-      <div className="flex pt-[25px] items-center justify-end">
-        <ReactPaginate
-          className={`history_pagination ${
-            mode === "dark" ? "paginate_dark" : ""
-          }`}
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={1}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null}
-          forcePage={currentPage}
-        />
-      </div>
+      {
+        pageCount > 1 &&
+        <div className="flex pt-[25px] items-center justify-end">
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+              }`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+            forcePage={currentPage}
+          />
+        </div>
+      }
     </div>
   );
 };

@@ -223,9 +223,9 @@ const Dashboard = (props: FixSection) => {
                   <p className="sm-text">
                     This account was created on {moment(props.session?.user?.createdAt).format('YYYY-MM-DD HH:mm:ss A')}
                   </p>
-                  <div className="flex gap-[30px]">
-                    <button type="button" className="solid-button2" onClick={handleCancel}>Cancel</button>
-                    <button type="submit" disabled={disabled} className={`solid-button px-[23px] min-w-[225px] md:px-[51px] ${disabled ? "cursor-not-allowed" : ""}`}>  
+                  <div className="flex max-[767px]:w-full max-[767px]:flex-col md:gap-[30px] gap-10">
+                    <button type="button" className="solid-button2 max-[767px]:max-w-full max-[767px]:w-full" onClick={handleCancel}>Cancel</button>
+                    <button type="submit" disabled={disabled} className={`max-[767px]:w-full max-[767px]:max-w-full solid-button px-[23px] min-w-[225px] md:px-[51px] ${disabled ? "cursor-not-allowed" : ""}`}>  
                       {disabled ?
                         <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />

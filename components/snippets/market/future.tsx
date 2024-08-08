@@ -10,8 +10,8 @@ import { currencyFormatter } from "./buySellCard";
 
 interface propsData {
     coins: any,
-    session:any,
-    networks:any
+    session: any,
+    networks: any
 }
 
 // interface propsData {
@@ -24,11 +24,11 @@ const Future = (props: propsData) => {
     const [show1, setShow1] = useState(0);
     const router = useRouter();
     const { mode } = useContext(Context)
-    const [token,setToken] = useState(Object);
+    const [token, setToken] = useState(Object);
     const [imgSrc, setImgSrc] = useState(false);
 
-    console.log(props.coins,"================props.coins");
-    
+    console.log(props.coins, "================props.coins");
+
     let itemsPerPage = 10;
     const endOffset = itemOffset + itemsPerPage;
     const currentItems = props.coins.slice(itemOffset, endOffset);
@@ -57,7 +57,7 @@ const Future = (props: propsData) => {
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
-                            
+
                             <th className="max-[1023px]:hidden py-5">
                                 <div className="flex">
                                     <p className="text-start !text-[12px] md:!text-[14px] nav-text-sm md:nav-text-lg dark:text-gamma">24h Low </p>
@@ -98,7 +98,7 @@ const Future = (props: propsData) => {
 
                                     <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                                        <Image src={`${imgSrc?'/assets/history/Coin.svg': item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol==="XRP"&&"bg-white rounded-full"}`}/>
+                                            <Image src={`${imgSrc ? '/assets/history/Coin.svg' : item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol === "XRP" && "bg-white rounded-full"}`} />
 
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                                 <p className="info-14-18 dark:text-white">{item?.symbol}</p>
@@ -109,7 +109,7 @@ const Future = (props: propsData) => {
                                     <td>
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white  ">${currencyFormatter(item?.price)}</p>
                                     </td>
-                                    
+
 
                                     <td className="max-[1023px]:hidden">
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(Number(item?.hlocv?.low).toFixed(4))}</p>
@@ -118,7 +118,7 @@ const Future = (props: propsData) => {
                                         <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">${currencyFormatter(Number(item?.hlocv?.high)?.toFixed(4))}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                    <div className={`flex items-center gap-[4px] flex-wrap`}>
+                                        <div className={`flex items-center gap-[4px] flex-wrap`}>
                                             <p className={`footer-text-secondary  ${Number(item?.hlocv?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(item?.hlocv?.changeRate) > 0 ? '+' : ''}{item?.hlocv?.changeRate !== undefined ? (Number(item?.hlocv?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
 
                                             {Number(item?.hlocv?.changeRate) > 0 &&
@@ -131,7 +131,7 @@ const Future = (props: propsData) => {
 
                                     </td>
                                     <td className="">
-                                        <button  onClick={() => router.push(`/future/${item?.coin_symbol}${item?.usdt_symbol}`)} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                        <button onClick={() => router.push(`/future/${item?.coin_symbol}${item?.usdt_symbol}`)} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                             <IconsComponent type="openInNewTab" hover={false} active={false} />
                                         </button>
                                     </td>
@@ -158,27 +158,29 @@ const Future = (props: propsData) => {
 
                 </table>
             </div>
-            <div className="flex pt-[25px] items-center justify-end">
-                <ReactPaginate
-                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-                    breakLabel="..."
-                    nextLabel=">"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    marginPagesDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel="<"
-                    renderOnZeroPageCount={null} />
-            </div>
-            
             {
-        show1 === 1 &&
-        <>
-          <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
-          <Deposit setShow1={setShow1} networks={props.networks} session={props.session} token={token}/>
+                pageCount > 1 &&
+                <div className="flex pt-[25px] items-center justify-end">
+                    <ReactPaginate
+                        className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        marginPagesDisplayed={2}
+                        pageCount={pageCount}
+                        previousLabel="<"
+                        renderOnZeroPageCount={null} />
+                </div>
+            }
+            {
+                show1 === 1 &&
+                <>
+                    <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
+                    <Deposit setShow1={setShow1} networks={props.networks} session={props.session} token={token} />
+                </>
+            }
         </>
-      }
-            </>
     )
 }
 

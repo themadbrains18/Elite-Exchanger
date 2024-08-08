@@ -170,7 +170,7 @@ const SellTableDesktop = (props: activeSection) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems && currentItems.length>0 && currentItems?.map((item, index) => {
+            {currentItems && currentItems.length > 0 && currentItems?.map((item, index) => {
               return (
                 <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FAFAFA] cursor-pointer">
                   <td className="group-hover:bg-[#FAFAFA] dark:group-hover:bg-black-v-1 ">
@@ -206,7 +206,7 @@ const SellTableDesktop = (props: activeSection) => {
 
                   <td>
                     <div className='flex items-center gap-10'>
-                      {item?.PaymentMethod && item?.PaymentMethod.length>0 &&
+                      {item?.PaymentMethod && item?.PaymentMethod.length > 0 &&
                         item?.PaymentMethod?.map((elem, ind) => {
                           return (
                             <Fragment key={ind}>
@@ -229,16 +229,19 @@ const SellTableDesktop = (props: activeSection) => {
       </div>
       <div className="flex pt-[25px] items-center justify-between">
         <p className="info-12 md:footer-text !text-gamma">52 assets</p>
-        <ReactPaginate
-          className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null} />
+        {
+          pageCount > 1 &&
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null} />
+        }
       </div>
     </>
   )
