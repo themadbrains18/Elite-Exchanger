@@ -9,6 +9,7 @@ interface UniqueIds {
   step?: number;
   levrage?: number;
   levrageValue?: number;
+  min?: number;
 }
 
 const RangeSlider: React.FC<UniqueIds> = ({
@@ -19,7 +20,8 @@ const RangeSlider: React.FC<UniqueIds> = ({
   rangetype = '',
   step = 1,
   levrage = 0,
-  levrageValue = 0
+  levrageValue = 0,
+  min
 }) => {
 
   useEffect(() => {
@@ -93,7 +95,7 @@ const RangeSlider: React.FC<UniqueIds> = ({
           id={inputId}
           className="range-slider_input"
           type="range"
-          min="1"
+          min={min}
           max="100"
           step={step}
           defaultValue={inputId === "rangeInput" ? levrageValue : levrage}

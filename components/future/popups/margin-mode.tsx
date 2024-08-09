@@ -86,7 +86,7 @@ const MarginMode: React.FC<FullWidth> = (props) => {
                 </div>
                 <p className='text-[25px] dark:text-white text-black cursor-pointer w-[50px] h-[40px] text-center' onClick={increment}> + </p>
             </div>
-            <RangeSlider inputId="rangeInput1" thumbId='rangeThumb1' lineId='rangeLine1' onChangeSizeInPercentage={onChangeSizeInPercentage} rangetype={'X'} step={1} levrage={leverageValue} />
+            <RangeSlider inputId="rangeInput1" thumbId='rangeThumb1' lineId='rangeLine1' onChangeSizeInPercentage={onChangeSizeInPercentage} rangetype={'X'} step={1} levrage={leverageValue} min={1}/>
             <div className={`flex gap-[5px] ${leverageValue > 10 ? ' bg-[#ff8d0021]' : 'bg-[#e5ecf0] dark:bg-[#3c4355]'}  mb-[25px] p-[8px] mt-[10px] rounded-8 items-center`}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={`fill-primary ${leverageValue > 10 ? 'dark:fill-white' : 'fill-primary dark:fill-white'} text-contentWarning shrink-0`} width="16" height="16">
                     <path d="M12 2.25A9.75 9.75 0 1021.75 12 9.76 9.76 0 0012 2.25zm-.75 5.25a.75.75 0 111.5 0v5.25a.75.75 0 11-1.5 0V7.5zm.75 9.75A1.125 1.125 0 1112 15a1.125 1.125 0 010 2.25z"></path>
