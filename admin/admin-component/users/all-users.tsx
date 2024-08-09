@@ -272,7 +272,7 @@ const AllUsers = (props: usersList) => {
                   />
                 </div>
               </th>
-              
+
               <th className="p-[10px] px-0 text-start dark:!text-[#ffffffb3] admin-table-heading">
                 Status
               </th>
@@ -399,20 +399,23 @@ const AllUsers = (props: usersList) => {
           </tbody>
         </table>
       </div>
-      <div className="flex pt-[25px] items-center justify-end">
-        <ReactPaginate
-          className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
-            }`}
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={1}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null}
-        />
-      </div>
+      {
+        pageCount > 1 &&
+        <div className="flex pt-[25px] items-center justify-end">
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+              }`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+          />
+        </div>
+      }
     </div>
   );
 };

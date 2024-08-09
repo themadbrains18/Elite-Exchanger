@@ -55,14 +55,14 @@ const ConvertTable = (props: propsData) => {
   useEffect(() => {
 
     let history: any = totalRecord;
-    if (props.coin !== "" && props.coin !== undefined && history?.length>0) {
+    if (props.coin !== "" && props.coin !== undefined && history?.length > 0) {
       history = history?.filter((item: any) => {
         return item.token_id === props.coin;
       });
     }
     const targetDate = new Date(props.date).setHours(0, 0, 0, 0);
     const currentDate = new Date().setHours(0, 0, 0, 0);
-    if (targetDate !== currentDate && history?.length>0) {
+    if (targetDate !== currentDate && history?.length > 0) {
       history = history?.filter((item: any) => {
         const itemDate = new Date(item.createdAt).setHours(0, 0, 0, 0);
         return itemDate === targetDate;
@@ -130,7 +130,7 @@ const ConvertTable = (props: propsData) => {
                 <tr key={index}>
                   <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                    <Image src={`${imgSrc?'/assets/history/Coin.svg':item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)}/>
+                      <Image src={`${imgSrc ? '/assets/history/Coin.svg' : item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} />
 
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                         <p className="info-14-18 dark:text-white">{item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
@@ -176,20 +176,23 @@ const ConvertTable = (props: propsData) => {
           </tbody>
         </table>
       </div>
-      <div className="flex pt-[25px] sticky left-0 items-center justify-end">
+      {
+        pageCount > 1 &&
+        <div className="flex pt-[25px] sticky left-0 items-center justify-end">
 
-        <ReactPaginate
-          className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null} 
-          forcePage={Math.floor(itemOffset / itemsPerPage)}/>
-      </div>
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+            forcePage={Math.floor(itemOffset / itemsPerPage)} />
+        </div>
+      }
     </>
   )
 }

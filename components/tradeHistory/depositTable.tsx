@@ -33,7 +33,7 @@ const DepositTable = (props: propsData) => {
   useEffect(() => {
 
     let history: any = totalRecord;
-    if (props.coin !== "" && props.coin !== undefined && history?.length>0) {
+    if (props.coin !== "" && props.coin !== undefined && history?.length > 0) {
       history = history?.filter((item: any) => {
         let symbol = item.coinName.split('/')[1];
         return symbol === props.coin;
@@ -41,7 +41,7 @@ const DepositTable = (props: propsData) => {
     }
     const targetDate = new Date(props.date).setHours(0, 0, 0, 0);
     const currentDate = new Date().setHours(0, 0, 0, 0);
-    if (targetDate !== currentDate && history?.length>0) {
+    if (targetDate !== currentDate && history?.length > 0) {
       history = history?.filter((item: any) => {
         const itemDate = new Date(item.createdAt).setHours(0, 0, 0, 0);
         return itemDate === targetDate;
@@ -52,7 +52,7 @@ const DepositTable = (props: propsData) => {
   }, [props.coin, props.date])
 
   async function getDepositData() {
-    let currency = props.coin !== undefined && props.coin !== "" ? props.coin: "all"
+    let currency = props.coin !== undefined && props.coin !== "" ? props.coin : "all"
     let depositHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency}&date=${props.date}`, {
       method: "GET",
       headers: {
@@ -81,7 +81,7 @@ const DepositTable = (props: propsData) => {
     setItemOffset(newOffset);
   };
 
-  
+
 
   return (
     <>
@@ -211,18 +211,20 @@ const DepositTable = (props: propsData) => {
       </div>
       <div className="flex pt-[25px] items-center justify-between">
         <p className="info-12 md:footer-text !text-gamma">{currentItems?.length} assets</p>
-
-        <ReactPaginate
-          className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null} 
-          forcePage={Math.floor(itemOffset / itemsPerPage)}/>
+        {
+          pageCount > 1 &&
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+            forcePage={Math.floor(itemOffset / itemsPerPage)} />
+        }
       </div>
     </>
   )

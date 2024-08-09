@@ -74,12 +74,12 @@ const MarketOverview = (props: list) => {
             {
               list && list?.length > 0 && list?.map((item: any, index: number) => {
                 // console.log(item?.image);
-                
+
                 return (
                   <tr key={index} className=" border-b-[0.5px] border-[#ECF0F3] dark:border-[#ffffff1a]  hover:bg-[#3699ff14] dark:hover:bg-[#90caf929]">
                     <td className="px-1 py-[10px] flex gap-[10px] items-center admin-table-data">
                       <Image
-                        src={`${imgSrc?'/assets/admin/coin1.svg':item?.image}`}
+                        src={`${imgSrc ? '/assets/admin/coin1.svg' : item?.image}`}
                         width={24}
                         height={24}
                         alt="coins"
@@ -132,17 +132,19 @@ const MarketOverview = (props: list) => {
         </table>
       </div>
       <div className="flex pt-[25px] items-center justify-end">
-
-        <ReactPaginate
-          className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={1}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null} />
+        {
+          pageCount > 1 &&
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null} />
+        }
       </div>
     </section>
   );

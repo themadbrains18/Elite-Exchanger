@@ -62,7 +62,6 @@ const OrderBook = (props: propsData) => {
                                 <div className='mt-10'>
                                     {props.BuyTrade && props.BuyTrade.length > 0 && props.BuyTrade.map((item: any, index:number) => {
                                         if (item.order_type === 'buy') {
-                                            
                                             return <div key={index+'buy'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-buy'>$ {currencyFormatter(item?.limit_usdt?.toFixed(5))}</p>
                                                 <p className='info-12 !text-[14px] z-[2]  text-center'>{currencyFormatter(item?.token_amount?.toFixed(5))}</p>

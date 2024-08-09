@@ -17,7 +17,7 @@ interface dataTypes {
     selectedToken?: any;
 }
 const OrdersTableMobile = (props: dataTypes) => {
-    
+
     const route = useRouter();
     const { mode } = useContext(Context);
 
@@ -89,16 +89,16 @@ const OrdersTableMobile = (props: dataTypes) => {
         <>
             <div>
                 {
-                  list &&  list?.length>0 && list?.map((item: any, ind: number) => {
+                    list && list?.length > 0 && list?.map((item: any, ind: number) => {
                         return (
                             <Fragment key={ind}>
                                 <div className='grid grid-cols-2 py-[15px] border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2' onClick={() => {
-                                            props?.setOrderId(item?.id);
-                                            route.push(`?buy=${item?.id}`);
-                                        }}>
+                                    props?.setOrderId(item?.id);
+                                    route.push(`?buy=${item?.id}`);
+                                }}>
                                     <div className=''>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Asset/Type</p>
-                                        <p className='info-14-18 !text-nav-primary dark:!text-white'><span className={`${item?.sell_user_id === session?.user.user_id ? "text-cancel" : "text-buy"} capitalize`}>{ item?.sell_user_id === session?.user.user_id ? "Sell":"Buy" }</span>&nbsp;{item?.receive_currency}</p>
+                                        <p className='info-14-18 !text-nav-primary dark:!text-white'><span className={`${item?.sell_user_id === session?.user.user_id ? "text-cancel" : "text-buy"} capitalize`}>{item?.sell_user_id === session?.user.user_id ? "Sell" : "Buy"}</span>&nbsp;{item?.receive_currency}</p>
                                     </div>
                                     <div className='text-end'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Status</p>
@@ -114,7 +114,7 @@ const OrdersTableMobile = (props: dataTypes) => {
                                     </div>
                                     <div className='mt-[15px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Qty</p>
-                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(item.quantity,6)}</p>
+                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(item.quantity, 6)}</p>
                                     </div>
                                     <div className='text-end mt-[15px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Date / Time </p>
@@ -139,18 +139,21 @@ const OrdersTableMobile = (props: dataTypes) => {
                     <p > No Record Found </p>
                 </div>
             }
-            <div className="flex pt-[25px] items-center justify-end">
-                <ReactPaginate
-                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-                    breakLabel="..."
-                    nextLabel=">"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    marginPagesDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel="<"
-                    renderOnZeroPageCount={null} />
-            </div>
+            {
+                pageCount > 1 &&
+                <div className="flex pt-[25px] items-center justify-end">
+                    <ReactPaginate
+                        className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        marginPagesDisplayed={2}
+                        pageCount={pageCount}
+                        previousLabel="<"
+                        renderOnZeroPageCount={null} />
+                </div>
+            }
         </>
     )
 }

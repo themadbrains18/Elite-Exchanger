@@ -464,7 +464,7 @@ const SecuritySettings = (props: fixSection) => {
                           </div>
                           {item.Add != false && (
                             <div
-                              className={`py-[8px] cursor-pointer pl-[10px] pr-[10px] pl-1 md:flex gap-[8px] items-center border rounded-5 border-grey-v-1 text-center dark:border-opacity-[15%] max-w-full md:max-w-fit w-full ${item?.title === "Email Authentication" && '!max-w-[130px]'}`}
+                              className={`py-[8px] cursor-pointer w-full pr-[10px] pl-1 block md:flex gap-[8px] items-center border rounded-5 border-grey-v-1 text-center dark:border-opacity-[15%] max-w-full md:max-w-fit  ${item?.title === "Email Authentication" && 'md:!max-w-[130px]'}`}
                               onClick={() => {
                                 // console.log(props?.session?.user, '==========props?.session?.user');
                                 if (googleAuth === true) {
@@ -484,16 +484,16 @@ const SecuritySettings = (props: fixSection) => {
                           alt="add"
                         /> */}
                               {item?.title === "Email Authentication" ? (
-                                <p className="nav-text-sm text-beta w-full text-center">
+                                <p className="nav-text-sm text-beta w-full asdasds text-center">
                                   {props?.session?.user?.email !== "null"
                                     ? "Change Email"
-                                    : "Add"}
+                                    : "Add +"}
                                 </p>
                               ) : (
                                 <p className="nav-text-sm text-beta w-full text-center">
                                   {item?.title === "SMS Authentication" &&
                                     props?.session?.user?.number == "null"
-                                    ? "Add"
+                                    ? "Add +"
                                     : "Change Number"}
                                 </p>
                               )}
@@ -727,7 +727,7 @@ const SecuritySettings = (props: fixSection) => {
                       <button
                         disabled={btnDisabled}
                         type="submit"
-                        className={`solid-button px-[23px] md:px-[51px] ${btnDisabled === true ? "cursor-not-allowed" : ''}`}
+                        className={`solid-button w-full md:w-auto px-[23px] md:px-[51px] ${btnDisabled === true ? "cursor-not-allowed" : ''}`}
                       >
                         {btnDisabled &&
                           <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

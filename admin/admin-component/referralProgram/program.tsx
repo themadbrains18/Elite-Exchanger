@@ -110,7 +110,7 @@ const MainProgram = (props: propsData) => {
     };
 
     const filterEventList = (item: any) => {
-        let record:any = list?.filter((e: any) => {
+        let record: any = list?.filter((e: any) => {
             return e.id === item.id
         })
 
@@ -120,7 +120,7 @@ const MainProgram = (props: propsData) => {
 
     return (
         <>
-            <ToastContainer limit={1}/>
+            <ToastContainer limit={1} />
             <div
                 className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show || editShow || inviteShow || inviteListShow ? "opacity-80 visible" : "opacity-0 invisible"
                     }`}
@@ -318,21 +318,24 @@ const MainProgram = (props: propsData) => {
                         </tbody>
                     </table>
                 </div>
-                <div className="flex pt-[25px] items-center justify-end">
-                    <ReactPaginate
-                        className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
-                            }`}
-                        breakLabel="..."
-                        nextLabel=">"
-                        onPageChange={handlePageClick}
-                        pageRangeDisplayed={1}
-                        marginPagesDisplayed={2}
-                        pageCount={pageCount}
-                        previousLabel="<"
-                        renderOnZeroPageCount={null}
-                        forcePage={currentPage}
-                    />
-                </div>
+                {
+                    pageCount > 1 &&
+                    <div className="flex pt-[25px] items-center justify-end">
+                        <ReactPaginate
+                            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+                                }`}
+                            breakLabel="..."
+                            nextLabel=">"
+                            onPageChange={handlePageClick}
+                            pageRangeDisplayed={1}
+                            marginPagesDisplayed={2}
+                            pageCount={pageCount}
+                            previousLabel="<"
+                            renderOnZeroPageCount={null}
+                            forcePage={currentPage}
+                        />
+                    </div>
+                }
             </div>
             {show === true &&
                 <AddReferralProgram data={props.coinList} show={show} setShow={setShow} refreshPairList={getReferralProgram} />

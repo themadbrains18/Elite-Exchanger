@@ -71,7 +71,7 @@ const cardsData = [
                 <Link href="/chart/BTCB" className='sec-Brief breief flex lg:hidden items-center gap-[10px] !text-primary mt-[50px] mx-auto text-center md:text-start justify-center'>
                     <span className='block relative !text-[18px] !leading-[24px] after:absolute after:w-full after:h-[2px] after:bg-primary hover:!text-white after:top-[100%] after:left-0'>Start Trading</span>
                     <IconsComponent type='rightArrow' hover={false} active={false}/>
-                    <p>Hii</p>
+                    
                 </Link>
                 
             </div>

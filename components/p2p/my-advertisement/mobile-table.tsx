@@ -20,7 +20,7 @@ interface dataTypes {
     session?: any;
 }
 const MobileTable = (props: dataTypes) => {
-    const {mode} = useContext(Context)
+    const { mode } = useContext(Context)
     const route = useRouter();
     const [postList, setPostList] = useState([]);
     let itemsPerPage = 10;
@@ -29,7 +29,7 @@ const MobileTable = (props: dataTypes) => {
     const [postId, setPostId] = useState('');
     const [active, setActive] = useState(0);
     const [show, setShow] = useState(false);
-    const {data:session,status} = useSession()
+    const { data: session, status } = useSession()
 
     useEffect(() => {
         getAds(itemOffset);
@@ -40,13 +40,13 @@ const MobileTable = (props: dataTypes) => {
             // console.log("called");
             let paymentMethod = props?.paymentId !== undefined && props?.paymentId !== "" ? props?.paymentId : "all"
             let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
-            let date = props?.startDate !== undefined && props?.startDate !== "" ?new Date(props?.startDate).toISOString() : "all"
+            let date = props?.startDate !== undefined && props?.startDate !== "" ? new Date(props?.startDate).toISOString() : "all"
 
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
-          
-        
+
+
             let userAllOrderList: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/advertisement?status=${props?.active === 1 ? true : props?.active === 2 ? false : "all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}&date=${date}`, {
                 method: "GET",
                 headers: {
@@ -54,9 +54,9 @@ const MobileTable = (props: dataTypes) => {
                 },
             }).then(response => response.json());
 
-            if(userAllOrderList?.data?.totalLength<=10){
+            if (userAllOrderList?.data?.totalLength <= 10) {
                 setItemOffset(0)
-              }
+            }
             for (const post of userAllOrderList?.data?.data) {
                 let payment_method: any = [];
                 for (const upid of post.p_method) {
@@ -150,7 +150,7 @@ const MobileTable = (props: dataTypes) => {
                 })
                 getAds(0)
                 toast.success(`Post ${putResponse?.data?.result?.status === true ? "Active" : "Inactive"}  successfully`)
-                
+
                 setActive(0);
                 setShow(false);
             }
@@ -165,20 +165,20 @@ const MobileTable = (props: dataTypes) => {
     }
 
     // console.log(postList,"============postList");
-    
+
 
     return (
         <>
-          <ToastContainer limit={1}/>
+            <ToastContainer limit={1} />
             <div>
                 {
-                   postList && postList.length > 0 && postList?.map((item:any, ind:any) => {
+                    postList && postList.length > 0 && postList?.map((item: any, ind: any) => {
                         return (
                             <Fragment key={ind}>
                                 <div className='grid grid-cols-2 py-[15px] border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2'>
                                     <div className=''>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Assets</p>
-                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
+                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                     </div>
                                     <div className='text-end'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Type</p>
@@ -186,7 +186,7 @@ const MobileTable = (props: dataTypes) => {
                                     </div>
                                     <div className='mt-[15px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Remaining</p>
-                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity} {item?.token!==null? item?.token?.symbol:item?.global_token?.symbol}</p>
+                                        <p className='info-14-18 !text-nav-primary dark:!text-white'>{item.quantity} {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                     </div>
                                     {/* <div  className='text-end mt-[15px]'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Payment</p>
@@ -218,15 +218,15 @@ const MobileTable = (props: dataTypes) => {
                                     <div className=' mt-[15px] text-end'>
                                         <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px] mb-[5px]'>Actions</p>
                                         <div className='flex items-center gap-10 justify-end'>
-                                                        {item?.status === false &&
-                                                            <button onClick={() => route.push(`/p2p/editpostad?postid=${item?.id}`)}>
-                                                                <IconsComponent type='editIcon' hover={false} active={false} />
-                                                            </button>
-                                                        }
-                                                        <button onClick={() => { setActive(1); setShow(true); setPostId(item?.id) }}>
-                                                            <IconsComponent type='deleteIcon' hover={false} active={false} />
-                                                        </button>
-                                                    </div>
+                                            {item?.status === false &&
+                                                <button onClick={() => route.push(`/p2p/editpostad?postid=${item?.id}`)}>
+                                                    <IconsComponent type='editIcon' hover={false} active={false} />
+                                                </button>
+                                            }
+                                            <button onClick={() => { setActive(1); setShow(true); setPostId(item?.id) }}>
+                                                <IconsComponent type='deleteIcon' hover={false} active={false} />
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </Fragment>
@@ -246,18 +246,21 @@ const MobileTable = (props: dataTypes) => {
                     <p > No Record Found </p>
                 </div>
             }
-            <div className="flex pt-[25px] items-center justify-end">
-                <ReactPaginate
-                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-                    breakLabel="..."
-                    nextLabel=">"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    marginPagesDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel="<"
-                    renderOnZeroPageCount={null} />
-            </div>
+            {
+                pageCount > 1 &&
+                <div className="flex pt-[25px] items-center justify-end">
+                    <ReactPaginate
+                        className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        marginPagesDisplayed={2}
+                        pageCount={pageCount}
+                        previousLabel="<"
+                        renderOnZeroPageCount={null} />
+                </div>
+            }
             {active === 1 &&
                 <ConfirmationModel setActive={setActive} setShow={setShow} title='Delete Ads' message='Are you sure you want to delete your ads with remaining quantity?' show={show} actionPerform={actionPerform} />
             }

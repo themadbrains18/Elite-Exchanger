@@ -16,7 +16,7 @@ const PaymentList = () => {
 
   useEffect(() => {
     getToken(itemOffset)
-  }, [itemOffset,open])
+  }, [itemOffset, open])
 
 
   const getToken = async (itemOffset: number) => {
@@ -266,19 +266,22 @@ const PaymentList = () => {
             </tbody>
           </table>
         </div>
-        <div className="flex pt-[25px] items-center justify-end">
+        {
+          pageCount > 1 &&
+          <div className="flex pt-[25px] items-center justify-end">
 
-          <ReactPaginate
-            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-            breakLabel="..."
-            nextLabel=">"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={1}
-            marginPagesDisplayed={2}
-            pageCount={pageCount}
-            previousLabel="<"
-            renderOnZeroPageCount={null} />
-        </div>
+            <ReactPaginate
+              className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+              breakLabel="..."
+              nextLabel=">"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={1}
+              marginPagesDisplayed={2}
+              pageCount={pageCount}
+              previousLabel="<"
+              renderOnZeroPageCount={null} />
+          </div>
+        }
       </div>
       {open &&
         <AddPaymentModal setOpen={setOpen} />

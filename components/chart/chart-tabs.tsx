@@ -20,15 +20,15 @@ interface propsData {
   slug?: any;
 }
 
-export function abbreviateNumber(value:number | string) {
+export function abbreviateNumber(value: number | string) {
   const suffixes = ["", "K", "M", "B", "T"];
   let suffixNum = 0;
   let newValue = Number(value);
   while (newValue >= 1000) {
-      newValue /= 1000;
-      suffixNum++;
+    newValue /= 1000;
+    suffixNum++;
   }
-  
+
   return newValue.toFixed(2) + suffixes[suffixNum];
 }
 
@@ -81,7 +81,7 @@ const ChartTabs = (props: propsData) => {
     }
   };
 
-  
+
   useEffect(() => {
 
     const fetchHLCOData = async () => {
@@ -89,7 +89,7 @@ const ChartTabs = (props: propsData) => {
 
 
       const fetchDataForCoin = async (coin: any) => {
-        
+
         const slug = coin.symbol;
         try {
           let hlocv = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/hloc?slug=${slug}`, {
@@ -97,7 +97,7 @@ const ChartTabs = (props: propsData) => {
           }).then(response => response.json())
           return {
             ...coin,
-            hlocv:hlocv?.data?.data
+            hlocv: hlocv?.data?.data
           };
         } catch (error) {
           console.error(`Error fetching HLCO data for ${slug}:`, error);
@@ -108,10 +108,10 @@ const ChartTabs = (props: propsData) => {
         }
       };
 
-      const updatedCardData:any = await Promise.all(coins.map(fetchDataForCoin));
+      const updatedCardData: any = await Promise.all(coins.map(fetchDataForCoin));
       // console.log(updatedCardData,"=updatedCardData");
-    
- 
+
+
       setCoins(updatedCardData)
     };
 
@@ -119,7 +119,7 @@ const ChartTabs = (props: propsData) => {
   }, [props?.coinsList]);
 
 
-  
+
 
   // Open order paggination code here
   const endOpenOffset = openItemOffset + itemsPerPage;
@@ -337,7 +337,7 @@ const ChartTabs = (props: propsData) => {
                 </thead>
                 <tbody>
                   {coins && coins.length > 0 && coins?.map((item: any, index: number) => {
-                      const tokenImage = item?.image;
+                    const tokenImage = item?.image;
 
                     return (
                       <tr
@@ -351,7 +351,7 @@ const ChartTabs = (props: propsData) => {
                       >
                         <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                           <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                            <Image src={`${imgSrc3 ? fallbackImage :tokenImage}`} width={30} height={30} alt="coins" onError={() => setImgSrc3(true)}  className={` w-[30px] h-[30px] ${item.symbol === 'XRP' || item.symbol === 'ETH' ? 'bg-white rounded-full' : ''}`}/>
+                            <Image src={`${imgSrc3 ? fallbackImage : tokenImage}`} width={30} height={30} alt="coins" onError={() => setImgSrc3(true)} className={` w-[30px] h-[30px] ${item.symbol === 'XRP' || item.symbol === 'ETH' ? 'bg-white rounded-full' : ''}`} />
 
                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                               <p className="info-14-18 dark:text-white">
@@ -404,16 +404,16 @@ const ChartTabs = (props: propsData) => {
                           </p>
                         </td>
                         <td className="max-[1023px]:hidden ">
-                        <div className={`flex items-center gap-[4px] flex-wrap`}>
-                                            <p className={`footer-text-secondary  ${Number(item?.hlocv?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(item?.hlocv?.changeRate) > 0 ? '+' : ''}{item?.hlocv?.changeRate !== undefined ? (Number(item?.hlocv?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
+                          <div className={`flex items-center gap-[4px] flex-wrap`}>
+                            <p className={`footer-text-secondary  ${Number(item?.hlocv?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(item?.hlocv?.changeRate) > 0 ? '+' : ''}{item?.hlocv?.changeRate !== undefined ? (Number(item?.hlocv?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
 
-                                            {Number(item?.hlocv?.changeRate) > 0 &&
-                                                <IconsComponent type="high" active={false} hover={false} />
-                                            }
-                                            {Number(item?.hlocv?.changeRate) < 0 &&
-                                                <IconsComponent type="low" active={false} hover={false} />
-                                            }
-                                        </div>
+                            {Number(item?.hlocv?.changeRate) > 0 &&
+                              <IconsComponent type="high" active={false} hover={false} />
+                            }
+                            {Number(item?.hlocv?.changeRate) < 0 &&
+                              <IconsComponent type="low" active={false} hover={false} />
+                            }
+                          </div>
                         </td>
                       </tr>
                     );
@@ -424,18 +424,21 @@ const ChartTabs = (props: propsData) => {
             <div className="flex pt-[25px] gap-[10px] items-center justify-between flex-wrap xl:flex-nowrap">
               <p className="info-12 md:footer-text !text-gamma">{props?.coinsList?.length} assets</p>
 
-              <ReactPaginate
-                className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
-                  }`}
-                breakLabel="..."
-                nextLabel=">"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={5}
-                marginPagesDisplayed={2}
-                pageCount={pageCount}
-                previousLabel="<"
-                renderOnZeroPageCount={null}
-              />
+              {
+                pageCount > 1 &&
+                <ReactPaginate
+                  className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+                    }`}
+                  breakLabel="..."
+                  nextLabel=">"
+                  onPageChange={handlePageClick}
+                  pageRangeDisplayed={5}
+                  marginPagesDisplayed={2}
+                  pageCount={pageCount}
+                  previousLabel="<"
+                  renderOnZeroPageCount={null}
+                />
+              }
             </div>
           </div>
         )}
@@ -565,7 +568,7 @@ const ChartTabs = (props: propsData) => {
                         >
                           <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                             <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                              <Image src={`${imgSrc ? fallbackImage :  tokenImage}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className="min-w-[30px]" />
+                              <Image src={`${imgSrc ? fallbackImage : tokenImage}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className="min-w-[30px]" />
 
                               <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                 <p className="info-14-18 dark:text-white">
@@ -657,20 +660,23 @@ const ChartTabs = (props: propsData) => {
                 </tbody>
               </table>
             </div>
-            <div className="flex pt-[25px] items-center justify-end">
-              <ReactPaginate
-                className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
-                  }`}
-                breakLabel="..."
-                nextLabel=">"
-                onPageChange={handleOpenPageClick}
-                pageRangeDisplayed={1}
-                marginPagesDisplayed={2}
-                pageCount={pageOpenCount}
-                previousLabel="<"
-                renderOnZeroPageCount={null}
-              />
-            </div>
+            {
+              pageOpenCount > 1 &&
+              <div className="flex pt-[25px] items-center justify-end">
+                <ReactPaginate
+                  className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+                    }`}
+                  breakLabel="..."
+                  nextLabel=">"
+                  onPageChange={handleOpenPageClick}
+                  pageRangeDisplayed={1}
+                  marginPagesDisplayed={2}
+                  pageCount={pageOpenCount}
+                  previousLabel="<"
+                  renderOnZeroPageCount={null}
+                />
+              </div>
+            }
           </div>
         )}
 
@@ -877,13 +883,13 @@ const ChartTabs = (props: propsData) => {
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                             
-                              ${currencyFormatter(truncateNumber(item.volume_usdt,6))}
+
+                              ${currencyFormatter(truncateNumber(item.volume_usdt, 6))}
                             </p>
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                              {currencyFormatter(truncateNumber(item.token_amount,6))}
+                              {currencyFormatter(truncateNumber(item.token_amount, 6))}
                             </p>
                           </div>
 
@@ -1026,12 +1032,12 @@ const ChartTabs = (props: propsData) => {
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                                   <p className="info-14-18 dark:text-white ">
-                                    ${currencyFormatter(truncateNumber(elm?.volume_usdt,6))}
+                                    ${currencyFormatter(truncateNumber(elm?.volume_usdt, 6))}
                                   </p>
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                                   <p className="info-14-18 dark:text-white">
-                                    ${currencyFormatter(truncateNumber(elm.token_amount,6))}
+                                    ${currencyFormatter(truncateNumber(elm.token_amount, 6))}
                                   </p>
                                 </div>
 
@@ -1066,20 +1072,23 @@ const ChartTabs = (props: propsData) => {
                 )}
               </div>
             </div>
-            <div className="flex pt-[25px] items-center justify-end">
-              <ReactPaginate
-                className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
-                  }`}
-                breakLabel="..."
-                nextLabel=">"
-                onPageChange={handleTradePageClick}
-                pageRangeDisplayed={5}
-                marginPagesDisplayed={2}
-                pageCount={pageTradeCount}
-                previousLabel="<"
-                renderOnZeroPageCount={null}
-              />
-            </div>
+            {
+              pageTradeCount > 1 &&
+              <div className="flex pt-[25px] items-center justify-end">
+                <ReactPaginate
+                  className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+                    }`}
+                  breakLabel="..."
+                  nextLabel=">"
+                  onPageChange={handleTradePageClick}
+                  pageRangeDisplayed={5}
+                  marginPagesDisplayed={2}
+                  pageCount={pageTradeCount}
+                  previousLabel="<"
+                  renderOnZeroPageCount={null}
+                />
+              </div>
+            }
           </div>
         )}
 

@@ -309,21 +309,24 @@ const DepositTable = (props: propData) => {
                 </tbody>
               </table>
             </div>
-            <div className="flex pt-[25px] items-center justify-end">
-              <ReactPaginate
-                className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-                breakLabel="..."
-                nextLabel=">"
-                onPageChange={handlePageClick}
-                pageRangeDisplayed={1}
-                marginPagesDisplayed={2}
-                pageCount={pageCount}
-                previousLabel="<"
-                renderOnZeroPageCount={null}
-                forcePage={currentPage}
-              />
+            {
+              pageCount > 1 &&
+              <div className="flex pt-[25px] items-center justify-end">
+                <ReactPaginate
+                  className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                  breakLabel="..."
+                  nextLabel=">"
+                  onPageChange={handlePageClick}
+                  pageRangeDisplayed={1}
+                  marginPagesDisplayed={2}
+                  pageCount={pageCount}
+                  previousLabel="<"
+                  renderOnZeroPageCount={null}
+                  forcePage={currentPage}
+                />
 
-            </div>
+              </div>
+            }
           </div>
       }
     </>

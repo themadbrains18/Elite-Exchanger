@@ -25,7 +25,7 @@ const CryptoCoin = (props: propsData) => {
   useEffect(() => {
     const fetchHLCOData = async () => {
       let coins = props?.coinList?.filter((item: any) => item?.symbol !== "USDT");
-      let limitedCoins = coins?.slice(0, 4);
+      let limitedCoins = coins?.slice(0, 6);
 
       const fetchDataForCoin = async (coin: any) => {
         

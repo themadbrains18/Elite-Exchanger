@@ -9,9 +9,9 @@ import { truncateNumber } from '@/libs/subdomain';
 
 
 interface propsData {
-  filter:string;
+  filter: string;
 }
-const DepositList = (props:propsData) => {
+const DepositList = (props: propsData) => {
   const [currentItems, setCurrentItems] = useState([]);
   const [itemOffset, setItemOffset] = useState(0);
   const [total, setTotal] = useState(0)
@@ -23,7 +23,7 @@ const DepositList = (props:propsData) => {
   useEffect(() => {
     getDepositData()
 
-  }, [itemOffset,props?.filter])
+  }, [itemOffset, props?.filter])
 
 
   async function getDepositData() {
@@ -37,14 +37,14 @@ const DepositList = (props:propsData) => {
     setTotal(depositHistory?.data?.total)
     if (props?.filter !== "") {
       let data = depositHistory?.data?.data.filter((item: any) => {
-              return item.coinName.split('/')[1].toLowerCase().includes(props?.filter.toLowerCase());
-            })
+        return item.coinName.split('/')[1].toLowerCase().includes(props?.filter.toLowerCase());
+      })
       setCurrentItems(data);
     }
-    else{
-    setCurrentItems(depositHistory?.data?.data);
+    else {
+      setCurrentItems(depositHistory?.data?.data);
 
-      }
+    }
 
   }
 
@@ -104,7 +104,7 @@ const DepositList = (props:propsData) => {
                     </div>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white  lg:text-start text-end">{currencyFormatter(truncateNumber(item?.amount,6))}</p>
+                    <p className="info-14-18 dark:text-white  lg:text-start text-end">{currencyFormatter(truncateNumber(item?.amount, 6))}</p>
                   </td>
                   <td className="max-[1023px]:hidden">
                     <p className="info-14-18 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
@@ -137,19 +137,22 @@ const DepositList = (props:propsData) => {
       </div>
       <div className="flex pt-[25px] items-center justify-between">
         <p className="info-12 md:footer-text !text-gamma">{total} assets</p>
-        <ReactPaginate
-          className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
-            }`}
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={1}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null}
-          forcePage={currentPage}
-        />
+        {
+          pageCount > 1 &&
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+              }`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+            forcePage={currentPage}
+          />
+        }
       </div>
     </>
   )

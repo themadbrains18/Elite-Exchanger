@@ -3,6 +3,7 @@ import IconsComponent from '../snippets/icons';
 import Image from 'next/image';
 import Context from "../contexts/context";
 import { currencyFormatter } from '../snippets/market/buySellCard';
+import { truncateNumber } from '@/libs/subdomain';
 
 interface propsData {
     slug?: any;
@@ -98,8 +99,8 @@ const OrderBookMobile = (props: propsData) => {
                                         if (item.order_type === 'buy') {
                                             return <div key={index+Date.now()} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
                                                 <p className='info-12 z-[2] !text-buy'>$ {currencyFormatter(item?.limit_usdt)}</p>
-                                                <p className='info-12 text-end z-[2] px-[2px]'>{currencyFormatter(item?.token_amount)}</p>
-                                                <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
+                                                <p className='info-12 text-end z-[2] px-[2px]'>{currencyFormatter(truncateNumber(item?.token_amount,6))}</p>
+                                                <div className='absolute top-0 z-[1] right-0 w-full h-full bg-green'></div>
                                             </div>
                                         }
                                     })}
@@ -135,8 +136,8 @@ const OrderBookMobile = (props: propsData) => {
                                         if (item.order_type === 'sell') {
                                             return <div key={Date.now()+index} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
                                                 <p className='info-12 z-[2] !text-sell'>$ {currencyFormatter(item?.limit_usdt)}</p>
-                                                <p className='info-12 text-end z-[2] px-[2px]'>{currencyFormatter(item?.token_amount.toFixed(6))}</p>
-                                                <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
+                                                <p className='info-12 text-end z-[2] px-[2px]'>{currencyFormatter(truncateNumber(item?.token_amount,6))}</p>
+                                                <div className='absolute top-0 z-[1] right-0 w-full h-full bg-red-light'></div>
                                             </div>
                                         }
                                     })}
@@ -177,15 +178,15 @@ const OrderBookMobile = (props: propsData) => {
                                     if (item.order_type === 'buy') {
                                         return <div key={Date.now()+index} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
                                             <p className='info-12 z-[2] !text-buy'>$ {currencyFormatter(item?.limit_usdt)}</p>
-                                            <p className='info-12 text-end z-[2] px-[2px]'>{currencyFormatter(item?.token_amount)}</p>
-                                            <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
+                                            <p className='info-12 text-end z-[2] px-[2px]'>{currencyFormatter(truncateNumber(item?.token_amount,6))}</p>
+                                            <div className='absolute top-0 z-[1] right-0 w-full h-full bg-green'></div>
                                         </div>
                                     }
                                     else {
                                         return <div key={Date.now()+index+'22'} className='grid grid-cols-2 gap-10 relative py-[4.5px] mb-[10px]'>
                                             <p className='info-12 z-[2] !text-sell'>$ {currencyFormatter(item?.limit_usdt)}</p>
-                                            <p className='info-12 text-end z-[2] px-[2px]'>{currencyFormatter(item?.token_amount)}</p>
-                                            <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
+                                            <p className='info-12 text-end z-[2] px-[2px]'>{currencyFormatter(truncateNumber(item?.token_amount,6))}</p>
+                                            <div className='absolute top-0 z-[1] right-0 w-full h-full bg-red-light'></div>
                                         </div>
                                     }
                                 })}
@@ -207,7 +208,7 @@ const OrderBookMobile = (props: propsData) => {
                 </div>
 
                 <div>
-                    <button type='button' className='solid-button w-full bg-buy mt-20'>$ {props?.token?.price.toFixed(4)}</button>
+                    <button type='button' className='solid-button w-full bg-buy mt-20'>$ {truncateNumber(props?.token?.price,6)}</button>
                 </div>
 
 

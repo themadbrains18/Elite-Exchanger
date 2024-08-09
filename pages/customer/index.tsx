@@ -15,12 +15,6 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useWebSocket } from '@/libs/WebSocketContext'
 
-// import Pusher from 'pusher-js';
-
-// const pusher = new Pusher('b275b2f9e51725c09934', {
-//   cluster: 'ap2'
-// });
-
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -40,12 +34,6 @@ export default function Home({ session, coinList }: Session) {
 
   useEffect(() => {
     socket();
-    // fetch('https://ipapi.co/json/')
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //   })
-    //   .catch(error => console.error('Error:', error));
   }, [wbsocket])
 
   const socket = () => {

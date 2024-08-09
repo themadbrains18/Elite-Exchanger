@@ -15,7 +15,7 @@ interface fixSection {
 }
 const Activity = (props: fixSection) => {
   const [active, setActive] = useState(1);
-  const { mode } = useContext(Context); 
+  const { mode } = useContext(Context);
   const [itemOffset, setItemOffset] = useState(0);
   const [total, setTotal] = useState(0)
   let itemsPerPage = 10;
@@ -26,8 +26,8 @@ const Activity = (props: fixSection) => {
   let pageCount = Math.ceil(total / itemsPerPage);
 
   const handlePageClick = async (event: any) => {
-      const newOffset = (event.selected * itemsPerPage) % total;
-      setItemOffset(newOffset);
+    const newOffset = (event.selected * itemsPerPage) % total;
+    setItemOffset(newOffset);
 
   };
 
@@ -55,7 +55,7 @@ const Activity = (props: fixSection) => {
 
     if (response) {
       toast.success(response?.data),
-      setData([]);
+        setData([]);
       setTotal(0)
     }
 
@@ -82,7 +82,7 @@ const Activity = (props: fixSection) => {
 
     }
   }
-  console.log(data,"=======================dta");
+  console.log(data, "=======================dta");
 
 
   return (
@@ -120,15 +120,15 @@ const Activity = (props: fixSection) => {
             </div> */}
             {
               data && data.length > 0 && (
-                
-                
-                <button className=" solid-button w-full hover:bg-primary-800" 
-                  onClick={()=>{setConfirmDelete(true)}}
-                  >
-                Clear History
-              </button>
-            )
-          }
+
+
+                <button className=" solid-button w-full hover:bg-primary-800"
+                  onClick={() => { setConfirmDelete(true) }}
+                >
+                  Clear History
+                </button>
+              )
+            }
           </div>
         </div>
         <div className="overflow-x-auto">
@@ -259,58 +259,61 @@ const Activity = (props: fixSection) => {
             </tbody>
           </table>
         </div>
-        <div className="flex pt-[25px] items-center justify-end">
-                <ReactPaginate
-                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-                    breakLabel="..."
-                    nextLabel=">"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    marginPagesDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel="<"
-                    renderOnZeroPageCount={null} />
-            </div>
+        {
+          pageCount > 1 &&
+          <div className="flex pt-[25px] items-center justify-end">
+            <ReactPaginate
+              className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+              breakLabel="..."
+              nextLabel=">"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={5}
+              marginPagesDisplayed={2}
+              pageCount={pageCount}
+              previousLabel="<"
+              renderOnZeroPageCount={null} />
+          </div>
+        }
       </section>
 
-        {/* confirm modal to clear history */}
-        {
-          confirmDelete && (
-            <>
-              <div className="bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible" onClick={ ()=>{setConfirmDelete(false)} }></div>
-              <div className="max-w-[calc(100%-30px)] md:max-w-[500px] w-full p-[40px]  z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
-                  <div className="flex items-center justify-between ">
-                    <p className="sec-title">Delete History</p>
-                    <svg
-                      onClick={ ()=>{setConfirmDelete(false)} }
-                        enableBackground="new 0 0 60.963 60.842"
-                        version="1.1"
-                        id="Layer_1"
-                        xmlns="http://www.w3.org/2000/svg"
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                        x="0px"
-                        y="0px"
-                        viewBox="0 0 60.963 60.842"
-                        xmlSpace="preserve"
-                        className="max-w-[18px] cursor-pointer w-full"
-                    >
-                        <path
-                            fill={mode === "dark" ? "#fff" : "#9295A6"}
-                            d="M59.595,52.861L37.094,30.359L59.473,7.98c1.825-1.826,1.825-4.786,0-6.611
+      {/* confirm modal to clear history */}
+      {
+        confirmDelete && (
+          <>
+            <div className="bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-80 visible" onClick={() => { setConfirmDelete(false) }}></div>
+            <div className="max-w-[calc(100%-30px)] md:max-w-[500px] w-full p-[40px]  z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+              <div className="flex items-center justify-between ">
+                <p className="sec-title">Delete History</p>
+                <svg
+                  onClick={() => { setConfirmDelete(false) }}
+                  enableBackground="new 0 0 60.963 60.842"
+                  version="1.1"
+                  id="Layer_1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlnsXlink="http://www.w3.org/1999/xlink"
+                  x="0px"
+                  y="0px"
+                  viewBox="0 0 60.963 60.842"
+                  xmlSpace="preserve"
+                  className="max-w-[18px] cursor-pointer w-full"
+                >
+                  <path
+                    fill={mode === "dark" ? "#fff" : "#9295A6"}
+                    d="M59.595,52.861L37.094,30.359L59.473,7.98c1.825-1.826,1.825-4.786,0-6.611
                                   c-1.826-1.825-4.785-1.825-6.611,0L30.483,23.748L8.105,1.369c-1.826-1.825-4.785-1.825-6.611,0c-1.826,1.826-1.826,4.786,0,6.611
                                   l22.378,22.379L1.369,52.861c-1.826,1.826-1.826,4.785,0,6.611c0.913,0.913,2.109,1.369,3.306,1.369s2.393-0.456,3.306-1.369
                                   l22.502-22.502l22.501,22.502c0.913,0.913,2.109,1.369,3.306,1.369s2.393-0.456,3.306-1.369
                                   C61.42,57.647,61.42,54.687,59.595,52.861z"
-                        />
-                    </svg>
-                  </div>
-                  <p className="text-[16px] md:text-[18px] dark:text-grey-v-1 leading-4 md:leading-5 text-center my-40">Are You Sure you want to clear all history?</p>
-                  <div className="grid grid-cols-2 items-center gap-10 mt-6">
-                    <button className="solid-button2 w-full" onClick={ ()=>{setConfirmDelete(false)} }>Cancel</button>
-                    <button className="solid-button w-full" onClick={() => {clearActivity();setConfirmDelete(false)}}>Delete</button>
-                  </div>
+                  />
+                </svg>
               </div>
-            </>
+              <p className="text-[16px] md:text-[18px] dark:text-grey-v-1 leading-4 md:leading-5 text-center my-40">Are You Sure you want to clear all history?</p>
+              <div className="grid grid-cols-2 items-center gap-10 mt-6">
+                <button className="solid-button2 w-full" onClick={() => { setConfirmDelete(false) }}>Cancel</button>
+                <button className="solid-button w-full" onClick={() => { clearActivity(); setConfirmDelete(false) }}>Delete</button>
+              </div>
+            </div>
+          </>
         )
       }
     </>

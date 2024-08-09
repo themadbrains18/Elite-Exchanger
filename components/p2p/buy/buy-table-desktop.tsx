@@ -34,12 +34,12 @@ const BuyTableDesktop = (props: activeSection) => {
 
   useEffect(() => {
     setItemOffset(0); // Reset itemOffset to 0 when filters change
-}, [props?.firstCurrency, props?.paymentId]);
+  }, [props?.firstCurrency, props?.paymentId]);
 
   useEffect(() => {
- 
-      getAllPosts(itemOffset);
-    
+
+    getAllPosts(itemOffset);
+
   }, [itemOffset, props?.firstCurrency, props?.paymentId]);
 
   const getAllPosts = async (itemOffset: number) => {
@@ -85,7 +85,7 @@ const BuyTableDesktop = (props: activeSection) => {
 
       setList(posts.data.data);
 
-      if(posts?.data?.totalLength<=10){
+      if (posts?.data?.totalLength <= 10) {
         setItemOffset(0)
       }
 
@@ -278,7 +278,7 @@ const BuyTableDesktop = (props: activeSection) => {
                     </td>
 
                     <td>
-                      <p className="info-14-18 dark:text-white  ">{currencyFormatter(truncateNumber(item?.price,6))} INR</p>
+                      <p className="info-14-18 dark:text-white  ">{currencyFormatter(truncateNumber(item?.price, 6))} INR</p>
                     </td>
 
                     <td>
@@ -291,16 +291,16 @@ const BuyTableDesktop = (props: activeSection) => {
 
                     <td>
                       <div className='flex items-center '>
-                      {
-                      payment_method && payment_method.length>0 && payment_method.map((elem: any, ind: number) => {
-                        const iconClass = ind === 0 ? '' : 'ml-[-10px]';
-                        return (
-                          <Fragment key={ind}>
-                            <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className={iconClass} />
-                          </Fragment>
-                        )
-                      })
-                    }
+                        {
+                          payment_method && payment_method.length > 0 && payment_method.map((elem: any, ind: number) => {
+                            const iconClass = ind === 0 ? '' : 'ml-[-10px]';
+                            return (
+                              <Fragment key={ind}>
+                                <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className={iconClass} />
+                              </Fragment>
+                            )
+                          })
+                        }
                       </div>
                     </td>
 
@@ -330,20 +330,23 @@ const BuyTableDesktop = (props: activeSection) => {
           </tbody>
         </table>
       </div>
-      <div className="flex pt-[25px] items-center justify-end">
-        <ReactPaginate
-          className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={5}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null} 
-          forcePage={Math.floor(itemOffset / itemsPerPage)} />
+      {
+        pageCount > 1 &&
+        <div className="flex pt-[25px] items-center justify-end">
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={5}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+            forcePage={Math.floor(itemOffset / itemsPerPage)} />
 
-      </div>
+        </div>
+      }
 
       {show &&
         <BuyAuthenticationModelPopup title='Confirmation' message='Please complete your kyc' setShow={setShow} setActive={setActive} show={show} type={type} />

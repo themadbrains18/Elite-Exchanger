@@ -25,7 +25,7 @@ const WithdrawList = (props: propsData) => {
   useEffect(() => {
     getWithdrawData()
 
-  }, [itemOffset,props?.filter])
+  }, [itemOffset, props?.filter])
 
   async function getWithdrawData() {
     let withdrawList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/list?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
@@ -35,8 +35,8 @@ const WithdrawList = (props: propsData) => {
       },
     }).then(response => response.json());
 
-    console.log(withdrawList,"==========withdrawList");
-    
+    console.log(withdrawList, "==========withdrawList");
+
     setTotal(withdrawList?.data?.total)
     if (props?.filter !== "") {
       let data = withdrawList?.data?.data.filter((item: any) => {
@@ -111,7 +111,7 @@ const WithdrawList = (props: propsData) => {
                     </div>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white  lg:text-start text-end">{currencyFormatter(truncateNumber(item?.amount,6))}</p>
+                    <p className="info-14-18 dark:text-white  lg:text-start text-end">{currencyFormatter(truncateNumber(item?.amount, 6))}</p>
                   </td>
                   <td className="max-[1023px]:hidden">
                     <p className="info-14-18 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
@@ -144,19 +144,22 @@ const WithdrawList = (props: propsData) => {
       </div>
       <div className="flex pt-[25px] items-center justify-between">
         <p className="info-12 md:footer-text !text-gamma">{total} assets</p>
-        <ReactPaginate
-          className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
-            }`}
-          breakLabel="..."
-          nextLabel=">"
-          onPageChange={handlePageClick}
-          pageRangeDisplayed={1}
-          marginPagesDisplayed={2}
-          pageCount={pageCount}
-          previousLabel="<"
-          renderOnZeroPageCount={null}
-          forcePage={currentPage}
-        />
+        {
+          pageCount > 1 &&
+          <ReactPaginate
+            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+              }`}
+            breakLabel="..."
+            nextLabel=">"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={1}
+            marginPagesDisplayed={2}
+            pageCount={pageCount}
+            previousLabel="<"
+            renderOnZeroPageCount={null}
+            forcePage={currentPage}
+          />
+        }
       </div>
     </>
   )

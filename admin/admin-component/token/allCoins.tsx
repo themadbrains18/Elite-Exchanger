@@ -112,7 +112,7 @@ const AllCoins = (props: Session) => {
 
   return (
     <>
-      <ToastContainer limit={1}/>
+      <ToastContainer limit={1} />
       <div
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${(show || editShow || networkShow) ? "opacity-80 visible" : "opacity-0 invisible"
           }`}
@@ -365,19 +365,22 @@ const AllCoins = (props: Session) => {
             </tbody>
           </table>
         </div>
-        <div className="flex pt-[25px] items-center justify-end">
+        {
+          pageCount > 1 &&
+          <div className="flex pt-[25px] items-center justify-end">
 
-          <ReactPaginate
-            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-            breakLabel="..."
-            nextLabel=">"
-            onPageChange={handlePageClick}
-            pageRangeDisplayed={1}
-            marginPagesDisplayed={2}
-            pageCount={pageCount}
-            previousLabel="<"
-            renderOnZeroPageCount={null} />
-        </div>
+            <ReactPaginate
+              className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+              breakLabel="..."
+              nextLabel=">"
+              onPageChange={handlePageClick}
+              pageRangeDisplayed={1}
+              marginPagesDisplayed={2}
+              pageCount={pageCount}
+              previousLabel="<"
+              renderOnZeroPageCount={null} />
+          </div>
+        }
       </div>
 
       {

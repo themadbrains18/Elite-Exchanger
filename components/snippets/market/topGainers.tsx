@@ -79,7 +79,7 @@ const TopGainers = (props: propsData) => {
 
                                     <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                                            <Image src={imgSrc?'/assets/history/Coin.svg':`https://lcw.nyc3.cdn.digitaloceanspaces.com/production/currencies/32/${item?.code.toLowerCase()}.webp`} width={30} height={30} alt="coins" onError={()=>{setImgSrc(true)}} className={`${item?.symbol==="XRP"&&"bg-white rounded-full"}`}/>
+                                            <Image src={imgSrc ? '/assets/history/Coin.svg' : `https://lcw.nyc3.cdn.digitaloceanspaces.com/production/currencies/32/${item?.code.toLowerCase()}.webp`} width={30} height={30} alt="coins" onError={() => { setImgSrc(true) }} className={`${item?.symbol === "XRP" && "bg-white rounded-full"}`} />
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                                 <p className="info-14-18 dark:text-white">{item.code}</p>
                                                 <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.code}</p>
@@ -131,18 +131,23 @@ const TopGainers = (props: propsData) => {
 
                 </table>
             </div>
-            <div className="flex pt-[25px] items-center justify-end">
-                <ReactPaginate
-                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-                    breakLabel="..."
-                    nextLabel=">"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    marginPagesDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel="<"
-                    renderOnZeroPageCount={null} />
-            </div></>
+            {
+                pageCount > 1 &&
+                <div className="flex pt-[25px] items-center justify-end">
+                    <ReactPaginate
+                        className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        marginPagesDisplayed={2}
+                        pageCount={pageCount}
+                        previousLabel="<"
+                        renderOnZeroPageCount={null} />
+                </div>
+            }
+
+        </>
     )
 }
 

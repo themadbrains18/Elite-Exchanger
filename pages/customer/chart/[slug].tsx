@@ -82,10 +82,10 @@ const Chart = (props: Session) => {
         setAllCoins(tokenList?.data);
         setCurrentToken(ccurrentToken);
         getTokenUserTradeHistory(ccurrentToken[0]?.id);
-        
+
     }
 
-    const getTokenUserTradeHistory=async(token_id:string)=>{
+    const getTokenUserTradeHistory = async (token_id: string) => {
         addToWatchList(token_id);
         if (props.session) {
             let openOrder = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market?token_id=${token_id}&userid=${props.session?.user?.user_id}`, {
@@ -157,16 +157,16 @@ const Chart = (props: Session) => {
     }
 
     const filterBuySellRecords = (data: any) => {
-// console.log(slug,"slug");
+        // console.log(slug,"slug");
 
 
         if (data && data.length > 0) {
             let sellRecord = data.filter((item: any) => {
-                return item.order_type === 'sell' && item?.global_token ? item?.global_token?.symbol===slug: item?.token?.symbol===slug
+                return item.order_type === 'sell' && item?.global_token ? item?.global_token?.symbol === slug : item?.token?.symbol === slug
             })
 
             let buyRecord = data.filter((item: any) => {
-                return item.order_type === 'buy' && item?.global_token ? item?.global_token?.symbol===slug: item?.token?.symbol===slug
+                return item.order_type === 'buy' && item?.global_token ? item?.global_token?.symbol === slug : item?.token?.symbol === slug
             })
             setSellTrade(sellRecord);
             setBuyTrade(buyRecord);
@@ -191,7 +191,7 @@ const Chart = (props: Session) => {
                             <ChartSec slug={`${slug === 'BTCB' ? 'BTC' : slug === 'BNBT' ? 'BNB' : slug}USDT`} view={view} />
                             {/* hidden on mobile */}
                             <div className='lg:block hidden'>
-                                <ChartTabs slug={slug} coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory}  />
+                                <ChartTabs slug={slug} coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} />
                             </div>
                         </div>
                         <div className="max-w-full lg:max-w-[432px] w-full">
@@ -205,12 +205,12 @@ const Chart = (props: Session) => {
                             {/* hidden on desktop */}
                             <div className='lg:hidden'>
                                 <OrderBookMobile slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} hlocData={hlocData} />
-                                <ChartTabs slug={slug} coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory}  />
+                                <ChartTabs slug={slug} coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} />
                             </div>
                         </div>
                     </div>
                     <div className="lg:hidden">
-                        <ResponsiveFixCta coins={allCoins} session={props.session} token={currentToken[0]} slug={slug} assets={props.assets}  />
+                        <ResponsiveFixCta coins={allCoins} session={props.session} token={currentToken[0]} slug={slug} assets={props.assets} />
                     </div>
                 </div>
             </div>
@@ -223,7 +223,7 @@ export default Chart
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const session = await getServerSession(context.req, context.res, authOptions);
     const providers = await getProviders();
-    
+
     return {
         props: {
             session: session,

@@ -111,10 +111,10 @@ const AllCrypto = (props: propsData) => {
                                     </td>
 
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{abbreviateNumber(item.totalSupply)||0}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{abbreviateNumber(item.totalSupply) || 0}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
-                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{abbreviateNumber(item.maxSupply)|| 0}</p>
+                                        <p className="info-14-18 !text-[14px] md:!text-[16px] dark:text-white">{abbreviateNumber(item.maxSupply) || 0}</p>
                                     </td>
                                     <td className="max-[1023px]:hidden">
                                         <div className={`flex items-center gap-[4px] flex-wrap`}>
@@ -159,18 +159,21 @@ const AllCrypto = (props: propsData) => {
 
                 </table>
             </div>
-            <div className="flex pt-[25px] items-center justify-end">
-                <ReactPaginate
-                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-                    breakLabel="..."
-                    nextLabel=">"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    marginPagesDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel="<"
-                    renderOnZeroPageCount={null} />
-            </div>
+            {
+                pageCount > 1 &&
+                <div className="flex pt-[25px] items-center justify-end">
+                    <ReactPaginate
+                        className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        marginPagesDisplayed={2}
+                        pageCount={pageCount}
+                        previousLabel="<"
+                        renderOnZeroPageCount={null} />
+                </div>
+            }
             {
                 show1 === 1 &&
                 <>

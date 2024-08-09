@@ -36,7 +36,7 @@ const FuturePairList = (props: Session) => {
     const { mode } = useContext(Context);
 
     const [total, setTotal] = useState(0);
-    const {data:session} = useSession()
+    const { data: session } = useSession()
 
     let itemsPerPage = 10;
 
@@ -55,7 +55,7 @@ const FuturePairList = (props: Session) => {
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
-    
+
             let pairList = await fetch(
                 `${process.env.NEXT_PUBLIC_APIURL}/future/${itemOffset}/${itemsPerPage}`,
                 {
@@ -69,10 +69,10 @@ const FuturePairList = (props: Session) => {
             setList(pairList?.data);
             setTotal(pairList?.total);
         } catch (error) {
-            console.log("error in get list of future trade pair",error);
-            
+            console.log("error in get list of future trade pair", error);
+
         }
-      
+
     };
     const pageCount = Math.ceil(total / itemsPerPage);
 
@@ -95,21 +95,21 @@ const FuturePairList = (props: Session) => {
                     body: JSON.stringify(data),
                 }
             ).then((response) => response.json());
-    
+
             if (responseStatus) {
                 refreshPairList();
             }
         } catch (error) {
-            console.log("error in update ststua of future pair list",error);
-            
+            console.log("error in update ststua of future pair list", error);
+
         }
 
-        
+
     };
 
     return (
         <>
-            <ToastContainer limit={1}/>
+            <ToastContainer limit={1} />
             <div
                 className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show || editShow ? "opacity-80 visible" : "opacity-0 invisible"
                     }`}
@@ -314,21 +314,24 @@ const FuturePairList = (props: Session) => {
                         </tbody>
                     </table>
                 </div>
-                <div className="flex pt-[25px] items-center justify-end">
-                    <ReactPaginate
-                        className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
-                            }`}
-                        breakLabel="..."
-                        nextLabel=">"
-                        onPageChange={handlePageClick}
-                        pageRangeDisplayed={1}
-                        marginPagesDisplayed={2}
-                        pageCount={pageCount}
-                        previousLabel="<"
-                        renderOnZeroPageCount={null}
-                        forcePage={currentPage}
-                    />
-                </div>
+                {
+                    pageCount > 1 &&
+                    <div className="flex pt-[25px] items-center justify-end">
+                        <ReactPaginate
+                            className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""
+                                }`}
+                            breakLabel="..."
+                            nextLabel=">"
+                            onPageChange={handlePageClick}
+                            pageRangeDisplayed={1}
+                            marginPagesDisplayed={2}
+                            pageCount={pageCount}
+                            previousLabel="<"
+                            renderOnZeroPageCount={null}
+                            forcePage={currentPage}
+                        />
+                    </div>
+                }
             </div>
 
             {show && <FutureAddPair data={props?.list} show={show} setShow={setShow} refreshPairList={refreshPairList} />}

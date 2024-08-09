@@ -87,18 +87,18 @@ const Spot = (props: propsData) => {
                     </thead>
                     <tbody>
                         {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: any) => {
-                            console.log(item,"=================item");
-                            
+                            console.log(item, "=================item");
+
                             return (
                                 <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => { window.location.href = `/chart/${item.symbol}`; }}>
 
                                     <td className="group-hover:bg-[#FEF2F2] dark:group-hover:bg-black-v-1 lg:sticky bg-white dark:bg-d-bg-primary">
                                         <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                                        <Image src={`${imgSrc?'/assets/history/Coin.svg':item.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol==="XRP"&&"bg-white rounded-full"}`}/>
+                                            <Image src={`${imgSrc ? '/assets/history/Coin.svg' : item.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol === "XRP" && "bg-white rounded-full"}`} />
 
                                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                                 <p className="info-14-18 dark:text-white">{item.symbol}</p>
-                                                
+
                                             </div>
                                         </div>
                                     </td>
@@ -132,7 +132,7 @@ const Spot = (props: propsData) => {
                                     </td>
                                     <td className="">
                                         <button onClick={() => { window.location.href = `/chart/${item.symbol}`; }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
-                                            
+
                                             <IconsComponent type="openInNewTab" hover={false} active={false} />
                                         </button>
                                     </td>
@@ -159,18 +159,21 @@ const Spot = (props: propsData) => {
 
                 </table>
             </div>
-            <div className="flex pt-[25px] items-center justify-end">
-                <ReactPaginate
-                    className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
-                    breakLabel="..."
-                    nextLabel=">"
-                    onPageChange={handlePageClick}
-                    pageRangeDisplayed={5}
-                    marginPagesDisplayed={2}
-                    pageCount={pageCount}
-                    previousLabel="<"
-                    renderOnZeroPageCount={null} />
-            </div>
+            {
+                pageCount > 1 &&
+                <div className="flex pt-[25px] items-center justify-end">
+                    <ReactPaginate
+                        className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""}`}
+                        breakLabel="..."
+                        nextLabel=">"
+                        onPageChange={handlePageClick}
+                        pageRangeDisplayed={5}
+                        marginPagesDisplayed={2}
+                        pageCount={pageCount}
+                        previousLabel="<"
+                        renderOnZeroPageCount={null} />
+                </div>
+            }
             {
                 show1 === 1 &&
                 <>
