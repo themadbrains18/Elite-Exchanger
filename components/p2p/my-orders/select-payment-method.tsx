@@ -17,22 +17,26 @@ const SlectPaymentMethod = (props: propsData) => {
     const [sellerUser, setSellerUser] = useState<any>({});
     const showOpt = (e: any) => {
         let parent = e?.currentTarget?.closest(".parent");
-        console.log(parent,"========parent");
-        
         let nextSiblibg = parent?.nextElementSibling;
-        // nextSiblibg = nextSiblibg.querySelector("#scaner");
-        console.log(nextSiblibg,"========nextSiblibg");
-        
-        let nextSiblibgHeight = nextSiblibg?.querySelector("#scaner").scrollHeight;
-        
-        console.log(nextSiblibgHeight,"========nextSiblibgHeight");
+        let nextSiblibgHeight = nextSiblibg?.scrollHeight;
+    
+        // Detect if the browser is Safari
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    
+        if (isSafari) {
+            // Set height to 50% less if on Safari
+            nextSiblibgHeight = nextSiblibgHeight ? nextSiblibgHeight * 0.5 : 0;
+        }
+    
         parent?.classList?.toggle("show");
+    
         if (parent?.classList?.contains("show")) {
             nextSiblibg?.setAttribute("style", `height:${nextSiblibgHeight}px;`);
         } else {
             nextSiblibg?.removeAttribute("style");
         }
     }
+    
     const [payment_method, setPaymentMethod] = useState([]);
     
     const [orderDetail, setOrderDetail] = useState<any>({});
@@ -136,13 +140,13 @@ const SlectPaymentMethod = (props: propsData) => {
                                         ">
                                                <span className='text-banner-text  dark:text-white'>{elem?.master_payment_method?.payment_method}</span>
                                         <Fragment key={ind}>
-                                            <Image src={`${elem?.master_payment_method?.icon}`} alt='error'  width={28} height={28} />
+                                            <Image src={`${elem?.master_payment_method?.icon}`} alt='error' width={28} height={28} />
                                         </Fragment>
                                      
                                     </label>
                                     {/* <p className='info-14-18 !text-banner-heading dark:!text-white md:block hidden'>( BankName@{elem.master_payment_method?.payment_method} )</p> */}
                                 </div>
-                                <div className='cursor-pointer'  onClick={(e) => { showOpt(e) }}>
+                                <div className='cursor-pointer' onClick={(e) => { showOpt(e) }}>
                                     <IconsComponent type='downArrow' hover={false} active={false} />
                                 </div>
                             </div>
@@ -172,8 +176,8 @@ const SlectPaymentMethod = (props: propsData) => {
                                     <div className='text-center'>
                                         {elem?.pmObject?.qr_code!==undefined && elem?.pmObject?.qr_code!=="notValid" &&
                                             <>
-                                                <Image src={elem?.pmObject?.qr_code} alt='error' width={145} height={145} id='scaner' className='md:max-w-[145px] w-full max-w-[70px] md:mb-20 mx-auto rounded-[5px] bg-white p-10' />
-                                                <p className='sm-text md:block hidden !text-[12px] dark:!text-[#96969A]'>My QR Code:<span className='dark:text-grey-v-1 text-black'>&nbsp;{truncateNumber(orderDetail?.spend_amount,6)} INR</span></p>
+                                            <Image src={elem?.pmObject?.qr_code} alt='error' width={145} height={145} className='md:max-w-[145px] w-full max-w-[70px] md:mb-20 mx-auto rounded-[5px] bg-white p-10' />
+                                            <p className='sm-text md:block hidden !text-[12px] dark:!text-[#96969A]'>My QR Code:<span className='dark:text-grey-v-1 text-black'>&nbsp;{truncateNumber(orderDetail?.spend_amount,6)} INR</span></p>
                                             </>
                                         }
                                         
