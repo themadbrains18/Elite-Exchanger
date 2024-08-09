@@ -17,8 +17,14 @@ const SlectPaymentMethod = (props: propsData) => {
     const [sellerUser, setSellerUser] = useState<any>({});
     const showOpt = (e: any) => {
         let parent = e?.currentTarget?.closest(".parent");
+        console.log(parent,"========parent");
+        
         let nextSiblibg = parent?.nextElementSibling;
+        console.log(nextSiblibg,"========nextSiblibg");
+        
         let nextSiblibgHeight = nextSiblibg?.scrollHeight;
+        
+        console.log(nextSiblibgHeight,"========nextSiblibgHeight");
         parent?.classList?.toggle("show");
         if (parent?.classList?.contains("show")) {
             nextSiblibg?.setAttribute("style", `height:${nextSiblibgHeight}px;`);
@@ -135,7 +141,7 @@ const SlectPaymentMethod = (props: propsData) => {
                                     </label>
                                     {/* <p className='info-14-18 !text-banner-heading dark:!text-white md:block hidden'>( BankName@{elem.master_payment_method?.payment_method} )</p> */}
                                 </div>
-                                <div className='cursor-pointer' onClick={(e) => { showOpt(e) }}>
+                                <div className='cursor-pointer'  onClick={(e) => { showOpt(e) }}>
                                     <IconsComponent type='downArrow' hover={false} active={false} />
                                 </div>
                             </div>
