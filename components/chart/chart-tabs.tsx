@@ -177,8 +177,7 @@ const ChartTabs = (props: propsData) => {
       ).then((response) => response.json());
 
       if (cancelReponse?.data?.result) {
-        setActive(false);
-        setShow(false);
+    
         setOrderId("");
         if (wbsocket) {
           let withdraw = {
@@ -186,6 +185,13 @@ const ChartTabs = (props: propsData) => {
           }
           wbsocket.send(JSON.stringify(withdraw));
         }
+
+        setTimeout(()=>{
+          setActive(false);
+          setShow(false);
+        },2000)
+
+
       }
 
     } catch (error) {

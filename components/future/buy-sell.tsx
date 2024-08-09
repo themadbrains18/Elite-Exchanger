@@ -936,6 +936,7 @@ const BuySell = (props: fullWidth) => {
           rangetype="X"
           step={1}
           levrageValue={leverage}
+          min={0}
         />
 
         {/* ================================= */}
