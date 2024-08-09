@@ -1073,7 +1073,7 @@ const ChartTabs = (props: propsData) => {
               </div>
             </div>
             {
-              pageOpenCount > 1 &&
+              pageTradeCount > 1 &&
               <div className="flex pt-[25px] items-center justify-end">
                 <ReactPaginate
                   className={`history_pagination ${mode === "dark" ? "paginate_dark" : ""

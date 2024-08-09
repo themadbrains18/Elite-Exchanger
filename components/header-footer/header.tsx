@@ -215,7 +215,7 @@ const Header = (props: propsData) => {
     <>
       {/* <ToastContainer limit={1} /> */}
       <header
-        className={`${router?.pathname?.includes('/future/') ? 'py-[10px]' : 'py-[30px]'} z-[6] dark:bg-omega bg-white z-9 xl:rounded-none dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 w-full rounded-b-[20px] border-b-0 md:border-b dark:border-[#25262a] border-[#e5e7eb]`}
+        className={`${router?.pathname?.includes('/future/') ? 'py-[10px]' : 'py-[30px]'} z-[6] dark:bg-omega bg-white xl:rounded-none dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 w-full border-b-0 md:border-b dark:border-[#25262a] border-[#e5e7eb]`}
       >
         <div className={`container ${router?.pathname?.includes('/future/') && '!max-w-full'}`}>
           {/* this is for desktop */}
@@ -429,7 +429,7 @@ const Header = (props: propsData) => {
             </div>
           </div>
           {/* this is for mobile */}
-          <div className="lg:hidden z-[9]">
+          <div className="lg:hidden ">
             <div className="flex items-center justify-between">
               <div>
                 <Link href="/">

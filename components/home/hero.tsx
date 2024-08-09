@@ -5,6 +5,7 @@ import { useContext } from "react";
 import Context from "../contexts/context";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css'; 
+import 'swiper/css/bundle';
 
 
 const Hero = () => {
