@@ -25,7 +25,7 @@ const SlectPaymentMethod = (props: propsData) => {
     
         if (isSafari) {
             // Set height to 50% less if on Safari
-            nextSiblibgHeight = nextSiblibgHeight ? nextSiblibgHeight * 0.5 : 0;
+            nextSiblibgHeight = nextSiblibgHeight ? 350 : 0;
         }
     
         parent?.classList?.toggle("show");
