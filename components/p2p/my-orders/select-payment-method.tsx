@@ -20,10 +20,10 @@ const SlectPaymentMethod = (props: propsData) => {
         console.log(parent,"========parent");
         
         let nextSiblibg = parent?.nextElementSibling;
-        nextSiblibg = nextSiblibg.querySelector("#scaner");
+        // nextSiblibg = nextSiblibg.querySelector("#scaner");
         console.log(nextSiblibg,"========nextSiblibg");
         
-        let nextSiblibgHeight = nextSiblibg?.scrollHeight;
+        let nextSiblibgHeight = nextSiblibg?.querySelector("#scaner").scrollHeight;
         
         console.log(nextSiblibgHeight,"========nextSiblibgHeight");
         parent?.classList?.toggle("show");
