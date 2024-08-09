@@ -20,6 +20,7 @@ const SlectPaymentMethod = (props: propsData) => {
         console.log(parent,"========parent");
         
         let nextSiblibg = parent?.nextElementSibling;
+        nextSiblibg = nextSiblibg.querySelector("#scaner");
         console.log(nextSiblibg,"========nextSiblibg");
         
         let nextSiblibgHeight = nextSiblibg?.scrollHeight;
@@ -135,7 +136,7 @@ const SlectPaymentMethod = (props: propsData) => {
                                         ">
                                                <span className='text-banner-text  dark:text-white'>{elem?.master_payment_method?.payment_method}</span>
                                         <Fragment key={ind}>
-                                            <Image src={`${elem?.master_payment_method?.icon}`} alt='error' width={28} height={28} />
+                                            <Image src={`${elem?.master_payment_method?.icon}`} alt='error'  width={28} height={28} />
                                         </Fragment>
                                      
                                     </label>
@@ -171,8 +172,8 @@ const SlectPaymentMethod = (props: propsData) => {
                                     <div className='text-center'>
                                         {elem?.pmObject?.qr_code!==undefined && elem?.pmObject?.qr_code!=="notValid" &&
                                             <>
-                                            <Image src={elem?.pmObject?.qr_code} alt='error' width={145} height={145} className='md:max-w-[145px] w-full max-w-[70px] md:mb-20 mx-auto rounded-[5px] bg-white p-10' />
-                                            <p className='sm-text md:block hidden !text-[12px] dark:!text-[#96969A]'>My QR Code:<span className='dark:text-grey-v-1 text-black'>&nbsp;{truncateNumber(orderDetail?.spend_amount,6)} INR</span></p>
+                                                <Image src={elem?.pmObject?.qr_code} alt='error' width={145} height={145} id='scaner' className='md:max-w-[145px] w-full max-w-[70px] md:mb-20 mx-auto rounded-[5px] bg-white p-10' />
+                                                <p className='sm-text md:block hidden !text-[12px] dark:!text-[#96969A]'>My QR Code:<span className='dark:text-grey-v-1 text-black'>&nbsp;{truncateNumber(orderDetail?.spend_amount,6)} INR</span></p>
                                             </>
                                         }
                                         
