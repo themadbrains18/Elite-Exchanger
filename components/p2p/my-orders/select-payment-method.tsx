@@ -19,13 +19,27 @@ const SlectPaymentMethod = (props: propsData) => {
         let parent = e?.currentTarget?.closest(".parent");
         let nextSiblibg = parent?.nextElementSibling;
         let nextSiblibgHeight = nextSiblibg?.scrollHeight;
+    
+        // Detect if the browser is Safari
+        const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    
+        if (isSafari) {
+            // Set height to 50% less if on Safari
+            let scaner = document.querySelector("#scaner");
+            if(scaner){
+                nextSiblibgHeight = nextSiblibgHeight ? 350 : 0;
+            }
+        }
+    
         parent?.classList?.toggle("show");
+    
         if (parent?.classList?.contains("show")) {
             nextSiblibg?.setAttribute("style", `height:${nextSiblibgHeight}px;`);
         } else {
             nextSiblibg?.removeAttribute("style");
         }
     }
+    
     const [payment_method, setPaymentMethod] = useState([]);
     
     const [orderDetail, setOrderDetail] = useState<any>({});
@@ -165,7 +179,7 @@ const SlectPaymentMethod = (props: propsData) => {
                                     <div className='text-center'>
                                         {elem?.pmObject?.qr_code!==undefined && elem?.pmObject?.qr_code!=="notValid" &&
                                             <>
-                                            <Image src={elem?.pmObject?.qr_code} alt='error' width={145} height={145} className='md:max-w-[145px] w-full max-w-[70px] md:mb-20 mx-auto rounded-[5px] bg-white p-10' />
+                                            <Image src={elem?.pmObject?.qr_code} alt='error' width={145} height={145} id='scaner' className='md:max-w-[145px] w-full max-w-[70px] md:mb-20 mx-auto rounded-[5px] bg-white p-10' />
                                             <p className='sm-text md:block hidden !text-[12px] dark:!text-[#96969A]'>My QR Code:<span className='dark:text-grey-v-1 text-black'>&nbsp;{truncateNumber(orderDetail?.spend_amount,6)} INR</span></p>
                                             </>
                                         }
