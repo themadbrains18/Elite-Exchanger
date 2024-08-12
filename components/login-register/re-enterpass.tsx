@@ -157,105 +157,107 @@ const ReEnterpass = (props: propsData) => {
   return (
     <>
       <ToastContainer limit={1}/>
-      <section className="bg-primary-300 lg:dark:bg-black-v-1 xl:h-full  lg:bg-bg-primary ">
-        <div className="flex h-full min-h-full gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
+      <section className="bg-primary-300 lg:dark:bg-black-v-1 xl:h-full  lg:bg-bg-primary relative overflow-hidden">
+        <div className="flex h-full min-h-full bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
           <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
             <Image
-              src="/assets/register/forget.png"
+              src="/assets/register/register.png"
               width={848}
               height={631}
               alt="signup"
               className="object-cover min-h-screen h-[1080px] block w-full"
             />
           </div>
-          <div className="max-w-full lg:max-w-[50%] w-full ">
-            <div
-              className="my-[30px] lg:my-[40px]  max-w-[600px] w-full mx-auto cursor-pointer"
-              onClick={() => {
-                router.push("/");
-              }}
-            >
-              <div className="max-w-[183px] w-full max-[1023px]:mx-auto lg:ml-auto">
-                <HeaderLogo />
+          <div className="max-w-full lg:max-w-[50%] w-full max-[1023px]:h-screen">
+            <div className="max-w-[522px] w-full h-full lg:px-5 max-[1023px]:mx-auto">
+              <div
+                className="my-[30px] lg:my-[40px]  max-w-[600px] w-full mx-auto cursor-pointer"
+                onClick={() => {
+                  router.push("/");
+                }}
+              >
+                <div className="max-w-[183px] w-full max-[1023px]:mx-auto lg:ml-auto">
+                  <HeaderLogo />
+                </div>
               </div>
-            </div>
-            <div className="lg:hidden block">
-              <Image
-                src="/assets/register/forgetbg.svg"
-                alt="forget"
-                width={398}
-                height={198}
-                className="mx-auto"
-              />
-            </div>
-            <div className="mt-0 lg:mt-[250px] lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
-              <h1 className="lg-heading mb-5">Password Recovery</h1>
-              <p className="mb-5  lg:mb-[20px] md-text">
-                Create new password
-              </p>
-              {/**Form Start  */}
-              <form onSubmit={handleSubmit(onHandleSubmit)}  onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+              <div className="lg:hidden block">
+                <Image
+                  src="/assets/register/forgetbg.svg"
+                  alt="forget"
+                  width={398}
+                  height={198}
+                  className="mx-auto"
+                />
+              </div>
+              <div className="mt-0 lg:mt-[250px] lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
+                <h1 className="lg-heading mb-5">Password Recovery</h1>
+                <p className="mb-5  lg:mb-[20px] md-text">
+                  Create new password
+                </p>
+                {/**Form Start  */}
+                <form onSubmit={handleSubmit(onHandleSubmit)}  onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                }
+              }}>
 
-                <div className="relative text-end mb-[10px]">
-                  <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
-                </div>
-                <div
-                      className="relative flex justify-between gap-2 items-center input-cta"
-                      onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}}
-                    >
-                      <input type={`${show === true ? "text" : "password"}`} {...register('new_password')}
-                        name="new_password" placeholder="New Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta lg:dark:shadow-[inset_0_50px_0_#121318] dark:shadow-[inset_0_50px_0_#080808] shadow-[inset_0_50px_0_#e2f2ff]" maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)}  />
-                      <Image
-                        data-testid="show-hide"
-                        src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
-                        alt="eyeicon"
-                        width={24}
-                        height={24}
-                        onClick={() => {
-                          setShow(!show);
-                        }}  
-                        className="cursor-pointer "
-                      />
-                    {checker && 
-                      <StrengthCheck2 password={pswd} />}
-                    </div>
-                    <StrengthCheck password={pswd} />
-                {errors.new_password && <p className="errorMessage">{errors.new_password.message}</p>}
-                <div className="relative">
-                <div className="relative mt-[10px]">
-                  <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
-                  <Image
-                    src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
-                    alt="eyeicon2"
-                    width={24}
-                    height={24}
-                    onClick={() => {
-                      setShow(!show);
-                    }}
-                    className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                  />
-                </div>
+                  <div className="relative text-end mb-[10px]">
+                    <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
+                  </div>
+                  <div
+                        className="relative flex justify-between gap-2 items-center input-cta"
+                        onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}}
+                      >
+                        <input type={`${show === true ? "text" : "password"}`} {...register('new_password')}
+                          name="new_password" placeholder="New Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta lg:dark:shadow-[inset_0_50px_0_#121318] dark:shadow-[inset_0_50px_0_#080808] shadow-[inset_0_50px_0_#e2f2ff]" maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)}  />
+                        <Image
+                          data-testid="show-hide"
+                          src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
+                          alt="eyeicon"
+                          width={24}
+                          height={24}
+                          onClick={() => {
+                            setShow(!show);
+                          }}  
+                          className="cursor-pointer "
+                        />
+                      {checker && 
+                        <StrengthCheck2 password={pswd} />}
+                      </div>
+                      <StrengthCheck password={pswd} />
+                  {errors.new_password && <p className="errorMessage">{errors.new_password.message}</p>}
+                  <div className="relative">
+                  <div className="relative mt-[10px]">
+                    <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
+                    <Image
+                      src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
+                      alt="eyeicon2"
+                      width={24}
+                      height={24}
+                      onClick={() => {
+                        setShow(!show);
+                      }}
+                      className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                    />
+                  </div>
 
-                {errors.confirmPassword && <p className="errorMessage absolute">{errors.confirmPassword.message}</p>}
-                </div>
+                  {errors.confirmPassword && <p className="errorMessage absolute">{errors.confirmPassword.message}</p>}
+                  </div>
 
-                <button
-                  type="submit" disabled={btnDisabled}
-                  className={`my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-800 ${btnDisabled === true ? 'cursor-not-allowed':''}`}
-                >
-                  {btnDisabled &&
-                    <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
-                      <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />
-                    </svg>
-                  }
-                  Reset Password
-                </button>
-              </form>
+                  <button
+                    type="submit" disabled={btnDisabled}
+                    className={`my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-800 ${btnDisabled === true ? 'cursor-not-allowed':''}`}
+                  >
+                    {btnDisabled &&
+                      <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
+                        <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />
+                      </svg>
+                    }
+                    Reset Password
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>

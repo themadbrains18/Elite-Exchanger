@@ -138,12 +138,12 @@ const SignIn = (Props: loginType) => {
       {
         step === 0 &&
         <section className="bg-primary-300 lg:dark:bg-black-v-1  lg:bg-bg-primary overflow-hidden">
-          <div className="h-full min-h-screen flex gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
+          <div className="h-full min-h-screen flex bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
             <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
               <Image src="/assets/register/register.png" width={1018} height={1100} alt="signup" className="object-cover h-full block w-full" />
             </div> 
             <div className="max-w-full lg:max-w-[50%] w-full flex">
-              <div className="w-full">
+              <div className="w-full max-w-[522px] h-full lg:px-5 max-[1023px]:mx-auto">
                 <div className="lg:max-w-[600px] w-full ">
                   <div className="my-[30px] max-w-[183px] lg:my-[40px] w-full max-[1023px]:mx-auto lg:ml-auto cursor-pointer" onClick={() => { router.push("/") }}>
                     <HeaderLogo />
@@ -154,7 +154,7 @@ const SignIn = (Props: loginType) => {
                     <Image src="/assets/register/loginmobile.svg" alt="register" width={398} height={198} className="mx-auto" />
                   </div>
 
-                  <div className=" !my-auto  p-5 max-w-[calc(100%-30px)] mx-auto lg:mx-0 lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full lg:mb-0 mb-[10px]">
+                  <div className=" !my-auto  max-w-[calc(100%-30px)] mx-auto lg:mx-0 lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full lg:mb-0 mb-[10px]">
                     <h1 className="lg-heading mb-5 lg:mb-[70px]">Sign In</h1>
 
                     {/**Form Start  */}

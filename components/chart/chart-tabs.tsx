@@ -472,7 +472,7 @@ const ChartTabs = (props: propsData) => {
                     <th className="lg:sticky left-0 py-5">
                       <div className="flex">
                         <p className="text-center  nav-text-sm md:nav-text-lg dark:text-gamma">
-                          Market Type
+                          Trade Type
                         </p>
                         <Image
                           src="/assets/history/uparrow.svg"
@@ -498,7 +498,7 @@ const ChartTabs = (props: propsData) => {
                     <th className="max-[1023px]:hidden py-5">
                       <div className="flex">
                         <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                          Amount
+                          Quantity
                         </p>
                         <Image
                           src="/assets/history/uparrow.svg"
@@ -511,7 +511,7 @@ const ChartTabs = (props: propsData) => {
                     <th className="max-[1023px]:hidden py-5">
                       <div className="flex">
                         <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                          Bid Value{" "}
+                          Bid Price{" "}
                         </p>
                         <Image
                           src="/assets/history/uparrow.svg"
@@ -579,21 +579,22 @@ const ChartTabs = (props: propsData) => {
                               <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                 <p className="info-14-18 dark:text-white">
                                   {item?.token
-                                    ? item?.token.fullName
-                                    : item?.global_token.fullName}
+                                    ? item?.token.symbol
+                                    : item?.global_token.symbol}
                                 </p>
-                                <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">
+                                {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">
                                   {item?.token
                                     ? item?.token?.symbol
                                     : item?.global_token?.symbol}
-                                </p>
+                                </p> */}
                               </div>
                             </div>
                           </td>
                           <td>
-                            <p className="info-14-18 dark:text-white">
+                            <p className="info-14-18 dark:text-white capitalize">
                               {item?.market_type}
                             </p>
+                           
                           </td>
                           <td>
                             <p
@@ -696,7 +697,7 @@ const ChartTabs = (props: propsData) => {
                 >
                   <div className="flex py-5 md:col-span-2 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma  ">
-                      Pair
+                      Coin Name
                     </p>
                     <Image
                       src="/assets/history/uparrow.svg"
@@ -718,7 +719,7 @@ const ChartTabs = (props: propsData) => {
                   </div>
                   <div className="hidden md:flex py-5 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                      Type
+                      Trade Type
                     </p>
                     <Image
                       src="/assets/history/uparrow.svg"
@@ -741,7 +742,7 @@ const ChartTabs = (props: propsData) => {
                   </div>
                   <div className="hidden md:flex py-5 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                      Bid
+                      Bid Price
                     </p>
                     <Image
                       src="/assets/history/uparrow.svg"
@@ -763,7 +764,7 @@ const ChartTabs = (props: propsData) => {
                   </div>
                   <div className="hidden md:flex py-5 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
-                      Total Qty.
+                      Quantity
                     </p>
                     <Image
                       src="/assets/history/uparrow.svg"
@@ -806,15 +807,15 @@ const ChartTabs = (props: propsData) => {
 
                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                               <p className="info-14-18 dark:text-white">
-                                {item?.token !== null
-                                  ? item?.token?.fullName
-                                  : item?.global_token?.fullName}
+                              {item?.token
+                                    ? item?.token.symbol
+                                    : item?.global_token.symbol}
                               </p>
-                              <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">
+                              {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">
                                 {item?.token !== null
                                   ? item?.token?.symbol
                                   : item?.global_token?.symbol}
-                              </p>
+                              </p> */}
                             </div>
                           </div>
                           <div className="flex items-center py-[10px] md:py-[15px] px-0 md:px-[5px] ">
@@ -857,22 +858,22 @@ const ChartTabs = (props: propsData) => {
                               )}
                             </div>
                             <div className="hidden md:block py-[10px] md:py-[15px] px-0 md:px-[5px]">
-                              <p className="info-14-18 dark:text-white">
+                              <p className="info-14-18 dark:text-white capitalize">
                                 {item.order_type}
                               </p>
                               <p className="info-10">
-                                {moment(item?.createdAt).format("YYYY-MM-DD")}
+                              {moment(item?.createdAt).format("YYYY-MM-DD")}
                               </p>
                             </div>
                             <div className="block md:hidden py-[10px] md:py-[15px] px-0 md:px-[5px]">
-                              <p className="info-14-18 dark:text-white">
+                              <p className="info-14-18 dark:text-white capitalize">
                                 {item.market_type}
                               </p>
                               <p className="info-10">{currencyFormatter(item.token_amount.toFixed(4))}</p>
                             </div>
                           </div>
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
-                            <p className="info-14-18 dark:text-white  ">
+                            <p className="info-14-18 dark:text-white  capitalize">
                               {item.market_type}
                             </p>
                           </div>

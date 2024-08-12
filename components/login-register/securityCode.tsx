@@ -289,12 +289,12 @@ const SecurityCode = (props: propsData) => {
   return (
     <>
       <section className="bg-primary-300 lg:dark:bg-black-v-1 xl:h-full  lg:bg-bg-primary overflow-hidden">
-        <div className="flex min-h-screen h-full gap-5 bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
+        <div className="flex min-h-screen h-full bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
           <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
-            <Image src={props.api === 'forget' ? '/assets/register/forget.png' : "/assets/register/register.png"} width={1018} height={1100} alt="signup" className="object-cover h-[1080px] min-h-screen block w-full" />
+            <Image src={props.api === 'forget' ? '/assets/register/register.png' : "/assets/register/register.png"} width={1018} height={1100} alt="signup" className="object-cover h-[1080px] min-h-screen block w-full" />
           </div>
           <div className={`max-w-full lg:max-w-[50%] lg:flex lg:mx-5 w-full ${props.api === 'forget' ? 'items-center' : ''}`}>
-            <div className="h-full">
+            <div className="h-full max-[1023px]:mx-auto max-w-[522px] lg:px-5 w-full">
               <div className="my-[30px] lg:my-[40px] w-full  lg:max-w-[600px] max-[1023px]:mx-auto">
                 <div className="max-w-[183px] mt-9 w-full max-[1023px]:mx-auto lg:ml-auto cursor-pointer" onClick={() => { router.push("/"); }}>
                   <HeaderLogo />
@@ -303,9 +303,9 @@ const SecurityCode = (props: propsData) => {
               <div className="lg:hidden block">
                 <Image src="/assets/register/loginmobile.svg" alt="forget" width={398} height={198} className="mx-auto" />
               </div>
-              <div className="lg:h-full lg:flex lg:justify-center">  
-                <div className="max-[1023px]:max-w-[460px] max-[1023px]:mx-auto max-[1023px]:w-full  lg:my-auto">
-                  <div className="max-[1023px]:!mx-auto lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[460px] w-full">
+              <div className="lg:h-full lg:grid">  
+                <div className="max-[1023px]:max-w-[460px] max-[1023px]:mx-auto max-[1023px]:w-full max-w-full lg:my-auto">
+                  <div className="max-[1023px]:!mx-auto lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-full w-full">
                     <h1 className="lg-heading mb-5">Enter your security code</h1>
                     {props.isEmail &&
                       <div className="relative">
