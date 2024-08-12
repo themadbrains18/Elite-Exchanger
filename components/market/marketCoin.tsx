@@ -66,11 +66,11 @@ const MarketCoin = (props: propsData) => {
               spaceBetween: 20,
             },
             1350: {
-              slidesPerView: 4,
+              slidesPerView: 1,
               spaceBetween: 30,
             },
             1550: {
-              slidesPerView: 4,
+              slidesPerView: 1,
               spaceBetween: 30,
             },
           }}

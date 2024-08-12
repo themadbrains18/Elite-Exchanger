@@ -97,7 +97,7 @@ const OrdersTableMobile = (props: dataTypes) => {
                                     route.push(`?buy=${item?.id}`);
                                 }}>
                                     <div className=''>
-                                        <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Asset/Type</p>
+                                        <p className='sm-text !text-body-secondary dark:!text-beta !text-[12px]'>Type/Asset</p>
                                         <p className='info-14-18 !text-nav-primary dark:!text-white'><span className={`${item?.sell_user_id === session?.user.user_id ? "text-cancel" : "text-buy"} capitalize`}>{item?.sell_user_id === session?.user.user_id ? "Sell" : "Buy"}</span>&nbsp;{item?.receive_currency}</p>
                                     </div>
                                     <div className='text-end'>

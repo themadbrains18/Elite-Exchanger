@@ -27,7 +27,7 @@ const Marketpage = (props: propsData) => {
       const fetchDataForCoin = async (coin: any) => {
         
         const slug = coin.symbol;
-        console.log(slug,'===========slug');
+        // console.log(slug,'===========slug');
         
         try {
           let hlocv = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/hloc?slug=${slug}`, {
