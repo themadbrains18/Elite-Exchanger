@@ -17,13 +17,13 @@ router
     .get(async (req, res) => {
         try {
             // Destructure and retrieve variables from the query parameters.
-            let {user_id,itemOffset,itemsPerPage}= req.query;
+            let {user_id,itemOffset,itemsPerPage,currency,date}= req.query;
             
             // Retrieve the authorization token from the request headers.
             let token = req.headers.authorization;
 
             // Call the API using a helper function and pass the necessary parameters.
-            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/deposit/history/${user_id}/${itemOffset}/${itemsPerPage}`, token);
+            let data = await getMethod(`${process.env.NEXT_PUBLIC_APIURL}/deposit/history/${user_id}/${itemOffset}/${itemsPerPage}/${currency}/${date}`, token);
 
             // Respond with a 200 status and send the retrieved data.
             return res.status(200).send({ data });

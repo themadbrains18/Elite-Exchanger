@@ -142,7 +142,7 @@ const Historytrade = (props: propsData) => {
               <DepositTable filter={filter} date={startDate} coin={symbol}/>
             )}
             {active === 3 && (
-              <WithdrawTable filter={filter} date={startDate} coin={firstCurrency}/>
+              <WithdrawTable filter={filter} date={startDate} coin={symbol}/>
             )}
             {/* {active === 4 && (
          <ConvertTable />

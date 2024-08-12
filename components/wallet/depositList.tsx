@@ -27,7 +27,7 @@ const DepositList = (props: propsData) => {
 
 
   async function getDepositData() {
-    let depositHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+    let depositHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=all&date=all`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token
@@ -135,8 +135,8 @@ const DepositList = (props: propsData) => {
           </tbody>
         </table>
       </div>
-      <div className="flex pt-[25px] items-center justify-between">
-        <p className="info-12 md:footer-text !text-gamma">{total} assets</p>
+      <div className="flex pt-[25px] items-center justify-end">
+        {/* <p className="info-12 md:footer-text !text-gamma">{total} assets</p> */}
         {
           pageCount > 1 &&
           <ReactPaginate

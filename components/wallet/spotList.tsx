@@ -417,8 +417,8 @@ const SpotList = (props: propsData): any => {
         </div>
       </div>
 
-      <div className="flex pt-[25px] items-center justify-between">
-        <p className="info-12 md:footer-text !text-gamma">{total} assets</p>
+      <div className="flex pt-[25px] items-center justify-end">
+        {/* <p className="info-12 md:footer-text !text-gamma">{total} assets</p> */}
         {
           pageCount > 1 &&
           <ReactPaginate
