@@ -136,7 +136,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 
     if (session) {
 
-        let withdraws = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/list?user_id=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
+        let withdraws = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/list?user_id=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20&currency=all&date=all`, {
             method: "GET",
             headers: {
                 "Authorization": session?.user?.access_token

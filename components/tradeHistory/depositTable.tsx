@@ -26,51 +26,73 @@ const DepositTable = (props: propsData) => {
   let itemsPerPage = 10;
 
   useEffect(() => {
-    getDepositData()
+    if (session) {
+      getDepositData()
+    }
 
-  }, [itemOffset, props?.filter])
+  }, [itemOffset, props?.filter, session])
 
   useEffect(() => {
+    
+    // let history: any = totalRecord;
+    // if (props.coin !== "" && props.coin !== undefined && history?.length > 0) {
+    //   history = history?.filter((item: any) => {
+    //     let symbol = item.coinName.split('/')[1];
+    //     return symbol === props.coin;
+    //   });
+    // }
+    // const targetDate = new Date(props.date).setHours(0, 0, 0, 0);
+    // const currentDate = new Date().setHours(0, 0, 0, 0);
+    // if (targetDate !== currentDate && history?.length > 0) {
+    //   history = history?.filter((item: any) => {
+    //     const itemDate = new Date(item.createdAt).setHours(0, 0, 0, 0);
+    //     return itemDate === targetDate;
+    //   });
+    // }
+    // setCurrentItems(history);
 
-    let history: any = totalRecord;
-    if (props.coin !== "" && props.coin !== undefined && history?.length > 0) {
-      history = history?.filter((item: any) => {
-        let symbol = item.coinName.split('/')[1];
-        return symbol === props.coin;
-      });
+    if (session) {
+     
+      getDepositData()
     }
-    const targetDate = new Date(props.date).setHours(0, 0, 0, 0);
-    const currentDate = new Date().setHours(0, 0, 0, 0);
-    if (targetDate !== currentDate && history?.length > 0) {
-      history = history?.filter((item: any) => {
-        const itemDate = new Date(item.createdAt).setHours(0, 0, 0, 0);
-        return itemDate === targetDate;
-      });
-    }
-    setCurrentItems(history);
 
-  }, [props.coin, props.date])
+  }, [props.coin, props.date, session])
 
   async function getDepositData() {
+
     let currency = props.coin !== undefined && props.coin !== "" ? props.coin : "all"
-    let depositHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency}&date=${props.date}`, {
+    let date = props.date !== undefined ? new Date(props.date).toISOString() : "all"
+    let depositHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency}&date=${date}`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token
       },
     }).then(response => response.json());
-    setTotalRecord(depositHistory?.data?.data);
+    
     setTotal(depositHistory?.data?.total)
-    if (props?.filter !== "") {
-      let data = depositHistory?.data?.data.filter((item: any) => {
-        return item.coinName.split('/')[1].toLowerCase().includes(props?.filter.toLowerCase());
-      })
-      setCurrentItems(data);
+
+    if (depositHistory?.data?.total <= 10) {
+      setItemOffset(0)
+    }
+    if (depositHistory?.data?.data?.message !== undefined) {
+      depositHistory = [];
     }
     else {
-      setCurrentItems(depositHistory?.data?.data);
+      // console.log("=here");
 
+      depositHistory = depositHistory?.data?.data;
     }
+    setTotalRecord(depositHistory)
+    // if (props?.filter !== "") {
+    //   let data = depositHistory?.data?.data.filter((item: any) => {
+    //     return item.coinName.split('/')[1].toLowerCase().includes(props?.filter.toLowerCase());
+    //   })
+    //   setCurrentItems(data);
+    // }
+    // else {
+    //   setCurrentItems(depositHistory?.data?.data);
+
+    // }
 
   }
 
@@ -129,7 +151,7 @@ const DepositTable = (props: propsData) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: any) => {
+            {totalRecord && totalRecord?.length > 0 && totalRecord?.map((item: any, index: any) => {
               return (
                 <tr key={index} >
                   <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
@@ -190,7 +212,7 @@ const DepositTable = (props: propsData) => {
                 </tr>
               );
             })}
-            {currentItems && currentItems?.length === 0 &&
+            {totalRecord && totalRecord?.length === 0 &&
               <tr>
                 <td colSpan={7}>
                   <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
@@ -209,8 +231,8 @@ const DepositTable = (props: propsData) => {
           </tbody>
         </table>
       </div>
-      <div className="flex pt-[25px] items-center justify-between">
-        <p className="info-12 md:footer-text !text-gamma">{currentItems?.length} assets</p>
+      <div className="flex pt-[25px] items-center justify-end">
+        {/* <p className="info-12 md:footer-text !text-gamma">{currentItems?.length} assets</p> */}
         {
           pageCount > 1 &&
           <ReactPaginate

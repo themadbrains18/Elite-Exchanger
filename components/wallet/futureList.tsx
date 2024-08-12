@@ -282,8 +282,8 @@ const FutureList = (props: propsData) => {
                     </div>
                 </div>
             </div>
-            <div className="flex pt-[25px] items-center justify-between">
-                <p className="info-12 md:footer-text !text-gamma">{currentItems?.length} assets</p>
+            <div className="flex pt-[25px] items-center justify-end">
+                {/* <p className="info-12 md:footer-text !text-gamma">{currentItems?.length} assets</p> */}
                 {
                     pageCount > 1 &&
                     <ReactPaginate

@@ -30,6 +30,8 @@ const WithdrawTable = (props: propsData) => {
 
   let itemsPerPage = 10;
 
+  
+
   useEffect(() => {
     getWithdrawData();
     // console.log(currentItems,"============currentItems");
@@ -38,26 +40,16 @@ const WithdrawTable = (props: propsData) => {
 
   useEffect(() => {
 
-    let history: any = totalRecord;
-    if (props.coin !== "" && props.coin !== undefined && history?.length > 0) {
-      history = history?.filter((item: any) => {
-        return item.token_id === props.coin;
-      });
-    }
-    const targetDate = new Date(props.date).setHours(0, 0, 0, 0);
-    const currentDate = new Date().setHours(0, 0, 0, 0);
-    if (targetDate !== currentDate && history?.length > 0) {
-      history = history?.filter((item: any) => {
-        const itemDate = new Date(item.createdAt).setHours(0, 0, 0, 0);
-        return itemDate === targetDate;
-      });
-    }
-    setCurrentItems(history);
+ if(session){
+  getWithdrawData()
+ }
 
-  }, [props.coin, props.date])
+  }, [props.coin, props.date,session])
 
   async function getWithdrawData() {
-    let withdraw = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/list?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+     let currency = props.coin !== undefined && props.coin !== "" ? props.coin : "all"
+    let date = props.date !== undefined ? new Date(props.date).toISOString() : "all"
+    let withdraw = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/list?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency}&date=${date}`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token
@@ -67,16 +59,21 @@ const WithdrawTable = (props: propsData) => {
     // console.log(withdraw,"==============withdraw");
 
     setTotal(withdraw?.data?.total)
-    setTotalRecord(withdraw?.data?.total)
-    if (props?.filter !== "") {
-      let data = withdraw?.data?.data.filter((item: any) => {
-        return item.symbol.toLowerCase().includes(props?.filter.toLowerCase());
-      })
-      setCurrentItems(data);
+
+
+
+    if (withdraw?.data?.total <= 10) {
+      setItemOffset(0)
+    }
+    if (withdraw?.data?.data?.message !== undefined) {
+      withdraw = [];
     }
     else {
-      setCurrentItems(withdraw?.data?.data);
+      // console.log("=here");
+
+      withdraw = withdraw?.data?.data;
     }
+    setTotalRecord(withdraw)
   }
 
   const pageCount = Math.ceil(total / itemsPerPage);
@@ -159,7 +156,7 @@ const WithdrawTable = (props: propsData) => {
             </tr>
           </thead>
           <tbody>
-            {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: any) => {
+            {totalRecord && totalRecord?.length > 0 && totalRecord?.map((item: any, index: any) => {
               return (
                 <tr key={index}>
                   <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
@@ -228,7 +225,7 @@ const WithdrawTable = (props: propsData) => {
               );
             })}
 
-            {currentItems && currentItems?.length === 0 &&
+            {totalRecord && totalRecord?.length === 0 &&
               <tr>
                 <td colSpan={7}>
                   <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>

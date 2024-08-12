@@ -28,14 +28,13 @@ const WithdrawList = (props: propsData) => {
   }, [itemOffset, props?.filter])
 
   async function getWithdrawData() {
-    let withdrawList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/list?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
+    let withdrawList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/withdraw/list?user_id=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=all&date=all`, {
       method: "GET",
       headers: {
         "Authorization": session?.user?.access_token
       },
     }).then(response => response.json());
 
-    console.log(withdrawList, "==========withdrawList");
 
     setTotal(withdrawList?.data?.total)
     if (props?.filter !== "") {
@@ -143,7 +142,7 @@ const WithdrawList = (props: propsData) => {
         </table>
       </div>
       <div className="flex pt-[25px] items-center justify-between">
-        <p className="info-12 md:footer-text !text-gamma">{total} assets</p>
+        {/* <p className="info-12 md:footer-text !text-gamma">{total} assets</p> */}
         {
           pageCount > 1 &&
           <ReactPaginate
