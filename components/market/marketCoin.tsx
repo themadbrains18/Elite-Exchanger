@@ -78,13 +78,9 @@ const MarketCoin = (props: propsData) => {
               spaceBetween: 20,
             },
             1350: {
-              slidesPerView: 1,
+              slidesPerView: 4,
               spaceBetween: 30,
-            },
-            1550: {
-              slidesPerView: 1,
-              spaceBetween: 30,
-            },
+            }
           }}
           className="mySwiper tmb-swiper"
         >
