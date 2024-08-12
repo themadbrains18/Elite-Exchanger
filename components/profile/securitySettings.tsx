@@ -115,7 +115,6 @@ const SecuritySettings = (props: fixSection) => {
       Add: false,
       CtaText: "Enable",
     },
-
     {
       image: "activity.svg",
       bg: "green",
