@@ -38,11 +38,11 @@ const MarketCoin = (props: propsData) => {
     return images[randomIndex];
   };
 
-  const swiperRef = useRef<SwiperInstance | null>(null); // Type the useRef correctly
+  const swiperRef = useRef<SwiperInstance | null>(null);
 
   useEffect(() => {
     if (swiperRef.current) {
-      swiperRef.current.update(); // Update Swiper instance after mount
+      swiperRef.current.update(); 
     }
   }, []);
 
@@ -56,11 +56,9 @@ const MarketCoin = (props: propsData) => {
       <div className="mt-30 md:mt-50">
         <Swiper
           onSwiper={(swiper) => {
-            swiperRef.current = swiper; // Capture the Swiper instance
+            swiperRef.current = swiper; 
           }}
           pagination={true}
-          // observer={false}          
-          // observeParents={false}  
           loop={true}
           autoplay={{ delay: 4000 }} 
           modules={[Pagination, Autoplay]}

@@ -13,7 +13,8 @@ interface dataList {
   value?: string;
   filterNetworkListByCoin?: any;
   disabled?:boolean;
-  setEnableNetWork?:Function
+  setEnableNetWork?:Function;
+  setUnSelectCoinError?:Function;
 }
 
 const FilterSelectMenuWithCoin = (props: dataList) => {
@@ -98,10 +99,10 @@ const FilterSelectMenuWithCoin = (props: dataList) => {
                     <input type="search" className='nav-text-sm !text-beta outline-none bg-white dark:bg-d-bg-primary  w-full' onChange={(e) => { filterCoinsInList(e); }} />
                   </div>
                 </div>
-                <ul>
+                <ul className='asdadsdasdsd'>
                   {filterCoin !== undefined && filterCoin.map((item: any, index: number) => {
                     return (
-                      <li key={index} onClick={() => { props?.setEnableNetWork && props?.setEnableNetWork(false); setImage(item.image); setText(item.symbol); setShow(false); props?.setCurrencyName && props?.setCurrencyName(item.symbol, props.dropdown); props?.setCurrency && props.setCurrency(item, props.dropdown); props.filterNetworkListByCoin && props.filterNetworkListByCoin(item) }} className='cursor-pointer  flex items-center gap-10 p-10 py-[6px] hover:bg-grey dark:hover:bg-d-bg-primary rounded-[5px]'>
+                      <li key={index} onClick={() => { props?.setUnSelectCoinError && props?.setUnSelectCoinError(item.symbol); props?.setEnableNetWork && props?.setEnableNetWork(false); setImage(item.image); setText(item.symbol); setShow(false); props?.setCurrencyName && props?.setCurrencyName(item.symbol, props.dropdown); props?.setCurrency && props.setCurrency(item, props.dropdown); props.filterNetworkListByCoin && props.filterNetworkListByCoin(item) }} className='cursor-pointer  flex items-center gap-10 p-10 py-[6px] hover:bg-grey dark:hover:bg-d-bg-primary rounded-[5px]'>
                         <Image src={`${imgSrc2?'/assets/history/Coin.svg':item.image}`} alt="error" width={20} height={20} className={`${item.symbol === 'XRP' || item.symbol === 'ETH' ? 'bg-white rounded-full' : ''}`} onError={() => setImgSrc2(true)}/>
                         <p className={`sm-text rounded-[5px] dark:!text-d-nav-secondary   !text-banner-text`}>{item.symbol}</p>
                       </li>
