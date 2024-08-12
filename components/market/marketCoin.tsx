@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
@@ -7,6 +7,7 @@ import { Autoplay, Pagination } from "swiper/modules";
 import IconsComponent from "../snippets/icons";
 import Link from "next/link";
 import { currencyFormatter } from "../snippets/market/buySellCard";
+import type { Swiper as SwiperInstance } from 'swiper';
 
 interface propsData {
   bannerCoinList: any,
@@ -37,6 +38,14 @@ const MarketCoin = (props: propsData) => {
     return images[randomIndex];
   };
 
+  const swiperRef = useRef<SwiperInstance | null>(null); // Type the useRef correctly
+
+  useEffect(() => {
+    if (swiperRef.current) {
+      swiperRef.current.update(); // Update Swiper instance after mount
+    }
+  }, []);
+
   return (
     <div className="p-20 md:p-40 rounded-10 bg-white dark:bg-d-bg-primary">
       <div className="flex justify-between gap-[15px] flex-wrap xl:flex-nowrap">
@@ -46,6 +55,9 @@ const MarketCoin = (props: propsData) => {
       </div>
       <div className="mt-30 md:mt-50">
         <Swiper
+          onSwiper={(swiper) => {
+            swiperRef.current = swiper; // Capture the Swiper instance
+          }}
           pagination={true}
           // observer={false}          
           // observeParents={false}  
