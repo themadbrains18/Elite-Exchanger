@@ -14,6 +14,7 @@ import WithdrawAuthenticationModelPopup from './withdrawAuthentication';
 import { currencyFormatter } from '../snippets/market/buySellCard';
 import { useWebSocket } from '@/libs/WebSocketContext';
 import { truncateNumber } from '@/libs/subdomain';
+import RestrictionNotice from '../snippets/restrictionNotice';
 
 interface propsData {
   networks: any;
@@ -38,6 +39,7 @@ const SpotList = (props: propsData): any => {
   const router = useRouter();
   const [imgSrc, setImgSrc] = useState(false);
   const [imgSrc2, setImgSrc2] = useState(false);
+  const [showNotice,setShowNotice] = useState(false);
 
 
   let itemsPerPage = 10;
@@ -226,7 +228,9 @@ const SpotList = (props: propsData): any => {
                             setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
                           }
                           else {
-                            toast.warning('You cannot do any action next 24 hours');
+                            // toast.warning('You cannot do any action next 24 hours');
+                            setShowNotice(true)
+
                           }
                         }
 
@@ -368,7 +372,8 @@ const SpotList = (props: propsData): any => {
                           setSelectedCoin(item.token !== null ? item?.token : item?.global_token);
                         }
                         else {
-                          toast.warning('You cannot do any action next 24 hours');
+                          // toast.warning('You cannot do any action next 24 hours');
+                          setShowNotice(true)
                         }
 
                       }} className=" max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
@@ -472,6 +477,11 @@ const SpotList = (props: propsData): any => {
       }
       {depositActive === true &&
         <WithdrawAuthenticationModelPopup setActive={setDepositActive} setShow={setWithdrawShow} show={withdrawShow} title="Deposit Security Settings" type="deposit" />
+      }
+
+      {
+        showNotice &&
+        <RestrictionNotice setShowNotice={setShowNotice} />
       }
 
     </>

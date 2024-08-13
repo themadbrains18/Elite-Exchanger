@@ -287,7 +287,6 @@ const Exchange = (props: DynamicId): any => {
           });
         }
         else {
-          setAmount(0);
           setBtnDisabled2(false);
           toast.error(res.data.data, {
             position: 'top-center'
@@ -295,6 +294,7 @@ const Exchange = (props: DynamicId): any => {
           setFirstCurrency('')
           setSecondCurrency('')
           setIsConvert(false)
+          setAmount(0)
           setReceivedAmount(0);
         }
       }
@@ -344,7 +344,7 @@ const Exchange = (props: DynamicId): any => {
           <div className="mt-20 rounded-5 p-[10px] justify-between flex border items-center border-grey-v-1 dark:border-opacity-[15%] relative">
             <div className="max-w-[calc(100%-100px)] w-full">
               <p className="sm-text dark:text-white">Quantity</p>
-              <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="$0" step={0.000001} readOnly={isConvert} {...register('spend_amount')} name="spend_amount" onChange={(e: any) => {
+              <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="$0" step={0.000001} readOnly={isConvert} value={amount > 0 ? truncateNumber(amount,6) : ''} {...register('spend_amount')} name="spend_amount" onChange={(e: any) => {
                 // setAmount(parseFloat(e.target?.value));
                 const value = e.target.value;
                 const regex = /^\d{0,11}(\.\d{0,6})?$/;
