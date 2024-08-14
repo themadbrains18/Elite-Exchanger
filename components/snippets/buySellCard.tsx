@@ -629,7 +629,7 @@ const BuySellCard = (props: DynamicId) => {
 
 
                 </div>
-                <div className="mt-5 flex gap-1 justify-between">
+                <div className="mt-5 flex gap-2 justify-between flex-wrap">
 
                   {/* <div className=" flex gap-1">
                   <p className="sm-text dark:text-white">Est. Fee:</p>

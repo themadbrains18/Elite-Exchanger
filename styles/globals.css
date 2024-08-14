@@ -675,3 +675,6 @@ input:-webkit-autofill {
 .coins-tabs::-webkit-scrollbar{
   display: none;
 }
+.tmbMySwiper .swiper-wrapper{
+  align-items: center;
+}

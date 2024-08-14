@@ -145,7 +145,7 @@ const BuyTableMobile = (props: activeSection) => {
 
                                     <div>
                                         <div className="flex gap-2 md:py-[15px] items-center px-0 md:px-[5px] ">
-                                            <Image src={profileImg} width={30} height={30} alt="coins" />
+                                            <Image src={profileImg} width={30} height={30} alt="coins" className='rounded-full w-[40px] h-[40px] object-cover object-top' />
                                             <div>
                                                 <p className="info-14-18 !text-[14px] text-black dark:text-white">{userName}</p>
                                                 <p className="sm-text !text-[10px] dark:text-beta">{item?.orders}</p>

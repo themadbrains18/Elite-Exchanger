@@ -251,9 +251,7 @@ const Header = (props: propsData) => {
                               {spotTrade?.map((item: any, nesIndex: any) => {
                                 return (
                                   <li key={nesIndex + Date.now()} className="mb-[10px]">
-                                    {/* onClick={() => router.push({
-                                        pathname: `/chart/${item?.tradepair?.symbolOne}`
-                                      })} */}
+                                   
                                     <Link href={`/chart/${item?.tradepair?.symbolOne}`}>
                                       <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full cursor-pointer" onClick={() => { router?.push(`/chart/${item?.tradepair?.symbolOne}`) }}>
                                       <Image src={`${imgSrc2?'/assets/history/Coin.svg':item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)} className={`min-w-[30px] ${item?.symbol==="XRP"&&"bg-white rounded-full "}`}/>

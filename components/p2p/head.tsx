@@ -58,6 +58,29 @@ const Head = () => {
     // }
   ];
 
+  function centerActiveTab(): void {
+    const container = document.querySelector('.links_wrapper') as HTMLElement | null;
+    const activeTab = container?.querySelector('.tab.active') as HTMLElement | null;
+    
+    if (container && activeTab) {
+      const containerWidth: number = container.offsetWidth;
+      const tabWidth: number = activeTab.offsetWidth;
+      const tabOffsetLeft: number = activeTab.offsetLeft;
+  
+      const scrollPosition: number = tabOffsetLeft - (containerWidth / 2) + (tabWidth / 2);
+      
+      container.scroll({
+        left: scrollPosition,
+        behavior: 'smooth' 
+      });
+    }
+  }
+  
+  useEffect(()=>{
+    centerActiveTab();
+  })
+  
+
   return (
     <>
       {/* top heading and brief */}
@@ -107,8 +130,8 @@ const Head = () => {
                       }
                     }}
                       // href={`${elem.linkUrl}`}
-                      className={`${router.pathname.includes(elem.linkUrl)
-                        ? "bg-primary !text-white"
+                      className={`tab ${router.pathname.includes(elem.linkUrl)
+                        ? "bg-primary !text-white active"
                         : "dark:text-beta bg-bg-secondary !text-body-primary dark:bg-black-v-1"
                         } !text-[14px] md:!text-[18px] px-[15px] md:px-[20px] py-[5px] md:py-[14px] rounded-[5px]`}
                     >

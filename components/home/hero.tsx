@@ -28,77 +28,7 @@ const Hero = () => {
 
 
                             <div className="hero_footer">
-                                {/* <div className="lg:hidden">
-                                    <Swiper
-                                        className="mySwiper"
-                                        slidesPerView={2}
-                                        spaceBetween={20}
-                                    >
-                                        <SwiperSlide>
-                                            <Image
-                                                src="/assets/home/bannerLogo-1.png"
-                                                alt="Logo"
-                                                className="max-w-[125px] w-full"
-                                                width={125}
-                                                height={50}
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src="/assets/home/bannerLogo-2.png"
-                                                alt="Logo"
-                                                className="max-w-[125px] w-full"
-                                                width={125}
-                                                height={50}
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src="/assets/home/bannerLogo-3.png"
-                                                alt="Logo"
-                                                className="max-w-[125px] w-full"
-                                                width={125}
-                                                height={50}
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src="/assets/home/bannerLogo-4.png"
-                                                alt="Logo"
-                                                className="max-w-[125px] w-full"
-                                                width={125}
-                                                height={50}
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src="/assets/home/bannerLogo-5.png"
-                                                alt="Logo"
-                                                className="max-w-[125px] w-full"
-                                                width={125}
-                                                height={50}
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src="/assets/home/bannerLogo-6.png"
-                                                alt="Logo"
-                                                className="max-w-[125px] w-full"
-                                                width={125}
-                                                height={50}
-                                            />
-                                        </SwiperSlide>
-                                        <SwiperSlide>
-                                            <Image
-                                                src="/assets/home/bannerLogo-6.png"
-                                                alt="Logo"
-                                                className="max-w-[125px] w-full"
-                                                width={125}
-                                                height={50}
-                                            />
-                                        </SwiperSlide>
-                                    </Swiper>
-                                </div> */}
+                               
 
                                 <div className="lg:grid hidden overflow-x-auto gap-[30px] grid-cols-3 md:gap-x-[101px] md:gap-y-[50px]">
                                     <Image className="block m-auto aspect-[1] h-[50px] object-contain w-[157px]" src="/assets/home/bannerLogo-1.png" alt="Logo" width={251} height={50} />
@@ -114,6 +44,86 @@ const Hero = () => {
                         <div className="hero_right w-full max-w-[820px] lg:flex lg:items-center order-1 lg:order-2">
                             <Image src={`/assets/home/${mode === "light" ? "BannerLight1.png" : "BannerDark1.png"}`} alt="Laptop-image" className="block w-full" width={653} height={500} />
                         </div>
+                    </div>
+                    <div className="lg:hidden">
+                        <Swiper
+                            className="mySwiper tmbMySwiper"
+                            slidesPerView={2}
+                            spaceBetween={20}
+                            autoplay={{
+                                delay: 2500
+                            }}
+                            breakpoints={{
+                                '300': {
+                                  slidesPerView: 2,
+                                  spaceBetween: 10,
+                                },
+                                '575': {
+                                  slidesPerView: 3,
+                                  spaceBetween: 10,
+                                },
+                                '767': {
+                                  slidesPerView: 4,
+                                  spaceBetween: 10,
+                                }
+                            }}
+                        >
+                            <SwiperSlide>
+                                <Image
+                                    src="/assets/home/bannerLogo-1.png"
+                                    alt="Logo"
+                                    className="max-w-[125px] w-full"
+                                    width={125}
+                                    height={50}
+                                />
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <Image
+                                    src="/assets/home/bannerLogo-2.png"
+                                    alt="Logo"
+                                    className="max-w-[125px] w-full"
+                                    width={125}
+                                    height={50}
+                                />
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <Image
+                                    src="/assets/home/bannerLogo-3.png"
+                                    alt="Logo"
+                                    className="max-w-[125px] w-full"
+                                    width={125}
+                                    height={50}
+                                />
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <Image
+                                    src="/assets/home/bannerLogo-4.png"
+                                    alt="Logo"
+                                    className="max-w-[125px] w-full"
+                                    width={125}
+                                    height={50}
+                                />
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <Image
+                                    src="/assets/home/bannerLogo-5.png"
+                                    alt="Logo"
+                                    className="max-w-[125px] w-full"
+                                    width={125}
+                                    height={50}
+                                />
+                            </SwiperSlide>
+                            <SwiperSlide>
+                                <Image
+                                    src="/assets/home/bannerLogo-6.png"
+                                    alt="Logo"
+                                    className="max-w-[125px] w-full"
+                                    width={125}
+                                    height={50}
+                                />
+                            </SwiperSlide>
+                            
+                        </Swiper>
                     </div>
                 </div>
             </div>

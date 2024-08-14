@@ -55,6 +55,7 @@ const AddAddress = (props: activeSection) => {
   const [addressVerified, setAddressVerified] = useState(false);
   const [unSelectCoinError, setUnSelectCoinError] = useState('');
   const [enableNetWork,setEnableNetWork] = useState(true);
+  const [coinError,SetCoinError] = useState('');
 
 
   let {
@@ -95,6 +96,7 @@ const AddAddress = (props: activeSection) => {
   const onHandleSubmit = async (data: UserSubmitForm) => {
     try {
       if (selectedCoin === "") {
+        SetCoinError("Select Coin");
         setError("tokenID", {
           type: "custom",
           message: "Please select coin.",
@@ -291,6 +293,7 @@ const AddAddress = (props: activeSection) => {
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
 
+
   return (
     <>
       {/* <ToastContainer position="top-right" limit={1} /> */}
@@ -366,9 +369,11 @@ const AddAddress = (props: activeSection) => {
                 dropdown={1}
                 filterNetworkListByCoin={filterNetworkListByCoin}
               />
-              {unSelectCoinError!=="" && <p className="errorMessage mt-10">{unSelectCoinError}</p>}
+              {coinError !=="" && <p className="errorMessage mt-10">{coinError}</p>}
           </div>
       }
+
+      
               <div className="my-20">
                 <label className="sm-text mb-[10px] block">Network</label>
                 <div className={`${enableNetWork && 'cursor-not-allowed opacity-[0.5]'}`}>
@@ -383,7 +388,7 @@ const AddAddress = (props: activeSection) => {
                     />
                   </div>
                 </div>
-
+                
                 {errors.networkId && (
                   <p className="errorMessage mt-10">{errors.networkId.message}</p>
                 )}
