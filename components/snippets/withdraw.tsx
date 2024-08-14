@@ -104,11 +104,38 @@ const Withdraw = (props: activeSection) => {
   }, [errors])
 
 
+  const netWorkList = props?.networks?.filter((item: any) => {
+    return props?.token?.networks?.some((titem: any) => {
+      if (item?.id === titem?.id) {
+        item.fee = titem?.fee;
+        return true;
+      }
+      return false;
+    });
+  }).map((item: any) => {
+    const titem = props?.token?.networks?.find((titem: any) => item?.id === titem?.id);
+    return { ...item, fee: titem?.fee };
+  });
 
   const onAddressChange = async (address: string, network: { id: string, fullname: string, symbol: string }) => {
+    setValue('networkId',network?.id)
     setSelectedNetwork(network?.id)
     setValue('withdraw_wallet', address)
     setSelectedNetworkValue(network?.fullname)
+    // Check if network id exists in networkList and set transaction fee
+
+    if (netWorkList && Array.isArray(netWorkList)) {
+      const selectedNetwork = netWorkList.find(net => net.id === network?.id);
+      if (selectedNetwork) {
+        setTransFees(selectedNetwork.fee);  // Assuming 'fees' is the key where the fee value is stored
+      } else {
+        console.log("Network not found in the list.");
+        // Optionally, you can set a default fee or handle this scenario
+      }
+    } else {
+      console.log("networkList is not an array or is undefined.");
+      // Handle the case where networkList is not available
+    }
 
     var raw = JSON.stringify({
       "address": address,
@@ -124,6 +151,7 @@ const Withdraw = (props: activeSection) => {
 
     // console.log(validAddress, "===isValid");
     setAddressVerified(validAddress?.data?.data?.isValid);
+
   }
 
   const getAllWhitelistAddress = async () => {
@@ -162,8 +190,10 @@ const Withdraw = (props: activeSection) => {
       setAddressVerified(validAddress?.data?.data?.isValid);
     }
 
+
+
   };
-  console.log(props?.token, "=props?.token");
+  // console.log(props?.token, "=props?.token");
 
 
   const onHandleSubmit = async (data: UserSubmitForm) => {
@@ -204,9 +234,9 @@ const Withdraw = (props: activeSection) => {
         }, 3000);
         return;
       }
-      
 
-      if (data?.amount < (Number(transFees)+Number(min_withdraw))) {
+
+      if (data?.amount < (Number(transFees) + Number(min_withdraw))) {
         setError("amount", {
           type: "custom",
           message: "Please enter amount more than your transaction fee.",
@@ -413,23 +443,10 @@ const Withdraw = (props: activeSection) => {
   clickOutSidePopupClose({ wrapperRef, closePopup });
 
 
-  const netWorkList = props?.networks?.filter((item: any) => {
-    return props?.token?.networks?.some((titem: any) => {
-      if (item?.id === titem?.id) {
-        item.fee = titem?.fee;
-        return true;
-      }
-      return false;
-    });
-  }).map((item: any) => {
-    const titem = props?.token?.networks?.find((titem: any) => item?.id === titem?.id);
-    return { ...item, fee: titem?.fee };
-  });
 
-  console.log(netWorkList, "=========netWorkList");
+  // console.log(netWorkList, "=========netWorkList");
   // console.log(props.token, "=========props.token");
 
-  console.log(props?.token, "=props?.token");
 
 
   return (
@@ -557,7 +574,7 @@ const Withdraw = (props: activeSection) => {
                     id="amount"
                     {...register("amount")}
                     name="amount"
-                    step={0.001}
+                    step={0.0000001}
                     placeholder="Enter Amount"
                     className="outline-none sm-text w-full bg-[transparent]"
                     onChange={(e) => {

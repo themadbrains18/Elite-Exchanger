@@ -688,7 +688,7 @@ const SecuritySettings = (props: fixSection) => {
 
                           <div className=" w-full">
                             <p className="sm-text mb-[10px] h-[21px]">Re-enter password<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
-                            <div className="relative">
+                            <div className="relative mb-[10px]">
                               <input
                                 type={`${showpswd === true ? "text" : "password"}`}
                                 {...register("confirmPassword")}

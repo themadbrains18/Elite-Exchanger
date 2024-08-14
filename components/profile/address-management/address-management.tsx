@@ -400,6 +400,26 @@ const AddressManagement = (props: fixSection) => {
                   </>
                 );
               })}
+              {list && list.length === 0 && (
+                    <tr>
+                      <td colSpan={6}>
+                        <div
+                          className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark"
+                            ? "text-[#ffffff]"
+                            : "text-[#000000]"
+                            }`}
+                        >
+                          <Image
+                            src="/assets/refer/empty.svg"
+                            alt="emplty table"
+                            width={107}
+                            height={104}
+                          />
+                          <p> No Record Found </p>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
             </tbody>
           </table>
         </div>

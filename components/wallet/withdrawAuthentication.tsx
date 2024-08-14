@@ -60,17 +60,19 @@ const WithdrawAuthenticationModelPopup = (props: activeSection) => {
                     {
                         props?.type === "deposit" ?
                             <div className="flex justify-between mt-20">
-                                <div className="md-text dark:!text-g-secondary  ">
-                                    {(session?.user?.email === '' || session?.user?.email === null) ? 'Please Verify Your Email' : 'Email verified'}
+                                <div className="md-text dark:!text-g-secondary">
+                                    {session?.user?.kyc !== 'approve' ? 'Please verify your kyc' : 'Kyc verified'}
                                 </div>
                                 <div>
-                                    {(session?.user?.email === '' || session?.user?.email === null) ? <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap " onClick={() => route.push('/profile/security')}>
+                                    {session?.user?.kyc !== 'approve' ? <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap" onClick={() => route.push('/profile/kyc')}>
                                         Verify
                                     </button> : <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap">
                                         Approved
                                     </button>}
 
                                 </div>
+
+
                             </div> :
                             <>
                                 <div className="flex justify-between mt-20">

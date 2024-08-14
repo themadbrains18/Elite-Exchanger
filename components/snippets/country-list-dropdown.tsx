@@ -25,13 +25,17 @@ const CountrylistDropdown = (props: dataList) => {
     })
     setFilterCoin(record);
   }
+
+  // console.log(filterCoin,"=filterCoin");
+  
+
   const filterAddressChange = (e: any) => {
-    console.log(props.data,"============props.data");
+    // console.log(props.data,"============props.data");
     
     let record = props.data.filter((item: any) => {
       return item.label.toLowerCase().includes(e.target.value.toLowerCase())
     })
-    console.log(record,"=============record");
+    // console.log(record,"=============record");
     
     setFilterCoin(record);
   }

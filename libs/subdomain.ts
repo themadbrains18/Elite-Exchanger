@@ -14,7 +14,21 @@ export const getValidSubdomain = (host?: string | null) => {
     return subdomain;
 };
 
+// export const truncateNumber = (num: number, decimals: number) => {
+//     const factor = Math.pow(10, decimals);
+//     return (num >= 0 ? Math.floor(num * factor) : Math.ceil(num * factor)) / factor;
+// }
+
+
 export const truncateNumber = (num: number, decimals: number) => {
-    const factor = Math.pow(10, decimals);
-    return (num >= 0 ? Math.floor(num * factor) : Math.ceil(num * factor)) / factor;
+    const valueString = num?.toString();
+    const decimalIndex = valueString?.indexOf('.');
+
+    if (decimalIndex === -1) {
+        // No decimal point found, so return the value as is
+        return valueString;
+    }
+
+    // Slice the string to include only up to 6 digits after the decimal point
+    return valueString?.slice(0, decimalIndex + (decimals+1));
 }

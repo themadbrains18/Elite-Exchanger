@@ -348,7 +348,7 @@ const Password = (props: activeSection) => {
                 </div>
               </div>
             </div>
-            <div className="flex flex-col  gap-20">
+            <div className="flex flex-col  gap-10">
               <label className="sm-text mb-[6px]">Enter Account Password</label>
               <div className={` relative `}>
                 <input
@@ -356,6 +356,7 @@ const Password = (props: activeSection) => {
                   placeholder="Re-Enter password"
                   maxLength={32}
                   autoComplete="off"
+                  id="reenterpass"
                   className={`sm-text w-full  input-cta2`}
                   {...register("password")}
                 />

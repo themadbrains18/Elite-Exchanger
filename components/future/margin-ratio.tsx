@@ -29,7 +29,7 @@ const MarginRatio = (props: fullWidth) => {
         });
 
         if (asset?.length > 0) {
-            let assetbal = truncateNumber(Number(asset[0].balance), 6)
+            let assetbal = parseFloat(truncateNumber(Number(asset[0].balance), 6))
             setAvailBalance(assetbal);
 
             let marginbalance = assetbal;

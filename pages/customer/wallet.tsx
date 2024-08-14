@@ -142,12 +142,14 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
                 "Authorization": session?.user?.access_token
             },
         }).then(response => response.json());
-        let deposits = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
+        let deposits = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/deposit?user_id=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20&currency=all&date=all`, {
             method: "GET",
             headers: {
                 "Authorization": session?.user?.access_token
             },
         }).then(response => response.json());
+
+    
 
         let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
             method: "GET",

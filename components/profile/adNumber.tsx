@@ -135,6 +135,10 @@ const AdNumber = (props: activeSection) => {
 
   const sendOtp = async () => {
     try {
+      const inputElements = document.querySelectorAll(".input_wrapper4 input");
+            inputElements.forEach((ele, index) => {
+              (inputElements[index] as HTMLInputElement).value = ""
+            })
       setOtp('')
       let uname = getValues("uname");
       if (uname !== "") {
@@ -335,15 +339,17 @@ const AdNumber = (props: activeSection) => {
         let res = await userExist.json();
         if (res?.data?.message !== undefined) {
           toast.error(res?.data?.message, { autoClose: 2000 });
+          console.log("here");
+          
           setTimeout(() => {
             setBtnDisabled(false);
             // if (Ref.current) clearInterval(Ref.current);
             // setShowTime(false);
             // setStatuss(true);
-            const inputElements = document.querySelectorAll(".input_wrapper4 input");
-            inputElements.forEach((ele, index) => {
-              (inputElements[index] as HTMLInputElement).value = ""
-            })
+            // const inputElements = document.querySelectorAll(".input_wrapper4 input");
+            // inputElements.forEach((ele, index) => {
+            //   (inputElements[index] as HTMLInputElement).value = ""
+            // })
           }, 3000);
         } else {
           await sendSessionOtp();
@@ -395,6 +401,8 @@ const AdNumber = (props: activeSection) => {
           let expireTime = res?.data?.otp?.expire;
           setSecondExpireTime(expireTime);
         } else {
+          console.log("here2");
+          
           toast.error(res.data.message, { autoClose: 2500 });
           setTimeout(() => {
             setDisabled(false);
@@ -417,7 +425,7 @@ const AdNumber = (props: activeSection) => {
 
 
   return (
-    <>
+    <div  ref={wrapperRef}>
       {show && props?.type === "email" ? (
         <EmailChangeAlert
           setShow={setShow}
@@ -426,15 +434,15 @@ const AdNumber = (props: activeSection) => {
         />
       ) : (
         <div
-          ref={wrapperRef}
-          className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+        
+          className={`max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  ${popup===false  ?"opacity-100":"opacity-0"}`}
         >
           {step === false &&
             <>
-              <div className="flex items-center justify-between ">
+              <div className={`flex items-center justify-between  `}>
                 <p className="sec-title">
                   {props?.type === "email"
-                    ? "Add Email Address"
+                    ? "Add Email Address "
                     : "Add Mobile Number"}
                 </p>
                 <svg
@@ -469,9 +477,11 @@ const AdNumber = (props: activeSection) => {
                 }
               }}>
                 <div className="py-30 md:py-40">
-                  <div className="flex flex-col mb-[15px] md:mb-20 gap-20">
+                  <div className="flex flex-col mb-[15px] md:mb-20 gap-10">
+                    <label className="sm-text">
+                Enter new {props?.type === "Email" ? "mobile number" : "email address"} 
+              </label>
                     <div>
-
                       <input
                         type="text"
                         {...register("uname")}
@@ -479,7 +489,7 @@ const AdNumber = (props: activeSection) => {
                         placeholder={props?.type === "email"
                           ? "Enter Email Address"
                           : "Enter Mobile Number"}
-                        className="sm-text input-cta2 w-full"
+                        className="sm-text input-cta2 w-full mb-[10px]"
                       />
                       {errors.uname && (
                         <p className="errorMessage">{errors.uname.message}</p>
@@ -488,7 +498,7 @@ const AdNumber = (props: activeSection) => {
 
 
                   </div>
-                  <div className="flex flex-col  gap-20">
+                  <div className="flex flex-col  gap-10">
                     <label className="sm-text">Enter 6 Digit OTP</label>
                     <div className="flex gap-10 justify-between items-center input_wrapper4 relative">
                       <input
@@ -604,7 +614,7 @@ const AdNumber = (props: activeSection) => {
       )}
       {popup === true && <CodeNotRecieved setEnable={setPopup} />}
 
-    </>
+    </div>
   );
 };
 

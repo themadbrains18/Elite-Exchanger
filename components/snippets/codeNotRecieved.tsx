@@ -64,7 +64,8 @@ const CodeNotRecieved = (props: changeProps) => {
           <p
             className={`info-10-14 pb-4 border-b-[2px] cursor-pointer border-[transparent] ${active === 1 && " border-b-primary font-bold"
               }`}
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault()
               setActive(1);
             }}
           >
@@ -73,7 +74,8 @@ const CodeNotRecieved = (props: changeProps) => {
           <p
             className={`info-10-14 pb-4 border-b-[2px] cursor-pointer border-[transparent] ${active === 2 && " border-b-primary font-bold"
               }`}
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault()
               setActive(2);
             }}
           >

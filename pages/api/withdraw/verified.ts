@@ -15,17 +15,25 @@ export const config = {
 router
     .post(async (req, res) => {
         try {
+
+            // console.log(req.body,"==body");
+            
+
             // Call the API using a helper function and pass the necessary parameters.
             let responseData = await fetch(`https://checkcryptoaddress.com/api/check-address`, {
                 method: "POST",
                 headers: new Headers({
-                    "content-type": "application/json",
+                    "Content-type": "application/json",
                 }),
                 redirect: 'follow',
                 body: req.body
             });
 
             let data = await responseData.json();
+            
+            console.log(data,"==data");
+            
+
             // Respond with a 200 status and send the retrieved data.
             return res.status(200).send({ data });
 

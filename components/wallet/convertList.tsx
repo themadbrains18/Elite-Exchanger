@@ -204,7 +204,7 @@ const ConvertList = (props: propsData) => {
         </div>
       </div>
       <div className="flex pt-[25px] items-center justify-between">
-        <p className="info-12 md:footer-text !text-gamma">{total} assets</p>
+      {total>0 &&  <p className="info-12 md:footer-text !text-gamma">{total} assets</p>}
         {
           pageCount > 1 &&
           <ReactPaginate

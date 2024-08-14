@@ -3,10 +3,11 @@ import React, { useState } from "react";
 
 import IconsComponent from "../snippets/icons";
 import { toast } from 'react-toastify';
-import { signOut } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Deposit from "../snippets/deposit";
 import { currencyFormatter } from "../snippets/market/buySellCard";
 import { truncateNumber } from "@/libs/subdomain";
+import WithdrawAuthenticationModelPopup from "./withdrawAuthentication";
 
 interface propsData {
   assets: any;
@@ -20,10 +21,12 @@ interface propsData {
 const Banner = (props: propsData): any => {
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(0);
+  const [depositActive, setDepositActive] = useState(false);
+  const { data: session } = useSession();
 
   let dataCoinWallet = props.coinList;
-  const star='*'
-  
+  const star = '*'
+
 
   return (
     <>
@@ -33,7 +36,15 @@ const Banner = (props: propsData): any => {
             <p className="text-[23px] leading-7 font-medium mb-2 md:mb-[10px] dark:text-white">Wallet</p>
           </div>
           <div>
-            <button onClick={() => { setShow1(1) }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+
+            <button onClick={() => {
+              if (session?.user?.kyc !== 'approve') {
+                setDepositActive(true);
+              }
+              else {
+                setShow1(1)
+              }
+            }} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
               <span className="text-primary block">Deposit</span>
               <IconsComponent type="openInNewTab" hover={false} active={false} />
             </button>
@@ -48,7 +59,7 @@ const Banner = (props: propsData): any => {
             <div className="mt-30 flex gap-10">
               <p className="md-heading text-black dark:text-white">
                 {
-                  show == true ? <span> ${props.assets !=0 ? currencyFormatter(truncateNumber(props?.assets,6)) :'0.00' }</span> :  <span>$ {props.assets !=0 ?star.repeat(props.assets.toFixed(6)?.length):star.repeat(4)}</span>
+                  show == true ? <span> ${props.assets != 0 ? currencyFormatter(truncateNumber(props?.assets, 6)) : '0.00'}</span> : <span>$ {props.assets != 0 ? star.repeat(props.assets.toFixed(6)?.length) : star.repeat(4)}</span>
                 }
               </p>
               <div className="p-[5px] rounded flex gap-[10px] items-center cursor-pointer" onClick={() => { setShow(!show) }}>
@@ -71,7 +82,7 @@ const Banner = (props: propsData): any => {
               </div>
               <div className="flex items-center gap-10">
                 <IconsComponent type="totalDepositBlue" hover={false} active={false} />
-                <p className="sm-text dark:!text-white">${currencyFormatter(truncateNumber(props?.depositList,6))}</p>
+                <p className="sm-text dark:!text-white">${currencyFormatter(truncateNumber(props?.depositList, 6))}</p>
               </div>
             </div>
             <div className="flex items-center  justify-between gap-5 flex-wrap">
@@ -81,7 +92,7 @@ const Banner = (props: propsData): any => {
               </div>
               <div className="flex items-center gap-10">
                 <IconsComponent type="totalWithdrawBlue" hover={false} active={false} />
-                <p className="sm-text dark:!text-white">${currencyFormatter(truncateNumber(props?.withdrawList,6))}</p>
+                <p className="sm-text dark:!text-white">${currencyFormatter(truncateNumber(props?.withdrawList, 6))}</p>
               </div>
             </div>
           </div>
@@ -92,6 +103,13 @@ const Banner = (props: propsData): any => {
         <>
           <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
           <Deposit setShow1={setShow1} networks={props.networks} session={props.session} coinList={dataCoinWallet} hideDefault={true} />
+        </>
+      }
+      {depositActive === true &&
+        <>
+          <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show1 ? "opacity-80 visible" : "opacity-0 invisible"}`} ></div>
+
+          <WithdrawAuthenticationModelPopup setActive={setDepositActive} setShow={setShow1} title="Deposit Security Settings" type="deposit" />
         </>
       }
     </>
