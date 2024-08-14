@@ -95,7 +95,7 @@ const Adverstisement = (props: propsData) => {
         let data = await responseData.json();
         setLoading(false);
         setInrPrice(data?.rate);
-        setValue('price', truncateNumber( data?.rate,6));
+        setValue('price', parseFloat(truncateNumber( data?.rate,6)));
       }
       else {
         // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
@@ -117,7 +117,7 @@ const Adverstisement = (props: propsData) => {
         setLoading(false);
         setInrPrice(item?.price * data?.rate);
         let price: any = item?.price * data?.rate
-        setValue('price', truncateNumber( inrPrice,6));
+        setValue('price', parseFloat(truncateNumber( inrPrice,6)));
       }
 
       setSelectedAssets(item);
@@ -298,7 +298,7 @@ const Adverstisement = (props: propsData) => {
                     onClick={() => {
                       setShow(2);
                       selectToken(selectedAssets);
-                      let currentPrice = truncateNumber(inrPrice,6)
+                      let currentPrice = parseFloat(truncateNumber(inrPrice,6))
                       setValue('price', currentPrice)
                     }}
                     type="button"

@@ -60,7 +60,7 @@ const EditAdverstisement = (props: propsData) => {
     });
     if (token?.length > 0) {
       selectToken(token[0]);
-      setValue("price", truncateNumber(props?.editPost?.price, 4));
+      setValue("price",parseFloat(truncateNumber(props?.editPost?.price, 4)));
     }
     let type = props.editPost?.price_type === 'fixed' ? 1 : 2;
     setShow(type)
@@ -86,7 +86,7 @@ const EditAdverstisement = (props: propsData) => {
         });
         let data = await responseData.json();
         setLoading(false);
-        setInrPrice(truncateNumber(data?.rate, 6));
+        setInrPrice(parseFloat(truncateNumber(data?.rate, 6)));
       }
       else {
         let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
@@ -102,7 +102,7 @@ const EditAdverstisement = (props: propsData) => {
           }),
         });
         let data = await responseData.json();
-        setInrPrice(truncateNumber(item?.price * data?.rate, 6));
+        setInrPrice(parseFloat(truncateNumber(item?.price * data?.rate, 6)));
       }
 
 
@@ -263,7 +263,7 @@ const EditAdverstisement = (props: propsData) => {
                       }`}
                     onClick={() => {
                       setShow(1);
-                      setValue('price', truncateNumber(props?.editPost?.price, 4))
+                      setValue('price',parseFloat(truncateNumber(props?.editPost?.price, 4)))
                     }}
                     type="button"
                   >
@@ -315,7 +315,7 @@ const EditAdverstisement = (props: propsData) => {
                       setShow(2);
                       selectToken(selectedAssets);
                       let currentPrice = truncateNumber(inrPrice, 6)
-                      setValue('price', currentPrice)
+                      setValue('price', parseFloat(currentPrice))
                     }}
                     type="button"
                   >

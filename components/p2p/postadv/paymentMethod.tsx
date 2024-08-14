@@ -85,7 +85,7 @@ const PaymentMethod = (props: activeSection) => {
       let qty: any = router?.query?.qty;
       let pmid: any = router?.query?.pmid;
       setValue("quantity", qty);
-      setValue("max_limit", truncateNumber(props.price * qty,6));
+      setValue("max_limit", parseFloat(truncateNumber(props.price * qty,6)));
       setReduceValue(truncateNumber(props.assetsBalance - qty,6))
       const paymentMethodName = getPaymentMethodName(pmid);
       getAllPayments(paymentMethodName)
@@ -203,7 +203,7 @@ const PaymentMethod = (props: activeSection) => {
     } else {
       // setValue("max_limit", props.price * e.target.value);
       // setMaxInputValue(Number(props.price) * Number(e.target.value))
-      let maxLimit = truncateNumber(props.price * e.target.value, 6);
+      let maxLimit = parseFloat(truncateNumber(props.price * e.target.value, 6));
       setValue('max_limit', maxLimit);
       clearErrors('max_limit')
       setMaxInputValue(maxLimit)

@@ -56,12 +56,12 @@ const ProfitLossModal = (props: showPopup) => {
             if (props?.show === 'long') {
                 //=========== USDT PnL ================
                 let usdt_pnl: any = props?.position?.qty * (newPriceValue - parseFloat(props?.entryPrice));
-                setProfit(truncateNumber(usdt_pnl, 6));
+                setProfit(parseFloat(truncateNumber(usdt_pnl, 6)));
             }
             else if (props?.show === 'short') {
                 //=========== USDT PnL ================
                 let usdt_pnl: any = props?.position?.qty * (parseFloat(props?.entryPrice) - newPriceValue);
-                setProfit(truncateNumber(usdt_pnl, 6));
+                setProfit(parseFloat(truncateNumber(usdt_pnl, 6)));
             }
         }
         else {
@@ -81,12 +81,12 @@ const ProfitLossModal = (props: showPopup) => {
             if (props?.show === 'long') {
                 //=========== USDT PnL ================
                 let usdt_pnl: any = props?.position?.qty * (parseFloat(props?.entryPrice) - newPriceValue);
-                setLoss(truncateNumber(usdt_pnl, 6));
+                setLoss(parseFloat(truncateNumber(usdt_pnl, 6)));
             }
             else if (props?.show === 'short') {
                 //=========== USDT PnL ================
                 let usdt_pnl: any = props?.position?.qty * (newPriceValue - parseFloat(props?.entryPrice));
-                setLoss(truncateNumber(usdt_pnl, 6));
+                setLoss(parseFloat(truncateNumber(usdt_pnl, 6)));
             }
         }
         else{
