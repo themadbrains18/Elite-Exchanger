@@ -339,7 +339,7 @@ const AdNumber = (props: activeSection) => {
         let res = await userExist.json();
         if (res?.data?.message !== undefined) {
           toast.error(res?.data?.message, { autoClose: 2000 });
-          console.log("here");
+          // console.log("here");
           
           setTimeout(() => {
             setBtnDisabled(false);
@@ -401,7 +401,7 @@ const AdNumber = (props: activeSection) => {
           let expireTime = res?.data?.otp?.expire;
           setSecondExpireTime(expireTime);
         } else {
-          console.log("here2");
+          // console.log("here2");
           
           toast.error(res.data.message, { autoClose: 2500 });
           setTimeout(() => {

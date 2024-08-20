@@ -27,7 +27,7 @@ const Future = (props: propsData) => {
     const [token, setToken] = useState(Object);
     const [imgSrc, setImgSrc] = useState(false);
 
-    console.log(props.coins, "================props.coins");
+    // console.log(props.coins, "================props.coins");
 
     let itemsPerPage = 10;
     const endOffset = itemOffset + itemsPerPage;

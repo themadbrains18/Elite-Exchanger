@@ -137,7 +137,7 @@ const TransferModal = (props: showPopup) => {
   const filterAsset = (symbol: string, type: string) => {
     let coins: any = [];
     if (type == "Spot") {
-      console.log(props?.assets,"props?.assets");
+      // console.log(props?.assets,"props?.assets");
       let asset = props?.assets?.filter((item: any) => {
         let token = item?.token !== null ? item?.token : item?.global_token;
         if( symbol){
@@ -159,7 +159,7 @@ const TransferModal = (props: showPopup) => {
         }
       });
       setCoinList(coins)
-      console.log("in spot", asset);
+      // console.log("in spot", asset);
       setUserAsset(asset[0]);
       setValue('token_id', asset[0]?.token_id);
       clearErrors('token_id')

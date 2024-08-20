@@ -31,7 +31,7 @@ router
 
             let data = await responseData.json();
             
-            console.log(data,"==data");
+            // console.log(data,"==data");
             
 
             // Respond with a 200 status and send the retrieved data.

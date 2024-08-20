@@ -82,7 +82,7 @@ const Activity = (props: fixSection) => {
 
     }
   }
-  console.log(data, "=======================dta");
+  // console.log(data, "=======================dta");
 
 
   return (

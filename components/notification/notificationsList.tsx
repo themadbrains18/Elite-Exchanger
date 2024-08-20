@@ -33,7 +33,7 @@ const NotificationsList = (props: propsData) => {
       );
     });
     setData(filterData);
-    console.log(Ndata, "===========Ndata");
+    // console.log(Ndata, "===========Ndata");
   };
 
   return (

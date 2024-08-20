@@ -153,7 +153,7 @@ const Remarks = (props: propsData) => {
      * @returns 
      */
     const updatePaymentMethod = async () => {
-        console.log(orderDetail?.id,"=orderDetail?.id");
+        // console.log(orderDetail?.id,"=orderDetail?.id");
 
         if (props.paymentMethod === '') {
             toast.error('Please select one payment method');
@@ -215,7 +215,7 @@ const Remarks = (props: propsData) => {
      */
     const orderCancel = async (type: string) => {
 
-        console.log(orderDetail?.id,"=orderDetail?.id");
+        // console.log(orderDetail?.id,"=orderDetail?.id");
         
         let obj = {
             "order_id": orderDetail?.id,

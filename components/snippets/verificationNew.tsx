@@ -200,7 +200,7 @@ const VerificationNew = (props: activeSection) => {
 
     const matchUserOtp = async () => {
         try {
-            console.log(fillOtp,"==fillOtp");                        
+            // console.log(fillOtp,"==fillOtp");                        
             setDisabled(true)
 
             if (fillOtp === "" || fillOtp === "string" || fillOtp === null) {

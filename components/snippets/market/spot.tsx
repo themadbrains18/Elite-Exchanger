@@ -87,7 +87,7 @@ const Spot = (props: propsData) => {
                     </thead>
                     <tbody>
                         {currentItems && currentItems?.length > 0 && currentItems?.map((item: any, index: any) => {
-                            console.log(item, "=================item");
+                            // console.log(item, "=================item");
 
                             return (
                                 <tr key={index} className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => { window.location.href = `/chart/${item.symbol}`; }}>

@@ -223,7 +223,7 @@ const BuySellCard = (props: DynamicId) => {
     let sellerFees: any = (data.token_amount * data.limit_usdt * 0.001);
     sellerFees = scientificToDecimal(Number(truncateNumber(sellerFees.toFixed(12), 8)));
 
-    console.log(buyerFees,'======buyer fees', sellerFees,'========sellerFees',  transactionFee,'=========transactionFee');
+    // console.log(buyerFees,'======buyer fees', sellerFees,'========sellerFees',  transactionFee,'=========transactionFee');
     
     let obj = {
       "user_id": props.session.user.user_id,
@@ -249,7 +249,8 @@ const BuySellCard = (props: DynamicId) => {
   // =======================================================
   const actionPerform = async () => {
     try {
-      console.log("herer", objData);
+      // console.log("herer", objData);
+
 
       const ciphertext = AES.encrypt(JSON.stringify(objData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record = encodeURIComponent(ciphertext.toString());
@@ -264,7 +265,7 @@ const BuySellCard = (props: DynamicId) => {
       }).then(response => response.json());
 
       if (reponse.data.status === 200) {
-        console.log("here2");
+        // console.log("here2");
         setPriceOnChangeType(objData?.order_type, '')
         // getAssets()
         toast.success(reponse.data?.data?.message);
