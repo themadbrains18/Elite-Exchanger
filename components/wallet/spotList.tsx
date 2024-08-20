@@ -346,7 +346,7 @@ const SpotList = (props: propsData): any => {
                     </div>
                   </div>
                   <div>
-                    <p className="info-14-18 dark:text-white  lg:text-start text-center">{currencyFormatter(item?.balance.toFixed(2))}</p>
+                    <p className="info-14-18 dark:text-white  lg:text-start text-center">{currencyFormatter(truncateNumber(item?.balance,6))}</p>
                   </div>
                   <div className="iconParent lg:text-start text-end flex items-center justify-between">
                     <p className="info-14-18 dark:text-white">${item.token !== null ? currencyFormatter(item?.token?.price.toFixed(5)) : currencyFormatter(item?.global_token?.price.toFixed(5))}</p>
