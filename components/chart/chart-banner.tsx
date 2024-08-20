@@ -1,9 +1,10 @@
 import Image from 'next/image';
-import React, { Fragment, useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import IconsComponent from '../snippets/icons';
 import { useRouter } from 'next/router';
 import { useWebSocket } from '@/libs/WebSocketContext';
 import { currencyFormatter } from '../snippets/market/buySellCard';
+import { truncateNumber } from '@/libs/subdomain';
 // import Pusher from 'pusher-js';
 
 // const pusher = new Pusher('b275b2f9e51725c09934', {
@@ -27,22 +28,34 @@ const ChartBanner = (props: propsData) => {
 
   const wbsocket = useWebSocket();
   useEffect(() => {
-    setFillFav(false)
-    socket();
+    setFillFav(false);
     refreshTokenList();
   }, [slug])
 
-  const socket =()=>{
-    if(wbsocket){
-      wbsocket.onmessage = (event) => {
-        const data = JSON.parse(event.data).data;
-        let eventDataType = JSON.parse(event.data).type;
-        if (eventDataType === "price") {
-          refreshTokenList()
-        }
+  const socketListenerRef = useRef<(event: MessageEvent) => void>();
+  useEffect(() => {
+    const handleSocketMessage = (event: any) => {
+      const data = JSON.parse(event.data).data;
+      let eventDataType = JSON.parse(event.data).type;
+
+      if (eventDataType === "price") {
+        refreshTokenList()
       }
+    };
+    if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
+      if (socketListenerRef.current) {
+        wbsocket.removeEventListener('message', socketListenerRef.current);
+      }
+      socketListenerRef.current = handleSocketMessage;
+      wbsocket.addEventListener('message', handleSocketMessage);
     }
-  }
+
+    return () => {
+      if (wbsocket) {
+        wbsocket.removeEventListener('message', handleSocketMessage);
+      }
+    };
+  }, [wbsocket])
 
   const refreshTokenList = async () => {
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
@@ -85,7 +98,7 @@ const ChartBanner = (props: propsData) => {
     ]
     setCurrentToken(ccurrentToken[0]);
     setCardsData(obj);
-   
+
     let favItems = localStorage.getItem('favToken');
     if (favItems) {
       favItems = JSON.parse(favItems);
@@ -96,7 +109,7 @@ const ChartBanner = (props: propsData) => {
       setFillFav(false);
     }
 
-  
+
   }
 
   // const styles = {
@@ -108,7 +121,7 @@ const ChartBanner = (props: propsData) => {
   //   const highPrice = props?.hlocData?.high;
   //   const lowPrice = props?.hlocData?.low;
   //   let currentPrice = currentToken?.price?.toFixed(5); 
-    
+
   //   // Calculate ranges
   //   const totalRange = highPrice - lowPrice;
   //   // Check for negative price and set to 0 if negative
@@ -117,18 +130,18 @@ const ChartBanner = (props: propsData) => {
   //   }
   //   const currentRange = currentPrice - lowPrice;
   //   console.log(currentRange,"==========currentRange");
-    
+
   //   // Calculate bar width percentage
   //   const barWidthPercentage = (currentRange / totalRange) * 100;
   //   setBarWidth(barWidthPercentage);
   // }
   // useEffect(()=>{
-    
+
   //     BarWidth();
-    
+
   // },[props])
 
-  
+
   return (
     <div className='p-20 rounded-10  bg-white dark:bg-d-bg-primary'>
       {/* head */}
@@ -148,9 +161,9 @@ const ChartBanner = (props: propsData) => {
                     data-nimg={1}
                     style={{ color: "transparent" }}
                     src={`${currentToken?.image !== undefined ? currentToken?.image : '/assets/home/coinLogo.png'}`}
-                    className={`${currentToken?.symbol==="XRP"&&"bg-white rounded-full "}`}
+                    className={`${currentToken?.symbol === "XRP" && "bg-white rounded-full "}`}
                   />
-                  
+
                   <div>
                     <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px] ss">
                       <p className="info-14-18 dark:text-white">{`${currentToken?.fullName}`}</p>
@@ -199,7 +212,7 @@ const ChartBanner = (props: propsData) => {
                       </svg>
                     </div>
                     <div className='flex items-center gap-[20px] lg:max-w-[50%] lg:justify-start justify-between mt-[15px]'>
-                      <p className="info-14-18 dark:text-white">${currentToken?.price!==undefined? currencyFormatter(currentToken?.price?.toFixed(5)):'0.0'}</p>
+                      <p className="info-14-18 dark:text-white">${currentToken?.price !== undefined ? currencyFormatter(truncateNumber(currentToken?.price, 6)) : '0.0'}</p>
                       {/* <h4 className='md-heading dark:text-white'>${`${currentToken?.price?.toFixed(5)}`}</h4> */}
                       <div className={` items-center gap-[4px] flex`}>
                         <p className={`footer-text-secondary ${Number(props?.hlocData?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(props?.hlocData?.changeRate) > 0 ? '+' : ''}{props?.hlocData?.changeRate !== undefined ? (Number(props?.hlocData?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
@@ -231,7 +244,7 @@ const ChartBanner = (props: propsData) => {
                   <div className={`w-[40%] h-[5px] rounded-[5px] bg-primary`}></div>
                 </div>
                 <div className='flex items-center justify-between'>
-                  <p className="info-10-14 !text-gamma">Low : ${props?.hlocData?.changeRate !== undefined ? currencyFormatter(props?.hlocData?.low ): 0.0}</p>
+                  <p className="info-10-14 !text-gamma">Low : ${props?.hlocData?.changeRate !== undefined ? currencyFormatter(props?.hlocData?.low) : 0.0}</p>
                   <p className="info-10-14 !text-gamma">High : ${props?.hlocData?.changeRate !== undefined ? currencyFormatter(props?.hlocData?.high) : 0.0}</p>
                 </div>
               </div>

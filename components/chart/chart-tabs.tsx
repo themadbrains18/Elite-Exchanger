@@ -695,7 +695,7 @@ const ChartTabs = (props: propsData) => {
                 <div
                   className={`head_row border-b border-t border-grey-v-3 dark:border-opacity-[15%] grid grid-cols-3 md:grid-cols-9  justify-between`}
                 >
-                  <div className="flex py-5 md:col-span-2 items-center">
+                  <div className="flex py-5 md:col-span-1 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma  ">
                       Coin Name
                     </p>
@@ -740,7 +740,7 @@ const ChartTabs = (props: propsData) => {
                       alt="uparrow"
                     />
                   </div>
-                  <div className="hidden md:flex py-5 items-center">
+                  <div className="hidden md:flex py-5 col-span-2 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
                       Bid Price
                     </p>
@@ -802,7 +802,7 @@ const ChartTabs = (props: propsData) => {
                         <div
                           className={`grid grid-cols-3 relative md:grid-cols-9 items-center  justify-between `}
                         >
-                          <div className="flex gap-2 md:col-span-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
+                          <div className="flex gap-2 md:col-span-1 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                             <Image src={`${imgSrc2 ? fallbackImage : tokenImage}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)} />
 
                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
@@ -883,8 +883,8 @@ const ChartTabs = (props: propsData) => {
                               {item?.fee?.toFixed(8)}
                             </p>
                           </div>
-                          <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
-                            <p className="info-14-18 dark:text-white ">
+                          <div className="py-[10px] md:py-[15px] col-span-2 px-0 md:px-[5px]  md:block hidden min-w-[140px] w-full">
+                            <p className="info-14-18 dark:text-white w-full">
                               {currencyFormatter(truncateNumber(item?.limit_usdt,6))}
                             </p>
                           </div>
@@ -966,7 +966,7 @@ const ChartTabs = (props: propsData) => {
 
                             return (
                               <div className={`grid grid-cols-3 md:grid-cols-9 items-center  justify-between `}>
-                                <div className="flex gap-2 md:col-span-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
+                                <div className="flex gap-2 md:col-span-1 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                                 </div>
                                 <div className="flex items-center py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                                   <div
@@ -1008,7 +1008,7 @@ const ChartTabs = (props: propsData) => {
                                     )}
                                   </div>
                                   <div className="hidden md:block py-[10px] md:py-[15px] px-0 md:px-[5px]">
-                                    <p className="info-14-18 dark:text-white">
+                                    <p className="info-14-18 dark:text-white capitalize">
                                       {elm.order_type}
                                     </p>
                                     <p className="info-10">
@@ -1016,14 +1016,14 @@ const ChartTabs = (props: propsData) => {
                                     </p>
                                   </div>
                                   <div className="block md:hidden py-[10px] md:py-[15px] px-0 md:px-[5px]">
-                                    <p className="info-14-18 dark:text-white">
+                                    <p className="info-14-18 dark:text-white capitalize">
                                       {elm.market_type}
                                     </p>
                                     <p className="info-10">{currencyFormatter(elm.token_amount.toFixed(4))}</p>
                                   </div>
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
-                                  <p className="info-14-18 dark:text-white  ">
+                                  <p className="info-14-18 dark:text-white capitalize">
                                     {elm.market_type}
                                   </p>
                                 </div>
@@ -1032,7 +1032,7 @@ const ChartTabs = (props: propsData) => {
                                     {elm?.fee?.toFixed(8)}
                                   </p>
                                 </div>
-                                <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
+                                <div className="py-[10px] md:py-[15px] px-0 md:px-[5px] col-span-2 md:block hidden">
                                   <p className="info-14-18 dark:text-white">
                                     {currencyFormatter(truncateNumber(elm?.limit_usdt,6))}
                                   </p>
