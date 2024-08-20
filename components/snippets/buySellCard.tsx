@@ -99,7 +99,7 @@ const BuySellCard = (props: DynamicId) => {
   }, [wbsocket])
 
   const hasRun = useRef(false);
- 
+
 
   useEffect(() => {
     // console.log(props.slug,"=props.slug");
@@ -174,6 +174,10 @@ const BuySellCard = (props: DynamicId) => {
     }
   }
 
+  const scientificToDecimal = (value: number): string => {
+    return value.toFixed(10).replace(/\.?0+$/, ""); // Convert to decimal format, trimming unnecessary zeros
+  };
+
   const onHandleSubmit = async (data: any) => {
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
 
@@ -214,6 +218,13 @@ const BuySellCard = (props: DynamicId) => {
     let totalUsdtAmount: any = totalAmount;
     let transactionFee: any = active1 === 1 ? (data.token_amount * 0.001).toFixed(8) : (data.token_amount * data.limit_usdt * 0.001).toFixed(8);
 
+    let buyerFees: any = data.token_amount * 0.001;
+    buyerFees = scientificToDecimal(Number(truncateNumber(buyerFees.toFixed(12), 8)));
+    let sellerFees: any = (data.token_amount * data.limit_usdt * 0.001);
+    sellerFees = scientificToDecimal(Number(truncateNumber(sellerFees.toFixed(12), 8)));
+
+    console.log(buyerFees,'======buyer fees', sellerFees,'========sellerFees',  transactionFee,'=========transactionFee');
+    
     let obj = {
       "user_id": props.session.user.user_id,
       "token_id": selectedToken?.id,
@@ -222,7 +233,7 @@ const BuySellCard = (props: DynamicId) => {
       "limit_usdt": data.limit_usdt.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
       "volume_usdt": totalUsdtAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
       "token_amount": data.token_amount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
-      "fee": transactionFee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
+      "fee": active1 === 1 ? buyerFees : sellerFees, /// transactionFee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
       "is_fee": false,
       "status": false,
       "isCanceled": false,
@@ -238,8 +249,8 @@ const BuySellCard = (props: DynamicId) => {
   // =======================================================
   const actionPerform = async () => {
     try {
-      console.log("herer",objData);
-      
+      console.log("herer", objData);
+
       const ciphertext = AES.encrypt(JSON.stringify(objData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record = encodeURIComponent(ciphertext.toString());
 
@@ -254,28 +265,28 @@ const BuySellCard = (props: DynamicId) => {
 
       if (reponse.data.status === 200) {
         console.log("here2");
-        setPriceOnChangeType(objData?.order_type,'') 
+        setPriceOnChangeType(objData?.order_type, '')
         // getAssets()
         toast.success(reponse.data?.data?.message);
 
         setFirstCurrency('BTCB');
         setSecondCurrency('USDT');
-        setActive(false);    
-        if(show===1){
+        setActive(false);
+        if (show === 1) {
           reset({
             limit_usdt: 0.00,
             token_amount: 0.00,
           })
 
-        }     
-        
-        else{
+        }
+
+        else {
           reset({
             token_amount: 0.00,
           })
           setValue('limit_usdt', props?.token?.price)
         }
-        
+
         setEstimateFee(0.00)
         setTotalAmount(0.0)
         if (wbsocket) {
@@ -310,7 +321,7 @@ const BuySellCard = (props: DynamicId) => {
           }).then(response => response.json());
 
           if (executionReponse?.data?.message === undefined) {
-          
+
             if (wbsocket) {
               let withdraw = {
                 ws_type: 'market',
@@ -388,7 +399,7 @@ const BuySellCard = (props: DynamicId) => {
       }).then(response => response.json());
 
       setUserAssets(userAssets);
-      return userAssets 
+      return userAssets
 
     } catch (error) {
       console.log("error while fetching assets", error);
@@ -396,7 +407,7 @@ const BuySellCard = (props: DynamicId) => {
     }
   }
 
-  
+
   // console.log(estimateFee,"=estimate fee");
 
 
@@ -412,7 +423,7 @@ const BuySellCard = (props: DynamicId) => {
             setSpotType('buy');
             setTotalAmount(0.0); setEstimateFee(0.00)
             if (show === 2) {
-              let price=  truncateNumber(Number(props?.token?.price),6)
+              let price = truncateNumber(Number(props?.token?.price), 6)
               setValue('limit_usdt', Number(price))
             }
           }}>
@@ -429,9 +440,9 @@ const BuySellCard = (props: DynamicId) => {
             setTotalAmount(0.0);
             setEstimateFee(0.00);
             if (show === 2) {
-              let price=  truncateNumber(Number(props?.token?.price),6)
+              let price = truncateNumber(Number(props?.token?.price), 6)
               setValue('limit_usdt', Number(price))
-            
+
             }
           }}>
             Sell
@@ -537,14 +548,14 @@ const BuySellCard = (props: DynamicId) => {
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
                   {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
                   <p className="md-text w-full">
-                    {currencyFormatter(Number(truncateNumber(price,6)))}
+                    {currencyFormatter(Number(truncateNumber(price, 6)))}
                     &nbsp;{active1 === 1 ? 'USDT' : props?.token?.symbol}</p>
 
                   <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className={`min-w-[24px] ${selectedToken?.symbol === "XRP" && "bg-white rounded-full "}`} alt="wallet2" width={24} height={24} />
                   {router.pathname.includes("/chart") && <p className="md-text">
                     $
                     {props?.token !== undefined && props?.token?.price !== undefined
-                      ? currencyFormatter(truncateNumber(props?.token?.price,6))
+                      ? currencyFormatter(truncateNumber(props?.token?.price, 6))
                       : "0.00"}
                   </p>
 
@@ -552,42 +563,42 @@ const BuySellCard = (props: DynamicId) => {
 
                   {router.pathname.includes("/market") && props.coins && props.coins.map((item: any) => {
                     if (item.symbol === selectedToken?.symbol) {
-                      return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? currencyFormatter(truncateNumber(item?.price,6)) : '0.00'}</p>
+                      return <p className="md-text">${selectedToken !== undefined && selectedToken?.price !== undefined ? currencyFormatter(truncateNumber(item?.price, 6)) : '0.00'}</p>
                     }
                   })}
                 </div>
 
                 {/* Price Inputs for limit order case */}
                 {show === 1 &&
-                <>
+                  <>
 
-                  <div className="mt-30 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
+                    <div className="mt-30 rounded-5 p-[10px] flex border items-center justify-between gap-[15px] border-grey-v-1 dark:border-opacity-[15%] relative">
 
-                    <div className="">
-                      <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
-                      <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} placeholder="$0" step="0.000001" {...register('limit_usdt', {
-                        onChange: (e) => {
-                          {
-                            const value = e.target.value;
-                            const regex = /^\d{0,11}(\.\d{0,6})?$/;
-                            if (regex.test(value) || value === "") {
-                              convertTotalAmount();
-                              checkInput(e, 'limit');
-                            } else {
-                              e.target.value = value.slice(0, -1);
+                      <div className="">
+                        <p className="sm-text dark:text-white">{active1 === 1 ? "Buy" : "Sell"} For ({secondCurrency})</p>
+                        <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} placeholder="$0" step="0.000001" {...register('limit_usdt', {
+                          onChange: (e) => {
+                            {
+                              const value = e.target.value;
+                              const regex = /^\d{0,11}(\.\d{0,6})?$/;
+                              if (regex.test(value) || value === "") {
+                                convertTotalAmount();
+                                checkInput(e, 'limit');
+                              } else {
+                                e.target.value = value.slice(0, -1);
+                              }
+
                             }
-
                           }
-                        }
-                      })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
-                    </div>
+                        })} name="limit_usdt" className="bg-[transparent] outline-none md-text px-[5px] mt-[10px] max-w-full w-full " />
+                      </div>
 
-                    <div className="relative">
-                      <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} disabled={true} />
+                      <div className="relative">
+                        <FilterSelectMenuWithCoin data={secondList} border={false} setCurrencyName={setCurrencyName} dropdown={2} value={secondCurrency} disabled={true} />
+                      </div>
                     </div>
-                  </div>
-                {errors.limit_usdt && <p className="errorMessage">{errors.limit_usdt.message}</p>}
-                </>
+                    {errors.limit_usdt && <p className="errorMessage">{errors.limit_usdt.message}</p>}
+                  </>
                 }
 
                 {/* coin quantity Inputs */}

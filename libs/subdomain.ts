@@ -21,14 +21,20 @@ export const getValidSubdomain = (host?: string | null) => {
 
 
 export const truncateNumber = (num: number, decimals: number) => {
-    const valueString = num?.toString();
-    const decimalIndex = valueString?.indexOf('.');
+    // const valueString = num?.toString();
+    // const decimalIndex = valueString?.indexOf('.');
 
-    if (decimalIndex === -1) {
-        // No decimal point found, so return the value as is
-        return valueString;
-    }
+    // if (decimalIndex === -1) {
+    //     // No decimal point found, so return the value as is
+    //     return valueString;
+    // }
 
-    // Slice the string to include only up to 6 digits after the decimal point
-    return valueString?.slice(0, decimalIndex + (decimals+1));
+    // // Slice the string to include only up to 6 digits after the decimal point
+    // return valueString?.slice(0, decimalIndex + (decimals+1));
+
+    const regex = new RegExp(`^-?\\d+(?:\\.\\d{0,${decimals}})?`);
+    const match = num?.toString().match(regex);
+    // console.log(match,'=======match');
+
+    return match ? parseFloat(match[0]) : num;
 }

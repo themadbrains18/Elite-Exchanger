@@ -121,7 +121,7 @@ const BuySellExpress = (props: propsData) => {
 
       let data = await responseData?.json();
 
-      setUsdtToInr(parseFloat(truncateNumber(data?.rate, 6)));
+      setUsdtToInr(truncateNumber(data?.rate, 6));
       setLoader(false)
 
       return data;
@@ -267,7 +267,7 @@ const BuySellExpress = (props: propsData) => {
         if (amount !== undefined) {
           let spend_amount: any = getValues('spend_amount') * data?.rate
           setReceivedAmount(spend_amount)
-          setValue('receive_amount', parseFloat(truncateNumber(spend_amount, 6)));
+          setValue('receive_amount',truncateNumber(spend_amount, 6));
         }
         else {
           setReceivedAmount(0.00)
@@ -488,7 +488,7 @@ const BuySellExpress = (props: propsData) => {
                 // console.log("==here", amount,"post?.price",post?.price);
 
                 let receiveAmount: any = amount / post?.price;
-                setValue('receive_amount', parseFloat(truncateNumber(receiveAmount, 6)));
+                setValue('receive_amount',truncateNumber(receiveAmount, 6));
 
               }
               clearErrors('spend_amount');
@@ -652,9 +652,9 @@ const BuySellExpress = (props: propsData) => {
                             receiveAmount = receiveAmount?.toFixed(5);                         
                           }
 
-                          setReceivedAmount(parseFloat(truncateNumber(receiveAmount, 6)));
+                          setReceivedAmount(truncateNumber(receiveAmount, 6));
 
-                          setValue('receive_amount', parseFloat(truncateNumber(receiveAmount, 6)));
+                          setValue('receive_amount',truncateNumber(receiveAmount, 6));
                           clearErrors('spend_amount');
                           clearErrors('receive_amount');                            
                           if (paymentMethod && selectedSecondToken) {
@@ -736,8 +736,8 @@ const BuySellExpress = (props: propsData) => {
                             spendAmount = spendAmount?.toFixed();
                           
                           }
-                          setAmount(parseFloat(truncateNumber(spendAmount, 6)));
-                          setValue('spend_amount', parseFloat(truncateNumber(spendAmount, 6)));
+                          setAmount(truncateNumber(spendAmount, 6));
+                          setValue('spend_amount', truncateNumber(spendAmount, 6));
                           clearErrors('receive_amount');
                           clearErrors('spend_amount')
                         } else {
@@ -829,9 +829,9 @@ const BuySellExpress = (props: propsData) => {
                           let receiveAmount: any = parseFloat(e?.target?.value) * usdtToInr;
            
                          
-                          setReceivedAmount(parseFloat(truncateNumber(receiveAmount, 6)));
+                          setReceivedAmount(truncateNumber(receiveAmount, 6));
                           // setReceivedAmount(parseFloat(e?.target?.value) * usdtToInr);
-                          setValue('receive_amount', parseFloat(truncateNumber(receiveAmount, 6)));
+                          setValue('receive_amount',truncateNumber(receiveAmount, 6));
                           clearErrors('spend_amount');
                           clearErrors('receive_amount');
                         } else {
@@ -884,8 +884,8 @@ const BuySellExpress = (props: propsData) => {
                             setReceivedAmount((e?.target?.value));
                           }
                           let spendAmount: any = parseFloat(e.target.value) / usdtToInr;
-                          setAmount(parseFloat(truncateNumber(spendAmount, 6)));
-                          setValue('spend_amount', parseFloat(truncateNumber(spendAmount, 6)));
+                          setAmount(truncateNumber(spendAmount, 6));
+                          setValue('spend_amount', truncateNumber(spendAmount, 6));
                           clearErrors('spend_amount');
                           clearErrors('receive_amount');
                         } else {
