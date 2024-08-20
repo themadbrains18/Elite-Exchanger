@@ -156,7 +156,7 @@ const BuySell = (props: fullWidth) => {
       //   setButtonStyle(false);
       // }
       let bal = Number(truncateNumber(Number(asset[0].balance) + rewardsAmount, 6))
-      let assetbal = parseFloat(truncateNumber(Number(asset[0].balance), 6))
+      let assetbal = truncateNumber(Number(asset[0].balance), 6)
       // console.log(assetbal,"=jsdsajhdkas");
 
       setAssetsBalance(assetbal);
@@ -1085,10 +1085,10 @@ const BuySell = (props: fullWidth) => {
                       {showNes === 1
                         ? sizeValue === 0
                           ? 0.00
-                          : isNaN(parseFloat(truncateNumber(sizeValue / entryPrice, 3)))
+                          : isNaN(truncateNumber(sizeValue / entryPrice, 3))
                             ? 0.00
                             : truncateNumber(sizeValue / entryPrice, 3)
-                        : isNaN(parseFloat(truncateNumber(sizeValue / marketPrice, 3)))
+                        : isNaN(truncateNumber(sizeValue / marketPrice, 3))
                           ? 0.00
                           : truncateNumber(sizeValue / marketPrice, 3)}{" "}
                       {props?.currentToken?.coin_symbol}
@@ -1103,10 +1103,10 @@ const BuySell = (props: fullWidth) => {
                       {showNes === 1
                         ? sizeValue === 0
                           ? 0.00
-                          : isNaN(parseFloat(truncateNumber(sizeValue * entryPrice, 5)))
+                          : isNaN(truncateNumber(sizeValue * entryPrice, 5))
                             ? 0.00
                             : truncateNumber(sizeValue * entryPrice, 5)
-                        : isNaN(parseFloat(truncateNumber(sizeValue * marketPrice, 5)))
+                        : isNaN(truncateNumber(sizeValue * marketPrice, 5))
                           ? 0.00
                           : truncateNumber(sizeValue * marketPrice, 5)}{" "}
                       USDT
