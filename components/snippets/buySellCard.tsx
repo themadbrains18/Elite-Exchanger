@@ -378,7 +378,7 @@ const BuySellCard = (props: DynamicId) => {
     else {
       let qty: any = getValues('token_amount');
       if (qty) {
-        let totalAmount: any = qty * props?.token?.price;
+        let totalAmount: any = qty * truncateNumber(props?.token?.price,6);
         let fee: any = active1 === 1 ? truncateNumber((qty * 0.001), 6) : truncateNumber((props?.token?.price * qty * 0.001), 6);
         setEstimateFee(fee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
         setTotalAmount(totalAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
