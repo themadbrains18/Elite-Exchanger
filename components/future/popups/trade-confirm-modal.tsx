@@ -79,7 +79,7 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Cost</p>
-                    <p className='dark:text-[#6a6d7d] text-black'>{truncateNumber(Number(currencyFormatter(props?.confirmOrderData?.margin)),6)} USDT</p>
+                    <p className='dark:text-[#6a6d7d] text-black'>{(currencyFormatter(props?.confirmOrderData?.margin))} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Value</p>
