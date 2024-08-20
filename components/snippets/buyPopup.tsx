@@ -280,7 +280,7 @@ const BuyPopup = (props: activeSection) => {
                         // setSpendAmount(e.target.value);
                         let receiveAmount: any = (e?.target?.value / props?.selectedPost?.price);
                         setReceiveAmount(truncateNumber(receiveAmount,6));
-                        setValue('receive_amount', parseFloat(truncateNumber(receiveAmount,6)));
+                        setValue('receive_amount', truncateNumber(receiveAmount,6));
                         clearErrors('spend_amount')
                         clearErrors('receive_amount')
                       }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full  dark:text-white" placeholder="0" />
@@ -305,7 +305,7 @@ const BuyPopup = (props: activeSection) => {
                         let spendAmount: any = props?.selectedPost?.price * e.target.value;
                         setSpendAmount(truncateNumber(spendAmount,6));
                         // setReceiveAmount(e.target.value);
-                        setValue('spend_amount',parseFloat(truncateNumber(spendAmount,6)));
+                        setValue('spend_amount',truncateNumber(spendAmount,6));
                         clearErrors('spend_amount')
                         clearErrors('receive_amount')
                       }} className="sm-text pr-10 max-w-none placeholder:text-disable-clr  dark:bg-d-bg-primary  bg-transparent  outline-none bg-transparent w-full dark:text-white" placeholder="0" />

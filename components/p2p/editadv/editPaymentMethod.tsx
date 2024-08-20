@@ -37,7 +37,7 @@ const EditPaymentMethod = (props: activeSection) => {
   const [list, setList] = useState(props.userPaymentMethod);
   const [inputValue, setInputValue] = useState(props?.editPost?.quantity);
   const [minInputValue, setMinInputValue] = useState(props?.editPost?.min_limit);
-  const [maxInputValue, setMaxInputValue] = useState(props?.editPost?.price !== props.price ? parseFloat(truncateNumber(props.price * props?.editPost?.quantity, 6)) : parseFloat(truncateNumber(props?.editPost?.max_limit, 6)));
+  const [maxInputValue, setMaxInputValue] = useState(props?.editPost?.price !== props.price ? truncateNumber(props.price * props?.editPost?.quantity, 6) : truncateNumber(props?.editPost?.max_limit, 6));
   const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
   const [reduceValue, setReduceValue] = useState<Number | any>(props.assetsBalance || 0);
 
@@ -50,7 +50,7 @@ const EditPaymentMethod = (props: activeSection) => {
     setValue('min_limit', props?.editPost?.min_limit);
     let total = props.assetsBalance && props.assetsBalance.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0];
     setReduceValue(total);
-    let max_limit = props?.editPost?.price !== props.price ? parseFloat(truncateNumber(props.price * props?.editPost?.quantity, 6)) : parseFloat(truncateNumber(props?.editPost?.max_limit, 6))
+    let max_limit = props?.editPost?.price !== props.price ? truncateNumber(props.price * props?.editPost?.quantity, 6) : truncateNumber(props?.editPost?.max_limit, 6)
     setValue('max_limit',Number(truncateNumber(max_limit, 6)));
 
 
@@ -128,7 +128,7 @@ const EditPaymentMethod = (props: activeSection) => {
     }
     if (e.target.value <= (props.assetsBalance + truncateNumber(Number(props?.editPost?.quantity), 6)) || e.target.value == inputValue) {
 
-      let maxLimit =parseFloat(truncateNumber(props.price * e.target.value, 6));
+      let maxLimit =truncateNumber(props.price * e.target.value, 6);
 
       setValue('max_limit', maxLimit);
       setMaxInputValue(maxLimit);
