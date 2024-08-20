@@ -89,8 +89,8 @@ const SignUp = () => {
 
       // console.log(localPart.length,"=local pat");
       
-      if(localPart.length<6 || localPart.length>32){
-        setError('username',{message:"Username must be between 6 and 32 characters long."})
+      if(localPart.length<3 || localPart.length>32){
+        setError('username',{message:"Username must be between 3 and 32 characters long."})
         setBtnDisabled(false)
         return;
       }

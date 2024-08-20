@@ -78,7 +78,7 @@ const ResetPassword = () => {
         setStep(2)
         setFormData(data);
       } else {
-        toast.error(res.data.message, { autoClose: 2500 });
+        toast.error(res.data.message, { autoClose: 2000 });
         setTimeout(() => {
           setBtnDisabled(false);
         }, 3000);

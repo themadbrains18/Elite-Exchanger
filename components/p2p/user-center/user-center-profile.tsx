@@ -25,7 +25,7 @@ const UserCenterProfile = (props: propsData) => {
                             {props?.userDetail && props?.userDetail?.image &&
                                 <Image src={`${props?.userDetail?.image}`} alt='profile' width={100} height={100} className='rounded-full h-[130px] w-[130px] object-cover' />
                             }
-                            {props?.userDetail?.fName === undefined &&
+                            {props?.userDetail?.image === null &&
                                 <Image src={`${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`} alt='error' width={100} height={100} className='rounded-full' />
                             }
 

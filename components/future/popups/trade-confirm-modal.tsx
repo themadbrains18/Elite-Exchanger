@@ -35,6 +35,8 @@ const TradeConfirmPopupModal = (props: showPopup) => {
         }
     },[props.finalOrderSubmit])
 
+    
+
     return (
         <div ref={wrapperRef} className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[520px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.modelPopup == 1 ? 'top-[50%] opacity-1 visible' : 'top-[52%] opacity-0 invisible'}  left-[50%] translate-x-[-50%] translate-y-[-50%]`}>
             <div className="flex items-center justify-between mb-[20px]">
@@ -79,7 +81,7 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Cost</p>
-                    <p className='dark:text-[#6a6d7d] text-black'>{(currencyFormatter(props?.confirmOrderData?.margin))} USDT</p>
+                    <p className='dark:text-[#6a6d7d] text-black'>{currencyFormatter(truncateNumber(props?.confirmOrderData?.margin,6))} USDT</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Value</p>

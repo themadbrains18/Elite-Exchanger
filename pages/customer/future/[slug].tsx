@@ -192,6 +192,8 @@ const FutureTrading = (props: Session) => {
     // Get Refresh user wallet assets after order create //
     // ================================================= //
     const refreshWalletAssets = async () => {
+        console.log("here");
+        
         let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${props?.session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
             method: "GET",
             headers: {

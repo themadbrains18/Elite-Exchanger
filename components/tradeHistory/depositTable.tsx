@@ -166,6 +166,7 @@ const DepositTable = (props: propsData) => {
                   <td>
                     <div className="flex items-center gap-5 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                       <div className={`p-0 md:p-[5px] rounded-5 bg-[transparent] ${item.side === "Sell" ? "md:bg-sell" : "md:bg-buy"} `}>
+
                         {item.side === "Buy" ? (
                           <svg xmlns="http://www.w3.org/2000/svg" width={20} height={21} viewBox="0 0 20 21" fill="none">
                             <path
@@ -187,7 +188,7 @@ const DepositTable = (props: propsData) => {
                         )}
                       </div>
                       <div className="hidden md:block">
-                        <p className="info-14-18 dark:text-white">{item.side}</p>
+                        <p className="info-14-18 dark:text-white">Deposit</p>
                         <p className="info-10">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
                       </div>
                       <div className="block md:hidden">

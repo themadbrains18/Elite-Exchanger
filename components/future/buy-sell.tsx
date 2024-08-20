@@ -189,7 +189,7 @@ const BuySell = (props: fullWidth) => {
     }
 
     setUsedQty(usedQty)
-  }, [props?.currentToken?.coin_symbol, props.assets, tpsl, prefernceSymbol, props.positions]);
+  }, [props?.currentToken?.coin_symbol, props.assets, tpsl, prefernceSymbol, props.positions, props?.refreshWalletAssets]);
 
   // ===================================================================//
   // =======Change wallet balance according to token change=============//
@@ -426,6 +426,7 @@ const BuySell = (props: fullWidth) => {
         setConfirmModelOverlay(false);
         setConfirmModelPopup(0);
         setFinalOrderSubmit(false);
+
         return;
       }
 
@@ -463,6 +464,7 @@ const BuySell = (props: fullWidth) => {
           setButtonStyle(false);
           setFinalOrderSubmit(false);
           props?.refreshWalletAssets();
+
         }
         else {
 
@@ -527,6 +529,7 @@ const BuySell = (props: fullWidth) => {
           setConfirmModelOverlay(false);
           setConfirmModelPopup(0);
           setFinalOrderSubmit(false);
+
         }
 
       }
