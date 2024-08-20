@@ -263,8 +263,7 @@ const SideBar = (props: profileSec) => {
                             data?.map((item, index) => {
 
                                 return (
-                                    <Link href={item?.link} key={index} className={`${(router?.pathname === item?.link || router?.pathname.endsWith(item?.link)) && 'dark:bg-black-v-1 bg-primary-100'} rounded-[5px]  flex gap-[10px]  w-full cursor-pointer mb-[15px] items-center group md:mb-[10px] 
-                            py-[15px] px-5`}>
+                                    <Link href={item?.link} key={index} className={`${(router?.pathname === item?.link || router?.pathname.endsWith(item?.link)) && 'dark:bg-black-v-1 bg-primary-100'} rounded-[5px]  flex gap-[10px]  w-full cursor-pointer mb-[15px] items-center group md:mb-[10px] py-[15px] px-5`}>
                                         <div className='min-w-[22px]'>
                                             <IconsComponent type={item?.svgType} hover={true} active={(router?.pathname === item?.link || router?.pathname.endsWith(item?.link))? true : false} />
                                         </div>
