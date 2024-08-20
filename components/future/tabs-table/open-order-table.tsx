@@ -69,9 +69,6 @@ const OpenOrderTable = (props: propsData) => {
         }
     }
 
-    console.log(props?.openOrders,"=openOrders");
-    
-
     return (
         <>
             <div className="overflow-x-auto h-[234px]">

@@ -570,7 +570,7 @@ const BuySell = (props: fullWidth) => {
     }
 
     const value = parseFloat(e.target.value) == 0 ? 0.00 : parseFloat(e.target.value);
-    let marginValue = orderType === "qty" ? (marketType === 'limit' ? entryPrice : marketPrice * parseFloat(e.target.value)) / props?.marginMode?.leverage : parseFloat(e.target.value) / props?.marginMode?.leverage;
+    let marginValue = orderType === "qty" ? (marketType === 'limit' ? entryPrice * parseFloat(e.target.value) / props?.marginMode?.leverage : marketPrice * parseFloat(e.target.value)) / props?.marginMode?.leverage : parseFloat(e.target.value) / props?.marginMode?.leverage;
 
     if (isNaN(value)) {
       setSizeValue(''); // Reset sizeValue to its current state
