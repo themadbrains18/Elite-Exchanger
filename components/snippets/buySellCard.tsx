@@ -215,7 +215,8 @@ const BuySellCard = (props: DynamicId) => {
       return;
     }
 
-    let totalUsdtAmount: any = totalAmount;
+    let totalUsdtAmount: any = (data.token_amount * data.limit_usdt);
+    totalUsdtAmount=  scientificToDecimal(Number(truncateNumber(totalUsdtAmount.toFixed(12), 8)));
     let transactionFee: any = active1 === 1 ? (data.token_amount * 0.001).toFixed(8) : (data.token_amount * data.limit_usdt * 0.001).toFixed(8);
 
     let buyerFees: any = data.token_amount * 0.001;
@@ -231,7 +232,7 @@ const BuySellCard = (props: DynamicId) => {
       "market_type": type?.value,
       "order_type": active1 === 1 ? 'buy' : 'sell',
       "limit_usdt": data.limit_usdt.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
-      "volume_usdt": totalUsdtAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
+      "volume_usdt": totalUsdtAmount,
       "token_amount": data.token_amount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
       "fee": active1 === 1 ? buyerFees : sellerFees, /// transactionFee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
       "is_fee": false,

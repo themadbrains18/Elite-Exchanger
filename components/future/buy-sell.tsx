@@ -1202,18 +1202,28 @@ const BuySell = (props: fullWidth) => {
             {/* open long */}
             <div
               className="flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[10px]"
-              onClick={() => {
-                props.setOverlay(true);
-                props.setPopupMode(4);
-              }}
+              // onClick={() => {
+              //   props.setOverlay(true);
+              //   props.setPopupMode(4);
+              // }}
             >
               <div className="flex items-center gap-10">
                 <p className="top-label dark:!text-white !text-[#000]">
                   Fee Rate
                 </p>
               </div>
-              <IconsComponent type="rightArrowWithoutBg" />
+              {/* <IconsComponent type="rightArrowWithoutBg" /> */}
             </div>
+            <div className=' mt-10 '>
+            <div className="flex gap-5 items-center justify-between mb-[5px]">
+                <p className='top-label'>Maker fee</p>
+                <p className='top-label !text-[#000] dark:!text-white'>0.02%</p>
+            </div>
+            <div className="flex gap-5 items-center justify-between">
+                <p className='top-label'>Taker fee</p>
+                <p className='top-label !text-[#000] dark:!text-white'>0.06%</p>
+            </div>
+        </div>
           </>
         )}
 

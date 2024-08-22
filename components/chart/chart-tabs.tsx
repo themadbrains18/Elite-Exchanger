@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import IconsComponent from "../snippets/icons";
 import ReactPaginate from "react-paginate";
 import Context from "../contexts/context";
@@ -53,6 +53,8 @@ const ChartTabs = (props: propsData) => {
   const [imgSrc3, setImgSrc3] = useState(false);
   const [coins, setCoins] = useState(props?.coinsList || [])
 
+
+  const elementRef = useRef(null);
   let data = props.coinsList; //token list
 
   let itemsPerPage = 10;
@@ -65,11 +67,14 @@ const ChartTabs = (props: propsData) => {
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % data.length;
     setItemOffset(newOffset);
+
   };
 
   const setHeight = (e: any) => {
-    let nexElm = e.currentTarget.nextElementSibling;
-    let nexElmHeight = nexElm.scrollHeight;
+    
+    let nexElm = e?.currentTarget?.nextElementSibling;
+    
+    let nexElmHeight = nexElm?.scrollHeight;
 
     let iconImg = e.currentTarget?.querySelector("svg");
     iconImg?.classList.toggle("rotate-180");
@@ -145,7 +150,8 @@ const ChartTabs = (props: propsData) => {
 
   const handleTradePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % (props.tradehistory && props.tradehistory.length);
-    setTradeItemOffset(newOffset);
+    setTradeItemOffset(newOffset); 
+
   };
 
   /**
@@ -800,7 +806,8 @@ const ChartTabs = (props: propsData) => {
                         className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] relative"
                       >
                         <div
-                          className={`grid grid-cols-3 relative md:grid-cols-9 items-center  justify-between `}
+                          className={`grid grid-cols-3 relative md:grid-cols-9 items-center  justify-between cursor-pointer`}
+                      
                         >
                           <div className="flex gap-2 md:col-span-1 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                             <Image src={`${imgSrc2 ? fallbackImage : tokenImage}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)} />
@@ -818,7 +825,7 @@ const ChartTabs = (props: propsData) => {
                               </p> */}
                             </div>
                           </div>
-                          <div className="flex items-center py-[10px] md:py-[15px] px-0 md:px-[5px] ">
+                          <div className="flex items-center py-[10px] md:py-[15px] px-0 md:px-[5px] "  >
                             <div
                               className={`p-0 md:p-[5px] rounded-5 bg-[transparent] ${item.order_type === "sell"
                                 ? "md:bg-sell"
@@ -920,7 +927,8 @@ const ChartTabs = (props: propsData) => {
 
                         {/* Sub transaction record listing */}
                         {sortBlogPostsByDate &&
-                          <div
+                          <button
+                      
                             className="absolute top-[43px]  right-[10px]  max-w-[10px] w-full cursor-pointer"
                             onClick={setHeight}
                           >
@@ -939,9 +947,9 @@ const ChartTabs = (props: propsData) => {
                                 />
                               </g>
                             </svg>
-                          </div>
+                          </button>
                         }
-                        <div className={`h-0 overflow-hidden duration-300 flex flex-col-reverse`} >
+                        <div className={`h-0 overflow-hidden duration-300 flex flex-col-reverse`}  ref={elementRef}>
 
                           {sortBlogPostsByDate && sortBlogPostsByDate.length > 0 && sortBlogPostsByDate?.map((elm: any, ind: number) => {
 
@@ -965,7 +973,7 @@ const ChartTabs = (props: propsData) => {
                             }
 
                             return (
-                              <div className={`grid grid-cols-3 md:grid-cols-9 items-center  justify-between `}>
+                              <div  className={`grid grid-cols-3 md:grid-cols-9 items-center  justify-between `}>
                                 <div className="flex gap-2 md:col-span-1 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                                 </div>
                                 <div className="flex items-center py-[10px] md:py-[15px] px-0 md:px-[5px] ">

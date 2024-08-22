@@ -108,7 +108,7 @@ const CoinTypes = (props: propsData) => {
                                     height={10}
                                     xmlns="http://www.w3.org/2000/svg"
                                     className={`dark:stroke-white stroke-black`}
-                                    stroke-width="0.4"
+                                    strokeWidth="0.4"
 
                                     fill='transparent'
                                 >

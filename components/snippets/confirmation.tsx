@@ -82,8 +82,8 @@ const ConfirmationModel = (props: activeSection) => {
                         </svg>
                     </div>
                     {/* <p className={`py-20 info-14-18`}></p> */}
-                    {newText && newText.length > 0 && newText.map((item: any) => {
-                        return <p className={`py-1  info-14-18 mb-[35px] mt-[10px] ${props?.textColor && `text-[${props?.textColor}]`}`}>{item}</p>
+                    {newText && newText.length > 0 && newText.map((item: any, index:number) => {
+                        return <p key={index} className={`py-1  info-14-18 mb-[35px] mt-[10px] ${props?.textColor && `text-[${props?.textColor}]`}`}>{item}</p>
                     })}
                     <div className="grid grid-cols-2 items-center gap-20">
                         <button

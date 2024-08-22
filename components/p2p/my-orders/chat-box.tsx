@@ -1,7 +1,7 @@
 import IconsComponent from '@/components/snippets/icons';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Fragment, useEffect, useRef, useState } from 'react';
 import AES from 'crypto-js/aes';
 import { toast } from 'react-toastify';
 import { useWebSocket } from '@/libs/WebSocketContext';
@@ -279,8 +279,8 @@ const ChatBox = (props: PropsData) => {
                             </div>
 
                             <div>
-                                {messages && messages?.map((item: any) => (
-                                    <>
+                                {messages && messages?.map((item: any,index:number) => (
+                                    <Fragment key={index}>
                                         <div key={item.id} className={item.from !== session?.user?.user_id ? 'left gap-[4px] mb-2' : 'right flex items-start gap-[4px] mb-2'}>
                                             <div className="mt-[4px] p-[10px] ml-[auto] rounded-[6px] min-w-[60px] max-w-fit w-full dark:bg-[#232530] bg-primary-600 bottom-right">
                                                 {item.message.includes('https://') ? (
@@ -290,7 +290,7 @@ const ChatBox = (props: PropsData) => {
                                                 )}
                                             </div>
                                         </div>
-                                    </>
+                                    </Fragment>
                                 ))}
                             </div>
                         </React.Fragment>

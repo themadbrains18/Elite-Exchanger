@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { Fragment, useContext, useRef, useState } from "react";
 import Context from "../contexts/context";
 import FiliterSelectMenu from "./filter-select-menu";
 import { toast } from "react-toastify";
@@ -241,10 +241,10 @@ const AddPayment = (props: activeSection) => {
 
           </div>
 
-          {paymentFields && paymentFields.length > 0 && paymentFields.map((item: any) => {
+          {paymentFields && paymentFields.length > 0 && paymentFields.map((item: any,index:number) => {
             // console.log(typeof item?.required,'===field require');
 
-            return <>
+            return <Fragment key={index}>
               <div className="flex flex-col mb-[15px] md:mb-5 ">
                 <label className="sm-text mb-[10px]">{item?.label} {item?.required === 'true' && <span className="text-red dark:text-[#9295a6]">*</span>}</label>
                 <div className="border relative border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px] mb-[5px]">
@@ -284,7 +284,7 @@ const AddPayment = (props: activeSection) => {
               </div>
 
 
-            </>
+            </Fragment>
           })}
 
         </div>

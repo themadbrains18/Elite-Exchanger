@@ -62,7 +62,7 @@ const EditResponse = (props: activeSection) => {
   });
 
   const onHandleSubmit = async (data: any) => {
-    
+
     try {
       setDisable(true);
 
@@ -78,7 +78,7 @@ const EditResponse = (props: activeSection) => {
         "user_id": session?.user?.user_id,
         "token_id": props.step1Data?.token_id,
         "price": props.step1Data?.price,
-        "price_type":props.step1Data?.price_type,
+        "price_type": props.step1Data?.price_type,
         "quantity": props.step2Data?.quantity,
         "min_limit": props.step2Data?.min_limit,
         "max_limit": props.step2Data?.max_limit,
@@ -93,7 +93,7 @@ const EditResponse = (props: activeSection) => {
         "fundcode": '123456'
       }
 
-      
+
       const ciphertext = AES.encrypt(JSON.stringify(formData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
       let record = encodeURIComponent(ciphertext.toString());
 
@@ -116,18 +116,18 @@ const EditResponse = (props: activeSection) => {
           }
           wbsocket.send(JSON.stringify(post));
         }
-        toast.success("Post Ad update successfully",{autoClose:2000});
-        setTimeout(()=>{
+        toast.success("Post Ad update successfully", { autoClose: 2000 });
+        setTimeout(() => {
           setDisable(false);
-        },3000)
+        }, 3000)
 
         route.push('/p2p/my-advertisement?t=2');
       }
       else {
-        toast.error(res.data.data,{autoClose:2000});
-        setTimeout(()=>{
+        toast.error(res.data.data, { autoClose: 2000 });
+        setTimeout(() => {
           setDisable(false);
-        },3000)
+        }, 3000)
 
       }
     } catch (error) {
@@ -165,12 +165,12 @@ const EditResponse = (props: activeSection) => {
 
   return (
     <>
-      <ToastContainer limit={1}/>
+      <ToastContainer limit={1} />
       <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+        if (e.key === 'Enter') {
+          e.preventDefault();
+        }
+      }}>
         <div className="mt-40">
           <div className="mt-30 p-20 md:p-40 border rounded-10 border-grey-v-2 dark:border-opacity-[15%]">
             <p className="sec-title pb-30 border-b border-grey-v-2 dark:border-opacity-[15%]">Set Remarks and Automatic Response</p>
@@ -202,7 +202,7 @@ const EditResponse = (props: activeSection) => {
                 {condition?.map((item, index) => {
                   return (
                     <div key={index} className="mb-10 md:mb-20 cursor-pointer">
-                      <input id={`radio${item.value}`} type="radio" {...register('condition')}  onChange={() => selectCondition(item.value)} value={item?.value} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
+                      <input id={`radio${item.value}`} type="radio" {...register('condition')} onChange={() => selectCondition(item.value)} value={item?.value} name="colored-radio" className="w-5 h-5 hidden bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]" />
                       <label
                         htmlFor={`radio${item.value}`}
                         className="
@@ -298,16 +298,30 @@ const EditResponse = (props: activeSection) => {
             >
               Previous
             </button>
-            
+
             <button disabled={disable} className={`solid-button max-w-[220px] text-center w-full ${disable === true ? 'opacity-50 cursor-not-allowed' : ''}`}>
               {disable === true &&
-                <svg className="w-5 h-5 mx-auto text-white animate-spin " xmlns="http://www.w3.org/2000/svg" fill="none"
-                  viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                  <path className="opacity-75" fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                  </path>
+                <svg
+                  className="w-5 h-5 mx-auto text-white animate-spin "
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx={12}
+                    cy={12}
+                    r={10}
+                    stroke="currentColor"
+                    strokeWidth={4}
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
                 </svg>
+
               }
               {disable === false &&
                 <>Post</>
