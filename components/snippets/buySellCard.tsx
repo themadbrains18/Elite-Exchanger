@@ -102,14 +102,14 @@ const BuySellCard = (props: DynamicId) => {
 
 
   useEffect(() => {
-    // console.log(props.slug,"=props.slug");
+ 
     setCurrencyName(props.slug, 1);
 
     if (props.slug && props?.coins.length > 0) {
-      if (!hasRun.current) {
+      // if (!hasRun.current) {
         setPriceOnChangeType(spotType, '');
-        hasRun.current = true;
-      }
+        // hasRun.current = true;
+      // }
     }
   }, [props.session, props.slug, props?.coins]);
 
@@ -160,7 +160,7 @@ const BuySellCard = (props: DynamicId) => {
             return item.token_id === token[0].id && item?.walletTtype === "main_wallet"
           });
 
-          // console.log(selectAssets,"===selected assets",token[0].id);
+          // console.log(selectAssets,"===selected assets",token[0]);
 
 
           if (selectAssets.length > 0) {
