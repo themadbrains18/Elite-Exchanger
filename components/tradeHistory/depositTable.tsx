@@ -5,6 +5,7 @@ import ReactPaginate from 'react-paginate';
 import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
 import { currencyFormatter } from '../snippets/market/buySellCard';
+import { toast } from 'react-toastify';
 
 
 interface propsData {
@@ -22,6 +23,7 @@ const DepositTable = (props: propsData) => {
   const [total, setTotal] = useState(0)
   const [totalRecord, setTotalRecord] = useState([]);
   const { mode } = useContext(Context)
+  const [loading, setLoading] = useState<boolean>(false);
 
   let itemsPerPage = 10;
 
@@ -103,7 +105,19 @@ const DepositTable = (props: propsData) => {
     setItemOffset(newOffset);
   };
 
+ // Function to copy text to the clipboard
+ const copyToClipboard = async (text: string): Promise<void> => {
+  await navigator.clipboard.writeText(text);
+};
 
+// Event handler for clicking an address
+const handleAddressClick = (text: string): void => {
+  copyToClipboard(text);
+  toast.success('Copied to clipboard!', { autoClose: 1500 });
+  setTimeout(() => {
+    setLoading(false);
+  }, 3000);
+};
 
   return (
     <>
@@ -126,7 +140,7 @@ const DepositTable = (props: propsData) => {
 
               <th className=" py-5">
                 <div className="hidden md:flex">
-                  <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Filled</p>
+                  <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Tx_Hash</p>
                   <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
@@ -199,7 +213,17 @@ const DepositTable = (props: propsData) => {
                   </td>
 
                   <td>
-                    <p className="info-14-18 dark:text-white md:block hidden">Filled</p>
+                    <p className={`info-14-18 dark:text-white ${loading ? 'cursor-not-allowed' : ''}`}>
+
+
+                      <button className={`${loading ? 'pointer-events-none' : ''}`} onClick={() => {
+                        if(item.tx_hash && item.tx_hash !== null){
+                        setLoading(true);
+                        handleAddressClick(item.tx_hash);
+                        }
+                      }}>{item.tx_hash && item.tx_hash !== null && item.tx_hash.substring(0, 7) + '..'}</button>
+
+                    </p>
                   </td>
                   <td>
                     <p className="info-14-18 dark:text-white md:block hidden">{currencyFormatter(item.amount)}</p>

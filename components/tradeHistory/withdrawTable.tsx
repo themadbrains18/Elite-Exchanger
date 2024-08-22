@@ -212,8 +212,10 @@ const WithdrawTable = (props: propsData) => {
 
 
                       <button className={`${loading ? 'pointer-events-none' : ''}`} onClick={() => {
-                        setLoading(true);
-                        handleAddressClick(item.tx_hash);
+                        if(item.tx_hash && item.tx_hash !== null){
+                          setLoading(true);
+                          handleAddressClick(item.tx_hash);
+                        }
                       }}>{item.tx_hash && item.tx_hash !== null && item.tx_hash.substring(0, 7) + '..'}</button>
 
                     </p>

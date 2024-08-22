@@ -155,8 +155,8 @@ const BuySell = (props: fullWidth) => {
       // } else {
       //   setButtonStyle(false);
       // }
-      let bal = Number(truncateNumber(Number(asset[0].balance) + rewardsAmount, 6))
-      let assetbal = truncateNumber(Number(asset[0].balance), 6)
+      let bal = Number(truncateNumber(Number(asset[0].balance) + rewardsAmount, 8))
+      let assetbal = truncateNumber(Number(asset[0].balance), 8)
       // console.log(assetbal,"=jsdsajhdkas");
 
       setAssetsBalance(assetbal);
@@ -250,22 +250,22 @@ const BuySell = (props: fullWidth) => {
       if (prefernceSymbol === "Qty") {
 
         finalValue = (props.maxTrade) * (value / 100);
-        setSizeValue(truncateNumber(finalValue, 6));
+        setSizeValue(truncateNumber(finalValue, 8));
       } else {
 
         finalValue = (entryPrice * props.maxTrade) * (value / 100);
-        setSizeValue(truncateNumber(finalValue, 6));
+        setSizeValue(truncateNumber(finalValue, 8));
       }
     }
     else {
       if (prefernceSymbol === "Qty") {
 
         finalValue = (props.maxTrade) * (value / 100);
-        setSizeValue(truncateNumber(finalValue, 6));
+        setSizeValue(truncateNumber(finalValue, 8));
       } else {
 
-        finalValue = (Number(truncateNumber(marketPrice, 6)) * props.maxTrade) * (value / 100);
-        setSizeValue(truncateNumber(finalValue, 6));
+        finalValue = (Number(truncateNumber(marketPrice, 8)) * props.maxTrade) * (value / 100);
+        setSizeValue(truncateNumber(finalValue, 8));
       }
     }
 
@@ -894,7 +894,7 @@ const BuySell = (props: fullWidth) => {
               </div>
             </div>
             <p className="errorMessage">{entryPriceValidate}</p>
-            <p className="top-label mt-[5px]">Current Price : {currencyFormatter(truncateNumber(marketPrice, 6))}</p>
+            <p className="top-label mt-[5px]">Current Price : {currencyFormatter(truncateNumber(marketPrice, 8))}</p>
           </>
         )}
         {(showNes === 1 || showNes === 2) && (

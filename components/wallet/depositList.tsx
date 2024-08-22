@@ -104,7 +104,7 @@ const DepositList = (props: propsData) => {
                     </div>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white  lg:text-start text-end">{currencyFormatter(truncateNumber(item?.amount, 6))}</p>
+                    <p className="info-14-18 dark:text-white  lg:text-start text-end">{currencyFormatter(truncateNumber(item?.amount, 8))}</p>
                   </td>
                   <td className="max-[1023px]:hidden">
                     <p className="info-14-18 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>

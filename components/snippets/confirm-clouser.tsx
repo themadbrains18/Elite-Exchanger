@@ -92,20 +92,20 @@ const ConfirmationClouserModel = (props: activeSection) => {
                             </div>
                             <div className="flex justify-between items-center mb-[10px]">
                                 <p className="dark:text-white text-black">Position Size</p>
-                                <p className="dark:text-[#6a6d7d] text-black">${truncateNumber(props?.positionData?.size, 6)}</p>
+                                <p className="dark:text-[#6a6d7d] text-black">${truncateNumber(props?.positionData?.size, 8)}</p>
                             </div>
 
                             <div className="flex justify-between items-center mb-[10px]">
                                 <p className="dark:text-white text-black">Entry Price</p>
-                                <p className="dark:text-[#6a6d7d] text-black">${truncateNumber(props?.positionData?.entry_price, 6)}</p>
+                                <p className="dark:text-[#6a6d7d] text-black">${truncateNumber(props?.positionData?.entry_price, 8)}</p>
                             </div>
                             <div className="flex justify-between items-center mb-[10px]">
                                 <p className="dark:text-white text-black">Current Price</p>
-                                <p className="dark:text-[#6a6d7d] text-black">${truncateNumber(props?.positionData?.global_token?.price, 6) ?? truncateNumber(props?.positionData?.token?.price, 6)}</p>
+                                <p className="dark:text-[#6a6d7d] text-black">${truncateNumber(props?.positionData?.global_token?.price, 8) ?? truncateNumber(props?.positionData?.token?.price, 8)}</p>
                             </div>
                             <div className="flex justify-between items-center mb-[10px]">
                                 <p className="dark:text-white text-black">Profit/Loss</p>
-                                <p className={`${props?.positionData?.pnl > 0 ? 'text-buy' : 'text-sell'}`}>{props?.positionData?.pnl > 0 ? '+' : '-'}${truncateNumber(Math.abs(props?.positionData?.pnl), 6)}</p>
+                                <p className={`${props?.positionData?.pnl > 0 ? 'text-buy' : 'text-sell'}`}>{props?.positionData?.pnl > 0 ? '+' : '-'}${truncateNumber(Math.abs(props?.positionData?.pnl), 8)}</p>
                             </div>
                         </>
                     }

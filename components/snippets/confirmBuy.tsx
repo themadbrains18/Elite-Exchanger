@@ -89,7 +89,7 @@ const ConfirmBuy = (props: activeSection) => {
             <div>
               <p className="info-10-14 ">
               {/* {currencyFormatter(truncateNumber( inrPrice,6))} */}
-                {props?.objData?.market_type === "limit" ? currencyFormatter(truncateNumber(props?.objData?.limit_usdt,6)) : currencyFormatter(truncateNumber(Number(props?.price),6)) }
+                {props?.objData?.market_type === "limit" ? currencyFormatter(truncateNumber(props?.objData?.limit_usdt,8)) : currencyFormatter(truncateNumber(Number(props?.price),8)) }
                 {}
               </p>
             </div>

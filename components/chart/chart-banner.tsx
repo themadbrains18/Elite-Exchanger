@@ -62,7 +62,6 @@
     }, [wbsocket]);
   
     const refreshTokenList = async () => {
-      console.log(slug, '=props.slug');
       const tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
         method: 'GET',
       }).then((response) => response.json());
@@ -71,7 +70,6 @@
         return item.symbol === slug;
       });
   
-      console.log(ccurrentToken, '=current token');
   
       const obj: any = [
         {
@@ -225,7 +223,7 @@
                         </svg>
                       </div>
                       <div className='flex items-center gap-[20px] lg:max-w-[50%] lg:justify-start justify-between mt-[15px]'>
-                        <p className="info-14-18 dark:text-white">${currentToken?.price !== undefined ? currencyFormatter(truncateNumber(currentToken?.price, 6)) : '0.0'}</p>
+                        <p className="info-14-18 dark:text-white">${currentToken?.price !== undefined ? currencyFormatter(truncateNumber(currentToken?.price, 8)) : '0.0'}</p>
                         {/* <h4 className='md-heading dark:text-white'>${`${currentToken?.price?.toFixed(5)}`}</h4> */}
                         <div className={` items-center gap-[4px] flex`}>
                           <p className={`footer-text-secondary ${Number(props?.hlocData?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(props?.hlocData?.changeRate) > 0 ? '+' : ''}{props?.hlocData?.changeRate !== undefined ? (Number(props?.hlocData?.changeRate) * 100).toFixed(3) : '0.0'}%</p>

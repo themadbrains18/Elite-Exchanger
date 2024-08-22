@@ -326,7 +326,7 @@ const Exchange = (props: DynamicId): any => {
 
         <div className="flex gap-[10px] py-5">
           <Image src="/assets/market/walletpayment.svg" alt="wallet2" width={24} height={24} />
-          <p className="md-text w-full">${currencyFormatter(truncateNumber(currentTokenWalletBalance, 6)) || 0.00}</p>
+          <p className="md-text w-full">${currencyFormatter(truncateNumber(currentTokenWalletBalance, 8)) || 0.00}</p>
           <Image src={`${imgSrc?'/assets/history/Coin.svg':selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} className={`${selectedToken?.symbol ==="XRP"&&"bg-white rounded-full"} max-w-[24px] w-full`} onError={() => setImgSrc(true)}/>
           {props.coinList && props.coinList?.map((item: any) => {
             if (item.symbol === selectedToken?.symbol) {
@@ -344,7 +344,7 @@ const Exchange = (props: DynamicId): any => {
           <div className="mt-20 rounded-5 p-[10px] justify-between flex border items-center border-grey-v-1 dark:border-opacity-[15%] relative">
             <div className="max-w-[calc(100%-100px)] w-full">
               <p className="sm-text dark:text-white">Quantity</p>
-              <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="$0" step={0.000001} readOnly={isConvert} value={amount > 0 ? truncateNumber(amount,6) : ''} {...register('spend_amount')} name="spend_amount" onChange={(e: any) => {
+              <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="$0" step={0.000001} readOnly={isConvert} value={amount > 0 ? truncateNumber(amount,8) : ''} {...register('spend_amount')} name="spend_amount" onChange={(e: any) => {
                 // setAmount(parseFloat(e.target?.value));
                 const value = e.target.value;
                 const regex = /^\d{0,11}(\.\d{0,6})?$/;
@@ -387,7 +387,7 @@ const Exchange = (props: DynamicId): any => {
           <div className=" rounded-5 p-[10px] justify-between flex border items-center border-grey-v-1 dark:border-opacity-[15%] relative">
             <div className="max-w-[calc(100%-100px)] w-full">
               <p className="sm-text dark:text-white">Buy For </p>
-              <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} value={receiveAmount > 0 ? truncateNumber(receiveAmount,6) : ''} readOnly placeholder="$0" className="bg-[transparent] md-text outline-none border-l px-[5px] mt-[10px] border-h-primary" />
+              <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} value={receiveAmount > 0 ? truncateNumber(receiveAmount,8) : ''} readOnly placeholder="$0" className="bg-[transparent] md-text outline-none border-l px-[5px] mt-[10px] border-h-primary" />
             </div>
             <div>
               <FilterSelectMenuWithCoin data={list} border={false} {...register('secondCurrency')} dropdown={2} setCurrencyName={setCurrencyName} value={secondCurrency} />

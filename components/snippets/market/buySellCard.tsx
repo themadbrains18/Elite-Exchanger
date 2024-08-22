@@ -343,7 +343,7 @@ const BuySellCard = (props: DynamicId) => {
       let amount: any = getValues('limit_usdt');
 
       let totalAmount = qty * amount;
-      let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),6) : truncateNumber((amount * qty * 0.001),6);
+      let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),8) : truncateNumber((amount * qty * 0.001),8);
 
       setEstimateFee(fee);
       setTotalAmount(totalAmount);
@@ -353,7 +353,7 @@ const BuySellCard = (props: DynamicId) => {
       
       let qty: any = getValues('token_amount');
       let totalAmount = qty * selectedToken?.price;
-      let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),6) : truncateNumber((selectedToken?.price * qty * 0.001),6);
+      let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),8) : truncateNumber((selectedToken?.price * qty * 0.001),8);
 
       setEstimateFee(fee);
       setTotalAmount(totalAmount);
@@ -547,7 +547,7 @@ const BuySellCard = (props: DynamicId) => {
                       <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} placeholder="$0" step="any" {...register('limit_usdt', {
                         onChange: (e) => {
                           const value = e.target.value;
-                          const regex = /^\d{0,11}(\.\d{0,6})?$/;
+                          const regex = /^\d{0,11}(\.\d{0,8})?$/;
                           if (regex.test(value) || value === "") {
                             convertTotalAmount();
                           }
@@ -572,7 +572,7 @@ const BuySellCard = (props: DynamicId) => {
                     <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} placeholder="0" min={0} step=".00001" {...register('token_amount', {
                       onChange: (e) => {
                         const value = e.target.value;
-                        const regex = /^\d{0,10}(\.\d{0,6})?$/;
+                        const regex = /^\d{0,10}(\.\d{0,8})?$/;
                         if (regex.test(value) || value === "") { convertTotalAmount() }
                         else {
                           e.target.value = value.slice(0, -1);
