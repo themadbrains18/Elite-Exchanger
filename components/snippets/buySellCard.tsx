@@ -304,36 +304,36 @@ const BuySellCard = (props: DynamicId) => {
         /**
          * After order create here is partial execution request send to auto execute
          */
-        // setTimeout(async () => {
-        //   let partialObj = {
-        //     "user_id": props.session.user.user_id,
-        //     "token_id": selectedToken?.id,
-        //     "order_type": active1 === 1 ? 'buy' : 'sell',
-        //     "market_type": show === 1 ? 'limit' : 'market'
-        //   }
+        setTimeout(async () => {
+          let partialObj = {
+            "user_id": props.session.user.user_id,
+            "token_id": selectedToken?.id,
+            "order_type": active1 === 1 ? 'buy' : 'sell',
+            "market_type": show === 1 ? 'limit' : 'market'
+          }
 
-        //   const ciphertext = AES.encrypt(JSON.stringify(partialObj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
-        //   let record = encodeURIComponent(ciphertext.toString());
+          const ciphertext = AES.encrypt(JSON.stringify(partialObj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
+          let record = encodeURIComponent(ciphertext.toString());
 
-        //   let executionReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
-        //     method: "PUT",
-        //     headers: {
-        //       'Content-Type': 'application/json',
-        //       "Authorization": props?.session?.user?.access_token
-        //     },
-        //     body: JSON.stringify(record)
-        //   }).then(response => response.json());
+          let executionReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
+            method: "PUT",
+            headers: {
+              'Content-Type': 'application/json',
+              "Authorization": props?.session?.user?.access_token
+            },
+            body: JSON.stringify(record)
+          }).then(response => response.json());
 
-        //   if (executionReponse?.data?.message === undefined) {
+          if (executionReponse?.data?.message === undefined) {
 
-        //     if (wbsocket) {
-        //       let withdraw = {
-        //         ws_type: 'market',
-        //       }
-        //       wbsocket.send(JSON.stringify(withdraw));
-        //     }
-        //   }
-        // }, 2000);
+            if (wbsocket) {
+              let withdraw = {
+                ws_type: 'market',
+              }
+              wbsocket.send(JSON.stringify(withdraw));
+            }
+          }
+        }, 2000);
       }
       else {
         toast.error(reponse.data?.data);
