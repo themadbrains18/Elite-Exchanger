@@ -21,6 +21,8 @@ export const getValidSubdomain = (host?: string | null) => {
 
 
 export const truncateNumber = (num: number, decimals: number) => {
+    // console.log(num,"==num");
+    
     // const valueString = num?.toString();
     // const decimalIndex = valueString?.indexOf('.');
 
@@ -38,3 +40,7 @@ export const truncateNumber = (num: number, decimals: number) => {
 
     return match ? parseFloat(match[0]) : num;
 }
+
+export  const scientificToDecimal = (value: number): string => {
+    return value.toFixed(10).replace(/\.?0+$/, ""); // Convert to decimal format, trimming unnecessary zeros
+};

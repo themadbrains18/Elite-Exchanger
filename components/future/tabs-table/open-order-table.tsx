@@ -117,12 +117,12 @@ const OpenOrderTable = (props: propsData) => {
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
-                            <th className="py-[10px]">
+                            {/* <th className="py-[10px]">
                                 <div className="flex ">
                                     <p className="text-start top-label dark:text-gamma">Filled</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
-                            </th>
+                            </th> */}
                             <th className="py-[10px]">
                                 <div className="flex ">
                                     <p className="text-start top-label dark:text-gamma">Reduce Only</p>
@@ -184,9 +184,9 @@ const OpenOrderTable = (props: propsData) => {
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(item?.amount)}</p>
                                         </td>
-                                        <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                                        {/* <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">0.0</p>
-                                        </td>
+                                        </td> */}
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item?.reduce_only}</p>
                                         </td>
@@ -213,7 +213,7 @@ const OpenOrderTable = (props: propsData) => {
                 </table>
             </div>
             {active === true &&
-                <ConfirmationModel setActive={setActive} setShow={setShow} title='Notification' message='Please confirm to close this open order.' actionPerform={actionPerform} show={show} />
+                <ConfirmationModel setActive={setActive} setShow={setShow} title='Close Position' message='Please confirm to close this open order.' actionPerform={actionPerform} show={show} />
             }
         </>
     )

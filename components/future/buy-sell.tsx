@@ -12,7 +12,7 @@ import OrderPreferenceModal from "../snippets/orderPreferenceModal";
 import PositionModal from "../snippets/positionModal";
 import ConfirmationModel from "../snippets/confirmation";
 import { useWebSocket } from "@/libs/WebSocketContext";
-import { truncateNumber } from "@/libs/subdomain";
+import { scientificToDecimal, truncateNumber } from "@/libs/subdomain";
 import { currencyFormatter } from "../snippets/market/buySellCard";
 import { useRouter } from "next/router";
 
@@ -234,6 +234,8 @@ const BuySell = (props: fullWidth) => {
     }
     setSymbol(token);
   };
+
+
 
   // ===================================================================//
   // asset amount value using range slider //
@@ -743,7 +745,7 @@ const BuySell = (props: fullWidth) => {
           </div>
 
           <div className="px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer w-full">
-            <p className="top-label dark:!text-white !text-[#000]">
+            <p className="top-label dark:!text-white !text-[#000] whitespace-nowrap">
               {positionMode === "oneWay" ? (
                 <span>One Way Mode</span>
               ) : (
@@ -834,7 +836,7 @@ const BuySell = (props: fullWidth) => {
         </div>
         {/* available Balance*/}
         <div className="flex items-center gap-[8px] mt-10">
-          <p className="admin-body-text !text-[12px] !text-[#a3a8b7]">
+          <p className="admin-body-text !text-[12px]">
             Available: {avaibalance}
           </p>
           <p className="admin-body-text !text-[12px] dark:!text-white"> {symbol}</p>
@@ -1171,9 +1173,14 @@ const BuySell = (props: fullWidth) => {
                 <div className="flex gap-5 items-center justify-between mt-[5px]">
                   <p className="top-label">Margin</p>
                   <p className="top-label !text-[#000] dark:!text-[#fff]">
+
                     {isNaN(sizeValue / props?.marginMode?.leverage)
-                      ? (0 / props?.marginMode?.leverage)
-                      : truncateNumber(sizeValue / props?.marginMode?.leverage, 6)}
+                      ?
+                      truncateNumber(Number(scientificToDecimal(0 / props?.marginMode?.leverage)),6  )
+                      :
+
+                      truncateNumber(Number(scientificToDecimal(sizeValue / props?.marginMode?.leverage)), 6)
+                    }
                   </p>
 
                 </div>
@@ -1202,10 +1209,10 @@ const BuySell = (props: fullWidth) => {
             {/* open long */}
             <div
               className="flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[10px]"
-              // onClick={() => {
-              //   props.setOverlay(true);
-              //   props.setPopupMode(4);
-              // }}
+            // onClick={() => {
+            //   props.setOverlay(true);
+            //   props.setPopupMode(4);
+            // }}
             >
               <div className="flex items-center gap-10">
                 <p className="top-label dark:!text-white !text-[#000]">
@@ -1215,15 +1222,15 @@ const BuySell = (props: fullWidth) => {
               {/* <IconsComponent type="rightArrowWithoutBg" /> */}
             </div>
             <div className=' mt-10 '>
-            <div className="flex gap-5 items-center justify-between mb-[5px]">
+              <div className="flex gap-5 items-center justify-between mb-[5px]">
                 <p className='top-label'>Maker fee</p>
                 <p className='top-label !text-[#000] dark:!text-white'>0.02%</p>
-            </div>
-            <div className="flex gap-5 items-center justify-between">
+              </div>
+              <div className="flex gap-5 items-center justify-between">
                 <p className='top-label'>Taker fee</p>
                 <p className='top-label !text-[#000] dark:!text-white'>0.06%</p>
+              </div>
             </div>
-        </div>
           </>
         )}
 

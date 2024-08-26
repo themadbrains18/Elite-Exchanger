@@ -26,8 +26,8 @@ interface showPopup {
   refreshWalletAssets?: any;
   wallet_type?: string
   token?: any;
-  type?:string;
-  disableClick?:boolean;
+  type?: string;
+  disableClick?: boolean;
 }
 const TransferModal = (props: showPopup) => {
   const { status, data: session } = useSession();
@@ -60,25 +60,25 @@ const TransferModal = (props: showPopup) => {
   function setValues() {
     // console.log(Spot,"========Spot");
     // console.log(future,"========future");
-    
+
     if (Spot == "Spot") {
       setFuture("Spot");
       setSpot("Futures");
     }
-     else {
+    else {
       setFuture("Futures");
       setSpot("Spot");
     }
 
 
-    if(selectedCoin){
+    if (selectedCoin) {
       filterAsset(selectedCoin, Spot === "Spot" ? "Futures" : "Spot");
     }
   }
 
-  
+
   // console.log(props?.assets,"==assets");
-  
+
 
   useEffect(() => {
 
@@ -86,11 +86,11 @@ const TransferModal = (props: showPopup) => {
     // console.log(props?.assets,"=========props?.assets====");
     // console.log(props?.type,"=========props.wallet_type====");
     // console.log(props,"=====props");
-    
+
     props?.assets?.filter((item: any) => {
       if (item?.walletTtype === props.wallet_type) {
         coins.push(
-          item?.token !== null ? item?.token?.symbol  : item?.global_token?.symbol
+          item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol
         );
       }
     });
@@ -100,7 +100,7 @@ const TransferModal = (props: showPopup) => {
     setCoinList(coins);
 
     // || props?.type==="future"
-    if (props?.wallet_type === "future_wallet" ) {
+    if (props?.wallet_type === "future_wallet") {
       setFuture("Spot");
       setSpot("Futures");
     }
@@ -109,18 +109,24 @@ const TransferModal = (props: showPopup) => {
       let type = props?.wallet_type === "future_wallet" ? "Futures" : "Spot"
       filterAsset(props?.token?.symbol, type)
     }
-    if(props?.type==="future"){
-      props?.assets?.filter((item: any) => {
-        if (item?.walletTtype === "future_wallet") {
-          coins.push(
-            item?.token !== null
-              ? item?.token?.symbol
-              : item?.global_token?.symbol
-          );
+
+    if (props?.type === "future") {
+      const coinsSet = new Set();
+
+      props?.assets?.forEach((item: any) => {
+        //  if (item?.walletTtype === "future_wallet") {
+        const symbol = item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol;
+        if (symbol) {
+          coinsSet.add(symbol);
         }
+        // }
       });
-      setCoinList(coins);
+
+      const uniqueCoins: any = Array.from(coinsSet);
+      setCoinList(uniqueCoins);
     }
+
+
 
     setTimeout(() => {
       if (errors.amount) {
@@ -130,7 +136,7 @@ const TransferModal = (props: showPopup) => {
         clearErrors('token_id')
       }
     }, 3000);
-  }, [props?.assets, errors, props?.wallet_type, props?.token,props?.type, userAsset]);
+  }, [props?.assets, errors, props?.wallet_type, props?.token, props?.type, userAsset]);
 
 
 
@@ -140,12 +146,12 @@ const TransferModal = (props: showPopup) => {
       // console.log(props?.assets,"props?.assets");
       let asset = props?.assets?.filter((item: any) => {
         let token = item?.token !== null ? item?.token : item?.global_token;
-        if( symbol){
+        if (symbol) {
           return item?.walletTtype === "main_wallet" && token?.symbol === symbol;
 
         }
-        else{
-           return item?.walletTtype === "main_wallet"
+        else {
+          return item?.walletTtype === "main_wallet"
         }
 
       });
@@ -164,7 +170,7 @@ const TransferModal = (props: showPopup) => {
       setValue('token_id', asset[0]?.token_id);
       clearErrors('token_id')
     } else {
-            
+
       let asset = props?.assets?.filter((item: any) => {
         let token = item?.token !== null ? item?.token : item?.global_token;
         return (
@@ -202,8 +208,8 @@ const TransferModal = (props: showPopup) => {
         });
         return;
       }
-      if(data?.amount == userAsset?.balance.toFixed(6)){
-        data.amount=userAsset?.balance
+      if (data?.amount == userAsset?.balance.toFixed(6)) {
+        data.amount = userAsset?.balance
       }
 
       let obj = {
@@ -271,7 +277,7 @@ const TransferModal = (props: showPopup) => {
     }
   };
 
-  
+
   return (
     <div ref={wrapperRef}
       className={`max-w-[calc(100%-30px)] duration-300 md:max-w-[550px] w-full p-5 md:p-[32px] z-10 fixed rounded-10 bg-white dark:bg-[#292d38] ${props.popupMode === 3
@@ -332,7 +338,7 @@ const TransferModal = (props: showPopup) => {
       <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={preventEnterSubmit}>
         <div className="flex items-center justify-between px-[12px] py-[12px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[25px] relative">
           {
-            
+
             props?.wallet_type !== undefined ?
               <input defaultValue={coinDefaultValue} readOnly className='top-label py-[5px] px-[10px] w-full cursor-not-allowed bg-[transparent]  focus:outline-none' />
               :
@@ -354,23 +360,23 @@ const TransferModal = (props: showPopup) => {
         )}
         <div className="flex items-center bg-[#e5ecf0] dark:bg-[#373d4e] p-[11px] mt-[25px] rounded-[5px] dark:text-white text-black justify-between">
           <input
-            type="number"  
+            type="number"
             step={0.000001}
             {...register('amount')}
             name="amount"
             className="outline-none  bg-[#e5ecf0] dark:bg-[#373d4e]"
             placeholder="0"
             onChange={(e: any) => {
-                const value = e.target.value;
-                const regex = /^\d{0,11}(\.\d{0,6})?$/;
-                if (regex.test(value) || value === "") {
+              const value = e.target.value;
+              const regex = /^\d{0,11}(\.\d{0,6})?$/;
+              if (regex.test(value) || value === "") {
 
-                  if (/^\d*\.?\d{0,6}$/.test(value)) {
-                    setAmount(value);
-                  }
-                }else{
-                  e.target.value = value.slice(0, -1);
+                if (/^\d*\.?\d{0,6}$/.test(value)) {
+                  setAmount(value);
                 }
+              } else {
+                e.target.value = value.slice(0, -1);
+              }
             }}
           />
           <p className="top-label dark:!text-primary cursor-pointer" onClick={() => setValue('amount', userAsset !== undefined && userAsset !== null ? userAsset?.balance?.toFixed(6) : 0)}>All</p>
@@ -381,7 +387,7 @@ const TransferModal = (props: showPopup) => {
 
         <p className="top-label !text-[16px] mt-[15px]">
           Available:{" "}
-          {userAsset !== undefined && userAsset !== null && Object.keys(userAsset).length> 0  ? currencyFormatter(userAsset?.balance?.toFixed(6)) : `0.00`}{""}
+          {userAsset !== undefined && userAsset !== null && Object.keys(userAsset).length > 0 ? currencyFormatter(userAsset?.balance?.toFixed(6)) : `0.00`}{""}
           {selectedCoin}
         </p>
         <button
@@ -397,7 +403,7 @@ const TransferModal = (props: showPopup) => {
           </svg>
           }
           Transfer
-        </button> 
+        </button>
       </form>
     </div>
   );
