@@ -55,7 +55,7 @@ const MarginRatio = (props: fullWidth) => {
             </div>
             
             <div className='flex items-center gap-[15px] mt-[15px]'>
-                <Link href="/p2p/express" className='border dark:text-white text-[#1A1B1F] dark:border-[#25262a] border-[#e5e7eb] text-center text-[12px] rounded-[4px] py-[5px] px-[10px] w-full max-w-full' target='_blank'>Buy Crypto</Link>
+                <Link href="/p2p/express" className='border dark:text-white text-[#1A1B1F] dark:border-[#25262a] border-[#e5e7eb] text-center text-[12px] rounded-[4px] py-[5px] px-[10px] w-full max-w-full' >Buy Crypto</Link>
                 <button className='border dark:text-white text-[#1A1B1F] dark:border-[#25262a] border-[#e5e7eb] text-[12px] rounded-[4px] py-[5px] px-[10px] w-full max-w-full' onClick={() => { props.setOverlay(true); props.setPopupMode(3) }}>Transfer</button>
             </div>
         </div>

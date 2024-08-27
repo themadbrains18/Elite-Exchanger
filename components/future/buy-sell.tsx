@@ -155,8 +155,8 @@ const BuySell = (props: fullWidth) => {
       // } else {
       //   setButtonStyle(false);
       // }
-      let bal = Number(truncateNumber(Number(asset[0].balance) + rewardsAmount, 8))
-      let assetbal = truncateNumber(Number(asset[0].balance), 8)
+      let bal = Number(truncateNumber(Number(asset[0].balance) + rewardsAmount, 6))
+      let assetbal = truncateNumber(Number(asset[0].balance), 6)
       // console.log(assetbal,"=jsdsajhdkas");
 
       setAssetsBalance(assetbal);
@@ -237,6 +237,7 @@ const BuySell = (props: fullWidth) => {
 
 
 
+
   // ===================================================================//
   // asset amount value using range slider //
   // ===================================================================//
@@ -252,22 +253,22 @@ const BuySell = (props: fullWidth) => {
       if (prefernceSymbol === "Qty") {
 
         finalValue = (props.maxTrade) * (value / 100);
-        setSizeValue(truncateNumber(finalValue, 8));
+        setSizeValue(truncateNumber(finalValue, 6));
       } else {
 
         finalValue = (entryPrice * props.maxTrade) * (value / 100);
-        setSizeValue(truncateNumber(finalValue, 8));
+        setSizeValue(truncateNumber(finalValue, 6));
       }
     }
     else {
       if (prefernceSymbol === "Qty") {
 
         finalValue = (props.maxTrade) * (value / 100);
-        setSizeValue(truncateNumber(finalValue, 8));
+        setSizeValue(truncateNumber(finalValue, 6));
       } else {
 
-        finalValue = (Number(truncateNumber(marketPrice, 8)) * props.maxTrade) * (value / 100);
-        setSizeValue(truncateNumber(finalValue, 8));
+        finalValue = (Number(truncateNumber(marketPrice, 6)) * props.maxTrade) * (value / 100);
+        setSizeValue(truncateNumber(finalValue, 6));
       }
     }
 
@@ -277,6 +278,7 @@ const BuySell = (props: fullWidth) => {
   // Submit form data in case of limit and market trading//
   // ===================================================================//
   const submitForm = async (orderMarkeType: string) => {
+
     let obj;
     if (orderMarkeType === "market") {
       if (sizeValue === 0 || sizeValue < 0) {
@@ -312,11 +314,11 @@ const BuySell = (props: fullWidth) => {
       let releazedPnl: any = (marketPrice * value) / 100;
       let size: any = truncateNumber(qty * marketPrice, 5);
 
+
       // let marginValue = size / props?.marginMode?.leverage;
 
       let marginValue = orderType === "qty" ? (marketPrice * sizeValue) / props?.marginMode?.leverage : marketPrice / props?.marginMode?.leverage;
       // orderType === "qty" ? size / props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
-
       obj = {
         symbol:
           props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
@@ -381,9 +383,11 @@ const BuySell = (props: fullWidth) => {
         return;
       }
 
+
       let enter_Price: any = entryPrice;
       let amount: any = qty * entryPrice;
-      let marginValue = orderType === "qty" ? (entryPrice * sizeValue) / props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
+      let marginValue = orderType === "qty" ? ((entryPrice * sizeValue) / props?.marginMode?.leverage) : sizeValue / props?.marginMode?.leverage;
+
       obj = {
         position_id: "--",
         user_id: session?.user?.user_id,
@@ -411,6 +415,13 @@ const BuySell = (props: fullWidth) => {
         position_mode: positionMode
       };
     }
+    // console.log(props?.marginMode?.leverage,"==props?.marginMode?.leverage");
+    // console.log(entryPrice,"==entryPrice");
+    // console.log(sizeValue,"==sizeValue");
+
+    // console.log(obj,"===sell order");
+
+
     setConfirmOrderData(obj);
     setConfirmModelPopup(1);
     setConfirmModelOverlay(true);
@@ -572,6 +583,7 @@ const BuySell = (props: fullWidth) => {
     }
 
     const value = parseFloat(e.target.value) == 0 ? 0.00 : parseFloat(e.target.value);
+
     let marginValue = orderType === "qty" ? (marketType === 'limit' ? entryPrice * parseFloat(e.target.value) / props?.marginMode?.leverage : marketPrice * parseFloat(e.target.value)) / props?.marginMode?.leverage : parseFloat(e.target.value) / props?.marginMode?.leverage;
 
     if (isNaN(value)) {
@@ -590,6 +602,8 @@ const BuySell = (props: fullWidth) => {
       setButtonStyle(false);
 
       let leverage = props.marginMode.leverage;
+
+
 
       if (marginValue > avaibalance) {
         setButtonStyle(true);
@@ -772,6 +786,12 @@ const BuySell = (props: fullWidth) => {
               if (showNes === 3) {
                 onCoinDropDownChange("USDT");
               }
+              if(showNes===1){
+                setMarketType('limit')
+              }
+              else {
+                setMarketType('market')
+              }
             }}
           >
             Buy
@@ -784,6 +804,7 @@ const BuySell = (props: fullWidth) => {
             onClick={() => {
               setShow(2);
               setSizeValue(0);
+              setMarketType('market')
               props?.setOpnlong && props?.setOpnlong('Short');
               setEntryPrice(0);
               if (showNes === 3) {
@@ -896,7 +917,7 @@ const BuySell = (props: fullWidth) => {
               </div>
             </div>
             <p className="errorMessage">{entryPriceValidate}</p>
-            <p className="top-label mt-[5px]">Current Price : {currencyFormatter(truncateNumber(marketPrice, 8))}</p>
+            <p className="top-label mt-[5px]">Current Price : {currencyFormatter(truncateNumber(marketPrice, 6))}</p>
           </>
         )}
         {(showNes === 1 || showNes === 2) && (
@@ -1129,11 +1150,15 @@ const BuySell = (props: fullWidth) => {
                           submitForm('market');
                         }
                         else if (marketType === "limit") {
+                          console.log("heresadasda");
                           let market_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
                           if (market_price < entryPrice) {
+                            console.log("in this", market_price, "entry pricesada", entryPrice);
+
                             setShortConfirm(true);
                           }
                           else {
+                            console.log("here in elseewrwee");
                             submitForm('limit')
                           }
                         }
@@ -1156,11 +1181,17 @@ const BuySell = (props: fullWidth) => {
                           submitForm('market');
                         }
                         else if (marketType === "limit") {
+                          console.log("here");
+
                           let market_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
                           if (market_price > entryPrice) {
+                            console.log("in this", market_price, "entry price", entryPrice);
+
                             setShortConfirm(true);
                           }
                           else {
+                            console.log("here in else");
+
                             submitForm('limit')
                           }
                         }
@@ -1176,7 +1207,7 @@ const BuySell = (props: fullWidth) => {
 
                     {isNaN(sizeValue / props?.marginMode?.leverage)
                       ?
-                      truncateNumber(Number(scientificToDecimal(0 / props?.marginMode?.leverage)),6  )
+                      truncateNumber(Number(scientificToDecimal(0 / props?.marginMode?.leverage)), 6)
                       :
 
                       truncateNumber(Number(scientificToDecimal(sizeValue / props?.marginMode?.leverage)), 6)

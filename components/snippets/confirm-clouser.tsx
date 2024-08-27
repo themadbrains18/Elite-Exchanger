@@ -50,7 +50,7 @@ const ConfirmationClouserModel = (props: activeSection) => {
                 ></div>
             }
             <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show ? " opacity-20 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow(false) }}></div>
-            <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full  z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
+            <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full  z-10 fixed rounded-10 bg-white dark:bg-[#292d38] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ">
                 <div className="p-5 md:p-40 relative">
                     <div className="">
                         <p className="sec-title">{props?.title}</p>
@@ -81,7 +81,7 @@ const ConfirmationClouserModel = (props: activeSection) => {
                     </div>
                     {/* <p className={`py-20 info-14-18`}></p> */}
                     {newText && newText.length > 0 && newText.map((item: any) => {
-                        return <p className={`py-1  info-14-18 my-[10px] mb-[30px]`}>{item}</p>
+                        return <p className={`py-1  info-14-18 my-[10px] mb-[30px] text-[#a3a8b7]`}>{item}</p>
                     })}
 
                     {props?.positionData &&

@@ -230,22 +230,22 @@ const PositionsTable = (props: propsData) => {
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <p className="top-label !font-[600] dark:!text-white !text-black">{truncateNumber(item?.margin, 6)}</p>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.leverage_type}</p>
+                      <p className="top-label !font-[600] dark:!text-white !text-black">  </p>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <div className='flex items-center gap-[5px]'>
                         <div>
-                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{item?.pnl}</p>
-                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>USDT</p>
+                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{item?.pnl} USDT</p>
+                          {/* <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}></p> */}
                         </div>
                         {/* <IconsComponent type='sendIcon' /> */}
                       </div>
                     </td>
                     <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                       <div className='flex items-center gap-[5px]'>
-                        <div>
-                          <p className={`top-label !font-[600] !text-sell`}>-{item?.realized_pnl}</p>
-                          <p className={`top-label !font-[600] !text-sell`}>USDT</p>
+                        <div >
+                          <p className={`top-label !font-[600] !text-sell`}>-{item?.realized_pnl} USDT</p>
+                          {/* <p className={`top-label !font-[600] !text-sell`}></p> */}
                         </div>
                         {/* <IconsComponent type='sendIcon' /> */}
                       </div>

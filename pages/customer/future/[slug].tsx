@@ -57,6 +57,14 @@ const FutureTrading = (props: Session) => {
 
     const [rewardsTotalPoint, setRewardsTotalPoint] = useState(props?.totalPoint);
     const wbsocket = useWebSocket();
+
+
+    useEffect(() => {
+        const savedLeverage = typeof window !== 'undefined' && localStorage.getItem('leverage');
+        if (savedLeverage) {
+            setMarginMode({ margin: 'Isolated', leverage: parseInt(savedLeverage) });
+        } 
+    }, []);
     useEffect(() => {
         let ccurrentToken = props.coinList.filter((item: any) => {
             return item.coin_symbol + item.usdt_symbol === props?.serverSlug

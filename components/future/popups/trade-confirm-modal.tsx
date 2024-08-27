@@ -21,15 +21,21 @@ const TradeConfirmPopupModal = (props: showPopup) => {
     let { mode } = useContext(Context);
     const [disable, setDisable] = useState(false)
 
+
     const closePopup = () => {
         props.setConfirmModelOverlay(false);
         props.setConfirmModelPopup(0);
+
         setDisable(false);
+
+
     }
     const wrapperRef = useRef(null);
     clickOutSidePopupClose({ wrapperRef, closePopup });
 
     useEffect(()=>{
+        console.log(props?.confirmOrderData,"======props?.confirmOrderData?");
+
         if(props.finalOrderSubmit === false){
             setDisable(false);
         }
@@ -113,6 +119,11 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                             className={` solid-button w-full !py-[19px]  ${disable ? 'cursor-not-allowed  opacity-50' : ''}`} onClick={() => {
                                 props.confirmOrder();
                                 setDisable(true)
+
+                                setTimeout(()=>{
+                                    setDisable(false)
+                                },5000)
+
                             }} >Confirm</button>
                     </div>
                 </div>

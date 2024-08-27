@@ -28,19 +28,30 @@ const MarginMode: React.FC<FullWidth> = (props) => {
     
 
     useEffect(() => {
-        setLeverageValue(props?.leverage ?? 10);
+        let leverage= localStorage.getItem('leverage') ?? 10
+        setLeverageValue(leverage);
     }, [props?.leverage]);
 
-    function increment() {
-        setLeverageValue((prev: number) => prev + 1);
+    const increment = () => {
+        setLeverageValue((prev: number) => {
+            const newValue = prev + 1;
+            localStorage.setItem('leverage', newValue.toString());
+            return newValue;
+        });
     }
 
-    function decrement() {
-        setLeverageValue((prev: number) => Math.max(prev - 1, 1)); // Assuming leverage cannot be less than 1
+    const decrement = () => {
+        setLeverageValue((prev: number) => {
+            const newValue = Math.max(prev - 1, 1); // Assuming leverage cannot be less than 1
+            localStorage.setItem('leverage', newValue.toString());
+            return newValue;
+        });
     }
 
     const onChangeSizeInPercentage = (value: any) => {
-        setLeverageValue(parseInt(value));
+        const newValue = parseInt(value);
+        setLeverageValue(newValue);
+        localStorage.setItem('leverage', newValue.toString());
     }
 
     const closePopup = () => {

@@ -48,11 +48,11 @@ const ConfirmationModel = (props: activeSection) => {
         <>
             {props?.hideVisibility !== true &&
                 <div
-                    className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-20`}
+                    className={`bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-50`}
                 ></div>
             }
             <div className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${props.show ? " opacity-20 visible" : "opacity-0 invisible"}`} onClick={() => { props.setShow(false) }}></div>
-            <div ref={wrapperRef} className={`max-w-[calc(100%-30px)] md:max-w-[510px] w-full  z-10 fixed rounded-10 bg-white  top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${props?.bgColor ? `dark:bg-[${props?.bgColor}]` : 'dark:bg-omega'}`}>
+            <div ref={wrapperRef} className={`max-w-[calc(100%-30px)] md:max-w-[510px] w-full  z-10 fixed rounded-10 bg-white  top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${props?.bgColor ? `dark:bg-[${props?.bgColor}]` : 'dark:bg-[#292d38]'}`}>
                 <div className="p-5 md:p-40 ">
                     <div className="flex justify-between items-center mb-[25px]">
                         <p className="sec-title text-center ">{props?.title}</p>
@@ -83,7 +83,7 @@ const ConfirmationModel = (props: activeSection) => {
                     </div>
                     {/* <p className={`py-20 info-14-18`}></p> */}
                     {newText && newText.length > 0 && newText.map((item: any, index:number) => {
-                        return <p key={index} className={`py-1  info-14-18 mb-[35px] mt-[10px] ${props?.textColor && `text-[${props?.textColor}]`}`}>{item}</p>
+                        return <p key={index} className={`py-1  info-14-18 mb-[35px] mt-[10px] !text-[#a3a8b7] ${props?.textColor && `text-[${props?.textColor}]`}`}>{item}</p>
                     })}
                     <div className="grid grid-cols-2 items-center gap-20">
                         <button

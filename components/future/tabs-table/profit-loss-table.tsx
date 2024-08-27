@@ -8,6 +8,7 @@ import { truncateNumber } from '@/libs/subdomain';
 import { AES } from 'crypto-js';
 import { toast } from 'react-toastify';
 import ConfirmationClouserModel from '@/components/snippets/confirm-clouser';
+import moment from 'moment';
 
 interface propsData {
     show: number
@@ -126,7 +127,7 @@ const ProfitLossTable: React.FC<propsData> = ({ show }) => {
                             </th>
                             <th className="py-[10px]">
                                 <div className="flex ">
-                                    <p className="text-start top-label dark:text-gamma">Order Time</p>
+                                    <p className="text-start top-label dark:text-gamma">Date/Time</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
@@ -164,7 +165,7 @@ const ProfitLossTable: React.FC<propsData> = ({ show }) => {
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item?.trade_type}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{formatDate(item?.createdAt)}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{moment(item?.createdAt).format("YYYY-MM-DD HH:mm:ss")}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%] cursor-pointer' onClick={() => closePosition(item?.position_id)}>
                                             <div className='flex items-center'>
