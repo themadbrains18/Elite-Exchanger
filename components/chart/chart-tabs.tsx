@@ -151,8 +151,18 @@ const ChartTabs = (props: propsData) => {
   const handleTradePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % (props.tradehistory && props.tradehistory.length);
     setTradeItemOffset(newOffset); 
-
+  
+    const allElements = document.querySelectorAll<HTMLElement>('.tmb-height'); 
+    allElements.forEach((element) => {
+      element.removeAttribute('style'); 
+    });
+  
+    const allIcons = document.querySelectorAll<SVGElement>('.arrow-icon svg'); 
+    allIcons.forEach((icon) => {
+      icon.classList.remove('rotate-180'); 
+    });
   };
+  
 
   /**
    * Cancel order
@@ -929,7 +939,7 @@ const ChartTabs = (props: propsData) => {
                         {sortBlogPostsByDate &&
                           <button
                       
-                            className="absolute top-[43px]  right-[10px]  max-w-[10px] w-full cursor-pointer"
+                            className="absolute top-[43px] right-[10px]  max-w-[10px] w-full cursor-pointer arrow-icon"
                             onClick={setHeight}
                           >
                             <svg
@@ -949,7 +959,7 @@ const ChartTabs = (props: propsData) => {
                             </svg>
                           </button>
                         }
-                        <div className={`h-0 overflow-hidden duration-300 flex flex-col-reverse`}  ref={elementRef}>
+                        <div className={`h-0 overflow-hidden duration-300 flex flex-col-reverse tmb-height`}  ref={elementRef}>
 
                           {sortBlogPostsByDate && sortBlogPostsByDate.length > 0 && sortBlogPostsByDate?.map((elm: any, ind: number) => {
 
