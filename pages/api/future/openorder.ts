@@ -44,7 +44,7 @@ router.post(async (req, res) => {
         let token = req.headers.authorization;
         // Call the API using a helper function and pass the necessary parameters.
 
-        console.log(JSON.parse(formData),"================position_mode");
+        // console.log(JSON.parse(formData),"================position_mode");
         
         let data = await postData(`${process.env.NEXT_PUBLIC_APIURL}/futureorder/create`, JSON.parse(formData), token);
         // Respond with a 200 status and send the retrieved data.
