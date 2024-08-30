@@ -72,6 +72,7 @@ const BuySell = (props: fullWidth) => {
   const [assetsBalance, setAssetsBalance] = useState(0);
   const [assetsList, setAssetsList] = useState();
   const [percentage, setPercentage] = useState(0)
+  
 
   const [leverage, setLerverage] = useState(0)
 
@@ -729,6 +730,15 @@ const BuySell = (props: fullWidth) => {
     submitForm('market');
     setMarketType('market')
   }
+
+  useEffect(()=>{
+    const storedPositionMode = localStorage.getItem('positionMode');
+    if(storedPositionMode == "Hedge"){
+      setPositionMode('Hedge');
+    }else{
+      setPositionMode('oneWay');
+    }
+  },[])
 
   return (
     <>

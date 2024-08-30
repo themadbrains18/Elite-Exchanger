@@ -72,7 +72,7 @@ const PositionModal = (props: propsData) => {
         <div className="mt-20">
           <div className="flex justify-between mt-20">
             <div className="w-full">
-              <div className="flex justify-between items-center w-full mb-[5px]" onClick={() => { setValue("oneWay") }}>
+              <div className="flex justify-between items-center w-full mb-[5px]" onClick={() => { setValue("oneWay");localStorage.setItem('positionMode', 'oneWay'); }}>
                 <div
                   className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`}
                 >
@@ -127,7 +127,7 @@ const PositionModal = (props: propsData) => {
               <div className="flex justify-between items-center w-full mb-[5px]">
                 <div
                   className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`}
-                  onClick={() => setValue("Hedge")}
+                  onClick={() =>{setValue("Hedge"); localStorage.setItem('positionMode', 'Hedge')}}
                 >
                   <input
                     id={`custom-radio2`}

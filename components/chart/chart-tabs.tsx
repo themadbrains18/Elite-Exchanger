@@ -11,6 +11,7 @@ import { currencyFormatter } from "../snippets/market/buySellCard";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import token from "@/pages/api/token";
 import { truncateNumber } from "@/libs/subdomain";
+import { useRouter } from "next/router";
 
 interface propsData {
   coinsList: any;
@@ -148,6 +149,9 @@ const ChartTabs = (props: propsData) => {
   const currentTradeItems = props?.tradehistory && props?.tradehistory.length > 0 ? props.tradehistory.slice(tradeItemOffset, endTradeOffset) : [];
   const pageTradeCount = Math.ceil(props.tradehistory && props.tradehistory.length / itemsPerPage);
 
+
+  const router = useRouter();
+
   const handleTradePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % (props.tradehistory && props.tradehistory.length);
     setTradeItemOffset(newOffset); 
@@ -162,6 +166,29 @@ const ChartTabs = (props: propsData) => {
       icon.classList.remove('rotate-180'); 
     });
   };
+
+  const handleRouteChange = () => {
+    const allElements = document.querySelectorAll<HTMLElement>('.tmb-height');
+    allElements.forEach((element) => {
+      element.removeAttribute('style');
+    });
+
+    const allIcons = document.querySelectorAll<SVGElement>('.arrow-icon svg');
+    allIcons.forEach((icon) => {
+      icon.classList.remove('rotate-180');
+    });
+  };
+
+  useEffect(() => {
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Cleanup the event listener
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
+
+    
   
 
   /**
