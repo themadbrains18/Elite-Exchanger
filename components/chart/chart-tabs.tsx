@@ -77,7 +77,7 @@ const ChartTabs = (props: propsData) => {
     
     let nexElmHeight = nexElm?.scrollHeight;
 
-    let iconImg = e.currentTarget?.querySelector("svg");
+    let iconImg = e.currentTarget?.querySelector(".arrow-icon");
     iconImg?.classList.toggle("rotate-180");
 
     if (nexElm.getAttribute("style")) {
