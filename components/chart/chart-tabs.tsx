@@ -73,7 +73,7 @@ const ChartTabs = (props: propsData) => {
 
   const setHeight = (e: any) => {
     
-    let nexElm = e?.currentTarget?.nextElementSibling;
+    let nexElm = e?.currentTarget?.querySelector(".tmb-height");
     
     let nexElmHeight = nexElm?.scrollHeight;
 
@@ -841,6 +841,7 @@ const ChartTabs = (props: propsData) => {
                       <div
                         key={index}
                         className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] relative"
+                        onClick={setHeight}
                       >
                         <div
                           className={`grid grid-cols-3 relative md:grid-cols-9 items-center gap-[5px] justify-between cursor-pointer`}
@@ -967,7 +968,7 @@ const ChartTabs = (props: propsData) => {
                           <button
                       
                             className="absolute top-[43px] right-[10px]  max-w-[10px] w-full cursor-pointer arrow-icon"
-                            onClick={setHeight}
+                            
                           >
                             <svg
                               className="duration-300"
