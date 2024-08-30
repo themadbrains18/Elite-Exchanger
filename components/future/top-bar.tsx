@@ -18,6 +18,13 @@ const TopBar = (props: showSidebar) => {
 
     const [sessionTimePeriod, setSessionTimePeriod] = useState(1);
 
+    useEffect(()=>{
+
+        console.log(props?.currentToken,"=hkjdhfs");
+        
+    },[props?.currentToken])
+
+
     const getTimeRemaining = (e: any) => {
         let deadline: any = new Date();
         const total = Date.parse(e) - Date.parse(deadline);
