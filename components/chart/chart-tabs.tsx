@@ -930,7 +930,7 @@ const ChartTabs = (props: propsData) => {
                              {scientificToDecimal(Number(truncateNumber(item.fee.toFixed(12), 8)))}
                             </p>
                           </div>
-                          <div className="py-[10px] md:py-[15px]  px-0 md:px-[5px]  md:block hidden min-w-[140px] w-full">
+                          <div className="py-[10px] md:py-[15px] col-span-2 px-0 md:px-[5px]  md:block hidden min-w-[140px] w-full">
                             <p className="info-14-18 dark:text-white w-full">
                               {currencyFormatter(truncateNumber(item?.limit_usdt,8))}
                             </p>
