@@ -236,7 +236,7 @@ const TransferModal = (props: showPopup) => {
       if (assetReponse?.data?.status === 200) {
         toast.success(assetReponse?.data.data.message, { autoClose: 2000 });
         setValue('token_id', '');
-        setCoinDefaultValue('Select Token');
+        setCoinDefaultValue('');
         setSelectedCoin('');
         setUserAsset(null);
         if (wbsocket) {

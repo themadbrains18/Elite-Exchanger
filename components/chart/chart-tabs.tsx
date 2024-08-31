@@ -11,6 +11,7 @@ import { currencyFormatter } from "../snippets/market/buySellCard";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import token from "@/pages/api/token";
 import { scientificToDecimal, truncateNumber } from "@/libs/subdomain";
+import { useRouter } from "next/router";
 
 interface propsData {
   coinsList: any;
@@ -72,11 +73,11 @@ const ChartTabs = (props: propsData) => {
 
   const setHeight = (e: any) => {
     
-    let nexElm = e?.currentTarget?.nextElementSibling;
+    let nexElm = e?.currentTarget?.querySelector(".tmb-height");
     
     let nexElmHeight = nexElm?.scrollHeight;
 
-    let iconImg = e.currentTarget?.querySelector("svg");
+    let iconImg = e.currentTarget?.querySelector(".arrow-icon");
     iconImg?.classList.toggle("rotate-180");
 
     if (nexElm.getAttribute("style")) {
@@ -148,11 +149,47 @@ const ChartTabs = (props: propsData) => {
   const currentTradeItems = props?.tradehistory && props?.tradehistory.length > 0 ? props.tradehistory.slice(tradeItemOffset, endTradeOffset) : [];
   const pageTradeCount = Math.ceil(props.tradehistory && props.tradehistory.length / itemsPerPage);
 
+
+  const router = useRouter();
+
   const handleTradePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % (props.tradehistory && props.tradehistory.length);
     setTradeItemOffset(newOffset); 
-
+  
+    const allElements = document.querySelectorAll<HTMLElement>('.tmb-height'); 
+    allElements.forEach((element) => {
+      element.removeAttribute('style'); 
+    });
+  
+    const allIcons = document.querySelectorAll<SVGElement>('.arrow-icon svg'); 
+    allIcons.forEach((icon) => {
+      icon.classList.remove('rotate-180'); 
+    });
   };
+
+  const handleRouteChange = () => {
+    const allElements = document.querySelectorAll<HTMLElement>('.tmb-height');
+    allElements.forEach((element) => {
+      element.removeAttribute('style');
+    });
+
+    const allIcons = document.querySelectorAll<SVGElement>('.arrow-icon svg');
+    allIcons.forEach((icon) => {
+      icon.classList.remove('rotate-180');
+    });
+  };
+
+  useEffect(() => {
+    router.events.on('routeChangeComplete', handleRouteChange);
+
+    // Cleanup the event listener
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
+
+    
+  
 
   /**
    * Cancel order
@@ -804,6 +841,7 @@ const ChartTabs = (props: propsData) => {
                       <div
                         key={index}
                         className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] relative"
+                        onClick={setHeight}
                       >
                         <div
                           className={`grid grid-cols-3 relative md:grid-cols-9 items-center gap-[5px] justify-between cursor-pointer`}
@@ -930,8 +968,8 @@ const ChartTabs = (props: propsData) => {
                         {sortBlogPostsByDate &&
                           <button
                       
-                            className="absolute top-[43px]  right-[10px]  max-w-[10px] w-full cursor-pointer"
-                            onClick={setHeight}
+                            className="absolute top-[43px] right-[10px]  max-w-[10px] w-full cursor-pointer arrow-icon"
+                            
                           >
                             <svg
                               className="duration-300"
@@ -950,7 +988,7 @@ const ChartTabs = (props: propsData) => {
                             </svg>
                           </button>
                         }
-                        <div className={`h-0 overflow-hidden duration-300 flex flex-col-reverse`}  ref={elementRef}>
+                        <div className={`h-0 overflow-hidden duration-300 flex flex-col-reverse tmb-height`}  ref={elementRef}>
 
                           {sortBlogPostsByDate && sortBlogPostsByDate.length > 0 && sortBlogPostsByDate?.map((elm: any, ind: number) => {
 

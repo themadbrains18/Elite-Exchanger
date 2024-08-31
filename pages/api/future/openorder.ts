@@ -36,13 +36,16 @@ router
 // Create buy/sell order by user for trading
 // ==========================================
 router.post(async (req, res) => {
-    try {
+    try { 
         const decodedStr = decodeURIComponent(req.body);
         let formData = AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
 
         // Retrieve the authorization token from the request headers.
         let token = req.headers.authorization;
         // Call the API using a helper function and pass the necessary parameters.
+
+        // console.log(JSON.parse(formData),"================position_mode");
+        
         let data = await postData(`${process.env.NEXT_PUBLIC_APIURL}/futureorder/create`, JSON.parse(formData), token);
         // Respond with a 200 status and send the retrieved data.
         return res.status(data.status).send({ data });
