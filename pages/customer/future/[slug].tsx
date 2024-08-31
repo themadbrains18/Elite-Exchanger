@@ -18,6 +18,7 @@ import ChartSec from '@/components/chart/chart-sec';
 import TransferModal from '@/components/future/popups/transfer-modal';
 import TradingFeeMadal from '@/components/future/popups/trading-fee-madal';
 import { useWebSocket } from '@/libs/WebSocketContext';
+import { useRouter } from 'next/router';
 
 
 interface Session {
@@ -33,8 +34,6 @@ interface Session {
 }
 
 const FutureTrading = (props: Session) => {
-    const slug = props?.serverSlug// router.query;
-
     const [show, setShow] = useState(1);
     const [active, setActive] = useState(1)
     const [marginMode, setMarginMode] = useState({ margin: 'Isolated', leverage: 10 });
@@ -54,10 +53,15 @@ const FutureTrading = (props: Session) => {
     const [topHLOCData, setTopHLOCData] = useState(Object);
     const [positionRecord, setPositionRecord] = useState([]);
     const [opnlong, setOpnlong] = useState('long');
+    const router = useRouter();
+    const { slug } = router.query;
+    // const [slugs, setSlugs] = useState(slug)
 
     const [rewardsTotalPoint, setRewardsTotalPoint] = useState(props?.totalPoint);
     const wbsocket = useWebSocket();
 
+
+    
 
     useEffect(() => {
         const savedLeverage = typeof window !== 'undefined' && localStorage.getItem('leverage');
@@ -65,10 +69,14 @@ const FutureTrading = (props: Session) => {
             setMarginMode({ margin: 'Isolated', leverage: parseInt(savedLeverage) });
         } 
     }, []);
+
     useEffect(() => {
+
         let ccurrentToken = props.coinList.filter((item: any) => {
-            return item.coin_symbol + item.usdt_symbol === props?.serverSlug
+            return item.coin_symbol + item.usdt_symbol === slug
         })
+
+ 
 
         if (ccurrentToken && ccurrentToken?.length > 0) {
             setMinTrade(ccurrentToken[0]?.coin_min_trade)
@@ -82,14 +90,18 @@ const FutureTrading = (props: Session) => {
         getCoinHLOCData();
         getPositionOrderBook();
 
-    }, [props?.serverSlug]);
+    }, [slug]);
 
     const socketListenerRef = useRef<(event: MessageEvent) => void>();
     useEffect(() => {
+
+        console.log(slug,"===slug in "); 
+        
+        
         const handleSocketMessage = async (event: any) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
-
+            
             if (eventDataType === "price") {
                 await refreshTokenList();
                 getUserFuturePositionData();
@@ -99,7 +111,7 @@ const FutureTrading = (props: Session) => {
             }
 
             if (eventDataType === 'position') {
-                refreshWalletAssets();
+                await refreshWalletAssets();
                 getUserFuturePositionData();
                 getUserOpenOrderData();
                 getUserFuturePositionHistoryData();
@@ -117,6 +129,7 @@ const FutureTrading = (props: Session) => {
             wbsocket.addEventListener('message', handleSocketMessage);
         }
 
+        console.log(router.query,"==skjfhkjsh");
         return () => {
             if (wbsocket) {
                 wbsocket.removeEventListener('message', handleSocketMessage);
@@ -127,14 +140,17 @@ const FutureTrading = (props: Session) => {
     // ===================================== //
     // Refresh token list after price update //
     // ===================================== //
-    const refreshTokenList = async () => {
+    const refreshTokenList = async () => {        
 
         let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future?qu=all`, {
             method: "GET"
         }).then(response => response.json());
 
+        console.log("slug=============",slug);
+        
+
         let ccurrentToken = tokenList?.data.filter((item: any) => {
-            return (item.coin_symbol + item.usdt_symbol) === props?.serverSlug
+            return (item.coin_symbol + item.usdt_symbol) === slug
         })
 
         setCurrentToken(ccurrentToken);
@@ -264,6 +280,8 @@ const FutureTrading = (props: Session) => {
     // ================================================ //
     const getCoinHLOCData = async () => {
         try {
+            console.log("herer");
+            
             let ccurrentToken = props.coinList.filter((item: any) => {
                 return item.coin_symbol + item.usdt_symbol === props?.serverSlug
             })
@@ -316,7 +334,7 @@ const FutureTrading = (props: Session) => {
                                 </div>
                                 {/* Future chart */}
                                 <div className='max-[1499px]:pl-[20px] w-full max-w-full  bg-[#fafafa] dark:bg-[#1a1b1f] '>
-                                    <ChartSec slug={`${props?.serverSlug}`} view="desktop" />
+                                    <ChartSec slug={`${slug}`} view="desktop" />
                                 </div>
                             </div>
                         </div>
@@ -412,6 +430,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const providers = await getProviders();
 
     const { slug } = context.query;
+     
 
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future?qu=all`, {
         method: "GET"

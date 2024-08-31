@@ -10,7 +10,7 @@ import moment from "moment";
 import { currencyFormatter } from "../snippets/market/buySellCard";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import token from "@/pages/api/token";
-import { truncateNumber } from "@/libs/subdomain";
+import { scientificToDecimal, truncateNumber } from "@/libs/subdomain";
 import { useRouter } from "next/router";
 
 interface propsData {
@@ -923,9 +923,10 @@ const ChartTabs = (props: propsData) => {
                             </p>
                           </div>
 
-                          <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
+                          <div className="py-[10px] md:py-[15px]  px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
-                              {item?.fee?.toFixed(8)}
+                              {/* {item?.fee?.toFixed(8)} */}
+                             {scientificToDecimal(Number(truncateNumber(item.fee.toFixed(12), 8)))}
                             </p>
                           </div>
                           <div className="py-[10px] md:py-[15px] col-span-2 px-0 md:px-[5px]  md:block hidden min-w-[140px] w-full">
