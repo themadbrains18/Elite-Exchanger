@@ -108,7 +108,7 @@ const BuySellCard = (props: DynamicId) => {
     if (props.slug && props?.coins.length > 0) {
       // if (!hasRun.current) {
         setPriceOnChangeType(spotType, '');
-        setValue('limit_usdt', props?.token?.price)
+      
         // hasRun.current = true;
       // }
     }
