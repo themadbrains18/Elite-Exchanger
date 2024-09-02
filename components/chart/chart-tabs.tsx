@@ -659,7 +659,7 @@ const ChartTabs = (props: propsData) => {
 
                           <td className="max-[1023px]:hidden">
                             <p className="info-14-18 dark:text-white">
-                              ${currencyFormatter(item?.limit_usdt)}
+                              ${currencyFormatter(truncateNumber(item?.limit_usdt,8))}
                             </p>
                           </td>
                           <td className="max-[1023px]:hidden">
