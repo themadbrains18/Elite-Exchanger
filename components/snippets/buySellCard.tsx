@@ -217,13 +217,13 @@ const BuySellCard = (props: DynamicId) => {
     }
 
     let totalUsdtAmount: any = (data.token_amount * data.limit_usdt);
-    totalUsdtAmount=  scientificToDecimal(Number(truncateNumber(totalUsdtAmount.toFixed(12), 10)));
+    totalUsdtAmount=  scientificToDecimal(Number(truncateNumber(totalUsdtAmount.toFixed(12), 8)));
     let transactionFee: any = active1 === 1 ? (data.token_amount * 0.001).toFixed(8) : (data.token_amount * data.limit_usdt * 0.001).toFixed(8);
 
     let buyerFees: any = data.token_amount * 0.001;
-    buyerFees = scientificToDecimal(Number(truncateNumber(buyerFees.toFixed(12), 10)));
+    buyerFees = scientificToDecimal(Number(truncateNumber(buyerFees.toFixed(12), 8)));
     let sellerFees: any = (data.token_amount * data.limit_usdt * 0.001);
-    sellerFees = scientificToDecimal(Number(truncateNumber(sellerFees.toFixed(12), 10)));
+    sellerFees = scientificToDecimal(Number(truncateNumber(sellerFees.toFixed(12), 8)));
 
     // console.log(buyerFees,'======buyer fees', sellerFees,'========sellerFees',  transactionFee,'=========transactionFee');
     

@@ -171,24 +171,30 @@ const ChartTabs = (props: propsData) => {
   const handleRouteChange = () => {
     const allElements = document.querySelectorAll<HTMLElement>('.tmb-height');
     allElements.forEach((element) => {
-      element.removeAttribute('style');
+      if (element.style) {
+        element.removeAttribute('style');
+      }
     });
-
+  
     const allIcons = document.querySelectorAll<SVGElement>('.arrow-icon svg');
     allIcons.forEach((icon) => {
-      icon.classList.remove('rotate-180');
+      if (icon.classList.contains('rotate-180')) {
+        icon.classList.remove('rotate-180');
+      }
     });
   };
-
+  
   useEffect(() => {
-    router.events.on('routeChangeComplete', handleRouteChange);
-
+    const handleRouteChangeComplete = () => handleRouteChange();
+  
+    router.events.on('routeChangeComplete', handleRouteChangeComplete);
+  
     // Cleanup the event listener
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off('routeChangeComplete', handleRouteChangeComplete);
     };
   }, [router.events]);
-
+  
     
   
 
@@ -247,9 +253,9 @@ const ChartTabs = (props: propsData) => {
 
   return (
     <div className="mt-30 p-20 lg:px-30 lg:py-40 rounded-10  bg-white dark:bg-d-bg-primary">
-      {/* ta cta */}
+      {/* tabs cta */}
       <div className="overflow-x-auto">
-        <div className="flex border-b border-[#e9eaf026] gap-30 justify-start  min-w-max md:min-w-[1000px]">
+        <div className="flex border-b border-[#e9eaf026] gap-30 justify-start  min-w-max ">
           {/* Coin List */}
           <div>
             <button
@@ -734,10 +740,10 @@ const ChartTabs = (props: propsData) => {
         {/* Trade History Data Listing */}
         {activeTab === 3 && (
           <div>
-            <div className="overflow-x-auto">
-              <div className="table lg:min-w-[1018px] w-full ">
+            <div className="overflow-x-auto hide-scroller">
+              <div className="table lg:min-w-max w-full ">
                 <div
-                  className={`head_row border-b border-t border-grey-v-3 dark:border-opacity-[15%] grid grid-cols-3 md:grid-cols-9  justify-between`}
+                  className={`head_row border-b border-t border-grey-v-3 dark:border-opacity-[15%] grid grid-cols-3 md:grid-cols-10  justify-between`}
                 >
                   <div className="flex py-5 md:col-span-1 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma  ">
@@ -795,7 +801,7 @@ const ChartTabs = (props: propsData) => {
                       alt="uparrow"
                     />
                   </div>
-                  <div className="hidden md:flex py-5 items-center">
+                  <div className="hidden md:flex py-5 col-span-2 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
                       Amount
                     </p>
@@ -845,7 +851,7 @@ const ChartTabs = (props: propsData) => {
                        
                       >
                         <div
-                          className={`grid grid-cols-3 relative md:grid-cols-9 items-center gap-[5px] justify-between cursor-pointer`}
+                          className={`grid grid-cols-3 relative md:grid-cols-10 items-center gap-[5px] justify-between cursor-pointer`}
                           onClick={setHeight}
                         >
                           <div className="flex gap-2 md:col-span-1 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
@@ -935,7 +941,7 @@ const ChartTabs = (props: propsData) => {
                               {currencyFormatter(truncateNumber(item?.limit_usdt,8))}
                             </p>
                           </div>
-                          <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
+                          <div className="py-[10px] md:py-[15px] col-span-2 px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
 
                               ${currencyFormatter(truncateNumber(item.volume_usdt, 8))}
@@ -1013,7 +1019,7 @@ const ChartTabs = (props: propsData) => {
                             }
 
                             return (
-                              <div  className={`grid grid-cols-3 md:grid-cols-9 items-center  justify-between `}>
+                              <div  className={`grid grid-cols-3 md:grid-cols-10 items-center  justify-between `}>
                                 <div className="flex gap-2 md:col-span-1 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                                 </div>
                                 <div className="flex items-center py-[10px] md:py-[15px] px-0 md:px-[5px] ">
@@ -1085,7 +1091,7 @@ const ChartTabs = (props: propsData) => {
                                     {currencyFormatter(truncateNumber(elm?.limit_usdt,8))}
                                   </p>
                                 </div>
-                                <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
+                                <div className="py-[10px] md:py-[15px] px-0 md:px-[5px] col-span-2 md:block hidden">
                                   <p className="info-14-18 dark:text-white ">
                                     ${currencyFormatter(truncateNumber(elm?.volume_usdt, 8))}
                                   </p>
