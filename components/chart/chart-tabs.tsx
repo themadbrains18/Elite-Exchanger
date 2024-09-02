@@ -73,11 +73,12 @@ const ChartTabs = (props: propsData) => {
 
   const setHeight = (e: any) => {
     
-    let nexElm = e?.currentTarget?.querySelector(".tmb-height");
+    // let nexElm = e?.currentTarget?.querySelector(".tmb-height");
+    let nexElm = e?.currentTarget?.nextElementSibling.nextElementSibling;
     
     let nexElmHeight = nexElm?.scrollHeight;
 
-    let iconImg = e.currentTarget?.querySelector(".arrow-icon");
+    let iconImg = e.currentTarget?.nextElementSibling;
     iconImg?.classList.toggle("rotate-180");
 
     if (nexElm.getAttribute("style")) {
@@ -841,11 +842,11 @@ const ChartTabs = (props: propsData) => {
                       <div
                         key={index}
                         className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] relative"
-                        onClick={setHeight}
+                       
                       >
                         <div
                           className={`grid grid-cols-3 relative md:grid-cols-9 items-center gap-[5px] justify-between cursor-pointer`}
-                      
+                          onClick={setHeight}
                         >
                           <div className="flex gap-2 md:col-span-1 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                             <Image src={`${imgSrc2 ? fallbackImage : tokenImage}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)} />
