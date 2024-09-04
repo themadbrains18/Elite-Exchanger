@@ -98,13 +98,12 @@ const ProfitLossModal = (props: showPopup) => {
 
     const storeProfitLossData = async () => {
         try {
-
             let token = props?.currentToken?.token !== null ? props?.currentToken?.token : props?.currentToken?.global_token;
             let currentPrice = token?.price;
 
             if (props?.show === 'long') {
                 if (currentPrice > takeProfirValue && takeProfirValue > 0) {
-                    toast.error('Take-Profit price must be better than market Price', { position: 'top-center' })
+                    toast.error('Take-Profit price must be greater than market Price', { position: 'top-center' })
                     return;
                 }
                 if (currentPrice < stopLossValue || stopLossValue > parseFloat(props?.entryPrice) && stopLossValue > 0) {

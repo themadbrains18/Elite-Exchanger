@@ -16,13 +16,12 @@ const PositionModal = (props: propsData) => {
 
   const [value, setValue] = useState(props?.positionMode);
 
+  console.log(props?.positionMode,"=========dfsf56sd5f=====");
+  
+
   useEffect(() => {
-    let radioCta = document.querySelector(
-      "#custom-radio1"
-    ) as HTMLInputElement | null;
-    let radioCta2 = document.querySelector(
-      "#custom-radio2"
-    ) as HTMLInputElement | null;
+    let radioCta = document.querySelector("#custom-radio1") as HTMLInputElement | null;
+    let radioCta2 = document.querySelector("#custom-radio2") as HTMLInputElement | null;
 
     if (value === "oneWay") {
       radioCta?.click();

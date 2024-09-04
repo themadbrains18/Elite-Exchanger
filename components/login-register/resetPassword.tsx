@@ -181,7 +181,7 @@ const ResetPassword = () => {
         </section>
       )}
 
-      {step === 2 && <SecurityCode formData={formData} api="forget" isEmail={isEmail} sendOtpRes={sendOtpRes} setStep={setStep} />}
+      {step === 2 && <SecurityCode formData={formData} api="forget" isEmail={isEmail}  sendOtpRes={sendOtpRes} setStep={setStep} />}
       {step === 3 && <ReEnterpass formData={formData} api="forget" isEmail={isEmail} sendOtpRes={sendOtpRes} setStep={setStep} />}
     </>
   );

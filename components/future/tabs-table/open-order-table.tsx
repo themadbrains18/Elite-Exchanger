@@ -71,7 +71,7 @@ const OpenOrderTable = (props: propsData) => {
 
     return (
         <>
-            <div className="overflow-x-auto h-[234px]">
+            <div className="overflow-x-auto h-[234px] ">
                 <table width="100%" className="min-w-[1200px] w-full">
                     <thead>
                         <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">

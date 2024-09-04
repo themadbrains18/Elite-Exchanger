@@ -126,6 +126,8 @@ const BuySell = (props: fullWidth) => {
   }, [marketPrice])
 
   useEffect(() => {
+    
+    
     let futureAssets = props?.assets?.filter((item: any) => {
       return item.walletTtype === "future_wallet";
     });
@@ -1262,7 +1264,7 @@ const BuySell = (props: fullWidth) => {
               </div>
               {/* <IconsComponent type="rightArrowWithoutBg" /> */}
             </div>
-            <div className=' mt-10 '>
+            <div className=' my-10 block'>
               <div className="flex gap-5 items-center justify-between mb-[5px]">
                 <p className='top-label'>Maker fee</p>
                 <p className='top-label !text-[#000] dark:!text-white'>0.02%</p>
