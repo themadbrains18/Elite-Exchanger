@@ -48,9 +48,26 @@ const Chart = (props: Session) => {
         else {
             setView("desktop")
         }
-        socket();
         refreshTokenList();
-    }, [slug, wbsocket]);
+    }, [slug]);
+    useEffect(() => {
+        if (!wbsocket) return;
+    
+        const handleSocketMessage = (event:any) => {
+            const data = JSON.parse(event.data).data;
+            const eventDataType = JSON.parse(event.data).type;
+    
+            if (eventDataType === "price" || eventDataType === "market") {
+                refreshTokenList();
+            }
+        };
+    
+        wbsocket.onmessage = handleSocketMessage;
+    
+        return () => {
+            wbsocket.onmessage = null;  // Cleanup to avoid memory leaks
+        };
+    }, [wbsocket, slug]);
 
     const socket = () => {
         if (wbsocket) {
@@ -183,10 +200,10 @@ const Chart = (props: Session) => {
             <div>
                 <ToastContainer limit={1} />
                 <div className=" bg-light-v-1 py-20 dark:bg-black-v-1">
-                    <div className="container p-[15px] lg:p-20 gap-30">
+                    <div className="container !max-w-[1830px] p-[15px] lg:p-20 gap-30">
                         <ChartBanner hlocData={hlocData} />
                     </div>
-                    <div className="container p-[15px] lg:p-20 flex gap-30 flex-wrap">
+                    <div className="container !max-w-[1830px] p-[15px] lg:p-20 flex gap-30 flex-wrap">
                         <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
                             <ChartSec slug={`${slug === 'BTCB' ? 'BTC' : slug === 'BNBT' ? 'BNB' : slug}USDT`} view={view} />
                             {/* hidden on mobile */}

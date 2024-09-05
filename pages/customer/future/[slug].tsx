@@ -71,6 +71,9 @@ const FutureTrading = (props: Session) => {
     }, []);
 
     useEffect(() => {
+        console.log(slug,"=jkhdfkhsd");
+        console.log(props?.serverSlug,"=serverslug");
+        
 
         let ccurrentToken = props.coinList.filter((item: any) => {
             return item.coin_symbol + item.usdt_symbol === slug
@@ -146,7 +149,6 @@ const FutureTrading = (props: Session) => {
             method: "GET"
         }).then(response => response.json());
 
-        console.log("slug=============",slug);
         
 
         let ccurrentToken = tokenList?.data.filter((item: any) => {
