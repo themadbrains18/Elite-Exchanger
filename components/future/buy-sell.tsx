@@ -280,9 +280,17 @@ const BuySell = (props: fullWidth) => {
   // ===================================================================//
   const submitForm = async (orderMarkeType: string) => {
 
+    
     let obj;
+
     if (orderMarkeType === "market") {
-      if (sizeValue === 0 || sizeValue < 0) {
+      console.log(sizeValue,"=entryPrice");
+      
+      if(showNes===1 && (entryPrice == undefined || entryPrice == null || entryPrice === 0 || entryPrice < 0 || entryPrice === "") ){
+        setEntryPriceValidate("Price must be greater than '0'");
+      }
+
+      if (sizeValue === 0 || sizeValue < 0 || sizeValue === "" ) {
         setSizeValidate("Amount must be greater than '0'");
         return;
       }
@@ -348,13 +356,15 @@ const BuySell = (props: fullWidth) => {
     else {
       if (entryPrice == undefined || entryPrice == null || entryPrice === 0 || entryPrice < 0 || entryPrice === "") {
         setEntryPriceValidate("Price must be greater than '0'");
-        return;
+        // return;  
       }
-
-      if (sizeValue == undefined || sizeValue == null || sizeValue === 0 || sizeValue < 0 || sizeValue === "") {
+      
+      if (isNaN(sizeValue)|| sizeValue == undefined || sizeValue == null || sizeValue === 0 || sizeValue < 0 || sizeValue === "") {
+      
         setSizeValidate("Amount must be greater than '0'");
         return;
       }
+
 
       let Liquidation_Price: any =
         (entryPrice * (1 - 0.01)) / props?.marginMode?.leverage;
@@ -793,6 +803,8 @@ const BuySell = (props: fullWidth) => {
               setSizeValue(0);
               props?.setOpnlong && props?.setOpnlong('Long');
               setEntryPrice(0);
+              setEntryPriceValidate("");
+              setSizeValidate('')
               if (showNes === 3) {
                 onCoinDropDownChange("USDT");
               }
@@ -817,6 +829,8 @@ const BuySell = (props: fullWidth) => {
               setMarketType('market')
               props?.setOpnlong && props?.setOpnlong('Short');
               setEntryPrice(0);
+              setEntryPriceValidate("");
+              setSizeValidate('')
               if (showNes === 3) {
                 onCoinDropDownChange(props?.currentToken?.coin_symbol);
               }

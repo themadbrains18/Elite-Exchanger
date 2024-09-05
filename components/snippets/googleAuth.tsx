@@ -374,7 +374,7 @@ const GoogleAuth = (props: activeSection) => {
           </p>
         </div>
     
-     :
+        :  
         <SecurityVerification setShow={props?.setShow} setEnable={props.setEnable} setActive={setActive} session={props?.session} setGoogleAuth={props.setGoogleAuth} sendOtp={sendOtp} />
       }
       {

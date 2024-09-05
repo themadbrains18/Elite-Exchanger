@@ -99,7 +99,6 @@ const PositionsTable = (props: propsData) => {
 
     } catch (error) {
       console.log(error, "=error in close position");
-
     }
   }
 
@@ -278,7 +277,6 @@ const PositionsTable = (props: propsData) => {
               })
             }
           </tbody>
-
         </table>
       </div>
       {/* overlay */}

@@ -2,10 +2,11 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import HeaderLogo from "../svg-snippets/headerLogo";
 import { useRouter } from "next/router";
-import { signIn } from "next-auth/react"
+import { signIn, useSession } from "next-auth/react"
 import { toast } from 'react-toastify';
 import AES from 'crypto-js/aes';
 import CodeNotRecieved from "../snippets/codeNotRecieved";
+import { Session } from "inspector";
 
 interface propsData {
   formData?: any,
@@ -18,7 +19,6 @@ interface propsData {
 }
 
 const SecurityCode = (props: propsData) => {
-
   const router = useRouter()
   const [fillOtp, setOtp] = useState('');
   const [fillOtp2, setOtp2] = useState('');
@@ -303,7 +303,7 @@ const SecurityCode = (props: propsData) => {
               <div className="lg:hidden block">
                 <Image src="/assets/register/loginmobile.svg" alt="forget" width={398} height={198} className="mx-auto" />
               </div>
-              <div className="lg:h-full lg:grid">  
+              <div className="lg:h-full lg:grid">
                 <div className="max-[1023px]:max-w-[460px] max-[1023px]:mx-auto max-[1023px]:w-full max-w-full lg:my-auto">
                   <div className="max-[1023px]:!mx-auto lg:p-0 p-5  max-w-[calc(100%-30px)] mx-auto  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-full w-full">
                     <h1 className="lg-heading mb-5">Enter your security code</h1>
@@ -330,6 +330,23 @@ const SecurityCode = (props: propsData) => {
                         </p>
 
                       </div>}
+                    
+                    
+                      {/* // <>
+                      //   <div className="relative mt-6">
+                      //     <p className="mb-5  md-text">Google Authenticator code</p>
+                      //     <div className="flex gap-[10px] md:gap-[30px] justify-between items-center input_wrapper">
+                      //       <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-1`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
+                      //       <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-2`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
+                      //       <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-3`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code3" />
+                      //       <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-4`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code4" />
+                      //       <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-5`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code5" />
+                      //       <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-6`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code6" />
+                      //     </div>
+                      //     <p className="errorMessage absolute top-[calc(100%+5px)]">{otpMessage}</p>
+                      //   </div>
+                      // </> */}
+                     
 
 
                     {(props?.isEmail == false || (props.data !== undefined && props.data?.number !== null)) && <div className="mt-[20px]">
