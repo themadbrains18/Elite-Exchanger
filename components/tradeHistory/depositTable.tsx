@@ -6,6 +6,7 @@ import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
 import { currencyFormatter } from '../snippets/market/buySellCard';
 import { toast } from 'react-toastify';
+import { Tooltip } from 'react-tooltip';
 
 
 interface propsData {
@@ -211,19 +212,16 @@ const handleAddressClick = (text: string): void => {
                       </div>
                     </div>
                   </td>
-
                   <td>
                     <p className={`info-14-18 dark:text-white ${loading ? 'cursor-not-allowed' : ''}`}>
-
-
-                      <button className={`${loading ? 'pointer-events-none' : ''}`} onClick={() => {
+                      <button id={`my-element-${index}`} className={`${loading ? 'pointer-events-none' : ''}`} onClick={() => {
                         if(item.tx_hash && item.tx_hash !== null){
                         setLoading(true);
                         handleAddressClick(item.tx_hash);
                         }
                       }}>{item.tx_hash && item.tx_hash !== null && item.tx_hash.substring(0, 7) + '..'}</button>
-
                     </p>
+                    <Tooltip anchorSelect={`#my-element-${index}`} content={item.tx_hash} />
                   </td>
                   <td>
                     <p className="info-14-18 dark:text-white md:block hidden">{currencyFormatter(item.amount)}</p>

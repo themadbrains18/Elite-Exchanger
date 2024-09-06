@@ -53,11 +53,11 @@ const InvestorSec = () => {
           <div className='pt-50'>
             <Swiper
               modules={[Autoplay]}
-              slidesPerView={6}  // Adjust the number of slides visible
-              spaceBetween={30} // Space between slides
-              loop={true}       // Enable looping
+              slidesPerView={6}  
+              spaceBetween={30} 
+              loop={true}       
               autoplay={{
-                delay: 2500,     // Autoplay delay
+                delay: 2500,    
                 disableOnInteraction: false,
               }}
               breakpoints={{

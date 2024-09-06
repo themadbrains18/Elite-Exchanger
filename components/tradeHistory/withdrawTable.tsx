@@ -190,7 +190,7 @@ const WithdrawTable = (props: propsData) => {
                   <td>
                     <p className={`info-14-18 dark:text-white ${loading ? 'cursor-not-allowed' : ''}`}
                     >
-                      <button id={`my-anchor-element-${index}`} className={`${loading ? 'pointer-events-none' : ''}`} onClick={() => {
+                      <button id={`my-anchorTmb-element-${index}`} className={`${loading ? 'pointer-events-none' : ''}`} onClick={() => {
                         setLoading(true);
                         handleAddressClick(item.withdraw_wallet);
                       }}>
@@ -198,7 +198,7 @@ const WithdrawTable = (props: propsData) => {
                       </button>
 
                     </p>
-                    <Tooltip anchorSelect={`#my-anchor-element-${index}`} content={item.withdraw_wallet} />
+                    <Tooltip anchorSelect={`#my-anchorTmb-element-${index}`} content={item.withdraw_wallet} />
                   </td>
                   <td>
                     <p className="info-14-18 dark:text-white">{currencyFormatter(item?.amount)}</p>
