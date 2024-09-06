@@ -7,6 +7,7 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { currencyFormatter } from '../snippets/market/buySellCard';
 import { toast } from 'react-toastify';
+import { Tooltip } from 'react-tooltip';
 
 interface propsData {
   filter: string,
@@ -189,7 +190,7 @@ const WithdrawTable = (props: propsData) => {
                   <td>
                     <p className={`info-14-18 dark:text-white ${loading ? 'cursor-not-allowed' : ''}`}
                     >
-                      <button className={`${loading ? 'pointer-events-none' : ''}`} onClick={() => {
+                      <button id={`my-anchor-element-${index}`} className={`${loading ? 'pointer-events-none' : ''}`} onClick={() => {
                         setLoading(true);
                         handleAddressClick(item.withdraw_wallet);
                       }}>
@@ -197,6 +198,7 @@ const WithdrawTable = (props: propsData) => {
                       </button>
 
                     </p>
+                    <Tooltip anchorSelect={`#my-anchor-element-${index}`} content={item.withdraw_wallet} />
                   </td>
                   <td>
                     <p className="info-14-18 dark:text-white">{currencyFormatter(item?.amount)}</p>
@@ -211,7 +213,7 @@ const WithdrawTable = (props: propsData) => {
                     <p className={`info-14-18 dark:text-white ${loading ? 'cursor-not-allowed' : ''}`}>
 
 
-                      <button className={`${loading ? 'pointer-events-none' : ''}`} onClick={() => {
+                      <button id={`my-anchor-element-${index}`}  className={`${loading ? 'pointer-events-none' : ''}`} onClick={() => {
                         if(item.tx_hash && item.tx_hash !== null){
                           setLoading(true);
                           handleAddressClick(item.tx_hash);
@@ -219,6 +221,7 @@ const WithdrawTable = (props: propsData) => {
                       }}>{item.tx_hash && item.tx_hash !== null && item.tx_hash.substring(0, 7) + '..'}</button>
 
                     </p>
+                    <Tooltip anchorSelect={`#my-anchor-element-${index}`} content={item.tx_hash} />
                   </td>
                   <td>
                     <p className={`info-14-18  capitalize ${item?.status == "success" ? '!text-buy' : item?.status == "pending" ? '!text-primary' : ' !text-cancel'}`}>{item?.status}</p>

@@ -238,7 +238,7 @@ const SecurityVerification = (props: activeSection) => {
                 maxLength={6}
                 placeholder="Enter text"
                 id="code"
-                className={`sm-text input-cta2 w-full  ${errors.code && 'border-1 border-[#ff0000]'}`}
+                className={`sm-text input-cta2 w-full `}
                 {...register("code")}
               />
               {errors.code && (
@@ -254,7 +254,7 @@ const SecurityVerification = (props: activeSection) => {
                   placeholder="Re-Enter password"
                   autoComplete="off"
                   maxLength={32}
-                  className={`sm-text input-cta2 w-full  ${errors.password && 'border-1 border-[#ff0000]'}`}
+                  className={`sm-text input-cta2 w-full  `}
                   {...register("password")}
                 />
                 <Image

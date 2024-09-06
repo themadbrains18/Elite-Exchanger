@@ -743,7 +743,7 @@ const ChartTabs = (props: propsData) => {
             <div className="overflow-x-auto hide-scroller">
               <div className="table lg:min-w-max w-full ">
                 <div
-                  className={`head_row border-b border-t border-grey-v-3 dark:border-opacity-[15%] grid grid-cols-3 md:grid-cols-10  justify-between`}
+                  className={`head_row border-b border-t border-grey-v-3 dark:border-opacity-[15%] grid grid-cols-3 md:grid-cols-11  justify-between`}
                 >
                   <div className="flex py-5 md:col-span-1 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma  ">
@@ -779,7 +779,7 @@ const ChartTabs = (props: propsData) => {
                     />
                   </div>
 
-                  <div className="hidden md:flex py-5 items-center">
+                  <div className="hidden md:flex py-5 col-span-2 items-center">
                     <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">
                       Fee
                     </p>
@@ -851,7 +851,7 @@ const ChartTabs = (props: propsData) => {
                        
                       >
                         <div
-                          className={`grid grid-cols-3 relative md:grid-cols-10 items-center gap-[5px] justify-between cursor-pointer`}
+                          className={`grid grid-cols-3 relative md:grid-cols-11 items-center gap-[5px] justify-between cursor-pointer`}
                           onClick={setHeight}
                         >
                           <div className="flex gap-2 md:col-span-1 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
@@ -930,7 +930,7 @@ const ChartTabs = (props: propsData) => {
                             </p>
                           </div>
 
-                          <div className="py-[10px] md:py-[15px]  px-0 md:px-[5px]  md:block hidden">
+                          <div className="py-[10px] md:py-[15px] col-span-2 px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white ">
                               {/* {item?.fee?.toFixed(8)} */}
                              {scientificToDecimal(Number(truncateNumber(item.fee.toFixed(12), 10)))}
@@ -1019,7 +1019,7 @@ const ChartTabs = (props: propsData) => {
                             }
 
                             return (
-                              <div  className={`grid grid-cols-3 md:grid-cols-10 items-center  justify-between `}>
+                              <div  className={`grid grid-cols-3 md:grid-cols-11 items-center  justify-between `}>
                                 <div className="flex gap-2 md:col-span-1 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                                 </div>
                                 <div className="flex items-center py-[10px] md:py-[15px] px-0 md:px-[5px] ">
@@ -1076,7 +1076,7 @@ const ChartTabs = (props: propsData) => {
                                     <p className="info-10">{currencyFormatter(elm.token_amount.toFixed(4))}</p>
                                   </div>
                                 </div>
-                                <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
+                                <div className="py-[10px] col-span-2 md:py-[15px] px-0 md:px-[5px]  md:block hidden">
                                   <p className="info-14-18 dark:text-white capitalize">
                                     {elm.market_type}
                                   </p>
