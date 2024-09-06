@@ -16,6 +16,7 @@ interface propsData {
   sendOtpRes?: any;
   isEmail?: boolean;
   isNumber?: boolean;
+  isTwoFa?: boolean;
 }
 
 const SecurityCode = (props: propsData) => {
@@ -23,12 +24,14 @@ const SecurityCode = (props: propsData) => {
   const [fillOtp, setOtp] = useState('');
   const [fillOtp2, setOtp2] = useState('');
   const [otpMessage, setOtpMessage] = useState('');
+  const [authMessage, setAuthMessage] = useState('');
   const Ref: any = useRef(null);
   const [timeLeft, setTimer] = useState('');
   const [enable, setEnable] = useState(false);
   const [popup, setPopup] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [emailSplit, setEmailSplit] = useState('');
+  const [authCode, setAuthCode] = useState('');
 
   const [reqCount, setReqCount] = useState(0);
 
@@ -42,6 +45,7 @@ const SecurityCode = (props: propsData) => {
     }
     const inputElements = document.querySelectorAll(".input_wrapper input");
     const inputElements2 = document.querySelectorAll(".input_wrapper2 input");
+    
     inputElements?.forEach((ele, index) => {
       ele.addEventListener("keydown", (e: any) => {
         if (e.keyCode === 8 && e.target.value === "") {
@@ -89,6 +93,31 @@ const SecurityCode = (props: propsData) => {
       });
     });
 
+    const inputElements3 = document?.querySelectorAll(".input_wrapper3 input");
+    inputElements3?.forEach((ele, index) => {
+      ele.addEventListener("keydown", (e: any) => {
+        if (e.keyCode === 8 && e.target.value === "") {
+          (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
+        }
+      });
+      ele.addEventListener("input", (e: any) => {
+        setAuthMessage('');
+        const [first, ...rest] = e.target.value;
+        e.target.value = first ?? "";
+        const lastInputBox = index === inputElements.length - 1;
+        const didInsertContent = first !== undefined;
+        if (didInsertContent && !lastInputBox) {
+          // continue to input the rest of the string
+          (inputElements[index + 1] as HTMLElement).focus();
+          (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
+          inputElements[index + 1].dispatchEvent(new Event("input"));
+        } else {
+          
+          setAuthCode((inputElements[0] as HTMLInputElement).value + '' + (inputElements[1] as HTMLInputElement).value + '' + (inputElements[2] as HTMLInputElement).value + '' + (inputElements[3] as HTMLInputElement).value + '' + (inputElements[4] as HTMLInputElement).value + '' + (inputElements[5] as HTMLInputElement).value);
+        }
+      });
+    });
+
   }, [])
 
   const matchUserOtp = async () => {
@@ -99,6 +128,7 @@ const SecurityCode = (props: propsData) => {
       }
       props.formData.step = 3;
       props.formData.otp = fillOtp;
+      props.formData.token = authCode;
 
       if (fillOtp === '') {
         setOtpMessage('Please enter One-Time password to authenticate.');
@@ -117,6 +147,8 @@ const SecurityCode = (props: propsData) => {
         props.formData.location = locationData?.country_name
         props.formData.region = locationData?.region
       }
+
+
 
       const ciphertext = AES.encrypt(JSON.stringify(props.formData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record = encodeURIComponent(ciphertext.toString());
@@ -309,7 +341,7 @@ const SecurityCode = (props: propsData) => {
                     <h1 className="lg-heading mb-5">Enter your security code</h1>
                     {props.isEmail &&
                       <div className="relative">
-                        <p className="mb-5  md-text">We texted your code to {props.formData?.username !== null && emailSplit}</p>
+                        <p className="mb-5  md-text">We sent your code to {props.formData?.username !== null && emailSplit}</p>
                         <div className="flex gap-[10px] md:gap-[30px] justify-between items-center input_wrapper">
                           <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-1`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
                           <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-2`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
@@ -332,20 +364,21 @@ const SecurityCode = (props: propsData) => {
                       </div>}
                     
                     
-                      {/* // <>
-                      //   <div className="relative mt-6">
-                      //     <p className="mb-5  md-text">Google Authenticator code</p>
-                      //     <div className="flex gap-[10px] md:gap-[30px] justify-between items-center input_wrapper">
-                      //       <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-1`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code1" />
-                      //       <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-2`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code2" />
-                      //       <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-3`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code3" />
-                      //       <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-4`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code4" />
-                      //       <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-5`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code5" />
-                      //       <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-6`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code6" />
-                      //     </div>
-                      //     <p className="errorMessage absolute top-[calc(100%+5px)]">{otpMessage}</p>
-                      //   </div>
-                      // </> */}
+                     {props?.isTwoFa &&
+                       <>
+                         <div className="relative mt-6">
+                           <p className="mb-5  md-text">Google Authenticator code</p>
+                           <div className="flex gap-[10px] md:gap-[30px] justify-between items-center input_wrapper3">
+                             <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-11`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code11" />
+                             <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-12`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code12" />
+                             <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-13`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code13" />
+                             <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-14`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code14" />
+                             <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-15`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code15" />
+                             <input type="text" onKeyDown={(e) => { handleKeyDown(e) }} data-testid={`otp-input-16`} autoComplete="off" className="block px-2 font-noto  md:px-3 w-[40px] md:w-[46px] dark:bg-black bg-primary-100 border text-center border-black dark:border-white rounded min-h-[40px] md:min-h-[46px] text-black dark:text-white outline-none focus:!border-primary" name="code16" />
+                           </div>
+                           <p className="errorMessage absolute top-[calc(100%+5px)]">{authMessage}</p>
+                         </div>
+                       </>}
                      
 
 

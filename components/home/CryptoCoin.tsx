@@ -4,7 +4,7 @@ import CoinCard from '../snippets/coinCard';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Pagination } from 'swiper/modules';
+import { Autoplay, Pagination } from 'swiper/modules';
 
 interface propsData {
   coinList: any;
@@ -25,10 +25,10 @@ const CryptoCoin = (props: propsData) => {
   useEffect(() => {
     const fetchHLCOData = async () => {
       let coins = props?.coinList?.filter((item: any) => item?.symbol !== "USDT");
-      let limitedCoins = coins?.slice(0, 6);
+      let limitedCoins = coins?.slice(0, 8);
 
       const fetchDataForCoin = async (coin: any) => {
-        
+
         const slug = coin.symbol;
         try {
           let hlocv = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/hloc?slug=${slug}`, {
@@ -40,7 +40,7 @@ const CryptoCoin = (props: propsData) => {
             chartImg: "ChartImage",
             status: 'high',
             change24h: '4',
-            hlocv:hlocv?.data?.data
+            hlocv: hlocv?.data?.data
           };
         } catch (error) {
           console.error(`Error fetching HLCO data for ${slug}:`, error);
@@ -73,22 +73,28 @@ const CryptoCoin = (props: propsData) => {
           ))}
         </div> */}
         <div className='mt-[50px]'>
-          <Swiper slidesPerView={1.2} 
-          breakpoints={{
-            '250': {
-              slidesPerView: 1.2,
-              spaceBetween: 10,
-            },
-            '767': {
-              slidesPerView: 2.5,
-              spaceBetween: 10,
-            },
-            '1200': {
-              slidesPerView: 4,
-              spaceBetween: 10,
-            }
-          }}
-          spaceBetween={20} pagination={true} modules={[Pagination]} className="mySwiper tmb-swiper">
+          <Swiper
+            slidesPerView={1.2}
+            breakpoints={{
+              '250': {
+                slidesPerView: 1.2,
+                spaceBetween: 10,
+              },
+              '767': {
+                slidesPerView: 2.5,
+                spaceBetween: 10,
+              },
+              '1200': {
+                slidesPerView: 4,
+                spaceBetween: 10,
+              }
+            }}
+            spaceBetween={20}
+            pagination={true}
+            loop={true}
+            autoplay={true}
+            modules={[Pagination, Autoplay]}
+            className="mySwiper tmb-swiper">
             {cardData && cardData.length > 0 && cardData.map((elem: any, ind: any) => (
               <Fragment key={ind}>
                 <SwiperSlide key={ind}>

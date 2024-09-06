@@ -30,6 +30,7 @@ const ResetPassword = () => {
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
   const [layout, setLayout] = useState(false)
+  const [isTwoFa, setIsTwoFa] = useState(false)
 
   let {
     register,
@@ -72,6 +73,13 @@ const ResetPassword = () => {
       let res = await responseData.json();
 
       if (res?.data?.otp !== undefined) {
+        console.log(res?.data?.otp?.twoFa,"===========res");
+        
+        if(res?.data?.otp?.twoFa){
+          setIsTwoFa(true)
+        }
+        data.secret= res?.data?.otp?.secret 
+
         toast.success(res?.data?.message);
         setSendOtpRes(res?.data?.otp);
         setLayout(true)
@@ -181,7 +189,7 @@ const ResetPassword = () => {
         </section>
       )}
 
-      {step === 2 && <SecurityCode formData={formData} api="forget" isEmail={isEmail}  sendOtpRes={sendOtpRes} setStep={setStep} />}
+      {step === 2 && <SecurityCode formData={formData} api="forget" isEmail={isEmail}  sendOtpRes={sendOtpRes} setStep={setStep}  isTwoFa={isTwoFa}/>}
       {step === 3 && <ReEnterpass formData={formData} api="forget" isEmail={isEmail} sendOtpRes={sendOtpRes} setStep={setStep} />}
     </>
   );
