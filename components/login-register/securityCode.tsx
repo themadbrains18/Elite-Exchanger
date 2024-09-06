@@ -90,6 +90,10 @@ const SecurityCode = (props: propsData) => {
       if (reqCount >= 5) {
         setOtpMessage("Too many attempts");
       }
+
+
+console.log(props?.formData,"=hgfhkjgdhfkgjk");
+
       props.formData.step = 3;
       props.formData.otp = fillOtp;
       props.formData.token = authCode;
