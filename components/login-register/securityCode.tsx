@@ -35,90 +35,145 @@ const SecurityCode = (props: propsData) => {
 
   const [reqCount, setReqCount] = useState(0);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    if (props.isEmail && props.formData?.username !== null) {
+  //   if (props.isEmail && props.formData?.username !== null) {
 
-      let str = props.formData?.username.split('@');
-      let substring = str[0].substring(0, 3);
-      setEmailSplit(substring + '****@' + str[1])
-    }
-    const inputElements = document.querySelectorAll(".input_wrapper input");
-    const inputElements2 = document.querySelectorAll(".input_wrapper2 input");
+  //     let str = props.formData?.username.split('@');
+  //     let substring = str[0].substring(0, 3);
+  //     setEmailSplit(substring + '****@' + str[1])
+  //   }
+  //   const inputElements = document.querySelectorAll(".input_wrapper input");
+  //   const inputElements2 = document.querySelectorAll(".input_wrapper2 input");
     
-    inputElements?.forEach((ele, index) => {
-      ele.addEventListener("keydown", (e: any) => {
-        if (e.keyCode === 8 && e.target.value === "") {
-          (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
-        }
-      });
-      ele.addEventListener("input", (e: any) => {
-        setOtpMessage('');
-        const [first, ...rest] = e.target.value;
-        e.target.value = first ?? "";
-        const lastInputBox = index === inputElements.length - 1;
-        const didInsertContent = first !== undefined;
-        if (didInsertContent && !lastInputBox) {
-          // continue to input the rest of the string
-          (inputElements[index + 1] as HTMLElement).focus();
-          (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
-          inputElements[index + 1].dispatchEvent(new Event("input"));
-        } else {
-          setOtp((inputElements[0] as HTMLInputElement).value + '' + (inputElements[1] as HTMLInputElement).value + '' + (inputElements[2] as HTMLInputElement).value + '' + (inputElements[3] as HTMLInputElement).value + '' + (inputElements[4] as HTMLInputElement).value + '' + (inputElements[5] as HTMLInputElement).value);
-        }
-      });
-    });
-    orderTimeCalculation(props?.sendOtpRes);
+  //   inputElements?.forEach((ele, index) => {
+  //     ele.addEventListener("keydown", (e: any) => {
+  //       if (e.keyCode === 8 && e.target.value === "") {
+  //         (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
+  //       }
+  //     });
+  //     ele.addEventListener("input", (e: any) => {
+  //       setOtpMessage('');
+  //       const [first, ...rest] = e.target.value;
+  //       e.target.value = first ?? "";
+  //       const lastInputBox = index === inputElements.length - 1;
+  //       const didInsertContent = first !== undefined;
+  //       if (didInsertContent && !lastInputBox) {
+  //         // continue to input the rest of the string
+  //         (inputElements[index + 1] as HTMLElement).focus();
+  //         (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
+  //         inputElements[index + 1].dispatchEvent(new Event("input"));
+  //       } else {
+  //         setOtp((inputElements[0] as HTMLInputElement).value + '' + (inputElements[1] as HTMLInputElement).value + '' + (inputElements[2] as HTMLInputElement).value + '' + (inputElements[3] as HTMLInputElement).value + '' + (inputElements[4] as HTMLInputElement).value + '' + (inputElements[5] as HTMLInputElement).value);
+  //       }
+  //     });
+  //   });
+  //   orderTimeCalculation(props?.sendOtpRes);
 
-    inputElements2?.forEach((ele, index) => {
-      ele.addEventListener("keydown", (e: any) => {
-        if (e.keyCode === 8 && e.target.value === "") {
-          (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
-        }
-      });
-      ele.addEventListener("input", (e: any) => {
-        setOtpMessage('');
-        const [first, ...rest] = e.target.value;
-        e.target.value = first ?? "";
-        const lastInputBox = index === inputElements.length - 1;
-        const didInsertContent = first !== undefined;
-        if (didInsertContent && !lastInputBox) {
-          // continue to input the rest of the string
-          (inputElements[index + 1] as HTMLElement).focus();
-          (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
-          inputElements[index + 1].dispatchEvent(new Event("input"));
-        } else {
-          setOtp2((inputElements[0] as HTMLInputElement).value + '' + (inputElements[1] as HTMLInputElement).value + '' + (inputElements[2] as HTMLInputElement).value + '' + (inputElements[3] as HTMLInputElement).value + '' + (inputElements[4] as HTMLInputElement).value + '' + (inputElements[5] as HTMLInputElement).value);
-        }
-      });
-    });
+  //   inputElements2?.forEach((ele, index) => {
+  //     ele.addEventListener("keydown", (e: any) => {
+  //       if (e.keyCode === 8 && e.target.value === "") {
+  //         (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
+  //       }
+  //     });
+  //     ele.addEventListener("input", (e: any) => {
+  //       setOtpMessage('');
+  //       const [first, ...rest] = e.target.value;
+  //       e.target.value = first ?? "";
+  //       const lastInputBox = index === inputElements.length - 1;
+  //       const didInsertContent = first !== undefined;
+  //       if (didInsertContent && !lastInputBox) {
+  //         // continue to input the rest of the string
+  //         (inputElements[index + 1] as HTMLElement).focus();
+  //         (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
+  //         inputElements[index + 1].dispatchEvent(new Event("input"));
+  //       } else {
+  //         setOtp2((inputElements[0] as HTMLInputElement).value + '' + (inputElements[1] as HTMLInputElement).value + '' + (inputElements[2] as HTMLInputElement).value + '' + (inputElements[3] as HTMLInputElement).value + '' + (inputElements[4] as HTMLInputElement).value + '' + (inputElements[5] as HTMLInputElement).value);
+  //       }
+  //     });
+  //   });
 
-    const inputElements3 = document?.querySelectorAll(".input_wrapper3 input");
-    inputElements3?.forEach((ele, index) => {
-      ele.addEventListener("keydown", (e: any) => {
-        if (e.keyCode === 8 && e.target.value === "") {
-          (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
-        }
-      });
-      ele.addEventListener("input", (e: any) => {
-        setAuthMessage('');
-        const [first, ...rest] = e.target.value;
-        e.target.value = first ?? "";
-        const lastInputBox = index === inputElements.length - 1;
-        const didInsertContent = first !== undefined;
-        if (didInsertContent && !lastInputBox) {
-          // continue to input the rest of the string
-          (inputElements[index + 1] as HTMLElement).focus();
-          (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
-          inputElements[index + 1].dispatchEvent(new Event("input"));
-        } else {
+  //   const inputElements3 = document?.querySelectorAll(".input_wrapper3 input");
+  //   inputElements3?.forEach((ele, index) => {
+  //     ele.addEventListener("keydown", (e: any) => {
+  //       if (e.keyCode === 8 && e.target.value === "") {
+  //         (inputElements[Math.max(0, index - 1)] as HTMLElement).focus();
+  //       }
+  //     });
+  //     ele.addEventListener("input", (e: any) => {
+  //       setAuthMessage('');
+  //       const [first, ...rest] = e.target.value;
+  //       e.target.value = first ?? "";
+  //       const lastInputBox = index === inputElements.length - 1;
+  //       const didInsertContent = first !== undefined;
+  //       if (didInsertContent && !lastInputBox) {
+  //         // continue to input the rest of the string
+  //         (inputElements[index + 1] as HTMLElement).focus();
+  //         (inputElements[index + 1] as HTMLInputElement).value = rest.join("");
+  //         inputElements[index + 1].dispatchEvent(new Event("input"));
+  //       } else {
           
-          setAuthCode((inputElements[0] as HTMLInputElement).value + '' + (inputElements[1] as HTMLInputElement).value + '' + (inputElements[2] as HTMLInputElement).value + '' + (inputElements[3] as HTMLInputElement).value + '' + (inputElements[4] as HTMLInputElement).value + '' + (inputElements[5] as HTMLInputElement).value);
-        }
-      });
-    });
+  //         setAuthCode((inputElements[0] as HTMLInputElement).value + '' + (inputElements[1] as HTMLInputElement).value + '' + (inputElements[2] as HTMLInputElement).value + '' + (inputElements[3] as HTMLInputElement).value + '' + (inputElements[4] as HTMLInputElement).value + '' + (inputElements[5] as HTMLInputElement).value);
+  //       }
+  //     });
+  //   });
 
-  }, [])
+  // }, [])
+
+
+  useEffect(() => {
+    if (props.isEmail && props.formData?.username) {
+      const str = props.formData?.username.split('@');
+      const substring = str[0].substring(0, 3);
+      setEmailSplit(`${substring}****@${str[1]}`);
+    }
+
+    const handleInputChange = (e: any, setOtpState: Function, inputElements: NodeListOf<HTMLInputElement>) => {
+      const [first, ...rest] = e.target.value;
+      e.target.value = first ?? "";
+
+      const index = Array.from(inputElements).indexOf(e.target);
+      if (first && index < inputElements.length - 1) {
+        inputElements[index + 1].focus();
+        inputElements[index + 1].value = rest.join("");
+        inputElements[index + 1].dispatchEvent(new Event("input"));
+      }
+
+      const otp = Array.from(inputElements).map(input => input.value).join('');
+      setOtpState(otp);
+    };
+
+    const setupInputs = (selector: string, setOtpState: Function) => {
+      const inputElements = document.querySelectorAll(selector) as NodeListOf<HTMLInputElement>;
+
+      inputElements.forEach((input, index) => {
+        const onKeyDown = (e: KeyboardEvent) => {
+          if (e.key === "Backspace" && !input.value) {
+            inputElements[Math.max(0, index - 1)].focus();
+          }
+        };
+        const onInput = (e: any) => {
+          handleInputChange(e, setOtpState, inputElements);
+        };
+
+        input.addEventListener("keydown", onKeyDown);
+        input.addEventListener("input", onInput);
+
+        return () => {
+          input.removeEventListener("keydown", onKeyDown);
+          input.removeEventListener("input", onInput);
+        };
+      });
+    };
+
+    setupInputs(".input_wrapper input", setOtp);
+    setupInputs(".input_wrapper2 input", setOtp2);
+    setupInputs(".input_wrapper3 input", setAuthCode);
+
+    // return () => {
+    //   if (timerRef.current) clearInterval(timerRef.current);
+    // };
+  }, [props]);
 
   const matchUserOtp = async () => {
     try {
