@@ -82,10 +82,6 @@ const SecurityCode = (props: propsData) => {
     setupInputs(".input_wrapper input", setOtp);
     setupInputs(".input_wrapper2 input", setOtp2);
     setupInputs(".input_wrapper3 input", setAuthCode);
-
-    // return () => {
-    //   if (timerRef.current) clearInterval(timerRef.current);
-    // };
   }, [props]);
 
   const matchUserOtp = async () => {
