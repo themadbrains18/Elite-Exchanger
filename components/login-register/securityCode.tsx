@@ -122,6 +122,9 @@ const SecurityCode = (props: propsData) => {
 
 
   useEffect(() => {
+
+    orderTimeCalculation(props?.sendOtpRes);
+    
     if (props.isEmail && props.formData?.username) {
       const str = props.formData?.username.split('@');
       const substring = str[0].substring(0, 3);
@@ -173,7 +176,7 @@ const SecurityCode = (props: propsData) => {
     // return () => {
     //   if (timerRef.current) clearInterval(timerRef.current);
     // };
-  }, [props]);
+  }, []);
 
   const matchUserOtp = async () => {
     try {
