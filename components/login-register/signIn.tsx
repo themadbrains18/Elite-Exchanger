@@ -52,6 +52,8 @@ const SignIn = (Props: loginType) => {
   const router = useRouter();
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
+  const [isTwoFa, setIsTwoFa] = useState(false)
+
 
   let { register, setValue, handleSubmit, watch, setError, clearErrors, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
@@ -249,13 +251,12 @@ const SignIn = (Props: loginType) => {
       {
         step === 1 &&
         <span data-testid="verification-modal">
-          <Verification step={step} setStep={setStep} isEmail={isEmail} isNumber={isNumber} formData={formData} data={data} api='login' setSendOtpRes={setSendOtpRes} />
-
+          <Verification setIsTwoFa={setIsTwoFa} step={step} setStep={setStep} isEmail={isEmail} isNumber={isNumber} formData={formData} data={data} api='login' setSendOtpRes={setSendOtpRes} />
         </span>
       }
       {
         step === 2 &&
-        <SecurityCode formData={formData} api='login' data={data} isEmail={isEmail} isNumber={isNumber} sendOtpRes={sendOtpRes} />
+        <SecurityCode formData={formData} isTwoFa={isTwoFa} api='login' data={data} isEmail={isEmail} isNumber={isNumber} sendOtpRes={sendOtpRes} />
       }
     </>
   );

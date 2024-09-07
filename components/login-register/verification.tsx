@@ -16,12 +16,14 @@ interface propsData {
   api: string;
   setSendOtpRes?: any;
   data?: any;
+  setIsTwoFa?: Function;
 }
 
 const Verification = (props: propsData) => {
   const { mode } = useContext(Context);
   const router = useRouter();
   const [btnDisabled, setBtnDisabled] = useState(false);
+  
 
   const sendOtp = async () => {
     try {
@@ -43,7 +45,8 @@ const Verification = (props: propsData) => {
           body: JSON.stringify(record),
         }
       ).then((response) => response.json());
-
+      console.log(userExist,"===========");
+      
       if (props?.api === "forget") {
         if (userExist.status === 200) {
           toast.success(userExist?.data?.message, { autoClose: 2000 });
@@ -54,6 +57,11 @@ const Verification = (props: propsData) => {
         }
       } else {
         if (userExist.data.status === 200) {
+          if(userExist?.data?.data?.otp?.twoFa === 1){
+            props?.setIsTwoFa && props?.setIsTwoFa(true)
+          }
+          props.formData.secret= userExist?.data?.data?.otp?.secret;
+
           toast.success(userExist?.data?.data?.message, { autoClose: 2000 });
           props.setSendOtpRes(userExist?.data?.data?.otp);
           props.setStep(2);
