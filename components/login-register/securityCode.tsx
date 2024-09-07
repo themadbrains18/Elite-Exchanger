@@ -35,6 +35,9 @@ const SecurityCode = (props: propsData) => {
 
   const [reqCount, setReqCount] = useState(0);
   useEffect(() => {
+
+    orderTimeCalculation(props?.sendOtpRes);
+    
     if (props.isEmail && props.formData?.username) {
       const str = props.formData?.username.split('@');
       const substring = str[0].substring(0, 3);
@@ -82,7 +85,11 @@ const SecurityCode = (props: propsData) => {
     setupInputs(".input_wrapper input", setOtp);
     setupInputs(".input_wrapper2 input", setOtp2);
     setupInputs(".input_wrapper3 input", setAuthCode);
-  }, [props]);
+
+    // return () => {
+    //   if (timerRef.current) clearInterval(timerRef.current);
+    // };
+  }, []);
 
   const matchUserOtp = async () => {
     try {
