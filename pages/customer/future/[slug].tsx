@@ -56,6 +56,7 @@ const FutureTrading = (props: Session) => {
     const router = useRouter();
     const { slug } = router.query;
     // const [slugs, setSlugs] = useState(slug)
+    const slugRef = useRef(slug); // Store the current slug
 
     const [rewardsTotalPoint, setRewardsTotalPoint] = useState(props?.totalPoint);
     const wbsocket = useWebSocket();
@@ -71,9 +72,8 @@ const FutureTrading = (props: Session) => {
     }, []);
 
     useEffect(() => {
-        // console.log(slug,"=jkhdfkhsd");
-        // console.log(props?.serverSlug,"=serverslug");
-        
+
+        slugRef.current = slug;
 
         let ccurrentToken = props.coinList.filter((item: any) => {
             return item.coin_symbol + item.usdt_symbol === slug
@@ -132,7 +132,6 @@ const FutureTrading = (props: Session) => {
             wbsocket.addEventListener('message', handleSocketMessage);
         }
 
-        console.log(router.query,"==skjfhkjsh");
         return () => {
             if (wbsocket) {
                 wbsocket.removeEventListener('message', handleSocketMessage);
@@ -152,7 +151,7 @@ const FutureTrading = (props: Session) => {
         
 
         let ccurrentToken = tokenList?.data.filter((item: any) => {
-            return (item.coin_symbol + item.usdt_symbol) === slug
+            return (item.coin_symbol + item.usdt_symbol) === slugRef.current
         })
 
         setCurrentToken(ccurrentToken);
