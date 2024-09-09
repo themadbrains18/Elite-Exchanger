@@ -288,6 +288,7 @@ const BuySell = (props: fullWidth) => {
       
       if(showNes===1 && (entryPrice == undefined || entryPrice == null || entryPrice === 0 || entryPrice < 0 || entryPrice === "") ){
         setEntryPriceValidate("Price must be greater than '0'");
+        return
       }
 
       if (sizeValue === 0 || sizeValue < 0 || sizeValue === "" ) {
@@ -356,7 +357,7 @@ const BuySell = (props: fullWidth) => {
     else {
       if (entryPrice == undefined || entryPrice == null || entryPrice === 0 || entryPrice < 0 || entryPrice === "") {
         setEntryPriceValidate("Price must be greater than '0'");
-        // return;  
+        return;  
       }
       
       if (isNaN(sizeValue)|| sizeValue == undefined || sizeValue == null || sizeValue === 0 || sizeValue < 0 || sizeValue === "") {

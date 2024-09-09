@@ -36,12 +36,15 @@
   
     const socketListenerRef = useRef<(event: MessageEvent) => void>();
     useEffect(() => {
+
       const handleSocketMessage = (event: any) => {
+        
         const data = JSON.parse(event.data).data;
         const eventDataType = JSON.parse(event.data).type;
   
+        
         // Only process the message if the slug matches the current slug
-        if (eventDataType === 'price' && data?.symbol === slugRef.current) {
+        if (eventDataType === 'price' ) {
           refreshTokenList();
         }
       };
@@ -67,7 +70,7 @@
       }).then((response) => response.json());
   
       const ccurrentToken = tokenList?.data?.filter((item: any) => {
-        return item.symbol === slug;
+        return item.symbol === slugRef.current;
       });
   
   
