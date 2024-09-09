@@ -90,7 +90,7 @@ const ProfitLossTable: React.FC<propsData> = ({ show }) => {
         }
     }
 
-    console.log(orders,"=============orders");
+    // console.log(orders,"=============orders");
     return (
         <>
             <div className="overflow-x-auto h-[234px]">
@@ -150,7 +150,7 @@ const ProfitLossTable: React.FC<propsData> = ({ show }) => {
                                             <div className={`pl-[5px] pt-[5px] border-l-[5px] ${item?.trade_type === 'Close Long' ? 'border-[#03A66D]' : 'border-[#f74646]'} flex gap-[8px] items-center`}>
                                                 <div>
                                                     <p className="info-14 !text-[12px] dark:text-white">{item.contract}</p>
-                                                    {/* <p className={`top-label ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.leverage_type} {item.leverage}x</p> */}
+                                                    <p className={`top-label ${item?.futureposition?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.futureposition?.leverage_type} {item?.futureposition?.leverage}x</p>
                                                 </div>
                                             </div>
                                         </td>
