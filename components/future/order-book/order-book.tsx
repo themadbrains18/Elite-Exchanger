@@ -17,7 +17,7 @@ const OrderBookFuture = (props: setHeight) => {
 
     useEffect(() => {
 
-setPrevPrice(props?.positionRecord[0])
+        setPrevPrice(props?.positionRecord[0])
 
     }, [props?.positionRecord]);
 
@@ -140,35 +140,35 @@ setPrevPrice(props?.positionRecord[0])
             {
                 props.show === 2 &&
                 <>  <div className='bg-card-bg py-[6px] px-[20px] flex items-center justify-between dark:bg-omega bg-white my-[10px]'>
-                <div className='flex items-center gap-1'>
-                    <svg
-                        enableBackground="new 0 0 32 32"
-                        version="1.1"
-                        viewBox="0 0 32 32"
-                        xmlSpace="preserve"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className={`w-3 ${prevPrice?.direction==="long" ? 'rotate-180' : ''}`}
-                        xmlnsXlink="http://www.w3.org/1999/xlink"
-                    >
-                        <path
-                            clipRule="evenodd"
-                            d="M26.704,20.393  c-0.394-0.39-1.034-0.391-1.428,0l-8.275,8.193V1c0-0.552-0.452-1-1.01-1s-1.01,0.448-1.01,1v27.586l-8.275-8.192  c-0.394-0.391-1.034-0.391-1.428,0c-0.394,0.391-0.394,1.024,0,1.414l9.999,9.899c0.39,0.386,1.039,0.386,1.429,0l9.999-9.899  C27.099,21.417,27.099,20.784,26.704,20.393C26.31,20.003,27.099,20.784,26.704,20.393z"
-                            className={`${prevPrice?.direction==="long" ? 'fill-buy' : 'fill-sell'}`}
-                            fillRule="evenodd"
-                        />
-                        <g />
-                        <g />
-                        <g />
-                        <g />
-                        <g />
-                        <g />
-                    </svg>
+                    <div className='flex items-center gap-1'>
+                        <svg
+                            enableBackground="new 0 0 32 32"
+                            version="1.1"
+                            viewBox="0 0 32 32"
+                            xmlSpace="preserve"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className={`w-3 ${prevPrice?.direction === "long" ? 'rotate-180' : ''}`}
+                            xmlnsXlink="http://www.w3.org/1999/xlink"
+                        >
+                            <path
+                                clipRule="evenodd"
+                                d="M26.704,20.393  c-0.394-0.39-1.034-0.391-1.428,0l-8.275,8.193V1c0-0.552-0.452-1-1.01-1s-1.01,0.448-1.01,1v27.586l-8.275-8.192  c-0.394-0.391-1.034-0.391-1.428,0c-0.394,0.391-0.394,1.024,0,1.414l9.999,9.899c0.39,0.386,1.039,0.386,1.429,0l9.999-9.899  C27.099,21.417,27.099,20.784,26.704,20.393C26.31,20.003,27.099,20.784,26.704,20.393z"
+                                className={`${prevPrice?.direction === "long" ? 'fill-buy' : 'fill-sell'}`}
+                                fillRule="evenodd"
+                            />
+                            <g />
+                            <g />
+                            <g />
+                            <g />
+                            <g />
+                            <g />
+                        </svg>
 
-                    <p className={`info-18 ${prevPrice?.direction==="long" ? 'text-buy' : 'text-sell'}`}>{currencyFormatter(truncateNumber(prevPrice ? prevPrice?.entry_price:0, 6))}</p>
+                        <p className={`info-18 ${prevPrice?.direction === "long" ? 'text-buy' : 'text-sell'}`}>{currencyFormatter(truncateNumber(prevPrice ? prevPrice?.entry_price : 0, 6))}</p>
+                    </div>
+                    <p className='info-16 !text-black dark:!text-white !text-[14px] '>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price, 6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price, 6))}</p>
                 </div>
-                <p className='info-16 !text-black dark:!text-white !text-[14px] '>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price, 6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price, 6))}</p>
-            </div>
-                <BuyTableFuture fullHeight={true} showPrice={true} currentToken={props.currentToken} positionRecord={props?.positionRecord}  />
+                    <BuyTableFuture fullHeight={true} showPrice={true} currentToken={props.currentToken} positionRecord={props?.positionRecord} />
                 </>
             }
             {
@@ -183,13 +183,13 @@ setPrevPrice(props?.positionRecord[0])
                                 viewBox="0 0 32 32"
                                 xmlSpace="preserve"
                                 xmlns="http://www.w3.org/2000/svg"
-                                className={`w-3 ${prevPrice?.direction==="long" ? 'rotate-180' : ''}`}
+                                className={`w-3 ${prevPrice?.direction === "long" ? 'rotate-180' : ''}`}
                                 xmlnsXlink="http://www.w3.org/1999/xlink"
                             >
                                 <path
                                     clipRule="evenodd"
                                     d="M26.704,20.393  c-0.394-0.39-1.034-0.391-1.428,0l-8.275,8.193V1c0-0.552-0.452-1-1.01-1s-1.01,0.448-1.01,1v27.586l-8.275-8.192  c-0.394-0.391-1.034-0.391-1.428,0c-0.394,0.391-0.394,1.024,0,1.414l9.999,9.899c0.39,0.386,1.039,0.386,1.429,0l9.999-9.899  C27.099,21.417,27.099,20.784,26.704,20.393C26.31,20.003,27.099,20.784,26.704,20.393z"
-                                    className={`${prevPrice?.direction==="long" ? 'fill-buy' : 'fill-sell'}`}
+                                    className={`${prevPrice?.direction === "long" ? 'fill-buy' : 'fill-sell'}`}
                                     fillRule="evenodd"
                                 />
                                 <g />
@@ -200,7 +200,7 @@ setPrevPrice(props?.positionRecord[0])
                                 <g />
                             </svg>
 
-                            <p className={`info-18 ${prevPrice?.direction==="long" ? 'text-buy' : 'text-sell'}`}>{currencyFormatter(truncateNumber(prevPrice ? prevPrice?.entry_price:0, 6))}</p>
+                            <p className={`info-18 ${prevPrice?.direction === "long" ? 'text-buy' : 'text-sell'}`}>{currencyFormatter(truncateNumber(prevPrice ? prevPrice?.entry_price : 0, 6))}</p>
                         </div>
                         <p className='info-16 !text-black dark:!text-white !text-[14px] '>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price, 6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price, 6))}</p>
                     </div>
@@ -210,7 +210,7 @@ setPrevPrice(props?.positionRecord[0])
             {
                 props.show === 3 &&
                 <>
-                  <div className='bg-card-bg py-[6px] px-[20px] flex items-center justify-between dark:bg-omega bg-white my-[10px]'>
+                    <div className='bg-card-bg py-[6px] px-[20px] flex items-center justify-between dark:bg-omega bg-white my-[10px]'>
                         <div className='flex items-center gap-1'>
                             <svg
                                 enableBackground="new 0 0 32 32"
@@ -218,13 +218,13 @@ setPrevPrice(props?.positionRecord[0])
                                 viewBox="0 0 32 32"
                                 xmlSpace="preserve"
                                 xmlns="http://www.w3.org/2000/svg"
-                                className={`w-3 ${prevPrice?.direction==="long" ? 'rotate-180' : ''}`}
+                                className={`w-3 ${prevPrice?.direction === "long" ? 'rotate-180' : ''}`}
                                 xmlnsXlink="http://www.w3.org/1999/xlink"
                             >
                                 <path
                                     clipRule="evenodd"
                                     d="M26.704,20.393  c-0.394-0.39-1.034-0.391-1.428,0l-8.275,8.193V1c0-0.552-0.452-1-1.01-1s-1.01,0.448-1.01,1v27.586l-8.275-8.192  c-0.394-0.391-1.034-0.391-1.428,0c-0.394,0.391-0.394,1.024,0,1.414l9.999,9.899c0.39,0.386,1.039,0.386,1.429,0l9.999-9.899  C27.099,21.417,27.099,20.784,26.704,20.393C26.31,20.003,27.099,20.784,26.704,20.393z"
-                                    className={`${prevPrice?.direction==="long" ? 'fill-buy' : 'fill-sell'}`}
+                                    className={`${prevPrice?.direction === "long" ? 'fill-buy' : 'fill-sell'}`}
                                     fillRule="evenodd"
                                 />
                                 <g />
@@ -235,11 +235,11 @@ setPrevPrice(props?.positionRecord[0])
                                 <g />
                             </svg>
 
-                            <p className={`info-18 ${prevPrice?.direction==="long" ? 'text-buy' : 'text-sell'}`}>{currencyFormatter(truncateNumber(prevPrice ? prevPrice?.entry_price:0, 6))}</p>
+                            <p className={`info-18 ${prevPrice?.direction === "long" ? 'text-buy' : 'text-sell'}`}>{currencyFormatter(truncateNumber(prevPrice ? prevPrice?.entry_price : 0, 6))}</p>
                         </div>
                         <p className='info-16 !text-black dark:!text-white !text-[14px] '>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price, 6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price, 6))}</p>
                     </div>
-                <SelltableFuture show={props.show} fullHeight={true} showPrice={true} currentToken={props.currentToken} positionRecord={props?.positionRecord} />
+                    <SelltableFuture show={props.show} fullHeight={true} showPrice={true} currentToken={props.currentToken} positionRecord={props?.positionRecord} />
                 </>
             }
         </div>

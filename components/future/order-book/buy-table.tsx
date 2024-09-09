@@ -1,6 +1,6 @@
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import { truncateNumber } from '@/libs/subdomain';
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 interface setState {
     show?: number;
     fullHeight?: boolean;
@@ -9,7 +9,6 @@ interface setState {
     positionRecord?: any;
 }
 const BuyTableFuture = (props: setState) => {
-
     let data = props?.positionRecord?.filter((item:any)=>{
         return item?.direction === 'long'
     });
@@ -25,7 +24,7 @@ const BuyTableFuture = (props: setState) => {
             } */}
             <div className={`p-[16px] pt-[0] overflow-y-auto orderTable ${props.fullHeight ? 'max-h-[274px] lg:max-h-[620px]' : 'max-h-[137px] lg:max-h-[310px]'}`}>
                 {/* head */}
-                <div className='grid grid-cols-3 gap-[10px] sticky top-0 bg-light bg-[#fafafa] dark:bg-[#1a1b1f]'>
+                <div className='grid grid-cols-3 gap-[10px] sticky top-0 bg-light bg-[#fafafa] dark:bg-[#1a1b1f] sdasdsadas'>
                     <p className='top-label text-start py-[5px]'>Price (USDT)</p>
                     <p className='top-label text-center py-[5px]'>Qty ({props?.currentToken?.coin_symbol})</p>
                     <p className='top-label text-end  py-[5px]'>Total (USDT)</p>

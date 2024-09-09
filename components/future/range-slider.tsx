@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 interface UniqueIds {
   inputId: string;
@@ -21,58 +21,76 @@ const RangeSlider: React.FC<UniqueIds> = ({
   step = 1,
   levrage = 0,
   levrageValue = 0,
-  min
+  min = 0
 }) => {
+  const sliderRef = useRef<HTMLInputElement | null>(null);
+  const thumbRef = useRef<HTMLDivElement | null>(null);
+  const lineRef = useRef<HTMLDivElement | null>(null);
+  const isDragging = useRef<boolean>(false);
 
   useEffect(() => {
-    const sliderInput = document.getElementById(inputId) as HTMLInputElement;
+    const sliderInput = sliderRef.current;
     if (sliderInput) {
-      sliderInput.value = inputId === "rangeInput" ? levrageValue.toString() : levrage.toString();
-      showSliderValue();
-      sliderInput.addEventListener('input', showSliderValue);
+      // Set initial value for the slider
+      sliderInput.value = levrageValue ? levrageValue.toString() : levrage.toString();
+      updateSlider();
     }
-    return () => {
-      if (sliderInput) {
-        sliderInput.removeEventListener('input', showSliderValue);
-      }
-    };
-  }, [levrageValue, levrage, inputId]);
+  }, [levrageValue, levrage]);
 
-  const showSliderValue = () => {
-    
-    const sliderInput = document.getElementById(inputId) as HTMLInputElement;
-    const sliderThumb = document.getElementById(thumbId) as HTMLDivElement;
-    const sliderLine = document.getElementById(lineId) as HTMLDivElement;
+  const updateSlider = () => {
+    const sliderInput = sliderRef.current as HTMLInputElement;
+    const sliderThumb = thumbRef.current as HTMLDivElement;
+    const sliderLine = lineRef.current as HTMLDivElement;
 
     if (sliderInput && sliderThumb && sliderLine) {
       const value = Number(sliderInput.value);
       const max = Number(sliderInput.max);
+      const min = Number(sliderInput.min);
 
+      // Update thumb position and inner value
       sliderThumb.innerHTML = `${value}X`;
-      const bulletPosition = value / max;
+      const bulletPosition = (value - min) / (max - min);
       const space = sliderInput.offsetWidth - sliderThumb.offsetWidth;
 
       sliderThumb.style.left = `${bulletPosition * space}px`;
       sliderLine.style.width = `${(value / max) * 100}%`;
 
-      const inputPercent = document.querySelector('.inputPercent') as HTMLInputElement;
-      if (inputPercent) {
-        inputPercent.value = `${Math.trunc((value / max) * 100)}X`;
-      }
-
-      
+      // Callback to parent with value change
       onChangeSizeInPercentage(value);
-
- 
     }
   };
 
-  const handleBulletClick = (value: number) => {
-    const sliderInput = document.getElementById(inputId) as HTMLInputElement;
-    if (sliderInput) {
-      sliderInput.value = value.toString();
-      showSliderValue();
+  const handleSliderClick = (event: any) => {
+    const sliderRect = sliderRef.current?.getBoundingClientRect();
+    if (sliderRect) {
+      const xPos = 'clientX' in event ? event.clientX : event.touches[0].clientX;
+      const percentage = Math.max(Math.min((xPos - sliderRect.left) / sliderRect.width, 1), 0);
+      const newValue = Math.round(percentage * (Number(sliderRef.current?.max) - min) + min);
+
+      if (sliderRef.current) {
+        sliderRef.current.value = newValue.toString();
+        updateSlider();
+      }
     }
+  };
+
+  const handleMouseMove = (event: any) => {
+    if (isDragging.current) {
+      handleSliderClick(event);
+    }
+  };
+
+  const handleMouseUp = () => {
+    isDragging.current = false;
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  };
+
+  const handleMouseDown = (event: React.MouseEvent) => {
+    isDragging.current = true;
+    handleSliderClick(event);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
   };
 
   return (
@@ -82,29 +100,33 @@ const RangeSlider: React.FC<UniqueIds> = ({
           <div
             key={value}
             className="w-[10px] h-[10px] rounded-full bg-primary cursor-pointer relative z-[2]"
-            onClick={() => handleBulletClick(value)}
+            onClick={() => handleSliderClick(value)}
           ></div>
         ))}
       </div>
-      <div className="range-slider mt-[-12px] cursor-pointer">
-        <div id={thumbId} className="range-slider_thumb"></div>
+      <div
+        className="range-slider mt-[-12px] cursor-pointer"
+        onMouseDown={handleMouseDown}
+      >
+        <div id={thumbId} ref={thumbRef} className="range-slider_thumb"></div>
         <div className="range-slider_line">
-          <div id={lineId} className="range-slider_line-fill"></div>
+          <div id={lineId} ref={lineRef} className="range-slider_line-fill"></div>
         </div>
         <input
           id={inputId}
+          ref={sliderRef}
           className="range-slider_input"
           type="range"
           min={min}
           max="100"
           step={step}
-          defaultValue={inputId === "rangeInput" ? levrageValue : levrage}
-          onChange={showSliderValue}
+          defaultValue={levrageValue?.toString()}
+          readOnly
         />
       </div>
       <div className="flex items-center justify-between mt-[7px] relative z-[4]">
         {[0, 25, 50, 75, 100].map((value) => (
-          <p key={value} className="text-[12px] dark:text-white text-black ml-[8px]">
+          <p key={value} className="text-[12px] dark:text-white text-black">
             {value}{rangetype}
           </p>
         ))}

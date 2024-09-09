@@ -71,8 +71,8 @@ const FutureTrading = (props: Session) => {
     }, []);
 
     useEffect(() => {
-        console.log(slug,"=jkhdfkhsd");
-        console.log(props?.serverSlug,"=serverslug");
+        // console.log(slug,"=jkhdfkhsd");
+        // console.log(props?.serverSlug,"=serverslug");
         
 
         let ccurrentToken = props.coinList.filter((item: any) => {
@@ -98,7 +98,7 @@ const FutureTrading = (props: Session) => {
     const socketListenerRef = useRef<(event: MessageEvent) => void>();
     useEffect(() => {
 
-        console.log(slug,"===slug in "); 
+        // console.log(slug,"===slug in "); 
         
         
         const handleSocketMessage = async (event: any) => {
@@ -313,7 +313,8 @@ const FutureTrading = (props: Session) => {
             let orderBookData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/orderbook?coinid=${ccurrentToken[0]?.coin_id}`, {
                 method: "GET",
             }).then(response => response.json());
-
+            
+            
             setPositionRecord(orderBookData?.data);
         } catch (error) {
 
