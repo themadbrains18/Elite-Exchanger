@@ -98,6 +98,9 @@ const FutureTrading = (props: Session) => {
     const socketListenerRef = useRef<(event: MessageEvent) => void>();
     useEffect(() => {
 
+        // console.log(slug,"===slug in "); 
+        
+        
         const handleSocketMessage = async (event: any) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
@@ -309,7 +312,8 @@ const FutureTrading = (props: Session) => {
             let orderBookData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/orderbook?coinid=${ccurrentToken[0]?.coin_id}`, {
                 method: "GET",
             }).then(response => response.json());
-
+            
+            
             setPositionRecord(orderBookData?.data);
         } catch (error) {
 

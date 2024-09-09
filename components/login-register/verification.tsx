@@ -45,7 +45,7 @@ const Verification = (props: propsData) => {
           body: JSON.stringify(record),
         }
       ).then((response) => response.json());
-      console.log(userExist,"===========");
+      
       
       if (props?.api === "forget") {
         if (userExist.status === 200) {
