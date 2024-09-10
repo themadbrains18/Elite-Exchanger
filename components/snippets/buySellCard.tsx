@@ -176,9 +176,27 @@ const BuySellCard = (props: DynamicId) => {
     }
   }
 
-  const scientificToDecimal = (value: number): string => {
-    return value.toFixed(10).replace(/\.?0+$/, ""); // Convert to decimal format, trimming unnecessary zeros
+  const scientificToDecimal = (value: any): string => {
+
+    
+
+  let val=   value.toFixed(10) // Convert to decimal format, trimming unnecessary zeros
+
+     val= val.replace(/\.?0+$/, "");
+    //  console.log(val.replace(/\.?0+$/, ""),"==value");
+     
+
+     return val
+     
   };
+
+   const truncateToNumber = (num: any, decimals: number) => {
+    const regex = new RegExp(`^-?\\d+(?:\\.\\d{0,${decimals}})?`);
+    const match = num?.toString().match(regex);
+
+
+    return match ? parseFloat(match[0]) : num;
+};
 
   const onHandleSubmit = async (data: any) => {
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
@@ -554,7 +572,8 @@ const BuySellCard = (props: DynamicId) => {
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
                   {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
                   <p className="md-text w-full">
-                    {currencyFormatter(Number(truncateNumber(price, 8)))}
+                    {scientificToDecimal(truncateToNumber(price.toFixed(12),8))}
+    
                     &nbsp;{active1 === 1 ? 'USDT' : props?.token?.symbol}</p>
 
                   <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className={`min-w-[24px] ${selectedToken?.symbol === "XRP" && "bg-white rounded-full "}`} alt="wallet2" width={24} height={24} />

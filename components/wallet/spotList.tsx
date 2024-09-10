@@ -13,7 +13,7 @@ import TransferModal from '../future/popups/transfer-modal';
 import WithdrawAuthenticationModelPopup from './withdrawAuthentication';
 import { currencyFormatter } from '../snippets/market/buySellCard';
 import { useWebSocket } from '@/libs/WebSocketContext';
-import { truncateNumber } from '@/libs/subdomain';
+import { scientificToDecimal, truncateNumber } from '@/libs/subdomain';
 import RestrictionNotice from '../snippets/restrictionNotice';
 
 interface propsData {
@@ -188,7 +188,7 @@ const SpotList = (props: propsData): any => {
                     </div>
                   </td>
                   <td>
-                    <p className="info-14-18 dark:text-white  lg:text-start text-center">{currencyFormatter(truncateNumber(item?.balance, 8))}</p>
+                    <p className="info-14-18 dark:text-white  lg:text-start text-center">{scientificToDecimal(truncateNumber(item?.balance.toFixed(12), 8))}</p>
                   </td>
                   <td className="lg:text-start text-end">
                     <p className="info-14-18 dark:text-white">${item.token !== null ? currencyFormatter(truncateNumber(item?.token?.price, 8)) : currencyFormatter(truncateNumber(item?.global_token?.price, 8))}</p>
@@ -344,9 +344,9 @@ const SpotList = (props: propsData): any => {
                         <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
                       </div>
                     </div>
-                  </div>
+                  </div>  
                   <div>
-                    <p className="info-14-18 dark:text-white  lg:text-start text-center">{currencyFormatter(truncateNumber(item?.balance,8))}</p>
+                    <p className="info-14-18 dark:text-white  lg:text-start text-center">{scientificToDecimal(truncateNumber(item?.balance.toFixed(12),8))}</p>
                   </div>
                   <div className="iconParent lg:text-start text-end flex items-center justify-between">
                     <p className="info-14-18 dark:text-white">${item.token !== null ? currencyFormatter(item?.token?.price.toFixed(5)) : currencyFormatter(item?.global_token?.price.toFixed(5))}</p>
