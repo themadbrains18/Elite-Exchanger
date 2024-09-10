@@ -931,7 +931,7 @@ const ChartTabs = (props: propsData) => {
                           </div>
 
                           <div className="py-[10px] md:py-[15px] col-span-2 px-0 md:px-[5px]  md:block hidden">
-                            <p className="info-14-18 dark:text-white ">
+                            <p className="info-14-18 dark:text-white">
                               {/* {item?.fee?.toFixed(8)} */}
                              {scientificToDecimal(Number(truncateNumber(item.fee.toFixed(12), 10)))}
                             </p>
@@ -952,7 +952,6 @@ const ChartTabs = (props: propsData) => {
                               {currencyFormatter(truncateNumber(item.token_amount, 8))}
                             </p>
                           </div>
-
                           <div className="py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                             <p
                               className={`info-14-18  ${item.status === true
@@ -1081,10 +1080,10 @@ const ChartTabs = (props: propsData) => {
                                     {elm.market_type}
                                   </p>
                                 </div>
-                                <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden">
-                                  <p className="info-14-18 dark:text-white ">
+                                <div className="py-[10px] md:py-[15px] px-0 md:px-[5px]  md:block hidden adasdadas">
+                                  {/* <p className="info-14-18 dark:text-white ">
                                     {elm?.fee?.toFixed(8)}
-                                  </p>
+                                  </p> */}
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px] col-span-2 md:block hidden">
                                   <p className="info-14-18 dark:text-white">
