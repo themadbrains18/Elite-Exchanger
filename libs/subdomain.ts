@@ -36,7 +36,7 @@ export const truncateNumber = (num: number, decimals: number) => {
 
     const regex = new RegExp(`^-?\\d+(?:\\.\\d{0,${decimals}})?`);
     const match = num?.toString().match(regex);
-    // console.log(match,'=======match');
+
 
     return match ? parseFloat(match[0]) : num;
 }
