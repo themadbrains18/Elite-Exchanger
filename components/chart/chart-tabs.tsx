@@ -975,7 +975,7 @@ const ChartTabs = (props: propsData) => {
                         {sortBlogPostsByDate &&
                           <button
                       
-                            className="absolute top-[43px] right-[15px]  max-w-[10px] w-full cursor-pointer arrow-icon"
+                            className="absolute top-[43px] right-[22px]  max-w-[10px] w-full cursor-pointer arrow-icon"
                             
                           >
                             <svg
