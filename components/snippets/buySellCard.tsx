@@ -183,7 +183,7 @@ const BuySellCard = (props: DynamicId) => {
   let val=   value.toFixed(10) // Convert to decimal format, trimming unnecessary zeros
 
      val= val.replace(/\.?0+$/, "");
-     console.log(val.replace(/\.?0+$/, ""),"==value");
+    //  console.log(val.replace(/\.?0+$/, ""),"==value");
      
 
      return val
