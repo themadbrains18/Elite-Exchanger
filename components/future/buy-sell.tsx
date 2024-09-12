@@ -284,7 +284,7 @@ const BuySell = (props: fullWidth) => {
     let obj;
 
     if (orderMarkeType === "market") {
-      console.log(sizeValue,"=entryPrice");
+      // console.log(sizeValue,"=entryPrice");
       
       if(showNes===1 && (entryPrice == undefined || entryPrice == null || entryPrice === 0 || entryPrice < 0 || entryPrice === "") ){
         setEntryPriceValidate("Price must be greater than '0'");
@@ -1175,15 +1175,15 @@ const BuySell = (props: fullWidth) => {
                           submitForm('market');
                         }
                         else if (marketType === "limit") {
-                          console.log("heresadasda");
+                          // console.log("heresadasda");
                           let market_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
                           if (market_price < entryPrice) {
-                            console.log("in this", market_price, "entry pricesada", entryPrice);
+                            // console.log("in this", market_price, "entry pricesada", entryPrice);
 
                             setShortConfirm(true);
                           }
                           else {
-                            console.log("here in elseewrwee");
+                            // console.log("here in elseewrwee");
                             submitForm('limit')
                           }
                         }

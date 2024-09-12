@@ -20,7 +20,7 @@ const TopBar = (props: showSidebar) => {
 
     useEffect(()=>{
 
-        console.log(props?.currentToken,"=hkjdhfs");
+        // console.log(props?.currentToken,"=hkjdhfs");
         
     },[props?.currentToken])
 

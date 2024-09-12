@@ -34,7 +34,6 @@ const TradeConfirmPopupModal = (props: showPopup) => {
     clickOutSidePopupClose({ wrapperRef, closePopup });
 
     useEffect(()=>{
-        console.log(props?.confirmOrderData,"======props?.confirmOrderData?");
 
         if(props.finalOrderSubmit === false){
             setDisable(false);
