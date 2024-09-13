@@ -283,7 +283,7 @@ const PositionsTable = (props: propsData) => {
       <div className={`bg-black z-[9] duration-300 fixed top-0 left-0 h-full w-full opacity-0 invisible ${modelOverlay && '!opacity-[70%] !visible'}`}></div>
       <ProfitLossModal setModelOverlay={setModelOverlay} setModelPopup={setModelPopup} modelPopup={modelPopup} modelOverlay={modelOverlay} currentToken={props?.currentToken} entryPrice={selectedPosition?.entry_price} leverage={selectedPosition?.leverage} sizeValue={selectedPosition?.size} show={selectedPosition?.direction} actionType="position" position={selectedPosition} />
       {active === true &&
-        <ConfirmationClouserModel setActive={setActive} positionData={positionData} setShow={setShow} title='Confirm Position Closure' message='Are you sure to want to close this position.' actionPerform={actionPerform} show={show} />
+        <ConfirmationClouserModel setActive={setActive} positionData={positionData} setShow={setShow} title='Confirm Position Closure' message='' actionPerform={actionPerform} show={show} />
       }
 
     </>
