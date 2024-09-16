@@ -25,6 +25,7 @@ const ChartTabsFuture = (props: propsData) => {
     const router = useRouter();
     const { slug } = router.query;
 
+    // Get all Profit Loss Orders
     const getProfitLossOrder = async () => {
         try {
             if (session) {
