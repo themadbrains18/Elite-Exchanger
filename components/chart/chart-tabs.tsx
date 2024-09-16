@@ -117,8 +117,6 @@ const ChartTabs = (props: propsData) => {
 
       const updatedCardData: any = await Promise.all(coins.map(fetchDataForCoin));
       // console.log(updatedCardData,"=updatedCardData");
-
-
       setCoins(updatedCardData)
     };
 
@@ -186,10 +184,8 @@ const ChartTabs = (props: propsData) => {
   
   useEffect(() => {
     const handleRouteChangeComplete = () => handleRouteChange();
-  
     router.events.on('routeChangeComplete', handleRouteChangeComplete);
-  
-    // Cleanup the event listener
+    // Cleanup the event listener //
     return () => {
       router.events.off('routeChangeComplete', handleRouteChangeComplete);
     };
@@ -1149,12 +1145,12 @@ const ChartTabs = (props: propsData) => {
 
         {active === true && (
           <ConfirmationModel
-            setActive={setActive}
-            setShow={setShow}
-            title={title}
-            message={message}
-            show={show}
-            actionPerform={actionPerform}
+              setActive={setActive}
+              setShow={setShow}
+              title={title}
+              message={message}
+              show={show}
+              actionPerform={actionPerform}
           />
         )}
       </div>

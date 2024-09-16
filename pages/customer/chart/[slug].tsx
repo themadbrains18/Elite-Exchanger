@@ -199,12 +199,12 @@ const Chart = (props: Session) => {
     slug = slug
 
     useEffect(() => {
-        const generateRandomWidth = () => {
+        const generateRandomWidth = (): number => {
           return Math.floor(Math.random() * (100 - 30 + 1)) + 30;
         };
     
         const applyRandomWidths = () => {
-          let tmbbgoverlays = document.querySelectorAll('.tmb-bg-overlay');
+          let tmbbgoverlays = document.querySelectorAll<HTMLElement>('.tmb-bg-overlay');
           tmbbgoverlays.forEach((element) => {
             const randomWidth = generateRandomWidth();
             (element as HTMLElement).style.width = `${randomWidth}%`;
@@ -215,7 +215,7 @@ const Chart = (props: Session) => {
           applyRandomWidths(); 
         }, 1000);
     
-        return () => clearInterval(intervalId);
+        // return () => clearInterval(intervalId);
       }, []);
 
     return (
@@ -239,7 +239,6 @@ const Chart = (props: Session) => {
                                 <BuySellCard id={1} coins={allCoins} session={props.session} token={currentToken[0]} slug={slug} assets={props.assets} />
                                 {/* hidden on mobile */}
                                 <div className='lg:block hidden'>
-                                
                                     <OrderBook slug={slug} width={width} token={currentToken[0]} allTradeHistory={userTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} hlocData={hlocData} />
                                 </div>
                             </div>

@@ -173,6 +173,9 @@ const FutureTrading = (props: Session) => {
                     },
                 }).then(response => response.json());
 
+                
+                
+
                 setPositionData(positionData?.data);
             }
 

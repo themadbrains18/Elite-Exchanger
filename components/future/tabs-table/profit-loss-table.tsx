@@ -9,39 +9,26 @@ import { AES } from 'crypto-js';
 import { toast } from 'react-toastify';
 import ConfirmationClouserModel from '@/components/snippets/confirm-clouser';
 import moment from 'moment';
+import { useRouter } from 'next/router';
 
 interface propsData {
-    show: number
+    show: number;
+    getProfitLossOrder?:Function;
+    orders:any
 }
-const ProfitLossTable: React.FC<propsData> = ({ show }) => {
+const ProfitLossTable: React.FC<propsData> = ({ show , getProfitLossOrder , orders }) => {
 
     const { status, data: session } = useSession();
     const [active, setActive] = useState(false);
     const [showm, setShow] = useState(false);
     const [positionId, setPositionId] = useState('');
     const wbsocket = useWebSocket();
-    const [orders, setOrders] = useState([]);
 
     useEffect(() => {
-        getProfitLossOrder();
+        getProfitLossOrder && getProfitLossOrder();
     }, [show]);
 
-    const getProfitLossOrder = async () => {
-        try {
-            if (session) {
-                let orderData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/profitlossorder`, {
-                    method: "GET",
-                    headers: {
-                        "Authorization": session?.user?.access_token
-                    },
-                }).then(response => response.json());
-                
-                setOrders(orderData?.data);
-            }
-        } catch (error) {
-
-        }
-    }
+    
     function formatDate(date: any) {
         const options: {} = { year: 'numeric', month: 'short', day: '2-digit' };
         return new Date(date).toLocaleDateString('en-US', options)
@@ -82,7 +69,7 @@ const ProfitLossTable: React.FC<propsData> = ({ show }) => {
                     toast.success(closeReponse?.data?.message);
                     setActive(false);
                     setShow(false);
-                    getProfitLossOrder();
+                    getProfitLossOrder && getProfitLossOrder();
                 }
             }
         } catch (error) {
@@ -90,7 +77,8 @@ const ProfitLossTable: React.FC<propsData> = ({ show }) => {
         }
     }
 
-    // console.log(orders,"=============orders");
+    const router = useRouter();
+    const { slug } = router.query;
     return (
         <>
             <div className="overflow-x-auto h-[234px]">
@@ -143,7 +131,7 @@ const ProfitLossTable: React.FC<propsData> = ({ show }) => {
                     </thead>
                     <tbody>
                         {
-                            session && orders && orders.length > 0 && orders?.map((item: any, index: number) => {
+                            session && orders && orders.length > 0 && orders?.filter((item: any) => item?.contract === slug).map((item: any, index: number) => {
                                 return (
                                     <tr key={index}>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>

@@ -1,6 +1,6 @@
 import IconsComponent from '@/components/snippets/icons';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProfitLossModal from '../popups/profit-loss-model';
 import { useSession } from 'next-auth/react';
 import { ToastContainer, toast } from 'react-toastify';
@@ -11,6 +11,7 @@ import { useWebSocket } from '@/libs/WebSocketContext';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import ConfirmationClouserModel from '@/components/snippets/confirm-clouser';
 import { truncateNumber } from '@/libs/subdomain';
+import { useRouter } from 'next/router';
 
 interface propsData {
   positions?: any;
@@ -101,6 +102,13 @@ const PositionsTable = (props: propsData) => {
       console.log(error, "=error in close position");
     }
   }
+  
+
+  const router = useRouter();
+  const { slug } = router.query;
+  
+
+
 
   return (
     <>
@@ -184,98 +192,98 @@ const PositionsTable = (props: propsData) => {
             </tr>
           </thead>
           <tbody>
-            {
-              session && props?.positions && props?.positions.length > 0 && props?.positions?.map((item: any, index: number) => {
+              {
+                session && props?.positions && props?.positions.length > 0 && props?.positions?.filter((item: any) => item?.symbol === slug).map((item: any, index: number) => {
+                  let tpsl = '--';
+                  {
+                    
+                    item?.futureOpenOrders !== null && item?.futureOpenOrders?.map((oo: any) => {
+                      if (tpsl === '--' && oo?.type === 'take profit market') {
+                        tpsl = oo?.trigger;
+                      }
+                      else if (oo?.type === 'stop market') {
+                        tpsl = tpsl + '/' + oo?.trigger;
+                      }
+                    })
+                  }
+                  return (
+                    <tr key={index}>
+                      <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                        <div className={`pl-[5px] pt-[5px] border-l-[5px] ${item?.direction === 'long' ? 'border-[#03A66D]' : 'border-[#f74646]'} flex gap-[8px] items-center`}>
+                          <div>
+                            <p className="info-14 !text-[12px] dark:text-white">{item.symbol}</p>
+                            <p className={`top-label ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.leverage_type} {item.leverage}x</p>
+                          </div>
+                          {/* <p className="bg-[#13c2c21f] px-[5px] text-[#13c2c2] text-[12px]">{item.leverage}x</p> */}
+                        </div>
+                      </td>
+                      <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                        <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction !== 'long' ? '-' : ''}{item?.qty}</p>
+                      </td>
+                      <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                        <p className="top-label !font-[600] dark:!text-white !text-black">{item?.size}</p>
+                      </td>
+                      <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                        <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(truncateNumber(item?.entry_price, 6))}</p>
+                      </td>
+                      <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                        <p className="top-label !font-[600] dark:!text-white !text-black">{item?.token !== null ? currencyFormatter(truncateNumber(item?.token?.price, 6)) : currencyFormatter(truncateNumber(item?.global_token?.price, 5))}</p>
+                      </td>
+                      <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                        <p className="top-label !text-[#f7a600] !font-[600]">{currencyFormatter(truncateNumber(item?.liq_price, 6))}</p>
+                      </td>
+                      <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                        <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction}</p>
+                      </td>
+                      <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                        <p className="top-label !font-[600] dark:!text-white !text-black">{truncateNumber(item?.margin, 6)}</p>
+                        <p className="top-label !font-[600] dark:!text-white !text-black">  </p>
+                      </td>
+                      <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                        <div className='flex items-center gap-[5px]'>
+                          <div>
+                            <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{item?.pnl} USDT</p>
+                            {/* <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}></p> */}
+                          </div>
+                          {/* <IconsComponent type='sendIcon' /> */}
+                        </div>
+                      </td>
+                      <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                        <div className='flex items-center gap-[5px]'>
+                          <div >
+                            <p className={`top-label !font-[600] !text-sell`}>-{item?.realized_pnl} USDT</p>
+                            {/* <p className={`top-label !font-[600] !text-sell`}></p> */}
+                          </div>
+                          {/* <IconsComponent type='sendIcon' /> */}
+                        </div>
+                      </td>
+                      <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%] cursor-pointer'>
+                        <div className='flex items-center'>
+                          <p className='top-label dark:!text-[#cccc56] !font-[600] pr-[20px]' onClick={() => { closePositionOrder(item?.id); setPositionId(item?.id); }}>Close Position</p>
 
-                let tpsl = '--';
-                {
-                  item?.futureOpenOrders !== null && item?.futureOpenOrders?.map((oo: any) => {
-                    if (tpsl === '--' && oo?.type === 'take profit market') {
-                      tpsl = oo?.trigger;
-                    }
-                    else if (oo?.type === 'stop market') {
-                      tpsl = tpsl + '/' + oo?.trigger;
-                    }
-                  })
-                }
-                return (
-                  <tr key={index}>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <div className={`pl-[5px] pt-[5px] border-l-[5px] ${item?.direction === 'long' ? 'border-[#03A66D]' : 'border-[#f74646]'} flex gap-[8px] items-center`}>
-                        <div>
-                          <p className="info-14 !text-[12px] dark:text-white">{item.symbol}</p>
-                          <p className={`top-label ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.leverage_type} {item.leverage}x</p>
                         </div>
-                        {/* <p className="bg-[#13c2c21f] px-[5px] text-[#13c2c2] text-[12px]">{item.leverage}x</p> */}
-                      </div>
-                    </td>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction !== 'long' ? '-' : ''}{item?.qty}</p>
-                    </td>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.size}</p>
-                    </td>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(truncateNumber(item?.entry_price, 6))}</p>
-                    </td>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{item?.token !== null ? currencyFormatter(truncateNumber(item?.token?.price, 6)) : currencyFormatter(truncateNumber(item?.global_token?.price, 5))}</p>
-                    </td>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !text-[#f7a600] !font-[600]">{currencyFormatter(truncateNumber(item?.liq_price, 6))}</p>
-                    </td>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction}</p>
-                    </td>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">{truncateNumber(item?.margin, 6)}</p>
-                      <p className="top-label !font-[600] dark:!text-white !text-black">  </p>
-                    </td>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <div className='flex items-center gap-[5px]'>
-                        <div>
-                          <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{item?.pnl} USDT</p>
-                          {/* <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}></p> */}
+                      </td>
+                      <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                        <div className='flex items-center gap-[5px]'>
+                          <div>
+                            {item?.profitlosses && item?.profitlosses.length > 0 &&
+                              <div className="top-label !font-[600] flex ">
+                                <p className='!text-buy'>{item?.profitlosses[0]?.trigger_profit}</p>/<p className='!text-sell'>{item?.profitlosses[0]?.trigger_loss}</p>
+                              </div>
+                            }
+                            {item?.profitlosses && item?.profitlosses.length === 0 &&
+                              <div className="top-label !font-[600] flex ">--</div>
+                            }
+                          </div>
+                          <div className='cursor-pointer' onClick={() => { setModelPopup(1); setModelOverlay(true); setSelectedPosition(item) }}>
+                            <IconsComponent type='editIcon' />
+                          </div>
                         </div>
-                        {/* <IconsComponent type='sendIcon' /> */}
-                      </div>
-                    </td>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <div className='flex items-center gap-[5px]'>
-                        <div >
-                          <p className={`top-label !font-[600] !text-sell`}>-{item?.realized_pnl} USDT</p>
-                          {/* <p className={`top-label !font-[600] !text-sell`}></p> */}
-                        </div>
-                        {/* <IconsComponent type='sendIcon' /> */}
-                      </div>
-                    </td>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%] cursor-pointer'>
-                      <div className='flex items-center'>
-                        <p className='top-label dark:!text-[#cccc56] !font-[600] pr-[20px]' onClick={() => { closePositionOrder(item?.id); setPositionId(item?.id); }}>Close Position</p>
-
-                      </div>
-                    </td>
-                    <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                      <div className='flex items-center gap-[5px]'>
-                        <div>
-                          {item?.profitlosses && item?.profitlosses.length > 0 &&
-                            <div className="top-label !font-[600] flex ">
-                              <p className='!text-buy'>{item?.profitlosses[0]?.trigger_profit}</p>/<p className='!text-sell'>{item?.profitlosses[0]?.trigger_loss}</p>
-                            </div>
-                          }
-                          {item?.profitlosses && item?.profitlosses.length === 0 &&
-                            <div className="top-label !font-[600] flex ">--</div>
-                          }
-                        </div>
-                        <div className='cursor-pointer' onClick={() => { setModelPopup(1); setModelOverlay(true); setSelectedPosition(item) }}>
-                          <IconsComponent type='editIcon' />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                )
-              })
-            }
+                      </td>
+                    </tr>
+                  )
+                })
+              }
           </tbody>
         </table>
       </div>

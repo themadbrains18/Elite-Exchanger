@@ -158,7 +158,6 @@ const OrderBookMobile = (props: propsData) => {
                                         </div>
                                     }
                                 </div>
-
                             </div>
                         </div>
                     }
