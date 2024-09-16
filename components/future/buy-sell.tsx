@@ -72,7 +72,7 @@ const BuySell = (props: fullWidth) => {
   const [assetsBalance, setAssetsBalance] = useState(0);
   const [assetsList, setAssetsList] = useState();
   const [percentage, setPercentage] = useState(0)
-  
+
 
   const [leverage, setLerverage] = useState(0)
 
@@ -120,6 +120,10 @@ const BuySell = (props: fullWidth) => {
 
 
   useEffect(() => {
+  
+    let value=localStorage.getItem('preference') || "Qty"
+    setPreferenceSymbol(value)
+    
     if (showNes === 2 && percentage > 0) {
       onChangeSizeInPercentage(percentage)
     }
@@ -280,18 +284,18 @@ const BuySell = (props: fullWidth) => {
   // ===================================================================//
   const submitForm = async (orderMarkeType: string) => {
 
-    
+
     let obj;
 
     if (orderMarkeType === "market") {
-      console.log(sizeValue,"=entryPrice");
-      
-      if(showNes===1 && (entryPrice == undefined || entryPrice == null || entryPrice === 0 || entryPrice < 0 || entryPrice === "") ){
+      // console.log(sizeValue,"=entryPrice");
+
+      if (showNes === 1 && (entryPrice == undefined || entryPrice == null || entryPrice === 0 || entryPrice < 0 || entryPrice === "")) {
         setEntryPriceValidate("Price must be greater than '0'");
         return
       }
 
-      if (sizeValue === 0 || sizeValue < 0 || sizeValue === "" ) {
+      if (sizeValue === 0 || sizeValue < 0 || sizeValue === "") {
         setSizeValidate("Amount must be greater than '0'");
         return;
       }
@@ -309,7 +313,7 @@ const BuySell = (props: fullWidth) => {
       }
 
       let qty: any = sizeValue / marketPrice;
-      qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
+      qty = qty.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0];
 
 
       if (orderType === "qty") {
@@ -350,18 +354,18 @@ const BuySell = (props: fullWidth) => {
         order_type: orderType,
         leverage_type: props?.marginMode?.margin,
         market_type: orderMarkeType,
-        qty: parseFloat(qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0]),
+        qty: parseFloat(qty.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0]),
         position_mode: positionMode
       };
     }
     else {
       if (entryPrice == undefined || entryPrice == null || entryPrice === 0 || entryPrice < 0 || entryPrice === "") {
         setEntryPriceValidate("Price must be greater than '0'");
-        return;  
+        return;
       }
-      
-      if (isNaN(sizeValue)|| sizeValue == undefined || sizeValue == null || sizeValue === 0 || sizeValue < 0 || sizeValue === "") {
-      
+
+      if (isNaN(sizeValue) || sizeValue == undefined || sizeValue == null || sizeValue === 0 || sizeValue < 0 || sizeValue === "") {
+
         setSizeValidate("Amount must be greater than '0'");
         return;
       }
@@ -382,7 +386,7 @@ const BuySell = (props: fullWidth) => {
       }
 
       let qty: any = sizeValue / marketPrice;
-      qty = qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
+      qty = qty.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0];
 
 
       if (orderType === "qty") {
@@ -423,7 +427,7 @@ const BuySell = (props: fullWidth) => {
         order_type: orderType,
         leverage_type: props?.marginMode?.margin,
         coin_id: props?.currentToken?.coin_id,
-        qty: parseFloat(qty.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0]),
+        qty: parseFloat(qty.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0]),
         position_mode: positionMode
       };
     }
@@ -582,6 +586,12 @@ const BuySell = (props: fullWidth) => {
   // =====Validation in case of amount more than enter wallet value=====//
   // ===================================================================//
   const onChangeSizeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+
+    let value:any= e.target.value
+
+    const regex = /^\d{0,10}(\.\d{0,4})?$/;
+
+                 
     setLerverage(0);
     let sliderThumb = document.getElementById("rangeThumb") as HTMLDivElement;
     let rangeLine = document.getElementById("rangeLine") as HTMLDivElement;
@@ -593,44 +603,46 @@ const BuySell = (props: fullWidth) => {
       inputPercent?.value == "0";
       rangeLine.setAttribute("style", 'width:0;');
     }
-
-    const value = parseFloat(e.target.value) == 0 ? 0.00 : parseFloat(e.target.value);
-
-    let marginValue = orderType === "qty" ? (marketType === 'limit' ? entryPrice * parseFloat(e.target.value) / props?.marginMode?.leverage : marketPrice * parseFloat(e.target.value)) / props?.marginMode?.leverage : parseFloat(e.target.value) / props?.marginMode?.leverage;
-
-    if (isNaN(value)) {
-      setSizeValue(''); // Reset sizeValue to its current state
-      return; // Exit early without updating state or applying further logic
-    }
-
-    else if (value !== 0 && value < props?.minTrade) {
-      setSizeValidate(`Minimum value: ${props?.minTrade}`)
-      // console.log(sizeValue,"==sizeValue");
-      return;
-    }
-    else {
-      setSizeValidate('')
-      setSizeValue(value);
-      setButtonStyle(false);
-
-      let leverage = props.marginMode.leverage;
-
-
-
-      if (marginValue > avaibalance) {
-        setButtonStyle(true);
-      }
-
-      const openPositionFee = (marginValue * 0.055) / 100;
-      const longClosePositionFee = ((marginValue * (leverage - 1)) / leverage * 0.055) / 100;
-      const shortClosePositionFee = (marginValue * ((leverage + 1) / leverage) * 0.055) / 100;
-
-      const longCost = marginValue / leverage + openPositionFee + longClosePositionFee;
-      const shortCost = marginValue / leverage + openPositionFee + shortClosePositionFee;
-
-      // console.log(longCost * leverage, '===========long Cost==========', shortCost * leverage, '============short Cost============');
-
-
+    if (regex.test(value) || value === "") {
+      
+           value = parseFloat(e.target.value) == 0 ? 0.00 : parseFloat(e.target.value);
+      
+          let marginValue = orderType === "qty" ? (marketType === 'limit' ? entryPrice * parseFloat(e.target.value) / props?.marginMode?.leverage : marketPrice * parseFloat(e.target.value)) / props?.marginMode?.leverage : parseFloat(e.target.value) / props?.marginMode?.leverage;
+      
+          if (isNaN(value)) {
+            setSizeValue(''); // Reset sizeValue to its current state
+            return; // Exit early without updating state or applying further logic
+          }
+      
+          else if (value !== 0 && value < props?.minTrade) {
+            setSizeValidate(`Minimum value: ${props?.minTrade}`)
+            // console.log(sizeValue,"==sizeValue");
+            return;
+          }
+          else {
+            setSizeValidate('')
+            setSizeValue(value);
+            setButtonStyle(false);
+      
+            let leverage = props.marginMode.leverage;
+      
+      
+      
+            if (marginValue > avaibalance) {
+              setButtonStyle(true);
+            }
+      
+            const openPositionFee = (marginValue * 0.055) / 100;
+            const longClosePositionFee = ((marginValue * (leverage - 1)) / leverage * 0.055) / 100;
+            const shortClosePositionFee = (marginValue * ((leverage + 1) / leverage) * 0.055) / 100;
+      
+            const longCost = marginValue / leverage + openPositionFee + longClosePositionFee;
+            const shortCost = marginValue / leverage + openPositionFee + shortClosePositionFee;
+      
+            // console.log(longCost * leverage, '===========long Cost==========', shortCost * leverage, '============short Cost============');
+      
+      
+          }
     }
 
   };
@@ -742,14 +754,14 @@ const BuySell = (props: fullWidth) => {
     setMarketType('market')
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     const storedPositionMode = localStorage.getItem('positionMode');
-    if(storedPositionMode == "Hedge"){
+    if (storedPositionMode == "Hedge") {
       setPositionMode('Hedge');
-    }else{
+    } else {
       setPositionMode('oneWay');
     }
-  },[])
+  }, [])
 
   return (
     <>
@@ -809,7 +821,7 @@ const BuySell = (props: fullWidth) => {
               if (showNes === 3) {
                 onCoinDropDownChange("USDT");
               }
-              if(showNes===1){
+              if (showNes === 1) {
                 setMarketType('limit')
               }
               else {
@@ -968,7 +980,7 @@ const BuySell = (props: fullWidth) => {
                   step="any"
                   min={props?.minTrade}
                   name="token_amount"
-
+                  pattern="^\d{0,10}(\.\d{0,4})?$"
                   className="bg-[transparent] max-w-full w-full outline-none md-text px-[5px] asdsadsad"
                 />
               </div>
@@ -1175,15 +1187,15 @@ const BuySell = (props: fullWidth) => {
                           submitForm('market');
                         }
                         else if (marketType === "limit") {
-                          console.log("heresadasda");
+                          // console.log("heresadasda");
                           let market_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
                           if (market_price < entryPrice) {
-                            console.log("in this", market_price, "entry pricesada", entryPrice);
+                            // console.log("in this", market_price, "entry pricesada", entryPrice);
 
                             setShortConfirm(true);
                           }
                           else {
-                            console.log("here in elseewrwee");
+                            // console.log("here in elseewrwee");
                             submitForm('limit')
                           }
                         }

@@ -281,7 +281,7 @@ const FutureTrading = (props: Session) => {
     // ================================================ //
     const getCoinHLOCData = async () => {
         try {
-            console.log("herer");
+            // console.log("herer");
             
             let ccurrentToken = props.coinList.filter((item: any) => {
                 return item.coin_symbol + item.usdt_symbol === props?.serverSlug

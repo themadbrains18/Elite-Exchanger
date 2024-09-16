@@ -73,6 +73,7 @@ const OrderPreferenceModal = (props: propsData) => {
                 className="flex justify-between items-center w-full mb-[5px]"
                 onClick={() => {
                   setValue("Qty")
+                  localStorage.setItem('preference','Qty')
                 }}
               >
                 <div
@@ -128,7 +129,8 @@ const OrderPreferenceModal = (props: propsData) => {
           </div>
           <div className="flex justify-between mt-20">
             <div>
-              <div className="flex justify-between items-center w-full mb-[5px]" onClick={() => { setValue("Value") }}>
+              <div className="flex justify-between items-center w-full mb-[5px]" onClick={() => { setValue("Value"); localStorage.setItem('preference','Value')
+ }}>
                 <div
                   className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`}
                 >

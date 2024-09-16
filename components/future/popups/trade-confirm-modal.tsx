@@ -34,10 +34,11 @@ const TradeConfirmPopupModal = (props: showPopup) => {
     clickOutSidePopupClose({ wrapperRef, closePopup });
 
     useEffect(()=>{
-        console.log(props?.confirmOrderData,"======props?.confirmOrderData?");
 
         if(props.finalOrderSubmit === false){
-            setDisable(false);
+            setTimeout(()=>{
+                setDisable(false);
+            },3500)
         }
     },[props.finalOrderSubmit])
 
@@ -122,7 +123,7 @@ const TradeConfirmPopupModal = (props: showPopup) => {
 
                                 setTimeout(()=>{
                                     setDisable(false)
-                                },5000)
+                                },3500)
 
                             }} >Confirm</button>
                     </div>

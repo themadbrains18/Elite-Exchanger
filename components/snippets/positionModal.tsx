@@ -16,7 +16,7 @@ const PositionModal = (props: propsData) => {
 
   const [value, setValue] = useState(props?.positionMode);
 
-  console.log(props?.positionMode,"=========dfsf56sd5f=====");
+  // console.log(props?.positionMode,"=========dfsf56sd5f=====");
   
 
   useEffect(() => {
