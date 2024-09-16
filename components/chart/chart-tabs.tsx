@@ -995,15 +995,10 @@ const ChartTabs = (props: propsData) => {
                           </button>
                         }
                         <div className={`h-0 overflow-hidden duration-300 flex flex-col-reverse tmb-height`}  ref={elementRef}>
-
                           {sortBlogPostsByDate && sortBlogPostsByDate.length > 0 && sortBlogPostsByDate?.map((elm: any, ind: number) => {
 
                             let classByStatus = "";
                             let status = "";
-                            // if (elm?.status === false && (item?.market_order_histroys.length === (ind+1) || ind === 0)) {
-                            //   classByStatus = 'text-gamma';
-                            //   status = "Initial"
-                            // }
                             if (elm?.status === false && elm?.isCanceled === false) {
                               classByStatus = 'text-gamma'
                               status = "Initial"

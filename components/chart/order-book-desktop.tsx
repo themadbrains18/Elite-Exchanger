@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Context from "../contexts/context";
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { currencyFormatter } from '../snippets/market/buySellCard';
 import { truncateNumber } from '@/libs/subdomain';
 
@@ -11,6 +11,7 @@ interface propsData {
     sellTrade?:any;
     BuyTrade?:any;
     hlocData?:any;
+    width?:Number;
 }
 
 const OrderBook = (props: propsData) => {
@@ -18,7 +19,11 @@ const OrderBook = (props: propsData) => {
     const [show, setShow] = useState(1);
     const [lastsellBid, setLastsellBid] = useState();
     const { mode } = useContext(Context);
+
     let isLastItem;
+
+    
+
     return (
         <div className='mt-30 px-30 py-40 rounded-10  bg-white dark:bg-d-bg-primary'>
             {/* ta cta */}
@@ -67,7 +72,9 @@ const OrderBook = (props: propsData) => {
                                                 <p className='info-12 !text-[14px] z-[2] !text-buy whitespace-nowrap'>$ {currencyFormatter(truncateNumber(item?.limit_usdt,8))}</p>
                                                 <p className='info-12 !text-[14px] z-[2]  text-center'>{currencyFormatter(truncateNumber(item?.token_amount,8))}</p>
                                                 <p className='info-12  text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(truncateNumber(item?.volume_usdt,8))}</p>
-                                                <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
+                                                <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green tmb-bg-overlay duration-300' style={{
+                                                    width: `${props?.width}%`,
+                                                }}></div>
                                             </div>
                                         }
                                     })}
@@ -119,7 +126,9 @@ const OrderBook = (props: propsData) => {
                                                 <p className='info-12 !text-[14px] z-[2] !text-sell whitespace-nowrap'>$ {currencyFormatter(truncateNumber(item?.limit_usdt,8))}</p>
                                                 <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(truncateNumber(item?.token_amount,8))}</p>
                                                 <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(truncateNumber(item?.volume_usdt,8))}</p>
-                                                <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
+                                                <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light duration-300 tmb-bg-overlay' style={{
+                                                    width: `${props?.width}%`,
+                                                }}></div>
                                             </div>
                                         }
                                     })}
@@ -166,7 +175,9 @@ const OrderBook = (props: propsData) => {
                                                 <p className='info-12 !text-[14px] z-[2] !text-sell whitespace-nowrap'>$ {currencyFormatter(truncateNumber(item?.limit_usdt,8))}</p>
                                                 <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(truncateNumber(item?.token_amount,8))}</p>
                                                 <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(truncateNumber(item?.volume_usdt,8))}</p>
-                                                <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
+                                                <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light duration-300 tmb-bg-overlay' style={{
+                                                    width: `${props?.width}%`,
+                                                }}></div>
                                             </div>
                                         }
                                     })}
@@ -219,7 +230,9 @@ const OrderBook = (props: propsData) => {
                                                 <p className='info-12 !text-[14px] z-[2] !text-buy whitespace-nowrap'>$ {currencyFormatter(truncateNumber(item?.limit_usdt,8))}</p>
                                                 <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(truncateNumber(item?.token_amount,8))}</p>
                                                 <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(truncateNumber(item?.volume_usdt,8))}</p>
-                                                <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
+                                                <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green tmb-bg-overlay duration-300' style={{
+                                                    width: `${props?.width}%`,
+                                                }}></div>
                                             </div>
                                         }
                                     })}
@@ -281,7 +294,9 @@ const OrderBook = (props: propsData) => {
                                         <p className='info-12 !text-[14px] z-[2] !text-buy whitespace-nowrap'>$ {currencyFormatter(truncateNumber(item?.limit_usdt,8))}</p>
                                         <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(truncateNumber(item?.token_amount,8))}</p>
                                         <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(truncateNumber(item?.volume_usdt,8))}</p>
-                                        <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green'></div>
+                                        <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-green duration-300 tmb-bg-overlay' style={{
+                                                    width: `${props?.width}%`,
+                                                }}></div>
                                     </div>
                                 }
                                 else {
@@ -289,7 +304,9 @@ const OrderBook = (props: propsData) => {
                                         <p className='info-12 !text-[14px] z-[2] !text-sell whitespace-nowrap'>$ {currencyFormatter(truncateNumber(item?.limit_usdt,8))}</p>
                                         <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(truncateNumber(item?.token_amount,8))}</p>
                                         <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(truncateNumber(item?.volume_usdt,8))}</p>
-                                        <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light'></div>
+                                        <div className='absolute top-0 z-[1] right-0 w-[70%] h-full bg-red-light tmb-bg-overlay duration-300' style={{
+                                                    width: `${props?.width}%`,
+                                                }}></div>
                                     </div>
                                 }
                             })}

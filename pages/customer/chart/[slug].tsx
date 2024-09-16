@@ -40,6 +40,8 @@ const Chart = (props: Session) => {
     const [hlocData, setHLOCData] = useState<any>(Object);
     let { slug } = router.query;
     const wbsocket = useWebSocket();
+    const [width, setWidth] = useState<number>(0);
+
 
     useEffect(() => {
         if (window.innerWidth < 768) {
@@ -195,6 +197,27 @@ const Chart = (props: Session) => {
     }
 
     slug = slug
+
+    useEffect(() => {
+        const generateRandomWidth = () => {
+          return Math.floor(Math.random() * (100 - 30 + 1)) + 30;
+        };
+    
+        const applyRandomWidths = () => {
+          let tmbbgoverlays = document.querySelectorAll('.tmb-bg-overlay');
+          tmbbgoverlays.forEach((element) => {
+            const randomWidth = generateRandomWidth();
+            (element as HTMLElement).style.width = `${randomWidth}%`;
+          });
+        };
+        applyRandomWidths();
+        const intervalId = setInterval(() => {
+          applyRandomWidths(); 
+        }, 1000);
+    
+        return () => clearInterval(intervalId);
+      }, []);
+
     return (
         <>
             <div>
@@ -216,12 +239,13 @@ const Chart = (props: Session) => {
                                 <BuySellCard id={1} coins={allCoins} session={props.session} token={currentToken[0]} slug={slug} assets={props.assets} />
                                 {/* hidden on mobile */}
                                 <div className='lg:block hidden'>
-                                    <OrderBook slug={slug} token={currentToken[0]} allTradeHistory={userTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} hlocData={hlocData} />
+                                
+                                    <OrderBook slug={slug} width={width} token={currentToken[0]} allTradeHistory={userTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} hlocData={hlocData} />
                                 </div>
                             </div>
                             {/* hidden on desktop */}
                             <div className='lg:hidden'>
-                                <OrderBookMobile slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} hlocData={hlocData} />
+                                <OrderBookMobile width={width} slug={slug} token={currentToken[0]} allTradeHistory={allTradeHistory} sellTrade={sellTrade} BuyTrade={BuyTrade} hlocData={hlocData} />
                                 <ChartTabs slug={slug} coinsList={allCoins} openOrder={orders} tradehistory={userTradeHistory} />
                             </div>
                         </div>
