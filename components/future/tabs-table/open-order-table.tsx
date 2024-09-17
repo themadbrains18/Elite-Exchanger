@@ -9,6 +9,7 @@ import moment from 'moment';
 import { AES } from 'crypto-js';
 import { useWebSocket } from '@/libs/WebSocketContext';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
+import { useRouter } from 'next/router';
 
 interface propsData {
     openOrders?: any;
@@ -69,6 +70,12 @@ const OpenOrderTable = (props: propsData) => {
         }
     }
 
+
+    const router = useRouter();
+    const { slug } = router.query;
+
+    // console.log(props?.openOrders,"======props?.openOrders");
+    
 
     return (
         <>
@@ -158,7 +165,7 @@ const OpenOrderTable = (props: propsData) => {
                     </thead>
                     <tbody>
                         {
-                            session && props?.openOrders && props?.openOrders.length > 0 && props?.openOrders?.map((item: any, index: number) => {
+                            session && props?.openOrders && props?.openOrders.length > 0 && props?.openOrders?.filter((item: any) => item?.symbol === slug)?.map((item: any, index: number) => {
                                 return (
                                     <tr key={index}>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
