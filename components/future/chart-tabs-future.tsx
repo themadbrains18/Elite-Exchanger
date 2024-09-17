@@ -84,18 +84,16 @@ const ChartTabsFuture = (props: propsData) => {
                 <OpenOrderTable openOrders={props?.openOrders} />
             }
             {
-                show === 5 &&
-                // <OpenOrderHistoryTable openOrders={props.openOrderHistoryData}/>
-                <ProfitLossTable orders={orders} getProfitLossOrder={getProfitLossOrder} show={show} />
-            }
-            {
                 show === 3 &&
                 <PositionsHistoryTable positions={props.positionHistoryData} />
             }
             {
                 show === 4 &&
-                // <OpenOrderHistoryTable openOrders={props.openOrderHistoryData}/>
                 <PositionsHistoryTable positions={props.positionHistoryData} />
+            }
+            {
+                show === 5 &&
+                <ProfitLossTable orders={orders} getProfitLossOrder={getProfitLossOrder} show={show} />
             }
 
         </div>

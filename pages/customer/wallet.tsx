@@ -101,15 +101,15 @@ const Wallet = (props: Session) => {
             <ToastContainer limit={1} />
             <div className=" bg-light-v-1 py-[20px] md:py-[80px] dark:bg-black-v-1">
                 <div className="container flex gap-30 flex-wrap">
-                    <div className="max-w-full lg:max-w-[calc(100%-463px)] w-full">
+                    <div className="max-w-full w-full">
                         <Banner coinList={allCoins} networks={props?.networks} session={props.session} assets={userAssetsList?.data?.totalAmount} withdrawList={props.withdrawList} depositList={props.depositList} />
                         <WalletList coinList={allCoins} networks={props?.networks} session={props.session} refreshData={refreshData} />
                     </div>
-                    <div className="lg:max-w-[432px] w-full md:block hidden">
+                    {/* <div className="lg:max-w-[432px] w-full md:block hidden">
                         <div className="lg:block hidden ">
                             <Exchange id={0} coinList={allCoins} assets={userAssetsList?.data?.data} refreshData={refreshData} />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="lg:hidden">
                     <ResponsiveFixCta />

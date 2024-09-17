@@ -763,6 +763,16 @@ const BuySell = (props: fullWidth) => {
     }
   }, [])
 
+  // useEffect(() =>{
+  //   console.log(entryPrice,"========truncateNumber(sizeValue / entryPrice, 3)");
+  //   console.log(avaibalance,"========avaibalance");
+  //   let tokenAmount = document.querySelector('[name="token_amount"]');
+    
+  //   // if(avaibalance > isNaN(truncateNumber(sizeValue / marketPrice, 3)) ){
+  //   //   setButtonStyle(true);
+  //   // }
+  // },[avaibalance,sizeValue,entryPrice])
+
   return (
     <>
       <div
@@ -1069,7 +1079,7 @@ const BuySell = (props: fullWidth) => {
                   onChange={(e) => {
 
                     setSizeValue(
-                      e.target.value === "" ? 0 : parseFloat(e.target.value)
+                      e.target.value === "" ? 0.00 : parseFloat(e.target.value)
                     );
                     setSizeValidate("");
                   }}
@@ -1144,13 +1154,7 @@ const BuySell = (props: fullWidth) => {
                     <p className="top-label !text-[#000] dark:!text-[#fff]">
                       {showNes === 1
                         ? sizeValue === 0
-                          ? 0.00
-                          : isNaN(truncateNumber(sizeValue / entryPrice, 3))
-                            ? 0.00
-                            : truncateNumber(sizeValue / entryPrice, 3)
-                        : isNaN(truncateNumber(sizeValue / marketPrice, 3))
-                          ? 0.00
-                          : truncateNumber(sizeValue / marketPrice, 3)}{" "}
+                          ? 0.00 : isNaN(truncateNumber(sizeValue / entryPrice, 3))  ? 0.00 : truncateNumber(sizeValue / entryPrice, 3) : isNaN(truncateNumber(sizeValue / marketPrice, 3)) ? 0.00 : truncateNumber(sizeValue / marketPrice, 3)}{" "}
                       {props?.currentToken?.coin_symbol}
                     </p>
                   </div>
@@ -1174,11 +1178,13 @@ const BuySell = (props: fullWidth) => {
                   </div>
                 )}
 
+                
+
                 {show === 1 && (
                   <div className="mt-[5px]">
                     <button
                       disabled={buttonStyle}
-                      className={` solid-button w-full !bg-[#03A66D] !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true
+                      className={` solid-button w-full !bg-[#03A66D]  !rounded-[8px] py-[10px] px-[15px] !text-[14px] ${buttonStyle === true
                         ? "cursor-not-allowed opacity-50"
                         : ""
                         }`}

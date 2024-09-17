@@ -253,7 +253,7 @@ const ProfitLossModal = (props: showPopup) => {
                     <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative p-[15px] rounded-[5px] justify-between'>
                         <p className='top-label min-w-max'>Take Profit</p>
                         <div className='flex item-center justify-between'>
-                            <input type="text" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' maxLength={11} value={takeProfirValue} onChange={(e: any) => {
+                            <input type="text" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' maxLength={11} value={takeProfirValue === 0 ? '': takeProfirValue} onChange={(e: any) => {
                                 const value = e.target.value;
                                 const regex = /^\d{0,10}(\.\d{0,6})?$/;
                                 if (regex.test(value) || value === "") {
@@ -277,7 +277,7 @@ const ProfitLossModal = (props: showPopup) => {
                     <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative p-[15px] rounded-[5px] justify-between'>
                         <p className='top-label min-w-max'>Stop Loss</p>
                         <div className='flex item-center justify-between'>
-                            <input type="text" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' maxLength={11} value={stopLossValue} onChange={(e: any) => {
+                            <input type="text" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' maxLength={11} value={stopLossValue === 0 ? '':stopLossValue} onChange={(e: any) => {
                                 const value = e.target.value;
                                 const regex = /^\d{0,10}(\.\d{0,6})?$/;
                                 if (regex.test(value) || value === "") {

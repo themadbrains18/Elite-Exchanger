@@ -140,7 +140,7 @@ const FutureList = (props: propsData) => {
                                         </div>
                                     </td>
                                     <td>
-                                        <p className="info-14-18 dark:text-white  lg:text-start text-center">{scientificToDecimal(truncateNumber(item?.balance.toFixed(12), 8))}</p>
+                                        <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance === 0 ? '0.00': scientificToDecimal(truncateNumber(item?.balance.toFixed(12), 8))}</p>
                                     </td>
                                     <td className="lg:text-start text-end">
                                         <p className="info-14-18 dark:text-white">${item.token !== null ? currencyFormatter(truncateNumber(item?.token?.price, 8)) : currencyFormatter(truncateNumber(item?.global_token?.price, 8))}</p>
@@ -238,7 +238,7 @@ const FutureList = (props: propsData) => {
                                         </div>
                                     </div>
                                     <div>
-                                        <p className="info-14-18 dark:text-white  lg:text-start text-center">{currencyFormatter(item?.balance.toFixed(2))}</p>
+                                        <p className="info-14-18 dark:text-white  lg:text-start text-center">{item?.balance === 0 ? '0.00':currencyFormatter(item?.balance.toFixed(2))}</p>
                                     </div>
                                     <div className="iconParent lg:text-start text-end flex items-center justify-between">
                                         <p className="info-14-18 dark:text-white">${item.token !== null ? currencyFormatter(item?.token?.price.toFixed(5)) : currencyFormatter(item?.global_token?.price.toFixed(5))}</p>

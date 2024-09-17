@@ -20,9 +20,9 @@ const WatchListPage = (props:propsData) => {
           <CoinList watchList={props?.watchList}/>
         </div>
         <div className="lg:max-w-[432px] w-full">
-          <div className="lg:block hidden ">
+          {/* <div className="lg:block hidden ">
             <Exchange id={0} />
-          </div>
+          </div> */}
           <TopGainer />
         </div>
       </div>

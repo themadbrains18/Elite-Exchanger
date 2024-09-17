@@ -69,8 +69,7 @@ const OrderBook = (props: propsData) => {
                                     {props.BuyTrade && props.BuyTrade.length > 0 && props.BuyTrade.map((item: any, index: number) => {
                                         if (item.order_type === 'buy') {
                                             return(
-                                                            
-                                                <div key={index + 'buy'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
+                                                <div key={index + 'buy'} className='grid grid-cols-3 gap-10 min-w-[372] relative mb-[5px]'>
                                                     <p className='info-12 !text-[14px] z-[2] !text-buy whitespace-nowrap'>$ {currencyFormatter(truncateNumber(item?.limit_usdt, 8))}</p>
                                                     <p className='info-12 !text-[14px] z-[2]  text-center'>{currencyFormatter(truncateNumber(item?.token_amount, 8))}</p>
                                                     <p className='info-12  text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(truncateNumber(item?.volume_usdt, 8))}</p>
@@ -123,7 +122,7 @@ const OrderBook = (props: propsData) => {
                                 <div className='mt-10'>
                                     {props.sellTrade && props.sellTrade.length > 0 && props.sellTrade.map((item: any, index: number) => {
                                         if (item.order_type === 'sell') {
-                                            return <div key={index + 'sell'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
+                                            return <div key={index + 'sell'} className='grid grid-cols-3 gap-10 min-w-[372] relative mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-sell whitespace-nowrap'>$ {currencyFormatter(truncateNumber(item?.limit_usdt, 8))}</p>
                                                 <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(truncateNumber(item?.token_amount, 8))}</p>
                                                 <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(truncateNumber(item?.volume_usdt, 8))}</p>
@@ -172,7 +171,7 @@ const OrderBook = (props: propsData) => {
                                 <div className='mt-10'>
                                     {props.sellTrade && props.sellTrade.length > 0 && props.sellTrade.map((item: any, index: number) => {
                                         if (item.order_type === 'sell') {
-                                            return <div key={index + 'sell2'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
+                                            return <div key={index + 'sell2'} className='grid grid-cols-3 gap-10 min-w-[372] relative mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-sell whitespace-nowrap'>$ {currencyFormatter(truncateNumber(item?.limit_usdt, 8))}</p>
                                                 <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(truncateNumber(item?.token_amount, 8))}</p>
                                                 <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(truncateNumber(item?.volume_usdt, 8))}</p>
@@ -227,7 +226,7 @@ const OrderBook = (props: propsData) => {
                                 <div className='mt-10'>
                                     {props.BuyTrade && props.BuyTrade.length > 0 && props.BuyTrade.map((item: any, index: number) => {
                                         if (item.order_type === 'buy') {
-                                            return <div key={index + 'buy2'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
+                                            return <div key={index + 'buy2'} className='grid grid-cols-3 gap-10 min-w-[372] relative mb-[5px]'>
                                                 <p className='info-12 !text-[14px] z-[2] !text-buy whitespace-nowrap'>$ {currencyFormatter(truncateNumber(item?.limit_usdt, 8))}</p>
                                                 <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(truncateNumber(item?.token_amount, 8))}</p>
                                                 <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(truncateNumber(item?.volume_usdt, 8))}</p>
@@ -284,7 +283,7 @@ const OrderBook = (props: propsData) => {
 
                             {props.allTradeHistory && props.allTradeHistory.length > 0 && props.allTradeHistory.map((item: any, index: number) => {
                                 if (item.order_type === 'buy') {
-                                    return <div key={index + 'buy22'} className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
+                                    return <div key={index + 'buy22'} className='grid grid-cols-3 gap-10 min-w-[372] relative mb-[5px]'>
                                         <p className='info-12 !text-[14px] z-[2] !text-buy whitespace-nowrap'>$ {currencyFormatter(truncateNumber(item?.limit_usdt, 8))}</p>
                                         <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(truncateNumber(item?.token_amount, 8))}</p>
                                         <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(truncateNumber(item?.volume_usdt, 8))}</p>
@@ -294,7 +293,7 @@ const OrderBook = (props: propsData) => {
                                     </div>
                                 }
                                 else {
-                                    return <div className='grid grid-cols-3 gap-10 min-w-[372] relative py-[6px] mb-[5px]'>
+                                    return <div className='grid grid-cols-3 gap-10 min-w-[372] relative mb-[5px]'>
                                         <p className='info-12 !text-[14px] z-[2] !text-sell whitespace-nowrap'>$ {currencyFormatter(truncateNumber(item?.limit_usdt, 8))}</p>
                                         <p className='info-12 !text-[14px] z-[2] text-center'>{currencyFormatter(truncateNumber(item?.token_amount, 8))}</p>
                                         <p className='info-12 text-end z-[2] !text-[14px] px-[2px]'>$ {currencyFormatter(truncateNumber(item?.volume_usdt, 8))}</p>
