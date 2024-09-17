@@ -284,6 +284,8 @@ const BuySell = (props: fullWidth) => {
   // ===================================================================//
   const submitForm = async (orderMarkeType: string) => {
 
+console.log("hererere"
+);
 
     let obj;
 
@@ -349,7 +351,7 @@ const BuySell = (props: fullWidth) => {
         realized_pnl: releazedPnl.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0],
         tp_sl: "--",
         status: false,
-        queue: false,
+        queue: false,  
         direction: show === 1 ? "long" : "short",
         order_type: orderType,
         leverage_type: props?.marginMode?.margin,
