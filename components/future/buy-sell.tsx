@@ -327,17 +327,16 @@ console.log("hererere"
         return;
       }
       let value: any = truncateNumber((qty * 0.055),8);
-      console.log(value,"==value");
+      // console.log(value,"==value");
       
       let releazedPnl: any = (marketPrice * value) / 100;
-      console.log(releazedPnl,"==relaized pnl");
+      // console.log(releazedPnl,"==relaized pnl");
       
       let size: any = truncateNumber(qty * marketPrice, 8);
 
-
       // let marginValue = size / props?.marginMode?.leverage;
 
-      console.log(marketPrice,'=======entryPrice', sizeValue,'======sizeValue', props?.marginMode?.leverage,'=======leverage');
+      // console.log(marketPrice,'=======entryPrice', sizeValue,'======sizeValue', props?.marginMode?.leverage,'=======leverage');
       let marginValue = orderType === "qty" ? (marketPrice * sizeValue) / props?.marginMode?.leverage : marketPrice / props?.marginMode?.leverage;
       // orderType === "qty" ? size / props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
       obj = {
