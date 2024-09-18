@@ -1,6 +1,7 @@
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import moment from 'moment';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
 interface propsData {
@@ -9,6 +10,10 @@ interface propsData {
 }
 
 const PositionsHistoryTable = (props: propsData) => {
+
+
+    const router = useRouter();
+    const { slug } = router.query;
 
     return (
         <>
@@ -69,7 +74,7 @@ const PositionsHistoryTable = (props: propsData) => {
                     </thead>
                     <tbody>
                         {
-                            props?.positions && props?.positions.length > 0 && props?.positions.map((item: any, index: number) => {
+                            props?.positions && props?.positions.length > 0 && props?.positions?.filter((item: any) => item?.symbol === slug)?.map((item: any, index: number) => {
                                 return (
                                     <tr key={index}>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>

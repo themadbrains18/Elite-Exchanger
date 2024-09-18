@@ -1,6 +1,6 @@
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import { truncateNumber } from '@/libs/subdomain';
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 interface setState {
     show?: number;
     fullHeight?: boolean;
@@ -12,6 +12,27 @@ const BuyTableFuture = (props: setState) => {
     let data = props?.positionRecord?.filter((item:any)=>{
         return item?.direction === 'long'
     });
+
+
+    useEffect(() => {
+        const generateRandomWidth = (): number => {
+          return Math.floor(Math.random() * (100 - 30 + 1)) + 30;
+        };
+    
+        const applyRandomWidths = () => {
+          let tmbbgoverlays = document.querySelectorAll<HTMLElement>('.tmb-bg-overlay');
+          tmbbgoverlays.forEach((element) => {
+            const randomWidth = generateRandomWidth();
+            (element as HTMLElement).style.width = `${randomWidth}%`;
+          });
+        };
+        applyRandomWidths();
+        const intervalId = setInterval(() => {
+          applyRandomWidths(); 
+        }, 1000);
+    
+        return () => clearInterval(intervalId);
+      }, []);
 
     return (
         <>
@@ -32,10 +53,11 @@ const BuyTableFuture = (props: setState) => {
 
                 {data && data?.length > 0 && data.map((item: any, index:number) => {
                     return <Fragment key={Date.now()+index}>
-                        <div className='grid grid-cols-3 gap-[10px] bg-[#25e39e0a] rounded mb-[4px]'>
+                        <div className='grid grid-cols-3 gap-[10px]  rounded mb-[4px] relative'>
                             <p className={`top-label text-start ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{currencyFormatter(item?.entry_price?.toFixed(6))}</p>
                             <p className='top-label text-center !text-black dark:!text-white'>{currencyFormatter(item?.qty?.toFixed(6))}</p>
                             <p className='top-label text-end !text-black dark:!text-white'>{truncateNumber(item?.margin,6)}</p>
+                            <div className='absolute top-0  right-0 w-full h-full bg-[#25e39e0a] tmb-bg-overlay duration-300'></div>
                         </div>
                     </Fragment>
                 })}

@@ -42,7 +42,7 @@ const MarginMode: React.FC<FullWidth> = (props) => {
 
     const decrement = () => {
         setLeverageValue((prev: number) => {
-            const newValue = Math.max(prev - 1, 1); // Assuming leverage cannot be less than 1
+            const newValue = Math.max(prev - 1, 1); 
             localStorage.setItem('leverage', newValue.toString());
             return newValue;
         });

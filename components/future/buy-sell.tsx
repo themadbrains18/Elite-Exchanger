@@ -299,9 +299,9 @@ const BuySell = (props: fullWidth) => {
 
     let obj;
 
-    if (orderMarkeType === "market") {
-      // console.log(sizeValue,"=entryPrice");
+    console.log('============heer================');
 
+    if (orderMarkeType === "market") {
       if (showNes === 1 && (entryPrice == undefined || entryPrice == null || entryPrice === 0 || entryPrice < 0 || entryPrice === "")) {
         setEntryPriceValidate("Price must be greater than '0'");
         return
@@ -336,17 +336,17 @@ const BuySell = (props: fullWidth) => {
         toast.error('Order cost falls below the min. amount.', { autoClose: 2000 })
         return;
       }
-      let value: any = truncateNumber((qty * 0.055), 8);
-      console.log(value, "==value");
-
+      let value: any = truncateNumber((qty * 0.055),8);
+      // console.log(value,"==value");
+      
       let releazedPnl: any = (marketPrice * value) / 100;
-      console.log(releazedPnl, "==relaized pnl");
-
+      // console.log(releazedPnl,"==relaized pnl");
+      
       let size: any = truncateNumber(qty * marketPrice, 8);
-
 
       // let marginValue = size / props?.marginMode?.leverage;
 
+      // console.log(marketPrice,'=======entryPrice', sizeValue,'======sizeValue', props?.marginMode?.leverage,'=======leverage');
       let marginValue = orderType === "qty" ? (marketPrice * sizeValue) / props?.marginMode?.leverage : marketPrice / props?.marginMode?.leverage;
       // orderType === "qty" ? size / props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
       obj = {
@@ -418,7 +418,11 @@ const BuySell = (props: fullWidth) => {
 
       let enter_Price: any = entryPrice;
       let amount: any = qty * entryPrice;
+      
+      
       let marginValue = orderType === "qty" ? ((entryPrice * sizeValue) / props?.marginMode?.leverage) : sizeValue / props?.marginMode?.leverage;
+      console.log(marginValue,"=======marginValue");
+      
 
       obj = {
         position_id: "--",
