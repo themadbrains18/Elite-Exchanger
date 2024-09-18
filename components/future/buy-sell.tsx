@@ -37,6 +37,7 @@ interface fullWidth {
   totalPoint?: any;
   minTrade?: any;
   maxTrade?: any;
+  leverage?: any;
   setOpnlong?: Function;
 }
 
@@ -120,19 +121,25 @@ const BuySell = (props: fullWidth) => {
 
 
   useEffect(() => {
-  
-    let value=localStorage.getItem('preference') || "Qty"
+
+    let value = localStorage.getItem('preference') || "Qty"
     setPreferenceSymbol(value)
-    
+
     if (showNes === 2 && percentage > 0) {
       onChangeSizeInPercentage(percentage)
     }
   }, [marketPrice])
 
   useEffect(() => {
+    
+    setButtonStyle(false)
+
     let futureAssets = props?.assets?.filter((item: any) => {
       return item.walletTtype === "future_wallet";
     });
+
+    console.log("inside this");
+    
 
     // console.log(futureAssets,"=futureAssets");
 
@@ -248,6 +255,9 @@ const BuySell = (props: fullWidth) => {
   // ===================================================================//
   const onChangeSizeInPercentage = (value: number) => {
 
+
+    setButtonStyle(false)
+
     setPercentage(Math.trunc(value));
 
     let finalValue = 0;
@@ -284,8 +294,8 @@ const BuySell = (props: fullWidth) => {
   // ===================================================================//
   const submitForm = async (orderMarkeType: string) => {
 
-console.log("hererere"
-);
+    console.log("hererere"
+    );
 
     let obj;
 
@@ -326,12 +336,12 @@ console.log("hererere"
         toast.error('Order cost falls below the min. amount.', { autoClose: 2000 })
         return;
       }
-      let value: any = truncateNumber((qty * 0.055),8);
-      console.log(value,"==value");
-      
+      let value: any = truncateNumber((qty * 0.055), 8);
+      console.log(value, "==value");
+
       let releazedPnl: any = (marketPrice * value) / 100;
-      console.log(releazedPnl,"==relaized pnl");
-      
+      console.log(releazedPnl, "==relaized pnl");
+
       let size: any = truncateNumber(qty * marketPrice, 8);
 
 
@@ -355,7 +365,7 @@ console.log("hererere"
         realized_pnl: releazedPnl.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
         tp_sl: "--",
         status: false,
-        queue: false,  
+        queue: false,
         direction: show === 1 ? "long" : "short",
         order_type: orderType,
         leverage_type: props?.marginMode?.margin,
@@ -593,11 +603,14 @@ console.log("hererere"
   // ===================================================================//
   const onChangeSizeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-    let value:any= e.target.value
+    console.log("hereer i am");
+    
+
+    let value: any = e.target.value
 
     const regex = /^\d{0,10}(\.\d{0,4})?$/;
 
-                 
+
     setLerverage(0);
     let sliderThumb = document.getElementById("rangeThumb") as HTMLDivElement;
     let rangeLine = document.getElementById("rangeLine") as HTMLDivElement;
@@ -610,49 +623,52 @@ console.log("hererere"
       rangeLine.setAttribute("style", 'width:0;');
     }
     if (regex.test(value) || value === "") {
-      
-           value = parseFloat(e.target.value) == 0 ? 0.00 : parseFloat(e.target.value);
-      
-          let marginValue = orderType === "qty" ? (marketType === 'limit' ? entryPrice * parseFloat(e.target.value) / props?.marginMode?.leverage : marketPrice * parseFloat(e.target.value)) / props?.marginMode?.leverage : parseFloat(e.target.value) / props?.marginMode?.leverage;
-      
-          if (isNaN(value)) {
-            setSizeValue(''); // Reset sizeValue to its current state
-            return; // Exit early without updating state or applying further logic
-          }
-      
-          else if (value !== 0 && value < props?.minTrade) {
-            setSizeValidate(`Minimum value: ${props?.minTrade}`)
-            // console.log(sizeValue,"==sizeValue");
-            return;
-          }
-          else {
-            setSizeValidate('')
-            setSizeValue(value);
-            setButtonStyle(false);
-      
-            let leverage = props.marginMode.leverage;
-      
-      
-            console.log(marginValue,"margin value");
-            console.log(avaibalance,"avaibalance value");
-            
 
-      
-            if (marginValue > avaibalance) {
-              setButtonStyle(true);
-            }
-      
-            const openPositionFee = (marginValue * 0.055) / 100;
-            const longClosePositionFee = ((marginValue * (leverage - 1)) / leverage * 0.055) / 100;
-            const shortClosePositionFee = (marginValue * ((leverage + 1) / leverage) * 0.055) / 100;
-      
-            const longCost = marginValue / leverage + openPositionFee + longClosePositionFee;
-            const shortCost = marginValue / leverage + openPositionFee + shortClosePositionFee;
-      
-            // console.log(longCost * leverage, '===========long Cost==========', shortCost * leverage, '============short Cost============');
-      
-      
-          }
+      value = parseFloat(e.target.value) == 0 ? 0.00 : parseFloat(e.target.value);
+   
+
+      let propsLeverage= props?.marginMode?.leverage || props?.leverage
+
+      let marginValue = orderType === "qty" ? (marketType === 'limit' ? ((entryPrice * parseFloat(e.target.value)) /propsLeverage ):( (marketPrice * parseFloat(e.target.value))) / propsLeverage) : (parseFloat(e.target.value) / propsLeverage);
+
+      if (isNaN(value)) {
+        setSizeValue(''); // Reset sizeValue to its current state
+        return; // Exit early without updating state or applying further logic
+      }
+
+      else if (value !== 0 && value < props?.minTrade) {
+        setSizeValidate(`Minimum value: ${props?.minTrade}`)
+        // console.log(sizeValue,"==sizeValue");
+        return;
+      }
+      else {
+        setSizeValidate('')
+        setSizeValue(value);
+        setButtonStyle(false);
+
+        let leverage = propsLeverage
+
+
+        console.log(marginValue, "margin value");
+        console.log(avaibalance, "avaibalance value");
+
+
+
+        if (marginValue > avaibalance) {
+          setButtonStyle(true);
+        }
+
+        const openPositionFee = (marginValue * 0.055) / 100;
+        const longClosePositionFee = ((marginValue * (leverage - 1)) / leverage * 0.055) / 100;
+        const shortClosePositionFee = (marginValue * ((leverage + 1) / leverage) * 0.055) / 100;
+
+        const longCost = marginValue / leverage + openPositionFee + longClosePositionFee;
+        const shortCost = marginValue / leverage + openPositionFee + shortClosePositionFee;
+
+        // console.log(longCost * leverage, '===========long Cost==========', shortCost * leverage, '============short Cost============');
+
+
+      }
     }
 
   };
@@ -777,7 +793,7 @@ console.log("hererere"
   //   console.log(entryPrice,"========truncateNumber(sizeValue / entryPrice, 3)");
   //   console.log(avaibalance,"========avaibalance");
   //   let tokenAmount = document.querySelector('[name="token_amount"]');
-    
+
   //   // if(avaibalance > isNaN(truncateNumber(sizeValue / marketPrice, 3)) ){
   //   //   setButtonStyle(true);
   //   // }
@@ -1164,7 +1180,7 @@ console.log("hererere"
                     <p className="top-label !text-[#000] dark:!text-[#fff]">
                       {showNes === 1
                         ? sizeValue === 0
-                          ? 0.00 : isNaN(truncateNumber(sizeValue / entryPrice, 3))  ? 0.00 : truncateNumber(sizeValue / entryPrice, 3) : isNaN(truncateNumber(sizeValue / marketPrice, 3)) ? 0.00 : truncateNumber(sizeValue / marketPrice, 3)}{" "}
+                          ? 0.00 : isNaN(truncateNumber(sizeValue / entryPrice, 3)) ? 0.00 : truncateNumber(sizeValue / entryPrice, 3) : isNaN(truncateNumber(sizeValue / marketPrice, 3)) ? 0.00 : truncateNumber(sizeValue / marketPrice, 3)}{" "}
                       {props?.currentToken?.coin_symbol}
                     </p>
                   </div>
@@ -1188,7 +1204,7 @@ console.log("hererere"
                   </div>
                 )}
 
-                
+
 
                 {show === 1 && (
                   <div className="mt-[5px]">
