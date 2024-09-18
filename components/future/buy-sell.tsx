@@ -326,9 +326,13 @@ console.log("hererere"
         toast.error('Order cost falls below the min. amount.', { autoClose: 2000 })
         return;
       }
-      let value: any = (qty * 0.055).toFixed(5);
+      let value: any = truncateNumber((qty * 0.055),8);
+      console.log(value,"==value");
+      
       let releazedPnl: any = (marketPrice * value) / 100;
-      let size: any = truncateNumber(qty * marketPrice, 5);
+      console.log(releazedPnl,"==relaized pnl");
+      
+      let size: any = truncateNumber(qty * marketPrice, 8);
 
 
       // let marginValue = size / props?.marginMode?.leverage;
@@ -341,14 +345,14 @@ console.log("hererere"
         user_id: session?.user?.user_id,
         coin_id: props?.currentToken?.coin_id,
         leverage: props?.marginMode?.leverage,
-        size: size.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
-        entry_price: marketType === 'limit' ? entryPrice.toString() : marketPrice.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
-        market_price: marketType === 'limit' ? entryPrice.toString() : marketPrice.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
-        liq_price: Liquidation_Price.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
-        margin: truncateNumber(marginValue, 6),
+        size: size.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
+        entry_price: marketType === 'limit' ? entryPrice.toString() : marketPrice.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
+        market_price: marketType === 'limit' ? entryPrice.toString() : marketPrice.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
+        liq_price: Liquidation_Price.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
+        margin: truncateNumber(marginValue, 8),
         margin_ratio: 0.01,
         pnl: 0,
-        realized_pnl: releazedPnl.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0],
+        realized_pnl: releazedPnl.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
         tp_sl: "--",
         status: false,
         queue: false,  
@@ -356,7 +360,7 @@ console.log("hererere"
         order_type: orderType,
         leverage_type: props?.marginMode?.margin,
         market_type: orderMarkeType,
-        qty: parseFloat(qty.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0]),
+        qty: parseFloat(qty.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]),
         position_mode: positionMode
       };
     }
@@ -388,7 +392,7 @@ console.log("hererere"
       }
 
       let qty: any = sizeValue / marketPrice;
-      qty = qty.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0];
+      qty = qty.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0];
 
 
       if (orderType === "qty") {
@@ -413,15 +417,15 @@ console.log("hererere"
           props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
         side: show === 1 ? "open long" : "open short",
         type: orderMarkeType, //e.g limit, take profit market, stop market
-        amount: amount.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0], // limit order amount, close position
-        price_usdt: enter_Price.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0], // limit order price
+        amount: amount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0], // limit order amount, close position
+        price_usdt: enter_Price.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0], // limit order price
         trigger: "--", // TP/SL posiotion amount , limit order --
         reduce_only: "No", // TP/SL case Yes, limit order No
         post_only: "No", //No
         status: false,
         leverage: props?.marginMode?.leverage,
-        margin: truncateNumber(marginValue, 6),
-        liq_price: Liquidation_Price.toString().match(/^-?\d+(?:\.\d{0,5})?/)[0],
+        margin: truncateNumber(marginValue, 8),
+        liq_price: Liquidation_Price.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0],
         market_price:
           props?.currentToken?.token !== null
             ? props?.currentToken?.token?.price
@@ -429,7 +433,7 @@ console.log("hererere"
         order_type: orderType,
         leverage_type: props?.marginMode?.margin,
         coin_id: props?.currentToken?.coin_id,
-        qty: parseFloat(qty.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0]),
+        qty: parseFloat(qty.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]),
         position_mode: positionMode
       };
     }
@@ -629,6 +633,10 @@ console.log("hererere"
             let leverage = props.marginMode.leverage;
       
       
+            console.log(marginValue,"margin value");
+            console.log(avaibalance,"avaibalance value");
+            
+
       
             if (marginValue > avaibalance) {
               setButtonStyle(true);
