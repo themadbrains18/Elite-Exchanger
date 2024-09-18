@@ -34,10 +34,11 @@ const SelltableFuture = (props: setState) => {
 
                 {data && data?.length > 0 && data.map((item: any, index:number) => {
                     return <Fragment key={Date.now()+index}>
-                        <div className='grid grid-cols-3 gap-[10px] bg-[#fc47471c] rounded mb-[4px]'>
+                        <div className='grid grid-cols-3 gap-[10px]  rounded mb-[4px] relative'>
                             <p className={`top-label text-start ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{currencyFormatter(item?.entry_price?.toFixed(6))}</p>
                             <p className='top-label text-center !text-black dark:!text-white'>{currencyFormatter(item?.qty?.toFixed(6))}</p>
                             <p className='top-label text-end !text-black dark:!text-white'>{truncateNumber(item?.margin,6)}</p>
+                            <div className='absolute top-0  right-0 w-full h-full bg-[#fc47471c] tmb-bg-overlay duration-300'></div>
                         </div>
                     </Fragment>
                 })}
