@@ -364,7 +364,7 @@ const BuySell = (props: fullWidth) => {
       // let marginValue = size / props?.marginMode?.leverage;
 
       // console.log(marketPrice,'=======entryPrice', sizeValue,'======sizeValue', props?.marginMode?.leverage,'=======leverage');
-      let marginValue =prefernceSymbol === "Qty"? (marketPrice * sizeValue) / props?.marginMode?.leverage : marketPrice / props?.marginMode?.leverage;
+      let marginValue = prefernceSymbol === "Qty"? (marketPrice * sizeValue) / props?.marginMode?.leverage : marketPrice / props?.marginMode?.leverage;
       // orderType === "qty" ? size / props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
       obj = {
         symbol:
@@ -384,7 +384,7 @@ const BuySell = (props: fullWidth) => {
         status: false,
         queue: false,
         direction: show === 1 ? "long" : "short",
-        order_type: orderType,
+        order_type: prefernceSymbol,
         leverage_type: props?.marginMode?.margin,
         market_type: orderMarkeType,
         qty: parseFloat(qty.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]),
@@ -465,7 +465,7 @@ const BuySell = (props: fullWidth) => {
           props?.currentToken?.token !== null
             ? props?.currentToken?.token?.price
             : props?.currentToken?.global_token?.price,
-        order_type: orderType,
+        order_type: prefernceSymbol,
         leverage_type: props?.marginMode?.margin,
         coin_id: props?.currentToken?.coin_id,
         qty: parseFloat(qty.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]),
@@ -553,7 +553,7 @@ const BuySell = (props: fullWidth) => {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: session?.user?.access_token,
+                  Authorization: session?.user?.access_token, 
                 },
                 body: JSON.stringify(record),
               }
@@ -1278,7 +1278,7 @@ const BuySell = (props: fullWidth) => {
                   <p className="top-label">Max trade value</p>
                   <p className="top-label !text-[#000] dark:!text-[#fff]">
                     {`${truncateNumber(props?.maxTrade - usedQty, 3)} ${props?.currentToken?.coin_symbol}`}
-                    {/* {orderType === "qty"
+                    {/* {prefernceSymbol === "qty"
                       ? `${props?.maxTrade} ${props?.currentToken?.coin_symbol}`
                       : `${truncateNumber(props?.maxTrade * marketPrice, 6)} ${symbol}`} */}
                   </p>
