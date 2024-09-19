@@ -362,9 +362,13 @@ const BuySell = (props: fullWidth) => {
       let size: any = truncateNumber(qty * marketPrice, 8);
 
       // let marginValue = size / props?.marginMode?.leverage;
+      // console.log(prefernceSymbol,"=prefernceSymbol");
+      
 
       // console.log(marketPrice,'=======entryPrice', sizeValue,'======sizeValue', props?.marginMode?.leverage,'=======leverage');
-      let marginValue = prefernceSymbol === "Qty" ? (marketPrice * sizeValue) / props?.marginMode?.leverage : marketPrice / props?.marginMode?.leverage;
+      let marginValue = prefernceSymbol === "Qty" ? (marketPrice * sizeValue) / props?.marginMode?.leverage : (sizeValue / props?.marginMode?.leverage);
+      // console.log(marginValue,"=marginValue");
+      
       // orderType === "qty" ? size / props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
       obj = {
         symbol:
@@ -1288,7 +1292,7 @@ const BuySell = (props: fullWidth) => {
 
                     {isNaN(sizeValue / props?.marginMode?.leverage)
                       ?
-                      truncateNumber(Number(scientificToDecimal(0 / props?.marginMode?.leverage)), 6)
+                        isNaN(truncateNumber(Number(scientificToDecimal(0 / props?.marginMode?.leverage)), 6)) ? '0.00' : truncateNumber(Number(scientificToDecimal(0 / props?.marginMode?.leverage)), 6)
                       :
 
                       truncateNumber(Number(scientificToDecimal(sizeValue / props?.marginMode?.leverage)), 6)
