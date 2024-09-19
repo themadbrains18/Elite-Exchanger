@@ -99,7 +99,7 @@ const SecurityCode = (props: propsData) => {
       }
 
 
-console.log(props?.formData,"=hgfhkjgdhfkgjk");
+// console.log(props?.formData,"=hgfhkjgdhfkgjk");
 
       props.formData.step = 3;
       props.formData.otp = fillOtp;
