@@ -308,6 +308,8 @@ const BuySell = (props: fullWidth) => {
       }
     }
 
+    return finalValue;
+
   };
 
   // ===================================================================//
@@ -817,15 +819,7 @@ const BuySell = (props: fullWidth) => {
     }
   }, [])
 
-  // useEffect(() =>{
-  //   console.log(entryPrice,"========truncateNumber(sizeValue / entryPrice, 3)");
-  //   console.log(avaibalance,"========avaibalance");
-  //   let tokenAmount = document.querySelector('[name="token_amount"]');
-
-  //   // if(avaibalance > isNaN(truncateNumber(sizeValue / marketPrice, 3)) ){
-  //   //   setButtonStyle(true);
-  //   // }
-  // },[avaibalance,sizeValue,entryPrice])
+  
 
   return (
     <>
@@ -1335,7 +1329,7 @@ const BuySell = (props: fullWidth) => {
 
         {showNes === 3 && status !== "unauthenticated" && (
           <div className="mt-[20px]">
-            <div className="flex gap-5 items-center justify-between">
+            <div className="flex gap-5 items-center justify-between ">
               <p className="top-label">Qty</p>
               <p className="top-label !text-[#000] dark:!text-[#fff]">
                 {showNes === 3

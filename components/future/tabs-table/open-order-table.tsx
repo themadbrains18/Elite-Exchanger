@@ -131,12 +131,12 @@ const OpenOrderTable = (props: propsData) => {
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th> */}
-                            <th className="py-[10px]">
+                            {/* <th className="py-[10px]">
                                 <div className="flex ">
                                     <p className="text-start top-label dark:text-gamma">Reduce Only</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
-                            </th>
+                            </th> */}
                             {/* <th className="py-[10px]">
                                 <div className="flex ">
                                     <p className="text-start top-label dark:text-gamma">Post Only</p>
@@ -149,12 +149,12 @@ const OpenOrderTable = (props: propsData) => {
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th> */}
-                            <th className="py-[10px]">
+                            {/* <th className="py-[10px]">
                                 <div className="flex ">
                                     <p className="text-start top-label dark:text-gamma">TP/SL</p>
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
-                            </th>
+                            </th> */}
                             <th className="py-[10px]">
                                 <div className="flex ">
                                     <p className="  top-label dark:!text-[#cccc56] !font-[600]">Close All Positions</p>
@@ -195,18 +195,18 @@ const OpenOrderTable = (props: propsData) => {
                                         {/* <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">0.0</p>
                                         </td> */}
-                                        <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                                        {/* <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item?.reduce_only}</p>
-                                        </td>
+                                        </td> */}
                                         {/* <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item?.post_only}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item.trigger}</p>
                                         </td> */}
-                                        <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                                        {/* <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">--</p>
-                                        </td>
+                                        </td> */}
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <div className='cursor-pointer' onClick={() => { closeOpenOrder(item?.id) }}>
                                                 
