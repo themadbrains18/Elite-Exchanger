@@ -656,6 +656,7 @@ const BuySell = (props: fullWidth) => {
 
       let marginValue = prefernceSymbol === "Qty" ? (marketType === 'limit' ? ((entryPrice * parseFloat(e.target.value)) / propsLeverage) : ((marketPrice * parseFloat(e.target.value))) / propsLeverage) : (parseFloat(e.target.value) / propsLeverage);
 
+      
       if (isNaN(value)) {
         setSizeValue(''); // Reset sizeValue to its current state
         return; // Exit early without updating state or applying further logic
