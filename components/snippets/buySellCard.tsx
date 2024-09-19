@@ -102,15 +102,15 @@ const BuySellCard = (props: DynamicId) => {
 
 
   useEffect(() => {
- 
+
     setCurrencyName(props.slug, 1);
 
     if (props.slug && props?.coins.length > 0) {
       // if (!hasRun.current) {
-        setPriceOnChangeType(spotType, '');
-        if(show===2  )
+      setPriceOnChangeType(spotType, '');
+      if (show === 2)
         setValue('limit_usdt', props?.token?.price)
-        // hasRun.current = true;
+      // hasRun.current = true;
       // }
     }
   }, [props.session, props.slug, props?.coins]);
@@ -177,26 +177,17 @@ const BuySellCard = (props: DynamicId) => {
   }
 
   const scientificToDecimal = (value: any): string => {
+    let val = value.toFixed(10) // Convert to decimal format, trimming unnecessary zeros
+    val = val.replace(/\.?0+$/, "");
+    return val
 
-    
-
-  let val=   value.toFixed(10) // Convert to decimal format, trimming unnecessary zeros
-
-     val= val.replace(/\.?0+$/, "");
-    //  console.log(val.replace(/\.?0+$/, ""),"==value");
-     
-
-     return val
-     
   };
 
-   const truncateToNumber = (num: any, decimals: number) => {
+  const truncateToNumber = (num: any, decimals: number) => {
     const regex = new RegExp(`^-?\\d+(?:\\.\\d{0,${decimals}})?`);
     const match = num?.toString().match(regex);
-
-
     return match ? parseFloat(match[0]) : num;
-};
+  };
 
   const onHandleSubmit = async (data: any) => {
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
@@ -236,7 +227,7 @@ const BuySellCard = (props: DynamicId) => {
     }
 
     let totalUsdtAmount: any = (data.token_amount * data.limit_usdt);
-    totalUsdtAmount=  scientificToDecimal(Number(truncateNumber(totalUsdtAmount.toFixed(12), 10)));
+    totalUsdtAmount = scientificToDecimal(Number(truncateNumber(totalUsdtAmount.toFixed(12), 10)));
     let transactionFee: any = active1 === 1 ? (data.token_amount * 0.001).toFixed(8) : (data.token_amount * data.limit_usdt * 0.001).toFixed(8);
 
     let buyerFees: any = data.token_amount * 0.001;
@@ -245,9 +236,9 @@ const BuySellCard = (props: DynamicId) => {
     sellerFees = scientificToDecimal(Number(truncateNumber(sellerFees.toFixed(12), 10)));
 
     // console.log(buyerFees,'======buyer fees', sellerFees,'========sellerFees',  transactionFee,'=========transactionFee');
-    
-    console.log(data.limit_usdt,"data.limit_usdt");
-    
+
+    console.log(data.limit_usdt, "data.limit_usdt");
+
     let obj = {
       "user_id": props.session.user.user_id,
       "token_id": selectedToken?.id,
@@ -402,7 +393,7 @@ const BuySellCard = (props: DynamicId) => {
     else {
       let qty: any = getValues('token_amount');
       if (qty) {
-        let totalAmount: any = qty * truncateNumber(props?.token?.price,8);
+        let totalAmount: any = qty * truncateNumber(props?.token?.price, 8);
         let fee: any = active1 === 1 ? truncateNumber((qty * 0.001), 8) : truncateNumber((props?.token?.price * qty * 0.001), 8);
         setEstimateFee(fee.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
         setTotalAmount(totalAmount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]);
@@ -572,8 +563,8 @@ const BuySellCard = (props: DynamicId) => {
                   <Image src='/assets/market/walletpayment.svg' alt="wallet2" width={24} height={24} className="min-w-[24px]" />
                   {/* <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} alt="wallet2" width={24} height={24} /> */}
                   <p className="md-text w-full">
-                    {scientificToDecimal(truncateToNumber(price.toFixed(12),8))}
-    
+                    {scientificToDecimal(truncateToNumber(price.toFixed(12), 8))}
+
                     &nbsp;{active1 === 1 ? 'USDT' : props?.token?.symbol}</p>
 
                   <Image src={`${selectedToken !== undefined && selectedToken?.image ? selectedToken?.image : '/assets/history/Coin.svg'}`} className={`min-w-[24px] ${selectedToken?.symbol === "XRP" && "bg-white rounded-full "}`} alt="wallet2" width={24} height={24} />

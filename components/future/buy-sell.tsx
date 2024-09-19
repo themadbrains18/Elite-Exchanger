@@ -12,7 +12,7 @@ import OrderPreferenceModal from "../snippets/orderPreferenceModal";
 import PositionModal from "../snippets/positionModal";
 import ConfirmationModel from "../snippets/confirmation";
 import { useWebSocket } from "@/libs/WebSocketContext";
-import { scientificToDecimal, truncateNumber } from "@/libs/subdomain";
+import { truncateNumber } from "@/libs/subdomain";
 import { currencyFormatter } from "../snippets/market/buySellCard";
 import { useRouter } from "next/router";
 
@@ -119,7 +119,21 @@ const BuySell = (props: fullWidth) => {
       ? props?.currentToken?.token?.price
       : props?.currentToken?.global_token?.price;
 
+  const scientificToDecimal = (value: any): any => {
+    if(value){
+      let val = parseFloat(value).toFixed(10) // Convert to decimal format, trimming unnecessary zeros
+      val = val.replace(/\.?0+$/, "");
+      return val
 
+    }
+
+  };
+
+  const truncateToSixNumber = (num: any, decimals: number) => {
+    const regex = new RegExp(`^-?\\d+(?:\\.\\d{0,${decimals}})?`);
+    const match = num?.toString().match(regex);
+    return match ? parseFloat(match[0]) : num;
+  };
   useEffect(() => {
 
     let value = localStorage.getItem('preference') || "Qty"
@@ -128,7 +142,7 @@ const BuySell = (props: fullWidth) => {
     if (showNes === 2 && percentage > 0) {
       onChangeSizeInPercentage(percentage)
     }
-  
+
   }, [marketPrice])
 
   useEffect(() => {
@@ -267,32 +281,32 @@ const BuySell = (props: fullWidth) => {
         setSizeValue(truncateNumber(finalValue, 6));
       }
     }
-  
-      let propsLeverage = props?.marginMode?.leverage || props?.leverage
 
-      let marginValue = orderType === "qty" ? (marketType === 'limit' ? ((entryPrice * finalValue) / propsLeverage) : ((marketPrice * finalValue)) / propsLeverage) : (finalValue / propsLeverage);
+    let propsLeverage = props?.marginMode?.leverage || props?.leverage
+
+    let marginValue = prefernceSymbol === "Qty" ? (marketType === 'limit' ? ((entryPrice * finalValue) / propsLeverage) : ((marketPrice / finalValue)) / propsLeverage) : (finalValue / propsLeverage);
 
 
 
-       if (finalValue !== 0 && finalValue < props?.minTrade) {
-        setSizeValidate(`Minimum value: ${props?.minTrade}`)
-        // console.log(sizeValue,"==sizeValue");
-        return;
+    if (finalValue !== 0 && finalValue < props?.minTrade) {
+      setSizeValidate(`Minimum value: ${props?.minTrade}`)
+      // console.log(sizeValue,"==sizeValue");
+      return;
+    }
+    else {
+
+      // console.log(marginValue, "margin value");
+      // console.log(avaibalance, "avaibalance value");
+
+      if (marginValue > avaibalance) {
+        setButtonStyle(true);
       }
       else {
-   
-        console.log(marginValue, "margin value");
-        console.log(avaibalance, "avaibalance value");
+        setSizeValidate('')
+        setButtonStyle(false);
 
-        if (marginValue > avaibalance) {
-          setButtonStyle(true);
-        }
-        else{
-          setSizeValidate('')
-          setButtonStyle(false);
-          
-        }
       }
+    }
 
   };
 
@@ -300,13 +314,7 @@ const BuySell = (props: fullWidth) => {
   // Submit form data in case of limit and market trading//
   // ===================================================================//
   const submitForm = async (orderMarkeType: string) => {
-
-    console.log("hererere"
-    );
-
     let obj;
-
-    console.log('============heer================');
 
     if (orderMarkeType === "market") {
       if (showNes === 1 && (entryPrice == undefined || entryPrice == null || entryPrice === 0 || entryPrice < 0 || entryPrice === "")) {
@@ -331,11 +339,11 @@ const BuySell = (props: fullWidth) => {
         Liquidation_Price = (marketType === 'limit' ? entryPrice : marketPrice) + Liquidation_Price;
       }
 
-      let qty: any = sizeValue / marketPrice;
-      qty = qty.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0];
+      let qty: any = scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3));
+      qty = qty?.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0];
 
 
-      if (orderType === "qty") {
+      if (prefernceSymbol === "Qty") {
         qty = sizeValue.toString();
       }
 
@@ -354,7 +362,7 @@ const BuySell = (props: fullWidth) => {
       // let marginValue = size / props?.marginMode?.leverage;
 
       // console.log(marketPrice,'=======entryPrice', sizeValue,'======sizeValue', props?.marginMode?.leverage,'=======leverage');
-      let marginValue = orderType === "qty" ? (marketPrice * sizeValue) / props?.marginMode?.leverage : marketPrice / props?.marginMode?.leverage;
+      let marginValue =prefernceSymbol === "Qty"? (marketPrice * sizeValue) / props?.marginMode?.leverage : marketPrice / props?.marginMode?.leverage;
       // orderType === "qty" ? size / props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
       obj = {
         symbol:
@@ -408,11 +416,15 @@ const BuySell = (props: fullWidth) => {
         Liquidation_Price = entryPrice + Liquidation_Price;
       }
 
-      let qty: any = sizeValue / marketPrice;
-      qty = qty.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0];
+      let qty: any = scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 4));
+
+      // console.log(qty,"===qty");
+      
+
+      qty = qty?.toString().match(/^-?\d+(?:\.\d{0,4})?/)[0];
 
 
-      if (orderType === "qty") {
+      if (prefernceSymbol === "Qty") {
         qty = sizeValue.toString();
         // console.log(qty, "==qty", props?.minTrade, "==props?.minTrade");
 
@@ -427,8 +439,8 @@ const BuySell = (props: fullWidth) => {
       let amount: any = qty * entryPrice;
 
 
-      let marginValue = orderType === "qty" ? ((entryPrice * sizeValue) / props?.marginMode?.leverage) : sizeValue / props?.marginMode?.leverage;
-      console.log(marginValue, "=======marginValue");
+      let marginValue = prefernceSymbol === "Qty" ? ((entryPrice * sizeValue) / props?.marginMode?.leverage) : sizeValue / props?.marginMode?.leverage;
+      // console.log(marginValue, "=======marginValue");
 
 
       obj = {
@@ -614,7 +626,7 @@ const BuySell = (props: fullWidth) => {
   // ===================================================================//
   const onChangeSizeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-    console.log("hereer i am");
+    // console.log("hereer i am");
 
 
     let value: any = e.target.value
@@ -640,7 +652,7 @@ const BuySell = (props: fullWidth) => {
 
       let propsLeverage = props?.marginMode?.leverage || props?.leverage
 
-      let marginValue = orderType === "qty" ? (marketType === 'limit' ? ((entryPrice * parseFloat(e.target.value)) / propsLeverage) : ((marketPrice * parseFloat(e.target.value))) / propsLeverage) : (parseFloat(e.target.value) / propsLeverage);
+      let marginValue = prefernceSymbol === "Qty" ? (marketType === 'limit' ? ((entryPrice * parseFloat(e.target.value)) / propsLeverage) : ((marketPrice * parseFloat(e.target.value))) / propsLeverage) : (parseFloat(e.target.value) / propsLeverage);
 
       if (isNaN(value)) {
         setSizeValue(''); // Reset sizeValue to its current state
@@ -787,10 +799,10 @@ const BuySell = (props: fullWidth) => {
   const actionPerform = async () => {
     setShortConfirm(false);
     setActive(false);
-    if(show === 1 && showNes === 1 && !shortConfirm){
+    if (show === 1 && showNes === 1 && !shortConfirm) {
       submitForm('limit');
       setMarketType('limit')
-    }else{
+    } else {
       submitForm('market');
       setMarketType('market')
     }
@@ -871,7 +883,7 @@ const BuySell = (props: fullWidth) => {
               setEntryPrice(0);
               setEntryPriceValidate("");
               setSizeValidate('')
-       
+
               if (showNes === 3) {
                 onCoinDropDownChange("USDT");
               }
@@ -897,7 +909,7 @@ const BuySell = (props: fullWidth) => {
               setMarketType('market')
               props?.setOpnlong && props?.setOpnlong('Short');
               setEntryPrice(0);
-       
+
               setEntryPriceValidate("");
               setSizeValidate('')
               if (showNes === 3) {
@@ -937,7 +949,7 @@ const BuySell = (props: fullWidth) => {
                 }`}
               onClick={() => {
                 setShowNes(2);
-                setPercentage(0)  
+                setPercentage(0)
                 setMarketType("market");
                 setSizeValidate("");
                 setEntryPriceValidate("");
@@ -1152,57 +1164,18 @@ const BuySell = (props: fullWidth) => {
         {/* ================================= */}
         {(showNes === 1 || showNes === 2) && (
           <>
-            {/* <div className="flex items-center justify-between mt-[20px]">
-              <div
-                className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent] prefrence`}
-              >
-                <input
-                  id={`custom-radio${props.radioId}`}
-                  type="checkbox"
-                  onChange={(e) => {
-                    profitlosspopupenable(e);
-                  }}
-                  value=""
-                  name="colored-radio"
-                  checked={profitLossConfirm}
-                  className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]"
-                />
-                <label
-                  htmlFor={`custom-radio${props.radioId}`}
-                  className="
-                                    custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
-                                    cursor-pointer
-                                    after:dark:bg-omega
-                                    after:bg-white
-                                    after:left-[0px]
-                                    after:w-[20px] 
-                                    after:h-[20px]
-                                    after:border after:border-beta
-                                    after:absolute
-
-                                    before:dark:bg-[transparent]
-                                    before:bg-white
-                                    before:left-[5px]
-
-                                    before:w-[10px] 
-                                    before:h-[10px]
-                                    before:absolute
-                                    before:z-[1]
-                                    "
-                >
-                  <p className="ml-2 md-text !text-[14px]">TP/SL</p>
-                </label>
-              </div>
-            </div> */}
+      
             {session && (
               <div className="mt-[20px]">
                 {prefernceSymbol === "Value" && (
                   <div className="flex gap-5 items-center justify-between">
                     <p className="top-label">Qty</p>
                     <p className="top-label !text-[#000] dark:!text-[#fff]">
-                      {showNes === 1
-                        ? sizeValue === 0
-                          ? 0.00 : isNaN(truncateNumber(sizeValue / entryPrice, 3)) ? 0.00 : truncateNumber(sizeValue / entryPrice, 3) : isNaN(truncateNumber(sizeValue / marketPrice, 3)) ? 0.00 : truncateNumber(sizeValue / marketPrice, 3)}{" "}
+
+                      {
+                        showNes === 1
+                          ? sizeValue === 0
+                            ? 0.00 : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 4)))) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 4)) : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 4)))) ? 0.00 :scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 4))}{" "}
                       {props?.currentToken?.coin_symbol}
                     </p>
                   </div>
