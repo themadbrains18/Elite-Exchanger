@@ -73,7 +73,7 @@ const ResetPassword = () => {
       let res = await responseData.json();
 
       if (res?.data?.otp !== undefined) {
-        console.log(res?.data?.otp?.twoFa,"===========res");
+        // console.log(res?.data?.otp?.twoFa,"===========res");
         
         if(res?.data?.otp?.twoFa){
           setIsTwoFa(true)

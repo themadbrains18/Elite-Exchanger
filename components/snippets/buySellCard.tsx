@@ -237,7 +237,7 @@ const BuySellCard = (props: DynamicId) => {
 
     // console.log(buyerFees,'======buyer fees', sellerFees,'========sellerFees',  transactionFee,'=========transactionFee');
 
-    console.log(data.limit_usdt, "data.limit_usdt");
+    // console.log(data.limit_usdt, "data.limit_usdt");
 
     let obj = {
       "user_id": props.session.user.user_id,

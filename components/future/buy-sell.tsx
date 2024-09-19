@@ -675,8 +675,8 @@ const BuySell = (props: fullWidth) => {
         let leverage = propsLeverage
 
 
-        console.log(marginValue, "margin value");
-        console.log(avaibalance, "avaibalance value");
+        // console.log(marginValue, "margin value");
+        // console.log(avaibalance, "avaibalance value");
 
         if (prefernceSymbol === "Value") {
           // console.log((truncateToSixNumber((parseFloat(e.target.value) / entryPrice).toFixed(12), 3)),"heree");
@@ -1262,16 +1262,16 @@ const BuySell = (props: fullWidth) => {
                           submitForm('market');
                         }
                         else if (marketType === "limit") {
-                          console.log("here");
+                          // console.log("here");
 
                           let market_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
                           if (market_price > entryPrice) {
-                            console.log("in this", market_price, "entry price", entryPrice);
+                            // console.log("in this", market_price, "entry price", entryPrice);
 
                             setShortConfirm(true);
                           }
                           else {
-                            console.log("here in else");
+                            // console.log("here in else");
 
                             submitForm('limit')
                           }
