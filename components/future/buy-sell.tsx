@@ -541,7 +541,7 @@ const BuySell = (props: fullWidth) => {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: session?.user?.access_token,
+                  Authorization: session?.user?.access_token, 
                 },
                 body: JSON.stringify(record),
               }
