@@ -138,7 +138,7 @@ const BuySell = (props: fullWidth) => {
       return item.walletTtype === "future_wallet";
     });
 
-    console.log("inside this");
+    // console.log("inside this");
     
 
     // console.log(futureAssets,"=futureAssets");
@@ -255,7 +255,6 @@ const BuySell = (props: fullWidth) => {
   // ===================================================================//
   const onChangeSizeInPercentage = (value: number) => {
 
-
     setButtonStyle(false)
 
     setPercentage(Math.trunc(value));
@@ -286,6 +285,8 @@ const BuySell = (props: fullWidth) => {
         setSizeValue(truncateNumber(finalValue, 6));
       }
     }
+
+    return finalValue;
 
   };
 
@@ -798,15 +799,7 @@ const BuySell = (props: fullWidth) => {
     }
   }, [])
 
-  // useEffect(() =>{
-  //   console.log(entryPrice,"========truncateNumber(sizeValue / entryPrice, 3)");
-  //   console.log(avaibalance,"========avaibalance");
-  //   let tokenAmount = document.querySelector('[name="token_amount"]');
-
-  //   // if(avaibalance > isNaN(truncateNumber(sizeValue / marketPrice, 3)) ){
-  //   //   setButtonStyle(true);
-  //   // }
-  // },[avaibalance,sizeValue,entryPrice])
+  
 
   return (
     <>
@@ -1139,63 +1132,26 @@ const BuySell = (props: fullWidth) => {
         {/* ================================= */}
         {(showNes === 1 || showNes === 2) && (
           <>
-            {/* <div className="flex items-center justify-between mt-[20px]">
-              <div
-                className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent] prefrence`}
-              >
-                <input
-                  id={`custom-radio${props.radioId}`}
-                  type="checkbox"
-                  onChange={(e) => {
-                    profitlosspopupenable(e);
-                  }}
-                  value=""
-                  name="colored-radio"
-                  checked={profitLossConfirm}
-                  className="hidden w-5 h-5 max-w-full   bg-red-400 border-[transparent] focus:ring-primary dark:focus:ring-primary dark:ring-offset-primary  dark:bg-[transparent] dark:border-[transparent]"
-                />
-                <label
-                  htmlFor={`custom-radio${props.radioId}`}
-                  className="
-                                    custom-radio relative  px-[17px]  flex gap-2 items-center pl-[18px]
-                                    cursor-pointer
-                                    after:dark:bg-omega
-                                    after:bg-white
-                                    after:left-[0px]
-                                    after:w-[20px] 
-                                    after:h-[20px]
-                                    after:border after:border-beta
-                                    after:absolute
-
-                                    before:dark:bg-[transparent]
-                                    before:bg-white
-                                    before:left-[5px]
-
-                                    before:w-[10px] 
-                                    before:h-[10px]
-                                    before:absolute
-                                    before:z-[1]
-                                    "
-                >
-                  <p className="ml-2 md-text !text-[14px]">TP/SL</p>
-                </label>
-              </div>
-            </div> */}
             {session && (
               <div className="mt-[20px]">
-                {orderType === "value" && (
+                {prefernceSymbol === "Value" && (
                   <div className="flex gap-5 items-center justify-between">
                     <p className="top-label">Qty</p>
                     <p className="top-label !text-[#000] dark:!text-[#fff]">
                       {showNes === 1
-                        ? sizeValue === 0
-                          ? 0.00 : isNaN(truncateNumber(sizeValue / entryPrice, 3)) ? 0.00 : truncateNumber(sizeValue / entryPrice, 3) : isNaN(truncateNumber(sizeValue / marketPrice, 3)) ? 0.00 : truncateNumber(sizeValue / marketPrice, 3)}{" "}
+                        ? sizeValue === 0 ? 0.00 : isNaN(truncateNumber(sizeValue / entryPrice, 3)) ?
+                        0.00 : truncateNumber(sizeValue / entryPrice, 3) :
+                        isNaN(truncateNumber(sizeValue / marketPrice, 3)) ?
+                        0.00 : truncateNumber(sizeValue / marketPrice, 3)}{" "}
+
+                      
+                      
                       {props?.currentToken?.coin_symbol}
                     </p>
                   </div>
                 )}
 
-                {orderType === "qty" && (
+                {prefernceSymbol === "Qty" && (
                   <div className="flex gap-5 items-center justify-between">
                     <p className="top-label">Value</p>
                     <p className="top-label !text-[#000] dark:!text-[#fff]">
@@ -1349,7 +1305,7 @@ const BuySell = (props: fullWidth) => {
 
         {showNes === 3 && status !== "unauthenticated" && (
           <div className="mt-[20px]">
-            <div className="flex gap-5 items-center justify-between">
+            <div className="flex gap-5 items-center justify-between ">
               <p className="top-label">Qty</p>
               <p className="top-label !text-[#000] dark:!text-[#fff]">
                 {showNes === 3
