@@ -787,8 +787,13 @@ const BuySell = (props: fullWidth) => {
   const actionPerform = async () => {
     setShortConfirm(false);
     setActive(false);
-    submitForm('market');
-    setMarketType('market')
+    if(show === 1 && showNes === 1 && !shortConfirm){
+      submitForm('limit');
+      setMarketType('limit')
+    }else{
+      submitForm('market');
+      setMarketType('market')
+    }
   }
 
   useEffect(() => {
@@ -1030,7 +1035,7 @@ const BuySell = (props: fullWidth) => {
                   // onInput={()=>{
                   //   setLerverage(true)
                   // }}
-                  step="any"
+                  step="0.001"
                   min={props?.minTrade}
                   name="token_amount"
                   pattern="^\d{0,10}(\.\d{0,4})?$"
