@@ -424,7 +424,7 @@ const BuySell = (props: fullWidth) => {
       
 
       qty = qty?.toString().match(/^-?\d+(?:\.\d{0,4})?/)[0];
-
+      
 
       if (prefernceSymbol === "Qty") {
         qty = sizeValue.toString();
@@ -440,6 +440,9 @@ const BuySell = (props: fullWidth) => {
       let enter_Price: any = entryPrice;
       let amount: any = qty * entryPrice;
 
+      // console.log(qty,entryPrice,amount,"===========amount");
+      
+
 
       let marginValue = prefernceSymbol === "Qty" ? ((entryPrice * sizeValue) / props?.marginMode?.leverage) : sizeValue / props?.marginMode?.leverage;
       // console.log(marginValue, "=======marginValue");
@@ -452,7 +455,7 @@ const BuySell = (props: fullWidth) => {
           props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
         side: show === 1 ? "open long" : "open short",
         type: orderMarkeType, //e.g limit, take profit market, stop market
-        amount: amount.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0], // limit order amount, close position
+        amount: amount?.toString()?.match(/^-?\d+(?:\.\d{0,8})?/)[0], // limit order amount, close position
         price_usdt: enter_Price.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0], // limit order price
         trigger: "--", // TP/SL posiotion amount , limit order --
         reduce_only: "No", // TP/SL case Yes, limit order No
@@ -678,10 +681,36 @@ const BuySell = (props: fullWidth) => {
         console.log(avaibalance, "avaibalance value");
 
 
-
-        if (marginValue > avaibalance) {
-          setButtonStyle(true);
+        
+        
+        let tmbqty = scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)) || 0;
+        
+        if (marginValue > avaibalance && tmbqty >= 0.001) {
+          console.log("=============1");
+          setButtonStyle(false);
+          // if(prefernceSymbol==="Qty"){
+          //   console.log("avaibalance value 1");
+          //   setButtonStyle(true);
+          // }
+          // if(prefernceSymbol==="Value" && Number(e.target.value) >= 0.001){
+          //   console.log("avaibalance value 2");
+          //   setButtonStyle(true)
+          // }else{
+          //   console.log("avaibalance value 3");
+          //   setButtonStyle(false)
+          // }
+          // console.log("avaibalance value 4");
         }
+        else {
+          console.log("avaibalance value 5");
+          setSizeValidate('')
+          setButtonStyle(true)
+    
+        }
+        
+      
+
+
 
         const openPositionFee = (marginValue * 0.055) / 100;
         const longClosePositionFee = ((marginValue * (leverage - 1)) / leverage * 0.055) / 100;
@@ -695,6 +724,8 @@ const BuySell = (props: fullWidth) => {
 
       }
     }
+
+    
 
   };
 
@@ -1049,7 +1080,7 @@ const BuySell = (props: fullWidth) => {
                 />
               </div>
               <div className="cursor-default">
-                <p className='admin-body-text !text-[12px] dark:!text-white'>
+                <p className='admin-body-text !text-[12px] dark:!text-white '>
                   {prefernceSymbol === "Qty" ? props.currentToken?.coin_symbol : props.currentToken?.usdt_symbol}
                 </p>
               </div>
@@ -1160,7 +1191,7 @@ const BuySell = (props: fullWidth) => {
           <>
       
             {session && (
-              <div className="mt-[20px]">
+              <div className="mt-[20px] tmb-qty-value">
                 {prefernceSymbol === "Value" && (
                   <div className="flex gap-5 items-center justify-between">
                     <p className="top-label">Qty</p>
@@ -1169,7 +1200,7 @@ const BuySell = (props: fullWidth) => {
                       {
                         showNes === 1
                           ? sizeValue === 0
-                            ? 0.00 : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 4)))) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 4)) : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 4)))) ? 0.00 :scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 4))}{" "}
+                            ? 0.00 : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)))) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)) : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3)))) ? 0.00 :scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3))}{" "}
                       {props?.currentToken?.coin_symbol}
                     </p>
                   </div>

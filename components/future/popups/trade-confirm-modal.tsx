@@ -84,7 +84,7 @@ const TradeConfirmPopupModal = (props: showPopup) => {
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Qty</p>
-                    <p className='dark:text-[#6a6d7d] text-black'>{props?.confirmOrderData?.qty} {props?.symbol}</p>
+                    <p className='dark:text-[#6a6d7d] text-black'>{truncateNumber(props?.confirmOrderData?.qty,3)} {props?.symbol}</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Order Cost</p>
