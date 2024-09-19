@@ -120,7 +120,7 @@ const BuySell = (props: fullWidth) => {
       : props?.currentToken?.global_token?.price;
 
   const scientificToDecimal = (value: any): any => {
-    if(value){
+    if (value) {
       let val = parseFloat(value).toFixed(10) // Convert to decimal format, trimming unnecessary zeros
       val = val.replace(/\.?0+$/, "");
       return val
@@ -364,7 +364,7 @@ const BuySell = (props: fullWidth) => {
       // let marginValue = size / props?.marginMode?.leverage;
 
       // console.log(marketPrice,'=======entryPrice', sizeValue,'======sizeValue', props?.marginMode?.leverage,'=======leverage');
-      let marginValue = prefernceSymbol === "Qty"? (marketPrice * sizeValue) / props?.marginMode?.leverage : marketPrice / props?.marginMode?.leverage;
+      let marginValue = prefernceSymbol === "Qty" ? (marketPrice * sizeValue) / props?.marginMode?.leverage : marketPrice / props?.marginMode?.leverage;
       // orderType === "qty" ? size / props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
       obj = {
         symbol:
@@ -421,7 +421,7 @@ const BuySell = (props: fullWidth) => {
       let qty: any = scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 4));
 
       // console.log(qty,"===qty");
-      
+
 
       qty = qty?.toString().match(/^-?\d+(?:\.\d{0,4})?/)[0];
       
@@ -556,7 +556,7 @@ const BuySell = (props: fullWidth) => {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/json",
-                  Authorization: session?.user?.access_token, 
+                  Authorization: session?.user?.access_token,
                 },
                 body: JSON.stringify(record),
               }
@@ -631,13 +631,8 @@ const BuySell = (props: fullWidth) => {
   // ===================================================================//
   const onChangeSizeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
 
-    // console.log("hereer i am");
-
-
     let value: any = e.target.value
-
     const regex = /^\d{0,10}(\.\d{0,4})?$/;
-
 
     setLerverage(0);
     let sliderThumb = document.getElementById("rangeThumb") as HTMLDivElement;
@@ -659,6 +654,9 @@ const BuySell = (props: fullWidth) => {
 
       let marginValue = prefernceSymbol === "Qty" ? (marketType === 'limit' ? ((entryPrice * parseFloat(e.target.value)) / propsLeverage) : ((marketPrice * parseFloat(e.target.value))) / propsLeverage) : (parseFloat(e.target.value) / propsLeverage);
 
+
+
+
       if (isNaN(value)) {
         setSizeValue(''); // Reset sizeValue to its current state
         return; // Exit early without updating state or applying further logic
@@ -672,7 +670,7 @@ const BuySell = (props: fullWidth) => {
       else {
         setSizeValidate('')
         setSizeValue(value);
-        setButtonStyle(false);
+        setButtonStyle(true);
 
         let leverage = propsLeverage
 
@@ -680,35 +678,29 @@ const BuySell = (props: fullWidth) => {
         console.log(marginValue, "margin value");
         console.log(avaibalance, "avaibalance value");
 
+        if (prefernceSymbol === "Value") {
+          // console.log((truncateToSixNumber((parseFloat(e.target.value) / entryPrice).toFixed(12), 3)),"heree");
+          
+          let qty = marketType === 'limit' ?truncateToSixNumber((parseFloat(e.target.value) / entryPrice).toFixed(12), 3) : truncateToSixNumber((parseFloat(e.target.value) / marketPrice).toFixed(12), 3)         
 
-        
-        
-        let tmbqty = scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)) || 0;
-        
-        if (marginValue > avaibalance && tmbqty >= 0.001) {
-          console.log("=============1");
-          setButtonStyle(false);
-          // if(prefernceSymbol==="Qty"){
-          //   console.log("avaibalance value 1");
-          //   setButtonStyle(true);
-          // }
-          // if(prefernceSymbol==="Value" && Number(e.target.value) >= 0.001){
-          //   console.log("avaibalance value 2");
-          //   setButtonStyle(true)
-          // }else{
-          //   console.log("avaibalance value 3");
-          //   setButtonStyle(false)
-          // }
-          // console.log("avaibalance value 4");
+          if (qty >= 0.001 && marginValue < avaibalance) {
+            setButtonStyle(false);
+          }
+          else {
+            setButtonStyle(true)
+          }
+
         }
         else {
-          console.log("avaibalance value 5");
-          setSizeValidate('')
-          setButtonStyle(true)
-    
+          if (marginValue > avaibalance) {
+            setButtonStyle(true);
+          }
+          else{
+            setButtonStyle(false)
+          }
+
         }
-        
-      
+
 
 
 
@@ -850,7 +842,7 @@ const BuySell = (props: fullWidth) => {
     }
   }, [])
 
-  
+
 
   return (
     <>
@@ -1189,7 +1181,7 @@ const BuySell = (props: fullWidth) => {
         {/* ================================= */}
         {(showNes === 1 || showNes === 2) && (
           <>
-      
+
             {session && (
               <div className="mt-[20px] tmb-qty-value">
                 {prefernceSymbol === "Value" && (
