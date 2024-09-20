@@ -153,12 +153,12 @@ const PositionsTable = (props: propsData) => {
                   <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
-              <th className=" py-[10px]">
+              {/* <th className=" py-[10px]">
                 <div className="flex">
                   <p className="text-start  top-label dark:text-gamma">Direction</p>
                   <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
-              </th>
+              </th> */}
               <th className=" py-[10px]">
                 <div className="flex">
                   <p className="  top-label dark:text-gamma">Margin</p>
@@ -218,10 +218,10 @@ const PositionsTable = (props: propsData) => {
                         </div>
                       </td>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                        <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction !== 'long' ? '-' : ''}{item?.qty}</p>
+                        <p className={`top-label !font-[600] ${item?.qty < 0 ? '!text-sell' : '!text-buy'}`}>{item?.direction !== 'long' ? '-' : ''}{item?.qty}</p>
                       </td>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                        <p className="top-label !font-[600] dark:!text-white !text-black">{item?.size}</p>
+                        <p className={`top-label !font-[600] ${item?.size < 0 ? '!text-sell' : '!text-buy'}`}>{item?.size}</p>
                       </td>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                         <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(truncateNumber(item?.entry_price, 6))}</p>
@@ -232,9 +232,9 @@ const PositionsTable = (props: propsData) => {
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                         <p className="top-label !text-[#f7a600] !font-[600]">{currencyFormatter(truncateNumber(item?.liq_price, 6))}</p>
                       </td>
-                      <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
+                      {/* <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                         <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction}</p>
-                      </td>
+                      </td> */}
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                         <p className="top-label !font-[600] dark:!text-white !text-black">{truncateNumber(item?.margin, 6)}</p>
                         <p className="top-label !font-[600] dark:!text-white !text-black">  </p>

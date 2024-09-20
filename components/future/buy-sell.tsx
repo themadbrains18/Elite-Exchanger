@@ -46,7 +46,6 @@ const BuySell = (props: fullWidth) => {
   const [show, setShow] = useState(1);
   const { status, data: session } = useSession();
   const list = ["USDT", props?.currentToken?.coin_symbol];
-  // const timeInForceList = ['GTC', 'FOK', 'IOC'];
   const [modelPopup, setModelPopup] = useState(0);
   const [modelOverlay, setModelOverlay] = useState(false);
   // nested tabs
@@ -367,7 +366,7 @@ const BuySell = (props: fullWidth) => {
 
       // console.log(marketPrice,'=======entryPrice', sizeValue,'======sizeValue', props?.marginMode?.leverage,'=======leverage');
       let marginValue = prefernceSymbol === "Qty" ? (marketPrice * sizeValue) / props?.marginMode?.leverage : (sizeValue / props?.marginMode?.leverage);
-      console.log(marginValue,"=marginValue");
+      // console.log(marginValue,"=marginValue");
       
       // orderType === "qty" ? size / props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
       obj = {
@@ -449,7 +448,7 @@ const BuySell = (props: fullWidth) => {
 
 
       let marginValue = prefernceSymbol === "Qty" ? ((entryPrice * sizeValue) / props?.marginMode?.leverage) : sizeValue / props?.marginMode?.leverage;
-      console.log(marginValue, "=======marginValue limit");
+      // console.log(marginValue, "=======marginValue limit");
 
 
       obj = {
@@ -1065,9 +1064,6 @@ const BuySell = (props: fullWidth) => {
                   value={sizeValue}
                   placeholder="0.00"
                   onChange={onChangeSizeValue}
-                  // onInput={()=>{
-                  //   setLerverage(true)
-                  // }}
                   step="0.001"
                   min={props?.minTrade}
                   name="token_amount"
@@ -1235,15 +1231,12 @@ const BuySell = (props: fullWidth) => {
                           submitForm('market');
                         }
                         else if (marketType === "limit") {
-                          // console.log("heresadasda");
                           let market_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
                           if (market_price < entryPrice) {
-                            // console.log("in this", market_price, "entry pricesada", entryPrice);
 
                             setShortConfirm(true);
                           }
                           else {
-                            // console.log("here in elseewrwee");
                             submitForm('limit')
                           }
                         }
@@ -1266,17 +1259,11 @@ const BuySell = (props: fullWidth) => {
                           submitForm('market');
                         }
                         else if (marketType === "limit") {
-                          // console.log("here");
-
                           let market_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
                           if (market_price > entryPrice) {
-                            // console.log("in this", market_price, "entry price", entryPrice);
-
                             setShortConfirm(true);
                           }
                           else {
-                            // console.log("here in else");
-
                             submitForm('limit')
                           }
                         }
@@ -1304,9 +1291,6 @@ const BuySell = (props: fullWidth) => {
                   <p className="top-label">Max trade value</p>
                   <p className="top-label !text-[#000] dark:!text-[#fff]">
                     {`${truncateNumber(props?.maxTrade - usedQty, 3)} ${props?.currentToken?.coin_symbol}`}
-                    {/* {prefernceSymbol === "qty"
-                      ? `${props?.maxTrade} ${props?.currentToken?.coin_symbol}`
-                      : `${truncateNumber(props?.maxTrade * marketPrice, 6)} ${symbol}`} */}
                   </p>
 
                 </div>
@@ -1325,17 +1309,12 @@ const BuySell = (props: fullWidth) => {
             {/* open long */}
             <div
               className="flex items-center justify-between px-[12px] py-[7px] dark:bg-[#373d4e] bg-[#e5ecf0] rounded-[4px] cursor-pointer mt-[10px]"
-            // onClick={() => {
-            //   props.setOverlay(true);
-            //   props.setPopupMode(4);
-            // }}
             >
               <div className="flex items-center gap-10">
                 <p className="top-label dark:!text-white !text-[#000]">
                   Fee Rate
                 </p>
               </div>
-              {/* <IconsComponent type="rightArrowWithoutBg" /> */}
             </div>
             <div className=' mt-10 '>
               <div className="flex gap-5 items-center justify-between mb-[5px]">
