@@ -367,7 +367,7 @@ const BuySell = (props: fullWidth) => {
 
       // console.log(marketPrice,'=======entryPrice', sizeValue,'======sizeValue', props?.marginMode?.leverage,'=======leverage');
       let marginValue = prefernceSymbol === "Qty" ? (marketPrice * sizeValue) / props?.marginMode?.leverage : (sizeValue / props?.marginMode?.leverage);
-      // console.log(marginValue,"=marginValue");
+      console.log(marginValue,"=marginValue");
       
       // orderType === "qty" ? size / props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
       obj = {
@@ -449,7 +449,7 @@ const BuySell = (props: fullWidth) => {
 
 
       let marginValue = prefernceSymbol === "Qty" ? ((entryPrice * sizeValue) / props?.marginMode?.leverage) : sizeValue / props?.marginMode?.leverage;
-      // console.log(marginValue, "=======marginValue");
+      console.log(marginValue, "=======marginValue limit");
 
 
       obj = {
@@ -639,12 +639,12 @@ const BuySell = (props: fullWidth) => {
     const regex = /^\d{0,10}(\.\d{0,4})?$/;
 
     setLerverage(0);
-    let sliderThumb = document.getElementById("rangeThumb") as HTMLDivElement;
-    let rangeLine = document.getElementById("rangeLine") as HTMLDivElement;
+    let sliderThumb = document.getElementById("rangeThumb3") as HTMLDivElement;
+    let rangeLine = document.getElementById("rangeLine3") as HTMLDivElement;
     let inputPercent = document.querySelector('.inputPercent') as HTMLInputElement;
 
     if (leverage == 0) {
-      sliderThumb.setAttribute("style", 'left:0;');
+      sliderThumb?.setAttribute("style", 'left:0;');
       sliderThumb.innerText = "0X";
       inputPercent?.value == "0";
       rangeLine.setAttribute("style", 'width:0;');
@@ -1085,9 +1085,9 @@ const BuySell = (props: fullWidth) => {
           </>
         )}
         <RangeSlider
-          inputId="rangeInput"
-          thumbId="rangeThumb"
-          lineId="rangeLine"
+          inputId="rangeInput3"
+          thumbId="rangeThumb3"
+          lineId="rangeLine3"
           onChangeSizeInPercentage={onChangeSizeInPercentage}
           rangetype="X"
           step={1}
@@ -1295,7 +1295,7 @@ const BuySell = (props: fullWidth) => {
                         isNaN(truncateNumber(Number(scientificToDecimal(0 / props?.marginMode?.leverage)), 6)) ? '0.00' : truncateNumber(Number(scientificToDecimal(0 / props?.marginMode?.leverage)), 6)
                       :
 
-                      truncateNumber(Number(scientificToDecimal(sizeValue / props?.marginMode?.leverage)), 6)
+                      isNaN(truncateNumber(Number(scientificToDecimal(sizeValue / props?.marginMode?.leverage)), 6)) ? '0.00': truncateNumber(Number(scientificToDecimal(sizeValue / props?.marginMode?.leverage)), 6)
                     }
                   </p>
 
