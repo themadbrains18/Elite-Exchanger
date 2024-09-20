@@ -212,16 +212,16 @@ const PositionsTable = (props: propsData) => {
                         <div className={`pl-[5px] pt-[5px] border-l-[5px] ${item?.direction === 'long' ? 'border-[#03A66D]' : 'border-[#f74646]'} flex gap-[8px] items-center`}>
                           <div>
                             <p className="info-14 !text-[12px] dark:text-white">{item.symbol}</p>
-                            <p className={`top-label ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.leverage_type} {item.leverage}x</p>
+                            <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.leverage_type} {item.leverage}x</p>
                           </div>
                           {/* <p className="bg-[#13c2c21f] px-[5px] text-[#13c2c2] text-[12px]">{item.leverage}x</p> */}
                         </div>
                       </td>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                        <p className={`top-label !font-[600] ${item?.qty < 0 ? '!text-sell' : '!text-buy'}`}>{item?.direction !== 'long' ? '-' : ''}{item?.qty}</p>
+                        <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction !== 'long' ? '-' : ''}{item?.qty}</p>
                       </td>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                        <p className={`top-label !font-[600] ${item?.size < 0 ? '!text-sell' : '!text-buy'}`}>{item?.size}</p>
+                        <p className={`top-label !font-[600] dark:!text-white !text-black`}>{item?.size}</p>
                       </td>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                         <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(truncateNumber(item?.entry_price, 6))}</p>

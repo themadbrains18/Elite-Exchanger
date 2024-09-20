@@ -248,8 +248,6 @@ const BuySell = (props: fullWidth) => {
   // asset amount value using range slider //
   // ===================================================================//
   const onChangeSizeInPercentage = (value: number) => {
-
-
     setButtonStyle(true)
 
     setPercentage(Math.trunc(value));
@@ -493,6 +491,10 @@ const BuySell = (props: fullWidth) => {
 
   const confirmOrder = async () => {
     try {
+
+      // console.log(confirmOrderData,'===============');
+
+      // return;
       if (truncateNumber(usedQty + confirmOrderData?.qty, 3) > props?.maxTrade) {
 
         toast.error("Order failed. Order quantity is greater than maximum order quantity", { autoClose: 2000 })
@@ -633,7 +635,7 @@ const BuySell = (props: fullWidth) => {
   // =====Validation in case of amount more than enter wallet value=====//
   // ===================================================================//
   const onChangeSizeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-
+setPercentage(0)
     let value: any = e.target.value
     const regex = /^\d{0,10}(\.\d{0,4})?$/;
 
