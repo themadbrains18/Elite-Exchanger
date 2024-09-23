@@ -143,7 +143,7 @@ const ProfitLossTable: React.FC<propsData> = ({ show , getProfitLossOrder , orde
                                             </div>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className={`top-label !font-[600]`}>{item?.qty}</p>
+                                            <p className={`top-label !font-[600]`}>{truncateNumber(item?.qty,3)}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">TP {truncateNumber(item?.trigger_profit, 2)}(Last)</p>

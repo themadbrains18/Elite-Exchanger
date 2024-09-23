@@ -19,6 +19,7 @@ const CoinTypes = (props: propsData) => {
     const router = useRouter();
 
     useEffect(() => {
+       
         let existItem: any = localStorage.getItem('futurefavToken');
         if (existItem) {
             existItem = JSON.parse(existItem);
@@ -30,7 +31,7 @@ const CoinTypes = (props: propsData) => {
             }
         })
         setfavCoin(coinsItem);
-        // setFilteredCoins(coinsItem);
+        setFilteredCoins(coinsItem);
 
     }, [mode, props?.coins]);
 
@@ -152,7 +153,7 @@ const CoinTypes = (props: propsData) => {
                                             height={10}
                                             xmlns="http://www.w3.org/2000/svg"
                                             className={`dark:stroke-white stroke-black ${color}`}
-                                            stroke-width="0.4"
+                                            strokeWidth="0.4"
                                             fill='transparent'
                                         >
                                             <path d="M4.503.431a.7.7 0 0 1 1.293 0l1.073 2.58 2.785.223a.7.7 0 0 1 .399 1.23L7.931 6.28 8.58 9a.7.7 0 0 1-1.045.76L5.149 8.302 2.765 9.76a.7.7 0 0 1-1.046-.76l.648-2.718L.246 4.464a.7.7 0 0 1 .4-1.23l2.784-.223L4.503.43Z" />
@@ -207,7 +208,7 @@ const CoinTypes = (props: propsData) => {
                                             height={10}
                                             xmlns="http://www.w3.org/2000/svg"
                                             className={`dark:stroke-white stroke-black ${color}`}
-                                            stroke-width="0.4"
+                                            strokeWidth="0.4"
                                             fill='transparent'
                                         >
                                             <path d="M4.503.431a.7.7 0 0 1 1.293 0l1.073 2.58 2.785.223a.7.7 0 0 1 .399 1.23L7.931 6.28 8.58 9a.7.7 0 0 1-1.045.76L5.149 8.302 2.765 9.76a.7.7 0 0 1-1.046-.76l.648-2.718L.246 4.464a.7.7 0 0 1 .4-1.23l2.784-.223L4.503.43Z" />
