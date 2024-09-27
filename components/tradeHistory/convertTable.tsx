@@ -1,9 +1,9 @@
-import moment from 'moment';
 import Image from 'next/image';
 import React, { useContext, useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate';
 import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
+import { formatDate } from '@/libs/subdomain';
 
 interface propsData {
   date: Date,
@@ -141,7 +141,7 @@ const ConvertTable = (props: propsData) => {
                     <p className="info-14-18 dark:text-white  md:block ">{item?.type}</p>
                   </td>
                   <td>
-                    <p className={`info-14-18 dark:text-white  md:block hidden`}>{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
+                    <p className={`info-14-18 dark:text-white  md:block hidden`}>{formatDate(item?.createdAt,"yyyy-MM-dd HH:mm:ss")}</p>
                   </td>
                   <td>
                     <p className={`info-14-18 ${item?.type === 'Gain' ? '!text-dark-green' : '!text-red-dark'} md:block `}>{item?.amount}</p>

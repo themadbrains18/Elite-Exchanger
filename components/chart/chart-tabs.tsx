@@ -6,11 +6,9 @@ import Context from "../contexts/context";
 import ConfirmationModel from "../snippets/confirmation";
 import { useSession } from "next-auth/react";
 import AES from "crypto-js/aes";
-import moment from "moment";
 import { currencyFormatter } from "../snippets/market/buySellCard";
 import { useWebSocket } from "@/libs/WebSocketContext";
-import token from "@/pages/api/token";
-import { scientificToDecimal, truncateNumber } from "@/libs/subdomain";
+import { formatDate, scientificToDecimal, truncateNumber } from "@/libs/subdomain";
 import { useRouter } from "next/router";
 
 interface propsData {
@@ -628,11 +626,7 @@ const ChartTabs = (props: propsData) => {
                                     ? item?.token.symbol
                                     : item?.global_token.symbol}
                                 </p>
-                                {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">
-                                  {item?.token
-                                    ? item?.token?.symbol
-                                    : item?.global_token?.symbol}
-                                </p> */}
+                              
                               </div>
                             </div>
                           </td>
@@ -910,7 +904,7 @@ const ChartTabs = (props: propsData) => {
                                 {item.order_type}
                               </p>
                               <p className="info-10">
-                              {moment(item?.createdAt).format("YYYY-MM-DD")}
+                              {formatDate(item?.createdAt)}
                               </p>
                             </div>
                             <div className="block md:hidden py-[10px] md:py-[15px] px-0 md:px-[5px]">
@@ -1056,7 +1050,7 @@ const ChartTabs = (props: propsData) => {
                                       {elm.order_type}
                                     </p>
                                     <p className="info-10">
-                                      {moment(elm?.createdAt).format("YYYY-MM-DD")}
+                                    {formatDate(elm?.createdAt)}
                                     </p>
                                   </div>
                                   <div className="block md:hidden py-[10px] md:py-[15px] px-0 md:px-[5px]">

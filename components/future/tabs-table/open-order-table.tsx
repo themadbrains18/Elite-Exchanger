@@ -1,16 +1,14 @@
-import IconsComponent from '@/components/snippets/icons';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmationModel from '@/components/snippets/confirmation';
-import moment from 'moment';
 import { AES } from 'crypto-js';
 import { useWebSocket } from '@/libs/WebSocketContext';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import { useRouter } from 'next/router';
-import { truncateNumber } from '@/libs/subdomain';
+import { formatDate, truncateNumber } from '@/libs/subdomain';
 
 interface propsData {
     openOrders?: any;
@@ -141,7 +139,7 @@ const OpenOrderTable = (props: propsData) => {
                                 return (
                                     <tr key={index}>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{moment(item?.time).format("YYYY-MM-DD HH:mm:ss")}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{formatDate(item?.time,'yyyy-MM-dd HH:mm:ss')}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <div>

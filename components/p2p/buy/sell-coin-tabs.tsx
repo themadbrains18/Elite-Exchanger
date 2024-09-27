@@ -12,7 +12,6 @@ interface activeSection {
   }
 
 const SellCoinsTabs = (props:activeSection) => {
-  const [active, setActive] = useState(1);
   const [firstCurrency, setFirstCurrency] = useState('');
   const [selectedToken, setSelectedToken] = useState(Object);
 

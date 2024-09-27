@@ -5,11 +5,10 @@ import React, { useEffect, useState } from 'react'
 
 import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { useWebSocket } from '@/libs/WebSocketContext';
-import IconsComponent from '@/components/snippets/icons';
-import RestrictionNotice from '@/components/snippets/restrictionNotice';
+
 
 interface propsData {
   provider: any,

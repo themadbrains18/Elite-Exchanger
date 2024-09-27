@@ -1,5 +1,3 @@
-import React from "react";
-
 import SideBar from "../snippets/sideBar";
 
 interface child {

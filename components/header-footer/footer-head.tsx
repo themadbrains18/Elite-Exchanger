@@ -6,7 +6,7 @@ const FooterHead = () => {
   return (
     <div className="flex items-center justify-between mb-[50px]">
             <div>
-              <Link href="/">
+              <Link prefetch={false} href="/">
                 <svg    
                 // onClick={()=>{setMode("light");localStorage.setItem("mode", "light");}}
                 className='max-w-[159px] xl:max-w-[183px] w-full'
@@ -41,16 +41,16 @@ const FooterHead = () => {
               </Link>
             </div>
             <div className='flex items-center gap-[10px] lg:gap-[20px]'>
-              <Link href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer'>
+              <Link prefetch={false} href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer'>
                 <IconsComponent type='DownloadForWindow' hover={false} active={false} />
               </Link>
-              <Link href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer'>
+              <Link prefetch={false} href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer'>
                 <IconsComponent type='DownloadForMac' hover={false} active={false} />
               </Link>
-              <Link href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer'>
+              <Link prefetch={false} href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer'>
                 <IconsComponent type='DownloadFromAppStore' hover={false} active={false} />
               </Link>
-              <Link href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer'>
+              <Link prefetch={false} href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer'>
                 <IconsComponent type='DownloadFromGooglePlay' hover={false} active={false} />
               </Link>
             </div>

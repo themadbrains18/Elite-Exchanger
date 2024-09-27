@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
-import moment from "moment";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import Context from "../contexts/context";
+import { formatDate } from "@/libs/subdomain";
 
 interface fixSection {
     rewardsList?: any;
@@ -96,7 +96,7 @@ const Rewards = (props: fixSection) => {
                             const difference = +new Date(item.expired_on) - +new Date();
 
                             return <div key={index} className='rounded-[10px] bg-white'>
-                                <div className='pl-[24px] py-[30px] pr-[0] rounded-[10px] bg-primary-400 relative z-[1] group relative after:w-[20px] after:h-[20px] after:absolute after:top-[calc(50%-10px)] after:left-[-10px] overflow-hidden after:bg-[#fff] after:dark:bg-d-bg-primary after:rounded-full before:w-[20px] before:h-[20px] before:absolute before:top-[calc(50%-10px)] before:right-[-10px] overflow-hidden before:bg-[#fff] before:dark:bg-d-bg-primary before:rounded-full'>
+                                <div className='pl-[24px] py-[30px] pr-[0] rounded-[10px] bg-primary-400 relative z-[1] group  after:w-[20px] after:h-[20px] after:absolute after:top-[calc(50%-10px)] after:left-[-10px] overflow-hidden after:bg-[#fff] after:dark:bg-d-bg-primary after:rounded-full before:w-[20px] before:h-[20px] before:absolute before:top-[calc(50%-10px)] before:right-[-10px] overflow-hidden before:bg-[#fff] before:dark:bg-d-bg-primary before:rounded-full'>
                                     <div className='flex items-center justify-between gap-[15px]'>
                                         <div>
                                             <div className='flex items-center gap-[15px]'>
@@ -126,7 +126,7 @@ const Rewards = (props: fixSection) => {
                                     <div className='flex items-center mt-[24px] gap-[20px] justify-between'>
                                         <div>
                                             <div className='bg-[#3844520f] h-[8px] w-full max-w-[100px] rounded-[8px]'></div>
-                                            <p className='sm-text '>Use before {moment(item?.expired_on).format("YYYY-MM-DD")}</p>
+                                            <p className='sm-text '>Use before {formatDate(item?.expired_on)}</p>
 
                                         </div>
                                         <button type='button' disabled={difference < 0 ? true : false} className={`solid-button !px-[20px] !py-[10px] ${difference > 0 ? '' : 'cursor-not-allowed opacity-25'}`} onClick={() => difference > 0 ? router.push({ pathname: '/future/BTCUSDT' }) : ""}>{difference > 0 ? 'Use' : 'Expired'}</button>

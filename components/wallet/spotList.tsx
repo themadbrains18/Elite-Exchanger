@@ -4,7 +4,6 @@ import ReactPaginate from 'react-paginate';
 import IconsComponent from '../snippets/icons';
 import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
-import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import Deposit from '../snippets/deposit';
 import Withdraw from '../snippets/withdraw';

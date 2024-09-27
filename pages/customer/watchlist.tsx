@@ -1,13 +1,18 @@
-import WatchListPage from '@/components/watchlist/watchListPage'
+
 import React from 'react'
 import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
+import dynamic from 'next/dynamic'
 
 interface propsData{
   Watchlist?:any;
 } 
+const WatchListPage = dynamic(() => import('@/components/watchlist/watchListPage'), {
+  loading: () => <p>Loading...</p>, // Custom loading component or spinner
+});
+
 
 const Watchlist = (props: propsData) => {
   return (

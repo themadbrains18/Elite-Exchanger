@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Context from "../contexts/context";
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { currencyFormatter } from '../snippets/market/buySellCard';
 import { truncateNumber } from '@/libs/subdomain';
 
@@ -17,7 +17,6 @@ interface propsData {
 const OrderBook = (props: propsData) => {
     const [active1, setActive1] = useState(1);
     const [show, setShow] = useState(1);
-    const [lastsellBid, setLastsellBid] = useState();
     const { mode } = useContext(Context);
 
     // let isLastItem;

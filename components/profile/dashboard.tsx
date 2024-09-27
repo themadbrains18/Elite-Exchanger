@@ -1,13 +1,13 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import AES from 'crypto-js/aes';
-import moment from 'moment';
 import { useWebSocket } from '@/libs/WebSocketContext';
 import { toast } from 'react-toastify';
 import IconsComponent from '../snippets/icons';
+import { formatDate } from '@/libs/subdomain';
 
 const schema = yup.object().shape({
   fName: yup.string().optional().nullable(),
@@ -221,7 +221,7 @@ const Dashboard = (props: FixSection) => {
               {editable && (
                 <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-between pt-5 md:pt-[30px]">
                   <p className="sm-text">
-                    This account was created on {moment(props.session?.user?.createdAt).format('YYYY-MM-DD HH:mm:ss A')}
+                    This account was created on {formatDate(props.session?.user?.createdAt,"yyyy-MM-dd HH:mm:ss a")}
                   </p>
                   <div className="flex max-[767px]:w-full max-[767px]:flex-col md:gap-[30px] gap-10">
                     <button type="button" className="solid-button2 max-[767px]:max-w-full max-[767px]:w-full" onClick={handleCancel}>Cancel</button>

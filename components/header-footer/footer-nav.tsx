@@ -98,7 +98,7 @@ const FooterNav = () => {
                             return(
                                 <Fragment key={ind}>
                                     <li className='mb-[11px] md:mb-[21px]'>
-                                        <Link href={elem.linkurl} className='footer-text hover:text-primary'>
+                                        <Link prefetch={false} href={elem.linkurl} className='footer-text hover:text-primary'>
                                             {elem.linktext}
                                         </Link>
                                     </li>
@@ -116,7 +116,7 @@ const FooterNav = () => {
                             return(
                                 <Fragment key={ind}>
                                     <li className='mb-[11px] md:mb-[21px]'>
-                                        <Link href={elem.linkurl} className='footer-text hover:text-primary'>
+                                        <Link prefetch={false} href={elem.linkurl} className='footer-text hover:text-primary'>
                                             {elem.linktext}
                                         </Link>
                                     </li>
@@ -134,7 +134,7 @@ const FooterNav = () => {
                             return(
                                 <Fragment key={ind}>
                                     <li className='mb-[11px] md:mb-[21px] last:mb-[6px]'>
-                                        <Link href={elem.linkurl} className='footer-text hover:text-primary'>
+                                        <Link prefetch={false} href={elem.linkurl} className='footer-text hover:text-primary'>
                                             {elem.linktext}
                                         </Link>
                                     </li>
@@ -152,7 +152,7 @@ const FooterNav = () => {
                             return(
                                 <Fragment key={ind}>
                                     <li className='mb-[11px] md:mb-[21px] last:mb-[6px]'>
-                                        <Link href={elem.linkurl} className='footer-text hover:text-primary'>
+                                        <Link prefetch={false} href={elem.linkurl} className='footer-text hover:text-primary'>
                                             {elem.linktext}
                                         </Link>
                                     </li>

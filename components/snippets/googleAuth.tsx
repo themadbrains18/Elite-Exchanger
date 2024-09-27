@@ -1,9 +1,6 @@
-import Image from "next/image";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../contexts/context";
 import SecurityVerification from "./securityVerification";
-import QRCode from "qrcode";
-import { useSession } from "next-auth/react";
 import { toast } from 'react-toastify';
 import { AES } from "crypto-js";
 import clickOutSidePopupClose from "./clickOutSidePopupClose";

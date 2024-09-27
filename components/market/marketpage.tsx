@@ -13,7 +13,6 @@ interface propsData {
 
 const Marketpage = (props: propsData) => {
 
-  const watchCoinList = props.coinList.slice(0, 8);
   const marketCoinList = props.coinList.slice(0, 6);
   const [coins, setCoins] = useState([]);
   const [filter, setFilter] = useState('')

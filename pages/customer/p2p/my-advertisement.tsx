@@ -3,7 +3,7 @@ import AdvertisementTabs from '@/components/p2p/my-advertisement/advertisement-t
 import React from 'react'
 import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { useRouter } from 'next/router';
 

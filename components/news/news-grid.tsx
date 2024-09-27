@@ -28,7 +28,7 @@ const NewsGrid = () => {
                                         </div>
                                         <h3 className='sec-title md:mb-20 mb-[15px]'>Learn about UI8 coin and earn an All-Access Pass</h3>
                                         <p className='info-14-18 !text-[14px] md:!text-[16px]'></p>
-                                        <Link href='/detail' className='sec-Brief flex  items-center gap-[10px] !text-primary md:mt-[30px] mt-[20px]'>
+                                        <Link prefetch={false} href='/detail' className='sec-Brief flex  items-center gap-[10px] !text-primary md:mt-[30px] mt-[20px]'>
                                             <span className='block relative after:absolute after:w-full after:h-[2px] after:bg-primary after:top-[100%] after:left-0'>Read More</span>
                                         </Link>
                                     </div>

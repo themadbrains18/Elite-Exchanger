@@ -7,7 +7,6 @@ import DatePicker from "react-datepicker";
 import OrderTable from "./orderTable";
 import DepositTable from "./depositTable";
 import WithdrawTable from "./withdrawTable";
-import ConvertTable from "./convertTable";
 import StakingTable from "./stakingTable";
 import FilterSelectMenuWithCoin from "../snippets/filter-select-menu-with-coin";
 
@@ -22,9 +21,6 @@ const Historytrade = (props: propsData) => {
   const [startDate, setStartDate] = useState<any>();
   const [symbol, setSymbol] = useState('')
 
-  const filterData = async (e: any) => {
-    setFilter(e.target.value)
-  }
 
   
   
@@ -56,7 +52,7 @@ const Historytrade = (props: propsData) => {
           <div className="p-5 md:p-40 rounded-10  bg-white dark:bg-d-bg-primary">
             <div className="flex justify-between gap-5 mb-[26px] md:mb-40">
               <p className="sec-title">Trade History</p>
-              <Image src="/assets/history/dots.svg" width={24} height={24} alt="dots" className="cursor-pointer md:hidden block" />
+              <Image src="/assets/history/dots.svg" loading="lazy" width={24} height={24} alt="dots" className="cursor-pointer md:hidden block" />
               {/* <div className="border rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] py-[13px] px-[10px] ">
                 <Image src="/assets/history/search.svg" alt="search" width={24} height={24} />
                 <input type="search" placeholder="Search" className="nav-text-sm !text-beta outline-none bg-[transparent]" onChange={(e) => filterData(e)} />

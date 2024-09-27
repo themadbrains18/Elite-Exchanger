@@ -4,8 +4,7 @@ import ReactPaginate from 'react-paginate';
 import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
 import { currencyFormatter } from '../snippets/market/buySellCard';
-import { truncateNumber } from '@/libs/subdomain';
-import moment from 'moment';
+import { formatDate, truncateNumber } from '@/libs/subdomain';
 
 
 interface propsData {
@@ -59,7 +58,7 @@ const WithdrawList = (props: propsData) => {
     setCurrentPage(event.selected);
   };
 
-  function formatDate(date: any) {
+  function formattDate(date: any) {
     const options: {} = { year: 'numeric', month: 'short', day: '2-digit' };
     return new Date(date).toLocaleDateString('en-US', options)
   }
@@ -105,7 +104,7 @@ const WithdrawList = (props: propsData) => {
                       {/* <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" /> */}
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                         <p className="info-14-18 dark:text-white">{item.symbol}</p>
-                        <p className="info-14-18 !text-[10px] lg:hidden">{formatDate(item?.createdAt)}</p>
+                        <p className="info-14-18 !text-[10px] lg:hidden">{formattDate(item?.createdAt)}</p>
                       </div>
                     </div>
                   </td>
@@ -113,7 +112,7 @@ const WithdrawList = (props: propsData) => {
                     <p className="info-14-18 dark:text-white  lg:text-start text-end">{currencyFormatter(truncateNumber(item?.amount, 8))}</p>
                   </td>
                   <td className="max-[1023px]:hidden">
-                    <p className="info-14-18 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
+                    <p className="info-14-18 dark:text-white">{formatDate(item?.createdAt,"yyyy-MM-dd HH:mm:ss")}</p>
                   </td>
                   <td className=" text-end">
                     <p className={`info-14-18  ${item?.status == "success" ? "text-buy" : item?.status == "pending" ? "text-primary" : "text-cancel"}`}>{item?.status == "success" ? "Success" : item?.status == "pending" ? "Pending" : "Rejected"}</p>

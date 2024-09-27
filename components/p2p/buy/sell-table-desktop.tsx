@@ -219,7 +219,7 @@ const SellTableDesktop = (props: activeSection) => {
                   </td>
 
                   <td>
-                    <Link href="/p2p/postad" className="info-14-18 text-cancel px-[20px] py-[9px] rounded-[4px]  dark:bg-black-v-1 bg-orange">{item.sell}</Link>
+                    <Link prefetch={false} href="/p2p/postad" className="info-14-18 text-cancel px-[20px] py-[9px] rounded-[4px]  dark:bg-black-v-1 bg-orange">{item.sell}</Link>
                   </td>
                 </tr>
               );

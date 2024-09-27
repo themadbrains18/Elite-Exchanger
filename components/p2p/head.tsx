@@ -86,7 +86,7 @@ const Head = () => {
       {/* top heading and brief */}
       <div className="flex items-center justify-between">
         <div>
-          <Link href='/p2p/buy'
+          <Link prefetch={false} href='/p2p/buy'
             className={`${!router.pathname.includes('/p2p/express')
               ? "bg-primary !text-white"
               : "dark:text-beta bg-bg-secondary !text-body-primary dark:bg-black-v-1"
@@ -94,7 +94,7 @@ const Head = () => {
           >
             P2P Process
           </Link>
-          <Link href='/p2p/express'
+          <Link prefetch={false} href='/p2p/express'
             className={`${router.pathname.includes('/p2p/express')
               ? "bg-primary !text-white"
               : "dark:text-beta bg-bg-secondary !text-body-primary dark:bg-black-v-1"
@@ -145,7 +145,7 @@ const Head = () => {
               tabsLinks.map((elem, ind) => {
                 return (
                   <Fragment key={ind}>
-                    <Link
+                    <Link prefetch={false}
                       href={`${elem.linkUrl}`}
                       className={`${router.pathname.includes(elem.linkUrl)
                         ? "bg-primary !text-white"

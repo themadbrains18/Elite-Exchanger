@@ -23,7 +23,7 @@ const Hero = () => {
                         </div>
 
                         <div className="hero_right w-full max-w-[820px] lg:flex lg:items-center order-1 lg:order-2">
-                            <Image src="/assets/refer/hero-img.png" alt="Laptop-image" className="block w-full" width={653} height={500} />
+                            <Image loading="lazy" src="/assets/refer/hero-img.png" alt="Laptop-image" className="block w-full" width={653} height={500} />
                         </div>
                     </div>
                 </div>

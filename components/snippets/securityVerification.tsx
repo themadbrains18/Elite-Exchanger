@@ -1,15 +1,13 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Context from "../contexts/context";
 import { AES } from "crypto-js";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { signOut, useSession } from "next-auth/react";
-import { Sigmar } from "next/font/google";
 import Image from "next/image";
 import QRCode from "qrcode";
-import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
 interface activeSection {
   setActive: Function;

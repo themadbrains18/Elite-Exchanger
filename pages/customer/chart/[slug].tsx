@@ -6,14 +6,13 @@ import OrderBook from '@/components/chart/order-book-desktop';
 import ChartTabs from '@/components/chart/chart-tabs';
 import OrderBookMobile from '@/components/chart/order-book-mobile';
 import ResponsiveFixCta from '@/components/market/responsive-fix-cta';
-import { getProviders, signOut } from "next-auth/react"
+import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
-import AES from 'crypto-js/aes';
 import { useWebSocket } from '@/libs/WebSocketContext';
 
 interface Session {
@@ -52,6 +51,7 @@ const Chart = (props: Session) => {
         }
         refreshTokenList();
     }, [slug]);
+
     useEffect(() => {
         if (!wbsocket) return;
     
@@ -105,7 +105,7 @@ const Chart = (props: Session) => {
     }
 
     const getTokenUserTradeHistory = async (token_id: string) => {
-        addToWatchList(token_id);
+    
         if (props.session) {
             let openOrder = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market?token_id=${token_id}&userid=${props.session?.user?.user_id}`, {
                 method: "GET",
@@ -136,44 +136,7 @@ const Chart = (props: Session) => {
         filterBuySellRecords(marketHistory?.data?.orderAll);
     }
 
-    const addToWatchList = async (tokenid: string) => {
-        try {
-            if (props?.session) {
 
-                let exist = props.userWatchList.filter((item: any) => {
-                    return item?.token_id === tokenid
-                })
-
-                if (!exist) {
-                    let user_id = props.session.user.user_id;
-                    let token_id = tokenid;
-
-                    let obj = {
-                        user_id,
-                        token_id
-                    }
-
-                    const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
-                    let record = encodeURIComponent(ciphertext.toString());
-                    let result = await fetch(
-                        `/api/watchlist`,
-                        {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "Authorization": props?.session?.user?.access_token
-                            },
-                            body: JSON.stringify(record),
-                        }
-                    ).then((response) => response.json());
-                }
-
-            }
-
-        } catch (error: any) {
-            toast.error(error.message)
-        }
-    }
 
     const filterBuySellRecords = (data: any) => {
         // console.log(slug,"slug");

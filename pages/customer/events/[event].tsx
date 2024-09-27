@@ -46,8 +46,6 @@ export default Events;
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const session = await getServerSession(context.req, context.res, authOptions);
-  const providers = await getProviders()
-
   return {
     props: {
       sessions: session,

@@ -6,10 +6,10 @@ import Context from "../../contexts/context";
 import ConfirmationModel from "../../snippets/confirmation";
 import { useSession } from "next-auth/react";
 import AES from "crypto-js/aes";
-import moment from "moment";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { currencyFormatter } from "@/components/snippets/market/buySellCard";
 import { abbreviateNumber } from "@/components/chart/chart-tabs";
+import { formatDate } from "@/libs/subdomain";
 
 interface propsData {
   coinsList: any;
@@ -811,7 +811,7 @@ const ChartTabs = (props: propsData) => {
                                 {item.order_type}
                               </p>
                               <p className="info-10">
-                                {moment(item?.createdAt).format("YYYY-MM-DD")}
+                                {formatDate(item?.createdAt)}
                               </p>
                             </div>
                             <div className="block md:hidden py-[10px] md:py-[15px] px-0 md:px-[5px]">
@@ -960,7 +960,7 @@ const ChartTabs = (props: propsData) => {
                                       {elm.order_type}
                                     </p>
                                     <p className="info-10">
-                                      {moment(elm?.createdAt).format("YYYY-MM-DD")}
+                                      {formatDate(elm?.createdAt)}
                                     </p>
                                   </div>
                                   <div className="block md:hidden py-[10px] md:py-[15px] px-0 md:px-[5px]">

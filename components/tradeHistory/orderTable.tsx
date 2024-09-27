@@ -1,11 +1,10 @@
-import moment from 'moment';
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import React, { useContext, useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate';
 import Context from '../contexts/context';
 import { currencyFormatter } from '../snippets/market/buySellCard';
-import { truncateNumber } from '@/libs/subdomain';
+import { formatDate, truncateNumber } from '@/libs/subdomain';
 
 interface propsData {
   filter: string;
@@ -110,31 +109,31 @@ const OrderTable = (props: propsData) => {
               <th className="sticky left-0 bg-white dark:bg-d-bg-primary py-5">
                 <div className="flex ">
                   <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">Pair</p>
-                  <Image className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                  <Image loading='lazy' className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
               <th className=" py-5">
                 <div className="flex">
                   <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Side</p>
-                  <Image className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                  <Image loading='lazy' className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
               <th className=" py-5">
                 <div className=" md:flex">
                   <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Type</p>
-                  <Image className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                  <Image loading='lazy' className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
               <th className=" py-5">
                 <div className="hidden md:flex">
                   <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Price</p>
-                  <Image className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                  <Image loading='lazy' className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
               <th className=" py-5">
                 <div className="hidden md:flex">
                   <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Bid</p>
-                  <Image className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                  <Image loading='lazy' className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
               <th className=" py-5">
@@ -146,13 +145,14 @@ const OrderTable = (props: propsData) => {
               <th className=" py-5">
                 <div className="hidden md:flex">
                   <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Total Qty.</p>
-                  <Image className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                  <Image loading='lazy' className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
               <th className=" py-5">
                 <div className="flex">
                   <p className="text-end  nav-text-sm md:nav-text-lg dark:text-gamma">Status</p>
-                  <Image className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                  <Image
+                  loading="lazy" className="md:block hidden" src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
             </tr>
@@ -163,7 +163,8 @@ const OrderTable = (props: propsData) => {
                 <tr key={index}  >
                   <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                      <Image src={`${imgSrc ? '/assets/history/Coin.svg' : item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol === "XRP" && "bg-white rounded-full"}`} />
+                      <Image
+                      loading="lazy" src={`${imgSrc ? '/assets/history/Coin.svg' : item.token !== null ? item?.token?.image : item?.global_token?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol === "XRP" && "bg-white rounded-full"}`} />
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                         <p className="info-14-18 dark:text-white">{item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                         {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p> */}
@@ -195,7 +196,7 @@ const OrderTable = (props: propsData) => {
                       </div>
                       <div className="hidden md:block">
                         <p className="info-14-18 dark:text-white">{item.order_type}</p>
-                        <p className="info-10">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
+                        <p className="info-10">{formatDate(item?.createdAt,"yyyy-MM-dd HH:mm:ss")}</p>
                       </div>
                       <div className="block md:hidden">
                         <p className="info-14-18 dark:text-white">{item.market_type}</p>
@@ -230,6 +231,7 @@ const OrderTable = (props: propsData) => {
                 <td colSpan={8}>
                   <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                     <Image
+                    loading="lazy"
                       src="/assets/refer/empty.svg"
                       alt="emplty table"
                       width={107}

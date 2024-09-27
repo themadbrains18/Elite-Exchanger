@@ -5,7 +5,6 @@ import MobileTable from './mobile-table';
 import FilterSelectMenuWithCoin from '@/components/snippets/filter-select-menu-with-coin';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import moment from 'moment';
 import { useRouter } from 'next/router';
 
 interface propsData {
@@ -27,12 +26,6 @@ const AdvertisementTabs = (props: propsData) => {
     const [selectedToken, setSelectedToken] = useState(Object);
     // const [posts, setPosts] = useState(props?.posts);
     const [paymentId, setPaymentId] = useState('');
-
-    const [publishedData, setPublishedData] = useState(props.published);
-
-    const [unpublishedData, setUnpublishedData] = useState(props.unpublished);
-
-    const [adsHistory, setAdsHistory] = useState(props?.posts);
 
     const [startDate, setStartDate] = useState<any>();
     const [value, setValue] = useState(""); // For currency dropdown

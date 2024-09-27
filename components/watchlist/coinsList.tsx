@@ -3,7 +3,7 @@ import IconsComponent from "../snippets/icons";
 import Image from "next/image";
 import ReactPaginate from "react-paginate";
 import Context from "../contexts/context";
-import moment from "moment";
+import { formatDate } from "@/libs/subdomain";
 
 interface propsData {
   watchList?: any;
@@ -153,7 +153,7 @@ const CoinList = (props: propsData) => {
                     </td>
                     <td className="max-[1023px]:hidden">
                       <div className={` items-center gap-[10px] flex`}>
-                        <p className={`info-14-18 dark:text-white `}>{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
+                        <p className={`info-14-18 dark:text-white `}>{formatDate(item?.createdAt,"yyyy-MM-dd HH:mm:ss")}</p>
                         <IconsComponent type={item.status} active={false} hover={false} />
                       </div>
                     </td>

@@ -35,9 +35,7 @@ const schema = yup.object().shape({
 });
 
 const SignUp = () => {
-  const { mode } = useContext(Context);
   const [show, setShow] = useState(false);
-  const [show1, setShow1] = useState(false);
   const [step, setStep] = useState(0);
   const [isEmail, setIsEmail] = useState(false);
   const [formData, setFormData] = useState({ username: '', password: '' });
@@ -49,10 +47,6 @@ const SignUp = () => {
 
   // auto generate password
   const [passwordLength, setPasswordLength] = useState(18);
-  const [useSymbols, setUseSymbols] = useState(true);
-  const [useNumbers, setUseNumbers] = useState(true);
-  const [useLowerCase, setUseLowerCase] = useState(true);
-  const [useUpperCase, setUseUpperCase] = useState(true);
 
   const [checker, setChecker] = useState(false)
   const queryParams = searchParams.get('r');
@@ -274,7 +268,7 @@ const SignUp = () => {
                     <input type="checkbox" id="checkbox" {...register('agree')} className="mt-[6px]" />
                     <label htmlFor="checkbox" className=" cursor-pointer sm-text text-[14px] md:text-[16px] text-gamma dark:text-white leading-[24px]">
                     By registering, I agree that I am 18 years of age or older and accept the{" "}
-                      <Link href="#" className="!text-primary">
+                      <Link prefetch={false} href="#" className="!text-primary">
                         User Agreements, Privacy Policy, Cookie Policy.
                       </Link>
                     </label>
@@ -292,7 +286,7 @@ const SignUp = () => {
                 {/**Form End  */}
                 <div className="flex justify-center">
                   <p className="sec-text text-nav-primary dark:text-white">Already have an account?&nbsp;</p>
-                  <Link href="/login" className="sec-text !text-primary">
+                  <Link prefetch={false} href="/login" className="sec-text !text-primary">
                     Sign in
                   </Link>
                 </div>

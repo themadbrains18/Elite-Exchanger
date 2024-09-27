@@ -2,11 +2,10 @@ import React, { useState } from "react";
 import IconsComponent from "../snippets/icons";
 import Image from "next/image";
 import ReferPopup from "../snippets/referPopup";
-import Link from "next/link";
 import { toast } from 'react-toastify';
-import moment from 'moment';
 import { useRouter } from "next/router";
 import EventTaskPopup from "../snippets/eventTaskPopup";
+import { formatDate } from "@/libs/subdomain";
 interface fixSection {
   fixed?: boolean;
   show?: number;
@@ -243,7 +242,7 @@ const Referal = (props: fixSection) => {
                   {referList && referList.length > 0 && referList.map((item: any, index: number) => {
                     return <tr key={index}>
                       <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{(item?.referral_user)?.substring(0, 6)}</td>
-                      <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{moment(item?.createdAt)?.format('YYYY-MM-DD HH:mm:ss')}</td>
+                      <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white">{formatDate(item?.createdAt,"yyyy-MM-dd HH:mm:ss")}</td>
                       <td className="text-left py-10 md:py-20 sm-text text-black dark:text-white hidden md:block">{(item?.user_id)?.substring(0, 6)}</td>
                       <td className="text-left py-10 md:py-20 sm-text !text-[#52c41a]">Register</td>
                       <td className="text-left py-10 md:py-20 sm-text !text-[#52c41a] cursor-pointer max-[767px]:text-end " onClick={() => { setReferProgramTask(item); setTaskShow(true); }}>view</td>

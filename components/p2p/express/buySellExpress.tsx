@@ -957,6 +957,7 @@ const BuySellExpress = (props: propsData) => {
               </button>
             ) : (
               <Link
+              prefetch={false}
                 href="/login"
                 className="solid-button w-full block text-center"
               >

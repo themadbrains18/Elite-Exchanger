@@ -3,8 +3,8 @@ import FilterSelectMenuWithCoin from "@/components/snippets/filter-select-menu-w
 import React, { useContext } from "react";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, useForm } from "react-hook-form";
-import { toast, ToastContainer } from "react-toastify";
+import {  useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 import { AES } from "crypto-js";
 import { useSession } from "next-auth/react";
 
@@ -15,16 +15,6 @@ interface ActiveSession {
   refreshPairList?:any;
   session?:any;
 }
-
-type PairSubmitForm = {
-  tokenOne: string;
-  tokenTwo: string;
-  symbolOne: string;
-  symbolTwo: string;
-  maker?: number;
-  taker?: number;
-  min_trade: number;
-};
 
 const schema = yup.object().shape({
   tokenOne: yup.string().required("Please enter symbol."),
@@ -46,13 +36,9 @@ const AddPair = (props: ActiveSession) => {
     register,
     setValue,
     handleSubmit,
-    watch,
-    reset,
     setError,
     getValues,
     clearErrors,
-    formState,
-    control,
     formState: { errors },
   } = useForm({
     mode: "onChange",

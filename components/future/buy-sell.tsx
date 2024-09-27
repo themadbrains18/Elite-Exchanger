@@ -1301,6 +1301,7 @@ setPercentage(0)
             {status === "unauthenticated" && (
               <div className="mt-[20px]">
                 <Link
+                prefetch={false}
                   href="/login"
                   className="solid-button w-full block text-center !rounded-[8px] py-[10px] px-[15px] !text-[14px]"
                 >
@@ -1380,6 +1381,7 @@ setPercentage(0)
         {showNes === 3 && status === "unauthenticated" && (
           <div className="mt-[20px]">
             <Link
+            prefetch={false}
               href="/login"
               className="solid-button w-full block text-center !rounded-[8px] py-[10px] px-[15px] !text-[14px]"
             >

@@ -2,7 +2,6 @@ import Context from '@/components/contexts/context';
 import ConfirmationModel from '@/components/snippets/confirmation';
 import IconsComponent from '@/components/snippets/icons';
 import { AES } from 'crypto-js';
-import moment from 'moment';
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';

@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 
 import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 
 const Notification = () => {

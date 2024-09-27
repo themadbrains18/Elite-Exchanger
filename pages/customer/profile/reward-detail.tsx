@@ -3,18 +3,17 @@ import React, { useEffect, useState } from 'react'
 
 import { getProviders, useSession } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
-
-import moment from "moment";
 import { useRouter } from 'next/router';
+import { formatDate } from '@/libs/subdomain';
 
 const RewardDetail = () => {
     const searchParams = useSearchParams()
     const rewards_Id = searchParams.get('id');
     const router = useRouter();
 
-    const { status, data: session } = useSession();
+    const {  data: session } = useSession();
     const [reward, setRewardDetail] = useState(Object);
 
     useEffect(() => {
@@ -113,11 +112,11 @@ const RewardDetail = () => {
                         </div>
                         <div className='flex items-center gap-[15px] justify-between mt-[20px]'>
                             <p className='info-14-18'>Claimed on</p>
-                            <p className='info-14-18 dark:!text-white !text-black text-end max-w-[250px] w-full'>{moment(reward?.claimed_on).format("YYYY-MM-DD HH:mm")}</p>
+                            <p className='info-14-18 dark:!text-white !text-black text-end max-w-[250px] w-full'>{formatDate(reward?.claimed_on,"yyyy-MM-dd HH:mm")}</p>
                         </div>
                         <div className='flex items-center gap-[15px] justify-between mt-[20px]'>
                             <p className='info-14-18'>Expired on</p>
-                            <p className='info-14-18 dark:!text-white !text-black text-end max-w-[250px] w-full'>{moment(reward?.expired_on).format("YYYY-MM-DD HH:mm")}</p>
+                            <p className='info-14-18 dark:!text-white !text-black text-end max-w-[250px] w-full'>{formatDate(reward?.expired_on,"yyyy-MM-dd HH:mm")}</p>
                         </div>
                     </div>
                     <div className='max-w-[35%] w-full'>

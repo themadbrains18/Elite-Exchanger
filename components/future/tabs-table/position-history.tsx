@@ -1,9 +1,8 @@
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
-import { truncateNumber } from '@/libs/subdomain';
-import moment from 'moment';
+import { formatDate, truncateNumber } from '@/libs/subdomain';;
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React from 'react';
 
 interface propsData {
     positions?: any;
@@ -104,7 +103,7 @@ const PositionsHistoryTable = (props: propsData) => {
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item?.position_id.split('-')[0]}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{moment(item?.createdAt).format("YYYY-MM-DD HH:mm:ss")}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{formatDate(item?.createdAt,"yyyy-MM-dd HH:mm:ss")}</p>
                                         </td>
                                     </tr>
                                 )

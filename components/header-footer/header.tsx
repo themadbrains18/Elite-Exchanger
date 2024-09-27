@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { use, useContext, useEffect, useRef, useState } from "react";
+import React, {  useContext, useEffect, useRef, useState } from "react";
 import HeaderLogo from "../svg-snippets/headerLogo";
 import Link from "next/link";
 import TradeIcon from "../svg-snippets/trade-icon";
@@ -222,7 +222,7 @@ const Header = (props: propsData) => {
           <div className="hidden lg:grid header-wrapper items-center justify-between">
             <div className={`flex items-center`}>
               <div className="pr-[20px] border-r border-delta">
-                <Link href="/" className="min-w-[183px]">
+                <Link prefetch={false} href="/" className="min-w-[183px]">
                   <HeaderLogo />
                 </Link>
               </div>
@@ -233,7 +233,7 @@ const Header = (props: propsData) => {
                     return (
 
                       <li key={index + elem?.name} className="relative group hover:pb-[20px] hover:mb-[-20px] ">
-                        <Link
+                        <Link prefetch={false}
                           data-testid={elem?.name}
                           href={elem?.url}
                           className="md-text flex items-center gap-[5px] dark:text-d-nav-primary text-nav-primary whitespace-nowrap group-hover:!text-primary"
@@ -252,7 +252,7 @@ const Header = (props: propsData) => {
                                 return (
                                   <li key={nesIndex + Date.now()} className="mb-[10px]">
                                    
-                                    <Link href={`/chart/${item?.tradepair?.symbolOne}`}>
+                                    <Link prefetch={false} href={`/chart/${item?.tradepair?.symbolOne}`}>
                                       <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full cursor-pointer" onClick={() => { router?.push(`/chart/${item?.tradepair?.symbolOne}`) }}>
                                       <Image src={`${imgSrc2?'/assets/history/Coin.svg':item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)} className={`min-w-[30px] ${item?.symbol==="XRP"&&"bg-white rounded-full "}`}/>
 
@@ -276,7 +276,7 @@ const Header = (props: propsData) => {
                                 let symbol = item?.futuretradepair?.coin_symbol === 'BTCB' ? 'BTC' : item?.futuretradepair?.coin_symbol === 'BNBT' ? 'BNB' : item?.futuretradepair?.coin_symbol
                                 return (
                                   <li key={nesIndex + Date.now()} className="mb-[10px]">
-                                    <Link href={`/future/${symbol}${item?.futuretradepair?.usdt_symbol}`} >
+                                    <Link prefetch={false} href={`/future/${symbol}${item?.futuretradepair?.usdt_symbol}`} >
                                       <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
                                       <Image src={`${imgSrc?'/assets/history/Coin.svg':item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)}  className={`min-w-[30px] ${item?.symbol==="XRP"&&"bg-white rounded-full "}`}/>
 
@@ -305,13 +305,13 @@ const Header = (props: propsData) => {
 
               {session === null || session === undefined ? (
                 <div className="flex items-center gap-[30px] justify-end">
-                  <Link
+                  <Link prefetch={false}
                     className="nav-text-lg text-[18px] !text-primary whitespace-nowrap dark:hover:!text-white hover:!text-black"
                     href="/login"
                   >
                     Sign In
                   </Link>
-                  <Link
+                  <Link prefetch={false}
                     className={`solid-button !max-w-[161px] w-full text-center ${router?.pathname?.includes('/future/') && '!py-[12px]'}`}
                     href="/register"
                   >
@@ -320,7 +320,7 @@ const Header = (props: propsData) => {
                 </div>
               ) : (
                 <div className="flex items-center gap-[24px] xl:gap-[30px] justify-end">
-                  <Link
+                  <Link prefetch={false}
                     data-testid="trade-history"
                     className={`solid-button flex !bg-grey items-center group gap-[10px] dark:!bg-black-v-1  border dark:border-black-v-1 !text-nav-secondary hover:!border-primary  ${router?.pathname?.includes('/future/') && '!py-[12px]'}`}
                     href="/history"
@@ -330,7 +330,7 @@ const Header = (props: propsData) => {
                       Trade History
                     </span>
                   </Link>
-                  <Link
+                  <Link prefetch={false}
                     data-testid="wallet"
                     className={`solid-button flex !bg-grey group items-center gap-[10px] dark:!bg-black-v-1 !text-nav-secondary border dark:border-black-v-1 hover:!border-primary  ${router?.pathname?.includes('/future/') && '!py-[12px]'}`}
                     href="/wallet"
@@ -430,7 +430,7 @@ const Header = (props: propsData) => {
           <div className="lg:hidden ">
             <div className="flex items-center justify-between">
               <div>
-                <Link href="/">
+                <Link prefetch={false} href="/">
                   <HeaderLogo />
                 </Link>
               </div>

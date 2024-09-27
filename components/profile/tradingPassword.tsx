@@ -448,7 +448,7 @@ const TradingPassword = (props: activeSection) => {
 
               
           { !forgetPassword  && (
-            <Link onClick={(e)=>{e.preventDefault(); setForgetPassword(true)}} className={`sec-text text-[14px]  !text-primary mt-2  ${(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? 'hidden' : "inline-block"}`} href="#">Forget trading password?</Link>
+            <Link prefetch={false} onClick={(e)=>{e.preventDefault(); setForgetPassword(true)}} className={`sec-text text-[14px]  !text-primary mt-2  ${(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? 'hidden' : "inline-block"}`} href="#">Forget trading password?</Link>
           )  
           }
           </form>

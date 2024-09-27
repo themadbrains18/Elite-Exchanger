@@ -4,7 +4,6 @@ import AllUsers from "@/admin/admin-component/users/all-users";
 import TopHolders from "@/admin/admin-component/users/topHolders";
 import UserCard from "@/admin/admin-component/users/userCard";
 import DasboardLayout from "../../../components/layout/dasboard-layout";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";

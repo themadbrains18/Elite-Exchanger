@@ -36,9 +36,6 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     method: "GET"
   }).then(response => response.json());
 
-  let networkList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/network`, {
-    method: "GET"
-  }).then(response => response.json());
 
   if (session) {
 

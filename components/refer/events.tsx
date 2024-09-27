@@ -29,6 +29,7 @@ const Events = (props: propsData) => {
               </div>
               <div className="text-center">
                 <Image
+                loading="lazy"
                   src="/assets/refer/event1.png"
                   width={401}
                   height={291}

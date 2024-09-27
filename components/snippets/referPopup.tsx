@@ -134,7 +134,7 @@ const ReferPopup = (props: activeSection) => {
             return (
               <div key={index} className='bg-primary-100 dark:bg-black rounded-full min-w-[32px] md:min-w-[48px] min-h-[32px] md:min-h-[48px] flex'>
                 <div className='max-w-[14px] md:max-w-[24px] w-full m-auto'>
-                  <Link href={item.iconLink} target='_blank'>
+                  <Link prefetch={false} href={item.iconLink} target='_blank'>
                     <IconsComponent type={item.iconName} hover={false} active={false} />
                   </Link>
                 </div>

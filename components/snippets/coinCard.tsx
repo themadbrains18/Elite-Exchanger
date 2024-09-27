@@ -15,7 +15,7 @@ const CoinCard = (props: cardData) => {
 
     return (
         <>
-            <Link href={`/chart/${props.coinCardData.symbol}`} className='block'>
+            <Link prefetch={false} href={`/chart/${props.coinCardData.symbol}`} className='block'>
                 <div className='max-w-[375px] w-full rounded-[15px] p-[20px] pb-[5px] bg-white dark:bg-omega border border-grey dark:border-[transparent] duration-300 hover:drop-shadow-xl'>
                     <div>
                         <div className='flex items-center gap-[8px] md:gap-[15px] mb-[16px] md:mb-[20px] justify-between'>

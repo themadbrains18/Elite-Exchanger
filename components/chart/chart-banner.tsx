@@ -5,11 +5,6 @@
   import { useWebSocket } from '@/libs/WebSocketContext';
   import { currencyFormatter } from '../snippets/market/buySellCard';
   import { truncateNumber } from '@/libs/subdomain';
-  // import Pusher from 'pusher-js';
-
-  // const pusher = new Pusher('b275b2f9e51725c09934', {
-  //   cluster: 'ap2'
-  // });
 
   interface propsData {
     hlocData?: any;
@@ -265,20 +260,6 @@
 
               </div>
 
-              {/* <div className='flex gap-30 justify-between flex-wrap xl:flex-nowrap'>
-                <div className='flex items-center gap-[20px] lg:max-w-[50%] lg:justify-start justify-between'>
-                  <h3 className='md-heading dark:text-white'>${`${currentToken?.price?.toFixed(5)}`}</h3>
-                  <div className={` items-center gap-[10px] flex`}>
-                    <p className={`footer-text-secondary ${Number(props?.hlocData?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(props?.hlocData?.changeRate) > 0 ? '+' : ''}{props?.hlocData?.changeRate !== undefined ? (Number(props?.hlocData?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
-                    {Number(props?.hlocData?.changeRate) > 0 &&
-                      <IconsComponent type="high" active={false} hover={false} />
-                    }
-                    {Number(props?.hlocData?.changeRate) < 0 &&
-                      <IconsComponent type="low" active={false} hover={false} />
-                    }
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
 
@@ -295,10 +276,7 @@
                           <p className='info-10-14 !text-gamma'>{ele.cardTitle}</p>
                         </div>
                         <p className="md-text md:text-[14px] text-[12px] !font-bold">{ele.cardPrice ?? '$0'}</p>
-                        {/* <div className={` items-center gap-[10px] flex`}>
-                          <p className={`footer-text-secondary !text-[12px] lg:!text-[16px] !text-buy`}>{ele.cardLowHigh}</p>
-                          <IconsComponent type="high" active={false} hover={false} />
-                        </div> */}
+                    
                       </div>
                     </Fragment>
                   )

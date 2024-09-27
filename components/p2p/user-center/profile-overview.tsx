@@ -70,7 +70,7 @@ const ProfileOverview = () => {
             </div>
             
         </div>
-        <Link className='solid-button !max-w-full sm:!max-w-[220px] block text-center !w-full' href="#">Become Merchant</Link>
+        <Link prefetch={false} className='solid-button !max-w-full sm:!max-w-[220px] block text-center !w-full' href="#">Become Merchant</Link>
     </div>
   )
 }

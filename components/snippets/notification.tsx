@@ -1,9 +1,8 @@
 import Link from "next/link";
 import React from "react";
 import { useSession } from 'next-auth/react';
-import Image from "next/image";
 import IconsComponent from "./icons";
-import moment from "moment";
+import { formatDate } from "@/libs/subdomain";
 
 interface propsData {
   notificationData: any;
@@ -54,7 +53,7 @@ const Notification = (props: propsData) => {
                 
                 return (
                   <>
-                    <Link href={item?.url || '#'} onClick={() => updateNotificationStatus(item?.id, item?.user_id)} key={index} className="pb-3 mb-3 dark:border-[#25262a] inline-block w-full border-[#e5e7eb] border-b">
+                    <Link prefetch={false} href={item?.url || '#'} onClick={() => updateNotificationStatus(item?.id, item?.user_id)} key={index} className="pb-3 mb-3 dark:border-[#25262a] inline-block w-full border-[#e5e7eb] border-b">
                       <div className="flex items-center gap-3 mb-3">
                         <div className="w-6">
                           <IconsComponent type="MessageIcon" />
@@ -65,7 +64,7 @@ const Notification = (props: propsData) => {
                           item?.type == 'withdraw' &&
                           <p className="info-14-18 text-sm dark:text-[#a0a1a7] mb-2">{item?.message?.message}</p>
                         }
-                        <p className="info-14-18 text-sm dark:text-[#a0a1a7]">{moment(item?.createdAt).format("YYYY-MM-DD")}</p>
+                        <p className="info-14-18 text-sm dark:text-[#a0a1a7]">{formatDate(item?.createdAt)}</p>
                         {/* <Link href={item?.url || '#'} className="info-14-18 text-sm dark:text-[#a0a1a7] hover:!text-primary">View</Link> */}
                       
                     </Link>
@@ -86,7 +85,7 @@ const Notification = (props: propsData) => {
             }
           </div>
           {/* <Link href="/notification" className="solid-button absolute bottom-0 left-0 !py-2 !rounded-5 !w-full !block !text-center">View all</Link> */}
-          <Link href="/notification" className="solid-button !py-2 mt-4 !rounded-5 !w-full !block !text-center">View all</Link>
+          <Link prefetch={false} href="/notification" className="solid-button !py-2 mt-4 !rounded-5 !w-full !block !text-center">View all</Link>
         </div>
       </div>
     </div>

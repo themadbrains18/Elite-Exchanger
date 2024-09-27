@@ -1,18 +1,15 @@
 import ResponsiveFixCta from '../../components/market/responsive-fix-cta'
 import Banner from '../../components/wallet/banner'
-import Exchange from '../../components/watchlist/exchange'
 import React, { useEffect, useRef, useState } from 'react'
 import WalletList from '../../components/wallet/wallet-list'
-// import AddMoney from '../components/wallet/add-money'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useWebSocket } from '@/libs/WebSocketContext'
-import { useRouter } from 'next/navigation'
 
 
 interface Session {
@@ -36,7 +33,6 @@ const Wallet = (props: Session) => {
     const [allCoins, setAllCoins] = useState(props.coinList);
 
     const wbsocket = useWebSocket();
-    const router = useRouter()
     const socketListenerRef = useRef<(event: MessageEvent) => void>();
     useEffect(() => {
 

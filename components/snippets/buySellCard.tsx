@@ -685,7 +685,7 @@ const BuySellCard = (props: DynamicId) => {
               {props?.session ?
                 <button type="submit" className={`solid-button w-full ${disabled === true ? 'opacity-70 cursor-not-allowed' : ''}`} disabled={disabled} >{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
                 :
-                <Link href="/login" className="solid-button w-full block text-center">Login</Link>
+                <Link prefetch={false} href="/login" className="solid-button w-full block text-center">Login</Link>
               }
             </>
           }

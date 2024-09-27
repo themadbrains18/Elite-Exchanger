@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate';
 import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
-import moment from 'moment';
+import { formatDate } from '@/libs/subdomain';
 
 interface propsData {
   filter: string;
@@ -105,7 +105,7 @@ const ConvertList = (props: propsData) => {
                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
                       {/* <Image src={`${item.createdAt}`} width={30} height={30} alt="coins" /> */}
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                        <p className="info-14 dark:text-white whitespace-nowrap">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
+                        <p className="info-14 dark:text-white whitespace-nowrap">{formatDate(item?.createdAt,"yyyy-MM-dd HH:mm:ss")}</p>
                       </div>
                     </div>
                   </td>
@@ -175,7 +175,7 @@ const ConvertList = (props: propsData) => {
                   <div className="  lg:sticky left-0 bg-white dark:bg-d-bg-primary">
                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
-                        <p className="info-14-18 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
+                        <p className="info-14-18 dark:text-white">{formatDate(item?.createdAt,"yyyy-MM-dd HH:mm:ss")}</p>
                       </div>
                     </div>
                   </div>

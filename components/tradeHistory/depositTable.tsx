@@ -1,4 +1,3 @@
-import moment from 'moment';
 import Image from 'next/image';
 import React, { useContext, useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate';
@@ -7,6 +6,7 @@ import { useSession } from 'next-auth/react';
 import { currencyFormatter } from '../snippets/market/buySellCard';
 import { toast } from 'react-toastify';
 import { Tooltip } from 'react-tooltip';
+import { formatDate } from '@/libs/subdomain';
 
 
 interface propsData {
@@ -18,8 +18,7 @@ interface propsData {
 
 const DepositTable = (props: propsData) => {
 
-  const { data: session, status } = useSession();
-  const [currentItems, setCurrentItems] = useState([]);
+  const { data: session } = useSession();
   const [itemOffset, setItemOffset] = useState(0);
   const [total, setTotal] = useState(0)
   const [totalRecord, setTotalRecord] = useState([]);
@@ -36,23 +35,7 @@ const DepositTable = (props: propsData) => {
   }, [itemOffset, props?.filter, session])
 
   useEffect(() => {
-    
-    // let history: any = totalRecord;
-    // if (props.coin !== "" && props.coin !== undefined && history?.length > 0) {
-    //   history = history?.filter((item: any) => {
-    //     let symbol = item.coinName.split('/')[1];
-    //     return symbol === props.coin;
-    //   });
-    // }
-    // const targetDate = new Date(props.date).setHours(0, 0, 0, 0);
-    // const currentDate = new Date().setHours(0, 0, 0, 0);
-    // if (targetDate !== currentDate && history?.length > 0) {
-    //   history = history?.filter((item: any) => {
-    //     const itemDate = new Date(item.createdAt).setHours(0, 0, 0, 0);
-    //     return itemDate === targetDate;
-    //   });
-    // }
-    // setCurrentItems(history);
+
 
     if (session) {
      
@@ -86,16 +69,6 @@ const DepositTable = (props: propsData) => {
       depositHistory = depositHistory?.data?.data;
     }
     setTotalRecord(depositHistory)
-    // if (props?.filter !== "") {
-    //   let data = depositHistory?.data?.data.filter((item: any) => {
-    //     return item.coinName.split('/')[1].toLowerCase().includes(props?.filter.toLowerCase());
-    //   })
-    //   setCurrentItems(data);
-    // }
-    // else {
-    //   setCurrentItems(depositHistory?.data?.data);
-
-    // }
 
   }
 
@@ -129,38 +102,38 @@ const handleAddressClick = (text: string): void => {
               <th className="sticky left-0 bg-white dark:bg-d-bg-primary py-5">
                 <div className="flex ">
                   <p className="text-start nav-text-sm md:nav-text-lg dark:text-gamma">Pair</p>
-                  <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                  <Image loading='lazy' src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
               <th className=" py-5">
                 <div className="flex">
                   <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Side</p>
-                  <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                  <Image loading='lazy' src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
 
               <th className=" py-5">
                 <div className="hidden md:flex">
                   <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Tx_Hash</p>
-                  <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                  <Image loading='lazy' src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
               <th className=" py-5">
                 <div className="hidden md:flex">
                   <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Amount</p>
-                  <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                  <Image loading='lazy' src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
               <th className=" py-5">
                 <div className="hidden md:flex">
                   <p className="text-start  nav-text-sm md:nav-text-lg dark:text-gamma">Total Qty.</p>
-                  <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                  <Image loading='lazy' src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
               <th className=" py-5">
                 <div className="flex">
                   <p className="text-end  nav-text-sm md:nav-text-lg dark:text-gamma">Status</p>
-                  <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
+                  <Image loading='lazy' src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
             </tr>
@@ -171,7 +144,7 @@ const handleAddressClick = (text: string): void => {
                 <tr key={index} >
                   <td className="sticky left-0 bg-white dark:bg-d-bg-primary">
                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                      {/* <Image src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" /> */}
+                      {/* <Image loading='lazy' src={`/assets/history/${item.image}`} width={30} height={30} alt="coins" /> */}
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                         <p className="info-14-18 dark:text-white">{item.coinName.split('/')[1]}</p>
                         {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p> */}
@@ -204,7 +177,7 @@ const handleAddressClick = (text: string): void => {
                       </div>
                       <div className="hidden md:block">
                         <p className="info-14-18 dark:text-white">Deposit</p>
-                        <p className="info-10">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
+                        <p className="info-10">{formatDate(item?.createdAt,"yyyy-MM-dd HH:mm:ss")}</p>
                       </div>
                       <div className="block md:hidden">
                         <p className="info-14-18 dark:text-white">{item.type}</p>
@@ -239,7 +212,7 @@ const handleAddressClick = (text: string): void => {
               <tr>
                 <td colSpan={7}>
                   <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
-                    <Image
+                    <Image loading='lazy'
                       src="/assets/refer/empty.svg"
                       alt="emplty table"
                       width={107}

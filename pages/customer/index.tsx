@@ -1,5 +1,3 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
 import Hero from '../../components/home/hero'
 import CryptoCoin from '../../components/home/CryptoCoin'
 import CreateProfile from '@/components/home/create-profile'
@@ -7,16 +5,15 @@ import TradeAnyWhere from '@/components/home/trade-anywhere'
 import BestServices from '@/components/home/best-services'
 import InvestorSec from '@/components/home/investor-sec'
 import StartMinning from '@/components/home/start-minning'
-import BothVerificationOptions from '@/components/snippets/both-verification-options'
+
 import { useEffect, useState } from 'react'
 import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useWebSocket } from '@/libs/WebSocketContext'
 
 
-const inter = Inter({ subsets: ['latin'] })
 
 interface Session {
   session: {

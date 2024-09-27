@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import moment from "moment";
 import { useSession } from "next-auth/react";
+import { formatDate } from "@/libs/subdomain";
 
 interface propsData {
   eventData?: any;
@@ -44,7 +44,7 @@ const Banner = (props: propsData) => {
         <div>
           <div className="py-[9px] px-[16px] rounded-full bg-grey-v-2 dark:bg-[#40424a]">
             <p className="text-[12px] md:text-base font-medium leading-[21px] dark:text-white text-black-v-1">
-              Start Event From : {moment(props?.eventData?.start_date).format("YYYY-MM-DD")} – End Event To : {moment(props?.eventData?.end_date).format("YYYY-MM-DD")}
+              Start Event From : {formatDate(props?.eventData?.start_date)} – End Event To : {formatDate(props?.eventData?.end_date)}
             </p>
           </div>
           <p className="mt-[12px] text-[22px] md:text-[24px] font-semibold leading-[24px] dark:text-white text-black">

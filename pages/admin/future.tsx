@@ -5,11 +5,17 @@ import React, { useState } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { getProviders } from "next-auth/react";
-import FuturePairList from "@/admin/admin-component/future-trade/pairlist";
+import dynamic from "next/dynamic";
+import TableSkeleton from "@/components/skeletons/tableSkeleton";
+// import FuturePairList from "@/admin/admin-component/future-trade/pairlist";
 
 interface Session {
   coinList?: any;
 }
+const FuturePairList = dynamic(() => import("@/admin/admin-component/future-trade/pairlist"), {
+  loading: () => <TableSkeleton/>, // Custom loading component or spinner
+});
+
 
 const FuturePair = (props: Session) => {
 

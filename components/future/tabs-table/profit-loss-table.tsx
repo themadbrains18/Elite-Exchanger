@@ -4,11 +4,10 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { useWebSocket } from '@/libs/WebSocketContext';
-import { truncateNumber } from '@/libs/subdomain';
+import { formatDate, truncateNumber } from '@/libs/subdomain';
 import { AES } from 'crypto-js';
 import { toast } from 'react-toastify';
 import ConfirmationClouserModel from '@/components/snippets/confirm-clouser';
-import moment from 'moment';
 import { useRouter } from 'next/router';
 
 interface propsData {
@@ -29,10 +28,10 @@ const ProfitLossTable: React.FC<propsData> = ({ show , getProfitLossOrder , orde
     }, [show]);
 
     
-    function formatDate(date: any) {
-        const options: {} = { year: 'numeric', month: 'short', day: '2-digit' };
-        return new Date(date).toLocaleDateString('en-US', options)
-    }
+    // function formatDate(date: any) {
+    //     const options: {} = { year: 'numeric', month: 'short', day: '2-digit' };
+    //     return new Date(date).toLocaleDateString('en-US', options)
+    // }
 
     const closePosition = async (position_id: string) => {
         setPositionId(position_id);
@@ -156,7 +155,7 @@ const ProfitLossTable: React.FC<propsData> = ({ show , getProfitLossOrder , orde
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item?.trade_type}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{moment(item?.createdAt).format("YYYY-MM-DD HH:mm:ss")}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{formatDate(item?.createdAt,"yyyy-MM-dd HH:mm:ss")}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%] cursor-pointer' onClick={() => closePosition(item?.position_id)}>
                                             <div className='flex items-center'>

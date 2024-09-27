@@ -1,4 +1,3 @@
-import moment from 'moment';
 import Image from 'next/image';
 import React, { useContext, useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate';
@@ -12,6 +11,7 @@ import Verification from "../snippets/verification";
 
 import ConfirmationModel from "../snippets/confirmation";
 import { currencyFormatter } from '../snippets/market/buySellCard';
+import { formatDate } from '@/libs/subdomain';
 
 const StakingTable = () => {
   const { data: session, status } = useSession();
@@ -323,7 +323,7 @@ const StakingTable = () => {
                     <p className="info-14-18 dark:text-white md:block hidden">{item.time_format}</p>
                   </td>
                   <td>
-                    <p className={`info-14-18 ${item?.status === false ? '!text-red-dark' : '!text-dark-green'} md:block hidden`}>{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss A')}</p>
+                    <p className={`info-14-18 ${item?.status === false ? '!text-red-dark' : '!text-dark-green'} md:block hidden`}>{formatDate(item?.createdAt,"yyyy-MM-dd HH:mm:ss a")}</p>
                   </td>
                   <td>
                     <p className={`info-14-18 ${item?.status === false ? '!text-red-dark' : '!text-dark-green'} md:block hidden`}>{item?.status === false ? 'Pending' : 'Success'}</p>

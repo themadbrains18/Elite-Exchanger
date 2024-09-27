@@ -1,13 +1,7 @@
-import Earning from '@/components/refer/earning';
-import Events from '@/components/refer/events';
-import Hero from '@/components/refer/hero';
-import ReferFriends from '@/components/refer/referFriends';
-import Safe from '@/components/refer/safe';
 import React from 'react'
-
 import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 
 interface propsData {
@@ -19,6 +13,23 @@ interface propsData {
   referalList?: any,
 }
 
+import dynamic from 'next/dynamic';
+
+const Hero = dynamic(() => import('@/components/refer/hero'), {
+  loading: () => <p>Loading...</p>,
+})
+const ReferFriends = dynamic(() => import('@/components/refer/referFriends'), {
+  loading: () => <p>Loading...</p>,
+})
+const Safe = dynamic(() => import('@/components/refer/safe'), {
+  loading: () => <p>Loading...</p>,
+})
+const Earning = dynamic(() => import('@/components/refer/earning'), {
+  loading: () => <p>Loading...</p>,
+})
+const Events = dynamic(() => import('@/components/refer/events'), {
+  loading: () => <p>Loading...</p>,
+})
 
 const Refer = (props:propsData) => {
 

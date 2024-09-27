@@ -1,15 +1,22 @@
 import DasboardLayout from '@/components/layout/dasboard-layout'
 import React from 'react'
-import MainProgram from '@/admin/admin-component/referralProgram/program'
+// import MainProgram from '@/admin/admin-component/referralProgram/program'
 
 import { GetServerSidePropsContext } from "next";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { getProviders } from "next-auth/react";
+import dynamic from 'next/dynamic';
+import TableSkeleton from '@/components/skeletons/tableSkeleton';
 
 interface propsData {
     coinList?: any;
 }
+
+const MainProgram = dynamic(() => import('@/admin/admin-component/referralProgram/program'), {
+    loading: () => <TableSkeleton/>, // Custom loading component or spinner
+  });
+  
 
 const ReferralProgram = (props: propsData) => {
     return (

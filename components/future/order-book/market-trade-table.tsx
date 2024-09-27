@@ -1,7 +1,6 @@
-import React from 'react';
-import moment from "moment";
+
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
-import { truncateNumber } from '@/libs/subdomain';
+import { formatDate, truncateNumber } from '@/libs/subdomain';
 
 interface setState {
     show?: number;
@@ -32,7 +31,7 @@ const MarketTrades = (props: setState) => {
                         <div key={index} className={`grid grid-cols-3 gap-[10px] ${item?.direction === 'long' ? 'bg-[#25e39e0a]' : 'bg-[#fc47471c]'} rounded mb-[4px]`}>
                             <p className={`top-label text-start ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{currencyFormatter(item?.entry_price?.toFixed(6))}</p>
                             <p className='top-label text-center !text-black dark:!text-white'>{truncateNumber(item?.margin,6)}</p>
-                            <p className='top-label text-end !text-black dark:!text-white'>{moment(item?.createdAt).format("YYYY-MM-DD")}</p>
+                            <p className='top-label text-end !text-black dark:!text-white'>{formatDate(item?.createdAt)}</p>
                         </div>
                     </>
                 })}

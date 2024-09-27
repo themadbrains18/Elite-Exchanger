@@ -190,7 +190,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
 
             }
           </div>
-          <Link href="/profile" className='absolute top-0 left-0 right-0 h-full'></Link>
+          <Link prefetch={false} href="/profile" className='absolute top-0 left-0 right-0 h-full'></Link>
         </div>
         {/* responsive nav bar */}
         <div>
@@ -203,7 +203,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
                       <div className='flex items-center justify-between w-full dropdownCta pb-[5px]' onClick={(e) => { setDropdownHeight(e) }}>
                         <div className='flex items-center gap-[15px]'>
                           {/* <IconsComponent type={elem.svgType} hover={false} active={false} /> */}
-                          <Link href={elem.url} className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>{elem.name}</Link>
+                          <Link prefetch={false} href={elem.url} className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>{elem.name}</Link>
                         </div>
 
                         <svg
@@ -228,7 +228,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
                             {props?.spotTrade?.map((item: any, nesIndex: any) => {
                               return (
                                 <li key={nesIndex} className="mb-[10px]">
-                                  <Link href={`/chart/${item?.tradepair?.symbolOne}`} className='block'>
+                                  <Link prefetch={false} href={`/chart/${item?.tradepair?.symbolOne}`} className='block'>
                                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
                                     <Image src={`${imgSrc2?'/assets/history/Coin.svg':item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)}/>
 
@@ -251,7 +251,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
                             {props?.futureTrade?.map((item: any, nesIndex: any) => {
                               return (
                                 <li key={nesIndex} className="mb-[10px]">
-                                  <Link href={`/future/${item?.futuretradepair?.coin_symbol}${item?.futuretradepair?.usdt_symbol}`} className='block'>
+                                  <Link prefetch={false} href={`/future/${item?.futuretradepair?.coin_symbol}${item?.futuretradepair?.usdt_symbol}`} className='block'>
                                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
                                     <Image src={`${imgSrc?'/assets/history/Coin.svg':item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)}/>
 
@@ -278,7 +278,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
                   <li key="Trade" className='flex items-center justify-between mb-[36px] last:mb-0 relative' onClick={() => { props.setShowMenu(false) }}>
                     <div className='flex items-center gap-[15px]'>
                       {/* <IconsComponent type='TradeHistory' hover={false} active={false} /> */}
-                      <Link href="/history" className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>Trade History</Link>
+                      <Link prefetch={false} href="/history" className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>Trade History</Link>
                     </div>
                     <svg
                       width={7}
@@ -292,12 +292,12 @@ const ResponsiveSidebar = (props: defaultStates) => {
                         fill="#9295A6"
                       />
                     </svg>
-                    <Link href="/history" className='absolute top-0 left-0 right-0 h-full'></Link>
+                    <Link prefetch={false} href="/history" className='absolute top-0 left-0 right-0 h-full'></Link>
                   </li>
                   <li key="Wallet" className='flex items-center justify-between mb-[36px] last:mb-0 relative' onClick={() => { props.setShowMenu(false) }}>
                     <div className='flex items-center gap-[15px]'>
                       {/* <IconsComponent type='TradeHistory' hover={false} active={false} /> */}
-                      <Link href="/wallet" className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>Wallet</Link>
+                      <Link prefetch={false} href="/wallet" className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>Wallet</Link>
                     </div>
                     <svg
                       width={7}
@@ -311,12 +311,12 @@ const ResponsiveSidebar = (props: defaultStates) => {
                         fill="#9295A6"
                       />
                     </svg>
-                    <Link href="/wallet" className='absolute top-0 left-0 right-0 h-full'></Link>
+                    <Link prefetch={false} href="/wallet" className='absolute top-0 left-0 right-0 h-full'></Link>
                   </li>
                   <li key="WatchList" className='flex items-center justify-between mb-[36px] last:mb-0 relative' onClick={() => { props.setShowMenu(false) }}>
                     <div className='flex items-center gap-[15px]'>
                       {/* <IconsComponent type='TradeHistory' hover={false} active={false} /> */}
-                      <Link href="/watchlist" className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>WatchList</Link>
+                      <Link prefetch={false} href="/watchlist" className='md-text !text-[16px] dark:text-d-nav-primary text-nav-primary'>WatchList</Link>
                     </div>
                     <svg
                       width={7}
@@ -330,7 +330,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
                         fill="#9295A6"
                       />
                     </svg>
-                    <Link href="/watchlist" className='absolute top-0 left-0 right-0 h-full'></Link>
+                    <Link prefetch={false} href="/watchlist" className='absolute top-0 left-0 right-0 h-full'></Link>
                   </li>
                 </>
 
@@ -340,8 +340,8 @@ const ResponsiveSidebar = (props: defaultStates) => {
         </div>
         {session === null ?
           <div className='flex items-center gap-[15px] pt-[20px] mt-[30px] border-t border-[#E9EAF0] dark:border-[#e9eaf00f]'>
-            <Link className='solid-button w-full text-center !text-primary dark:!bg-white !bg-grey' href="/login">Sign In</Link>
-            <Link className='solid-button w-full text-center' href="/register">Register</Link>
+            <Link prefetch={false} className='solid-button w-full text-center !text-primary dark:!bg-white !bg-grey' href="/login">Sign In</Link>
+            <Link prefetch={false} className='solid-button w-full text-center' href="/register">Register</Link>
           </div>
           :
           <div className='flex items-center gap-[15px] pt-[20px] mt-[30px] border-t border-[#E9EAF0] dark:border-[#e9eaf00f]'>
@@ -354,13 +354,13 @@ const ResponsiveSidebar = (props: defaultStates) => {
       <div className='mt-[40px]'>
         <p className='text-center sec-text text-gamma'>© 2023. All rights reserved</p>
         <div className='grid grid-cols-3 place-items-center my-[20px]'>
-          <Link href="#" className='pl-[20px] border-l sec-text text-gamma border-gamma'>Privacy</Link>
-          <Link href="#" className='pl-[20px] border-l sec-text text-gamma border-gamma'>Terms</Link>
-          <Link href="#" className='pl-[20px] border-l sec-text text-gamma border-gamma'>Sitemap</Link>
+          <Link prefetch={false} href="#" className='pl-[20px] border-l sec-text text-gamma border-gamma'>Privacy</Link>
+          <Link prefetch={false} href="#" className='pl-[20px] border-l sec-text text-gamma border-gamma'>Terms</Link>
+          <Link prefetch={false} href="#" className='pl-[20px] border-l sec-text text-gamma border-gamma'>Sitemap</Link>
         </div>
       </div>
       <div className='flex items-center gap-[28px] justify-center'>
-        <Link href="#">
+        <Link prefetch={false} href="#">
           <svg
             width={25}
             height={24}
@@ -374,7 +374,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
             />
           </svg>
         </Link>
-        <Link href="#">
+        <Link prefetch={false} href="#">
           <svg
             width={25}
             height={24}
@@ -389,7 +389,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
           </svg>
 
         </Link>
-        <Link href="#">
+        <Link prefetch={false} href="#">
           <svg
             width={25}
             height={24}
@@ -404,7 +404,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
           </svg>
 
         </Link>
-        <Link href="#">
+        <Link prefetch={false} href="#">
           <svg
             width={25}
             height={24}
@@ -418,7 +418,7 @@ const ResponsiveSidebar = (props: defaultStates) => {
             />
           </svg>
         </Link>
-        <Link href="#">
+        <Link prefetch={false} href="#">
           <svg
             width={25}
             height={24}

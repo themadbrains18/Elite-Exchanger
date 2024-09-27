@@ -1,7 +1,7 @@
 import Context from "@/components/contexts/context";
 import IconsComponent from "@/components/snippets/icons";
+import { formatDate } from "@/libs/subdomain";
 import { AES } from "crypto-js";
-import moment from "moment";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
@@ -244,7 +244,7 @@ const Activity = (props: fixSection) => {
                       </td>
                       <td className="">
                         <p className="info-14-18 dark:text-white text-end">
-                          {moment(item.loginTime).format("YYYY-MM-DD HH:mm:ss A")}
+                          {formatDate(item.loginTime,"yyyy-MM-dd HH:mm:ss a")}
                         </p>
                       </td>
                       {/* <td className=" !text-end">

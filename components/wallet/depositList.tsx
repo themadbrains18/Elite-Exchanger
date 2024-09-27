@@ -1,11 +1,11 @@
-import moment from 'moment';
+
 import Image from 'next/image';
 import React, { useContext, useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate';
 import Context from '../contexts/context';
 import { useSession } from 'next-auth/react';
 import { currencyFormatter } from '../snippets/market/buySellCard';
-import { truncateNumber } from '@/libs/subdomain';
+import { formatDate, truncateNumber } from '@/libs/subdomain';
 
 
 interface propsData {
@@ -99,7 +99,7 @@ const DepositList = (props: propsData) => {
                       {/* <IconsComponent type="deposited" hover={false} active={false} /> */}
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                         <p className="info-14-18 dark:text-white">{item.coinName.split('/')[1]}</p>
-                        <p className="info-14-18 !text-[10px] lg:hidden">{moment(item?.createdAt).format('YYYY-MM-DD')}</p>
+                        <p className="info-14-18 !text-[10px] lg:hidden">{formatDate(item?.createdAt)}</p>
                       </div>
                     </div>
                   </td>
@@ -107,7 +107,7 @@ const DepositList = (props: propsData) => {
                     <p className="info-14-18 dark:text-white  lg:text-start text-end">{currencyFormatter(truncateNumber(item?.amount, 8))}</p>
                   </td>
                   <td className="max-[1023px]:hidden">
-                    <p className="info-14-18 dark:text-white">{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
+                    <p className="info-14-18 dark:text-white">{formatDate(item?.createdAt,"yyyy-MM-dd HH:mm:ss")}</p>
                   </td>
                   <td className=" text-end">
                     <p className={`info-14-18  ${item?.successful === "1" ? "text-buy" : "text-cancel"}`}>{item?.successful === "1" ? 'Successful' : 'Pending'}</p>

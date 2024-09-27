@@ -187,7 +187,7 @@ const SignIn = (Props: loginType) => {
                       </div>
                       <div className="flex mt-[10px] justify-between gap-5">
                         {/* <p className="sec-text">Scan to Login</p> */}
-                        <Link href="/forget" className="sec-text text-[14px] md:text-[16px] !text-primary">
+                        <Link prefetch={false} href="/forget" className="sec-text text-[14px] md:text-[16px] !text-primary">
                           Forgot Password?
                         </Link>
                       </div>
@@ -205,7 +205,7 @@ const SignIn = (Props: loginType) => {
                     {/**Form End  */}
                     <div className="flex md:flex-nowrap flex-wrap justify-center">
                       <p className="sm-text text-nav-primary  text-[14px] md:text-[16px] dark:text-white">If you don’t have an account?&nbsp;</p>
-                      <Link href="/register" className="sm-text  text-[14px] md:text-[16px] !text-primary">
+                      <Link prefetch={false} href="/register" className="sm-text  text-[14px] md:text-[16px] !text-primary">
                         Register Here!
                       </Link>
                     </div>

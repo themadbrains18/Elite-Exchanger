@@ -2,9 +2,8 @@ import Marketpage from '@/components/market/marketpage'
 import React, { useEffect, useState } from 'react'
 import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
+import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
-import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useWebSocket } from '@/libs/WebSocketContext'
 // import Pusher from 'pusher-js';
@@ -57,7 +56,7 @@ const Market = ({ session, coinList, assets, networks }: Session) => {
 
   return (
     <>
-      <ToastContainer limit={1} />
+      {/* <ToastContainer limit={1} /> */}
       <Marketpage coinList={allCoins} session={session} assets={userAssetsList} networks={networks} />
     </>
   )

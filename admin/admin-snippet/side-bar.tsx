@@ -162,7 +162,7 @@ xmlns="http://www.w3.org/2000/svg"
         {
         data?.map((item,index)=>{
             return(
-                <Link href={item.link} key={index} className={`${ router.pathname === (item.link === '/' ? '/admin': '/admin'+item.link)  && 'dark:!bg-admin-primary-100 !bg-primary shadow-[-8px_8px_10px_0px_#3699ff33] dark:shadow-[-8px_8px_10px_0px_#90caf90d] '} rounded-[8px] hover:bg-[#90caf914] flex gap-[10px]  w-full cursor-pointer mb-[15px] last:mb-[50px] items-center group md:mb-[10px] py-[15px] px-5 pr-0 `}>
+                <Link prefetch={false} href={item.link} key={index} className={`${ router.pathname === (item.link === '/' ? '/admin': '/admin'+item.link)  && 'dark:!bg-admin-primary-100 !bg-primary shadow-[-8px_8px_10px_0px_#3699ff33] dark:shadow-[-8px_8px_10px_0px_#90caf90d] '} rounded-[8px] hover:bg-[#90caf914] flex gap-[10px]  w-full cursor-pointer mb-[15px] last:mb-[50px] items-center group md:mb-[10px] py-[15px] px-5 pr-0 `}>
                     <div className='min-w-[22px]'>
                         <AdminIcons type={item.svgType} hover={true} active={router.pathname === (item.link === '/' ? '/admin': '/admin'+item.link) ? true:false}  />
                     </div>

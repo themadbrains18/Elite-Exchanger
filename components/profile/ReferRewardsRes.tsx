@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react'
 import IconsComponent from '../snippets/icons';
 import { useRouter } from 'next/router';
-import moment from "moment";
 import Image from "next/image";
 import Context from "../contexts/context";
+import { formatDate } from '@/libs/subdomain';
 
 interface fixSection {
   fixed?: boolean;
@@ -158,7 +158,7 @@ const ReferRewardsRes = (props: fixSection) => {
                   <div className='flex items-center mt-[24px] gap-[20px] justify-between'>
                     <div>
                       <div className='bg-[#3844520f] h-[8px] w-full max-w-[100px] rounded-[8px]'></div>
-                      <p className='sm-text '>Use before {moment(item?.expired_on).format("YYYY-MM-DD")}</p>
+                      <p className='sm-text '>Use before {formatDate(item?.expired_on)}</p>
 
                     </div>
                     <button type='button' disabled={difference < 0 ? true : false} className={`solid-button !px-[20px] !py-[10px] ${difference > 0 ? '' : 'cursor-not-allowed opacity-25'}`} onClick={() => difference > 0 ? router.push({ pathname: '/future/BTCUSDT' }) : ""}>{difference > 0 ? 'Use' : 'Expired'}</button>

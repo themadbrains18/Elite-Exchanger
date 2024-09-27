@@ -1,8 +1,6 @@
 import IconsComponent from '@/components/snippets/icons';
 import Image from 'next/image'
 import React, { Fragment, useContext, useEffect, useState } from 'react'
-import moment from 'moment';
-import ConfirmationModel from '@/components/snippets/confirmation';
 import { signOut, useSession } from 'next-auth/react';
 import AES from 'crypto-js/aes';
 import { ToastContainer, toast } from "react-toastify";
@@ -11,7 +9,7 @@ import { useRouter } from 'next/router';
 import Context from "../../contexts/context";
 import ReactPaginate from 'react-paginate';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
-import { truncateNumber } from '@/libs/subdomain';
+import { formatDate, truncateNumber } from '@/libs/subdomain';
 
 interface dataTypes {
 
@@ -23,6 +21,12 @@ interface dataTypes {
     active?: any;
     session?: any;
 }
+
+import dynamic from 'next/dynamic';
+
+const ConfirmationModel = dynamic(() => import('@/components/snippets/confirmation'), {
+    loading: () => <p>Loading...</p>,
+})
 const DesktopTable = (props: dataTypes) => {
     const { mode } = useContext(Context);
     const [postList, setPostList] = useState([]);
@@ -286,7 +290,7 @@ const DesktopTable = (props: dataTypes) => {
                                                 <p className='info-14-18 !text-nav-primary dark:!text-white'>{truncateNumber(parseFloat(item?.quantity), 6)}  {item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
-                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{moment(item?.createdAt).format('YYYY-MM-DD HH:mm:ss')}</p>
+                                                <p className='info-14-18 !text-nav-primary dark:!text-white'>{formatDate(item?.createdAt, "yyyy-MM-dd HH:mm:ss")}</p>
                                             </td>
                                             <td className="bg-white dark:bg-d-bg-primary py-5">
                                                 <div className='flex items-center '>
@@ -295,7 +299,7 @@ const DesktopTable = (props: dataTypes) => {
                                                             const iconClass = ind === 0 ? '' : 'ml-[-10px]';
                                                             return (
                                                                 <Fragment key={ind}>
-                                                                    <Image src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className={iconClass} />
+                                                                    <Image loading='lazy' src={`${elem.master_payment_method.icon}`} alt='error' width={30} height={30} className={iconClass} />
                                                                 </Fragment>
                                                             )
                                                         })
@@ -339,6 +343,7 @@ const DesktopTable = (props: dataTypes) => {
                                 <td colSpan={8}>
                                     <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
                                         <Image
+                                            loading='lazy'
                                             src="/assets/refer/empty.svg"
                                             alt="emplty table"
                                             width={107}

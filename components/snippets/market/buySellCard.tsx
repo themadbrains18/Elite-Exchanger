@@ -12,13 +12,10 @@ import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import ConfirmBuy from "../confirmBuy";
-import Pusher from 'pusher-js';
+
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { truncateNumber } from "@/libs/subdomain";
 
-const pusher = new Pusher('b275b2f9e51725c09934', {
-  cluster: 'ap2'
-});
 
 const schema = yup.object().shape({
   token_amount: yup.number().positive("Amount must be greater than '0'.").required('Please enter quantity.').typeError('Please enter quantity.'),
@@ -618,7 +615,7 @@ const BuySellCard = (props: DynamicId) => {
               {props?.session ?
                 <button type="submit" className={`solid-button w-full ${disabled === true ? 'opacity-70 cursor-not-allowed' : ''}`} disabled={disabled}>{active1 === 1 ? `Buy ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}` : `Sell ${selectedToken?.symbol !== undefined ? selectedToken?.symbol : ""}`}</button>
                 :
-                <Link href="/login" className="solid-button w-full block text-center">Login</Link>
+                <Link prefetch={false} href="/login" className="solid-button w-full block text-center">Login</Link>
               }
             </>
           }
