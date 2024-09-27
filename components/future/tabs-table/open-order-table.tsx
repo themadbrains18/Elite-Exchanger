@@ -72,16 +72,11 @@ const OpenOrderTable = (props: propsData) => {
 
     const router = useRouter();
     const { slug } = router.query;
-
-    // console.log(props?.openOrders,"======props?.openOrders");
-    
-
     return (
         <>
             <div className="overflow-x-auto h-[234px] ">
                 <table width="100%" className="min-w-[1200px] w-full">
                     <thead>
-                        {/* sticky top-0 bg-[#fafafa] dark:bg-[#1a1b1f] */}
                         <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%] ">
                             <th className="py-[10px]">
                                 <div className="flex ">

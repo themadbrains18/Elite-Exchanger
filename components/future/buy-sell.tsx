@@ -183,7 +183,6 @@ const BuySell = (props: fullWidth) => {
       props.positions.map((item: any) => {
         usedQty += item.qty
       })
-
       setPositionMode(props.positions[0]?.position_mode);
     }
     if (props.openOrders && props.openOrders.length > 0) {
