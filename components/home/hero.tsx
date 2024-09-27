@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useContext } from "react";
 import Context from "../contexts/context";
 import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper-bundle.css'; 
+import 'swiper/swiper-bundle.css';
 import 'swiper/css/bundle';
 
 
@@ -28,7 +28,7 @@ const Hero = () => {
 
 
                             <div className="hero_footer">
-                               
+
 
                                 <div className="lg:grid hidden overflow-x-auto gap-[30px] grid-cols-3 md:gap-x-[101px] md:gap-y-[50px]">
                                     <Image className="block m-auto aspect-[1] h-[50px] object-contain w-[157px]" src="/assets/home/bannerLogo-1.png" alt="Logo" width={251} height={50} />
@@ -42,7 +42,7 @@ const Hero = () => {
                         </div>
 
                         <div className="hero_right w-full max-w-[820px] lg:flex lg:items-center order-1 lg:order-2">
-                            <Image src={`/assets/home/${mode === "light" ? "BannerLight1.png" : "BannerDark1.png"}`} alt="Laptop-image" className="block w-full" width={653} height={500} />
+                            <Image src={`/assets/home/${mode === "light" ? "BannerLight1.png" : "BannerDark1.png"}`} alt="Laptop-image" className="block w-full" priority width={653} height={500} />
                         </div>
                     </div>
                     <div className="lg:hidden">
@@ -55,16 +55,16 @@ const Hero = () => {
                             }}
                             breakpoints={{
                                 '300': {
-                                  slidesPerView: 2,
-                                  spaceBetween: 10,
+                                    slidesPerView: 2,
+                                    spaceBetween: 10,
                                 },
                                 '575': {
-                                  slidesPerView: 3,
-                                  spaceBetween: 10,
+                                    slidesPerView: 3,
+                                    spaceBetween: 10,
                                 },
                                 '767': {
-                                  slidesPerView: 4,
-                                  spaceBetween: 10,
+                                    slidesPerView: 4,
+                                    spaceBetween: 10,
                                 }
                             }}
                         >
@@ -122,7 +122,7 @@ const Hero = () => {
                                     height={50}
                                 />
                             </SwiperSlide>
-                            
+
                         </Swiper>
                     </div>
                 </div>

@@ -480,13 +480,13 @@ const Header = (props: propsData) => {
                 </div>
               )}
             </div>
-            <ResponsiveSidebar
+          {showMenu &&  <ResponsiveSidebar
               showMenu={showMenu}
               setShowMenu={setShowMenu}
               userDetail={userDetail}
               spotTrade={spotTrade}
               futureTrade={futureTrade}
-            />
+            />}
           </div>
         </div>
       </header >
