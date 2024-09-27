@@ -79,7 +79,6 @@ const ConfirmationClouserModel = (props: activeSection) => {
                             />
                         </svg>
                     </div>
-                    {/* <p className={`py-20 info-14-18`}></p> */}
                     {newText && newText.length > 0 && newText.map((item: any) => {
                         return <p className={`py-1  info-14-18 my-[10px] mb-[30px] text-[#a3a8b7]`}>{item}</p>
                     })}

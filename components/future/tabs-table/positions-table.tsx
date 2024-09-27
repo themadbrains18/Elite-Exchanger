@@ -102,13 +102,9 @@ const PositionsTable = (props: propsData) => {
       console.log(error, "=error in close position");
     }
   }
-  
 
   const router = useRouter();
   const { slug } = router.query;
-  
-
-
 
   return (
     <>
@@ -116,7 +112,6 @@ const PositionsTable = (props: propsData) => {
         <table width="100%" className="min-w-[1200px] w-full">
           <thead>
             <tr className="border-b border-t border-grey-v-3 dark:border-opacity-[15%]">
-
               <th className="py-[10px]">
                 <div className="flex ">
                   <p className="text-start top-label dark:text-gamma">Symbol</p>
@@ -153,12 +148,6 @@ const PositionsTable = (props: propsData) => {
                   <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                 </div>
               </th>
-              {/* <th className=" py-[10px]">
-                <div className="flex">
-                  <p className="text-start  top-label dark:text-gamma">Direction</p>
-                  <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
-                </div>
-              </th> */}
               <th className=" py-[10px]">
                 <div className="flex">
                   <p className="  top-label dark:text-gamma">Margin</p>
@@ -180,7 +169,6 @@ const PositionsTable = (props: propsData) => {
               <th className=" py-[10px]">
                 <div className="flex">
                   <p className="  top-label dark:!text-[#cccc56] !font-[600]" onClick={() => { props?.positions && props?.positions.length > 0 ? closeAllPosition : '' }}>Close All Positions</p>
-                  {/* <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" /> */}
                 </div>
               </th>
               <th className=" py-[10px]">
@@ -196,6 +184,7 @@ const PositionsTable = (props: propsData) => {
                 session && props?.positions && props?.positions.length > 0 && props?.positions?.filter((item: any) => item?.symbol === slug).map((item: any, index: number) => {
                   let tpsl = '--';
                   {
+                    console.log(item.direction,"item.direction");
                     
                     item?.futureOpenOrders !== null && item?.futureOpenOrders?.map((oo: any) => {
                       if (tpsl === '--' && oo?.type === 'take profit market') {
@@ -209,19 +198,18 @@ const PositionsTable = (props: propsData) => {
                   return (
                     <tr key={index}>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                        <div className={`pl-[5px] pt-[5px] border-l-[5px] ${item?.direction === 'long' ? 'border-[#03A66D]' : 'border-[#f74646]'} flex gap-[8px] items-center`}>
+                        <div className={`pl-[5px] pt-[5px] border-l-[5px] ${(item?.direction === 'long') ? 'border-[#03A66D]' : 'border-[#f74646]'} flex gap-[8px] items-center`}>
                           <div>
                             <p className="info-14 !text-[12px] dark:text-white">{item.symbol}</p>
                             <p className={`top-label ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.leverage_type} {item.leverage}x</p>
                           </div>
-                          {/* <p className="bg-[#13c2c21f] px-[5px] text-[#13c2c2] text-[12px]">{item.leverage}x</p> */}
                         </div>
                       </td>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                         <p className={`top-label !font-[600] ${item?.qty < 0 ? '!text-sell' : '!text-buy'}`}>{item?.direction !== 'long' ? '-' : ''}{item?.qty}</p>
                       </td>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                        <p className={`top-label !font-[600] ${item?.size < 0 ? '!text-sell' : '!text-buy'}`}>{item?.size}</p>
+                        <p className={`top-label !font-[600] dark:!text-white !text-black`}>{item?.size}</p>
                       </td>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                         <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(truncateNumber(item?.entry_price, 6))}</p>
@@ -232,9 +220,6 @@ const PositionsTable = (props: propsData) => {
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                         <p className="top-label !text-[#f7a600] !font-[600]">{currencyFormatter(truncateNumber(item?.liq_price, 6))}</p>
                       </td>
-                      {/* <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                        <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction}</p>
-                      </td> */}
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                         <p className="top-label !font-[600] dark:!text-white !text-black">{truncateNumber(item?.margin, 6)}</p>
                         <p className="top-label !font-[600] dark:!text-white !text-black">  </p>
@@ -243,18 +228,14 @@ const PositionsTable = (props: propsData) => {
                         <div className='flex items-center gap-[5px]'>
                           <div>
                             <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}>{truncateNumber(item?.pnl,8)} USDT</p>
-                            {/* <p className={`top-label !font-[600] ${item?.pnl > 0 ? '!text-buy' : '!text-sell'}`}></p> */}
                           </div>
-                          {/* <IconsComponent type='sendIcon' /> */}
                         </div>
                       </td>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                         <div className='flex items-center gap-[5px]'>
                           <div >
                             <p className={`top-label !font-[600] !text-sell`}>-{truncateNumber(item?.realized_pnl,8)} USDT</p>
-                            {/* <p className={`top-label !font-[600] !text-sell`}></p> */}
                           </div>
-                          {/* <IconsComponent type='sendIcon' /> */}
                         </div>
                       </td>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%] cursor-pointer'>
