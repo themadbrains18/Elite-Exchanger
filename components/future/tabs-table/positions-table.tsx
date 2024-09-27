@@ -201,12 +201,12 @@ const PositionsTable = (props: propsData) => {
                         <div className={`pl-[5px] pt-[5px] border-l-[5px] ${(item?.direction === 'long') ? 'border-[#03A66D]' : 'border-[#f74646]'} flex gap-[8px] items-center`}>
                           <div>
                             <p className="info-14 !text-[12px] dark:text-white">{item.symbol}</p>
-                            <p className={`top-label ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.leverage_type} {item.leverage}x</p>
+                            <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.leverage_type} {item.leverage}x</p>
                           </div>
                         </div>
                       </td>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                        <p className={`top-label !font-[600] ${item?.qty < 0 ? '!text-sell' : '!text-buy'}`}>{item?.direction !== 'long' ? '-' : ''}{item?.qty}</p>
+                        <p className={`top-label !font-[600] ${item?.direction === 'long' ? '!text-buy' : '!text-sell'}`}>{item?.direction !== 'long' ? '-' : ''}{truncateNumber(item?.qty,3)}</p>
                       </td>
                       <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                         <p className={`top-label !font-[600] dark:!text-white !text-black`}>{item?.size}</p>

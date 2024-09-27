@@ -1,4 +1,5 @@
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
+import { truncateNumber } from '@/libs/subdomain';
 import moment from 'moment';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -85,7 +86,7 @@ const PositionsHistoryTable = (props: propsData) => {
                                             </div>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className={`top-label !font-[600]`}>{item?.qty}/{item?.qty}</p>
+                                            <p className={`top-label !font-[600]`}>{truncateNumber(item?.qty,3)}/{truncateNumber(item?.qty,3)}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(item?.market_price?.toFixed(2))}/{item?.market_type}</p>

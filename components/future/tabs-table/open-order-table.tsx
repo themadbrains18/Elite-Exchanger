@@ -10,6 +10,7 @@ import { AES } from 'crypto-js';
 import { useWebSocket } from '@/libs/WebSocketContext';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import { useRouter } from 'next/router';
+import { truncateNumber } from '@/libs/subdomain';
 
 interface propsData {
     openOrders?: any;
@@ -144,7 +145,7 @@ const OpenOrderTable = (props: propsData) => {
                                             </div>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.qty > 0 ? item?.qty?.toFixed(5) : item?.qty?.toFixed(2)}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.qty > 0 ? truncateNumber(item?.qty?.toFixed(10),3) : truncateNumber(item?.qty?.toFixed(10),3)}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item?.type}</p>

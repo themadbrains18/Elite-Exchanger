@@ -45,9 +45,13 @@ const ChartTabsFuture = (props: propsData) => {
         }
     }
 
+    useEffect(()=>{
+getProfitLossOrder()
+    },[])
+
     
     useEffect(() => {
-        getProfitLossOrder();
+    
         let Filteritems = props?.positions?.filter((item: any) => {
             if (item?.symbol == slug) {
                 return item;
