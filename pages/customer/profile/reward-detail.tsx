@@ -124,7 +124,7 @@ const RewardDetail = () => {
                     </div>
                     <div className='max-w-[35%] w-full'>
                         <div className='rounded-[10px] bg-white'>
-                            <div className='px-[24px] py-[30px] rounded-[10px] bg-primary-400 relative z-[1] group relative after:w-[20px] after:h-[20px] after:absolute after:top-[calc(50%-10px)] after:left-[-10px] overflow-hidden after:bg-[#fff] after:dark:bg-d-bg-primary after:rounded-full before:w-[20px] before:h-[20px] before:absolute before:top-[calc(50%-10px)] before:right-[-10px] overflow-hidden before:bg-[#fff] before:dark:bg-d-bg-primary before:rounded-full'>
+                            <div className='px-[24px] py-[30px] rounded-[10px] bg-primary-400 relative z-[1] group  after:w-[20px] after:h-[20px] after:absolute after:top-[calc(50%-10px)] after:left-[-10px]  after:bg-[#fff] after:dark:bg-d-bg-primary after:rounded-full before:w-[20px] before:h-[20px] before:absolute before:top-[calc(50%-10px)] before:right-[-10px] overflow-hidden before:bg-[#fff] before:dark:bg-d-bg-primary before:rounded-full'>
                                 <div className='flex items-center justify-center gap-[15px] relative'>
                                     <div className='text-center'>
                                         <h3 className='sec-title !text-white'>{reward?.amount} USDT</h3>
