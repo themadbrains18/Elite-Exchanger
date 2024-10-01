@@ -42,7 +42,7 @@ const Hero = () => {
                         </div>
 
                         <div className="hero_right w-full max-w-[820px] lg:flex lg:items-center order-1 lg:order-2">
-                            <Image src={`/assets/home/${mode === "light" ? "BannerLight1.webp" : "BannerDark1.webp"}`}  alt="Laptop-image" className="block w-full" priority width={653} height={500} />
+                            <Image src={`/assets/home/${mode === "light" ? "BannerLight1.webp" : "BannerDark1.webp"}`}  quality={75}  alt="Laptop-image" className="block w-full" priority width={653} height={500} />
                         </div>
                     </div>
                     <div className="lg:hidden">
