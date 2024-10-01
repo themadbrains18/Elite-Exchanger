@@ -10,6 +10,7 @@ import { authOptions } from "../api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { getProviders } from "next-auth/react";
 import LineChart from "@/admin/admin-snippet/lineChart";
+import Head from "next/head";
 
 interface propsData {
   // coinList?: any,
@@ -29,6 +30,12 @@ const Index = (props: propsData) => {
     console.log(props.session, "======================");
   }, []);
   return (
+    <>
+    <Head>
+    <link rel="stylesheet" href="https://code.highcharts.com/css/highcharts.css"/>
+          <link rel="stylesheet" href="https://code.highcharts.com/css/stocktools/gui.css"/>
+            <link rel="stylesheet" href="https://code.highcharts.com/css/annotations/popup.css"/>
+    </Head>
     <DasboardLayout>
       <Cards userList={props?.userList} tradeList={props?.tradeList} />
       <div className="flex items-start gap-[24px]">
@@ -41,14 +48,14 @@ const Index = (props: propsData) => {
               width={795}
               height={405}
               className="w-full dark:block hidden"
-            />
-            <Image
+              />
+              <Image
               src="/assets/admin/Graph-light.svg"
               alt="img-description"
               width={795}
               height={405}
               className="w-full dark:hidden block"
-            /> */}
+              /> */}
           </div>
           <Table coinList={props.topgainer} />
           {/* <MarketOverview coinList={props.coinList} /> */}
@@ -59,6 +66,7 @@ const Index = (props: propsData) => {
         </div>
       </div>
     </DasboardLayout>
+</>
   );
 };
 
