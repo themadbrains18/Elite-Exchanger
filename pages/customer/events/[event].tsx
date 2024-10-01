@@ -8,6 +8,7 @@ import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
+import Meta from "@/components/snippets/meta";
 
 const Events = () => {
 
@@ -34,6 +35,7 @@ const Events = () => {
 
   return (
     <>
+    <Meta title="Event Details | Upcoming Crypto Events and Webinars" description="Discover everything you need to know about our upcoming crypto events and webinars! Explore event details, including date, time, location, speakers, and topics covered. Join our community to gain insights, network with experts, and stay updated on the latest trends in the crypto world. Don’t miss out—register today!"/>
       <Banner eventData={eventData} />
       <Participate eventData={eventData} />
       <Terms />

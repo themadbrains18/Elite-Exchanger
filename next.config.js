@@ -62,6 +62,15 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/robots.txt',
+        destination: '/api/robots',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

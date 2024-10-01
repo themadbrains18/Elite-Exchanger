@@ -14,6 +14,9 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
 import { useWebSocket } from '@/libs/WebSocketContext';
+import Meta from '@/components/snippets/meta';
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
+import { truncateNumber } from '@/libs/subdomain';
 
 interface Session {
     session: {
@@ -30,7 +33,7 @@ const Chart = (props: Session) => {
     const router = useRouter();
     const [orders, setMarketOrders] = useState([]);
     const [userTradeHistory, setUserTradeHistory] = useState([]);
-    const [currentToken, setCurrentToken] = useState([]);
+    const [currentToken, setCurrentToken] = useState<any>([]);
     const [allCoins, setAllCoins] = useState(props.coinList);
     const [allTradeHistory, setAllTradeHistory] = useState([]);
     const [view, setView] = useState("desktop")
@@ -183,6 +186,7 @@ const Chart = (props: Session) => {
 
     return (
         <>
+        <Meta title={`${currencyFormatter(truncateNumber(currentToken[0]?.price, 1))} ${slug === 'BTCB' ? 'BTC' : slug === 'BNBT' ? 'BNB' : slug}USDT Crypto Planet Spot Trading`} description={`Trade ${slug === 'BTCB' ? 'BTC' : slug === 'BNBT' ? 'BNB' : slug}USDT effortlessly with our user-friendly platform. Access live prices, detailed charts, and expert trading strategies to maximize your investment. Stay updated on market trends and join a vibrant community of traders. Start your ${slug === 'BTCB' ? 'BTC' : slug === 'BNBT' ? 'BNB' : slug}USDT trading journey today!`}/>
             <div>
                 <ToastContainer limit={1} />
                 <div className=" bg-light-v-1 py-20 dark:bg-black-v-1">

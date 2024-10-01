@@ -178,18 +178,18 @@ const FooterNav = () => {
                 </div> */}
                 <p className='info-14-18  md:text-[18px] text-[16px] !text-footer-text  mb-[20px] md:mb-30'>We accept following payment systems</p>
                 <div className='flex items-center gap-[13px] flex-wrap'>
-                    <button  type='button' className='block max-w-[67px] md:max-w-[91px] w-full' >
+                    <div  className='block max-w-[67px] md:max-w-[91px] w-full' >
                         <IconsComponent type='paypal' hover={false} active={false} />
-                    </button>
-                    <button  type='button' className='block max-w-[67px] md:max-w-[91px] w-full' >
+                    </div>
+                    <div  className='block max-w-[67px] md:max-w-[91px] w-full' >
                         <IconsComponent type='masterCard' hover={false} active={false} />
-                    </button>
-                    <button  type='button'className='block max-w-[67px] md:max-w-[91px] w-full' >
+                    </div>
+                    <div className='block max-w-[67px] md:max-w-[91px] w-full' >
                         <IconsComponent type='bitCoin' hover={false} active={false} />
-                    </button>
-                    <button type='button' className='block max-w-[67px] md:max-w-[91px] w-full' >
+                    </div>
+                    <div className='block max-w-[67px] md:max-w-[91px] w-full' >
                         <IconsComponent type='otherCards' hover={false} active={false} />
-                    </button>
+                    </div>
                 </div>
             </div>
         </div>

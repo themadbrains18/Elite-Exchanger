@@ -32,7 +32,7 @@ const OrderBookFuture = (props: setHeight) => {
 
 
                 <div className='flex items-center justify-between gap-[10px] p-[10px]'>
-                    <button className={`p-[5px] border border-[#ffffff26] rounded  ${props.show === 1 ? "dark:bg-[#373d4e] bg-[#e5ecf0]" : "bg-transparent"}`} onClick={() => { props.setShow(1) }}>
+                    <button className={`p-[5px] border border-[#ffffff26] rounded  ${props.show === 1 ? "dark:bg-[#373d4e] bg-[#e5ecf0]" : "bg-transparent"}`} aria-label='buy-sell-history' onClick={() => { props.setShow(1) }}>
                         <svg
                             width={16}
                             height={16}
@@ -66,7 +66,7 @@ const OrderBookFuture = (props: setHeight) => {
                             />
                         </svg>
                     </button>
-                    <button className={`p-[5px] border border-[#ffffff26] rounded  ${props.show === 2 ? "dark:bg-[#373d4e] bg-[#e5ecf0]" : "bg-transparent"}`} onClick={() => { props.setShow(2) }}>
+                    <button aria-label='buy-list' className={`p-[5px] border border-[#ffffff26] rounded  ${props.show === 2 ? "dark:bg-[#373d4e] bg-[#e5ecf0]" : "bg-transparent"}`} onClick={() => { props.setShow(2) }}>
                         <svg
                             width={16}
                             height={16}
@@ -100,7 +100,7 @@ const OrderBookFuture = (props: setHeight) => {
                             />
                         </svg>
                     </button>
-                    <button className={`p-[5px] border border-[#ffffff26] rounded  ${props.show === 3 ? "dark:bg-[#373d4e] bg-[#e5ecf0]" : "bg-transparent"}`} onClick={() => { props.setShow(3) }}>
+                    <button aria-label='sell list' className={`p-[5px] border border-[#ffffff26] rounded  ${props.show === 3 ? "dark:bg-[#373d4e] bg-[#e5ecf0]" : "bg-transparent"}`} onClick={() => { props.setShow(3) }}>
                         <svg
                             width={16}
                             height={16}

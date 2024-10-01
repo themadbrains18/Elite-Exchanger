@@ -4,7 +4,7 @@ import HeaderLogo from "../svg-snippets/headerLogo";
 import Link from "next/link";
 import TradeIcon from "../svg-snippets/trade-icon";
 import { Wallet } from "../svg-snippets/wallet-icon";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Context from "../contexts/context";
@@ -13,13 +13,18 @@ import ResponsiveSidebar from "./responsive-sidebar";
 import { useRouter } from "next/router";
 import SideBar from "../snippets/sideBar";
 import { useSession } from "next-auth/react";
-import IconsComponent from "../snippets/icons";
-import Notification from "../snippets/notification";
+// import IconsComponent from "../snippets/icons";
 import { useWebSocket } from "@/libs/WebSocketContext";
+import dynamic from "next/dynamic";
 
 interface propsData {
   session: any;
 }
+
+
+const Notification = dynamic(() => import('../snippets/notification'));
+const IconsComponent = dynamic(() => import("../snippets/icons"));
+
 
 const Header = (props: propsData) => {
   let { mode } = useContext(Context);
@@ -222,7 +227,7 @@ const Header = (props: propsData) => {
           <div className="hidden lg:grid header-wrapper items-center justify-between">
             <div className={`flex items-center`}>
               <div className="pr-[20px] border-r border-delta">
-                <Link prefetch={false} href="/" className="min-w-[183px]">
+                <Link prefetch={false} href="/" aria-label="Go to home page" className="min-w-[183px]">
                   <HeaderLogo />
                 </Link>
               </div>
@@ -430,7 +435,7 @@ const Header = (props: propsData) => {
           <div className="lg:hidden ">
             <div className="flex items-center justify-between">
               <div>
-                <Link prefetch={false} href="/">
+                <Link prefetch={false} href="/" aria-label="Go to home page">
                   <HeaderLogo />
                 </Link>
               </div>

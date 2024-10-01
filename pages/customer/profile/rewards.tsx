@@ -5,6 +5,7 @@ import { authOptions } from '../../api/auth/[...nextauth]';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Rewards from '@/components/profile/rewards'
+import Meta from '@/components/snippets/meta';
 
 interface propsData {
     session?: {
@@ -23,10 +24,13 @@ interface propsData {
 
 const ReferRewards = (props: propsData) => {
     return (
+        <>
+        <Meta title='Earn Crypto Rewards | Unlock Benefits and Bonuses' description='Discover our Crypto Rewards program and start earning benefits for your trading activity! Explore various reward options, bonuses for referrals, and loyalty incentives. Maximize your crypto journey while enjoying exclusive offers tailored just for you. Join us and reap the rewards today!'/>
         <SideBarLayout userDetail={props.userDetail} referalList={props.referalList} eventList={props.eventList} rewardsList={props.rewardsList}>
             <ToastContainer limit={1}/>
             <Rewards rewardsList={props.rewardsList} />
         </SideBarLayout>
+        </>
     )
 }
 

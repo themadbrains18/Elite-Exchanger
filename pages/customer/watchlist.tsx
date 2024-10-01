@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import dynamic from 'next/dynamic'
+import Meta from '@/components/snippets/meta';
 
 interface propsData{
   Watchlist?:any;
@@ -17,6 +18,7 @@ const WatchListPage = dynamic(() => import('@/components/watchlist/watchListPage
 const Watchlist = (props: propsData) => {
   return (
     <>
+    <Meta title='Watchlist | Crypto Planet' description='Stay on top of the crypto market with your personalized watchlist! Monitor your favorite coins and tokens in real time, receive price alerts, and access key market data. Customize your watchlist to make informed trading decisions and never miss an opportunity in the dynamic world of cryptocurrency. Start tracking today!'/>
       <WatchListPage watchList={props.Watchlist}/>
     </>
   )

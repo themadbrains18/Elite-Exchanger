@@ -6,7 +6,7 @@ const FooterHead = () => {
   return (
     <div className="flex items-center justify-between mb-[50px]">
             <div>
-              <Link prefetch={false} href="/">
+              <Link prefetch={false} href="/" aria-label='Go to home page'>
                 <svg    
                 // onClick={()=>{setMode("light");localStorage.setItem("mode", "light");}}
                 className='max-w-[159px] xl:max-w-[183px] w-full'
@@ -41,16 +41,16 @@ const FooterHead = () => {
               </Link>
             </div>
             <div className='flex items-center gap-[10px] lg:gap-[20px]'>
-              <Link prefetch={false} href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer'>
+              <Link prefetch={false} href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer' aria-label='link for download app for window'>
                 <IconsComponent type='DownloadForWindow' hover={false} active={false} />
               </Link>
-              <Link prefetch={false} href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer'>
+              <Link prefetch={false} href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer' aria-label='link for download app for mac'>
                 <IconsComponent type='DownloadForMac' hover={false} active={false} />
               </Link>
-              <Link prefetch={false} href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer'>
+              <Link prefetch={false} href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer' aria-label='link for download app from app store'> 
                 <IconsComponent type='DownloadFromAppStore' hover={false} active={false} />
               </Link>
-              <Link prefetch={false} href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer'>
+              <Link prefetch={false} href="#" className='lg:w-[151px] lg:h-[42px] cursor-pointer' aria-label='link for download app from google play'>
                 <IconsComponent type='DownloadFromGooglePlay' hover={false} active={false} />
               </Link>
             </div>

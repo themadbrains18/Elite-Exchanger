@@ -7,6 +7,7 @@ import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
+import Meta from '@/components/snippets/meta';
 
 interface propsData {
   provider: any,
@@ -15,13 +16,17 @@ interface propsData {
   assets: any,
 }
 
-const P2pSell = (props:propsData) => {
-  const [show1,setShow1] = useState(false);
+const P2pSell = (props: propsData) => {
+  const [show1, setShow1] = useState(false);
 
   return (
-    <P2pLayout>
-      <SellCoinsTabs setShow1={setShow1} coinList={props?.coinList}/>
-    </P2pLayout>
+    <>
+      <Meta title='Crypto Planet P2P Trading | Sell Crypto via P2P' description='Crypto Planet Sell Crypto via P2P' />
+
+      <P2pLayout>
+        <SellCoinsTabs setShow1={setShow1} coinList={props?.coinList} />
+      </P2pLayout>
+    </>
   )
 }
 
@@ -55,7 +60,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       },
     };
   }
-  
+
   return {
     props: {
       providers: providers,

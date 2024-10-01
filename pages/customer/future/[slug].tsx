@@ -19,6 +19,9 @@ import TransferModal from '@/components/future/popups/transfer-modal';
 import TradingFeeMadal from '@/components/future/popups/trading-fee-madal';
 import { useWebSocket } from '@/libs/WebSocketContext';
 import { useRouter } from 'next/router';
+import Meta from '@/components/snippets/meta';
+import { currencyFormatter } from '@/components/snippets/market/buySellCard';
+import { truncateNumber } from '@/libs/subdomain';
 
 
 interface Session {
@@ -41,7 +44,7 @@ const FutureTrading = (props: Session) => {
     const [overlay, setOverlay] = useState(false);
     const [showMob, setShowMob] = useState(1);
     const [show1, setShow1] = useState(false);
-    const [currentToken, setCurrentToken] = useState([]);
+    const [currentToken, setCurrentToken] = useState<any>([]);
     const [allCoins, setAllCoins] = useState(props.coinList);
     const [positions, setPositionData] = useState([]);
     const [openOrders, setOpenOrders] = useState([]);
@@ -62,13 +65,13 @@ const FutureTrading = (props: Session) => {
     const wbsocket = useWebSocket();
 
 
-    
+
 
     useEffect(() => {
         const savedLeverage = typeof window !== 'undefined' && localStorage.getItem('leverage');
         if (savedLeverage) {
             setMarginMode({ margin: 'Isolated', leverage: parseInt(savedLeverage) });
-        } 
+        }
     }, []);
 
     useEffect(() => {
@@ -79,7 +82,7 @@ const FutureTrading = (props: Session) => {
             return item.coin_symbol + item.usdt_symbol === slug
         })
 
- 
+
 
         if (ccurrentToken && ccurrentToken?.length > 0) {
             setMinTrade(ccurrentToken[0]?.coin_min_trade)
@@ -99,12 +102,12 @@ const FutureTrading = (props: Session) => {
     useEffect(() => {
 
         // console.log(slug,"===slug in "); 
-        
-        
+
+
         const handleSocketMessage = async (event: any) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
-            
+
             if (eventDataType === "price") {
                 await refreshTokenList();
                 getUserFuturePositionData();
@@ -142,13 +145,13 @@ const FutureTrading = (props: Session) => {
     // ===================================== //
     // Refresh token list after price update //
     // ===================================== //
-    const refreshTokenList = async () => {        
+    const refreshTokenList = async () => {
 
         let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future?qu=all`, {
             method: "GET"
         }).then(response => response.json());
 
-        
+
 
         let ccurrentToken = tokenList?.data.filter((item: any) => {
             return (item.coin_symbol + item.usdt_symbol) === slugRef.current
@@ -173,8 +176,8 @@ const FutureTrading = (props: Session) => {
                     },
                 }).then(response => response.json());
 
-                
-                
+
+
 
                 setPositionData(positionData?.data);
             }
@@ -285,7 +288,7 @@ const FutureTrading = (props: Session) => {
     const getCoinHLOCData = async () => {
         try {
             // console.log("herer");
-            
+
             let ccurrentToken = props.coinList.filter((item: any) => {
                 return item.coin_symbol + item.usdt_symbol === props?.serverSlug
             })
@@ -315,8 +318,8 @@ const FutureTrading = (props: Session) => {
             let orderBookData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/orderbook?coinid=${ccurrentToken[0]?.coin_id}`, {
                 method: "GET",
             }).then(response => response.json());
-            
-            
+
+
             setPositionRecord(orderBookData?.data);
         } catch (error) {
 
@@ -325,6 +328,7 @@ const FutureTrading = (props: Session) => {
 
     return (
         <>
+            <Meta title={`${currencyFormatter(truncateNumber(currentToken[0]?.token?.price || currentToken[0]?.global_token?.price, 1))} | ${slug} Futures | Crypto Planet Future Trading`} description={`Dive into the world of futures trading with ${slug}! Explore real-time market data, advanced charting tools, and strategic insights to enhance your trading experience. Whether you’re a novice or a seasoned trader, maximize your investment potential with our secure platform. Start trading ${slug} futures today!`} />
             <ToastContainer limit={1} position='top-center' />
             {/* For Desktop use */}
             <div className='max-[991px]:hidden flex max-[1023px]:mt-[57px] mt-[69px]'>
@@ -380,9 +384,9 @@ const FutureTrading = (props: Session) => {
 
                 <div className='overflow-x-auto hide-scroller dark:bg-[#1a1b1f] bg-[#fafafa]'>
                     <div className='flex items-center gap-[20px] w-max p-[16px] '>
-                        <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-full after:translate-x-[-50%] after:h-[2px] ${showMob === 1 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(1) }}>Chart</button>
-                        <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-full after:translate-x-[-50%] after:h-[2px] ${showMob === 2 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(2) }}>Order Book</button>
-                        <button className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-full after:translate-x-[-50%] after:h-[2px] ${showMob === 3 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(3) }}>Recent Trades</button>
+                        <button aria-label='for chart' className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-full after:translate-x-[-50%] after:h-[2px] ${showMob === 1 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(1) }}>Chart</button>
+                        <button aria-label='for order book' className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-full after:translate-x-[-50%] after:h-[2px] ${showMob === 2 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(2) }}>Order Book</button>
+                        <button aria-label="for recent trades" className={`admin-body-text relative after:dark:bg-white after:bg-black after:absolute after:bottom-[-3px]  after:left-[50%] after:w-full after:translate-x-[-50%] after:h-[2px] ${showMob === 3 ? 'after:block !text-black dark:!text-white' : 'after:hidden !text-[#a3a8b7]'}`} onClick={() => { setShowMob(3) }}>Recent Trades</button>
                     </div>
                     {
                         showMob === 1 &&
@@ -435,7 +439,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     const providers = await getProviders();
 
     const { slug } = context.query;
-     
+
 
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future?qu=all`, {
         method: "GET"

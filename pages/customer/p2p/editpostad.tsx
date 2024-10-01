@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { useRouter } from 'next/router'
+import Meta from '@/components/snippets/meta'
 
 interface propsData {
     masterPayMethod?: any;
@@ -45,9 +46,12 @@ const EditPostad = (props: propsData) => {
     }
 
     return (
+        <>
+        <Meta title='Crypto Advertisements | Crypto Planet' description='Discover the latest crypto advertisements and promotions in one place! Browse exclusive offers, trading bonuses, and investment opportunities tailored for crypto enthusiasts. Stay informed and seize the best deals to maximize your trading experience. Check out our advertisement list today!'/>
         <P2pLayout>
             <EditAdverstisement masterPayMethod={props.masterPayMethod} userPaymentMethod={props.userPaymentMethod} tokenList={props.tokenList} assets={props.assets} editPost={editPost} />
         </P2pLayout>
+        </>
     )
 }
 

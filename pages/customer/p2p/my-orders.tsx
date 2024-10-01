@@ -16,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Successfull from '@/components/snippets/successfull';
 import { useWebSocket } from '@/libs/WebSocketContext';
 import { useRouter } from 'next/router';
+import Meta from '@/components/snippets/meta';
 
 interface propsData {
   userOrder?: any;
@@ -116,6 +117,7 @@ const MyOrders = (props: propsData) => {
 
   return (
     <>
+    <Meta title='Trade History | Review Your Crypto Transactions' description='Access your complete trade history and review all your crypto transactions in one place. Analyze your trading patterns, track profits and losses, and gain insights into your investment strategy. Stay informed and optimize your trading decisions with our detailed trade history overview.'/>
       <ToastContainer limit={1} />
       <P2pLayout>
         {

@@ -96,7 +96,7 @@ const ConfirmPopup = (props: activeSection) => {
             </div>
             <input type="email" placeholder="Enter Email " className="input-cta2 bg-primary-100" disabled={true} value={props.session?.user?.email !== "null" ? props.session?.user?.email : ''} />
           </div>}
-          <button className={`mt-[30px] lg:mt-[50px] solid-button w-full flex items-center gap-[10px] justify-center ${disable && "cursor-not-allowed"}`} disabled={disable} onClick={() => { sendOtp() }}>
+          <button aria-label='Continue process' className={`mt-[30px] lg:mt-[50px] solid-button w-full flex items-center gap-[10px] justify-center ${disable && "cursor-not-allowed"}`} disabled={disable} onClick={() => { sendOtp() }}>
             {disable === true &&
               <svg
               className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"

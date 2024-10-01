@@ -6,6 +6,7 @@ import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
+import Meta from '@/components/snippets/meta';
 
 const Notification = () => {
   const { status, data: session } = useSession();
@@ -30,7 +31,10 @@ const Notification = () => {
     }
   }
   return (
+    <>
+    <Meta title='Notifications | Stay Updated on Your Crypto Trades' description='Never miss an update with our Crypto Notification page! Customize your preferences to receive alerts about market trends, price changes, and important account activities. Stay informed and make timely decisions to enhance your trading experience. Join our community and take control of your crypto journey!'/>
     <NotificationsList notificationData={notificationData}/>
+    </>
   )
 }
 

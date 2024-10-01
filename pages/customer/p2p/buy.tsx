@@ -8,6 +8,7 @@ import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { useWebSocket } from '@/libs/WebSocketContext';
+import Meta from '@/components/snippets/meta';
 
 
 interface propsData {
@@ -66,16 +67,16 @@ const P2pBuy = (props: propsData) => {
 
 
   return (
+    <>
+    <Meta title='Crypto Planet P2P Trading | Buy Crypto via P2P' description='Crypto Planet Buy Crypto via P2P'/>
+
     <P2pLayout>
-
-      
-
       <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} assets={props?.assets} posts={newPosts?.length > 0 ? newPosts : props?.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} session={props?.session}/>
       {show1 === true &&
         <BuyPopup show1={show1} setShow1={setShow1} selectedPost={selectedPost} />
       }
-
     </P2pLayout>
+    </>
   )
 }
 

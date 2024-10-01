@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { useRouter } from 'next/router';
+import Meta from '@/components/snippets/meta';
 
 interface propsData {
   // posts?: any;
@@ -20,9 +21,12 @@ const MyAdvertisement = (props: propsData) => {
   const router= useRouter()
 
   return (
+    <>
+    <Meta title='Crypto Advertisements | Crypto Planet' description='Discover the latest crypto advertisements and promotions in one place! Browse exclusive offers, trading bonuses, and investment opportunities tailored for crypto enthusiasts. Stay informed and seize the best deals to maximize your trading experience. Check out our advertisement list today!'/>
     <P2pLayout>
       <AdvertisementTabs userPaymentMethod={props.userPaymentMethod} coinList={props?.coinList} masterPayMethod={props.masterPayMethod} session={props?.session}/>
     </P2pLayout>
+    </>
 
   )
 }

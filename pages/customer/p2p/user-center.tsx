@@ -8,6 +8,7 @@ import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
+import Meta from '@/components/snippets/meta';
 
 interface propsData{
   userDetail?:any;
@@ -19,11 +20,14 @@ interface propsData{
 const UserCenter = (props:propsData) => {
 
   return (
+    <>
+    <Meta title='User Center | Manage Your Crypto Account and Preferences' description='Welcome to your User Center! Manage your crypto account, update personal details, adjust security settings, and customize your trading preferences. Enjoy a seamless experience tailored to your needs, and stay in control of your crypto journey with easy access to all your account information.'/>
     <P2pLayout>
        <UserCenterProfile userDetail={props.userDetail}/>
        {/* <ProfileOverview /> */}
        <PaymentMethod masterPayMethod={props.masterPayMethod} userPaymentMethod={props.userPaymentMethod} page="user-center" userPosts={props?.posts}/>
     </P2pLayout>
+    </>
   )
 }
 

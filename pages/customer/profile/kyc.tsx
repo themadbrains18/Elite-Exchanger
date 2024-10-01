@@ -7,6 +7,7 @@ import { authOptions } from '../../api/auth/[...nextauth]'
 import { GetServerSidePropsContext } from 'next'
 import KycPending from '@/components/profile/kyc-pending'
 import KycDone from '@/components/profile/kyc-done'
+import Meta from '@/components/snippets/meta'
 
 
 
@@ -22,6 +23,8 @@ interface Session {
 const Kyc = (props: Session) => {
 
   return (
+    <>
+    <Meta title='Crypto Planet | KYC Verification' description='Complete your KYC verification to enhance the security of your crypto account and comply with regulations. Our streamlined process ensures your identity is verified quickly and safely. Join our platform with confidence and enjoy a secure trading experience while safeguarding your investments.'/>
     <SideBarLayout userDetail={props.userDetail} kycInfo={props.kycInfo} >
       {
         ((props?.kycInfo?.isReject === 1) || Object.keys(props?.kycInfo)?.length === 0) &&
@@ -37,6 +40,7 @@ const Kyc = (props: Session) => {
         <KycDone />
       }
     </SideBarLayout>
+      </>
   )
 }
 

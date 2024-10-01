@@ -93,9 +93,9 @@ const WithdrawAuthenticationModelPopup = (props: activeSection) => {
                                         {session?.user?.TwoFA === false ? 'Please set google authentication 2FA' : 'Google Authentication 2FA '}
                                     </div>
                                     <div>
-                                        {session?.user?.TwoFA === false ? <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap" onClick={() => route.push('/profile/security')}>
+                                        {session?.user?.TwoFA === false ? <button aria-label="to verify withdraw" className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap" onClick={() => route.push('/profile/security')}>
                                             Verify
-                                        </button> : <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap">
+                                        </button> : <button aria-label="to approve withraw" className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap">
                                             Approved
                                         </button>}
 

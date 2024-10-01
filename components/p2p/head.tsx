@@ -89,7 +89,7 @@ const Head = () => {
           <Link prefetch={false} href='/p2p/buy'
             className={`${!router.pathname.includes('/p2p/express')
               ? "bg-primary !text-white"
-              : "dark:text-beta bg-bg-secondary !text-body-primary dark:bg-black-v-1"
+              : "dark:!text-white bg-bg-secondary !text-body-primary dark:bg-black-v-1"
               } !text-[14px] md:!text-[18px] px-[15px] md:px-[20px] py-[5px] md:py-[14px] rounded-[5px]`}
           >
             P2P Process
@@ -97,7 +97,7 @@ const Head = () => {
           <Link prefetch={false} href='/p2p/express'
             className={`${router.pathname.includes('/p2p/express')
               ? "bg-primary !text-white"
-              : "dark:text-beta bg-bg-secondary !text-body-primary dark:bg-black-v-1"
+              : "dark:!text-white bg-bg-secondary !text-body-primary dark:bg-black-v-1"
               } !text-[14px] md:!text-[18px] px-[15px] md:px-[20px] py-[5px] md:py-[14px] rounded-[5px]`}
           >
             {" "}

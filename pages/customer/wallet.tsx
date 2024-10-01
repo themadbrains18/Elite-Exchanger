@@ -10,6 +10,7 @@ import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useWebSocket } from '@/libs/WebSocketContext'
+import Meta from '@/components/snippets/meta';
 
 
 interface Session {
@@ -93,25 +94,28 @@ const Wallet = (props: Session) => {
     }
 
     return (
-        <div>
-            <ToastContainer limit={1} />
-            <div className=" bg-light-v-1 py-[20px] md:py-[80px] dark:bg-black-v-1">
-                <div className="container flex gap-30 flex-wrap">
-                    <div className="max-w-full w-full">
-                        <Banner coinList={allCoins} networks={props?.networks} session={props.session} assets={userAssetsList?.data?.totalAmount} withdrawList={props.withdrawList} depositList={props.depositList} />
-                        <WalletList coinList={allCoins} networks={props?.networks} session={props.session} refreshData={refreshData} />
-                    </div>
-                    {/* <div className="lg:max-w-[432px] w-full md:block hidden">
-                        <div className="lg:block hidden ">
-                            <Exchange id={0} coinList={allCoins} assets={userAssetsList?.data?.data} refreshData={refreshData} />
+        <>
+            <Meta title='Asset Overview | Crypto Planet' description='Manage your digital assets with our secure crypto wallet. Store, send, and receive a variety of cryptocurrencies effortlessly. Enjoy top-notch security features, user-friendly interface, and seamless integration with trading platforms. Safeguard your investments and experience peace of mind with our trusted crypto wallet solution.' />
+            <div>
+                <ToastContainer limit={1} />
+                <div className=" bg-light-v-1 py-[20px] md:py-[80px] dark:bg-black-v-1">
+                    <div className="container flex gap-30 flex-wrap">
+                        <div className="max-w-full w-full">
+                            <Banner coinList={allCoins} networks={props?.networks} session={props.session} assets={userAssetsList?.data?.totalAmount} withdrawList={props.withdrawList} depositList={props.depositList} />
+                            <WalletList coinList={allCoins} networks={props?.networks} session={props.session} refreshData={refreshData} />
                         </div>
-                    </div> */}
-                </div>
-                <div className="lg:hidden">
-                    <ResponsiveFixCta />
+                        {/* <div className="lg:max-w-[432px] w-full md:block hidden">
+                        <div className="lg:block hidden ">
+                        <Exchange id={0} coinList={allCoins} assets={userAssetsList?.data?.data} refreshData={refreshData} />
+                        </div>
+                        </div> */}
+                    </div>
+                    <div className="lg:hidden">
+                        <ResponsiveFixCta />
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 
@@ -145,7 +149,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
             },
         }).then(response => response.json());
 
-    
+
 
         let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
             method: "GET",
@@ -154,7 +158,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
             },
         }).then(response => response.json());
 
-// console.log(userAssets,"==assets");
+        // console.log(userAssets,"==assets");
 
         return {
             props: {

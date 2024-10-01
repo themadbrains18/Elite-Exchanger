@@ -6,6 +6,7 @@ import { getProviders } from 'next-auth/react'
 import React, { useState } from 'react'
 import { authOptions } from '../../api/auth/[...nextauth]'
 import { GetServerSidePropsContext } from 'next'
+import Meta from '@/components/snippets/meta'
 
 interface Session {
   session: {
@@ -19,9 +20,12 @@ interface Session {
 const Security = (props: Session) => {
   
   return (
+    <>
+    <Meta title='Security Settings | Safeguard Your Crypto Account' description='Enhance the security of your crypto account with our comprehensive security settings. Manage two-factor authentication, update passwords, and review your account activity to ensure your assets are protected. Take control of your security and trade with confidence on our platform!'/>
     <SideBarLayout userDetail={props.userDetail} activity={props?.activity}>
       <SecuritySettings session={props?.session} activity={props?.activity}/>
     </SideBarLayout>
+    </>
   )
 }
 

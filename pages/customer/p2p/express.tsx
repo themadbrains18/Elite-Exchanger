@@ -5,6 +5,8 @@ import React from 'react'
 import { authOptions } from '../../api/auth/[...nextauth]'
 import { getServerSession } from 'next-auth'
 import { getProviders } from 'next-auth/react'
+import Head from 'next/head'
+import Meta from '@/components/snippets/meta'
 
 interface Session {
   session: {
@@ -20,9 +22,12 @@ interface Session {
 
 const Express = (props: Session) => {
   return (
-    <P2pLayout>
+    <>
+    <Meta title='Crypto Planet P2P Trading | Buy Crypto via Express' description='Crypto Planet Buy Crypto via Express'/>
+      <P2pLayout>
       <BuySellExpress coins={props?.coinList} session={props?.session} posts={props?.posts} masterPayMethod={props?.masterPayMethod} assets={props?.assets}/>
     </P2pLayout>
+    </>
   )
 }
 

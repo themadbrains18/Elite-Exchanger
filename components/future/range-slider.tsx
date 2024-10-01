@@ -113,6 +113,7 @@ const RangeSlider: React.FC<UniqueIds> = ({
         <div className="range-slider_line">
           <div id={lineId} ref={lineRef} className="range-slider_line-fill"></div>
         </div>
+        <label htmlFor={inputId}></label>
         <input
           id={inputId}
           ref={sliderRef}

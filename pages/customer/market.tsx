@@ -6,6 +6,7 @@ import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import 'react-toastify/dist/ReactToastify.css';
 import { useWebSocket } from '@/libs/WebSocketContext'
+import Meta from '@/components/snippets/meta'
 // import Pusher from 'pusher-js';
 
 // const pusher = new Pusher('b275b2f9e51725c09934', {
@@ -57,6 +58,7 @@ const Market = ({ session, coinList, assets, networks }: Session) => {
   return (
     <>
       {/* <ToastContainer limit={1} /> */}
+      <Meta title='Crypto Market Overview | Latest Trends, Prices & Insights' description='Stay informed with our comprehensive crypto market overview. Explore the latest trends, real-time prices, and in-depth insights on major cryptocurrencies, market cap, trading volume, and more. Join our community of crypto enthusiasts and navigate the ever-evolving landscape of digital assets with confidence.'/>
       <Marketpage coinList={allCoins} session={session} assets={userAssetsList} networks={networks} />
     </>
   )

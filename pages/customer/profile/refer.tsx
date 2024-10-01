@@ -7,6 +7,7 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Meta from '@/components/snippets/meta'
 
 interface propsData {
   session: {
@@ -20,10 +21,14 @@ interface propsData {
 
 const Refer = (props: propsData) => {
   return (
+    
+    <>
+    <Meta title='Refer and Earn | Crypto Referral Program' description='Join our Crypto Referral Program and start earning rewards today! Invite friends to trade on our platform, and receive bonuses for each successful referral. Discover how easy it is to share your love for crypto while benefiting from exclusive rewards. Start referring now and maximize your earnings!' />
     <SideBarLayout userDetail={props.userDetail} referalList={props.referalList} eventList={props.eventList} rewardsList={props.rewardsList}>
       <ToastContainer limit={1} />
       <Referal session={props.session} referalList={props.referalList} eventList={props.eventList} rewardsList={props.rewardsList} />
     </SideBarLayout>
+    </>
   )
 }
 

@@ -14,6 +14,7 @@ interface propsData {
 }
 
 import dynamic from 'next/dynamic';
+import Meta from '@/components/snippets/meta';
 
 const Hero = dynamic(() => import('@/components/refer/hero'), {
   loading: () => <p>Loading...</p>,
@@ -31,14 +32,15 @@ const Events = dynamic(() => import('@/components/refer/events'), {
   loading: () => <p>Loading...</p>,
 })
 
-const Refer = (props:propsData) => {
+const Refer = (props: propsData) => {
 
   return (
     <>
+      <Meta title='Refer and Earn | Crypto Referral Program' description='Join our Crypto Referral Program and start earning rewards today! Invite friends to trade on our platform, and receive bonuses for each successful referral. Discover how easy it is to share your love for crypto while benefiting from exclusive rewards. Start referring now and maximize your earnings!' />
       <Hero />
       <ReferFriends />
       <Safe />
-      <Events eventList={props.eventList}/>
+      <Events eventList={props.eventList} />
       <Earning />
     </>
   )

@@ -5,9 +5,12 @@ import { getProviders } from "next-auth/react"
 import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
+import Meta from '@/components/snippets/meta'
 
 const Overview = ({ sessions }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
+    <>
+    <Meta title='Crypto Planet' description='Crypto Planet'/>
     <section className="p-5 md:p-10 ">
       <div className="flex items-center gap-5 justify-between">
         <p className="sec-title">My Profile</p>
@@ -92,11 +95,12 @@ const Overview = ({ sessions }: InferGetServerSidePropsType<typeof getServerSide
       <div className="flex items-center justify-between pt-5 md:pt-[30px]">
         <p className="sm-text">This account was created on January 10, 2022, 02:12 PM</p>
         <div className="flex gap-[30px]">
-          <button className="solid-button2 ">Cancel</button>
-          <button className="solid-button px-[51px]">Save Changes</button>
+          <button aria-label='to cancel process' className="solid-button2 ">Cancel</button>
+          <button aria-label='for save changes' className="solid-button px-[51px]">Save Changes</button>
         </div>
       </div>
     </section>
+    </>
   )
 }
 

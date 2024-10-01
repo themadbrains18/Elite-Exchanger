@@ -5,6 +5,7 @@ import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import 'react-toastify/dist/ReactToastify.css';
+import Meta from '@/components/snippets/meta'
 
 interface propsData {
   session: {
@@ -16,7 +17,10 @@ interface propsData {
 
 const TradeHistory = (props: propsData) => {
   return (
+    <>
+    <Meta title='Trade History | Review Your Crypto Transactions' description='Access your complete crypto trade history and analyze your transactions with ease. Our Trade History page provides detailed insights into your buying, selling, and trading activities. Track your performance, monitor trends, and make informed decisions for future trades. Stay organized and in control of your crypto investments!'/>
     <Historytrade coinList={props.coinList}/>
+    </>
   )
 }
 

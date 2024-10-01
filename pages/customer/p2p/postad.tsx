@@ -6,6 +6,7 @@ import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from 'next'
 import { authOptions } from '../../api/auth/[...nextauth]';
 import AuthenticationModelPopup from '@/components/snippets/authenticationPopup'
+import Meta from '@/components/snippets/meta'
 
 interface propsData {
   masterPayMethod?: any;
@@ -30,6 +31,9 @@ const Postad = (props: propsData) => {
 
 
   return (
+    <>
+    <Meta title='Crypto Advertisements | Crypto Planet' description='Discover the latest crypto advertisements and promotions in one place! Browse exclusive offers, trading bonuses, and investment opportunities tailored for crypto enthusiasts. Stay informed and seize the best deals to maximize your trading experience. Check out our advertisement list today!'/>
+
     <P2pLayout>
       {(session?.user?.kyc === 'approve' ||  session?.user?.TwoFA === true || (session?.user?.tradingPassword !== '' || session?.user?.tradingPassword !== null) || (session?.user?.email !== '' || session?.user?.email !== null)) && 
         <Adverstisement masterPayMethod={props.masterPayMethod} userPaymentMethod={props.userPaymentMethod} tokenList={props.tokenList} assets={props.assets} session={props?.session}/>
@@ -37,9 +41,10 @@ const Postad = (props: propsData) => {
 
       {/* {(session?.user?.kyc !== 'approve' || session?.user?.TwoFA === false || (session?.user?.tradingPassword === '' || session?.user?.tradingPassword === null) || (session?.user?.email === '' || session?.user?.email === null)) &&
         <AuthenticationModelPopup title='Confirmation' message='Please complete your kyc' setShow={setShow} setActive={setActive} show={show} />
-      } */}
+        } */}
 
     </P2pLayout>
+        </>
   )
 }
 

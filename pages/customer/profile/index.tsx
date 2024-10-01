@@ -8,6 +8,7 @@ import { authOptions } from '../../api/auth/[...nextauth]';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useWebSocket } from '@/libs/WebSocketContext';
+import Meta from '@/components/snippets/meta';
 
 interface Props {
   session: {
@@ -49,6 +50,7 @@ const Profile: React.FC<Props> = ({
 
   return (
     <>
+    <Meta title='Crypto Planet User Dashboard' description='Access and manage your crypto profile with ease. Update your personal information, security settings, and trading preferences to enhance your experience on our platform. Stay in control of your investments and personalize your crypto journey today!'/>
       <ToastContainer limit={1} />
       <SideBarLayout 
         userDetail={profile} 

@@ -12,6 +12,8 @@ import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useWebSocket } from '@/libs/WebSocketContext'
+import Head from 'next/head'
+import Meta from '@/components/snippets/meta'
 
 
 
@@ -55,6 +57,8 @@ export default function Home({ session, coinList }: Session) {
 
   return (
     <>
+    <Meta title='Buy and Sell Bitcoin, Ethereum | Secure Crypto Trading Platform' description='Trade Bitcoin, Ethereum, and other cryptocurrencies instantly on our secure and easy-to-use platform. Buy, sell, and manage your crypto assets with confidence. Join now for fast and reliable crypto trading!'/>
+
       <section className='container max-w-[1818px] w-full'>
         <Hero />
       </section>
@@ -70,6 +74,7 @@ export default function Home({ session, coinList }: Session) {
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
+  
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders();
 

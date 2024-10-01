@@ -19,7 +19,7 @@ const FooterCopywrite = () => {
                     </div>
                 </div>
             <div className='flex items-center gap-[28px] justify-center'>
-                <Link prefetch={false} href="#"  className='group'>
+                <Link prefetch={false} href="#"  className='group' aria-label='facebook icon'>
                 <svg
                     width={25}
                     height={24}
@@ -34,7 +34,7 @@ const FooterCopywrite = () => {
                     />
                 </svg>
                 </Link>
-                <Link prefetch={false} href="#" className='group'>
+                <Link prefetch={false} href="#" className='group' aria-label='instagram icon'>
                 <svg
                     width={25}
                     height={24}
@@ -51,7 +51,7 @@ const FooterCopywrite = () => {
                 </svg>
 
                 </Link>
-                <Link prefetch={false} href="#"  className='group'>
+                <Link prefetch={false} href="#"  className='group' aria-label='youtube icon'>
                 <svg
                     width={25}
                     height={24}
@@ -67,7 +67,7 @@ const FooterCopywrite = () => {
                 </svg>
 
                 </Link>
-                <Link prefetch={false} href="#" className='group'>
+                <Link prefetch={false} href="#" className='group' aria-label='twitter icon'>
                 <svg
                 width={25}
                 height={24}
@@ -82,7 +82,7 @@ const FooterCopywrite = () => {
                 />
                 </svg>
                 </Link>
-                <Link prefetch={false} href="#"  className='group'>
+                <Link prefetch={false} href="#"  className='group' aria-label='linkedin icon'>
                 <svg
                     width={25}
                     height={24}
