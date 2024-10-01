@@ -9,6 +9,9 @@ export default function Document() {
         <link rel="stylesheet" href="https://code.highcharts.com/css/highcharts.css"/>
           <link rel="stylesheet" href="https://code.highcharts.com/css/stocktools/gui.css"/>
             <link rel="stylesheet" href="https://code.highcharts.com/css/annotations/popup.css"/>
+            <link rel="preload" as="image" href="/assets/home/BannerDark1.webp" />
+            <link rel="preload" as="image" href="/assets/home/BannerLight1.webp" />
+
         </Head>
             <body>
               <Main />
