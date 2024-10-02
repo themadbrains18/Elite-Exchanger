@@ -46,7 +46,7 @@ const cardsData = [
                         </div>
                     </div>
                     <div className='max-w-full lg:max-w-[50%] w-full'>
-                        <div className='grid grid-cols-1 md:grid-cols-2 gap-[20px] md:gap-[30px] place-items-center lg:place-items-start bg-contain bg-no-repeat bg-center bg-[url("/assets/home/profileBg.png")]'>
+                        <div className='grid grid-cols-1 md:grid-cols-2 gap-[20px] md:gap-[30px] place-items-center lg:place-items-start bg-contain bg-no-repeat bg-center bg-[url("/assets/home/profileBg.webp")]'>
                             {
                                 cardsData.map((elem,ind)=>{
                                     return(
