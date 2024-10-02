@@ -1,10 +1,10 @@
 import Hero from '../../components/home/hero'
-import CryptoCoin from '../../components/home/CryptoCoin'
-import CreateProfile from '@/components/home/create-profile'
-import TradeAnyWhere from '@/components/home/trade-anywhere'
-import BestServices from '@/components/home/best-services'
-import InvestorSec from '@/components/home/investor-sec'
-import StartMinning from '@/components/home/start-minning'
+// import CryptoCoin from '../../components/home/CryptoCoin'
+// import CreateProfile from '@/components/home/create-profile'
+// import TradeAnyWhere from '@/components/home/trade-anywhere'
+// import BestServices from '@/components/home/best-services'
+// import InvestorSec from '@/components/home/investor-sec'
+// import StartMinning from '@/components/home/start-minning'
 
 import { useEffect, useState } from 'react'
 import { getProviders } from "next-auth/react"
@@ -12,10 +12,17 @@ import { getServerSession } from "next-auth/next"
 import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useWebSocket } from '@/libs/WebSocketContext'
-import Head from 'next/head'
+
 import Meta from '@/components/snippets/meta'
+import dynamic from 'next/dynamic'
 
 
+const CryptoCoin = dynamic(() => import('../../components/home/CryptoCoin') );
+const CreateProfile = dynamic(() => import('@/components/home/create-profile') );
+const TradeAnyWhere = dynamic(() => import('@/components/home/trade-anywhere') );
+const BestServices = dynamic(() => import('@/components/home/best-services') );
+const InvestorSec = dynamic(() => import('@/components/home/investor-sec') );
+const StartMinning = dynamic(() => import('@/components/home/start-minning') );
 
 interface Session {
   session: {
@@ -54,6 +61,8 @@ export default function Home({ session, coinList }: Session) {
 
     setAllCoins(tokenList?.data);
   }
+
+
 
   return (
     <>
