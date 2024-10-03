@@ -1,7 +1,7 @@
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmationModel from '@/components/snippets/confirmation';
 import { AES } from 'crypto-js';
@@ -9,6 +9,7 @@ import { useWebSocket } from '@/libs/WebSocketContext';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import { useRouter } from 'next/router';
 import { formatDate, truncateNumber } from '@/libs/subdomain';
+
 
 interface propsData {
     openOrders?: any;
@@ -37,7 +38,7 @@ const OpenOrderTable = (props: propsData) => {
                 `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
             );
             let record = encodeURIComponent(ciphertext.toString());
-    
+
             let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeopenorder`, {
                 method: "POST",
                 headers: {
@@ -46,7 +47,7 @@ const OpenOrderTable = (props: propsData) => {
                 },
                 body: JSON.stringify(record)
             }).then(response => response.json());
-    
+
             if (closeReponse?.data?.status !== 200) {
                 toast.error(closeReponse?.data?.message);
             }
@@ -62,13 +63,42 @@ const OpenOrderTable = (props: propsData) => {
                 setActive(false);
                 setShow(false);
             }
-            
+
         } catch (error) {
-            console.log(error,"==error");
-            
+            console.log(error, "==error");
+
         }
     }
 
+    const closeAllOpenOrders = async () => {
+        try {
+          let obj = { "userid": session?.user?.user_id };
+          let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeallopenorders`, {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json',
+              "Authorization": session?.user?.access_token
+            },
+            body: JSON.stringify(obj)
+          }).then(response => response.json());
+    
+          if (closeReponse?.data?.status === 200) {
+            if (wbsocket) {
+              let position = {
+                ws_type: 'position'
+              }
+              wbsocket.send(JSON.stringify(position));
+            }
+            toast.success('closed all open orders successfully!!.');
+            setActive(false);
+            setShow(false);
+            setPositionId('');
+          }
+    
+        } catch (error) {
+          console.log(error, "=error in close position");
+        }
+      }
 
     const router = useRouter();
     const { slug } = router.query;
@@ -120,10 +150,12 @@ const OpenOrderTable = (props: propsData) => {
                                     <Image src="/assets/history/uparrow.svg" width={15} height={15} alt="uparrow" />
                                 </div>
                             </th>
-                            
+
                             <th className="py-[10px]">
                                 <div className="flex ">
-                                    <p className="  top-label dark:!text-[#cccc56] !font-[600]">Close All Positions</p>
+                                    <p className="  top-label dark:!text-[#cccc56] !font-[600]" onClick={() => {
+                                        closeAllOpenOrders()
+                                    }}>Close All Positions</p>
                                 </div>
                             </th>
                         </tr>
@@ -134,7 +166,7 @@ const OpenOrderTable = (props: propsData) => {
                                 return (
                                     <tr key={index}>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{formatDate(item?.time,'yyyy-MM-dd HH:mm:ss')}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{formatDate(item?.time, 'yyyy-MM-dd HH:mm:ss')}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <div>
@@ -143,7 +175,7 @@ const OpenOrderTable = (props: propsData) => {
                                             </div>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
-                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.qty > 0 ? truncateNumber(item?.qty?.toFixed(10),3) : truncateNumber(item?.qty?.toFixed(10),3)}</p>
+                                            <p className="top-label !font-[600] dark:!text-white !text-black">{item?.qty > 0 ? truncateNumber(item?.qty?.toFixed(10), 3) : truncateNumber(item?.qty?.toFixed(10), 3)}</p>
                                         </td>
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{item?.type}</p>
@@ -157,10 +189,10 @@ const OpenOrderTable = (props: propsData) => {
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <p className="top-label !font-[600] dark:!text-white !text-black">{currencyFormatter(item?.amount)}</p>
                                         </td>
-                                        
+
                                         <td className='border-b border-t border-grey-v-3 dark:border-opacity-[15%]'>
                                             <div className='cursor-pointer' onClick={() => { closeOpenOrder(item?.id) }}>
-                                                
+
                                                 <p className="top-label dark:!text-[#cccc56] !font-[600] pr-[20px]">Close Position</p>
                                             </div>
                                         </td>

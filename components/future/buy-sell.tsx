@@ -359,12 +359,12 @@ const BuySell = (props: fullWidth) => {
 
       // let marginValue = size / props?.marginMode?.leverage;
       // console.log(prefernceSymbol,"=prefernceSymbol");
-      
+
 
       // console.log(marketPrice,'=======entryPrice', sizeValue,'======sizeValue', props?.marginMode?.leverage,'=======leverage');
       let marginValue = prefernceSymbol === "Qty" ? (marketPrice * sizeValue) / props?.marginMode?.leverage : (sizeValue / props?.marginMode?.leverage);
       // console.log(marginValue,"=marginValue");
-      
+
       // orderType === "qty" ? size / props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
       obj = {
         symbol:
@@ -423,8 +423,8 @@ const BuySell = (props: fullWidth) => {
       // console.log(qty,"===qty");
 
 
-      qty = qty?.toString().match(/^-?\d+(?:\.\d{0,4})?/)[0];
-      
+      qty = qty?.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
+
 
       if (prefernceSymbol === "Qty") {
         qty = sizeValue.toString();
@@ -440,8 +440,12 @@ const BuySell = (props: fullWidth) => {
       let enter_Price: any = entryPrice;
       let amount: any = qty * entryPrice;
 
-      // console.log(qty,entryPrice,amount,"===========amount");
-      
+      console.log(qty,entryPrice,amount,"===========amount");
+
+      if(isNaN(amount)){
+        setButtonStyle(false)
+        return;
+      }
 
 
       let marginValue = prefernceSymbol === "Qty" ? ((entryPrice * sizeValue) / props?.marginMode?.leverage) : sizeValue / props?.marginMode?.leverage;
@@ -634,7 +638,7 @@ const BuySell = (props: fullWidth) => {
   // =====Validation in case of amount more than enter wallet value=====//
   // ===================================================================//
   const onChangeSizeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-setPercentage(0)
+    setPercentage(0)
     let value: any = e.target.value
     const regex = /^\d{0,10}(\.\d{0,4})?$/;
 
@@ -658,20 +662,24 @@ setPercentage(0)
 
       let marginValue = prefernceSymbol === "Qty" ? (marketType === 'limit' ? ((entryPrice * parseFloat(e.target.value)) / propsLeverage) : ((marketPrice * parseFloat(e.target.value))) / propsLeverage) : (parseFloat(e.target.value) / propsLeverage);
 
-
+      console.log(marginValue, "===marginValue");
 
 
       if (isNaN(value)) {
+        console.log("here in nan");
+
         setSizeValue(''); // Reset sizeValue to its current state
         return; // Exit early without updating state or applying further logic
       }
 
       else if (value !== 0 && value < props?.minTrade) {
         setSizeValidate(`Minimum value: ${props?.minTrade}`)
-        // console.log(sizeValue,"==sizeValue");
+        console.log(sizeValue, "==sizeValue");
         return;
       }
       else {
+        console.log("valueee", value);
+
         setSizeValidate('')
         setSizeValue(value);
         setButtonStyle(true);
@@ -684,8 +692,8 @@ setPercentage(0)
 
         if (prefernceSymbol === "Value") {
           // console.log((truncateToSixNumber((parseFloat(e.target.value) / entryPrice).toFixed(12), 3)),"heree");
-          
-          let qty = marketType === 'limit' ?truncateToSixNumber((parseFloat(e.target.value) / entryPrice).toFixed(12), 3) : truncateToSixNumber((parseFloat(e.target.value) / marketPrice).toFixed(12), 3)         
+
+          let qty = marketType === 'limit' ? truncateToSixNumber((parseFloat(e.target.value) / entryPrice).toFixed(12), 3) : truncateToSixNumber((parseFloat(e.target.value) / marketPrice).toFixed(12), 3)
 
           if (qty >= 0.001 && marginValue < avaibalance) {
             setButtonStyle(false);
@@ -699,7 +707,7 @@ setPercentage(0)
           if (marginValue > avaibalance) {
             setButtonStyle(true);
           }
-          else{
+          else {
             setButtonStyle(false)
           }
 
@@ -721,7 +729,7 @@ setPercentage(0)
       }
     }
 
-    
+
 
   };
 
@@ -1192,8 +1200,8 @@ setPercentage(0)
 
                       {
                         showNes === 1
-                          ? sizeValue === 0
-                            ? 0.00 : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)))) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)) : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3)))) ? 0.00 :scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3))}{" "}
+                          ? (sizeValue === 0 || sizeValue == Infinity || isNaN(sizeValue))
+                            ? 0.00 : (isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)))) || parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)))==Infinity) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)) : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3)))) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3))}{" "}
                       {props?.currentToken?.coin_symbol}
                     </p>
                   </div>
@@ -1280,10 +1288,10 @@ setPercentage(0)
 
                     {isNaN(sizeValue / props?.marginMode?.leverage)
                       ?
-                        isNaN(truncateNumber(Number(scientificToDecimal(0 / props?.marginMode?.leverage)), 6)) ? '0.00' : truncateNumber(Number(scientificToDecimal(0 / props?.marginMode?.leverage)), 6)
+                      isNaN(truncateNumber(Number(scientificToDecimal(0 / props?.marginMode?.leverage)), 6)) ? '0.00' : truncateNumber(Number(scientificToDecimal(0 / props?.marginMode?.leverage)), 6)
                       :
 
-                      isNaN(truncateNumber(Number(scientificToDecimal(sizeValue / props?.marginMode?.leverage)), 6)) ? '0.00': truncateNumber(Number(scientificToDecimal(sizeValue / props?.marginMode?.leverage)), 6)
+                      isNaN(truncateNumber(Number(scientificToDecimal(sizeValue / props?.marginMode?.leverage)), 6)) ? '0.00' : truncateNumber(Number(scientificToDecimal(sizeValue / props?.marginMode?.leverage)), 6)
                     }
                   </p>
 
@@ -1300,7 +1308,7 @@ setPercentage(0)
             {status === "unauthenticated" && (
               <div className="mt-[20px]">
                 <Link
-                prefetch={false}
+                  prefetch={false}
                   href="/login"
                   className="solid-button w-full block text-center !rounded-[8px] py-[10px] px-[15px] !text-[14px]"
                 >
@@ -1380,7 +1388,7 @@ setPercentage(0)
         {showNes === 3 && status === "unauthenticated" && (
           <div className="mt-[20px]">
             <Link
-            prefetch={false}
+              prefetch={false}
               href="/login"
               className="solid-button w-full block text-center !rounded-[8px] py-[10px] px-[15px] !text-[14px]"
             >

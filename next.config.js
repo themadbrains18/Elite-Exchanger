@@ -2,6 +2,8 @@
 
 const nextConfig = {
   reactStrictMode: true,
+  optimizeFonts: true, // Next.js will optimize fonts
+  compress: true,   
   images: {
     remotePatterns: [
       {

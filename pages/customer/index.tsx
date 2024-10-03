@@ -15,9 +15,12 @@ import { useWebSocket } from '@/libs/WebSocketContext'
 
 import Meta from '@/components/snippets/meta'
 import dynamic from 'next/dynamic'
+import CardsSkeleton from '@/components/skeletons/cardsSkeleton'
 
 
-const CryptoCoin = dynamic(() => import('../../components/home/CryptoCoin') );
+const CryptoCoin = dynamic(() => import('../../components/home/CryptoCoin') , {
+  loading: () => <CardsSkeleton/>,
+} );
 const CreateProfile = dynamic(() => import('@/components/home/create-profile') );
 const TradeAnyWhere = dynamic(() => import('@/components/home/trade-anywhere') );
 const BestServices = dynamic(() => import('@/components/home/best-services') );

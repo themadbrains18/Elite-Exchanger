@@ -184,7 +184,7 @@ const PositionsTable = (props: propsData) => {
                 session && props?.positions && props?.positions.length > 0 && props?.positions?.filter((item: any) => item?.symbol === slug).map((item: any, index: number) => {
                   let tpsl = '--';
                   {
-                    console.log(item.direction,"item.direction");
+                    // console.log(item.direction,"item.direction");
                     
                     item?.futureOpenOrders !== null && item?.futureOpenOrders?.map((oo: any) => {
                       if (tpsl === '--' && oo?.type === 'take profit market') {

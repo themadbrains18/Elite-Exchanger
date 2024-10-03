@@ -29,7 +29,9 @@ const ChartTabsFuture = (props: propsData) => {
     // Get all Profit Loss Orders
     const getProfitLossOrder = async () => {
         try {
-            if (session) {
+            // console.log(session,"=session");
+            
+            if (session && session?.user?.access_token) {
                 let orderData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/profitlossorder`, {
                     method: "GET",
                     headers: {
@@ -37,6 +39,7 @@ const ChartTabsFuture = (props: propsData) => {
                     },
                 }).then(response => response.json());
 
+                // if(orderData?.message!=="Un")
                 setOrders(orderData?.data);
             }
         } catch (error) {
@@ -52,26 +55,31 @@ getProfitLossOrder()
     
     useEffect(() => {
     
-        let Filteritems = props?.positions?.filter((item: any) => {
-            if (item?.symbol == slug) {
-                return item;
-            }
-        })
-        setPositionItems(Filteritems);
+        // console.log(session,"==session insides",props?.positions);
+        
+        if(props?.positions!=="Unuthorized User"){
+            let Filteritems = props?.positions?.filter((item: any) => {
+                if (item?.symbol == slug) {
+                    return item;
+                }
+            })
+            setPositionItems(Filteritems);
+    
+            let FilterTPSL = orders?.filter((item: any) => {
+                if (item?.contract == slug) {
+                    return item;
+                }
+            })
+            setTpSlOrders(FilterTPSL);
+    
+            let openOrderItems = props?.openOrders?.filter((item: any) => {
+                if (item?.symbol == slug) {
+                    return item;
+                }
+            })
+            setOpenOrders(openOrderItems);
 
-        let FilterTPSL = orders?.filter((item: any) => {
-            if (item?.contract == slug) {
-                return item;
-            }
-        })
-        setTpSlOrders(FilterTPSL);
-
-        let openOrderItems = props?.openOrders?.filter((item: any) => {
-            if (item?.symbol == slug) {
-                return item;
-            }
-        })
-        setOpenOrders(openOrderItems);
+        }
 
     }, [slug,props?.positions,orders,props?.openOrders])
 
