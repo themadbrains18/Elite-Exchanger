@@ -327,13 +327,16 @@ const BuySell = (props: fullWidth) => {
 
       let Liquidation_Price: any = (marketType === 'limit' ? entryPrice : marketPrice * (1 - 0.01)) / props?.marginMode?.leverage;
 
+      
+      
       // Liquidation Price for long case
       if (show === 1) {
         Liquidation_Price = (marketType === 'limit' ? entryPrice : marketPrice) - Liquidation_Price;
       }
-
+      
       // Liquidation Price for short case
       if (show === 2) {
+        console.log(Liquidation_Price,"==liquidaion price");
         Liquidation_Price = (marketType === 'limit' ? entryPrice : marketPrice) + Liquidation_Price;
       }
 
@@ -662,11 +665,11 @@ const BuySell = (props: fullWidth) => {
 
       let marginValue = prefernceSymbol === "Qty" ? (marketType === 'limit' ? ((entryPrice * parseFloat(e.target.value)) / propsLeverage) : ((marketPrice * parseFloat(e.target.value))) / propsLeverage) : (parseFloat(e.target.value) / propsLeverage);
 
-      console.log(marginValue, "===marginValue");
+      // console.log(marginValue, "===marginValue");
 
 
       if (isNaN(value)) {
-        console.log("here in nan");
+        // console.log("here in nan");
 
         setSizeValue(''); // Reset sizeValue to its current state
         return; // Exit early without updating state or applying further logic
@@ -674,11 +677,11 @@ const BuySell = (props: fullWidth) => {
 
       else if (value !== 0 && value < props?.minTrade) {
         setSizeValidate(`Minimum value: ${props?.minTrade}`)
-        console.log(sizeValue, "==sizeValue");
+        // console.log(sizeValue, "==sizeValue");
         return;
       }
       else {
-        console.log("valueee", value);
+        // console.log("valueee", value);
 
         setSizeValidate('')
         setSizeValue(value);
@@ -712,9 +715,6 @@ const BuySell = (props: fullWidth) => {
           }
 
         }
-
-
-
 
         const openPositionFee = (marginValue * 0.055) / 100;
         const longClosePositionFee = ((marginValue * (leverage - 1)) / leverage * 0.055) / 100;
