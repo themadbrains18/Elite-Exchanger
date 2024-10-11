@@ -240,9 +240,6 @@ const BuySell = (props: fullWidth) => {
     setSymbol(token);
   };
 
-
-
-
   // ===================================================================//
   // asset amount value using range slider //
   // ===================================================================//
@@ -452,7 +449,7 @@ const BuySell = (props: fullWidth) => {
 
 
       let marginValue = prefernceSymbol === "Qty" ? ((entryPrice * sizeValue) / props?.marginMode?.leverage) : sizeValue / props?.marginMode?.leverage;
-      // console.log(marginValue, "=======marginValue limit");
+      console.log(marginValue, "=======marginValue limit");
 
 
       obj = {
@@ -498,11 +495,22 @@ const BuySell = (props: fullWidth) => {
   const confirmOrder = async () => {
     try {
 
-      // console.log(confirmOrderData,'===============');
+      console.log(confirmOrderData,'===============');
 
       // return;
       if (truncateNumber(usedQty + confirmOrderData?.qty, 3) > props?.maxTrade) {
 
+        toast.error("Order failed. Order quantity is greater than maximum order quantity", { autoClose: 2000 })
+
+        setButtonStyle(false);
+        // props?.refreshWalletAssets();
+        setConfirmModelOverlay(false);
+        setConfirmModelPopup(0);
+        setFinalOrderSubmit(false);
+
+        return;
+      }
+      if((confirmOrderData.amount+(confirmOrderData?.realized_pnl||0))>avaibalance){
         toast.error("Order failed. Order quantity is greater than maximum order quantity", { autoClose: 2000 })
 
         setButtonStyle(false);
@@ -623,7 +631,7 @@ const BuySell = (props: fullWidth) => {
   };
 
   // ===================================================================//
-  // =======Take Profit and Sop Loss popup hide and shoow===============//
+  // =======Take Profit and Sop Loss popup hide and show===============//
   // ===================================================================//
   const profitlosspopupenable = (event: any) => {
 
@@ -723,7 +731,7 @@ const BuySell = (props: fullWidth) => {
         const longCost = marginValue / leverage + openPositionFee + longClosePositionFee;
         const shortCost = marginValue / leverage + openPositionFee + shortClosePositionFee;
 
-        // console.log(longCost * leverage, '===========long Cost==========', shortCost * leverage, '============short Cost============');
+        console.log(longCost * leverage, '===========long Cost==========', shortCost * leverage, '============short Cost============');
 
 
       }

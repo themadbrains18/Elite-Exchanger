@@ -19,6 +19,7 @@ export const config = {
 router.post(async (req, res) => {
     try {
         const decodedStr = decodeURIComponent(req.body);
+        
         let formData = AES.decrypt(decodedStr, `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString(enc.Utf8);
         // Retrieve the authorization token from the request headers.
         let token = req.headers.authorization;
@@ -28,6 +29,8 @@ router.post(async (req, res) => {
         return res.status(200).send({ data });
 
     } catch (error: any) {
+        // console.log(error.message,"==message");
+        
         // If an error occurs, throw it with its message for further handling.
         throw new Error(error.message)
     }

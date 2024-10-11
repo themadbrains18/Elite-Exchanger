@@ -19,6 +19,7 @@ const OpenOrderTable = (props: propsData) => {
 
     const { status, data: session } = useSession();
     const [active, setActive] = useState(false);
+    const [active1, setActive1] = useState(false);
     const [show, setShow] = useState(false);
     const [positionId, setPositionId] = useState('');
 
@@ -27,6 +28,11 @@ const OpenOrderTable = (props: propsData) => {
     const closeOpenOrder = async (id: string) => {
         setPositionId(id);
         setActive(true);
+        setShow(true);
+    }
+    const closeAllOpenOrder = async () => {
+        
+        setActive1(true);
         setShow(true);
     }
 
@@ -70,16 +76,23 @@ const OpenOrderTable = (props: propsData) => {
         }
     }
 
-    const closeAllOpenOrders = async () => {
+    const confirmCloseAllOpenOrders = async () => {
         try {
+
+            
           let obj = { "userid": session?.user?.user_id };
-          let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeallopenorders`, {
+          const ciphertext = AES.encrypt(
+            JSON.stringify(obj),
+            `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
+        );
+        let record = encodeURIComponent(ciphertext.toString());
+          let closeReponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/closeallopenorder`, {
             method: "POST",
             headers: {
               'Content-Type': 'application/json',
               "Authorization": session?.user?.access_token
             },
-            body: JSON.stringify(obj)
+            body: JSON.stringify(record)
           }).then(response => response.json());
     
           if (closeReponse?.data?.status === 200) {
@@ -90,9 +103,8 @@ const OpenOrderTable = (props: propsData) => {
               wbsocket.send(JSON.stringify(position));
             }
             toast.success('closed all open orders successfully!!.');
-            setActive(false);
+            setActive1(false);
             setShow(false);
-            setPositionId('');
           }
     
         } catch (error) {
@@ -153,8 +165,8 @@ const OpenOrderTable = (props: propsData) => {
 
                             <th className="py-[10px]">
                                 <div className="flex ">
-                                    <p className="  top-label dark:!text-[#cccc56] !font-[600]" onClick={() => {
-                                        closeAllOpenOrders()
+                                    <p className="  top-label dark:!text-[#cccc56] !font-[600] cursor-pointer" onClick={() => {
+                                        closeAllOpenOrder()
                                     }}>Close All Positions</p>
                                 </div>
                             </th>
@@ -205,6 +217,9 @@ const OpenOrderTable = (props: propsData) => {
             </div>
             {active === true &&
                 <ConfirmationModel setActive={setActive} setShow={setShow} title='Close Position' message='Please confirm to close this open order.' actionPerform={actionPerform} show={show} />
+            }
+            {active1 === true &&
+                <ConfirmationModel setActive={setActive1} setShow={setShow} title='Close All Position' message='Please confirm to close all open orders.' actionPerform={confirmCloseAllOpenOrders} show={show} />
             }
         </>
     )
