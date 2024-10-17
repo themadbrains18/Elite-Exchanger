@@ -29,6 +29,16 @@ const PositionsTable = (props: propsData) => {
   let [positionData, setPositionData] = useState();
   const wbsocket = useWebSocket();
 
+  useEffect(()=>{
+    props?.positions.map((item: any, index: number) => {
+      if (item.id == positionId) {
+        setPositionData(item);
+        // console.log("test done");
+      }
+    });
+  },[props?.positions])
+
+
   const closePositionOrder = async (id: string) => {
     props?.positions.map((item: any, index: number) => {
       if (item.id == id) {

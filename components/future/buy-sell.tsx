@@ -322,19 +322,27 @@ const BuySell = (props: fullWidth) => {
         return;
       }
 
-      let Liquidation_Price: any = (marketType === 'limit' ? entryPrice : marketPrice * (1 - 0.01)) / props?.marginMode?.leverage;
+      // console.log(entryPrice,"==entryprice");
+      // console.log(marketPrice,"==marketPrice");
+      // console.log(props?.marginMode?.leverage,"==props?.marginMode?.leverage");
+      
+      
+      let Liquidation_Price: any = ((marketType === 'limit' ? entryPrice : marketPrice )* (1 - 0.01)) / props?.marginMode?.leverage;
+// console.log(Liquidation_Price,"==liq price");
+
 
       
       
       // Liquidation Price for long case
       if (show === 1) {
         Liquidation_Price = (marketType === 'limit' ? entryPrice : marketPrice) - Liquidation_Price;
+        // console.log(Liquidation_Price,"==liquidaion price1");
       }
       
       // Liquidation Price for short case
       if (show === 2) {
-        console.log(Liquidation_Price,"==liquidaion price");
         Liquidation_Price = (marketType === 'limit' ? entryPrice : marketPrice) + Liquidation_Price;
+        // console.log(Liquidation_Price,"==liquidaion price2");
       }
 
       let qty: any = scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3));
