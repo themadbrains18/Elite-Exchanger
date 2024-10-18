@@ -117,7 +117,6 @@ const FutureTrading = (props: Session) => {
             }
 
             if (eventDataType === 'position') {
-                console.log("calling");
                 
                 await refreshWalletAssets();
                 getUserFuturePositionData();
@@ -177,9 +176,6 @@ const FutureTrading = (props: Session) => {
                         "Authorization": props?.session?.user?.access_token
                     },
                 }).then(response => response.json());
-
-console.log("here", positionData);
-
 
 
                 setPositionData(positionData?.data);
