@@ -117,6 +117,8 @@ const FutureTrading = (props: Session) => {
             }
 
             if (eventDataType === 'position') {
+                console.log("calling");
+                
                 await refreshWalletAssets();
                 getUserFuturePositionData();
                 getUserOpenOrderData();
@@ -176,6 +178,7 @@ const FutureTrading = (props: Session) => {
                     },
                 }).then(response => response.json());
 
+console.log("here", positionData);
 
 
 

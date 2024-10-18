@@ -235,7 +235,7 @@ const ProfitLossModal = (props: showPopup) => {
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Qty</p>
-                    <p className='dark:text-white text-black'>{truncateNumber(props?.position?.qty, 3)}</p>
+                    <p className='dark:text-white text-black'>{truncateNumber(props?.position?.qty, 4)}</p>
                 </div>
                 <div className='flex justify-between items-center mb-[10px]'>
                     <p className='dark:text-white text-black'>Entry Price</p>
