@@ -3,7 +3,7 @@ import PositionsTable from './tabs-table/positions-table';
 import OpenOrderTable from './tabs-table/open-order-table';
 import PositionsHistoryTable from './tabs-table/position-history';
 import ProfitLossTable from './tabs-table/profit-loss-table';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
 interface propsData {
@@ -54,10 +54,8 @@ getProfitLossOrder()
 
     
     useEffect(() => {
-    
-        // console.log(session,"==session insides",props?.positions);
         
-        if(props?.positions!=="Unuthorized User"){
+        if(props?.positions?.message!=="Unuthorized User"){
             let Filteritems = props?.positions?.filter((item: any) => {
                 if (item?.symbol == slug) {
                     return item;
@@ -79,6 +77,9 @@ getProfitLossOrder()
             })
             setOpenOrders(openOrderItems);
 
+        }
+        else{
+            signOut();
         }
 
     }, [slug,props?.positions,orders,props?.openOrders])

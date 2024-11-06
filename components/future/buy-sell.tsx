@@ -240,9 +240,6 @@ const BuySell = (props: fullWidth) => {
     setSymbol(token);
   };
 
-
-
-
   // ===================================================================//
   // asset amount value using range slider //
   // ===================================================================//
@@ -325,23 +322,31 @@ const BuySell = (props: fullWidth) => {
         return;
       }
 
-      let Liquidation_Price: any = (marketType === 'limit' ? entryPrice : marketPrice * (1 - 0.01)) / props?.marginMode?.leverage;
+      // console.log(entryPrice,"==entryprice");
+      // console.log(marketPrice,"==marketPrice");
+      // console.log(props?.marginMode?.leverage,"==props?.marginMode?.leverage");
+      
+      
+      let Liquidation_Price: any = ((marketType === 'limit' ? entryPrice : marketPrice )* (1 - 0.01)) / props?.marginMode?.leverage;
+// console.log(Liquidation_Price,"==liq price");
+
 
       
       
       // Liquidation Price for long case
       if (show === 1) {
         Liquidation_Price = (marketType === 'limit' ? entryPrice : marketPrice) - Liquidation_Price;
+        // console.log(Liquidation_Price,"==liquidaion price1");
       }
       
       // Liquidation Price for short case
       if (show === 2) {
-        console.log(Liquidation_Price,"==liquidaion price");
         Liquidation_Price = (marketType === 'limit' ? entryPrice : marketPrice) + Liquidation_Price;
+        // console.log(Liquidation_Price,"==liquidaion price2");
       }
 
-      let qty: any = scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3));
-      qty = qty?.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0];
+      let qty: any = scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 4));
+      qty = qty?.toString().match(/^-?\d+(?:\.\d{0,4})?/)[0];
 
 
       if (prefernceSymbol === "Qty") {
@@ -426,7 +431,7 @@ const BuySell = (props: fullWidth) => {
       // console.log(qty,"===qty");
 
 
-      qty = qty?.toString().match(/^-?\d+(?:\.\d{0,3})?/)[0];
+      qty = qty?.toString().match(/^-?\d+(?:\.\d{0,4})?/)[0];
 
 
       if (prefernceSymbol === "Qty") {
@@ -452,7 +457,7 @@ const BuySell = (props: fullWidth) => {
 
 
       let marginValue = prefernceSymbol === "Qty" ? ((entryPrice * sizeValue) / props?.marginMode?.leverage) : sizeValue / props?.marginMode?.leverage;
-      // console.log(marginValue, "=======marginValue limit");
+      console.log(marginValue, "=======marginValue limit");
 
 
       obj = {
@@ -498,11 +503,22 @@ const BuySell = (props: fullWidth) => {
   const confirmOrder = async () => {
     try {
 
-      // console.log(confirmOrderData,'===============');
+      console.log(confirmOrderData,'===============');
 
       // return;
       if (truncateNumber(usedQty + confirmOrderData?.qty, 3) > props?.maxTrade) {
 
+        toast.error("Order failed. Order quantity is greater than maximum order quantity", { autoClose: 2000 })
+
+        setButtonStyle(false);
+        // props?.refreshWalletAssets();
+        setConfirmModelOverlay(false);
+        setConfirmModelPopup(0);
+        setFinalOrderSubmit(false);
+
+        return;
+      }
+      if((confirmOrderData.amount+(confirmOrderData?.realized_pnl||0))>avaibalance){
         toast.error("Order failed. Order quantity is greater than maximum order quantity", { autoClose: 2000 })
 
         setButtonStyle(false);
@@ -623,7 +639,7 @@ const BuySell = (props: fullWidth) => {
   };
 
   // ===================================================================//
-  // =======Take Profit and Sop Loss popup hide and shoow===============//
+  // =======Take Profit and Sop Loss popup hide and show===============//
   // ===================================================================//
   const profitlosspopupenable = (event: any) => {
 
@@ -723,7 +739,7 @@ const BuySell = (props: fullWidth) => {
         const longCost = marginValue / leverage + openPositionFee + longClosePositionFee;
         const shortCost = marginValue / leverage + openPositionFee + shortClosePositionFee;
 
-        // console.log(longCost * leverage, '===========long Cost==========', shortCost * leverage, '============short Cost============');
+        console.log(longCost * leverage, '===========long Cost==========', shortCost * leverage, '============short Cost============');
 
 
       }
@@ -1201,7 +1217,7 @@ const BuySell = (props: fullWidth) => {
                       {
                         showNes === 1
                           ? (sizeValue === 0 || sizeValue == Infinity || isNaN(sizeValue))
-                            ? 0.00 : (isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)))) || parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)))==Infinity) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)) : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3)))) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3))}{" "}
+                            ? 0.00 : (isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 4)))) || parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)))==Infinity) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)) : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3)))) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3))}{" "}
                       {props?.currentToken?.coin_symbol}
                     </p>
                   </div>

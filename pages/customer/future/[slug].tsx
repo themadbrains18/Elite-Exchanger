@@ -117,6 +117,7 @@ const FutureTrading = (props: Session) => {
             }
 
             if (eventDataType === 'position') {
+                
                 await refreshWalletAssets();
                 getUserFuturePositionData();
                 getUserOpenOrderData();
@@ -167,7 +168,7 @@ const FutureTrading = (props: Session) => {
     // ================================================ //
     const getUserFuturePositionData = async () => {
         try {
-
+          await  refreshWalletAssets()
             if (props?.session) {
                 let positionData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/position?userid=${props?.session?.user?.user_id}`, {
                     method: "GET",
@@ -175,8 +176,6 @@ const FutureTrading = (props: Session) => {
                         "Authorization": props?.session?.user?.access_token
                     },
                 }).then(response => response.json());
-
-
 
 
                 setPositionData(positionData?.data);
