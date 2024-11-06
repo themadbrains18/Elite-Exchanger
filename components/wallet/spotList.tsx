@@ -248,7 +248,7 @@ const SpotList = (props: propsData): any => {
                         <IconsComponent type="openInNewTab" hover={false} active={false} />
                       </button>
 
-                      <button onClick={() => {
+                      {/* <button onClick={() => {
                         setSelectedCoin(item?.token !== null ? item?.token : item?.global_token);
                         setSelectedCoinBalance(item?.balance);
                         setShow1(3);
@@ -256,7 +256,7 @@ const SpotList = (props: propsData): any => {
                       }} disabled={!cursor} className={` max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  ${cursor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
                         <span className="text-primary block">Staking</span>
                         <IconsComponent type="openInNewTab" hover={false} active={false} />
-                      </button>
+                      </button> */}
 
                       <button onClick={() => router.push(`/chart/${item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}`)} disabled={!tradeCusrsor} className={`max-w-[100%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  ${tradeCusrsor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
                         <span className="text-primary block">Trade</span>
@@ -388,14 +388,16 @@ const SpotList = (props: propsData): any => {
                         <span className="text-primary block">Transfer</span>
                         <IconsComponent type="openInNewTab" hover={false} active={false} />
                       </button>
-                      <button onClick={() => {
+
+                      {/* <button onClick={() => {
                         setSelectedCoin(item?.token !== null ? item?.token : item?.global_token);
                         setSelectedCoinBalance(item?.balance);
                         setShow1(3);
                       }} disabled={!cursor} className={` max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  ${cursor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
                         <span className="text-primary block">Staking</span>
                         <IconsComponent type="openInNewTab" hover={false} active={false} />
-                      </button>
+                      </button> */}
+                      
                       <button onClick={() => router.push(`/chart/${item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol}`)} disabled={!tradeCusrsor}
                         className={`max-w-[50%] w-full justify-center px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 flex items-center rounded-[5px] sec-text !text-[14px]  ${tradeCusrsor === true ? 'cursor-pointer' : 'cursor-not-allowed opacity-70'}`}>
                         <span className="text-primary block">Trade</span>
