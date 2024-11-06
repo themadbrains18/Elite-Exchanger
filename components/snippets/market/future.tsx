@@ -1,12 +1,13 @@
 import ReactPaginate from "react-paginate";
 import Image from "next/image";
 import IconsComponent from "../icons";
-import { useContext, useState } from "react";
+import { useContext, useMemo, useState } from "react";
 import Context from "../../contexts/context";
 import { useRouter } from "next/router";
 
 import Deposit from "../deposit";
 import { currencyFormatter } from "./buySellCard";
+import Link from "next/link";
 
 interface propsData {
     coins: any,
@@ -26,8 +27,6 @@ const Future = (props: propsData) => {
     const { mode } = useContext(Context)
     const [token, setToken] = useState(Object);
     const [imgSrc, setImgSrc] = useState(false);
-
-    // console.log(props.coins, "================props.coins");
 
     let itemsPerPage = 10;
     const endOffset = itemOffset + itemsPerPage;
@@ -87,7 +86,7 @@ const Future = (props: propsData) => {
                     <tbody>
                         {currentItems?.length > 0 && currentItems?.map((item: any, index: any) => {
                             let marketPrice = item?.token !== null ? item?.token?.price.toFixed(5) : item?.global_token?.price.toFixed(5);
-
+                            
                             let change = ((item?.price - item?.hlocv?.open) / item?.hlocv?.open) * 100;
 
                             if (item?.hlocv?.open === 0) {
@@ -130,10 +129,13 @@ const Future = (props: propsData) => {
                                         </div>
 
                                     </td>
-                                    <td className="">
-                                        <button onClick={() => router.push(`/future/${item?.coin_symbol}${item?.usdt_symbol}`)} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                    <td>
+                                        {/* <button onClick={() => router.push(`/future/${item?.futuretradepair?.coin_symbol}${item?.futuretradepair?.usdt_symbol}`)} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
                                             <IconsComponent type="openInNewTab" hover={false} active={false} />
-                                        </button>
+                                        </button> */}
+                                        <a href={`/future/${item?.futuretradepair?.coin_symbol}${item?.futuretradepair?.usdt_symbol}`} className=" w-full px-[10px] py-[6.5px] bg-primary-100 dark:bg-black-v-1 justify-center flex items-center gap-[6px] rounded-[5px] sec-text !text-[14px]  cursor-pointer">
+                                            <IconsComponent type="openInNewTab" hover={false} active={false} />
+                                        </a>
                                     </td>
                                 </tr>
                             );

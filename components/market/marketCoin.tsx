@@ -59,7 +59,7 @@ const MarketCoin = (props: propsData) => {
             swiperRef.current = swiper; 
           }}
           pagination={true}
-          loop={true}
+          // loop={true}
           autoplay={{ delay: 4000 }} 
           modules={[Pagination, Autoplay]}
           breakpoints={{
@@ -74,10 +74,12 @@ const MarketCoin = (props: propsData) => {
             1150: {
               slidesPerView: 3,
               spaceBetween: 20,
+              // loop:true
             },
             1350: {
               slidesPerView: 4,
               spaceBetween: 30,
+              // loop:true
             }
           }}
           className="mySwiper tmb-swiper"
