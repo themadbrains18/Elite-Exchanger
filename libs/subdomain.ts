@@ -47,5 +47,5 @@ export const scientificToDecimal = (value: number): string => {
 };
 
 export const formatDate = (date: string, customFormat: string = 'yyyy-MM-dd'): string => {
-    return format(parseISO(date), customFormat);
+    return format(new Date(parseISO(date)), customFormat);
 }
