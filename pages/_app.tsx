@@ -14,6 +14,7 @@ import 'nprogress/nprogress.css'; // This line imports nprogress styles
 import dynamic from 'next/dynamic';
 import FooterSkeleton from '@/components/skeletons/footerSkeleton';
 import NavbarSkeleton from '@/components/skeletons/navbarSkeleton';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface ModeProps {
   mode: string;
