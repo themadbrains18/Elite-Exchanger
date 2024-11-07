@@ -120,10 +120,7 @@ const FuturePairList = (props: Session) => {
                         <p className="admin-component-heading">All Pairs</p>
                     </div>
                     <div className="flex items-center gap-10">
-                        <p className="admin-table-data">
-                            <span className="dark:text-[#ffffffb3]">1&nbsp;</span>Item
-                            selected
-                        </p>
+                        <p className="admin-table-data"><span className="dark:text-[#ffffffb3]">1&nbsp;</span>Item selected </p>
                         <div className="w-[28px] h-[28px] dark:bg-[#1B283F] bg-[#f3f6f9b3] p-[4px] rounded-[5px] cursor-pointer">
                             <AdminIcons type="download" hover={false} active={false} />
                         </div>

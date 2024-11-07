@@ -869,7 +869,7 @@ const ChartTabs = (props: propsData) => {
                         {/* Sub transaction record listing */}
                         {sortBlogPostsByDate &&
                           <div
-                            className="absolute top-[44px] right-[10px]  max-w-[10px] w-full cursor-pointer"
+                            className="absolute top-[44px] right-[12px]  max-w-[10px] w-full cursor-pointer"
                             onClick={setHeight}
                           >
                             <svg
