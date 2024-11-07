@@ -95,14 +95,14 @@ const Historytrade = (props: propsData) => {
                 >
                   Convert History
                 </button> */}
-                <button
+                {/* <button
                   className={`pb-[15px] md:pb-30 nav-text-sm md:nav-text-lg border-b-2 border-[transparent] whitespace-nowrap ${active === 5 && "border-primary !text-primary"}`}
                   onClick={() => {
                     setActive(5);
                   }}
                 >
                   Staking History
-                </button>
+                </button> */}
               </div>
               
               <div className="hidden lg:flex gap-5">
