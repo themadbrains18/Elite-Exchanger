@@ -99,6 +99,7 @@ const TradingPassword = (props: activeSection) => {
 
   const onHandleSubmit = async (data: any) => {
     try {
+console.log(props?.session,"==session");
 
       let username =
         props.session?.user.email !== "null"
@@ -132,6 +133,7 @@ const TradingPassword = (props: activeSection) => {
       }
 
       setDisabled(true);
+      
       if (session !== undefined && session?.user !== undefined) {
         const ciphertext = AES.encrypt(
           JSON.stringify(obj),
@@ -145,7 +147,7 @@ const TradingPassword = (props: activeSection) => {
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
-              Authorization: props?.session?.user?.access_token,
+              Authorization: props?.session?.user?.access_token || session?.user?.access_token,
             },
             body: JSON.stringify(record),
           }
