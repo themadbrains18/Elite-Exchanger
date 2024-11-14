@@ -535,7 +535,9 @@ const BuySell = (props: fullWidth) => {
 
       console.log(((parseFloat(confirmOrderData.amount) + (confirmOrderData?.realized_pnl || 0))),props?.leverage ,"=(confirmOrderData.amount + (confirmOrderData?.realized_pnl || 0))");
       
-      if (((parseFloat(confirmOrderData.amount) + (confirmOrderData?.realized_pnl || 0))/(localStorage.getItem('leverage')||1)) > avaibalance) {
+      let leverage:any= localStorage.getItem('leverage')!==null?localStorage.getItem('leverage'):1
+
+      if (((parseFloat(confirmOrderData.amount) + (confirmOrderData?.realized_pnl || 0))/leverage) > avaibalance) {
         console.log("hererererer");
         
         toast.error("Order failed. Order quantity is greater than maximum order quantity", { autoClose: 2000 })
