@@ -1494,7 +1494,7 @@ const BuySell = (props: fullWidth) => {
       }
         {
         authenticationPopup &&
-        <WithdrawAuthenticationModelPopup setActive={setAuthenticationPopup} title="Future Trading" type="deposit"/>
+        <WithdrawAuthenticationModelPopup setActive={setAuthenticationPopup} title="Verification Status" type="deposit"/>
       }
     </>
   );

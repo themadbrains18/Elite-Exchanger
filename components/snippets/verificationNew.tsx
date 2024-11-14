@@ -237,8 +237,8 @@ const VerificationNew = (props: activeSection) => {
 
     const closePopup = () => {
         props?.setShow(false);
-        props.setEnable(0);
-        props.parentSetEnable(0);
+        props?.setEnable(0);
+        props?.parentSetEnable(0);
     }
     const wrapperRef = useRef(null);
     clickOutSidePopupClose({ wrapperRef, closePopup });
@@ -261,8 +261,8 @@ const VerificationNew = (props: activeSection) => {
                         <svg
                             onClick={() => {
                                 props?.setShow(false);
-                                props.setEnable(0);
-                                props.parentSetEnable(0);
+                                props?.setEnable(0);
+                                props?.parentSetEnable(0);
                             }}
                             enableBackground="new 0 0 60.963 60.842"
                             version="1.1"

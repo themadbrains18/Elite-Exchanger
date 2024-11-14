@@ -431,7 +431,7 @@ const Remarks = (props: propsData) => {
             </div >
 
             {active &&
-                <TradingPasswordAds setActive={setActive} setShow={setShow} show={show} finalSubmitAds={finalSubmitAds} />
+                <TradingPasswordAds setActive={setActive} setShow={setShow} show={show} finalSubmitAds={finalSubmitAds} session={session}/>
             }
             {
                 active1 &&

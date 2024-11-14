@@ -22,32 +22,32 @@ router
             
 
             // Call the API using a helper function and pass the necessary parameters.
-            // let responseData = await fetch(`https://api.kucoin.com/api/v1/market/stats?symbol=${currency}-USDT`, {
-            //     method: "GET",
-            //     headers: new Headers({
-            //         "content-type": "application/json",
-            //     }),
-            // });
-
-            const myHeaders = new Headers();
-                myHeaders.append("content-type", "application/json");
-
-                const requestOptions :any = {
+            let responseData = await fetch(`https://api.kucoin.com/api/v1/market/stats?symbol=${currency}-USDT`, {
                 method: "GET",
-                headers: myHeaders,
-                redirect: "follow"
-                };
+                headers: new Headers({
+                    "content-type": "application/json",
+                }),
+            });
 
-                fetch("https://api.kucoin.com/api/v1/market/stats?symbol=BTC-USDT", requestOptions)
-                .then((response) => response.text())
-                .then((result) => console.log(result,'==========hloc data'))
-                .catch((error) => console.error(error));
+            // const myHeaders = new Headers();
+            //     myHeaders.append("content-type", "application/json");
 
-                return res.status(200).send(null); 
+            //     const requestOptions :any = {
+            //     method: "GET",
+            //     headers: myHeaders,
+            //     redirect: "follow"
+            //     };
 
-            // let data = await responseData.json();
+            //     fetch("https://api.kucoin.com/api/v1/market/stats?symbol=BTC-USDT", requestOptions)
+            //     .then((response) => response.json())
+            //     .then((result) => console.log(result,'==========hloc data'))
+            //     .catch((error) => console.error(error));
+
+            //     return res.status(200).send(null); 
+
+            let data = await responseData.json();
             // Respond with a 200 status and send the retrieved data.
-            // return res.status(200).send({ data });
+            return res.status(200).send({ data });
         } catch (error: any) {
             // If an error occurs, throw it with its message for further handling.
             console.error('Error:', error.message); // Log the error

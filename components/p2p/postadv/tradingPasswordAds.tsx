@@ -24,6 +24,8 @@ const TradingPasswordAds = (props: activeSection) => {
     const [disable, setDisabled] = useState(false)
     const [showForgetPopup, setShowForgetPopup] = useState(false)
 
+    console.log("herer");
+    
     const closePopup = () => {
         props?.setShow(false);
         props.setActive(false);
@@ -48,8 +50,8 @@ const TradingPasswordAds = (props: activeSection) => {
     ? 
     <TradingPassword showForgetPopup={showForgetPopup} setShow={props?.setShow} setShowForgetPopup={setShowForgetPopup} session={props?.session}/>
     :
-    
-            <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+    <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+                sdsadasda
                 <div className="flex items-center justify-between ">
                     <p className="sec-title">Enter Trading Passsword</p>
                     <svg

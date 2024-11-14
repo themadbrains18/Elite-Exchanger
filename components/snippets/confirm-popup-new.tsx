@@ -14,6 +14,7 @@ interface activeSection {
   data?: any;
   snedOtpToUser?: any;
   parentSetEnable?:any;
+  setShowForgetPopup?:any;
 }
 
 const ConfirmPopupNew = (props: activeSection) => {
@@ -44,8 +45,9 @@ const ConfirmPopupNew = (props: activeSection) => {
 
   const closePopup = () => {
     props?.setShow(false);
-    props.setEnable(0);
-    props.parentSetEnable(0);
+    props?.setEnable(0);
+    props?.parentSetEnable&& props?.parentSetEnable(0);
+    props?.setShowForgetPopup&& props?.setShowForgetPopup(false);
   }
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
@@ -60,8 +62,9 @@ const ConfirmPopupNew = (props: activeSection) => {
           <svg
             onClick={() => {
               props?.setShow(false);
-              props.setEnable(0);
-              props.parentSetEnable(0);
+              props?.setEnable(0);
+              props?.parentSetEnable(0);
+              props?.setShowForgetPopup&& props?.setShowForgetPopup(false);
               //   props.setActive(0);
             }}
             enableBackground="new 0 0 60.963 60.842"

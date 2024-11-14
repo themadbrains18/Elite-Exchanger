@@ -706,7 +706,7 @@ const BuySellCard = (props: DynamicId) => {
       }
       {
         authenticationPopup &&
-        <WithdrawAuthenticationModelPopup setActive={setAuthenticationPopup} title="Trading" type="deposit" />
+        <WithdrawAuthenticationModelPopup setActive={setAuthenticationPopup} title="Verification Status" type="deposit" />
       }
     </>
   )

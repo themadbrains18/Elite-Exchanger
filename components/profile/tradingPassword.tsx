@@ -76,7 +76,7 @@ const TradingPassword = (props: activeSection) => {
       .string()
       .required("This field is required.").min(8,"Password must be at least of '8' characters.").max(32,"Password length maximum '32' character").matches(/^\S*$/, "Whitespaces are not allowed."),
     confirmPassword: yup
-      .string().required("This field is required.")
+      .string().required("This field is required.").min(8,"Confirm Password must be at least of '8' characters.").max(32,"Confirm Password length maximum '32' character")
       .oneOf([yup.ref("new_password")], "Passwords must match.").matches(/^\S*$/, "Whitespaces are not allowed."),
   });
   let {
@@ -130,7 +130,7 @@ const TradingPassword = (props: activeSection) => {
         }
 
       }
-
+      console.log(props?.session,"==props?.session?");
       setDisabled(true);
       if (session !== undefined && session?.user !== undefined) {
         const ciphertext = AES.encrypt(
@@ -201,6 +201,7 @@ const TradingPassword = (props: activeSection) => {
       }
 
 
+
       const ciphertext = AES.encrypt(
         JSON.stringify(request),
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
@@ -223,8 +224,8 @@ const TradingPassword = (props: activeSection) => {
         setTimeout(() => {
           setEnable(1);
           props?.setEnable && props.setEnable(0);
-          props.setTradePassword && props.setTradePassword(true);
-          props.setShow && props.setShow(false);
+          props?.setTradePassword && props.setTradePassword(true);
+          props?.setShow && props.setShow(false);
           props?.setShowForgetPopup && props?.setShowForgetPopup(false)
           setDisabled(false);
         }, 3000);
@@ -473,6 +474,7 @@ const TradingPassword = (props: activeSection) => {
           type="number" 
           data={formData}
           session={props?.session}
+          setShowForgetPopup={props?.setShowForgetPopup}
         />
       )}
     </>
