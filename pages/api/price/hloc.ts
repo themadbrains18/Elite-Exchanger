@@ -22,23 +22,32 @@ router
             
 
             // Call the API using a helper function and pass the necessary parameters.
-            let responseData = await fetch(`https://api.kucoin.com/api/v1/market/stats?symbol=${currency}-USDT`, {
+            // let responseData = await fetch(`https://api.kucoin.com/api/v1/market/stats?symbol=${currency}-USDT`, {
+            //     method: "GET",
+            //     headers: new Headers({
+            //         "content-type": "application/json",
+            //     }),
+            // });
+
+            const myHeaders = new Headers();
+                myHeaders.append("content-type", "application/json");
+
+                const requestOptions :any = {
                 method: "GET",
-                headers: new Headers({
-                    "content-type": "application/json",
-                }),
-            });
+                headers: myHeaders,
+                redirect: "follow"
+                };
 
-            // Log the HTTP status to help debug
-            console.log(`KuCoin API Status: ${responseData.status}`);
+                fetch("https://api.kucoin.com/api/v1/market/stats?symbol=BTC-USDT", requestOptions)
+                .then((response) => response.text())
+                .then((result) => console.log(result,'==========hloc data'))
+                .catch((error) => console.error(error));
 
-            // Check if the response is successful and if it’s JSON
-            if (!responseData.ok || !responseData.headers.get("content-type")?.includes("application/json")) {
-                throw new Error(`Failed to fetch valid JSON. Status: ${responseData.status}`);
-            }
-            let data = await responseData.json();
+                return res.status(200).send(null); 
+
+            // let data = await responseData.json();
             // Respond with a 200 status and send the retrieved data.
-            return res.status(200).send({ data });
+            // return res.status(200).send({ data });
         } catch (error: any) {
             // If an error occurs, throw it with its message for further handling.
             console.error('Error:', error.message); // Log the error
