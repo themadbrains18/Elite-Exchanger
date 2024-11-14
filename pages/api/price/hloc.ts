@@ -18,6 +18,8 @@ router
 
             // Destructure and retrieve variables from the query parameters.
             let currency = req.query.slug === 'BTCB' ? 'BTC' : req.query.slug === 'BNBT' ? 'BNB' : req.query.slug;
+            console.log(currency,"==currency");
+            
 
             // Call the API using a helper function and pass the necessary parameters.
             let responseData = await fetch(`https://api.kucoin.com/api/v1/market/stats?symbol=${currency}-USDT`, {

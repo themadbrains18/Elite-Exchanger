@@ -31,6 +31,8 @@ const CryptoCoin = (props: propsData) => {
 
         const slug = coin.symbol;
         try {
+          console.log("herer", slug,`${process.env.NEXT_PUBLIC_BASEURL}/price/hloc?slug=${slug}` );
+          
           let hlocv = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/hloc?slug=${slug}`, {
             method: "GET"
           }).then(response => response.json());
