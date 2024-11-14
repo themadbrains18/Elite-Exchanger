@@ -29,12 +29,19 @@ router
                 }),
             });
 
+            // Log the HTTP status to help debug
+            console.log(`KuCoin API Status: ${responseData.status}`);
+
+            // Check if the response is successful and if it’s JSON
+            if (!responseData.ok || !responseData.headers.get("content-type")?.includes("application/json")) {
+                throw new Error(`Failed to fetch valid JSON. Status: ${responseData.status}`);
+            }
             let data = await responseData.json();
             // Respond with a 200 status and send the retrieved data.
             return res.status(200).send({ data });
         } catch (error: any) {
             // If an error occurs, throw it with its message for further handling.
-            console.log(error,'=========hloc error ');
+            console.error('Error:', error.message); // Log the error
             
             throw new Error(error.message)
         }
