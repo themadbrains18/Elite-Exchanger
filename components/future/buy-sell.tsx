@@ -510,12 +510,12 @@ const BuySell = (props: fullWidth) => {
   const confirmOrder = async () => {
     try {
 
-      console.log(confirmOrderData, '===============');
-      console.log(props?.maxTrade, '=============== props?.maxTrade');
-      console.log(usedQty, '=============== usedQty');
-      console.log(avaibalance, '=============== avaibalance');
-      console.log(confirmOrderData.amount, '=============== confirmOrderData.amount');
-      console.log(confirmOrderData?.realized_pnl, '=============== confirmOrderData?.realized_pnl');
+      // console.log(confirmOrderData, '===============');
+      // console.log(props?.maxTrade, '=============== props?.maxTrade');
+      // console.log(usedQty, '=============== usedQty');
+      // console.log(avaibalance, '=============== avaibalance');
+      // console.log(confirmOrderData.amount, '=============== confirmOrderData.amount');
+      // console.log(confirmOrderData?.realized_pnl, '=============== confirmOrderData?.realized_pnl');
 
       // return;
       if (truncateNumber(usedQty + confirmOrderData?.qty, 3) > props?.maxTrade) {
