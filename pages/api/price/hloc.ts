@@ -34,6 +34,8 @@ router
             return res.status(200).send({ data });
         } catch (error: any) {
             // If an error occurs, throw it with its message for further handling.
+            console.log(error,'=========hloc error ');
+            
             throw new Error(error.message)
         }
     });
