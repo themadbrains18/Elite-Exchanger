@@ -15,6 +15,7 @@ import ConfirmBuy from "./confirmBuy";
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { currencyFormatter } from "./market/buySellCard";
 import { truncateNumber } from "@/libs/subdomain";
+import WithdrawAuthenticationModelPopup from "../wallet/withdrawAuthentication";
 
 const schema = yup.object().shape({
   token_amount: yup.number().positive("Amount must be greater than '0'.").required('Please enter quantity.').typeError('Please enter quantity.'),
@@ -47,7 +48,7 @@ const BuySellCard = (props: DynamicId) => {
   const router = useRouter()
   const [spotType, setSpotType] = useState('buy');
   const [disabled, setDisabled] = useState(false);
-
+  const [authenticationPopup, setAuthenticationPopup] = useState(false)
   const [tokenInputValue, setTokenInputValue] = useState(0.000000);
   const [limitInputValue, setLimitInputValue] = useState(0.000000);
 
@@ -190,6 +191,14 @@ const BuySellCard = (props: DynamicId) => {
   };
 
   const onHandleSubmit = async (data: any) => {
+
+    console.log(props?.session, "==session");
+
+    if (props?.session?.user?.kyc !== "approve") {
+      setAuthenticationPopup(true)
+      return;
+    }
+
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
 
 
@@ -694,6 +703,10 @@ const BuySellCard = (props: DynamicId) => {
       {
         active &&
         <ConfirmBuy setActive={setActive} setShow={setShow} price={props?.token?.price} active1={active1} secondCurrency={secondCurrency} selectedToken={selectedToken?.symbol} actionPerform={actionPerform} objData={objData} />
+      }
+      {
+        authenticationPopup &&
+        <WithdrawAuthenticationModelPopup setActive={setAuthenticationPopup} title="Trading" type="deposit" />
       }
     </>
   )

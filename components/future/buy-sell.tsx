@@ -15,6 +15,7 @@ import { useWebSocket } from "@/libs/WebSocketContext";
 import { truncateNumber } from "@/libs/subdomain";
 import { currencyFormatter } from "../snippets/market/buySellCard";
 import { useRouter } from "next/router";
+import WithdrawAuthenticationModelPopup from "../wallet/withdrawAuthentication";
 
 interface fullWidth {
   fullWidth?: boolean;
@@ -72,7 +73,7 @@ const BuySell = (props: fullWidth) => {
   const [assetsBalance, setAssetsBalance] = useState(0);
   const [assetsList, setAssetsList] = useState();
   const [percentage, setPercentage] = useState(0)
-
+  const [authenticationPopup, setAuthenticationPopup] = useState(false)
 
   const [leverage, setLerverage] = useState(0)
 
@@ -309,6 +310,11 @@ const BuySell = (props: fullWidth) => {
   // Submit form data in case of limit and market trading//
   // ===================================================================//
   const submitForm = async (orderMarkeType: string) => {
+    if (session?.user?.kyc !== "approve") {
+      setAuthenticationPopup(true)
+      return;
+    }
+    
     let obj;
 
     if (orderMarkeType === "market") {
@@ -325,20 +331,20 @@ const BuySell = (props: fullWidth) => {
       // console.log(entryPrice,"==entryprice");
       // console.log(marketPrice,"==marketPrice");
       // console.log(props?.marginMode?.leverage,"==props?.marginMode?.leverage");
-      
-      
-      let Liquidation_Price: any = ((marketType === 'limit' ? entryPrice : marketPrice )* (1 - 0.01)) / props?.marginMode?.leverage;
-// console.log(Liquidation_Price,"==liq price");
 
 
-      
-      
+      let Liquidation_Price: any = ((marketType === 'limit' ? entryPrice : marketPrice) * (1 - 0.01)) / props?.marginMode?.leverage;
+      // console.log(Liquidation_Price,"==liq price");
+
+
+
+
       // Liquidation Price for long case
       if (show === 1) {
         Liquidation_Price = (marketType === 'limit' ? entryPrice : marketPrice) - Liquidation_Price;
         // console.log(Liquidation_Price,"==liquidaion price1");
       }
-      
+
       // Liquidation Price for short case
       if (show === 2) {
         Liquidation_Price = (marketType === 'limit' ? entryPrice : marketPrice) + Liquidation_Price;
@@ -448,9 +454,9 @@ const BuySell = (props: fullWidth) => {
       let enter_Price: any = entryPrice;
       let amount: any = qty * entryPrice;
 
-      console.log(qty,entryPrice,amount,"===========amount");
+      console.log(qty, entryPrice, amount, "===========amount");
 
-      if(isNaN(amount)){
+      if (isNaN(amount)) {
         setButtonStyle(false)
         return;
       }
@@ -484,7 +490,8 @@ const BuySell = (props: fullWidth) => {
         leverage_type: props?.marginMode?.margin,
         coin_id: props?.currentToken?.coin_id,
         qty: parseFloat(qty.toString().match(/^-?\d+(?:\.\d{0,8})?/)[0]),
-        position_mode: positionMode
+        position_mode: positionMode,
+       
       };
     }
     // console.log(props?.marginMode?.leverage,"==props?.marginMode?.leverage");
@@ -503,10 +510,17 @@ const BuySell = (props: fullWidth) => {
   const confirmOrder = async () => {
     try {
 
-      console.log(confirmOrderData,'===============');
+      console.log(confirmOrderData, '===============');
+      console.log(props?.maxTrade, '=============== props?.maxTrade');
+      console.log(usedQty, '=============== usedQty');
+      console.log(avaibalance, '=============== avaibalance');
+      console.log(confirmOrderData.amount, '=============== confirmOrderData.amount');
+      console.log(confirmOrderData?.realized_pnl, '=============== confirmOrderData?.realized_pnl');
 
       // return;
       if (truncateNumber(usedQty + confirmOrderData?.qty, 3) > props?.maxTrade) {
+        console.log("hereer");
+        
 
         toast.error("Order failed. Order quantity is greater than maximum order quantity", { autoClose: 2000 })
 
@@ -518,7 +532,12 @@ const BuySell = (props: fullWidth) => {
 
         return;
       }
-      if((confirmOrderData.amount+(confirmOrderData?.realized_pnl||0))>avaibalance){
+
+      console.log(((parseFloat(confirmOrderData.amount) + (confirmOrderData?.realized_pnl || 0))),props?.leverage ,"=(confirmOrderData.amount + (confirmOrderData?.realized_pnl || 0))");
+      
+      if (((parseFloat(confirmOrderData.amount) + (confirmOrderData?.realized_pnl || 0))/(localStorage.getItem('leverage')||1)) > avaibalance) {
+        console.log("hererererer");
+        
         toast.error("Order failed. Order quantity is greater than maximum order quantity", { autoClose: 2000 })
 
         setButtonStyle(false);
@@ -539,9 +558,10 @@ const BuySell = (props: fullWidth) => {
         );
         let record = encodeURIComponent(ciphertext.toString());
 
+        
 
         let reponse = await fetch(
-          `${process.env.NEXT_PUBLIC_BASEURL}/future/${(marketType === "market" || (show === 2 && marketType === 'limit')) ? "position" : "openorder"
+          `${process.env.NEXT_PUBLIC_BASEURL}/future/${marketType === "market"  ? "position" : "openorder"
           }`,
           {
             method: "POST",
@@ -951,9 +971,14 @@ const BuySell = (props: fullWidth) => {
               setShow(2);
               setSizeValue(0);
               setPercentage(0)
-              setMarketType('market')
+              if (showNes === 1) {
+                setMarketType('limit')
+              }
+              else {
+                setMarketType('market')
+              }
               props?.setOpnlong && props?.setOpnlong('Short');
-              setEntryPrice(0);
+              // setEntryPrice(0);
 
               setEntryPriceValidate("");
               setSizeValidate('')
@@ -1217,7 +1242,7 @@ const BuySell = (props: fullWidth) => {
                       {
                         showNes === 1
                           ? (sizeValue === 0 || sizeValue == Infinity || isNaN(sizeValue))
-                            ? 0.00 : (isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 4)))) || parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)))==Infinity) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)) : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3)))) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3))}{" "}
+                            ? 0.00 : (isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 4)))) || parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3))) == Infinity) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)) : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3)))) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3))}{" "}
                       {props?.currentToken?.coin_symbol}
                     </p>
                   </div>
@@ -1257,7 +1282,7 @@ const BuySell = (props: fullWidth) => {
                         }
                         else if (marketType === "limit") {
                           let market_price = props?.currentToken?.token !== null ? props?.currentToken?.token?.price : props?.currentToken?.global_token?.price;
-                          if (market_price < entryPrice) {
+                          if ((market_price < entryPrice && showNes === 1) || (marketPrice > entryPrice && showNes === 2)) {
 
                             setShortConfirm(true);
                           }
@@ -1289,6 +1314,8 @@ const BuySell = (props: fullWidth) => {
                             setShortConfirm(true);
                           }
                           else {
+                            console.log("here");
+
                             submitForm('limit')
                           }
                         }
@@ -1462,6 +1489,10 @@ const BuySell = (props: fullWidth) => {
               message={'The current order may encounter the following circumstances.\nPlease confirm before you proceed.\n1. The current order may be executed immediately  as a market order.'} actionPerform={actionPerform} />
           </>
         )
+      }
+        {
+        authenticationPopup &&
+        <WithdrawAuthenticationModelPopup setActive={setAuthenticationPopup} title="Future Trading" type="deposit"/>
       }
     </>
   );

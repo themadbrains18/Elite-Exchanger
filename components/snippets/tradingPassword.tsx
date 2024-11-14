@@ -206,7 +206,7 @@ const TradingPassword = (props: activeSection) => {
         }, 3000)
       }
       else {
-        // console.log(res,"=res");
+        console.log(res,"=res");
 
         toast.error(res?.data?.data, { autoClose: 2000 });
         setTimeout(() => {
