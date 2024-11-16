@@ -8,12 +8,32 @@ import Deposit from "../deposit";
 import { currencyFormatter } from "./buySellCard";
 import { abbreviateNumber } from "@/components/chart/chart-tabs";
 
+/**
+ * Interface representing the properties for a component or function that handles coin data, user session, and network information.
+ *
+ * @interface propsData
+ */
 interface propsData {
+    /**
+  * List of coins or coin data associated with the component.
+  * The exact structure of this property will depend on the coin-related data used in the application.
+  * 
+  * @type {any}
+  */
     coins: any,
+    /**
+   * The current session information of the user, including authentication details and user-specific data.
+   * 
+   * @type {any}
+   */
     session: any,
+    /**
+  * List or data related to available networks that the component or function interacts with.
+  * 
+  * @type {any}
+  */
     networks: any
 }
-
 
 const AllCrypto = (props: propsData) => {
 
@@ -30,6 +50,15 @@ const AllCrypto = (props: propsData) => {
     const currentItems = props.coins.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(props.coins.length / itemsPerPage);
 
+    /**
+     * Handles the page click event for pagination, updating the item offset based on the selected page.
+     *
+     * This function calculates the new offset for the items to be displayed on the current page,
+     * based on the selected page number and the number of items per page.
+     *
+     * @param {any} event - The event object triggered by the page click action.
+     * The event contains the selected page number which is used to calculate the new item offset.
+     */
     const handlePageClick = async (event: any) => {
         const newOffset = (event.selected * itemsPerPage) % props.coins.length;
         setItemOffset(newOffset);

@@ -14,8 +14,18 @@ import ConfirmPopup from "@/pages/customer/profile/confirm-popup";
 import Verification from "../../snippets/verification";
 import clickOutSidePopupClose from "../../snippets/clickOutSidePopupClose";
 import FilterSelectMenuWithCoin from "@/components/snippets/filter-select-menu-with-coin";
-import VerificationNew from "@/components/snippets/verificationNew";
 
+/**
+ * Schema validation for the user input fields using Yup.
+ * 
+ * This schema validates the following fields:
+ * - `tokenID`: An optional string with a default empty value.
+ * - `networkId`: An optional string with a default empty value.
+ * - `label`: A required string that must not exceed 20 characters.
+ * - `address`: A required string that must not exceed 50 characters.
+ * 
+ * The schema is used for validating form data before submission to ensure all required fields are provided and meet the length constraints.
+ */
 const schema = yup.object().shape({
   tokenID: yup.string().optional().default(""),
   networkId: yup.string().optional().default(""),
@@ -23,7 +33,21 @@ const schema = yup.object().shape({
   address: yup.string().required("This field is required.").max(50),
 });
 
-interface activeSection {
+/**
+ * Interface for the props passed to the AddAddress component.
+ * 
+ * This interface defines the properties required for managing address-related actions, 
+ * including setting the active state, refreshing data, and accessing necessary 
+ * network and token details.
+ * 
+ * - `setActive`: A function to set the active state.
+ * - `refreshData`: A function to trigger the data refresh.
+ * - `networks`: The available networks data to be used in the component.
+ * - `token`: The token data related to the current session or action.
+ * - `active`: The current active state.
+ * - `session`: The session data, typically containing user details and authentication tokens.
+ */
+interface AddAddressProps {
   setActive: Function;
   refreshData: Function;
   networks: any;
@@ -43,7 +67,8 @@ type UserSubmitForm = {
   otp?: string;
   step?: number;
 };
-const AddAddress = (props: activeSection) => {
+
+const AddAddress = (props: AddAddressProps) => {
   const { mode } = useContext(Context);
   const [selectedNetwork, setSelectedNetwork] = useState("");
   const [selectedCoin, setSelectedCoin] = useState();
@@ -54,8 +79,8 @@ const AddAddress = (props: activeSection) => {
   const [disable, setDisable] = useState(false);
   const [addressVerified, setAddressVerified] = useState(false);
   const [unSelectCoinError, setUnSelectCoinError] = useState('');
-  const [enableNetWork,setEnableNetWork] = useState(true);
-  const [coinError,SetCoinError] = useState('');
+  const [enableNetWork, setEnableNetWork] = useState(true);
+  const [coinError, SetCoinError] = useState('');
 
 
   let {
@@ -72,9 +97,17 @@ const AddAddress = (props: activeSection) => {
     resolver: yupResolver(schema),
   });
 
-  // console.log(props?.networks, "== props?.networks");
-
-
+  /**
+ * Filters the `networks` based on the application mode.
+ * 
+ * This logic determines which networks to show based on the environment setting 
+ * (`dev` or production). If the application is in `dev` mode, it filters the 
+ * networks to only include those with a "testnet" value. In production, 
+ * it filters for "mainnet" networks.
+ * 
+ * The filtered list is assigned to the `list` variable for further use within 
+ * the component.
+ */
   const list = props?.networks.filter((item: any) => {
     if (process.env.NEXT_PUBLIC_APPLICATION_MODE === "dev") {
       return item.network === "testnet";
@@ -83,16 +116,46 @@ const AddAddress = (props: activeSection) => {
     }
   });
 
+  /**
+ * Handles the selection of a network and updates the state.
+ * 
+ * This function is called when a network is selected from the list of available networks.
+ * It sets the `selectedNetwork` state with the ID of the selected network and clears any
+ * existing validation errors related to the `networkId` field.
+ * 
+ * @param {any} network - The network object containing details of the selected network.
+ */
   const getNetworkDetail = (network: any) => {
     setSelectedNetwork(network?.id);
     clearErrors("networkId");
   };
+
+  /**
+   * Filters and sets the selected coin, clears related errors, and resets coin selection error message.
+   * 
+   * This function is called when a coin is selected from the list. It updates the `selectedCoin`
+   * state with the ID of the selected coin, clears any validation errors related to the `tokenID` field,
+   * and resets any coin selection error message by setting the `unSelectCoinError` state to an empty string.
+   * 
+   * @param {any} token - The token (coin) object containing details of the selected coin.
+   */
   const filterNetworkListByCoin = (token: any) => {
     setSelectedCoin(token?.id);
     clearErrors("tokenID");
     setUnSelectCoinError("")
   };
 
+  /**
+ * Handles form submission, validates the selected coin and network, and submits the data to the server.
+ * 
+ * This function performs form validation by checking if the user has selected a coin and network. 
+ * If any of the fields are empty, it sets appropriate error messages. Once validation passes, it encrypts the form data 
+ * using AES encryption and sends it to the backend server for processing. If the submission is successful, 
+ * it updates the UI accordingly and displays a success message. If the session has expired, the user will be logged out.
+ * 
+ * @param {UserSubmitForm} data - The data submitted from the form, including user information, coin selection, 
+ *                                 network selection, and address details.
+ */
   const onHandleSubmit = async (data: UserSubmitForm) => {
     try {
       if (selectedCoin === "") {
@@ -101,10 +164,10 @@ const AddAddress = (props: activeSection) => {
           type: "custom",
           message: "Please select coin.",
         });
-        
+
         return;
       } else {
-        if(selectedCoin!==undefined){
+        if (selectedCoin !== undefined) {
           data.tokenID = selectedCoin;
           clearErrors("tokenID");
           setUnSelectCoinError("")
@@ -131,7 +194,7 @@ const AddAddress = (props: activeSection) => {
       data.step = 1;
 
       // console.log(data,"==data");
-      
+
 
       if (session !== null && session?.user !== undefined) {
         const ciphertext = AES.encrypt(
@@ -181,6 +244,16 @@ const AddAddress = (props: activeSection) => {
     }
   };
 
+  /**
+ * Sends OTP to the user after preparing the necessary data for the address verification process.
+ * 
+ * This function creates an object containing the user details, address, token, and network information. 
+ * It then encrypts this data using AES encryption and sends it to the backend server for OTP generation. 
+ * If the request is successful, the OTP is retrieved, and the user is moved to the next step in the process. 
+ * If the session has expired, the user is logged out and redirected to the login page.
+ * 
+ * @returns {Promise<void>} Returns a promise that resolves when the OTP has been successfully sent or an error occurs.
+ */
   const snedOtpToUser = async () => {
     try {
       let username = props.session?.user.email !== 'null' ? props.session?.user.email : props.session?.user?.number
@@ -235,6 +308,18 @@ const AddAddress = (props: activeSection) => {
     }
   }
 
+  /**
+ * Finalizes the OTP verification process by sending the OTP to the server for validation 
+ * and adding the address to the whitelist if the verification is successful.
+ * 
+ * This function takes the OTP entered by the user and sends it along with other user details 
+ * (such as address, token ID, network ID) to the backend server for validation. If the response 
+ * indicates success, the address is added to the whitelist, and the user is notified. After a short delay, 
+ * the form is reset, and the relevant data is refreshed.
+ * 
+ * @param otp - The OTP entered by the user for verification.
+ * @returns {Promise<void>} Returns a promise that resolves after the OTP verification process is complete.
+ */
   const finalOtpVerification = async (otp: any) => {
     try {
       let username =
@@ -287,6 +372,15 @@ const AddAddress = (props: activeSection) => {
     }
   }
 
+  /**
+ * Closes the popup by setting the active state to false.
+ * 
+ * This function triggers the closure of the popup by calling the `setActive` function 
+ * passed via props and setting it to `false`. This effectively hides the popup 
+ * from the user interface.
+ * 
+ * @returns {void} This function does not return any value.
+ */
   const closePopup = () => {
     props?.setActive(false);
   }
@@ -330,10 +424,10 @@ const AddAddress = (props: activeSection) => {
             </svg>
           </div>
           <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}>
             <div className="py-30 md:py-10">
               <div className="mb-[15px] md:mb-5">
                 <label className="sm-text ">Address label</label>
@@ -358,22 +452,22 @@ const AddAddress = (props: activeSection) => {
               </div>
 
               {
-        props?.token &&
-        <div className="relative max-w-full  w-full mt-20">
-            <label className="sm-text mb-[10px] block">Coin</label>
-            
-              <FilterSelectMenuWithCoin
-                setEnableNetWork={setEnableNetWork}
-                data={props?.token}
-                border={true}
-                dropdown={1}
-                filterNetworkListByCoin={filterNetworkListByCoin}
-              />
-              {coinError !=="" && <p className="errorMessage mt-10">{coinError}</p>}
-          </div>
-      }
+                props?.token &&
+                <div className="relative max-w-full  w-full mt-20">
+                  <label className="sm-text mb-[10px] block">Coin</label>
 
-      
+                  <FilterSelectMenuWithCoin
+                    setEnableNetWork={setEnableNetWork}
+                    data={props?.token}
+                    border={true}
+                    dropdown={1}
+                    filterNetworkListByCoin={filterNetworkListByCoin}
+                  />
+                  {coinError !== "" && <p className="errorMessage mt-10">{coinError}</p>}
+                </div>
+              }
+
+
               <div className="my-20">
                 <label className="sm-text mb-[10px] block">Network</label>
                 <div className={`${enableNetWork && 'cursor-not-allowed opacity-[0.5]'}`}>
@@ -388,7 +482,7 @@ const AddAddress = (props: activeSection) => {
                     />
                   </div>
                 </div>
-                
+
                 {errors.networkId && (
                   <p className="errorMessage mt-10">{errors.networkId.message}</p>
                 )}
@@ -424,27 +518,27 @@ const AddAddress = (props: activeSection) => {
               <button type="button" className="solid-button2 w-full" onClick={() => { props?.setActive(false) }}>Cancel</button>
               <button disabled={disable} className={`solid-button w-full flex items-center justify-center ${disable === true ? 'opacity-50 cursor-not-allowed' : ''}`}>
                 {disable === true &&
-                <svg
-                className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx={12}
-                  cy={12}
-                  r={10}
-                  stroke="currentColor"
-                  strokeWidth={4}
-                />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-              
+                  <svg
+                    className="w-5 h-5 mr-3 -ml-1 text-white animate-spin"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx={12}
+                      cy={12}
+                      r={10}
+                      stroke="currentColor"
+                      strokeWidth={4}
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+
                 }
                 Save
               </button>
@@ -457,7 +551,7 @@ const AddAddress = (props: activeSection) => {
         <ConfirmPopup
           setEnable={setEnable}
           setShow={props.setActive}
-          type="number"   
+          type="number"
           data={formData}
           session={props?.session}
           snedOtpToUser={snedOtpToUser}

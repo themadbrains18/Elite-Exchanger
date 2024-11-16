@@ -12,40 +12,133 @@ import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import ConfirmBuy from "../confirmBuy";
-
 import { useWebSocket } from "@/libs/WebSocketContext";
 import { truncateNumber } from "@/libs/subdomain";
 
-
+/**
+ * Validation schema for token amount and USDT limit.
+ *
+ * This schema defines the validation rules for two fields:
+ * - `token_amount`: A positive number that must be provided and is required.
+ * - `limit_usdt`: A positive number that must be provided and is required.
+ *
+ * The validation includes:
+ * - Ensuring both fields are positive numbers.
+ * - Displaying specific error messages for empty or invalid input.
+ *
+ * @type {Yup.ObjectSchema}
+ */
 const schema = yup.object().shape({
+  /**
+  * Validates the token amount.
+  * - Must be a positive number.
+  * - Must be greater than 0.
+  * - Required field with a custom error message.
+  * 
+  * @type {Yup.NumberSchema}
+  */
   token_amount: yup.number().positive("Amount must be greater than '0'.").required('Please enter quantity.').typeError('Please enter quantity.'),
+  /**
+   * Validates the limit for USDT.
+   * - Must be a positive number.
+   * - Must be greater than 0.
+   * - Required field with a custom error message.
+   * 
+   * @type {Yup.NumberSchema}
+   */
   limit_usdt: yup.number().positive("Limit must be greater than '0'.").required('Please enter limit amount.').typeError('Please enter limit amount.'),
-  // market_type:yup.string().optional().default('limit')
 });
 
-interface DynamicId {
+/**
+ * Props for the BuySellCard component.
+ * 
+ * This interface defines the properties passed to the BuySellCard component:
+ * - `id`: A unique identifier for the card (required).
+ * - `coins`: List of available coins (required).
+ * - `session`: The user's session information (required).
+ * - `token`: An optional token data associated with the card.
+ * - `assets`: Optional assets data.
+ * - `slug`: Optional identifier for the specific coin or asset.
+ * - `getUserOpenOrder`: Optional function to fetch the user's open orders.
+ * - `getUserTradeHistory`: Optional function to fetch the user's trade history.
+ * 
+ * @interface BuySellCardProps
+ */
+interface BuySellCardProps {
+  /**
+  * A unique identifier for the buy/sell card.
+  * 
+  * @type {number}
+  */
   id: number;
+  /**
+   * List of coins available for trading.
+   * 
+   * @type {any}
+   */
   coins: any,
+  /**
+   * The user's session information, including authentication and user data.
+   * 
+   * @type {any}
+   */
   session: any;
+  /**
+   * Optional token data related to the trading process.
+   * 
+   * @type {any}
+   * @optional
+   */
   token?: any;
+  /**
+   * Optional data about assets in the user's portfolio.
+   * 
+   * @type {any}
+   * @optional
+   */
   assets?: any;
+  /**
+   * An optional slug to identify the specific coin or asset.
+   * 
+   * @type {any}
+   * @optional
+   */
   slug?: any;
+  /**
+  * Optional function to retrieve the user's open orders.
+  * 
+  * @type {any}
+  * @optional
+  */
   getUserOpenOrder?: any;
+  /**
+  * Optional function to retrieve the user's trade history.
+  * 
+  * @type {any}
+  * @optional
+  */
   getUserTradeHistory?: any;
 }
 
+/**
+ * Formats a given amount into currency format, including proper comma separation for thousands and decimals.
+ * The amount is formatted according to the Indian numbering system (using 'en-IN' locale).
+ * 
+ * @param {any} amount - The amount to be formatted, which can be a string, number, or any other type convertible to a number.
+ * 
+ * @returns {string} - The formatted currency string. If the input is invalid, it returns "0.00".
+ * 
+ * @example
+ * currencyFormatter(1000000) // Returns "10,00,000.00"
+ * currencyFormatter(12345.67) // Returns "12,345.67"
+ */
 export function currencyFormatter(amount: any) {
   // Ensure the amount is a number
   const number = Number(amount);
-
   // Split the number into integer and decimal parts
   const [integerPart, decimalPart] = number.toString().split('.');
-
-
-
   // Format the integer part using toLocaleString
   const formattedInteger = Number(integerPart).toLocaleString('en-IN');
-
   // Combine the formatted integer part and the decimal part
   if (formattedInteger !== 'NaN') {
     return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger + '.00';
@@ -57,7 +150,7 @@ export function currencyFormatter(amount: any) {
 }
 
 
-const BuySellCard = (props: DynamicId) => {
+const BuySellCard = (props: BuySellCardProps) => {
   const [active1, setActive1] = useState(1);
   const [active, setActive] = useState(false);
   const [firstCurrency, setFirstCurrency] = useState('');
@@ -76,10 +169,30 @@ const BuySellCard = (props: DynamicId) => {
   const wbsocket = useWebSocket();
   const list = props.coins;
 
+  /**
+   * Filters the coins list to exclude 'USDT' and any coins where the tradepair is null.
+   * 
+   * @param {Array} props.coins - The array of coin objects to be filtered.
+   * 
+   * @returns {Array} - A filtered array of coins, excluding 'USDT' and coins with a null tradepair.
+   * 
+   * @example
+   * const qtylist = props.coins.filter((item) => item.symbol !== 'USDT' && item?.tradepair !== null);
+   */
   const qtylist = props.coins.filter((item: any) => {
     return item.symbol !== 'USDT' && item?.tradepair !== null
   });
 
+  /**
+   * Filters the coins list to include only those with the symbol 'USDT'.
+   * 
+   * @param {Array} props.coins - The array of coin objects to be filtered.
+   * 
+   * @returns {Array} - A filtered array containing only the coins with the symbol 'USDT'.
+   * 
+   * @example
+   * let secondList = props.coins?.filter((item) => item.symbol === 'USDT');
+   */
   let secondList = props.coins?.filter((item: any) => {
     return item.symbol === 'USDT'
   })
@@ -88,6 +201,20 @@ const BuySellCard = (props: DynamicId) => {
     resolver: yupResolver(schema),
   });
 
+  /**
+ * Effect hook that runs when the `userAssets` state changes.
+ * 
+ * - Sets the currency name to 'USDT' with 2 decimal places.
+ * - Sets the price change type based on `spotType`.
+ * - Calls the `Socket` function to establish a WebSocket connection.
+ * - Calls the `convertTotalAmount` function to update the total amount.
+ * - Finds the `.custom-radio` element and simulates a click on its previous sibling if it exists.
+ * 
+ * @example
+ * useEffect(() => {
+ *   // Sets the currency name and price change type, handles socket and amount conversion
+ * }, [userAssets]);
+ */
   useEffect(() => {
     setCurrencyName('USDT', 2);
     setPriceOnChangeType(spotType, '');
@@ -101,8 +228,19 @@ const BuySellCard = (props: DynamicId) => {
     }
   }, [userAssets])
 
+  /**
+   * Function to handle WebSocket messages.
+   * 
+   * This function listens for incoming WebSocket messages and processes them based on their type.
+   * - If the message type is "market", it calls `getAssets` to update asset information if the `session` is available.
+   * 
+   * @example
+   * Socket(); // Starts listening for WebSocket messages and handles them accordingly.
+   */
   const Socket = () => {
+    // Check if WebSocket connection is established
     if (wbsocket) {
+      // Define what to do when a message is received
       wbsocket.onmessage = (event) => {
         const data = JSON.parse(event.data).data;
         let eventDataType = JSON.parse(event.data).type;
@@ -117,16 +255,34 @@ const BuySellCard = (props: DynamicId) => {
 
   };
 
+  /**
+   * Sets the currency name and updates related state and form values based on the selected currency symbol.
+   * 
+   * This function handles the selection of the currency in the dropdown and updates various states
+   * such as the first or second currency, token details, fee estimates, and total amount based on the
+   * selected currency symbol.
+   * 
+   * - If `dropdown` is `1`, it updates the first currency and performs calculations for `limit_usdt`, 
+   *   total amount, and estimated fee.
+   * - If `dropdown` is not `1`, it updates the second currency.
+   * 
+   * @param {string} symbol - The symbol of the selected currency (e.g., 'USDT').
+   * @param {number} dropdown - Determines whether it's the first or second currency selection.
+   * @example
+   * setCurrencyName('USDT', 1); // Sets 'USDT' as the first currency and updates form values.
+   */
   const setCurrencyName = (symbol: string, dropdown: number) => {
+    // Check if the dropdown is the first one
     if (dropdown === 1) {
       clearErrors('token_amount');
       setFirstCurrency(symbol);
 
+      // Find the token data for the selected symbol
       let token = list && list?.length > 0 && list?.filter((item: any) => {
         return item.symbol === symbol && item?.tradepair !== null
       });
 
-
+      // If token data is found, update form values and perform calculations
       if (token.length > 0) {
         setValue('limit_usdt', token[0].price.toFixed(6))
         setSelectedToken(token[0]);
@@ -138,7 +294,7 @@ const BuySellCard = (props: DynamicId) => {
         setEstimateFee(fee);
         setTotalAmount(totalAmount);
       }
-
+      // If there is a session message indicating expired session, sign out
       if (userAssets.message !== undefined) {
         signOut();
         return;
@@ -149,16 +305,34 @@ const BuySellCard = (props: DynamicId) => {
     }
   }
 
+  /**
+   * Sets the price based on the selected type ('buy' or 'sell') and the currency symbol.
+   * 
+   * This function determines the appropriate token from the list and updates the price based on the 
+   * selected currency symbol and the available balance in the user's assets. 
+   * - If the type is 'buy', it checks for 'USDT' as the token.
+   * - If the type is not 'buy', it checks the selected symbol (or the first currency if symbol is empty).
+   * 
+   * The price is updated based on the balance of the selected token in the user's main wallet.
+   * 
+   * @param {string} type - The type of transaction, either 'buy' or 'sell'.
+   * @param {string} symbol - The symbol of the token (e.g., 'BTC', 'ETH').
+   * @example
+   * setPriceOnChangeType('buy', 'BTC'); // Sets the price for 'BTC' based on available balance in main wallet.
+   */
   const setPriceOnChangeType = (type: string, symbol: string) => {
     try {
       setPrice(0.00);
+      // Find the token based on type and symbol
       let token = list.filter((item: any) => {
         return item.symbol === (type === 'buy' ? 'USDT' : symbol === '' ? firstCurrency : symbol)
       });
+      // If a matching token is found
       if (token.length > 0) {
         let selectAssets = userAssets.filter((item: any) => {
           return item.token_id === token[0].id && item?.walletTtype === "main_wallet"
         });
+        // If asset found, update the price with the available balance
         if (selectAssets.length > 0) {
           setPrice(selectAssets[0].balance);
         }
@@ -168,8 +342,29 @@ const BuySellCard = (props: DynamicId) => {
     }
   }
 
+  /**
+ * Handles form submission for placing a market or limit order, based on the user's selection.
+ * 
+ * This function performs validation checks for the selected token, available balance, 
+ * and trading conditions (e.g., market type, limit trade availability, maximum trade amount).
+ * It processes the data from the form and constructs an order object to be submitted.
+ * 
+ * - If limit orders are unavailable for the selected token, an error message is shown.
+ * - It checks whether the user has sufficient balance for the trade.
+ * - It verifies if the user is attempting to trade more than the allowed maximum amount.
+ * - The order object is then prepared with the necessary data like user ID, token ID, order type, and fees.
+ * 
+ * @param {any} data - The form data containing information like token amount, limit amount, etc.
+ * @returns {void} 
+ * @throws {Error} If an error occurs during submission.
+ * 
+ * @example
+ * // Example usage when the user submits the form:
+ * onHandleSubmit(formData);  // Processes the order and handles validation.
+ */
   const onHandleSubmit = async (data: any) => {
     try {
+      // Check if limit orders are unavailable for the selected token
       if (show === 1 && selectedToken?.tradepair?.limit_trade === false) {
         setDisabled(true)
 
@@ -181,12 +376,15 @@ const BuySellCard = (props: DynamicId) => {
         return;
       }
       else {
+        // Get the selected market type (buy/sell)
         let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
 
+        // Validate if the user has selected a coin for the transaction
         if (firstCurrency === '') {
           setError('token_amount', { type: 'custom', message: 'Please select coin that you want to buy.' });
           return
         }
+        // Validate if the user has sufficient balance for the transaction
         if (active1 === 1 && totalAmount > price) {
           setDisabled(true);
           toast.error('Insufficient balance.', { autoClose: 2000 });
@@ -204,6 +402,7 @@ const BuySellCard = (props: DynamicId) => {
           return;
         }
 
+        // Check if the user is exceeding the maximum allowed trade amount
         if (selectedToken?.tradepair?.maxTrade < data.token_amount) {
           setError("token_amount", {
             type: "custom",
@@ -212,6 +411,7 @@ const BuySellCard = (props: DynamicId) => {
           return;
         }
 
+        // Prepare the order object with necessary information
         let obj = {
           "user_id": props.session.user.user_id,
           "token_id": selectedToken?.id,
@@ -229,20 +429,34 @@ const BuySellCard = (props: DynamicId) => {
         setObjData(obj)
         setActive(true)
       }
-
-
-
     } catch (error: any) {
       toast.error(error);
     }
-
   }
 
+  /**
+   * Handles the process of submitting a market order, including encryption of order data,
+   * making a POST request to the server, and performing additional actions based on the response.
+   * 
+   * This function first encrypts the order data (`objData`) and sends it to the server as a POST request.
+   * If the server responds with a success status, it resets form fields, clears the selected token, and
+   * sends a WebSocket message to update the market status. Additionally, after a short delay, the function
+   * sends a partial execution request for the market order.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the action is complete.
+   * @throws {Error} If an error occurs during the fetch request or encryption process.
+   * 
+   * @example
+   * // Example usage when the user performs an action:
+   * await actionPerform();  // Submits the market order and handles the response.
+   */
   const actionPerform = async () => {
     try {
+      // Encrypt the order data and prepare it for transmission
       const ciphertext = AES.encrypt(JSON.stringify(objData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record = encodeURIComponent(ciphertext.toString());
 
+      // Send the encrypted order data to the server via POST request
       let reponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market`, {
         method: "POST",
         headers: {
@@ -252,6 +466,7 @@ const BuySellCard = (props: DynamicId) => {
         body: JSON.stringify(record)
       }).then(response => response.json());
 
+      // Handle successful response from the server
       if (reponse.data.status === 200) {
         toast.success(reponse.data?.data?.message);
         setFirstCurrency('');
@@ -265,6 +480,7 @@ const BuySellCard = (props: DynamicId) => {
         setEstimateFee(0.00)
         setTotalAmount(0.0)
         setActive(false);
+        // Send a WebSocket message to update the market status
         if (wbsocket) {
           let withdraw = {
             ws_type: 'market',
@@ -272,9 +488,6 @@ const BuySellCard = (props: DynamicId) => {
           wbsocket.send(JSON.stringify(withdraw));
         }
 
-        /**
-         * After order create here is partial execution request send to auto execute
-         */
         setTimeout(async () => {
           let partialObj = {
             "user_id": props.session.user.user_id,
@@ -324,11 +537,23 @@ const BuySellCard = (props: DynamicId) => {
     }
   }
 
+  /**
+ * Calculates and updates the total amount and estimated fee based on the selected market type,
+ * token amount, and limit price. 
+ * 
+ * If the market type is "limit", the calculation is done using the `limit_usdt` value. If it's "market",
+ * the total amount is calculated using the `selectedToken.price`. The fee is calculated as a 0.1% fee on
+ * the total amount.
+ * 
+ * If no valid values are provided for token amount or limit price, the total amount is set to 0.00.
+ */
   const convertTotalAmount = () => {
+    // Check if the token amount is empty
     if (getValues('token_amount')?.toString() === '') {
       setTotalAmount(0.00);
       return;
     }
+    // Get the selected market type (either 'market' or 'limit')
     let type = document.querySelector('input[name="market_type"]:checked') as HTMLInputElement | null;
 
     if (type?.value === 'limit') {
@@ -336,32 +561,39 @@ const BuySellCard = (props: DynamicId) => {
         setTotalAmount(0.00);
         return;
       }
+      // Get the token amount and limit price from form values
       let qty: any = getValues('token_amount');
       let amount: any = getValues('limit_usdt');
 
+      // Calculate total amount and fee
       let totalAmount = qty * amount;
-      let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),8) : truncateNumber((amount * qty * 0.001),8);
+      let fee: any = active1 === 1 ? truncateNumber((qty * 0.001), 8) : truncateNumber((amount * qty * 0.001), 8);
 
       setEstimateFee(fee);
       setTotalAmount(totalAmount);
     }
     else {
-
-      
+      // If the market type is not 'limit', calculate based on the selected token's price
       let qty: any = getValues('token_amount');
       let totalAmount = qty * selectedToken?.price;
-      let fee: any = active1 === 1 ? truncateNumber((qty * 0.001),8) : truncateNumber((selectedToken?.price * qty * 0.001),8);
+      let fee: any = active1 === 1 ? truncateNumber((qty * 0.001), 8) : truncateNumber((selectedToken?.price * qty * 0.001), 8);
 
       setEstimateFee(fee);
       setTotalAmount(totalAmount);
     }
   }
 
+  /**
+ * Fetches the assets for the user from the API and updates the state.
+ * 
+ * This function sends a GET request to fetch the user's assets using their user ID
+ * and access token from the session. On success, it updates the `userAssets` state
+ * with the fetched data. If an error occurs during the fetch process, it displays
+ * an error message using a toast notification.
+ */
   const getAssets = async () => {
     try {
-      /**
-      * Get user assets data after order create
-      */
+      // Fetch user assets from the API
       let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${props.session?.user?.user_id}`, {
         method: "GET",
         headers: {
@@ -376,16 +608,6 @@ const BuySellCard = (props: DynamicId) => {
 
     }
   }
-
-  // useEffect(() => {
-  //   let radioCta = document.querySelector(".custom-radio") as HTMLInputElement | null;
-  //   let prevSibling: ChildNode | null | undefined = radioCta?.previousSibling;
-  //   if (prevSibling instanceof HTMLElement) {
-  //     prevSibling.click();
-  //   }
-
-  // }, []);
-
 
   return (
     <>

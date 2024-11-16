@@ -58,15 +58,21 @@ const FutureTrading = (props: Session) => {
     const [opnlong, setOpnlong] = useState('long');
     const router = useRouter();
     const { slug } = router.query;
-    // const [slugs, setSlugs] = useState(slug)
     const slugRef = useRef(slug); // Store the current slug
-
     const [rewardsTotalPoint, setRewardsTotalPoint] = useState(props?.totalPoint);
     const wbsocket = useWebSocket();
+    const socketListenerRef = useRef<(event: MessageEvent) => void>();
 
-
-
-
+    /**
+     * Initializes leverage and margin mode from local storage.
+     * - Retrieves `leverage` from `localStorage` if available.
+     * - Sets the margin mode to `Isolated` with the stored leverage value if found.
+     *
+     * Dependencies:
+     * - Empty dependency array `[]` ensures this effect runs only once, on mount.
+     *
+     * @function useEffect
+     */
     useEffect(() => {
         const savedLeverage = typeof window !== 'undefined' && localStorage.getItem('leverage');
         if (savedLeverage) {
@@ -74,16 +80,29 @@ const FutureTrading = (props: Session) => {
         }
     }, []);
 
+    /**
+     * Updates the state and fetches data when the `slug` changes.
+     * - Updates the `slugRef` with the new `slug`.
+     * - Filters the `coinList` to find the matching coin data based on the `slug`.
+     * - Sets `minTrade` and `maxTrade` from the filtered coin data if available.
+     * - Calls various functions to fetch user-related and coin-related data:
+     *   - `getUserFuturePositionData()`
+     *   - `getUserOpenOrderData()`
+     *   - `getUserFuturePositionHistoryData()`
+     *   - `getUserFutureOpenOrderHistoryData()`
+     *   - `getCoinHLOCData()`
+     *   - `getPositionOrderBook()`
+     *
+     * Dependencies:
+     * - `slug`: The effect runs whenever the `slug` value changes.
+     *
+     * @function useEffect
+     */
     useEffect(() => {
-
         slugRef.current = slug;
-
         let ccurrentToken = props.coinList.filter((item: any) => {
             return item.coin_symbol + item.usdt_symbol === slug
         })
-
-
-
         if (ccurrentToken && ccurrentToken?.length > 0) {
             setMinTrade(ccurrentToken[0]?.coin_min_trade)
             setMaxTrade(ccurrentToken[0]?.coin_max_trade)
@@ -98,12 +117,35 @@ const FutureTrading = (props: Session) => {
 
     }, [slug]);
 
-    const socketListenerRef = useRef<(event: MessageEvent) => void>();
+
+    /**
+     * Establishes a WebSocket connection to listen for incoming messages.
+     * - The effect listens for the `message` event on the `wbsocket`.
+     * - Depending on the event type (`price` or `position`), different actions are triggered:
+     *   - If the event type is `price`, it triggers the following functions:
+     *     - `refreshTokenList()`
+     *     - `getUserFuturePositionData()`
+     *     - `getUserOpenOrderData()`
+     *     - `getUserFuturePositionHistoryData()`
+     *     - `getUserFutureOpenOrderHistoryData()`
+     *   - If the event type is `position`, it triggers the following functions:
+     *     - `refreshWalletAssets()`
+     *     - `getUserFuturePositionData()`
+     *     - `getUserOpenOrderData()`
+     *     - `getUserFuturePositionHistoryData()`
+     *     - `getUserFutureOpenOrderHistoryData()`
+     *     - `getCoinHLOCData()`
+     *     - `getPositionOrderBook()`
+     *
+     * - The `handleSocketMessage` function is added as an event listener on the `wbsocket` for `message` events.
+     * - The event listener is cleaned up when the component is unmounted or the `wbsocket` changes.
+     *
+     * Dependencies:
+     * - `wbsocket`: The effect runs whenever the `wbsocket` object changes.
+     *
+     * @function useEffect
+     */
     useEffect(() => {
-
-        // console.log(slug,"===slug in "); 
-
-
         const handleSocketMessage = async (event: any) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
@@ -117,7 +159,7 @@ const FutureTrading = (props: Session) => {
             }
 
             if (eventDataType === 'position') {
-                
+
                 await refreshWalletAssets();
                 getUserFuturePositionData();
                 getUserOpenOrderData();
@@ -143,32 +185,52 @@ const FutureTrading = (props: Session) => {
         };
     }, [wbsocket]);
 
-    // ===================================== //
-    // Refresh token list after price update //
-    // ===================================== //
+    /**
+     * Fetches and updates the list of available tokens and the current token.
+     * 
+     * - Makes a GET request to the `/future` endpoint to retrieve a list of tokens.
+     * - Filters the tokens to find the current token based on the `slugRef.current` value, which combines the coin symbol and USDT symbol.
+     * - Updates the state with the current token and the full list of all tokens.
+     * 
+     * Dependencies:
+     * - `slugRef.current`: The combination of coin symbol and USDT symbol used to filter the token list.
+     * 
+     * @async
+     * @function refreshTokenList
+     */
     const refreshTokenList = async () => {
+        try {
+            let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future?qu=all`, {
+                method: "GET"
+            }).then(response => response.json());
+            let ccurrentToken = tokenList?.data.filter((item: any) => {
+                return (item.coin_symbol + item.usdt_symbol) === slugRef.current
+            })
+            setCurrentToken(ccurrentToken);
+            setAllCoins(tokenList?.data);
+        } catch (error) {
+            console.log(error);
 
-        let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future?qu=all`, {
-            method: "GET"
-        }).then(response => response.json());
-
-
-
-        let ccurrentToken = tokenList?.data.filter((item: any) => {
-            return (item.coin_symbol + item.usdt_symbol) === slugRef.current
-        })
-
-        setCurrentToken(ccurrentToken);
-        setAllCoins(tokenList?.data);
-
+        }
     }
 
-    // ================================================ //
-    // Get future position order mean market type order //
-    // ================================================ //
+    /**
+     * Fetches the user's future position data and updates the state.
+     * 
+     * - Calls `refreshWalletAssets` to refresh wallet data before fetching position data.
+     * - Makes a GET request to the `/future/position` endpoint, passing the user's ID and access token for authorization.
+     * - Updates the state with the fetched position data.
+     * 
+     * Dependencies:
+     * - `props?.session`: The session object containing the user's `user_id` and `access_token`, used for authorization.
+     * - `setPositionData`: Function to update the state with the fetched position data.
+     * 
+     * @async
+     * @function getUserFuturePositionData
+     */
     const getUserFuturePositionData = async () => {
         try {
-          await  refreshWalletAssets()
+            await refreshWalletAssets()
             if (props?.session) {
                 let positionData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/position?userid=${props?.session?.user?.user_id}`, {
                     method: "GET",
@@ -186,9 +248,19 @@ const FutureTrading = (props: Session) => {
         }
     }
 
-    // ============================================================== //
-    // Get future open order mean limit type, TP/SL, Stop Limit order //
-    // ============================================================== //
+    /**
+     * Fetches the user's open orders and updates the state.
+     * 
+     * - Makes a GET request to the `/future/openorder` endpoint, passing the user's ID and access token for authorization.
+     * - If the response contains data (and no errors), it updates the state with the user's open orders.
+     * 
+     * Dependencies:
+     * - `props?.session`: The session object containing the user's `user_id` and `access_token`, used for authorization.
+     * - `setOpenOrders`: Function to update the state with the fetched open orders.
+     * 
+     * @async
+     * @function getUserOpenOrderData
+     */
     const getUserOpenOrderData = async () => {
         try {
             if (props?.session) {
@@ -212,15 +284,45 @@ const FutureTrading = (props: Session) => {
         }
     }
 
+    /**
+     * Sets the margin mode and leverage for the trading account.
+     * 
+     * - Updates the margin mode state with the provided margin type and leverage value.
+     * - Resets the popup mode to `0` and hides the overlay.
+     * 
+     * Dependencies:
+     * - `setMarginMode`: Function to update the margin mode state with the given margin type and leverage.
+     * - `setPopupMode`: Function to reset the popup mode state.
+     * - `setOverlay`: Function to hide the overlay.
+     * 
+     * @param {string} marginType - The type of margin, e.g., "Isolated" or "Cross".
+     * @param {number} leverage - The leverage value for the margin type (e.g., 10, 20, 50).
+     * 
+     * @function setMarginModeAndLeverage
+     */
     const setMarginModeAndLeverage = (marginType: string, leverage: number) => {
         setMarginMode({ margin: marginType, leverage: leverage });
         setPopupMode(0);
         setOverlay(false);
     }
 
-    // ================================================= //
-    // Get Refresh user wallet assets after order create //
-    // ================================================= //
+    /**
+     * Fetches and updates the user's wallet assets and rewards information.
+     * 
+     * - Retrieves the user's assets based on their user ID and updates the `allAssets` state.
+     * - Retrieves the user's total reward points and updates the `rewardsTotalPoint` state.
+     * 
+     * Dependencies:
+     * - `setAllAssets`: Function to update the state of all assets.
+     * - `setRewardsTotalPoint`: Function to update the state of the total rewards points.
+     * 
+     * This function makes two API calls:
+     * 1. Fetches assets with pagination (items per page: 20) for the logged-in user.
+     * 2. Fetches the total reward points for the logged-in user.
+     * 
+     * @async
+     * @function refreshWalletAssets
+     */
     const refreshWalletAssets = async () => {
         let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${props?.session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
             method: "GET",
@@ -241,9 +343,19 @@ const FutureTrading = (props: Session) => {
         setRewardsTotalPoint(rewardsList?.data?.total);
     }
 
-    // ================================================ //
-    // Get future position order history //
-    // ================================================ //
+    /**
+     * Fetches and updates the user's future position history data.
+     * 
+     * - Retrieves the historical position data for the user based on their user ID and updates the `positionHistoryData` state.
+     * 
+     * Dependencies:
+     * - `setPositionHistoryData`: Function to update the state of the user's future position history.
+     * 
+     * This function makes an API call to retrieve the user's historical position data for future trading, based on the user's session and access token.
+     * 
+     * @async
+     * @function getUserFuturePositionHistoryData
+     */
     const getUserFuturePositionHistoryData = async () => {
         try {
             if (props?.session) {
@@ -261,9 +373,19 @@ const FutureTrading = (props: Session) => {
         }
     }
 
-    // ================================================ //
-    // Get future open order history //
-    // ================================================ //
+    /**
+     * Fetches and updates the user's future open order history data.
+     * 
+     * - Retrieves the user's historical open order data for future trading and updates the `openOrderHistoryData` state.
+     * 
+     * Dependencies:
+     * - `setOpenOrderHistoryData`: Function to update the state with the user's future open order history.
+     * 
+     * This function makes an API call to retrieve the user's historical open orders related to future trading, based on the user's session and access token.
+     * 
+     * @async
+     * @function getUserFutureOpenOrderHistoryData
+     */
     const getUserFutureOpenOrderHistoryData = async () => {
         try {
             if (props?.session) {
@@ -281,9 +403,21 @@ const FutureTrading = (props: Session) => {
         }
     }
 
-    // ================================================ //
-    // Get future Contract top bar HLOC data //
-    // ================================================ //
+    /**
+     * Fetches and updates the HLOC (High, Low, Open, Close) data for the selected coin.
+     * 
+     * - Retrieves HLOC data for the coin identified by `props.serverSlug` and updates the `topHLOCData` state.
+     * - Makes an API call to fetch the topbar HLOC data using the coin ID from the `props.coinList`.
+     * 
+     * Dependencies:
+     * - `setTopHLOCData`: Function to update the state with the fetched HLOC data.
+     * - `props.coinList`: List of coins that includes the `coin_symbol` and `usdt_symbol` used to filter the coin.
+     * - `props.serverSlug`: The slug used to filter the coin and identify the selected coin.
+     * - `props.session?.user?.access_token`: The user's authentication token required for the API call.
+     * 
+     * @async
+     * @function getCoinHLOCData
+     */
     const getCoinHLOCData = async () => {
         try {
             // console.log("herer");
@@ -305,9 +439,20 @@ const FutureTrading = (props: Session) => {
         }
     }
 
-    // ================================================ //
-    // Get future Contract order book data //
-    // ================================================ //
+    /**
+     * Fetches and updates the order book data for the selected coin.
+     * 
+     * - Retrieves the order book data for the coin identified by `props.serverSlug` and updates the `positionRecord` state.
+     * - Makes an API call to fetch the order book data for the coin using the coin ID from `props.coinList`.
+     * 
+     * Dependencies:
+     * - `setPositionRecord`: Function to update the state with the fetched order book data.
+     * - `props.coinList`: List of coins that includes the `coin_symbol` and `usdt_symbol` used to filter the coin.
+     * - `props.serverSlug`: The slug used to filter the coin and identify the selected coin.
+     * 
+     * @async
+     * @function getPositionOrderBook
+     */
     const getPositionOrderBook = async () => {
         try {
 
@@ -432,6 +577,30 @@ const FutureTrading = (props: Session) => {
 
 export default FutureTrading;
 
+/**
+ * Server-side function to fetch and provide necessary data to the page component.
+ * 
+ * This function fetches the following:
+ * - User session data using `getServerSession` to check if the user is authenticated.
+ * - A list of available tokens for the future market from `/future?qu=all`.
+ * - User assets data from `/assets` and rewards data from `/rewards`, if the user is authenticated.
+ * - The slug from the query parameters to identify a specific coin.
+ * 
+ * The returned props are passed to the page component, which includes:
+ * - `session`: The authenticated user session object.
+ * - `sessions`: Duplicate of `session` for potential use in the page component.
+ * - `provider`: The authentication providers fetched from `getProviders()`.
+ * - `coinList`: A list of tokens available for trading in the future market.
+ * - `assets`: The user's assets retrieved from the `/assets` API.
+ * - `serverSlug`: The slug parameter from the query, used to identify a coin.
+ * - `rewardsList`: The list of rewards associated with the user.
+ * - `totalPoint`: The total reward points available for the user.
+ * 
+ * @async
+ * @function getServerSideProps
+ * @param {GetServerSidePropsContext} context - The context object provided by Next.js containing request (`req`) and response (`res`).
+ * @returns {Promise<object>} The props object to be passed to the page component.
+ */
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const { req } = context;
     const session = await getServerSession(context.req, context.res, authOptions);

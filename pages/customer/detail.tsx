@@ -4,6 +4,14 @@ import RecentPosts from '@/components/news/recent-posts'
 import Meta from '@/components/snippets/meta'
 import React from 'react'
 
+/**
+ * Detail Component.
+ * This component renders the detailed page for crypto news, including the main news content,
+ * recent posts, and a contact form for user engagement. The page also sets meta tags for SEO 
+ * to ensure it is properly indexed by search engines with relevant title and description.
+ * 
+ * @returns {JSX.Element} The rendered News Detail page.
+ */
 const Detail = () => {
   return (
     <>

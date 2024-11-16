@@ -8,10 +8,26 @@ import Deposit from "../deposit";
 import { currencyFormatter } from "./buySellCard";
 import { abbreviateNumber } from "@/components/chart/chart-tabs";
 
+/**
+ * Represents the properties used in the Future component or feature.
+ * Contains data related to coins, user session, and networks.
+ */
 interface propsData {
-  coins: any;
-  session: any;
-  networks: any;
+  /**
+     * The list of coins available in the system.
+     * @type {any} - The type here can be updated based on the actual data structure for coins.
+     */
+  coins: any,
+  /**
+   * The session data of the user, typically containing authentication details and user info.
+   * @type {any} - The type here can be updated based on the session structure.
+   */
+  session: any,
+  /**
+   * The networks available or associated with the user or application.
+   * @type {any} - The type here can be updated based on the network structure.
+   */
+  networks: any
 }
 
 const NewListing = (props: propsData) => {
@@ -27,6 +43,12 @@ const NewListing = (props: propsData) => {
   const currentItems = props?.coins?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(props?.coins?.length / itemsPerPage);
 
+  /**
+     * Handles the page click event for pagination and calculates the new offset
+     * to display the correct page of items.
+     * 
+     * @param event - The pagination event, typically containing information about the selected page (event.selected).
+     */
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % props?.coins?.length;
     setItemOffset(newOffset);

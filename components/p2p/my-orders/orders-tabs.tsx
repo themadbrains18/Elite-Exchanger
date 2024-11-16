@@ -2,18 +2,49 @@ import React, { useState } from 'react'
 import OrdersTableDesktop from './orders-table-desktop';
 import OrdersTableMobile from './orders-table-mobile';
 import ReactDatePicker from 'react-datepicker';
-import FiliterSelectMenu from '@/components/snippets/filter-select-menu';
 import FilterSelectMenuWithCoin from '@/components/snippets/filter-select-menu-with-coin';
 
-interface propsData {
+/**
+ * Props interface for the OrdersTabs component.
+ *
+ * This interface defines the props expected by the OrdersTabs component, including
+ * data related to the order list, payment methods, and coin options.
+ *
+ * @interface OrdersTabsPropsData
+ */
+interface OrdersTabsPropsData {
+    /**
+     * The list of orders to display in the tab.
+     * @type {any}
+     */
     orderList?: any;
+
+    /**
+     * A function to set the selected order ID.
+     * @type {any}
+     */
     setOrderId?: any;
+
+    /**
+     * The list of available coins or tokens.
+     * @type {any}
+     */
     coinList?: any;
+
+    /**
+     * The master payment method list for the user.
+     * @type {any}
+     */
     masterPayMethod?: any;
+
+    /**
+     * The user’s selected payment method.
+     * @type {any}
+     */
     userPaymentMethod?: any;
 }
 
-const OrdersTabs = (props: propsData) => {
+const OrdersTabs = (props: OrdersTabsPropsData) => {
 
     const [active, setActive] = useState(1);
 
@@ -23,9 +54,18 @@ const OrdersTabs = (props: propsData) => {
     const [startDate, setStartDate] = useState<any>();
     const [value, setValue] = useState(""); // For currency dropdown
 
-
+    /**
+     * Sets the currency symbol and updates the related token information.
+     *
+     * This function updates the first currency symbol, filters the coin list to 
+     * find the selected token based on the symbol, and sets the selected token and 
+     * the input value accordingly.
+     *
+     * @param {string} symbol - The currency symbol to set (e.g., 'USD', 'BTC').
+     * @param {number} dropdown - The dropdown identifier. If it's 1, the function
+     *                             updates the first currency and selects the token.
+     */
     const setCurrencyName = (symbol: string, dropdown: number) => {
-
         if (dropdown === 1) {
             setFirstCurrency(symbol);
             let token = props?.coinList?.filter((item: any) => {
@@ -36,14 +76,24 @@ const OrdersTabs = (props: propsData) => {
         }
     }
 
-    const onPaymentMethodChange = (id: any) => {
-        setPaymentId(id);
-    }
-
+    /**
+     * Updates the start date state with the selected date.
+     *
+     * This function is triggered when a date is selected. It updates the `startDate` 
+     * state to the selected value.
+     *
+     * @param {any} date - The selected date to be set as the start date.
+     */
     const handleDate = (date: any) => {
         setStartDate(date);
     };
 
+    /**
+     * Clears the form values and resets the state.
+     *
+     * This function resets the input value, selected token, and the start date 
+     * to their initial states, effectively clearing the form.
+     */
     const clearAll = () => {
         setValue('')
         setSelectedToken('')
@@ -89,7 +139,7 @@ const OrdersTabs = (props: propsData) => {
                 </div>
                 <div className='flex md:flex-nowrap flex-wrap items-center gap-10 w-full lg:w-auto md:p-0 pb-[15px] md:!border-none border-b-[0.5px]  dark:border-[#efefef26] border-grey-v-2'>
                     <div className='relative max-w-full md:max-w-[50%] w-full'>
-                        <FilterSelectMenuWithCoin data={props?.coinList} border={true} dropdown={1} setCurrencyName={setCurrencyName} value={value}/>
+                        <FilterSelectMenuWithCoin data={props?.coinList} border={true} dropdown={1} setCurrencyName={setCurrencyName} value={value} />
                     </div>
 
                     <div className=' max-w-full md:max-w-[50%] w-full'>

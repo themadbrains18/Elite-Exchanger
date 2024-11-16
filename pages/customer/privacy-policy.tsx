@@ -1,6 +1,13 @@
 import Meta from '@/components/snippets/meta'
 import React from 'react'
 
+/**
+ * PrivacyPolicy Component.
+ * This component renders the Privacy Policy page, including a meta tag for SEO.
+ * It provides an overview of the privacy policy with a section displaying the page title.
+ * 
+ * @returns {JSX.Element} The rendered Privacy Policy page.
+ */
 const PrivacyPolicy = () => {
     return (
         <>

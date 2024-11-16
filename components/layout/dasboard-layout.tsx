@@ -12,24 +12,13 @@ const DasboardLayout = (props: child) => {
     let userPermission = ['admin','superadmin'];
 
     useEffect(() => {
-
-        // console.log(session?.user?.role,'===========session user roel====');
-        
         if (session !== null && userPermission.includes(session?.user?.role)) {
-
-            // console.log('=============heher============');
-            // signOut({
-            //     redirect: true,
-            //     callbackUrl: '/login'
-            // })
         } else {
-
             signOut({
                 redirect: true,
                 callbackUrl: '/login'
             })
         }
-
     }, [])
 
     return (

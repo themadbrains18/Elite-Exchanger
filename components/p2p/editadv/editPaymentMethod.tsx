@@ -18,7 +18,25 @@ const schema = yup.object().shape({
   payment_time: yup.string().optional().default('15'),
 });
 
-interface activeSection {
+/**
+ * Props interface for the EditPaymentMethod component.
+ * 
+ * This interface defines the structure of the props that are passed to the `EditPaymentMethod` 
+ * component. It includes information for managing form steps, payment methods, asset balances, 
+ * and edit post data.
+ * 
+ * @interface EditPaymentMethodProps
+ * @property {number} step - The current step in the form process.
+ * @property {function} setStep - A function to update the current step.
+ * @property {function} [setPaymentMethod] - A function to set the payment method in step 1 (optional).
+ * @property {any} [masterPayMethod] - The master payment method data (optional).
+ * @property {any} [userPaymentMethod] - The user's selected payment method data (optional).
+ * @property {any} [selectedAssets] - The assets selected for the payment method (optional).
+ * @property {any} [assetsBalance] - The balance of the selected assets (optional).
+ * @property {any} [price] - The price related to the payment method or asset (optional).
+ * @property {any} [editPost] - The data for the post to be edited (optional).
+ */
+interface EditPaymentMethodProps {
   step: number;
   setStep: any;
   setPaymentMethod?: any; //function call that in step 1
@@ -30,7 +48,7 @@ interface activeSection {
   editPost?: any;
 }
 
-const EditPaymentMethod = (props: activeSection) => {
+const EditPaymentMethod = (props: EditPaymentMethodProps) => {
   const [show, setShow] = useState(false)
   const [active, setActive] = useState(0)
   const [formMethod, setFormMethod] = useState();
@@ -41,9 +59,19 @@ const EditPaymentMethod = (props: activeSection) => {
   const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
   const [reduceValue, setReduceValue] = useState<Number | any>(props.assetsBalance || 0);
 
-
-
-
+  /**
+   * `useEffect` hook to handle setting initial values and updating form data when the `editPost` prop changes.
+   * 
+   * This effect runs when the `props.editPost` changes and performs several operations:
+   * - Sets the form values for `quantity` and `min_limit` from the `editPost` data.
+   * - Computes the `reduceValue` based on `assetsBalance` (formatted to a maximum of 6 decimal places).
+   * - Computes the `max_limit` based on either the provided `price` and `quantity` or the `editPost.max_limit`.
+   * - Sorts the `userPaymentMethod` array by `pm_name` (payment method name).
+   * - Sets the selected payment methods (`p_method`) from the `editPost` object.
+   * - Updates the `p_method` form field with the selected methods.
+   * 
+   * The effect also formats and truncates certain values using the `truncateNumber` function to ensure the correct number of decimals for price and limits.
+   */
   useEffect(() => {
     // console.log(props.assetsBalance,"=props.assetsBalance");
     setValue('quantity', props?.editPost?.quantity);
@@ -51,8 +79,7 @@ const EditPaymentMethod = (props: activeSection) => {
     let total = props.assetsBalance && props.assetsBalance.toString().match(/^-?\d+(?:\.\d{0,6})?/)[0];
     setReduceValue(total);
     let max_limit = props?.editPost?.price !== props.price ? truncateNumber(props.price * props?.editPost?.quantity, 6) : truncateNumber(props?.editPost?.max_limit, 6)
-    setValue('max_limit',Number(truncateNumber(max_limit, 6)));
-
+    setValue('max_limit', Number(truncateNumber(max_limit, 6)));
 
     let sortedPaymentMethods = props.userPaymentMethod?.sort((a: any, b: any) => {
       if (a.pm_name < b.pm_name) return -1;
@@ -67,7 +94,6 @@ const EditPaymentMethod = (props: activeSection) => {
       // console.log(item);
       method.push(item?.upm_id);
     })
-
 
     setSelectedMethods(method)
     setValue('p_method', method);
@@ -91,8 +117,17 @@ const EditPaymentMethod = (props: activeSection) => {
     resolver: yupResolver(schema),
   });
 
+  /**
+   * Handles the form submission by validating the input data, checking balance constraints, and managing form flow.
+   *
+   * This function is triggered when the user submits the form. It performs the following:
+   * 1. **Min-Max Limit Validation**: It checks if the `min_limit` is greater than the `max_limit`. If true, an error is set on the `min_limit` field and focus is set to it.
+   * 2. **Balance Validation**: It ensures the `quantity` is within the user's available balance. If the balance is insufficient or the quantity exceeds the available balance, an error is set on the `quantity` field and focus is set to it.
+   * 3. **Payment Method and Step Update**: If all validations pass, it updates the payment method and proceeds to the next step in the form flow.
+   *
+   * @param {any} data - The form data containing `min_limit`, `max_limit`, and `quantity`.
+   */
   const onHandleSubmit = async (data: any) => {
-
     if (data.min_limit > data.max_limit) {
       setError("min_limit", {
         type: "custom",
@@ -101,15 +136,9 @@ const EditPaymentMethod = (props: activeSection) => {
       setFocus("min_limit");
       return;
     }
-    // console.log(data.quantity,"=data.quantity", typeof data.quantity);
-    // console.log(props.assetsBalance,"=props.assetsBalance", typeof props.assetsBalance);
-    // console.log(props?.editPost?.quantity,"=props?.editPost?.quantity", typeof props?.editPost?.quantity);
-
-
     if (data.quantity <= (props.assetsBalance + truncateNumber(Number(props?.editPost?.quantity), 6)) || data.quantity == props?.editPost?.quantity) {
       props.setPaymentMethod(data);
       props.setStep(3);
-
     }
     else {
       setError("quantity", {
@@ -121,6 +150,16 @@ const EditPaymentMethod = (props: activeSection) => {
     }
   }
 
+  /**
+   * Handles input validation for the quantity field and calculates the max limit based on the input value.
+   *
+   * This function is triggered whenever the user enters a value in the quantity field. It performs the following:
+   * 1. **Input Validation**: Ensures the value entered matches the pattern for numbers with up to 6 decimal places.
+   * 2. **Balance Check**: Verifies if the entered quantity is within the user's available balance. If the balance is sufficient, it calculates and updates the `max_limit` field.
+   * 3. **Error Handling**: If the balance is insufficient, it displays an error message on the `quantity` field and prevents further submission.
+   *
+   * @param {any} e - The event triggered by the input change containing the value entered by the user.
+   */
   const checkBalnce = (e: any) => {
     const value = e.target.value;
     if (/^\d*\.?\d{0,6}$/.test(value)) {
@@ -128,7 +167,7 @@ const EditPaymentMethod = (props: activeSection) => {
     }
     if (e.target.value <= (props.assetsBalance + truncateNumber(Number(props?.editPost?.quantity), 6)) || e.target.value == inputValue) {
 
-      let maxLimit =truncateNumber(props.price * e.target.value, 6);
+      let maxLimit = truncateNumber(props.price * e.target.value, 6);
 
       setValue('max_limit', maxLimit);
       setMaxInputValue(maxLimit);
@@ -146,6 +185,18 @@ const EditPaymentMethod = (props: activeSection) => {
     }
   }
 
+  /**
+   * Handles input validation and updates for minimum and maximum limit fields.
+   *
+   * This function is triggered whenever the user enters a value in either the minimum or maximum limit fields.
+   * It performs the following:
+   * 1. **Input Validation**: Ensures the value entered matches the pattern for numbers with up to 6 decimal places.
+   * 2. **Min-Max Validation**: If the minimum value is greater than the maximum value, an error message is shown.
+   * 3. **Error Handling**: Clears the error if the condition is met (min value <= max value), otherwise, sets the error for `min_limit`.
+   *
+   * @param {any} e - The event triggered by the input change containing the value entered by the user.
+   * @param {string} type - The type of the input field, either "min" for minimum limit or "max" for maximum limit.
+   */
   const checkInput = (e: any, type: string) => {
     const value = e.target.value;
     if (/^\d*\.?\d{0,6}$/.test(value)) {
@@ -156,6 +207,19 @@ const EditPaymentMethod = (props: activeSection) => {
       value > maxInputValue ? setError('min_limit', { type: "custom", message: "Min limit must be less than max limit." }) : clearErrors('min_limit'); setMinInputValue(value)
     }
   }
+
+  /**
+   * Handles the change event for a checkbox input, updating the selected payment methods.
+   *
+   * This function is triggered when a user interacts with a checkbox. It adds or removes the payment method from 
+   * the `selectedMethods` array based on whether the checkbox is checked or unchecked.
+   * If the checkbox is checked and there are fewer than 5 selected methods, it adds the method to the list.
+   * If the checkbox is unchecked, it removes the method from the list.
+   *
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The change event triggered by the checkbox input.
+   * @param {string} e.target.value - The value associated with the checkbox input, representing a payment method.
+   * @param {boolean} e.target.checked - The checked state of the checkbox input, indicating whether it is selected or not.
+   */
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
 
@@ -172,7 +236,15 @@ const EditPaymentMethod = (props: activeSection) => {
     }
   };
 
-
+  /**
+ * Determines if a checkbox should be disabled based on the number of selected payment methods.
+ *
+ * This function checks if the maximum limit of 5 selected payment methods has been reached. If the limit is
+ * reached and the current method is not already selected, it disables the checkbox.
+ *
+ * @param {string} value - The value of the payment method associated with the checkbox.
+ * @returns {boolean} - Returns `true` if the checkbox should be disabled (i.e., if the max limit is reached and the method is not selected), `false` otherwise.
+ */
   const isCheckboxDisabled = (value: string) => {
     return selectedMethods.length >= 5 && !selectedMethods.includes(value);
   };

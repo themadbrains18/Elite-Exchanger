@@ -6,52 +6,109 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 
-interface propsData {
+/**
+ * Interface for the PaymentMethod component's props, which handle the user's order and payment method.
+ * 
+ * @interface PaymentMethodProps
+ * 
+ * @property {any} [userOrder] - An optional property representing the user's order details. This can include
+ *   information such as the order ID, status, amount, or any other relevant order details.
+ * 
+ * @property {any} [setPaymentMethod] - An optional callback function that is used to set the payment method
+ *   for the user. This function will likely be triggered when the user selects a payment method.
+ */
+interface PaymentMethodProps {
     userOrder?: any;
     setPaymentMethod?: any;
 }
 
-const SlectPaymentMethod = (props: propsData) => {
+const SlectPaymentMethod = (props: PaymentMethodProps) => {
 
     const { status, data: session } = useSession();
     const [sellerUser, setSellerUser] = useState<any>({});
+
+    /**
+     * Toggles the visibility of a sibling element and adjusts its height.
+     * This function detects if the browser is Safari and applies a specific height adjustment 
+     * for Safari users.
+     * 
+     * @function showOpt
+     * 
+     * @param {any} e - The event object triggered when the user interacts with an element.
+     *   It is used to locate the parent element and its next sibling to modify visibility and height.
+     * 
+     * @description 
+     * - The function first checks if the browser is Safari using the user-agent string.
+     * - If Safari is detected, it adjusts the height of the next sibling element to a fixed value (350px or 0).
+     * - If the parent element contains the class `show`, it will expand the next sibling element's height.
+     * - If the `show` class is removed, the height is reset.
+     */
     const showOpt = (e: any) => {
         let parent = e?.currentTarget?.closest(".parent");
         let nextSiblibg = parent?.nextElementSibling;
         let nextSiblibgHeight = nextSiblibg?.scrollHeight;
-    
+
         // Detect if the browser is Safari
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    
+
         if (isSafari) {
             // Set height to 50% less if on Safari
             let scaner = document.querySelector("#scaner");
-            if(scaner){
+            if (scaner) {
                 nextSiblibgHeight = nextSiblibgHeight ? 350 : 0;
             }
         }
-    
+
         parent?.classList?.toggle("show");
-    
+
         if (parent?.classList?.contains("show")) {
             nextSiblibg?.setAttribute("style", `height:${nextSiblibgHeight}px;`);
         } else {
             nextSiblibg?.removeAttribute("style");
         }
     }
-    
+
     const [payment_method, setPaymentMethod] = useState([]);
-    
+
     const [orderDetail, setOrderDetail] = useState<any>({});
     const router = useRouter();
     const { query } = router;
     const wbsocket = useWebSocket();
     const socketListenerRef = useRef<(event: MessageEvent) => void>();
 
+    /**
+     * Effect hook that fetches order data when the component is mounted or when `query` or `wbsocket` changes.
+     * It listens for incoming WebSocket messages related to the order and triggers an update when new messages are received.
+     * 
+     * @effect
+     * 
+     * This effect does the following:
+     * - When the component is mounted or the `query` changes, it fetches the order details based on the `buy` ID from `query` by calling `getOrderByOrderId`.
+     * - It sets up a WebSocket message listener (`handleSocketMessage`) to listen for incoming messages related to order events.
+     * - If a new WebSocket message of type "order" is received, it triggers a re-fetch of the order data via `getOrderByOrderId`.
+     * - The effect cleans up by removing the WebSocket listener when the component unmounts or when `wbsocket` or `query` changes.
+     * 
+     * @param {object} query - The query object that contains the `buy` ID used to fetch the order details.
+     * @param {WebSocket} wbsocket - The WebSocket connection used to receive messages related to the order.
+     */
     useEffect(() => {
+        // Fetch order details if query is available
         if (query) {
             getOrderByOrderId(query?.buy, 'onload');
         }
+        /**
+         * Handles incoming WebSocket messages.
+         * 
+         * This function processes WebSocket events, checks if the message type is "order",
+         * and triggers a re-fetch of the order details by calling `getOrderByOrderId`.
+         * 
+         * @param {MessageEvent} event - The WebSocket message event containing the data.
+         * @returns {void}
+         * 
+         * @example
+         * // Example usage:
+         * handleSocketMessage(event);
+         */
         const handleSocketMessage = (event: any) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
@@ -75,6 +132,20 @@ const SlectPaymentMethod = (props: propsData) => {
         };
     }, [query, wbsocket]);
 
+    /**
+     * Fetches order details by order ID and updates the corresponding state values.
+     * 
+     * This function retrieves order information from the backend using the provided order ID.
+     * It updates the `orderDetail`, `sellerUser`, and `paymentMethod` states based on the fetched data.
+     * 
+     * @param {any} orderid - The ID of the order to fetch details for.
+     * @param {string} type - The type of the operation that triggered the data fetch (e.g., "onload" or "socket").
+     * @returns {void}
+     * 
+     * @example
+     * // Example usage:
+     * getOrderByOrderId('12345', 'onload');
+     */
     const getOrderByOrderId = async (orderid: any, type: string) => {
         let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {
             method: "GET",
@@ -141,11 +212,11 @@ const SlectPaymentMethod = (props: propsData) => {
                                         before:z-[1]    
                                         flex items-center gap-10
                                         ">
-                                               <span className='text-banner-text  dark:text-white'>{elem?.master_payment_method?.payment_method}</span>
+                                        <span className='text-banner-text  dark:text-white'>{elem?.master_payment_method?.payment_method}</span>
                                         <Fragment key={ind}>
                                             <Image src={`${elem?.master_payment_method?.icon}`} alt='error' width={28} height={28} />
                                         </Fragment>
-                                     
+
                                     </label>
                                     {/* <p className='info-14-18 !text-banner-heading dark:!text-white md:block hidden'>( BankName@{elem.master_payment_method?.payment_method} )</p> */}
                                 </div>
@@ -177,13 +248,13 @@ const SlectPaymentMethod = (props: propsData) => {
                                         </div>
                                     </div>
                                     <div className='text-center'>
-                                        {elem?.pmObject?.qr_code!==undefined && elem?.pmObject?.qr_code!=="notValid" &&
+                                        {elem?.pmObject?.qr_code !== undefined && elem?.pmObject?.qr_code !== "notValid" &&
                                             <>
-                                            <Image src={elem?.pmObject?.qr_code} alt='error' width={145} height={145} id='scaner' className='md:max-w-[145px] w-full max-w-[70px] md:mb-20 mx-auto rounded-[5px] bg-white p-10' />
-                                            <p className='sm-text md:block hidden !text-[12px] dark:!text-[#96969A]'>My QR Code:<span className='dark:text-grey-v-1 text-black'>&nbsp;{truncateNumber(orderDetail?.spend_amount,6)} INR</span></p>
+                                                <Image src={elem?.pmObject?.qr_code} alt='error' width={145} height={145} id='scaner' className='md:max-w-[145px] w-full max-w-[70px] md:mb-20 mx-auto rounded-[5px] bg-white p-10' />
+                                                <p className='sm-text md:block hidden !text-[12px] dark:!text-[#96969A]'>My QR Code:<span className='dark:text-grey-v-1 text-black'>&nbsp;{truncateNumber(orderDetail?.spend_amount, 6)} INR</span></p>
                                             </>
                                         }
-                                        
+
                                     </div>
                                 </div>
                             </div>

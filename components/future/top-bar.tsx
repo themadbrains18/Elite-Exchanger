@@ -16,15 +16,11 @@ const TopBar = (props: showSidebar) => {
     const [timer, setTimer] = useState("00:00:00");
     const [highlow, setHighlow] = useState<any>(true);
 
-    const [sessionTimePeriod, setSessionTimePeriod] = useState(1);
-
-    useEffect(()=>{
-
-        // console.log(props?.currentToken,"=hkjdhfs");
-        
-    },[props?.currentToken])
-
-
+    /**
+     * Calculates the remaining time between the current date and a target deadline.
+     * @param e - The target deadline to calculate the time remaining from the current time.
+     * @returns An object containing total, hours, minutes, and seconds left.
+     */
     const getTimeRemaining = (e: any) => {
         let deadline: any = new Date();
         const total = Date.parse(e) - Date.parse(deadline);
@@ -43,6 +39,10 @@ const TopBar = (props: showSidebar) => {
         };
     };
 
+    /**
+     * Starts the timer by calculating the remaining time and updating the state every second.
+     * @param e - The target deadline for the countdown timer.
+     */
     const startTimer = (e: any) => {
         let { total, hours, minutes, seconds } =
             getTimeRemaining(e);
@@ -62,6 +62,10 @@ const TopBar = (props: showSidebar) => {
         }
     };
 
+    /**
+     * Clears the current timer and sets up a new interval to update the timer.
+     * @param e - The target deadline for the countdown timer.
+     */
     const clearTimer = (e: any) => {
         setTimer("08:00:00");
         if (Ref.current) clearInterval(Ref.current);
@@ -72,10 +76,13 @@ const TopBar = (props: showSidebar) => {
         Ref.current = id;
     };
 
+    /**
+     * Calculates and returns the deadline for the current session based on the current time.
+     * Adjusts for different session periods such as "first session", "second session", and "third session".
+     * @returns The calculated deadline date object.
+     */
     const getDeadTime = () => {
-
         let date = new Date();
-
         let month = (date.getMonth() + 1).toString();
         let year = date.getFullYear();
         let day = date.getDate();
@@ -110,7 +117,7 @@ const TopBar = (props: showSidebar) => {
 
         let time = ' 00:00:00 GMT-0000';
         // first session
-        if(hour === 0 && minute <=59){
+        if (hour === 0 && minute <= 59) {
             time = ' 16:00:00 GMT-0000';
             day = day - 1;
         }
@@ -125,7 +132,7 @@ const TopBar = (props: showSidebar) => {
         }
 
         // third session
-        if (hour >= 21 && (minute <= 30 || minute >= 30 )) {
+        if (hour >= 21 && (minute <= 30 || minute >= 30)) {
             time = ' 16:00:00 GMT-0000';
         }
 
@@ -136,20 +143,21 @@ const TopBar = (props: showSidebar) => {
         return deadline;
     };
 
+    /**
+     * Initializes the countdown timer by calling the `clearTimer` function with the calculated session deadline.
+     */
     useEffect(() => {
         clearTimer(getDeadTime());
     }, []);
-    
+
     let marketPrice = props?.currentToken?.token !== null ? props?.currentToken?.token?.price.toFixed(5) : props?.currentToken?.global_token?.price.toFixed(5);
- 
+
 
     let change = ((marketPrice - props?.topHLOCData?.open) / props?.topHLOCData?.open) * 100;
 
     if (props?.topHLOCData?.open === 0) {
         change = 0.00;
     }
-
-    // let change = ((marketPrice - 42000)/42000)*100;
 
     return (
         <section className='px-[1.25rem]  py-[10px] bg-[#fafafa] dark:bg-[#1a1b1f] border-b dark:border-[#25262a] border-[#e5e7eb]'>
@@ -181,12 +189,12 @@ const TopBar = (props: showSidebar) => {
 
                         </div>
                     </div>
-                   
+
 
                     {/* coin price */}
-                    
-                    
-                    <p className={`admin-component-heading ${highlow ? '!text-buy':'!text-sell'}`}>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price,6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price,6))}</p>
+
+
+                    <p className={`admin-component-heading ${highlow ? '!text-buy' : '!text-sell'}`}>{props?.currentToken?.token !== null ? currencyFormatter(truncateNumber(props?.currentToken?.token?.price, 6)) : currencyFormatter(truncateNumber(props?.currentToken?.global_token?.price, 6))}</p>
                     <div>
                         <p className='top-label'>Mark</p>
                         <p className='top-label !text-[#000] dark:!text-[#fff]'>{props?.currentToken?.token !== null ? currencyFormatter(props?.currentToken?.token?.price.toFixed(5)) : currencyFormatter(props?.currentToken?.global_token?.price.toFixed(5))}</p>

@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { AES } from 'crypto-js';
-import {  toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { signOut, useSession } from 'next-auth/react';
 import Image from "next/image";
 import clickOutSidePopupClose from '../snippets/clickOutSidePopupClose';
@@ -12,13 +12,56 @@ import ConfirmPopupNew from '../snippets/confirm-popup-new';
 import VerificationNew from '../snippets/verificationNew';
 import Link from 'next/link';
 
-interface activeSection {
+/**
+ * Interface for the props of the TradingPassword component.
+ * 
+ * @interface TradingPasswordProps
+ */
+interface TradingPasswordProps {
+  /**
+   * Optional function to control the visibility of a modal or popup.
+   * This might be used to show or hide the trading password modal.
+   * 
+   * @type {Function | any}
+   */
   setShow?: any;
+  /**
+   * Optional function to set the trade password.
+   * This function might be used to update the trade password in the state.
+   * 
+   * @type {Function | any}
+   */
   setTradePassword?: any;
+  /**
+   * Optional session data, likely including the logged-in user's information.
+   * 
+   * @type {any}
+   */
   session?: any;
+  /**
+   * Optional function to enable or disable certain features or actions.
+   * 
+   * @type {Function | any}
+   */
   setEnable?: any;
+  /**
+  * Optional trade password data, which might be used to display the current password.
+  * 
+  * @type {any}
+  */
   tradePassword?: any
+  /**
+   * Optional function to control the visibility of the forgot password popup.
+   * This might be used for showing or hiding a popup that allows the user to reset their password.
+   * 
+   * @type {Function | any}
+   */
   setShowForgetPopup?: any
+  /**
+  * Optional state to track the visibility of the forget password popup.
+  * 
+  * @type {boolean | any}
+  */
   showForgetPopup?: any
 }
 
@@ -28,26 +71,7 @@ type UserSubmitForm = {
   confirmPassword?: string;
 };
 
-
-// const schema = yup.object().shape({
-//   new_password: yup
-//     .string()
-//     .min(6)
-//     .max(6)
-//     .required("New password is required"),
-//   confirmPassword: yup
-//     .string()
-//     .oneOf([yup.ref("new_password")], "Passwords must match"),
-// });
-
-
-// .when('exist_password', {
-//   is: true,
-//   then(schema) {
-//     return schema.notOneOf([yup.ref('old_password')], 'New password must be different from the old password');
-//   }
-// })
-const TradingPassword = (props: activeSection) => {
+const TradingPassword = (props: TradingPasswordProps) => {
   const { mode } = useContext(Context)
   const [enable, setEnable] = useState(1)
   const [formData, setFormData] = useState<UserSubmitForm | null>();
@@ -60,11 +84,7 @@ const TradingPassword = (props: activeSection) => {
   const [showReset, setShowReset] = useState(true);
   const [forgetPassword, setForgetPassword] = useState(props?.showForgetPopup || false);
 
-  // console.log(props?.showForgetPopup,"============props?.showForgetPopup");
-  // console.log(forgetPassword,"============forgetPassword");
-  
   const schema2 = yup.object().shape({
-  
     exist_password: yup.boolean(),
     old_password: yup.string().when('exist_password', {
       is: true,
@@ -74,11 +94,12 @@ const TradingPassword = (props: activeSection) => {
     }),
     new_password: yup
       .string()
-      .required("This field is required.").min(8,"Password must be at least of '8' characters.").max(32,"Password length maximum '32' character").matches(/^\S*$/, "Whitespaces are not allowed."),
+      .required("This field is required.").min(8, "Password must be at least of '8' characters.").max(32, "Password length maximum '32' character").matches(/^\S*$/, "Whitespaces are not allowed."),
     confirmPassword: yup
       .string().required("This field is required.")
       .oneOf([yup.ref("new_password")], "Passwords must match.").matches(/^\S*$/, "Whitespaces are not allowed."),
   });
+
   let {
     register,
     setValue,
@@ -93,20 +114,23 @@ const TradingPassword = (props: activeSection) => {
     resolver: yupResolver(schema2),
   });
 
-
-  // console.log(forgetPassword,"=forgetPassword");
-  
-
+  /**
+ * Handles the submission of the trading password form.
+ * 
+ * @param {any} data - The form data containing the old and new passwords.
+ * @async
+ */
   const onHandleSubmit = async (data: any) => {
     try {
-console.log(props?.session,"==session");
-
+      // Determine the username based on session data (either email or phone number).
       let username =
         props.session?.user.email !== "null"
           ? props.session?.user.email
           : props.session?.user?.number;
       let obj;
+      // Check if the trading password exists and if the password is being updated (or forgotten).
       if ((props?.session?.user?.tradingPassword !== null && props.tradePassword === false && !forgetPassword)) {
+        // Ensure the new password is different from the old password.
         if (data?.old_password === data?.new_password) {
           setError("new_password", {
             type: "custom",
@@ -114,6 +138,7 @@ console.log(props?.session,"==session");
           });
           return;
         }
+        // Prepare the object with the old and new password for the request.
         obj = {
           username: username,
           old_password: data?.old_password,
@@ -123,6 +148,7 @@ console.log(props?.session,"==session");
         }
       }
       else {
+        // For the case where there's no old password (perhaps for a new trading password).
         obj = {
           username: username,
           new_password: data?.new_password,
@@ -132,15 +158,17 @@ console.log(props?.session,"==session");
 
       }
 
+      // Disable the form submission button to prevent multiple submissions.
       setDisabled(true);
-      
       if (session !== undefined && session?.user !== undefined) {
+        // Encrypt the request object before sending it to the server.
         const ciphertext = AES.encrypt(
           JSON.stringify(obj),
           `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
         );
         let record = encodeURIComponent(ciphertext.toString());
 
+        // Send the encrypted request to the backend to change the trading password.
         let userExist = await fetch(
           `${process.env.NEXT_PUBLIC_BASEURL}/user/tradePassword`,
           {
@@ -153,6 +181,7 @@ console.log(props?.session,"==session");
           }
         );
         let res = await userExist.json();
+        // Handle the response from the server.
         if (res.data.message) {
           toast.error(`${res.data.message}`, { autoClose: 2000 });
           setTimeout(() => {
@@ -175,15 +204,24 @@ console.log(props?.session,"==session");
     }
   };
 
+  /**
+ * Final step for OTP verification in the process of setting or changing the trading password.
+ * 
+ * @param {any} otp - The OTP provided by the user for verification.
+ * @async
+ */
   const finalOtpVerification = async (otp: any) => {
     try {
+      // Disable the button to prevent multiple submissions
       setDisabled(true);
+      // Determine the username based on session data (either email or phone number)
       let username =
         props.session?.user.email !== "null"
           ? props.session?.user.email
           : props.session?.user?.number;
       let request;
 
+      // Check if the trading password exists and if it's being changed (or forgotten)
       if ((props?.session?.user?.tradingPassword !== null && props.tradePassword === true && !forgetPassword)) {
         request = {
           username: username,
@@ -194,6 +232,7 @@ console.log(props?.session,"==session");
         }
       }
       else {
+        // If there's no old password (for a new trading password), just include the new password
         request = {
           username: username,
           new_password: formData?.new_password,
@@ -202,13 +241,15 @@ console.log(props?.session,"==session");
         }
       }
 
-
+      // Encrypt the request data before sending it to the server
       const ciphertext = AES.encrypt(
         JSON.stringify(request),
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
       );
 
+      // URL-encode the ciphertext for safe transmission
       let record = encodeURIComponent(ciphertext.toString());
+      // Send the encrypted data to the server for OTP verification and password change
       let response = await fetch(
         `${process.env.NEXT_PUBLIC_BASEURL}/user/tradePassword`,
         {
@@ -220,7 +261,10 @@ console.log(props?.session,"==session");
           body: JSON.stringify(record),
         }
       ).then((response) => response.json());
+
+      // Handle the server response based on the result
       if (response.data.result) {
+        // If OTP verification is successful, show success message and update state
         toast.success(response.data.message, { autoClose: 2000 });
         setTimeout(() => {
           setEnable(1);
@@ -232,23 +276,21 @@ console.log(props?.session,"==session");
         }, 3000);
         return true
       } else {
-
-
+        // If the response indicates an error, show error message
         toast.error(`${response.data.message}`, { autoClose: 2000 });
-        // console.log("sdhfsdfhksh");
-        
         setTimeout(() => {
           setDisabled(false);
 
         }, 3000)
       }
     } catch (error) {
-
+      // Handle any errors that occur during the process
+      console.error('Error in OTP verification:', error);
     }
   }
 
   useEffect(() => {
-    if (props?.session?.user?.tradingPassword === null && props.tradePassword === false ) {
+    if (props?.session?.user?.tradingPassword === null && props.tradePassword === false) {
       setValue('exist_password', false);
     }
     else {
@@ -269,10 +311,13 @@ console.log(props?.session,"==session");
 
   }, [errors]);
 
+  /**
+ * Closes the popup and resets the relevant states.
+ */
   const closePopup = () => {
     props?.setShow(false);
-   props?.setEnable&& props.setEnable(0);
-   props?.setShowForgetPopup && props?.setShowForgetPopup(false)
+    props?.setEnable && props.setEnable(0);
+    props?.setShowForgetPopup && props?.setShowForgetPopup(false)
   }
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
@@ -285,12 +330,12 @@ console.log(props?.session,"==session");
         <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
           <div className="flex items-center justify-between ">
             <p className="sec-title">
-              {(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? "Add" : forgetPassword? "Forget": "Edit"} Trading Password
+              {(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? "Add" : forgetPassword ? "Forget" : "Edit"} Trading Password
             </p>
             <svg
               onClick={() => {
                 props?.setShow(false);
-                props?.setEnable&& props.setEnable(0);
+                props?.setEnable && props.setEnable(0);
                 props?.setShowForgetPopup && props?.setShowForgetPopup(false)
                 //   props.setActive(0);
               }}
@@ -359,7 +404,7 @@ console.log(props?.session,"==session");
                   )
                 }
 
-                {( showReset && props?.session?.user?.tradingPassword !== null) && errors.old_password && (
+                {(showReset && props?.session?.user?.tradingPassword !== null) && errors.old_password && (
                   <p className="errorMessage mt-2">
                     {errors.old_password.message}
                   </p>
@@ -432,7 +477,7 @@ console.log(props?.session,"==session");
                 className="solid-button2 w-full "
                 onClick={() => {
                   props?.setShow(false);
-                  props?.setEnable&& props.setEnable(0);
+                  props?.setEnable && props.setEnable(0);
                   props?.setShowForgetPopup && props?.setShowForgetPopup(false)
                 }}
               >
@@ -448,11 +493,11 @@ console.log(props?.session,"==session");
 
             </div>
 
-              
-          { !forgetPassword  && (
-            <Link prefetch={false} onClick={(e)=>{e.preventDefault(); setForgetPassword(true)}} className={`sec-text text-[14px]  !text-primary mt-2  ${(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? 'hidden' : "inline-block"}`} href="#">Forget trading password?</Link>
-          )  
-          }
+
+            {!forgetPassword && (
+              <Link prefetch={false} onClick={(e) => { e.preventDefault(); setForgetPassword(true) }} className={`sec-text text-[14px]  !text-primary mt-2  ${(props?.session?.user?.tradingPassword === null && props.tradePassword === false) ? 'hidden' : "inline-block"}`} href="#">Forget trading password?</Link>
+            )
+            }
           </form>
         </div>
       }
@@ -472,7 +517,7 @@ console.log(props?.session,"==session");
           setEnable={setEnable}
           setShow={props?.setShow}
           parentSetEnable={props.setEnable}
-          type="number" 
+          type="number"
           data={formData}
           session={props?.session}
         />

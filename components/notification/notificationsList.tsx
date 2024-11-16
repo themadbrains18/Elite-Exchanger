@@ -12,12 +12,30 @@ const NotificationsList = (props: propsData) => {
   const [active, setActive] = useState(1);
   const [Ndata, setData] = useState([]);
 
-  useEffect(()=>{
+  /**
+ * React Hook to set the notification data whenever `props.notificationData` changes.
+ * This effect runs whenever the `notificationData` prop is updated.
+ * 
+ * @useEffect
+ */
+  useEffect(() => {
     setData(props.notificationData)
-  },[props.notificationData])
+  }, [props.notificationData])
 
-
-  
+  /**
+ * Filters the notification data based on the input value provided by the user.
+ * The filtering checks if the value is present in either the `type` or the 
+ * `message.message` field of each notification.
+ * 
+ * @param {any} e - The event object from the input field where the search term is entered.
+ * @function
+ * 
+ * @example
+ * // Example usage
+ * searchNotification({ target: { value: 'error' } });
+ * 
+ * @returns {void} - The function doesn't return anything but updates the component state.
+ */
   const searchNotification = (e: any) => {
     let value = e.target.value.toLowerCase();
     let filterData = props.notificationData.filter((item: any) => {
@@ -27,7 +45,6 @@ const NotificationsList = (props: propsData) => {
       );
     });
     setData(filterData);
-    // console.log(Ndata, "===========Ndata");
   };
 
   return (
@@ -56,9 +73,8 @@ const NotificationsList = (props: propsData) => {
           <div className="flex justify-between border-b border-grey-v-3 dark:border-opacity-[15%]">
             <div className="flex gap-5 md:gap-30 trade_history_scroll overflow-auto">
               <button
-                className={`pb-20 nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${
-                  active === 1 && "border-primary !text-primary"
-                }`}
+                className={`pb-20 nav-text-sm md:nav-text-lg border-b-[3px] border-[transparent] whitespace-nowrap ${active === 1 && "border-primary !text-primary"
+                  }`}
                 onClick={() => {
                   setActive(1);
                 }}

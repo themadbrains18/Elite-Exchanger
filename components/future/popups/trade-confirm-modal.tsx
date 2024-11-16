@@ -4,19 +4,37 @@ import clickOutSidePopupClose from '@/components/snippets/clickOutSidePopupClose
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import { truncateNumber } from '@/libs/subdomain';
 
-interface showPopup {
+interface TradeConfirmPopupModalProps {
+    /** Determines if the modal popup should be displayed */
     modelPopup?: number;
+    /** Function to control the display state of the confirmation modal */
     setConfirmModelPopup?: any;
+    /** Function to toggle overlay visibility */
     setConfirmModelOverlay?: any;
+    /** Overlay visibility state */
     modelOverlay?: boolean;
+    /** Function to trigger the order confirmation process */
     confirmOrder?: any;
+    /** Data for the confirmed order */
     confirmOrderData?: any;
+    /** Indicates if the final order is submitted */
     finalOrderSubmit?:boolean;
+    /** Symbol representing the order asset */
     symbol?:string;
+    /** Leverage amount */
     leverage?:any
 }
 
-const TradeConfirmPopupModal = (props: showPopup) => {
+/**
+ * TradeConfirmPopupModal Component
+ *
+ * This component displays a popup modal to confirm a trade order with various details.
+ *
+ * @component
+ * @param {TradeConfirmPopupModalProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered TradeConfirmPopupModal component.
+ */
+const TradeConfirmPopupModal = (props: TradeConfirmPopupModalProps) => {
 
     let { mode } = useContext(Context);
     const [disable, setDisable] = useState(false)

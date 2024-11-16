@@ -9,27 +9,71 @@ import { toast } from 'react-toastify';
 import IconsComponent from '../snippets/icons';
 import { formatDate } from '@/libs/subdomain';
 
+/**
+ * Validation schema for user form data using Yup.
+ * This schema defines the validation rules for the first name, last name, display name, and user name.
+ * It ensures that the input values conform to the specified criteria such as length, required fields, and valid characters.
+ *
+ * @type {Object}
+ */
 const schema = yup.object().shape({
+  // First name field is optional and nullable
   fName: yup.string().optional().nullable(),
+  // Last name field is optional and nullable
   lName: yup.string().optional().nullable(),
   dName: yup.string().required('This field is required.').min(4, 'Display name must be at least 4 characters.').max(20, 'Display name must be at most 20 characters.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
   uName: yup.string().required('This field is required.').min(4, 'User name must be at least 4 characters').max(20, 'User name must be at most 20 characters.').matches(/^([a-zA-Z0-9_\- ])+$/, 'Please enter only letters, numbers, and periods(-).'),
 });
 
-interface FixSection {
+/**
+ * Props interface for the Dashboard component.
+ * This interface defines the expected properties that can be passed to the Dashboard component.
+ * The properties cover various configuration options for the dashboard's display and user-related data.
+ *
+ * @interface DashboardProps
+ */
+interface DashboardProps {
+  /**
+   * Optional boolean value to determine if the dashboard is fixed or not.
+   * If `true`, the dashboard will have a fixed position, otherwise, it will be scrollable.
+   * @type {boolean}
+   */
   fixed?: boolean;
+  /**
+  * Optional number representing a display condition.
+  * Can be used to control certain UI states, such as visibility or page views.
+  * @type {number}
+  */
   show?: number;
+  /**
+   * Optional function to set the visibility of certain UI elements based on the `show` property.
+   * @type {Function}
+   */
   setShow?: Function;
+  /**
+   * Optional object containing profile information of the user.
+   * This data can be used to personalize the dashboard display.
+   * @type {any}
+   */
   profileInfo?: any;
+  /**
+   * Optional session object containing user session details.
+   * It might include authentication tokens, user ID, etc.
+   * @type {any}
+   */
   session?: any;
+  /**
+   * Optional object containing user-specific details, such as user preferences or role-based data.
+   * @type {any}
+   */
   userDetail?: any;
 }
 
-const Dashboard = (props: FixSection) => {
+const Dashboard = (props: DashboardProps) => {
   const [editable, setEditable] = useState(false);
   const [disabled, setDisabled] = useState(false);
   const [userDetails, setUserDetails] = useState(props.userDetail);
-  const { register, handleSubmit, reset, formState: { errors }, getValues,setValue } = useForm({
+  const { register, handleSubmit, reset, formState: { errors }, getValues, setValue } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -44,7 +88,7 @@ const Dashboard = (props: FixSection) => {
 
   const onHandleSubmit = async (data: any) => {
     // console.log("here i am");
-    
+
     setDisabled(true)
     // Create a new object with only the required fields
     const filteredData = {
@@ -153,21 +197,21 @@ const Dashboard = (props: FixSection) => {
                   <div className="w-full">
                     <p className="sm-text mb-[10px]">First Name</p>
                     <div className={editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}>
-                      <input type="text" {...register('fName')} placeholder="Enter first name" className="sm-text input-cta2 w-full" 
-                      onChange={(e)=>{
-                        const value = e.target.value.replace(/\s/g, ''); // Remove all spaces
-                        setValue('fName', value);
-                      }}/>
+                      <input type="text" {...register('fName')} placeholder="Enter first name" className="sm-text input-cta2 w-full"
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\s/g, ''); // Remove all spaces
+                          setValue('fName', value);
+                        }} />
                     </div>
                   </div>
                   <div className="w-full">
                     <p className="sm-text mb-[10px]">Last Name</p>
                     <div className={editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}>
-                      <input type="text" {...register('lName')} placeholder="Enter last name" className="sm-text input-cta2 w-full" 
-                       onChange={(e)=>{
-                        const value = e.target.value.replace(/\s/g, ''); // Remove all spaces
-                        setValue('lName', value);
-                      }}/>
+                      <input type="text" {...register('lName')} placeholder="Enter last name" className="sm-text input-cta2 w-full"
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\s/g, ''); // Remove all spaces
+                          setValue('lName', value);
+                        }} />
                     </div>
                   </div>
                 </div>
@@ -176,11 +220,11 @@ const Dashboard = (props: FixSection) => {
                     <p className="sm-text mb-[10px]">Display Name<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
                     <div className="relative">
                       <div className={editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}>
-                        <input type="text" maxLength={20} {...register('dName')} placeholder="Enter display name" className="sm-text input-cta2 w-full"  
-                         onChange={(e)=>{
-                          const value = e.target.value.replace(/\s/g, ''); // Remove all spaces
-                          setValue('dName', value);
-                        }}/>
+                        <input type="text" maxLength={20} {...register('dName')} placeholder="Enter display name" className="sm-text input-cta2 w-full"
+                          onChange={(e) => {
+                            const value = e.target.value.replace(/\s/g, ''); // Remove all spaces
+                            setValue('dName', value);
+                          }} />
                       </div>
                       {errors.dName && <p className="errorMessage">{errors.dName.message}</p>}
                     </div>
@@ -188,11 +232,11 @@ const Dashboard = (props: FixSection) => {
                   <div className="w-full">
                     <p className="sm-text mb-[10px]">User Name<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
                     <div className={`${editable ? 'cursor-auto' : 'cursor-not-allowed pointer-events-none'}   `}>
-                      <input type="text" maxLength={20} {...register('uName')} placeholder="Enter user name" className="sm-text  input-cta2  w-full" 
-                       onChange={(e)=>{
-                        const value = e.target.value.replace(/\s/g, ''); // Remove all spaces
-                        setValue('uName', value);
-                      }}/>
+                      <input type="text" maxLength={20} {...register('uName')} placeholder="Enter user name" className="sm-text  input-cta2  w-full"
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\s/g, ''); // Remove all spaces
+                          setValue('uName', value);
+                        }} />
                     </div>
                     {errors.uName && <p className="errorMessage">{errors.uName.message}</p>}
                   </div>
@@ -221,11 +265,11 @@ const Dashboard = (props: FixSection) => {
               {editable && (
                 <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-between pt-5 md:pt-[30px]">
                   <p className="sm-text">
-                    This account was created on {formatDate(props.session?.user?.createdAt,"yyyy-MM-dd HH:mm:ss a")}
+                    This account was created on {formatDate(props.session?.user?.createdAt, "yyyy-MM-dd HH:mm:ss a")}
                   </p>
                   <div className="flex max-[767px]:w-full max-[767px]:flex-col md:gap-[30px] gap-10">
                     <button type="button" className="solid-button2 max-[767px]:max-w-full max-[767px]:w-full" onClick={handleCancel}>Cancel</button>
-                    <button type="submit" disabled={disabled} className={`max-[767px]:w-full max-[767px]:max-w-full solid-button px-[23px] min-w-[225px] md:px-[51px] ${disabled ? "cursor-not-allowed" : ""}`}>  
+                    <button type="submit" disabled={disabled} className={`max-[767px]:w-full max-[767px]:max-w-full solid-button px-[23px] min-w-[225px] md:px-[51px] ${disabled ? "cursor-not-allowed" : ""}`}>
                       {disabled ?
                         <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
@@ -234,7 +278,7 @@ const Dashboard = (props: FixSection) => {
                         :
                         'Save Changes'
                       }
-                    
+
                     </button>
                   </div>
                 </div>

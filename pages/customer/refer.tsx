@@ -5,12 +5,12 @@ import { GetServerSidePropsContext } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 
 interface propsData {
-  eventList?: any;
-  fixed?: boolean;
-  show?: number;
-  setShow?: Function | any;
-  session?: any;
-  referalList?: any,
+  eventList?: any; // List of events related to the referral program.
+  fixed?: boolean; // Optional prop to indicate whether a component is fixed.
+  show?: number; // Optional prop to manage visibility or display.
+  setShow?: Function | any; // Optional function to manage visibility state.
+  session?: any; // Optional session data from the server.
+  referalList?: any; // Optional list of referrals associated with the user.
 }
 
 import dynamic from 'next/dynamic';
@@ -32,8 +32,16 @@ const Events = dynamic(() => import('@/components/refer/events'), {
   loading: () => <p>Loading...</p>,
 })
 
+/**
+ * Refer Component.
+ * This component renders the "Refer and Earn" page, showcasing various sections 
+ * related to the referral program such as earning opportunities, events, and safe trading.
+ * It dynamically imports multiple sections to optimize loading performance.
+ *
+ * @param {propsData} props - Properties passed to the component including event data and session.
+ * @returns {JSX.Element} The rendered Refer page with multiple sections.
+ */
 const Refer = (props: propsData) => {
-
   return (
     <>
       <Meta title='Refer and Earn | Crypto Referral Program' description='Join our Crypto Referral Program and start earning rewards today! Invite friends to trade on our platform, and receive bonuses for each successful referral. Discover how easy it is to share your love for crypto while benefiting from exclusive rewards. Start referring now and maximize your earnings!' />
@@ -48,6 +56,14 @@ const Refer = (props: propsData) => {
 
 export default Refer;
 
+/**
+ * getServerSideProps Function.
+ * This function is executed on the server-side before the page is rendered.
+ * It fetches the session, provider details, and event list related to the referral program.
+ * 
+ * @param {GetServerSidePropsContext} context - The server-side context, providing request and response objects.
+ * @returns {Promise<Object>} The props for the Refer page, including session data and event list.
+ */
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const session = await getServerSession(context.req, context.res, authOptions);

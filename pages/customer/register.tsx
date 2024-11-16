@@ -1,6 +1,13 @@
 import SignUp from "@/components/login-register/signUp"
 import Meta from "@/components/snippets/meta"
 
+/**
+ * Register Component.
+ * This component renders the registration page for new users to sign up and join the platform.
+ * It includes the Meta tags for SEO and dynamically renders the SignUp form component.
+ *
+ * @returns {JSX.Element} The rendered Register page with Meta tags and the SignUp form.
+ */
 const Register = () => {
   return (
     <>

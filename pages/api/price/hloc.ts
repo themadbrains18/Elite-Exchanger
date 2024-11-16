@@ -4,7 +4,16 @@ import { createRouter } from "next-connect";
 // Create a router instance for handling API requests.
 const router = createRouter<NextApiRequest, NextApiResponse>();
 
-// Configuration for this API route.
+/**
+ * Configuration settings for the API.
+ * 
+ * @constant
+ * @type {Object}
+ * @property {Object} api - API configuration options.
+ * @property {boolean} api.bodyParser - Enables or disables the body parser middleware.
+ * 
+ * Enables the body parser to handle JSON and other content types in the request body.
+ */
 export const config = {
     api: {
         bodyParser: true,
@@ -12,14 +21,20 @@ export const config = {
 }
 
 // Add a GET handler to the router.
-router
-    .get(async (req, res) => {
+router.get(
+    /**
+    * Handles GET request to retrieve a paginated list of user activities by user ID.
+    * 
+    * @async
+    * @function
+    * @param {Request} req - The request object, containing query parameters and headers.
+    * @param {Response} res - The response object to send the retrieved data.
+    * 
+    * @throws {Error} If an error occurs during data retrieval or response handling.
+    */
+    async (req, res) => {
         try {
-
-            // Destructure and retrieve variables from the query parameters.
             let currency = req.query.slug === 'BTCB' ? 'BTC' : req.query.slug === 'BNBT' ? 'BNB' : req.query.slug;
-
-            // Call the API using a helper function and pass the necessary parameters.
             let responseData = await fetch(`https://api.kucoin.com/api/v1/market/stats?symbol=${currency}-USDT`, {
                 method: "GET",
                 headers: new Headers({
@@ -28,15 +43,27 @@ router
             });
 
             let data = await responseData.json();
-            // Respond with a 200 status and send the retrieved data.
             return res.status(200).send({ data });
         } catch (error: any) {
-            // If an error occurs, throw it with its message for further handling.
             throw new Error(error.message)
         }
     });
 
-// Define the error handler for the router.
+/**
+ * Sets up the router handler with error handling for API requests.
+ *
+ * @function
+ * @param {Object} router.handler - The router handler object containing route definitions.
+ * @param {function} onError - A custom error handler to catch and respond to errors.
+ *
+ * @onError
+ * Handles errors by logging the error stack and sending an appropriate HTTP status code
+ * and error message in the response.
+ * 
+ * @param {Error} err - The error object containing stack trace and message.
+ * @param {Request} req - The request object for the API call.
+ * @param {Response} res - The response object to send error details.
+ */
 export default router.handler({
     onError: (err: any, req, res) => {
         console.error(err.stack);

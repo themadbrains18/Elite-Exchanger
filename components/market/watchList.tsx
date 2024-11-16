@@ -8,6 +8,7 @@ import { truncateNumber } from "@/libs/subdomain";
 interface propsData {
   coinList: any
 }
+
 const WatchList = (props: propsData) => {
   let data = props.coinList;
   const router = useRouter()
@@ -45,12 +46,12 @@ const WatchList = (props: propsData) => {
             </tr>
           </thead>
           <tbody>
-            {props.coinList && props.coinList?.length>0 && props.coinList?.map((item: any, index: any) => {
+            {props.coinList && props.coinList?.length > 0 && props.coinList?.map((item: any, index: any) => {
               return (
                 <tr key={index} className="dark:hover:bg-black-v-1 hover:bg-[#FEF2F2] cursor-pointer" onClick={() => router.push(`/chart/${item.symbol}`)}>
                   <td className="">
                     <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
-                    <Image src={`${imgSrc?'/assets/history/Coin.svg':item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol==="XRP"&&"bg-white rounded-full"}`}/>
+                      <Image src={`${imgSrc ? '/assets/history/Coin.svg' : item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`${item?.symbol === "XRP" && "bg-white rounded-full"}`} />
                       <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-1">
                         {/* <p className="info-14-18 dark:text-white">{item.name}</p> */}
                         <p className="info-12 !text-primary py-0 md:py-[2px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">{item.symbol}</p>
@@ -58,20 +59,20 @@ const WatchList = (props: propsData) => {
                     </div>
                   </td>
                   <td>
-                    <p className="nav-text-sm dark:text-white ">${currencyFormatter(truncateNumber(item.price,3))}</p>
+                    <p className="nav-text-sm dark:text-white ">${currencyFormatter(truncateNumber(item.price, 3))}</p>
                   </td>
                   <td>
                     <div className={` items-center gap-[10px] md:flex hidden`}>
-                    <div className={`flex items-center gap-[4px] flex-wrap`}>
-                                <p className={`footer-text-secondary  ${Number(item?.hlocv?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(item?.hlocv?.changeRate) > 0 ? '+' : ''}{item?.hlocv?.changeRate !== undefined ? (Number(item?.hlocv?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
+                      <div className={`flex items-center gap-[4px] flex-wrap`}>
+                        <p className={`footer-text-secondary  ${Number(item?.hlocv?.changeRate) > 0 ? '!text-buy' : '!text-sell'}`}>{Number(item?.hlocv?.changeRate) > 0 ? '+' : ''}{item?.hlocv?.changeRate !== undefined ? (Number(item?.hlocv?.changeRate) * 100).toFixed(3) : '0.0'}%</p>
 
-                                {Number(item?.hlocv?.changeRate) > 0 &&
-                                    <IconsComponent type="high" active={false} hover={false} />
-                                }
-                                {Number(item?.hlocv?.changeRate) < 0 &&
-                                    <IconsComponent type="low" active={false} hover={false} />
-                                }
-                            </div>
+                        {Number(item?.hlocv?.changeRate) > 0 &&
+                          <IconsComponent type="high" active={false} hover={false} />
+                        }
+                        {Number(item?.hlocv?.changeRate) < 0 &&
+                          <IconsComponent type="low" active={false} hover={false} />
+                        }
+                      </div>
                     </div>
                   </td>
                 </tr>

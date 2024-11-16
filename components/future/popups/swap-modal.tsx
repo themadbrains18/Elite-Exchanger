@@ -9,6 +9,22 @@ interface showPopup {
   overlay?: boolean;
 }
 
+/**
+ * SwapModal Component
+ * 
+ * This modal component renders the user interface for managing a swap trade,
+ * allowing selection of trading pairs, leverage options, and viewing PNL (Profit and Loss)
+ * or liquidation price based on user inputs.
+ * 
+ * @component
+ * @param {Object} props - The properties passed to this component.
+ * @param {number} [props.popupMode] - Determines the visibility and positioning of the modal.
+ * @param {function} [props.setPopupMode] - Function to set the popup mode.
+ * @param {function} [props.setOverlay] - Function to control the overlay visibility.
+ * @param {boolean} [props.overlay] - Controls whether the overlay is displayed.
+ * 
+ * @returns {JSX.Element} Rendered SwapModal component.
+ */
 const SwapModal = (props: showPopup) => {
   const list = ['BTCUSDT', 'ETHUSDT', 'BCHUSDT', 'ETCUSDT', 'LTCUSDT', 'FETUSDT', 'BNBUSDT'];
   const list2 = ['Isolated']

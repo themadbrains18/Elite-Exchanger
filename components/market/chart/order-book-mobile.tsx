@@ -14,49 +14,7 @@ interface propsData {
 
 const OrderBookMobile = (props: propsData) => {
     const [active1Mobile, setActive1Mobile] = useState(1);
-
     const { mode } = useContext(Context);
-
-    // const [props.sellTrade, setSellTrade] = useState([]);
-    // const [props.BuyTrade, setprops.BuyTrade] = useState([]);
-    // const [props.allTradeHistory, setAllTradeHistory] = useState([]);
-
-    // useEffect(() => {
-    //     getAllMarketOrderByToken(props.slug);
-    // }, [props.slug]);
-
-    // const filterBuySellRecords = (data: any) => {
-    //     if (data && data.length > 0) {
-    //         let sellRecord = data.filter((item: any) => {
-    //             return item.order_type === 'sell'
-    //         })
-
-    //         let buyRecord = data.filter((item: any) => {
-    //             return item.order_type === 'buy'
-    //         })
-    //         setSellTrade(sellRecord);
-    //         setprops.BuyTrade(buyRecord);
-    //     }
-    //     else {
-    //         setSellTrade([]);
-    //         setprops.BuyTrade([]);
-    //     }
-    // }
-
-    // const getAllMarketOrderByToken = async (symbol: any) => {
-
-    //     let marketHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market/token_trade_history?token_id=${props?.token?.id}`, {
-    //         method: "GET",
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //     }).then(response => response.json());
-
-    //     setAllTradeHistory(marketHistory?.data);
-
-    //     filterBuySellRecords(marketHistory?.data);
-    // }
-
     return (
         <>
             <div className='p-[20px] rounded-10  bg-white dark:bg-d-bg-primary'>

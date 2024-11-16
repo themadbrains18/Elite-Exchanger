@@ -16,22 +16,48 @@ interface FullWidth {
     setMarginModeAndLeverage?: any;
     leverage?: any;
     currentToken?: any;
-    opnlong?:string;
+    opnlong?: string;
 }
 
+/**
+ * MarginMode Component
+ *
+ * A component for selecting leverage and margin type for trading. Displays an input field
+ * for leverage, a range slider to adjust leverage, and warnings based on the selected leverage.
+ * It also allows the user to confirm the selected leverage and margin mode.
+ * 
+ * @param {Object} props - Component props
+ * @param {string} [props.inputId] - Optional ID for the input element
+ * @param {string} [props.thumbId] - Optional ID for the slider thumb element
+ * @param {string} [props.lineId] - Optional ID for the slider line element
+ * @param {string} [props.radioId] - Optional ID for radio buttons (if any)
+ * @param {number} [props.popupMode] - Optional mode to control popup visibility
+ * @param {Function} [props.setPopupMode] - Function to set the popup mode
+ * @param {Function} [props.setOverlay] - Function to control overlay visibility
+ * @param {boolean} [props.overlay] - Controls whether the overlay is visible
+ * @param {Function} [props.setMarginModeAndLeverage] - Function to set the margin mode and leverage value
+ * @param {any} [props.leverage] - Initial leverage value to be displayed
+ * @param {any} [props.currentToken] - Information about the current token (e.g., symbol)
+ * @param {string} [props.opnlong] - Specifies if the margin mode is "Long" or "Short"
+ *
+ * @returns {JSX.Element} The rendered MarginMode component
+ */
 const MarginMode: React.FC<FullWidth> = (props) => {
     const { mode } = useContext(Context);
     const [cross, setCross] = useState(2);
     const [marginType, setMarginType] = useState('Isolated');
     const [leverageValue, setLeverageValue] = useState(props?.leverage ?? 10);
 
-    
 
     useEffect(() => {
-        let leverage= localStorage.getItem('leverage') ?? 10
+        let leverage = localStorage.getItem('leverage') ?? 10
         setLeverageValue(leverage);
     }, [props?.leverage]);
 
+    /**
+    * Increments the leverage value by 1 and updates the localStorage with the new value.
+    * The updated value is then used to update the state of `leverageValue`.
+    */
     const increment = () => {
         setLeverageValue((prev: number) => {
             const newValue = prev + 1;
@@ -40,20 +66,39 @@ const MarginMode: React.FC<FullWidth> = (props) => {
         });
     }
 
+    /**
+     * Decrements the leverage value by 1, ensuring the value doesn't go below 1.
+     * The updated value is then saved to localStorage and used to update the `leverageValue` state.
+     */
     const decrement = () => {
         setLeverageValue((prev: number) => {
-            const newValue = Math.max(prev - 1, 1); 
+            const newValue = Math.max(prev - 1, 1);
             localStorage.setItem('leverage', newValue.toString());
             return newValue;
         });
     }
 
+    /**
+     * Handles the change of the leverage value in percentage.
+     * Converts the input value to an integer, updates the `leverageValue` state,
+     * and saves the new value to `localStorage`.
+     * 
+     * @param value The new leverage value as a string, which will be parsed to an integer.
+     */
     const onChangeSizeInPercentage = (value: any) => {
         const newValue = parseInt(value);
         setLeverageValue(newValue);
         localStorage.setItem('leverage', newValue.toString());
     }
 
+    /**
+     * Closes the popup by updating the overlay visibility and resetting the popup mode.
+     * This function is typically used to close the popup modal when the user interacts with 
+     * certain UI elements, like a close button.
+     * 
+     * It sets the `overlay` prop to `false` to hide the overlay and sets the `popupMode` 
+     * to `0` to reset the popup's visibility state.
+     */
     const closePopup = () => {
         props.setOverlay(false);
         props.setPopupMode(0);
@@ -89,15 +134,15 @@ const MarginMode: React.FC<FullWidth> = (props) => {
                     />
                 </svg>
             </div>
-            <p className="sec-title !text-[15px] mb-[10px]">{props?.currentToken?.coin_symbol}-{props?.currentToken?.usdt_symbol} <span className={`${props?.opnlong == "Short" ? 'text-sell':'text-buy'}`}>({props?.opnlong})</span></p>
+            <p className="sec-title !text-[15px] mb-[10px]">{props?.currentToken?.coin_symbol}-{props?.currentToken?.usdt_symbol} <span className={`${props?.opnlong == "Short" ? 'text-sell' : 'text-buy'}`}>({props?.opnlong})</span></p>
             <div className='flex bg-[#e5ecf0] dark:bg-[#3c4355] items-center justify-between relative z-[4] rounded-8'>
                 <p className='text-[25px] dark:text-white text-black cursor-pointer w-[50px] h-[40px] text-center' onClick={decrement}> - </p>
                 <div>
-                    <input type="text" className='bg-[#e5ecf0] dark:bg-[#3c4355] outline-none text-center lowercase inputPercent dark:text-[#fff] text-[#000] h-[40px]' readOnly value={Math.trunc(parseInt( leverageValue )).toString() + 'x'} />
+                    <input type="text" className='bg-[#e5ecf0] dark:bg-[#3c4355] outline-none text-center lowercase inputPercent dark:text-[#fff] text-[#000] h-[40px]' readOnly value={Math.trunc(parseInt(leverageValue)).toString() + 'x'} />
                 </div>
                 <p className='text-[25px] dark:text-white text-black cursor-pointer w-[50px] h-[40px] text-center' onClick={increment}> + </p>
             </div>
-            <RangeSlider inputId="rangeInput1" thumbId='rangeThumb1' lineId='rangeLine1' onChangeSizeInPercentage={onChangeSizeInPercentage} rangetype={'X'} step={1} levrage={leverageValue} min={1}/>
+            <RangeSlider inputId="rangeInput1" thumbId='rangeThumb1' lineId='rangeLine1' onChangeSizeInPercentage={onChangeSizeInPercentage} rangetype={'X'} step={1} levrage={leverageValue} min={1} />
             <div className={`flex gap-[5px] ${leverageValue > 10 ? ' bg-[#ff8d0021]' : 'bg-[#e5ecf0] dark:bg-[#3c4355]'}  mb-[25px] p-[8px] mt-[10px] rounded-8 items-center`}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={`fill-primary ${leverageValue > 10 ? 'dark:fill-white' : 'fill-primary dark:fill-white'} text-contentWarning shrink-0`} width="16" height="16">
                     <path d="M12 2.25A9.75 9.75 0 1021.75 12 9.76 9.76 0 0012 2.25zm-.75 5.25a.75.75 0 111.5 0v5.25a.75.75 0 11-1.5 0V7.5zm.75 9.75A1.125 1.125 0 1112 15a1.125 1.125 0 010 2.25z"></path>

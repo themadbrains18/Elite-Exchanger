@@ -1,11 +1,16 @@
-// import FeatureNews from '@/components/news/feature-news';
-// import NewsHero from '@/components/news/hero';
-// import NewsGrid from '@/components/news/news-grid';
-// import RecentPosts from '@/components/news/recent-posts';
 import React from 'react'
 import dynamic from 'next/dynamic';
 import Meta from '@/components/snippets/meta';
 
+/**
+ * Dynamically imported components for the News page. 
+ * These components will be loaded only when required to improve performance.
+ * 
+ * @component {React.Component} FeatureNews - Displays featured news articles.
+ * @component {React.Component} NewsHero - Displays the hero section with an introduction to the news.
+ * @component {React.Component} NewsGrid - Displays a grid of news articles.
+ * @component {React.Component} RecentPosts - Displays a list of recent posts.
+ */
 const FeatureNews = dynamic(() => import('@/components/news/feature-news'), {
   loading: () => <p>Loading...</p>,
 })

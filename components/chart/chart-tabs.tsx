@@ -11,14 +11,33 @@ import { useWebSocket } from "@/libs/WebSocketContext";
 import { formatDate, scientificToDecimal, truncateNumber } from "@/libs/subdomain";
 import { useRouter } from "next/router";
 
+/**
+ * Interface for the props of a component dealing with coins, open orders, and trade history.
+ * 
+ * @interface
+ * 
+ * @param {Array} coinsList - A list of available coins or assets (could be an array of objects).
+ * @param {Object} [openOrder] - Optional object representing the current open order, if any.
+ * @param {Array} [tradehistory] - Optional array representing the trade history.
+ * @param {string} [slug] - Optional slug for identifying a specific coin or asset.
+ */
 interface propsData {
-  coinsList: any;
-  openOrder?: any;
-  tradehistory?: any;
-
-  slug?: any;
+  coinsList: any;             // List of coins or assets available for trading
+  openOrder?: any;            // Optional current open order, if available
+  tradehistory?: any;        // Optional trade history, if available
+  slug?: any;                 // Optional slug for identifying a specific coin or asset
 }
 
+/**
+ * Abbreviates a large number to a more readable format with suffixes like K (Thousand), M (Million), etc.
+ *
+ * @param {number | string} value - The number or string to be abbreviated.
+ * @returns {string} The abbreviated number as a string with an appropriate suffix.
+ *
+ * @example
+ * abbreviateNumber(1500); // "1.50K"
+ * abbreviateNumber(2500000); // "2.50M"
+ */
 export function abbreviateNumber(value: number | string) {
   const suffixes = ["", "K", "M", "B", "T"];
   let suffixNum = 0;
@@ -51,6 +70,7 @@ const ChartTabs = (props: propsData) => {
   const [imgSrc2, setImgSrc2] = useState(false);
   const [imgSrc3, setImgSrc3] = useState(false);
   const [coins, setCoins] = useState(props?.coinsList || [])
+  const router = useRouter();
 
 
   const elementRef = useRef(null);
@@ -63,17 +83,42 @@ const ChartTabs = (props: propsData) => {
   const currentItems = data.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(data.length / itemsPerPage);
 
+  /**
+   * Handles the page click event for pagination and updates the item offset.
+   *
+   * This function is triggered when a user selects a different page in a paginated list. It calculates the new
+   * offset based on the selected page number and updates the state to fetch the correct set of items for that page.
+   *
+   * @param {any} event - The event object that contains the selected page number.
+   * @returns {void}
+   *
+   * @example
+   * handlePageClick({ selected: 2 }); // Updates the offset for the 3rd page (0-indexed).
+   */
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % data.length;
     setItemOffset(newOffset);
 
   };
 
+  /**
+   * Toggles the height of the next sibling element and rotates an icon.
+   *
+   * This function adjusts the height of a DOM element based on its current height. 
+   * It also rotates an icon by toggling a class. When the element's height is collapsed, 
+   * it will be expanded to its full height, and vice versa.
+   *
+   * @param {any} e - The event object, typically the click event triggered by the user.
+   * @returns {void}
+   *
+   * @example
+   * setHeight(event); // Toggles the height of the target element and rotates the icon.
+   */
   const setHeight = (e: any) => {
-    
+
     // let nexElm = e?.currentTarget?.querySelector(".tmb-height");
     let nexElm = e?.currentTarget?.nextElementSibling.nextElementSibling;
-    
+
     let nexElmHeight = nexElm?.scrollHeight;
 
     let iconImg = e.currentTarget?.nextElementSibling;
@@ -86,15 +131,31 @@ const ChartTabs = (props: propsData) => {
     }
   };
 
-
+  /**
+   * Fetches HLCO (High, Low, Close, Open) data for each coin in the list
+   * and updates the state with the fetched data.
+   *
+   * This effect runs when the `coinsList` prop changes. It filters out any coins with the symbol "USDT",
+   * and then fetches HLCO data for each of the remaining coins. Once the data is fetched, it updates
+   * the state with the new coin data, including the HLCO data for each coin.
+   *
+   * @returns {void}
+   *
+   * @example
+   * useEffect(() => { ... }, [props?.coinsList]); // Runs when the coinsList prop changes.
+   */
   useEffect(() => {
 
+    /**
+   * Fetches the HLCO data for each coin and updates the coin object.
+   *
+   * @async
+   * @param {any} coin - The coin object that contains the symbol to fetch HLCO data for.
+   * @returns {Promise<Object>} A new coin object containing the HLCO data.
+   */
     const fetchHLCOData = async () => {
       let coins = props.coinsList?.filter((item: any) => item?.symbol !== "USDT");
-
-
       const fetchDataForCoin = async (coin: any) => {
-
         const slug = coin.symbol;
         try {
           let hlocv = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/hloc?slug=${slug}`, {
@@ -114,14 +175,11 @@ const ChartTabs = (props: propsData) => {
       };
 
       const updatedCardData: any = await Promise.all(coins.map(fetchDataForCoin));
-      // console.log(updatedCardData,"=updatedCardData");
       setCoins(updatedCardData)
     };
 
     fetchHLCOData();
   }, [props?.coinsList]);
-
-
 
 
   // Open order paggination code here
@@ -147,23 +205,47 @@ const ChartTabs = (props: propsData) => {
   const pageTradeCount = Math.ceil(props.tradehistory && props.tradehistory.length / itemsPerPage);
 
 
-  const router = useRouter();
 
+
+  /**
+   * Handles the page click for trade history pagination. Updates the current offset
+   * for the trade history items and resets the styles for any elements related to
+   * expanding and collapsing content (like height and icon rotation).
+   *
+   * @async
+   * @param {any} event - The page click event object, contains the selected page number.
+   * @returns {void}
+   *
+   * @example
+   * handleTradePageClick(event); // Handles the page change and resets element styles.
+   */
   const handleTradePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % (props.tradehistory && props.tradehistory.length);
-    setTradeItemOffset(newOffset); 
-  
-    const allElements = document.querySelectorAll<HTMLElement>('.tmb-height'); 
+    setTradeItemOffset(newOffset);
+
+    const allElements = document.querySelectorAll<HTMLElement>('.tmb-height');
     allElements.forEach((element) => {
-      element.removeAttribute('style'); 
+      element.removeAttribute('style');
     });
-  
-    const allIcons = document.querySelectorAll<SVGElement>('.arrow-icon svg'); 
+
+    const allIcons = document.querySelectorAll<SVGElement>('.arrow-icon svg');
     allIcons.forEach((icon) => {
-      icon.classList.remove('rotate-180'); 
+      icon.classList.remove('rotate-180');
     });
   };
 
+  /**
+   * Handles route change events by resetting the styles and classes
+   * for elements that may have been altered (such as expanded content or rotated icons).
+   *
+   * This is useful when navigating between pages to ensure that UI elements
+   * are reset to their initial state.
+   *
+   * @returns {void}
+   *
+   * @example
+   * handleRouteChange(); // Resets the expanded content and icon rotation on route change.
+   */
   const handleRouteChange = () => {
     const allElements = document.querySelectorAll<HTMLElement>('.tmb-height');
     allElements.forEach((element) => {
@@ -171,7 +253,7 @@ const ChartTabs = (props: propsData) => {
         element.removeAttribute('style');
       }
     });
-  
+
     const allIcons = document.querySelectorAll<SVGElement>('.arrow-icon svg');
     allIcons.forEach((icon) => {
       if (icon.classList.contains('rotate-180')) {
@@ -179,7 +261,21 @@ const ChartTabs = (props: propsData) => {
       }
     });
   };
-  
+
+  /**
+   * Registers a handler for the `routeChangeComplete` event to reset UI elements
+   * (like expanded content and rotated icons) when the route has fully changed.
+   * 
+   * It cleans up the event listener when the component is unmounted or the `router.events`
+   * dependency changes to prevent memory leaks and redundant event listeners.
+   *
+   * @returns {void}
+   *
+   * @example
+   * useEffect(() => {
+   *   // Handles route change events by calling the route reset function
+   * }, []);
+   */
   useEffect(() => {
     const handleRouteChangeComplete = () => handleRouteChange();
     router.events.on('routeChangeComplete', handleRouteChangeComplete);
@@ -188,13 +284,22 @@ const ChartTabs = (props: propsData) => {
       router.events.off('routeChangeComplete', handleRouteChangeComplete);
     };
   }, [router.events]);
-  
-    
-  
+
 
   /**
-   * Cancel order
-   */
+ * Handles the action of cancelling a market order. 
+ * Encrypts order details and sends a PUT request to cancel the order, 
+ * then updates UI state based on the response.
+ *
+ * @async
+ * @returns {Promise<void>} Resolves when the order cancellation process is complete.
+ * 
+ * @throws {Error} If there is an issue with the fetch request or the decryption process.
+ * 
+ * @example
+ * // To cancel an order after a user action
+ * actionPerform();
+ */
   const actionPerform = async () => {
     try {
       let cancelObj = {
@@ -221,7 +326,6 @@ const ChartTabs = (props: propsData) => {
       ).then((response) => response.json());
 
       if (cancelReponse?.data?.result) {
-    
         setOrderId("");
         if (wbsocket) {
           let withdraw = {
@@ -229,21 +333,16 @@ const ChartTabs = (props: propsData) => {
           }
           wbsocket.send(JSON.stringify(withdraw));
         }
-
-        setTimeout(()=>{
+        setTimeout(() => {
           setActive(false);
           setShow(false);
-        },2000)
-
-
+        }, 2000)
       }
 
     } catch (error) {
       console.log("error in chart page trade history", error);
     }
   };
-
-
 
   return (
     <div className="mt-30 p-20 lg:px-30 lg:py-40 rounded-10  bg-white dark:bg-d-bg-primary">
@@ -626,7 +725,7 @@ const ChartTabs = (props: propsData) => {
                                     ? item?.token.symbol
                                     : item?.global_token.symbol}
                                 </p>
-                              
+
                               </div>
                             </div>
                           </td>
@@ -634,7 +733,7 @@ const ChartTabs = (props: propsData) => {
                             <p className="info-14-18 dark:text-white capitalize">
                               {item?.market_type}
                             </p>
-                           
+
                           </td>
                           <td>
                             <p
@@ -649,19 +748,19 @@ const ChartTabs = (props: propsData) => {
                           <td className="max-[1023px]:hidden">
                             <div className={` items-center gap-[10px] flex`}>
                               <p className={`info-14-18 dark:text-white`}>
-                                {currencyFormatter(truncateNumber(item?.token_amount,8))}
+                                {currencyFormatter(truncateNumber(item?.token_amount, 8))}
                               </p>
                             </div>
                           </td>
 
                           <td className="max-[1023px]:hidden">
                             <p className="info-14-18 dark:text-white">
-                              ${currencyFormatter(truncateNumber(item?.limit_usdt,8))}
+                              ${currencyFormatter(truncateNumber(item?.limit_usdt, 8))}
                             </p>
                           </td>
                           <td className="max-[1023px]:hidden">
                             <p className="info-14-18 dark:text-white">
-                              ${currencyFormatter(truncateNumber(item.volume_usdt,8))}
+                              ${currencyFormatter(truncateNumber(item.volume_usdt, 8))}
                             </p>
                           </td>
                           <td className="max-[1023px]:hidden">
@@ -838,7 +937,7 @@ const ChartTabs = (props: propsData) => {
                       <div
                         key={index}
                         className=" dark:hover:bg-black-v-1  group rounded-5 hover:bg-[#FEF2F2] relative"
-                       
+
                       >
                         <div
                           className={`grid grid-cols-3 relative md:grid-cols-11 items-center gap-[5px] justify-between cursor-pointer`}
@@ -849,9 +948,9 @@ const ChartTabs = (props: propsData) => {
 
                             <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                               <p className="info-14-18 dark:text-white">
-                              {item?.token
-                                    ? item?.token.symbol
-                                    : item?.global_token.symbol}
+                                {item?.token
+                                  ? item?.token.symbol
+                                  : item?.global_token.symbol}
                               </p>
                               {/* <p className="info-10-14 !text-primary py-0 md:py-[3px] px-0 md:px-[10px] bg-[transparent] md:bg-grey-v-2 md:dark:bg-black-v-1 rounded-5">
                                 {item?.token !== null
@@ -904,7 +1003,7 @@ const ChartTabs = (props: propsData) => {
                                 {item.order_type}
                               </p>
                               <p className="info-10">
-                              {formatDate(item?.createdAt)}
+                                {formatDate(item?.createdAt)}
                               </p>
                             </div>
                             <div className="block md:hidden py-[10px] md:py-[15px] px-0 md:px-[5px]">
@@ -923,12 +1022,12 @@ const ChartTabs = (props: propsData) => {
                           <div className="py-[10px] md:py-[15px] col-span-2 px-0 md:px-[5px]  md:block hidden">
                             <p className="info-14-18 dark:text-white">
                               {/* {item?.fee?.toFixed(8)} */}
-                             {scientificToDecimal(Number(truncateNumber(item.fee.toFixed(12), 10)))}
+                              {scientificToDecimal(Number(truncateNumber(item.fee.toFixed(12), 10)))}
                             </p>
                           </div>
                           <div className="py-[10px] md:py-[15px] col-span-2 px-0 md:px-[5px]  md:block hidden min-w-[140px] w-full">
                             <p className="info-14-18 dark:text-white w-full">
-                              {currencyFormatter(truncateNumber(item?.limit_usdt,8))}
+                              {currencyFormatter(truncateNumber(item?.limit_usdt, 8))}
                             </p>
                           </div>
                           <div className="py-[10px] md:py-[15px] col-span-2 px-0 md:px-[5px]  md:block hidden">
@@ -963,9 +1062,9 @@ const ChartTabs = (props: propsData) => {
                         {/* Sub transaction record listing */}
                         {sortBlogPostsByDate &&
                           <button
-                      
+
                             className="absolute top-[43px] right-[12px]  max-w-[10px] w-full cursor-pointer arrow-icon"
-                            
+
                           >
                             <svg
                               className="duration-300"
@@ -984,7 +1083,7 @@ const ChartTabs = (props: propsData) => {
                             </svg>
                           </button>
                         }
-                        <div className={`h-0 overflow-hidden duration-300 flex flex-col-reverse tmb-height`}  ref={elementRef}>
+                        <div className={`h-0 overflow-hidden duration-300 flex flex-col-reverse tmb-height`} ref={elementRef}>
                           {sortBlogPostsByDate && sortBlogPostsByDate.length > 0 && sortBlogPostsByDate?.map((elm: any, ind: number) => {
 
                             let classByStatus = "";
@@ -1003,7 +1102,7 @@ const ChartTabs = (props: propsData) => {
                             }
 
                             return (
-                              <div  className={`grid grid-cols-3 md:grid-cols-11 items-center  justify-between `}>
+                              <div className={`grid grid-cols-3 md:grid-cols-11 items-center  justify-between `}>
                                 <div className="flex gap-2 md:col-span-1 py-[10px] md:py-[15px] px-0 md:px-[5px] ">
                                 </div>
                                 <div className="flex items-center py-[10px] md:py-[15px] px-0 md:px-[5px] ">
@@ -1050,7 +1149,7 @@ const ChartTabs = (props: propsData) => {
                                       {elm.order_type}
                                     </p>
                                     <p className="info-10">
-                                    {formatDate(elm?.createdAt)}
+                                      {formatDate(elm?.createdAt)}
                                     </p>
                                   </div>
                                   <div className="block md:hidden py-[10px] md:py-[15px] px-0 md:px-[5px]">
@@ -1072,7 +1171,7 @@ const ChartTabs = (props: propsData) => {
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px] col-span-2 md:block hidden">
                                   <p className="info-14-18 dark:text-white">
-                                    {currencyFormatter(truncateNumber(elm?.limit_usdt,8))}
+                                    {currencyFormatter(truncateNumber(elm?.limit_usdt, 8))}
                                   </p>
                                 </div>
                                 <div className="py-[10px] md:py-[15px] px-0 md:px-[5px] col-span-2 md:block hidden">
@@ -1139,12 +1238,12 @@ const ChartTabs = (props: propsData) => {
 
         {active === true && (
           <ConfirmationModel
-              setActive={setActive}
-              setShow={setShow}
-              title={title}
-              message={message}
-              show={show}
-              actionPerform={actionPerform}
+            setActive={setActive}
+            setShow={setShow}
+            title={title}
+            message={message}
+            show={show}
+            actionPerform={actionPerform}
           />
         )}
       </div>

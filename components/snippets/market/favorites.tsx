@@ -8,13 +8,16 @@ import Deposit from "../deposit";
 import { currencyFormatter } from "./buySellCard";
 import { abbreviateNumber } from "@/components/chart/chart-tabs";
 
-interface propsData {
+interface FavoritesPropsData {
+    /** Array of coin objects, likely to include details about various cryptocurrencies */
     coins: any,
+    /** User session details, including user authentication info */
     session: any,
+    /** Array of network objects, potentially related to the blockchain or user networks */
     networks: any
 }
 
-const Favorites = (props: propsData) => {
+const Favorites = (props: FavoritesPropsData) => {
 
     const [itemOffset, setItemOffset] = useState(0);
     const [show1, setShow1] = useState(0);
@@ -29,8 +32,15 @@ const Favorites = (props: propsData) => {
     const currentItems = props.coins.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(props?.coins?.length / itemsPerPage);
 
+    /**
+     * Handles the page click event for pagination and calculates the new offset
+     * to display the correct page of items.
+     * 
+     * @param event - The pagination event, typically containing information about the selected page (event.selected).
+     */
     const handlePageClick = async (event: any) => {
         const newOffset = (event.selected * itemsPerPage) % props?.coins?.length;
+        // Update the offset state to show the correct page of items
         setItemOffset(newOffset);
     };
 

@@ -55,101 +55,127 @@ const Chart = (props: Session) => {
         refreshTokenList();
     }, [slug]);
 
+    /**
+     * useEffect hook to handle WebSocket messages.
+     * - Listens for messages from the WebSocket.
+     * - Parses incoming message data and checks the event type.
+     * - If the event type is "price" or "market", it triggers a token list refresh.
+     * - Cleans up the WebSocket listener on component unmount to prevent memory leaks.
+     */
     useEffect(() => {
         if (!wbsocket) return;
-    
-        const handleSocketMessage = (event:any) => {
+        // Function to handle incoming WebSocket messages
+        const handleSocketMessage = (event: any) => {
             const data = JSON.parse(event.data).data;
             const eventDataType = JSON.parse(event.data).type;
-    
+            // If event type is "price" or "market", refresh token data
             if (eventDataType === "price" || eventDataType === "market") {
                 refreshTokenList();
             }
         };
-    
         wbsocket.onmessage = handleSocketMessage;
-    
+        // Cleanup function to remove the message handler on unmount
         return () => {
             wbsocket.onmessage = null;  // Cleanup to avoid memory leaks
         };
     }, [wbsocket, slug]);
 
-    const socket = () => {
-        if (wbsocket) {
-            wbsocket.onmessage = (event) => {
-                const data = JSON.parse(event.data).data;
-                let eventDataType = JSON.parse(event.data).type;
-                if (eventDataType === "price" || eventDataType === "market") {
-                    refreshTokenList()
-                }
-            }
-        }
-    };
-
+    /**
+     * Asynchronously refreshes token and HLOC (high, low, open, close) data based on the current slug.
+     * - Fetches HLOC data for the current token.
+     * - Updates the HLOC state with the fetched data.
+     * - Fetches a list of all tokens from the server.
+     * - Filters the token list to match the symbol in the slug.
+     * - Sets the matching token as the current token.
+     * - Calls the function to retrieve the user's trade history for the current token.
+     */
     const refreshTokenList = async () => {
-
-        let hlocv = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/hloc?slug=${slug}`, {
-            method: "GET"
-        }).then(response => response.json());
-
-        setHLOCData(hlocv?.data?.data);
-
-        let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
-            method: "GET"
-        }).then(response => response.json());
-
-        let ccurrentToken = tokenList?.data.filter((item: any) => {
-            return item.symbol === slug
-        })
-        setAllCoins(tokenList?.data);
-        setCurrentToken(ccurrentToken);
-        getTokenUserTradeHistory(ccurrentToken[0]?.id);
-
-    }
-
-    const getTokenUserTradeHistory = async (token_id: string) => {
-    
-        if (props.session) {
-            let openOrder = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market?token_id=${token_id}&userid=${props.session?.user?.user_id}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": props.session?.user?.access_token
-                },
+        try {
+            let hlocv = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price/hloc?slug=${slug}`, {
+                method: "GET"
             }).then(response => response.json());
 
-            let tradeHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market/user_trade_history?token_id=${token_id}&userid=${props.session?.user?.user_id}`, {
-                method: "GET",
-                headers: {
-                    "Authorization": props.session?.user?.access_token
-                },
+            setHLOCData(hlocv?.data?.data);
+
+            let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
+                method: "GET"
             }).then(response => response.json());
 
-            setMarketOrders(openOrder.data);
-            setUserTradeHistory(tradeHistory?.data);
+            let ccurrentToken = tokenList?.data.filter((item: any) => {
+                return item.symbol === slug
+            })
+            setAllCoins(tokenList?.data);
+            setCurrentToken(ccurrentToken);
+            getTokenUserTradeHistory(ccurrentToken[0]?.id);
+        } catch (error) {
+
         }
+    }
 
-        let marketHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market/token_trade_history?token_id=${token_id}`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then(response => response.json());
+    /**
+     * getTokenUserTradeHistory
+     * - Fetches user-specific and global trade history data for a given token.
+     * - Makes requests to fetch open orders, user trade history, and market trade history.
+     * - Updates the component state with the fetched data.
+     *
+     * @param {string} token_id - The unique identifier for the token.
+     */
+    const getTokenUserTradeHistory = async (token_id: string) => {
+        try {
+            if (props.session) {
+                // Fetch open orders for the user based on the token ID
+                let openOrder = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market?token_id=${token_id}&userid=${props.session?.user?.user_id}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": props.session?.user?.access_token
+                    },
+                }).then(response => response.json());
 
-        setAllTradeHistory(marketHistory?.data?.orderAll);
-        filterBuySellRecords(marketHistory?.data?.orderAll);
+                // Fetch user-specific trade history for the token
+                let tradeHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market/user_trade_history?token_id=${token_id}&userid=${props.session?.user?.user_id}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": props.session?.user?.access_token
+                    },
+                }).then(response => response.json());
+
+                // Update the state with fetched open orders and user trade history
+                setMarketOrders(openOrder.data);
+                setUserTradeHistory(tradeHistory?.data);
+            }
+
+            // Fetch overall market trade history for the specified token
+            let marketHistory = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market/token_trade_history?token_id=${token_id}`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }).then(response => response.json());
+
+            setAllTradeHistory(marketHistory?.data?.orderAll);
+            filterBuySellRecords(marketHistory?.data?.orderAll);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
 
-
+    /**
+     * filterBuySellRecords
+     * - Filters buy and sell records from the provided trade data.
+     * - Checks if each record's token symbol matches the current `slug`.
+     * - Updates the component state with filtered buy and sell records.
+     *
+     * @param {any} data - Array of trade data objects to filter by order type and token symbol.
+     */
     const filterBuySellRecords = (data: any) => {
-        // console.log(slug,"slug");
-
-
         if (data && data.length > 0) {
+            // Filter sell records where order type is 'sell' and token symbol matches `slug`
             let sellRecord = data.filter((item: any) => {
                 return item.order_type === 'sell' && item?.global_token ? item?.global_token?.symbol === slug : item?.token?.symbol === slug
             })
 
+            // Filter buy records where order type is 'buy' and token symbol matches `slug`
             let buyRecord = data.filter((item: any) => {
                 return item.order_type === 'buy' && item?.global_token ? item?.global_token?.symbol === slug : item?.token?.symbol === slug
             })
@@ -164,29 +190,47 @@ const Chart = (props: Session) => {
 
     slug = slug
 
+    /**
+     * useEffect Hook
+     * - Randomly generates widths for elements with the class `.tmb-bg-overlay`.
+     * - Sets these random widths every second to create a dynamic width effect.
+     * - The interval is cleared on unmount to prevent memory leaks.
+     *
+     * Dependencies: []
+     */
     useEffect(() => {
+
+        /**
+         * generateRandomWidth
+         * - Generates a random width percentage between 30% and 100%.
+         * @returns {number} - A random integer representing a width percentage.
+         */
         const generateRandomWidth = (): number => {
-          return Math.floor(Math.random() * (100 - 30 + 1)) + 30;
+            return Math.floor(Math.random() * (100 - 30 + 1)) + 30;
         };
-    
+
+        /**
+        * applyRandomWidths
+        * - Selects all elements with the `.tmb-bg-overlay` class.
+        * - Applies a random width to each element.
+        */
         const applyRandomWidths = () => {
-          let tmbbgoverlays = document.querySelectorAll<HTMLElement>('.tmb-bg-overlay');
-          tmbbgoverlays.forEach((element) => {
-            const randomWidth = generateRandomWidth();
-            (element as HTMLElement).style.width = `${randomWidth}%`;
-          });
+            let tmbbgoverlays = document.querySelectorAll<HTMLElement>('.tmb-bg-overlay');
+            tmbbgoverlays.forEach((element) => {
+                const randomWidth = generateRandomWidth();
+                (element as HTMLElement).style.width = `${randomWidth}%`;
+            });
         };
         applyRandomWidths();
         const intervalId = setInterval(() => {
-          applyRandomWidths(); 
+            applyRandomWidths();
         }, 1000);
-    
-        // return () => clearInterval(intervalId);
-      }, []);
+
+    }, []);
 
     return (
         <>
-        <Meta title={`${currencyFormatter(truncateNumber(currentToken[0]?.price, 1))} ${slug === 'BTCB' ? 'BTC' : slug === 'BNBT' ? 'BNB' : slug}USDT Crypto Planet Spot Trading`} description={`Trade ${slug === 'BTCB' ? 'BTC' : slug === 'BNBT' ? 'BNB' : slug}USDT effortlessly with our user-friendly platform. Access live prices, detailed charts, and expert trading strategies to maximize your investment. Stay updated on market trends and join a vibrant community of traders. Start your ${slug === 'BTCB' ? 'BTC' : slug === 'BNBT' ? 'BNB' : slug}USDT trading journey today!`}/>
+            <Meta title={`${currencyFormatter(truncateNumber(currentToken[0]?.price, 1))} ${slug === 'BTCB' ? 'BTC' : slug === 'BNBT' ? 'BNB' : slug}USDT Crypto Planet Spot Trading`} description={`Trade ${slug === 'BTCB' ? 'BTC' : slug === 'BNBT' ? 'BNB' : slug}USDT effortlessly with our user-friendly platform. Access live prices, detailed charts, and expert trading strategies to maximize your investment. Stay updated on market trends and join a vibrant community of traders. Start your ${slug === 'BTCB' ? 'BTC' : slug === 'BNBT' ? 'BNB' : slug}USDT trading journey today!`} />
             <div>
                 <ToastContainer limit={1} />
                 <div className=" bg-light-v-1 py-20 dark:bg-black-v-1">
@@ -227,6 +271,27 @@ const Chart = (props: Session) => {
 
 export default Chart
 
+/**
+ * Server-side function to fetch and provide necessary data to the page component.
+ * 
+ * This function fetches the following:
+ * - User session data using `getServerSession` to check if the user is authenticated.
+ * - A list of available tokens for the future market from `/future?qu=all`.
+ * - User assets data from `/assets` and rewards data from `/rewards`, if the user is authenticated.
+ * 
+ * The returned props are passed to the page component, which includes:
+ * - `session`: The authenticated user session object.
+ * - `sessions`: Duplicate of `session` for potential use in the page component.
+ * - `provider`: The authentication providers fetched from `getProviders()`.
+ * - `coinList`: A list of tokens available for trading in the future market.
+ * - `assets`: The user's assets retrieved from the `/assets` API.
+ * - `userWatchList`: The list of watch coins last time associated with the user.
+ * 
+ * @async
+ * @function getServerSideProps
+ * @param {GetServerSidePropsContext} context - The context object provided by Next.js containing request (`req`) and response (`res`).
+ * @returns {Promise<object>} The props object to be passed to the page component.
+ */
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const session = await getServerSession(context.req, context.res, authOptions);
     const providers = await getProviders();

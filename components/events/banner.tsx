@@ -9,7 +9,14 @@ interface propsData {
 
 const Banner = (props: propsData) => {
 
+  // Get session status and user data using next-auth's useSession hook
   const { status, data: session } = useSession();
+
+  /**
+   * Function to calculate the remaining time for the event.
+   * It compares the current date with the event's end date to compute time left.
+   * @returns {Object} - Time left in days, hours, minutes, and seconds
+   */
   const calculateTimeLeft = () => {
     const difference = +new Date(props?.eventData?.end_date) - +new Date();
     let timeLeft = {};
@@ -31,6 +38,7 @@ const Banner = (props: propsData) => {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   useEffect(() => {
+    // Set up a timer that updates the time left every 100ms
     const timer = setTimeout(() => {
       setTimeLeft(calculateTimeLeft());
     }, 100);

@@ -16,7 +16,17 @@ import "react-toastify/dist/ReactToastify.css";
 import { truncateNumber } from "@/libs/subdomain";
 import AuthenticationModelPopup from "@/components/snippets/authenticationPopup";
 
+/**
+ * Validation schema for the form data using Yup.
+ * This schema validates the payment method, quantity, limits, and payment time.
+ */
 const schema = yup.object().shape({
+  /**
+   * Validation for payment methods.
+   * - If the value is an array, each item must be a string with at least one character.
+   * - The array must have a minimum of 1 item and a maximum of 5 items.
+   * - If the value is not an array, it must be a string with at least one character.
+   */
   p_method: yup.lazy((val) =>
     Array.isArray(val)
       ? yup
@@ -26,25 +36,74 @@ const schema = yup.object().shape({
       : yup.string().min(1).required("Please select '1' payment method.")
   ),
   // yup.array().of(yup.string().min(1).required()).required().nullable(),
+  /**
+  * Validation for quantity field.
+  * - Must be a positive number greater than 0.
+  * - Required field.
+  */
   quantity: yup
     .number()
     .positive("Quantity must be greater than '0'.")
     .required("Please enter quantity to sell.")
     .typeError("Please enter quantity to sell."),
+  /**
+ * Validation for minimum limit field.
+ * - Must be a positive number greater than 0.
+ * - Required field.
+ */
   min_limit: yup
     .number()
     .positive("Minimum limit must be greater than '0'.")
     .required("Please enter min limit amount.")
     .typeError("Please enter min limit amount."),
+  /**
+ * Validation for maximum limit field.
+ * - Must be a positive number greater than 0.
+ * - Required field.
+ */
   max_limit: yup
     .number()
     .positive("Maximum limit must be greater than '0'.")
     .required("Please enter max limit amount.")
     .typeError("Please enter max limit amount."),
+  /**
+ * Validation for payment time field.
+ * - Optional field.
+ * - Defaults to "15" if not provided.
+ */
   payment_time: yup.string().optional().default("15"),
 });
 
-interface activeSection {
+/**
+ * Props for managing the payment method selection and asset details in different steps of the form.
+ * 
+ * @interface PaymentMethodProps
+ * @property {number} [step] - The current step in the process (optional).
+ * @property {function} [setStep] - A function to update the current step (optional).
+ * @property {function} [setPaymentMethod] - A function to update the selected payment method, typically used in step 1 (optional).
+ * @property {any} [masterPayMethod] - A list of available master payment methods (optional).
+ * @property {any} [userPaymentMethod] - The payment methods already selected by the user (optional).
+ * @property {any} [selectedAssets] - The assets that the user has selected for the transaction (optional).
+ * @property {any} [assetsBalance] - The user's available asset balance (optional).
+ * @property {any} [price] - The price or value associated with the asset or transaction (optional).
+ * @property {any} [page] - The page or context from which the component is being used, typically for conditional rendering (optional).
+ * @property {any} [userPosts] - The user posts related to the payment method or transaction (optional).
+ * 
+ * @example
+ * <PaymentMethod 
+ *   step={1} 
+ *   setStep={setStepFunction} 
+ *   setPaymentMethod={setPaymentMethodFunction} 
+ *   masterPayMethod={masterMethods} 
+ *   userPaymentMethod={userMethods} 
+ *   selectedAssets={selectedAssets} 
+ *   assetsBalance={500} 
+ *   price={1000} 
+ *   page="payment" 
+ *   userPosts={userPosts} 
+ * />
+ */
+interface PaymentMethodProps {
   step?: number;
   setStep?: any;
   setPaymentMethod?: any; //function call that in step 1
@@ -57,7 +116,7 @@ interface activeSection {
   userPosts?: any;
 }
 
-const PaymentMethod = (props: activeSection) => {
+const PaymentMethod = (props: PaymentMethodProps) => {
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(0);
   const [formMethod, setFormMethod] = useState();
@@ -74,20 +133,39 @@ const PaymentMethod = (props: activeSection) => {
 
   const router = useRouter();
 
+  /**
+ * Retrieves the payment method name based on the provided payment method ID.
+ *
+ * @param {string} pmid - The ID of the payment method to look up.
+ * @returns {string} - The name of the payment method if found, otherwise an empty string.
+ */
   const getPaymentMethodName = (pmid: string) => {
+    // Find the payment method in the masterPayMethod list that matches the given ID
     const method = props.masterPayMethod.find((method: any) => method.id === pmid);
+    // Return the payment method name if found, otherwise return an empty string
     return method ? method.payment_method : "";
   };
 
+  /**
+ * useEffect to handle initialization logic based on router query parameters.
+ * - Fetches all payment methods.
+ * - Sets form values when query parameters are present.
+ *
+ * Dependencies:
+ * - Triggered whenever `router.query` changes.
+ */
   useEffect(() => {
+    // Fetch all payment methods without any filter initially
     getAllPayments('');
+    // Check if there are query parameters in the router object
     if (Object.keys(router?.query).length > 0) {
       let qty: any = router?.query?.qty;
       let pmid: any = router?.query?.pmid;
       setValue("quantity", qty);
-      setValue("max_limit", truncateNumber(props.price * qty,6));
-      setReduceValue(truncateNumber(props.assetsBalance - qty,6))
+      setValue("max_limit", truncateNumber(props.price * qty, 6));
+      setReduceValue(truncateNumber(props.assetsBalance - qty, 6))
       const paymentMethodName = getPaymentMethodName(pmid);
+      // Fetch all payments filtered by the retrieved payment method name
       getAllPayments(paymentMethodName)
 
     }
@@ -109,8 +187,19 @@ const PaymentMethod = (props: activeSection) => {
     resolver: yupResolver(schema),
   });
 
+  /**
+ * Fetches user payment methods and optionally selects a specific payment method by name.
+ *
+ * @param {string | undefined} name - The name of the payment method to be pre-selected. If empty, no selection is made.
+ *
+ * Functionality:
+ * - Fetches the user's payment methods from the server.
+ * - Sorts payment methods alphabetically by `pm_name`.
+ * - Updates the `list` state with the sorted payment methods.
+ * - If a payment method name is provided, it finds and selects that method.
+ */
   const getAllPayments = async (name: string | undefined) => {
-
+    // Fetch user payment methods from the API
     let userPaymentMethod = await fetch(
       `${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod`,
       {
@@ -121,21 +210,20 @@ const PaymentMethod = (props: activeSection) => {
       }
     ).then((response) => response.json());
     // Assuming `userPaymentMethod?.data` contains the payment methods array
+    // Sort payment methods alphabetically by `pm_name`
     let sortedPaymentMethods = userPaymentMethod?.data.sort((a: any, b: any) => {
       if (a.pm_name < b.pm_name) return -1;
       if (a.pm_name > b.pm_name) return 1;
       return 0;
     });
-
+    // Update the `list` state with sorted payment methods
     setList(sortedPaymentMethods);
-
-
-
+    // If a specific payment method name is provided, select it
     if (name !== '') {
       let method: any = userPaymentMethod?.data?.find((item: any) => item?.pm_name === name)
 
       if (method) {
-
+        // Set the value for the payment method field in the form
         setValue("p_method", method?.id)
         setSelectedMethods([method?.id]);
 
@@ -143,8 +231,23 @@ const PaymentMethod = (props: activeSection) => {
     }
   };
 
+  /**
+ * Handles form submission with validation checks for payment methods, balance, and limits.
+ *
+ * @param {any} data - The form data submitted by the user.
+ *
+ * Validation:
+ * - Ensures at least one payment method is selected.
+ * - Checks if the quantity exceeds the user's available balance.
+ * - Verifies that the minimum limit is less than the maximum limit.
+ * - Converts a single payment method into an array if necessary.
+ *
+ * Actions:
+ * - Sets errors for invalid fields.
+ * - Updates payment methods and proceeds to the next step if validation passes.
+ */
   const onHandleSubmit = async (data: any) => {
-
+    // Ensure at least one payment method is selected
     if (data.p_method.length === 0 || data.p_method[0] === "false") {
       setError("p_method", {
         type: "custom",
@@ -153,6 +256,7 @@ const PaymentMethod = (props: activeSection) => {
       setFocus("p_method");
       return;
     }
+    // Check for sufficient balance
     if (data.quantity > props.assetsBalance) {
       setError("quantity", {
         type: "custom",
@@ -161,6 +265,7 @@ const PaymentMethod = (props: activeSection) => {
       setFocus("quantity");
       return;
     }
+    // Ensure minimum limit is less than the maximum limit
     if (data.min_limit > data.max_limit) {
       setError("min_limit", {
         type: "custom",
@@ -187,13 +292,30 @@ const PaymentMethod = (props: activeSection) => {
     props.setStep(3);
   };
 
+  /**
+ * Validates user input for balance and calculates maximum limit.
+ *
+ * @param {any} e - The event triggered by the input change.
+ *
+ * Validation:
+ * - Ensures the input value matches the decimal format (up to 6 digits after the decimal point).
+ * - Checks if the input value exceeds the user's available balance.
+ *
+ * Actions:
+ * - Updates the input value if valid.
+ * - Sets or clears validation errors as needed.
+ * - Calculates and updates the maximum limit based on the quantity and price.
+ */
+
   const checkBalnce = (e: any) => {
     const value = e.target.value;
 
     // Check if the value matches the pattern (up to 5 digits after the decimal point)
+    // Allow only values with up to 6 decimal places
     if (/^\d*\.?\d{0,6}$/.test(value)) {
       setInputValue(value);
     }
+    // Check if the entered value exceeds the available balance
     if (e.target.value > props.assetsBalance) {
       setError("quantity", {
         type: "custom",
@@ -201,8 +323,7 @@ const PaymentMethod = (props: activeSection) => {
       });
       return;
     } else {
-      // setValue("max_limit", props.price * e.target.value);
-      // setMaxInputValue(Number(props.price) * Number(e.target.value))
+      // Calculate the maximum limit based on the entered value and price
       let maxLimit = truncateNumber(props.price * e.target.value, 6);
       setValue('max_limit', maxLimit);
       clearErrors('max_limit')
@@ -211,12 +332,24 @@ const PaymentMethod = (props: activeSection) => {
     }
   };
 
+  /**
+ * Deletes a payment method after validating its relation to existing ads.
+ *
+ * Steps:
+ * 1. Checks if the payment method is linked to any existing ads.
+ * 2. Displays a warning toast if the method is associated with ads, preventing deletion.
+ * 3. Sends a DELETE request to the API to remove the payment method if no associations are found.
+ * 4. Provides user feedback via toast notifications for success or failure.
+ *
+ * @async
+ */
   const handleDelete = async () => {
     try {
-      // console.log(props?.userPosts, "==id");
+      // Array to track payment methods associated with active ads
       let paymentMethodRelation = [];
+
+      // Check if the payment method is related to any ads
       for (const post of props?.userPosts?.data) {
-        // console.log(post, "==");
         post?.p_method.filter((itm: any) => {
           if (itm.upm_id === id) {
             paymentMethodRelation.push(itm);
@@ -224,12 +357,13 @@ const PaymentMethod = (props: activeSection) => {
         })
       }
 
+      // Prevent deletion if the method is associated with ads
       if (paymentMethodRelation.length > 0) {
         toast.warning('You can`t remove this payment method because it related to your ads. In case you first change payment method in ad then remove payment method.', { autoClose: 2000 });
         return;
       }
 
-      // return;
+      // Send DELETE request to remove the payment method
       let responseData = await fetch(
         `${process.env.NEXT_PUBLIC_BASEURL}/p2p/userpaymentmethod?id=${id}`,
         {
@@ -239,7 +373,8 @@ const PaymentMethod = (props: activeSection) => {
           },
         }
       ).then((res) => res.json());
-      // console.log(responseData, "==responseData");
+
+      // Handle the response
       if (responseData?.data) {
         getAllPayments('')
         toast.success("Payment method delete successfully");
@@ -257,8 +392,20 @@ const PaymentMethod = (props: activeSection) => {
     }
   };
 
+  /**
+ * Validates and updates input values for min and max limits.
+ *
+ * Steps:
+ * 1. Validates the input against a pattern (up to 6 digits after the decimal point).
+ * 2. Updates the respective state (`min` or `max`) based on the input type.
+ * 3. Checks if the min value exceeds the max value and sets an error if applicable.
+ *
+ * @param {React.ChangeEvent<HTMLInputElement>} e - The input event.
+ * @param {string} type - The type of input (`min` or `max`).
+ */
   const checkInput = (e: any, type: string) => {
     const value = e.target.value;
+    // Validate the input pattern (allow up to 6 decimal places)
     if (/^\d*\.?\d{0,6}$/.test(value)) {
       type === "min" ? setMinInputValue(value) : (value);
     }
@@ -267,11 +414,20 @@ const PaymentMethod = (props: activeSection) => {
     }
   }
 
+  /**
+ * Handles the change event for payment method checkboxes.
+ *
+ * Steps:
+ * 1. Adds a payment method to the list if the checkbox is checked and the limit (5 methods) is not exceeded.
+ * 2. Removes a payment method from the list if the checkbox is unchecked.
+ * 3. Updates the state for selected methods and the corresponding form field (`p_method`).
+ *
+ * @param {React.ChangeEvent<HTMLInputElement>} e - The checkbox change event.
+ */
+
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = e.target;
- 
     if (checked) {
-
       if (selectedMethods.length < 5) {
         setSelectedMethods([...selectedMethods, value]);
         setValue('p_method', [...selectedMethods, value]);
@@ -283,6 +439,16 @@ const PaymentMethod = (props: activeSection) => {
     }
   };
 
+  /**
+ * Determines if a checkbox should be disabled based on the selected methods.
+ *
+ * Logic:
+ * - If the number of selected methods is 5 or more, only allow the currently selected checkboxes to remain enabled.
+ * - Prevent selection of additional checkboxes when the limit is reached.
+ *
+ * @param {string} value - The value of the checkbox to evaluate.
+ * @returns {boolean} - `true` if the checkbox should be disabled, `false` otherwise.
+ */
   const isCheckboxDisabled = (value: string) => {
     return selectedMethods.length >= 5 && !selectedMethods.includes(value);
   };

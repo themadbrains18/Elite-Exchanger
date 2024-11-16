@@ -2,11 +2,30 @@ import React, { useContext } from "react";
 import Context from "../contexts/context";
 import Image from "next/image";
 
-interface activeSection {
+/**
+ * Interface for the properties of the AddBank component.
+ * It defines the necessary methods to control the component's behavior and visibility.
+ *
+ * @interface AddBankProps
+ */
+interface AddBankProps {
+  /**
+   * A function that sets the active state of the component, typically used to determine which view or step 
+   * of the process should be displayed.
+   * 
+   * @type {Function}
+   */
   setActive: Function;
+  /**
+   * A function that controls the visibility of the component, often used to show or hide modals, popups, 
+   * or other UI elements.
+   * 
+   * @type {Function}
+   */
   setShow: Function;
 }
-const AddBank = (props: activeSection) => {
+
+const AddBank = (props: AddBankProps) => {
   const { mode } = useContext(Context);
   return (
     <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
@@ -38,29 +57,29 @@ const AddBank = (props: activeSection) => {
         </svg>
       </div>
       <form onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+        if (e.key === 'Enter') {
+          e.preventDefault();
+        }
+      }}>
         <div className="py-30 md:py-10">
 
-            <div className="border border-grey-v-1 dark:border-opacity-[15%] mb-[15px] md:mb-5 gap-[15px] items-center flex rounded-5 p-[11px] md:p-[15px]">
-              <input type="text" placeholder="Bank Name" className="outline-none max-w-[355px] sm-text w-full bg-[transparent]" />
-              <Image src="/assets/profile/downarrow.svg" width={24} height={24} alt="downarrow" />
-            </div>
+          <div className="border border-grey-v-1 dark:border-opacity-[15%] mb-[15px] md:mb-5 gap-[15px] items-center flex rounded-5 p-[11px] md:p-[15px]">
+            <input type="text" placeholder="Bank Name" className="outline-none max-w-[355px] sm-text w-full bg-[transparent]" />
+            <Image src="/assets/profile/downarrow.svg" width={24} height={24} alt="downarrow" />
+          </div>
 
-            <div className="border border-grey-v-1 dark:border-opacity-[15%]  mb-[15px] md:mb-5  rounded-5 p-[11px] md:p-[15px]">
-              <input type="text" placeholder="Account Number" className="outline-none sm-text w-full bg-[transparent]" />
-            </div>
+          <div className="border border-grey-v-1 dark:border-opacity-[15%]  mb-[15px] md:mb-5  rounded-5 p-[11px] md:p-[15px]">
+            <input type="text" placeholder="Account Number" className="outline-none sm-text w-full bg-[transparent]" />
+          </div>
 
-            <div className="border border-grey-v-1 dark:border-opacity-[15%] mb-[15px] md:mb-5 gap-[15px] items-center flex rounded-5 p-[11px] md:p-[15px]">
-              <input type="text" placeholder="Re-enter Account Number" className="outline-none max-w-[355px] sm-text w-full bg-[transparent]" />
-              <Image src="/assets/payment/reenter.svg" width={24} height={24} alt="reenter" />
-            </div>
+          <div className="border border-grey-v-1 dark:border-opacity-[15%] mb-[15px] md:mb-5 gap-[15px] items-center flex rounded-5 p-[11px] md:p-[15px]">
+            <input type="text" placeholder="Re-enter Account Number" className="outline-none max-w-[355px] sm-text w-full bg-[transparent]" />
+            <Image src="/assets/payment/reenter.svg" width={24} height={24} alt="reenter" />
+          </div>
 
-            <div className="border border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px]">
-              <input type="text" placeholder="IFSC Code*" className="outline-none sm-text w-full bg-[transparent]" />
-            </div>
+          <div className="border border-grey-v-1 dark:border-opacity-[15%]  rounded-5 p-[11px] md:p-[15px]">
+            <input type="text" placeholder="IFSC Code*" className="outline-none sm-text w-full bg-[transparent]" />
+          </div>
 
         </div>
         <button className="solid-button w-full">Proceed</button>
@@ -70,7 +89,7 @@ const AddBank = (props: activeSection) => {
         <p className="nav-text-sm text-black dark:text-white mb-[10px]">Disclaimer</p>
         <div className="h-[1px] w-full bg-grey-v-2 mb-[10px]"></div>
         <p className="info-10-14">Please cross-check the destination address. Withdrawals to Smart Contract Addresses, payments or participation in ICOs/Airdrops are not supported and will be lost forever. Withdrawal requests cannot be cancelled after submission.</p>
-        </div>
+      </div>
 
     </div>
   );

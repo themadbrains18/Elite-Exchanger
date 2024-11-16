@@ -26,17 +26,33 @@ const P2pBuy = (props: propsData) => {
   const [show1, setShow1] = useState(false);
   const [selectedPost, setSelectedPost] = useState(Object);
   const [newPosts, setNewPosts] = useState([]);
-
-
-
   const wbsocket = useWebSocket();
 
+  /**
+ * Effect hook to establish a WebSocket connection when `wbsocket` or `user_id` changes.
+ * This effect triggers the `socket` function whenever a change is detected in `wbsocket` 
+ * or the user's `user_id`. It is used for managing WebSocket connections and handling 
+ * user-specific data.
+ * 
+ * Cleanup function ensures the WebSocket connection is closed if the component unmounts 
+ * or if either `wbsocket` or `user_id` changes.
+ */
   useEffect(() => {
     socket(props?.session?.user?.user_id);
   }, [wbsocket])
 
-
-
+  /**
+   * Establishes a WebSocket connection to listen for messages related to "post" data.
+   * It processes the received data, specifically extracting payment methods associated 
+   * with user posts, and updates the state with the processed posts data.
+   * 
+   * @param {string | undefined} user_id - The user identifier to send in the WebSocket request.
+   * This user ID is used to retrieve user-specific data related to posts and payment methods.
+   * 
+   * The WebSocket listens for incoming messages and updates the component state based 
+   * on the received data. Specifically, it processes post data, extracting and associating 
+   * payment methods with each post.
+   */
   const socket = (user_id: string | undefined) => {
     if (wbsocket) {
 
@@ -68,14 +84,14 @@ const P2pBuy = (props: propsData) => {
 
   return (
     <>
-    <Meta title='Crypto Planet P2P Trading | Buy Crypto via P2P' description='Crypto Planet Buy Crypto via P2P'/>
+      <Meta title='Crypto Planet P2P Trading | Buy Crypto via P2P' description='Crypto Planet Buy Crypto via P2P' />
 
-    <P2pLayout>
-      <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} assets={props?.assets} posts={newPosts?.length > 0 ? newPosts : props?.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} session={props?.session}/>
-      {show1 === true &&
-        <BuyPopup show1={show1} setShow1={setShow1} selectedPost={selectedPost} />
-      }
-    </P2pLayout>
+      <P2pLayout>
+        <BuyCoinsTabs setShow1={setShow1} coinList={props?.coinList} assets={props?.assets} posts={newPosts?.length > 0 ? newPosts : props?.posts} setSelectedPost={setSelectedPost} masterPayMethod={props.masterPayMethod} session={props?.session} />
+        {show1 === true &&
+          <BuyPopup show1={show1} setShow1={setShow1} selectedPost={selectedPost} />
+        }
+      </P2pLayout>
     </>
   )
 }

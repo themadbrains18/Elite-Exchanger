@@ -26,8 +26,23 @@ interface Session {
     depositList: any
 }
 
+/**
+ * Wallet Component.
+ * Displays the user's crypto wallet, including information such as assets, coins, and transactions.
+ * The component listens to WebSocket messages to update the token and asset data in real-time.
+ * Provides the user interface for managing and refreshing wallet data.
+ *
+ * @param {object} props - The properties passed to the Wallet component.
+ * @param {object} props.session - The user's session data, including access token and user details.
+ * @param {Array} props.coinList - The list of available coins in the platform.
+ * @param {Array} props.networks - The list of supported networks for transactions.
+ * @param {Array} props.withdrawList - The list of withdrawal data.
+ * @param {Array} props.depositList - The list of deposit data.
+ * @param {Array} props.assets - The list of assets owned by the user.
+ * 
+ * @returns {JSX.Element} The Wallet page with asset overview, coin list, and WebSocket support for real-time updates.
+ */
 const Wallet = (props: Session) => {
-
 
     const [userAssetsList, setUserAssetsList] = useState(props.assets);
 
@@ -37,6 +52,13 @@ const Wallet = (props: Session) => {
     const socketListenerRef = useRef<(event: MessageEvent) => void>();
     useEffect(() => {
 
+        /**
+         * WebSocket message handler.
+         * This function listens for incoming WebSocket messages and updates the token list
+         * or user assets based on the event type (e.g., "convert", "price", "transfer").
+         *
+         * @param {MessageEvent} event - The WebSocket message event containing the data.
+         */
         const handleSocketMessage = (event: any) => {
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
@@ -69,6 +91,10 @@ const Wallet = (props: Session) => {
         };
     }, [wbsocket]);
 
+    /**
+     * Refresh the list of tokens available on the platform.
+     * This function fetches the latest token data from the API and updates the state with the new list.
+     */
     const refreshTokenList = async () => {
         let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
             method: "GET"
@@ -77,19 +103,24 @@ const Wallet = (props: Session) => {
         setAllCoins(tokenList?.data);
     }
 
+    /**
+     * Refresh the user's asset data.
+     * This function fetches the latest asset data from the API using the user's access token and updates the state.
+     */
     const refreshData = async () => {
-
-        if (props.session) {
-            let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${props.session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
-                method: "GET",
-                headers: {
-                    "Authorization": props.session?.user?.access_token
-                },
-            }).then(response => response.json());
-
-            setUserAssetsList(userAssets);
-
-
+        try {
+            if (props.session) {
+                let userAssets = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/assets?user_id=${props.session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": props.session?.user?.access_token
+                    },
+                }).then(response => response.json());
+                setUserAssetsList(userAssets);
+            }
+        } catch (error) {
+            console.log(error);
+            
         }
     }
 
@@ -121,6 +152,15 @@ const Wallet = (props: Session) => {
 
 export default Wallet;
 
+/**
+ * Server-side function to fetch data before rendering the page.
+ * This function gets the user's session data, lists of coins, networks, assets, withdrawals, and deposits
+ * to render the Wallet page with up-to-date information.
+ *
+ * @param {GetServerSidePropsContext} context - The context for the server-side request.
+ * 
+ * @returns {object} The props to be passed to the Wallet component, including session data, coin list, networks, and transactions.
+ */
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     const { req } = context;
     const session = await getServerSession(context.req, context.res, authOptions);

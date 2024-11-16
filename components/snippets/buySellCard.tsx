@@ -19,7 +19,6 @@ import { truncateNumber } from "@/libs/subdomain";
 const schema = yup.object().shape({
   token_amount: yup.number().positive("Amount must be greater than '0'.").required('Please enter quantity.').typeError('Please enter quantity.'),
   limit_usdt: yup.number().positive("Limit must be greater than '0'.").required('Please enter limit amount.').typeError('Please enter limit amount.'),
-  // market_type:yup.string().optional().default('limit')
 });
 
 interface DynamicId {

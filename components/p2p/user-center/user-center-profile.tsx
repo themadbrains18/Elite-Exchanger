@@ -12,9 +12,6 @@ const UserCenterProfile = (props: propsData) => {
 
     const { status, data: session } = useSession();
 
-    // console.log(props?.userDetail?.User,'============userDetail User================');
-    
-
     return (
         <div>
             <div className='mt-40 mb-30'>

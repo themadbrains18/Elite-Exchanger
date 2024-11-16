@@ -2,6 +2,23 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { Fragment, useContext, useState } from 'react';
 
+/**
+ * Props for the SellTableDesktop component.
+ * 
+ * This interface defines the expected properties for the `SellTableDesktop` component, 
+ * including a function to control the visibility of a modal or some other UI element.
+ * 
+ * @interface SellTableDesktopProps
+ * 
+ * @property {Function} setShow1 - A function to control the visibility state. 
+ * This function is typically used to show or hide a modal or pop-up within the component.
+ * 
+ * @example
+ * // Example usage of the SellTableDesktopProps interface:
+ * const SellTableDesktopComponent = (props: SellTableDesktopProps) => {
+ *   // Logic to show or hide something based on props.setShow1
+ * };
+ */
 interface activeSection {
     setShow1: any;
   }

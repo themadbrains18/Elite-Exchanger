@@ -17,9 +17,6 @@ import { useForm } from "react-hook-form";
 const schema = yup.object().shape({
   username: yup.string()
     .required('Email / Phone is required.').matches(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})|([0-9]{10})+$/, 'Please enter valid email or phone number.'),
-  // .test('email_or_phone', 'Email / Phone is invalid', (value) => {
-  //   return validateEmail(value) || validatePhone(value);
-  // }),
   password: yup.string().required('Password must be required.'),
   confirmPassword: yup.string()
     .oneOf([yup.ref('password')], 'Passwords must match.')
@@ -74,6 +71,18 @@ const SignIn = (Props: loginType) => {
 
   }, [errors]);
 
+  /**
+   * **onHandleSubmit** - Handles the form submission logic for logging in a user.
+   * It processes the submitted form data, checks if the username is an email or phone number,
+   * and then sends a request to the server for login. 
+   * Depending on the response, it updates the state, displays appropriate messages, and handles navigation.
+   **1. Validate if the username is an email**
+    // Check if the entered username is a valid email address.
+    **2. Initialize form data**
+    // Set default values for OTP, step, and user type (email or number).
+    **3. Handle email vs. phone number logic**
+    // If it's an email, store it and clear the phone number fields; otherwise, store the number.
+  */
   const onHandleSubmit = async (data: any) => {
     try {
       let isEmailExist = await validateEmail(data.username);
@@ -89,9 +98,6 @@ const SignIn = (Props: loginType) => {
         data.email = "string";
         data.number = data.username
       }
-      // console.log(data, "==data");
-
-
       if (Props.loginType === "admin") {
         data.loginType = 'admin';
       } else {
@@ -99,6 +105,9 @@ const SignIn = (Props: loginType) => {
       }
 
       setBtnDisabled(true);
+
+      // ** Encrypt and send form data to the server**
+      // Encrypt the form data using AES and send it as a POST request to the backend.
       const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
       let record = encodeURIComponent(ciphertext.toString());
 
@@ -111,6 +120,8 @@ const SignIn = (Props: loginType) => {
         body: JSON.stringify(record)
       })
 
+      // ** Handle server response**
+      // If login is successful, update the state and navigate. If not, display an error.
       let res = await responseData.json();
 
       if (res.data.status === 200) {
@@ -127,6 +138,9 @@ const SignIn = (Props: loginType) => {
         }, 3000);
       }
     } catch (error: any) {
+      // ** Handle errors**
+      // In case of an error, show an error message and re-enable the button after a delay.
+      
       toast.error(error?.message, { autoClose: 2000 });
       setTimeout(() => {
         setBtnDisabled(false);

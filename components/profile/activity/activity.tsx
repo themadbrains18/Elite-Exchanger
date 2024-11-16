@@ -8,12 +8,20 @@ import React, { useContext, useEffect, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { ToastContainer, toast } from "react-toastify";
 
-interface fixSection {
+/**
+ * Defines the properties (props) for the Activity component.
+ * 
+ * @interface ActivityProps
+ * @property {boolean} [showActivity] - Optional flag to determine if the activity is visible.
+ * @property {Function} setShowActivity - Function to toggle the visibility of the activity.
+ */
+interface ActivityProps {
   showActivity?: boolean;
   setShowActivity: Function;
-  // activity?: any;
 }
-const Activity = (props: fixSection) => {
+
+
+const Activity = (props: ActivityProps) => {
   const [active, setActive] = useState(1);
   const { mode } = useContext(Context);
   const [itemOffset, setItemOffset] = useState(0);
@@ -22,20 +30,35 @@ const Activity = (props: fixSection) => {
   const { data: session } = useSession()
   const [data, setData] = useState([]);
   const [confirmDelete, setConfirmDelete] = useState(false);
-
   let pageCount = Math.ceil(total / itemsPerPage);
 
+  /**
+ * Handles the page click event for pagination.
+ * 
+ * This function calculates the new offset based on the selected page number
+ * and updates the state to reflect the new starting point for items to be displayed.
+ *
+ * @function handlePageClick
+ * @param {any} event - The event object from the page click (contains the selected page number).
+ * @returns {void} - This function doesn't return anything.
+ */
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % total;
     setItemOffset(newOffset);
-
   };
 
+  /**
+   * Clears the user's activity and resets relevant state.
+   * 
+   * This function sends a POST request to the server to clear the user's activity based on their user ID,
+   * then processes the server's response. Upon success, it resets the activity-related state and shows a success toast.
+   *
+   * @function clearActivity
+   * @returns {Promise<void>} - This function doesn't return anything but performs side effects like clearing activity and updating state.
+   */
   const clearActivity = async () => {
 
-    let obj = {
-      user_id: session?.user?.user_id
-    }
+    let obj = { user_id: session?.user?.user_id }
 
     const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
     let record = encodeURIComponent(ciphertext.toString());
@@ -61,11 +84,25 @@ const Activity = (props: fixSection) => {
 
   };
 
+  /**
+ * Fetches the activity data whenever the `itemOffset` value changes.
+ * 
+ * This `useEffect` hook runs whenever the `itemOffset` changes. It calls the `getActivityData` function to fetch the latest activity data based on the current `itemOffset`, which helps in paginating the activity list.
+ *
+ * @effect - Runs when the `itemOffset` state value changes.
+ */
   useEffect(() => {
-    // setData(props?.activity);
     getActivityData(itemOffset);
   }, [itemOffset]);
 
+  /**
+ * Fetches activity data from the server based on the current pagination parameters.
+ * 
+ * This function sends a GET request to the API endpoint `/profile/activity` with the `user_id`, `itemOffset`, and `itemsPerPage` parameters. It then updates the state variables `total` and `data` with the fetched activity data and total count of activities.
+ *
+ * @param itemOffset - The current offset for pagination, used to fetch the correct page of data.
+ * @returns void - This function doesn't return a value, but updates the state.
+ */
   const getActivityData = async (itemOffset: number) => {
     try {
       let activity = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/profile/activity?userid=${session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}`, {
@@ -82,8 +119,6 @@ const Activity = (props: fixSection) => {
 
     }
   }
-  // console.log(data, "=======================dta");
-
 
   return (
     <>
@@ -102,32 +137,13 @@ const Activity = (props: fixSection) => {
         <div className="flex gap-5 justify-between mb-[40px]">
           <p className="sec-title">Activity log</p>
           <div className="flex gap-2 items-center">
-            {/* <div className="border w-full rounded-5 hidden md:flex gap-[10px] border-grey-v-1 dark:border-opacity-[15%] max-w-[331px]  py-[13px] px-[10px] ">
-              <Image
-                alt="search"
-                loading="lazy"
-                width="24"
-                height="24"
-                decoding="async"
-                data-nimg="1"
-                src="/assets/history/search.svg"
-              />
-              <input
-                type="search"
-                placeholder="Search"
-                className="nav-text-sm !text-beta outline-none bg-[transparent] w-full"
-              />
-            </div> */}
-            {
-              data && data.length > 0 && (
-
-
-                <button className=" solid-button w-full hover:bg-primary-800"
-                  onClick={() => { setConfirmDelete(true) }}
-                >
-                  Clear History
-                </button>
-              )
+            {data && data.length > 0 && (
+              <button className=" solid-button w-full hover:bg-primary-800"
+                onClick={() => { setConfirmDelete(true) }}
+              >
+                Clear History
+              </button>
+            )
             }
           </div>
         </div>
@@ -244,7 +260,7 @@ const Activity = (props: fixSection) => {
                       </td>
                       <td className="">
                         <p className="info-14-18 dark:text-white text-end">
-                          {formatDate(item.loginTime,"yyyy-MM-dd HH:mm:ss a")}
+                          {formatDate(item.loginTime, "yyyy-MM-dd HH:mm:ss a")}
                         </p>
                       </td>
                       {/* <td className=" !text-end">

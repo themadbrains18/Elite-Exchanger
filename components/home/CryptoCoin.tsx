@@ -6,6 +6,14 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Autoplay, Pagination } from 'swiper/modules';
 
+/**
+ * Interface for the props used by the component that handles the coin list.
+ * 
+ * @interface
+ * @property {any} coinList - A list of coins to be displayed or processed.
+ * This can include information like coin names, values, symbols, etc., and
+ * may vary in structure depending on the data source.
+ */
 interface propsData {
   coinList: any;
 }
@@ -22,6 +30,19 @@ const CryptoCoin = (props: propsData) => {
     hidden: false
   };
 
+  /**
+ * Fetches HLCO (High, Low, Close, Open) data for a list of coins and updates the component state.
+ * 
+ * This effect runs whenever the `props.coinList` changes. It filters out the "USDT" coin from 
+ * the list, limits the number of coins to 8, and fetches HLCO data for each coin. If the data 
+ * is successfully fetched, it updates the coin data with additional properties like chart image,
+ * status, and change24h. If the fetch fails, it sets the `hlocv` to null and provides default 
+ * values for other properties.
+ * 
+ * @param {Array} props.coinList - The list of coins passed as a prop. Each coin object in the list
+ *                                  is expected to have properties like `symbol`, which is used 
+ *                                  to fetch HLCO data.
+ */
   useEffect(() => {
     const fetchHLCOData = async () => {
       let coins = props?.coinList?.filter((item: any) => item?.symbol !== "USDT");

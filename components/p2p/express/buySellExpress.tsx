@@ -22,16 +22,51 @@ const schema = yup.object().shape({
   p_method: yup.string().required('Please select payment method.').typeError('Please select payment method.')
 });
 
-
-interface propsData {
+/**
+ * Interface representing the data props for the BuySellExpress component.
+ * This interface defines the structure of props passed to the component.
+ */
+interface BuySellExpressPropsData {
+  /**
+   * A list of coins available for buying or selling.
+   * This will contain information about each coin that can be traded.
+   * 
+   * @type {any}
+   */
   coins: any;
+  /**
+  * The current session object for the user.
+  * Contains details about the logged-in user, such as user_id, access token, etc.
+  * 
+  * @type {any}
+  */
   session: any;
+  /**
+   * A list of posts related to buy/sell advertisements.
+   * This property is optional and contains information about the user's buy/sell posts.
+   * 
+   * @type {any}
+   * @optional
+   */
   posts?: any;
+  /**
+   * A list of master payment methods available for the user.
+   * This is an optional property that holds payment methods available to the user.
+   * 
+   * @type {any}
+   * @optional
+   */
   masterPayMethod?: any;
+  /**
+   * A list of assets associated with the user.
+   * This represents the user's owned assets, such as cryptocurrencies or tokens.
+   * 
+   * @type {any}
+   */
   assets: any
 }
 
-const BuySellExpress = (props: propsData) => {
+const BuySellExpress = (props: BuySellExpressPropsData) => {
   const [active1, setActive1] = useState(1);
   const [selectedToken, setSelectedToken] = useState(Object);
   const [selectedSecondToken, setSelectedSecondToken] = useState(Object);
@@ -57,7 +92,10 @@ const BuySellExpress = (props: propsData) => {
   const wbsocket = useWebSocket();
   const hasRun = useRef(false);
 
-
+  /**
+   * useEffect hook to reset form and set the second currency to 'USDT'
+   * when the value of `active1` changes.
+   */
   useEffect(() => {
     if (active1) {
       reset()
@@ -65,6 +103,10 @@ const BuySellExpress = (props: propsData) => {
     }
   }, [active1]);
 
+  /**
+ * useEffect hook that runs once when the component is mounted.
+ * This hook fetches filter assets and sets the second currency to 'USDT' for the dropdown.
+ */
   useEffect(() => {
     if (!hasRun.current) {
       getFilterAsset('');
@@ -72,16 +114,6 @@ const BuySellExpress = (props: propsData) => {
       hasRun.current = true;
     }
   }, [])
-
-      
-
-  // useEffect(()=>{
-  //   if(active1===1){
-  //     filterSellerAds(paymentMethod, selectedSecondToken);
-
-  //   }
-
-  // },[amount])
 
   let {
     register,
@@ -97,15 +129,15 @@ const BuySellExpress = (props: propsData) => {
   });
 
   /**
-   * Get initial usdt tot inr price
-   */
+ * Fetches the current price of the given asset (like USDT) in INR from the LiveCoinWatch API.
+ * 
+ * @param {string} asset - The asset code (e.g., 'USDT', 'BTC', etc.) whose price is to be fetched.
+ * @returns {Promise<any>} - Returns the data from the API response containing the exchange rate.
+ */
   const getUsdtToInrPrice = async (asset: string) => {
-    // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
-    //   method: "GET"
-    // }).then(response => response.json());
     setLoader(true)
-
     try {
+      // Sends a POST request to LiveCoinWatch API to get the price of the asset in INR
       let responseData = await fetch("https://api.livecoinwatch.com/coins/single", {
         method: "POST",
         headers: new Headers({
@@ -119,35 +151,37 @@ const BuySellExpress = (props: propsData) => {
         }),
       });
 
+      // Parses the JSON response from the API
       let data = await responseData?.json();
-
       setUsdtToInr(truncateNumber(data?.rate, 6));
-      setLoader(false)
-
-      return data;
+      setLoader(false); // Deactivates loader after fetching the data
+      return data; // Returns the response data containing the exchange rate
     } catch (error: any) {
       console.log(error?.message);
       setLoader(false)
     }
-
   }
 
   /**
-   * On token change
-   * @param symbol 
-   * @param dropdown 
-   * @returns 
-   */
+ * Handles the selection of a currency and adjusts the state accordingly.
+ * This function is used for both the buy and sell cases, where it updates the
+ * first and second currencies, fetches the respective token data, and adjusts
+ * conversion rates and prices.
+ *
+ * @param {string} symbol - The symbol of the selected currency (e.g., 'USDT', 'BTC').
+ * @param {number} dropdown - The dropdown selection (1 for buy, 2 for sell).
+ * 
+ * @returns {void}
+ */
   const setCurrencyName = async (symbol: string, dropdown: number) => {
     //================
     //Buy case
     //================
+    clearErrors("spend_amount"); // Clear any errors related to spend_amount
+    clearErrors("receive_amount"); // Clear any errors related to receive_amount
+    setPaymentMethod(''); // Reset payment method
+    reset(); // Reset the form
 
-    clearErrors("spend_amount")
-    clearErrors("receive_amount")
-    setPaymentMethod('')
-
-    reset()
     if (active1 === 1) {
       if (dropdown === 1) {
         setFirstCurrency(symbol);
@@ -187,23 +221,14 @@ const BuySellExpress = (props: propsData) => {
       let currentPrice = 0;
       setChangeSymbol(true);
       if (token[0]?.tokenType !== 'mannual') {
-        // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${symbol}&tsyms=INR`, {
-        //   method: "GET"
-        // }).then(response => response.json());
-
         let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
         await getUsdtToInrPrice(asset);
         setChangeSymbol(false);
 
       }
       else {
-        // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
-        //   method: "GET"
-        // }).then(response => response.json());
-
         let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
         let data = await getUsdtToInrPrice(asset);
-
         let token = list2.filter((item: any) => {
           return item.symbol === symbol
         });
@@ -255,33 +280,20 @@ const BuySellExpress = (props: propsData) => {
       let currentPrice = 0;
       setChangeSymbol(true);
       if (token[0]?.tokenType !== 'mannual') {
-        // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=${symbol}&tsyms=INR`, {
-        //   method: "GET"
-        // }).then(response => response.json());
-
         let asset = symbol === 'BTCB' ? 'BTC' : symbol === 'BNBT' ? 'BNB' : symbol
         let data = await getUsdtToInrPrice(asset);
-
-        // console.log(amount, "=amount", getValues('spend_amount'));
-
         if (amount !== undefined) {
           let spend_amount: any = getValues('spend_amount') * data?.rate
           setReceivedAmount(spend_amount)
-          setValue('receive_amount',truncateNumber(spend_amount, 6));
+          setValue('receive_amount', truncateNumber(spend_amount, 6));
         }
         else {
           setReceivedAmount(0.00)
           setValue('receive_amount', 0.00);
         }
-
         setChangeSymbol(false);
-
       }
       else {
-        // let priceData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
-        //   method: "GET"
-        // }).then(response => response.json());
-
         let asset = "USDT";
         let data = await getUsdtToInrPrice(asset);
         let token = list2.filter((item: any) => {
@@ -289,17 +301,6 @@ const BuySellExpress = (props: propsData) => {
         });
         currentPrice = token[0]?.price * data?.rate;
         setUsdtToInr(currentPrice);
-        // console.log(currentPrice, "==current");
-
-        // if (amount !== undefined) {
-        //   let spend_amount: any = amount * data?.rate
-        //   setReceivedAmount(amount * data?.rate)
-        //   setValue('spend_amount', spend_amount.toFixed(6));
-        // }
-        // else {
-        //   setReceivedAmount(0.00)
-        //   setValue('spend_amount', 0.00);
-        // }
         setChangeSymbol(false);
       }
     }
@@ -311,19 +312,22 @@ const BuySellExpress = (props: propsData) => {
   };
 
   /**
-   * On form submit
-   * @param data 
-   * @returns 
-   */
+ * Handles the form submission for purchasing an asset.
+ * Validates input and checks user authentication and balance before proceeding with the transaction.
+ * 
+ * @param data - The form data, including `spend_amount` and `receive_amount`.
+ * 
+ * @returns void
+ */
   const onHandleSubmit = async (data: any) => {
-
     try {
       let pmId = getValues("p_method")
-      // p2p/postad
+
+      //===========================
+      // Buy case: Validate balance and authentication
+      //===========================
       if (active1 === 2) {
-
-         let pmMethod = props.masterPayMethod.filter((item: any) => item?.id === pmId)
-
+        let pmMethod = props.masterPayMethod.filter((item: any) => item?.id === pmId)
         if (filterAsset?.balance == undefined) {
           setError("spend_amount", {
             type: "custom",
@@ -350,6 +354,9 @@ const BuySellExpress = (props: propsData) => {
         return;
       }
 
+      //===========================
+      // Sell case: Validate amount within allowed limits
+      //===========================
       if (data.spend_amount < finalPost?.min_limit) {
         setError("spend_amount", {
           type: "custom",
@@ -358,6 +365,9 @@ const BuySellExpress = (props: propsData) => {
         return;
       }
 
+      //===========================
+      // User authentication and API call for asset purchase
+      //===========================
       if (status === 'authenticated') {
         let obj = {
           post_id: finalPost?.id,
@@ -417,21 +427,30 @@ const BuySellExpress = (props: propsData) => {
       console.log(error, "==error");
 
     }
-
-
   }
 
   /**
-   * Filter seller ads based on payment method and token
-   * @param id 
-   * @param token 
-   */
+  * Filters seller ads based on the selected payment method and token, and validates the spend amount.
+  * 
+  * This function is responsible for setting the selected payment method, clearing errors on certain fields, 
+  * and determining the most suitable seller ad based on the user’s spend amount and selected token.
+  * It checks the seller ads, compares the payment methods, and ensures the spend amount is within the specified limits.
+  * 
+  * @param id - The ID of the selected payment method.
+  * @param token - The token to be used for filtering seller ads. If not provided, defaults to 'USDT'.
+  */
   const filterSellerAds = (id: string, token: any) => {
-    
+    //===========================
+    // Set Payment Method and Reset Errors
+    //===========================
     setPaymentMethod(id);
     clearErrors("spend_amount")
     clearErrors("receive_amount")
     setValue('p_method', id);
+
+    //===========================
+    // Determine Token to Use (Fallback to 'USDT' if None Provided)
+    //===========================
     if (Object.keys(selectedSecondToken).length === 0) {
       if (token === undefined || token === null || token?.length < 1) {
         let tokenArray = list2.filter((item: any) => {
@@ -447,15 +466,20 @@ const BuySellExpress = (props: propsData) => {
       else {
         token = selectedSecondToken;
       }
-
     }
-    
+
+    //===========================
+    // Filter and Process Seller Ads
+    //===========================
     if (props?.posts && props?.posts.length > 0) {
 
       let seller = props?.posts?.filter((item: any) => {
         return item?.token_id === token?.id && session?.user?.user_id !== item?.user_id
       })
 
+      //===========================
+      // If Seller Ads Found, Process Spend Amount and Payment Method
+      //===========================
       if (seller.length > 0) {
         let nearestObject: any = null;
         let minDifference = Infinity;
@@ -473,8 +497,10 @@ const BuySellExpress = (props: propsData) => {
             return item?.pmid === id
           })
 
+          //===========================
+          // Check Spend Amount Validity and Set Appropriate Values
+          //===========================
           if (sellerPost.length > 0) {
-
             if (spendAmount > 0 && (spendAmount < parseFloat(post.min_limit) || spendAmount > parseFloat(post.max_limit))) {
               flag = true;
             }
@@ -484,23 +510,21 @@ const BuySellExpress = (props: propsData) => {
               setFinalPost(post);
               setUsdtToInr(post?.price);
               if (amount) {
-
-                // console.log("==here", amount,"post?.price",post?.price);
-
                 let receiveAmount: any = amount / post?.price;
-                setValue('receive_amount',truncateNumber(receiveAmount, 6));
-
+                setValue('receive_amount', truncateNumber(receiveAmount, 6));
               }
               clearErrors('spend_amount');
               break;
             }
           }
           else {
-
             setFinalPost({});
           }
         }
 
+        //===========================
+        // If Spend Amount is Invalid, Show Error with Valid Range
+        //===========================
         if (flag === true) {
           seller.forEach((item: any) => {
             let userPaymentMethod = item?.user?.user_payment_methods;
@@ -524,60 +548,75 @@ const BuySellExpress = (props: propsData) => {
                 nearestObject = item;
               }
             }
-            
+
           });
           // setPaymentMethod('')
           setError("spend_amount", {
             type: "custom",
             message: `Note: There's an order available in the range  ${nearestObject?.min_limit} - ${nearestObject?.max_limit}. Order within the range. `,
           });
-
         }
       }
-
       else {
-        // console.log("i am here2");
-        
-        // setUsdtToInr(0.00)
         setFinalPost({});
       }
-
     }
   }
 
   /**
-   * In express sell case
-   * @param id 
-   */
+ * Filters buyer ads based on the selected payment method.
+ *
+ * This function sets the selected payment method, clears any validation errors on certain fields, 
+ * and updates the form values for the payment method. It is intended to be used when filtering or selecting 
+ * buyer ads based on the user's chosen payment method.
+ * 
+ * @param id - The ID of the selected payment method.
+ */
   const filterBuyerAds = (id: string) => {
+    //===========================
+    // Set Selected Payment Method and Update Form Values
+    //===========================
     setPaymentMethod(id);
     setValue('p_method', id);
+    //===========================
+    // Clear Any Validation Errors for Fields Related to the Payment Method
+    //===========================
     clearErrors('receive_amount');
     clearErrors('spend_amount');
     clearErrors('p_method');
   }
 
   /**
-   * In express sell case filter asset which user sell and check sufficiant balance
-   */
+ * Filters and sets the asset based on the provided token ID.
+ *
+ * This function checks if a token ID is provided. If no token ID is provided, it will default to filtering 
+ * assets based on the 'USDT' symbol and 'main_wallet' wallet type. If a valid token ID is provided, 
+ * it filters the assets accordingly and sets the filtered asset.
+ * 
+ * @param tokenID - The token ID used to filter assets.
+ */
   const getFilterAsset = (tokenID: string) => {
+    //===========================
+    // Handle case when tokenID is null, undefined, or empty
+    //===========================
     if (tokenID === null || tokenID === undefined || tokenID === "") {
       let asset = props.assets.filter((item: any) => {
         return item?.global_token?.symbol === 'USDT' && item.walletTtype === "main_wallet"
-
       });
-
       setFilterAsset(asset[0]);
     }
     else {
+      //===========================
+      // Filter assets by provided tokenID
+      //===========================
       let asset = props?.assets?.filter((item: any) => {
         return item?.token_id === tokenID && item.walletTtype === "main_wallet"
       });
-
       setFilterAsset(asset[0]);
     }
   }
-  // console.log(amount,"amount")
+
+
   return (
     <>
 
@@ -638,25 +677,25 @@ const BuySellExpress = (props: propsData) => {
                       step="any"
                       {...register('spend_amount')}
                       onChange={(e: any) => {
-                        
+
                         const value = e.target.value;
                         const regex = /^\d{0,11}(\.\d{0,6})?$/;
                         if (regex.test(value) || value === "") {
-                          
+
                           if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                             setAmount(e?.target?.value);
                             setValue("spend_amount", e?.target?.value);
                           }
                           let receiveAmount: any = e?.target?.value / usdtToInr;
                           if (/(\.\d*99\d*)$/.test(receiveAmount)) {
-                            receiveAmount = receiveAmount?.toFixed(5);                         
+                            receiveAmount = receiveAmount?.toFixed(5);
                           }
 
                           setReceivedAmount(truncateNumber(receiveAmount, 6));
 
-                          setValue('receive_amount',truncateNumber(receiveAmount, 6));
+                          setValue('receive_amount', truncateNumber(receiveAmount, 6));
                           clearErrors('spend_amount');
-                          clearErrors('receive_amount');                            
+                          clearErrors('receive_amount');
                           if (paymentMethod && selectedSecondToken) {
                             filterSellerAds(paymentMethod, selectedSecondToken);
                           }
@@ -667,7 +706,7 @@ const BuySellExpress = (props: propsData) => {
                                 message: `Note: There's an order available in the range  ${finalPost?.min_limit} - ${finalPost?.max_limit}. Order within the range.`,
                               });
                             }
-                          
+
                             let receiveAmount = parseFloat(e?.target?.value) / usdtToInr;
                             if (finalPost?.quantity < receiveAmount) {
                               setError("receive_amount", {
@@ -723,25 +762,25 @@ const BuySellExpress = (props: propsData) => {
 
                         const value = e.target.value;
                         const regex = /^\d{0,11}(\.\d{0,6})?$/;
-                        
+
                         if (regex.test(value) || value === "") {
-                   
+
                           if (/^\d*\.?\d{0,6}$/.test(e?.target?.value)) {
                             setReceivedAmount(e?.target?.value);
                           }
-                       
-                          
+
+
                           let spendAmount: any = e.target.value * usdtToInr;
                           if (/(\.\d*99\d*)$/.test(spendAmount)) {
                             spendAmount = spendAmount?.toFixed();
-                          
+
                           }
                           setAmount(truncateNumber(spendAmount, 6));
                           setValue('spend_amount', truncateNumber(spendAmount, 6));
                           clearErrors('receive_amount');
                           clearErrors('spend_amount')
                         } else {
-                      
+
                           e.target.value = value.slice(0, -1);
                         }
 
@@ -775,9 +814,9 @@ const BuySellExpress = (props: propsData) => {
                     Payment Method
                   </p>
                 </div>
-           
-                <div className={`mt-2 flex gap-2 ${(amount == undefined || isNaN(amount) ||amount==0)?'opacity-70 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}>
-              
+
+                <div className={`mt-2 flex gap-2 ${(amount == undefined || isNaN(amount) || amount == 0) ? 'opacity-70 pointer-events-none' : 'opacity-100 pointer-events-auto'}`}>
+
                   <FiliterSelectMenu
                     data={props.masterPayMethod}
                     placeholder="Select Payment Method"
@@ -785,8 +824,8 @@ const BuySellExpress = (props: propsData) => {
                     auto={false}
                     widthFull={true}
                     onPaymentMethodChange={filterSellerAds}
-                    resetValue={paymentMethod==""?true:false}
-                    // value={paymentMethod}
+                    resetValue={paymentMethod == "" ? true : false}
+                  // value={paymentMethod}
                   />
                 </div>
                 {errors?.p_method && (
@@ -827,11 +866,11 @@ const BuySellExpress = (props: propsData) => {
                             setAmount(e?.target?.value);
                           }
                           let receiveAmount: any = parseFloat(e?.target?.value) * usdtToInr;
-           
-                         
+
+
                           setReceivedAmount(truncateNumber(receiveAmount, 6));
                           // setReceivedAmount(parseFloat(e?.target?.value) * usdtToInr);
-                          setValue('receive_amount',truncateNumber(receiveAmount, 6));
+                          setValue('receive_amount', truncateNumber(receiveAmount, 6));
                           clearErrors('spend_amount');
                           clearErrors('receive_amount');
                         } else {
@@ -934,7 +973,7 @@ const BuySellExpress = (props: propsData) => {
                     auto={false}
                     widthFull={true}
                     onPaymentMethodChange={filterBuyerAds}
-                    resetValue={paymentMethod==""?true:false}
+                    resetValue={paymentMethod == "" ? true : false}
                   />
                 </div>
                 {errors?.p_method && (
@@ -957,7 +996,7 @@ const BuySellExpress = (props: propsData) => {
               </button>
             ) : (
               <Link
-              prefetch={false}
+                prefetch={false}
                 href="/login"
                 className="solid-button w-full block text-center"
               >

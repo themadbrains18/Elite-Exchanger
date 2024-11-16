@@ -1,16 +1,32 @@
 import Image from 'next/image';
 import React, { Fragment, useContext, useState } from 'react';
 import ReactPaginate from "react-paginate";
-import IconsComponent from '../../snippets/icons';
 import Context from "../../contexts/context";
 import Link from 'next/link';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
-interface activeSection {
+/**
+ * Props for the SellTableDesktop component.
+ * 
+ * This interface defines the expected properties for the `SellTableDesktop` component, 
+ * including a function to control the visibility of a modal or some other UI element.
+ * 
+ * @interface SellTableDesktopProps
+ * 
+ * @property {Function} setShow1 - A function to control the visibility state. 
+ * This function is typically used to show or hide a modal or pop-up within the component.
+ * 
+ * @example
+ * // Example usage of the SellTableDesktopProps interface:
+ * const SellTableDesktopComponent = (props: SellTableDesktopProps) => {
+ *   // Logic to show or hide something based on props.setShow1
+ * };
+ */
+interface SellTableDesktopProps {
   setShow1: any;
 }
 
-const SellTableDesktop = (props: activeSection) => {
+const SellTableDesktop = (props: SellTableDesktopProps) => {
   const { mode } = useContext(Context);
 
   const [itemOffset, setItemOffset] = useState(0);

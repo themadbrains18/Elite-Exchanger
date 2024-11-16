@@ -17,7 +17,7 @@ const schema = yup.object().shape({
   token_id: yup.string().required('This field is required.'),
 });
 
-interface showPopup {
+interface TransferModalProps {
   popupMode?: number;
   setPopupMode?: any;
   setOverlay?: any;
@@ -29,9 +29,9 @@ interface showPopup {
   type?: string;
   disableClick?: boolean;
 }
-const TransferModal = (props: showPopup) => {
-  
-  
+
+const TransferModal = (props: TransferModalProps) => {
+
   const { status, data: session } = useSession();
   let { mode } = useContext(Context);
   const [coinList, setCoinList] = useState([]);
@@ -59,10 +59,14 @@ const TransferModal = (props: showPopup) => {
     resolver: yupResolver(schema)
   });
 
+  /**
+ * Toggles between "Spot" and "Futures" modes and updates states accordingly.
+ * 
+ * This function changes the values of `Spot` and `Futures` states to toggle
+ * between two trading modes. It also triggers a filter action on assets based 
+ * on the selected coin and mode.
+ */
   function setValues() {
-    // console.log(Spot,"========Spot");
-    // console.log(future,"========future");
-
     if (Spot == "Spot") {
       setFuture("Spot");
       setSpot("Futures");
@@ -78,17 +82,25 @@ const TransferModal = (props: showPopup) => {
     }
   }
 
-
-  // console.log(props?.assets,"==assets");
-
-
+  /**
+ * Effect hook to handle asset filtering, coin list population, and error clearing.
+ * 
+ * This hook performs the following actions:
+ * 1. Filters assets based on the wallet type and populates the `coins` array 
+ *    with the appropriate symbols, then sets `coinList`.
+ * 2. Sets the `Spot` and `Futures` labels based on `wallet_type` value.
+ * 3. Calls `filterAsset` if a token is specified, using the symbol and wallet type.
+ * 4. For `future` type, generates a unique list of coin symbols.
+ * 5. Clears errors related to `amount` and `token_id` after a delay.
+ * 
+ * Dependencies:
+ * - `props.assets`: Triggered when asset list changes.
+ * - `errors`: To track and clear specific error messages.
+ * - `props.wallet_type`, `props.token`, `props.type`: To manage state and filters based on the provided types.
+ * - `userAsset`: Updates when the user asset changes.
+ */
   useEffect(() => {
-
     let coins: any = [];
-    // console.log(props?.assets,"=========props?.assets====");
-    // console.log(props?.type,"=========props.wallet_type====");
-    // console.log(props,"=====props");
-
     props?.assets?.filter((item: any) => {
       if (item?.walletTtype === props.wallet_type) {
         coins.push(
@@ -96,12 +108,8 @@ const TransferModal = (props: showPopup) => {
         );
       }
     });
-
-    // console.log(coins,"=========coins=========");
-
     setCoinList(coins);
 
-    // || props?.type==="future"
     if (props?.wallet_type === "future_wallet") {
       setFuture("Spot");
       setSpot("Futures");
@@ -116,19 +124,15 @@ const TransferModal = (props: showPopup) => {
       const coinsSet = new Set();
 
       props?.assets?.forEach((item: any) => {
-        //  if (item?.walletTtype === "future_wallet") {
         const symbol = item?.token !== null ? item?.token?.symbol : item?.global_token?.symbol;
         if (symbol) {
           coinsSet.add(symbol);
         }
-        // }
       });
 
       const uniqueCoins: any = Array.from(coinsSet);
       setCoinList(uniqueCoins);
     }
-
-
 
     setTimeout(() => {
       if (errors.amount) {
@@ -141,21 +145,34 @@ const TransferModal = (props: showPopup) => {
   }, [props?.assets, errors, props?.wallet_type, props?.token, props?.type, userAsset]);
 
 
-
+  /**
+   * Filters assets based on the provided symbol and type ("Spot" or "Futures").
+   * 
+   * This function does the following:
+   * 1. Filters assets based on `type`. For "Spot", it looks for assets in the "main_wallet" 
+   *    and matches the symbol with the provided one. For "Futures", it looks for assets in 
+   *    the "future_wallet" and performs the same matching.
+   * 2. Updates the `coinList` with the corresponding symbols of assets found in the selected wallet type.
+   * 3. Sets the `userAsset` to the first matching asset, and updates the `token_id` value using `setValue`.
+   * 4. Clears any existing errors related to the `token_id`.
+   * 5. Sets the selected coin symbol.
+   * 
+   * Dependencies:
+   * - `props.assets`: A list of assets to filter.
+   * - `props.wallet_type`: Used to determine whether to filter for "main_wallet" or "future_wallet".
+   * - `symbol`: The symbol to match when filtering assets.
+   */
   const filterAsset = (symbol: string, type: string) => {
     let coins: any = [];
     if (type == "Spot") {
-      // console.log(props?.assets,"props?.assets");
       let asset = props?.assets?.filter((item: any) => {
         let token = item?.token !== null ? item?.token : item?.global_token;
         if (symbol) {
           return item?.walletTtype === "main_wallet" && token?.symbol === symbol;
-
         }
         else {
           return item?.walletTtype === "main_wallet"
         }
-
       });
       props?.assets?.filter((item: any) => {
         if (item?.walletTtype === "main_wallet") {
@@ -167,12 +184,10 @@ const TransferModal = (props: showPopup) => {
         }
       });
       setCoinList(coins)
-      // console.log("in spot", asset);
       setUserAsset(asset[0]);
       setValue('token_id', asset[0]?.token_id);
       clearErrors('token_id')
     } else {
-
       let asset = props?.assets?.filter((item: any) => {
         let token = item?.token !== null ? item?.token : item?.global_token;
         return (
@@ -188,21 +203,42 @@ const TransferModal = (props: showPopup) => {
           );
         }
       });
-      setCoinList(coins)
-      // console.log("in future",asset);
-      setUserAsset(asset[0]);
-      setValue('token_id', asset[0]?.token_id);
-      clearErrors('token_id')
+      setCoinList(coins);  // Update the coin list with the filtered symbols.
+      setUserAsset(asset[0]);  // Set the user asset to the first matched item.
+      setValue('token_id', asset[0]?.token_id);  // Update the `token_id` value.
+      clearErrors('token_id');  // Clear any existing errors for `token_id`.
     }
 
     setSelectedCoin(symbol);
   };
 
+  /**
+ * Handles the form submission for transferring assets between wallets.
+ * 
+ * This function performs the following actions:
+ * 1. Validates the transfer amount to ensure it does not exceed the user's available balance.
+ * 2. Prepares a request payload with the transfer details, including the user's ID, the wallet types, the selected token ID, and the transfer amount.
+ * 3. Sends a POST request to the transfer API to execute the transfer.
+ * 4. If the transfer is successful, it:
+ *    - Displays a success toast message.
+ *    - Resets the form values and selected coin.
+ *    - Optionally triggers a WebSocket message to notify of the transfer.
+ *    - Refreshes wallet assets and closes the modal after a short delay.
+ * 5. If the transfer fails, it displays an error toast message.
+ * 6. Handles any errors during the process and logs them.
+ * 
+ * Dependencies:
+ * - `session.user.user_id`: User ID for the transfer.
+ * - `Spot` and `future`: States to determine the source and destination wallet types.
+ * - `userAsset.balance`: The user's balance used for validation.
+ * - `wbsocket`: WebSocket connection used for notifications.
+ * - `props.refreshWalletAssets`: A function to refresh wallet assets after a successful transfer.
+ * - `props.setOverlay` and `props.setPopupMode`: Used to close the modal after a successful transfer.
+ * - `toast`: To display success or error messages.
+ */
   const onHandleSubmit = async (data: any) => {
     try {
-      // console.log(data?.amount, userAsset?.balance.toFixed(6), "==data");
-
-
+      // Validate that the amount does not exceed the user's available balance.
       if (data?.amount > userAsset?.balance.toFixed(6)) {
         setError("amount", {
           type: "custom",
@@ -210,10 +246,13 @@ const TransferModal = (props: showPopup) => {
         });
         return;
       }
+
+      // Adjust the amount if it equals the available balance.
       if (data?.amount == userAsset?.balance.toFixed(6)) {
         data.amount = userAsset?.balance
       }
 
+      // Create the request payload for the transfer.
       let obj = {
         user_id: session?.user?.user_id,
         from: Spot === "Spot" ? "main_wallet" : "future_wallet",
@@ -222,7 +261,9 @@ const TransferModal = (props: showPopup) => {
         balance: data?.amount,
       };
 
-      setBtnDisabled(true);
+      setBtnDisabled(true); // Disable the button while the request is in progress.
+
+      // Send the transfer request.
       let assetReponse = await fetch(
         `${process.env.NEXT_PUBLIC_BASEURL}/transfer`,
         {
@@ -235,8 +276,10 @@ const TransferModal = (props: showPopup) => {
         }
       ).then((response) => response.json());
 
+      // Handle the response after the transfer request.
       if (assetReponse?.data?.status === 200) {
         toast.success(assetReponse?.data.data.message, { autoClose: 2000 });
+        // Reset the form and selected coin after successful transfer.
         setValue('token_id', '');
         setCoinDefaultValue('');
         setSelectedCoin('');
@@ -255,6 +298,7 @@ const TransferModal = (props: showPopup) => {
         }, 3000);
 
       } else {
+        // Handle errors in the response.
         toast.error(assetReponse?.data?.data?.message !== undefined ? assetReponse?.data?.data?.message : assetReponse?.data?.data, { autoClose: 2000 });
         setTimeout(() => {
           setBtnDisabled(false);

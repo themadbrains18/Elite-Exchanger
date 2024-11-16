@@ -7,6 +7,10 @@ import { useRouter } from "next/router";
 import { abbreviateNumber } from "@/components/chart/chart-tabs";
 
 interface propsData {
+    /**
+     * The list of coins available in the system.
+     * @type {any} - The type here can be updated based on the actual data structure for coins.
+     */
     coins: any
 }
 
@@ -23,6 +27,12 @@ const TopGainers = (props: propsData) => {
     const currentItems = props.coins.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(props.coins.length / itemsPerPage);
 
+    /**
+     * Handles the page click event for pagination and calculates the new offset
+     * to display the correct page of items.
+     * 
+     * @param event - The pagination event, typically containing information about the selected page (event.selected).
+     */
     const handlePageClick = async (event: any) => {
         const newOffset = (event.selected * itemsPerPage) % props.coins.length;
         setItemOffset(newOffset);

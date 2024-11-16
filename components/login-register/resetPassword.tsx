@@ -44,24 +44,35 @@ const ResetPassword = () => {
   });
 
 
-
+  /**
+   * Handles form submission for password recovery, validates email, and sends data to server for OTP generation.
+   * 
+   * @async
+   * @function onHandleSubmit
+   * @param {any} data - Form data to be validated and submitted.
+   * @returns {Promise<void>}
+   */
   const onHandleSubmit = async (data: any) => {
     try {
-
+      // Validate the email address
       let isEmailExist = await validateEmail(data.username);
       data.username = data.username.toLowerCase()
       setIsEmail(isEmailExist);
 
+      // Prepare form data for password recovery
       data.otp = "";
       data.type = "forget";
       data.step = 1;
       setBtnDisabled(true);
 
+      // Encrypt data using AES encryption
       const ciphertext = AES.encrypt(
         JSON.stringify(data),
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
       ).toString();
       let record = encodeURIComponent(ciphertext.toString());
+
+      // Send encrypted data to server
       let responseData = await fetch(`/api/user/forget`, {
         method: "POST",
         mode: "cors",
@@ -70,22 +81,24 @@ const ResetPassword = () => {
         },
         body: JSON.stringify(record),
       });
+
+      // Parse response
       let res = await responseData.json();
 
+      // Check if OTP data is received
       if (res?.data?.otp !== undefined) {
-        // console.log(res?.data?.otp?.twoFa,"===========res");
-        
-        if(res?.data?.otp?.twoFa){
+        if (res?.data?.otp?.twoFa) {
           setIsTwoFa(true)
         }
-        data.secret= res?.data?.otp?.secret 
-
+        data.secret = res?.data?.otp?.secret;
+        // Display success message and update state with OTP data
         toast.success(res?.data?.message);
         setSendOtpRes(res?.data?.otp);
         setLayout(true)
         setStep(2)
         setFormData(data);
       } else {
+        // Display error message and re-enable button if server response is invalid
         toast.error(res.data.message, { autoClose: 2000 });
         setTimeout(() => {
           setBtnDisabled(false);
@@ -150,10 +163,10 @@ const ResetPassword = () => {
                     </p>
                     {/**Form Start  */}
                     <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    e.preventDefault();
-                  }
-                }}>
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                      }
+                    }}>
                       <div className="flex flex-col gap-[15px] lg:gap-10 relative">
                         <input
                           type="text"
@@ -189,7 +202,7 @@ const ResetPassword = () => {
         </section>
       )}
 
-      {step === 2 && <SecurityCode formData={formData} api="forget" isEmail={isEmail}  sendOtpRes={sendOtpRes} setStep={setStep}  isTwoFa={isTwoFa}/>}
+      {step === 2 && <SecurityCode formData={formData} api="forget" isEmail={isEmail} sendOtpRes={sendOtpRes} setStep={setStep} isTwoFa={isTwoFa} />}
       {step === 3 && <ReEnterpass formData={formData} api="forget" isEmail={isEmail} sendOtpRes={sendOtpRes} setStep={setStep} />}
     </>
   );

@@ -10,28 +10,66 @@
     hlocData?: any;
   }
 
-
-
+  /**
+ * ChartBanner component renders the banner showing cryptocurrency token details.
+ * 
+ * @component
+ * @example
+ * // Usage of ChartBanner with hlocData passed in as props:
+ * <ChartBanner hlocData={hlocData} />
+ *
+ * @param {Object} props - The properties passed to the component
+ * @param {Object} [props.hlocData] - Optional data for high, low, and change rate
+ * 
+ * @returns {JSX.Element} The JSX markup for the ChartBanner component
+ */
   const ChartBanner = (props: propsData) => {
 
     const [fillFav, setFillFav] = useState(false);
     const [currentToken, setCurrentToken] = useState<any>(Object);
     const [cardsData, setCardsData] = useState([]);
     const router = useRouter();
+    
     const { slug } = router.query;
   
+    /**
+   * WebSocket context for real-time data updates.
+   * @type {WebSocket}
+   */
     const wbsocket = useWebSocket();
+
+    /**
+   * Reference to store the current slug for socket connection matching.
+   * @type {Object}
+   */
     const slugRef = useRef(slug); // Store the current slug
   
+    /**
+   * Effect hook to reset the favorite state and refresh token list when slug changes.
+   * @effect
+   */
     useEffect(() => {
       setFillFav(false);
       refreshTokenList();
       slugRef.current = slug; // Update the stored slug whenever it changes
     }, [slug]);
   
+    /**
+   * Reference to store the socket listener function to manage event listeners.
+   * @type {Object}
+   */
     const socketListenerRef = useRef<(event: MessageEvent) => void>();
+
+     /**
+   * Effect hook to listen for WebSocket messages and refresh the token list when prices change.
+   * @effect
+   */
     useEffect(() => {
 
+       /**
+     * Handle incoming WebSocket messages to refresh token list when necessary.
+     * @param {MessageEvent} event - The WebSocket message event
+     */
       const handleSocketMessage = (event: any) => {
         
         const data = JSON.parse(event.data).data;
@@ -59,6 +97,10 @@
       };
     }, [wbsocket]);
   
+    /**
+   * Refresh the list of tokens from the API and update the current token and cards data.
+   * @async
+   */
     const refreshTokenList = async () => {
       const tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
         method: 'GET',
@@ -121,35 +163,6 @@
         setFillFav(false);
       }
     };
-    // const styles = {
-    //   width: `${barWidth}%`,
-    // };
-
-    // const BarWidth = () =>{
-
-    //   const highPrice = props?.hlocData?.high;
-    //   const lowPrice = props?.hlocData?.low;
-    //   let currentPrice = currentToken?.price?.toFixed(5); 
-
-    //   // Calculate ranges
-    //   const totalRange = highPrice - lowPrice;
-    //   // Check for negative price and set to 0 if negative
-    //   if (currentPrice < 0) {
-    //       currentPrice = 0;
-    //   }
-    //   const currentRange = currentPrice - lowPrice;
-    //   console.log(currentRange,"==========currentRange");
-
-    //   // Calculate bar width percentage
-    //   const barWidthPercentage = (currentRange / totalRange) * 100;
-    //   setBarWidth(barWidthPercentage);
-    // }
-    // useEffect(()=>{
-
-    //     BarWidth();
-
-    // },[props])
-
 
     return (
       <div className='p-20 rounded-10  bg-white dark:bg-d-bg-primary'>

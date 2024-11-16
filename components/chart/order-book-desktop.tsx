@@ -19,10 +19,6 @@ const OrderBook = (props: propsData) => {
     const [show, setShow] = useState(1);
     const { mode } = useContext(Context);
 
-    // let isLastItem;
-
-
-
     return (
         <div className='mt-30 px-30 py-40 rounded-10  bg-white dark:bg-d-bg-primary'>
             {/* ta cta */}

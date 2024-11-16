@@ -2,13 +2,22 @@ import React, { useContext, useEffect, useState } from 'react';
 import Context from '../contexts/context';
 import CodeNotRecieved from './codeNotRecieved';
 
-interface activeSection {
+/**
+ * Interface for the props passed to the VerificationOptions component.
+ * This interface defines the structure of the props that control the display and behavior of the verification options.
+ *
+ * @interface VerificationOptionsProps
+ * @property {Function} [setEnable] - Optional function to enable or disable certain features or actions within the component.
+ * @property {Function} [setShow] - Optional function to control the visibility of elements, such as showing or hiding the verification options.
+ * @property {string} [type] - Optional string that defines the type of verification or a specific mode that the component should handle (e.g., SMS, email, etc.).
+ */
+interface VerificationOptionsProps {
   setEnable?: any,
   setShow?: any;
   type?: string
 }
 
-const BothVerificationOptions = (props: activeSection) => {
+const BothVerificationOptions = (props: VerificationOptionsProps) => {
   const { mode } = useContext(Context);
   const [popup, setPopup] = useState(false);
   useEffect(() => {

@@ -2,13 +2,22 @@ import Image from "next/image";
 import React from "react";
 import IconsComponent from "../snippets/icons";
 
-interface fixSection{
+/**
+ * Represents the properties for the Notification Settings component.
+ * 
+ * @interface NotificationSettingsProps
+ * 
+ * @property {boolean} [fixed] - Optional flag to determine if the notification settings should be fixed in place (e.g., not scrollable). Default is `false`.
+ * @property {number} [show] - Optional value representing the current state of visibility. Can be used to control the display logic (e.g., 0 for hidden, 1 for visible).
+ * @property {Function} [setShow] - Optional function used to update the `show` state. Typically used to toggle visibility or change the notification state.
+ */
+interface NotificationSettingsProps{
   fixed?:boolean;
   show?:number;
   setShow?:Function;
 }
 
-const NotificationSettings = (props:fixSection) => {
+const NotificationSettings = (props:NotificationSettingsProps) => {
   let data = [
     {
       image: "price.svg",

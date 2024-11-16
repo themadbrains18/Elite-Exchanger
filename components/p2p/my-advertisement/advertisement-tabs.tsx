@@ -7,17 +7,45 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useRouter } from 'next/router';
 
-interface propsData {
+interface AdvertisementTabsProps {
+    /**
+     * List of posts related to advertisements.
+     * @type {any} - Can be an array of advertisement posts.
+     */
     posts?: any;
+    /**
+     * List of published advertisements.
+     * @type {any} - Can be an array of published advertisements.
+     */
     published?: any;
+    /**
+     * List of unpublished advertisements.
+     * @type {any} - Can be an array of unpublished advertisements.
+     */
     unpublished?: any;
+    /**
+     * User's payment method details.
+     * @type {any} - Typically an object or array of user payment methods.
+     */
     userPaymentMethod?: any;
+    /**
+     * List of available coins for transaction or display.
+     * @type {any} - Can be an array of coins or coin-related data.
+     */
     coinList?: any;
+    /**
+     * List of available payment methods.
+     * @type {any} - Can be an array of payment methods, possibly including their details.
+     */
     masterPayMethod?: any;
+    /**
+     * Session object containing the user's session information.
+     * @type {any} - Can be the session data returned by a session provider (e.g., next-auth).
+     */
     session?: any;
 }
 
-const AdvertisementTabs = (props: propsData) => {
+const AdvertisementTabs = (props: AdvertisementTabsProps) => {
     const router = useRouter();
     const initialTab = parseInt(router.query.t as string) || 1;
     const [active, setActive] = useState(initialTab);
@@ -31,11 +59,18 @@ const AdvertisementTabs = (props: propsData) => {
     const [value, setValue] = useState(""); // For currency dropdown
     const [resetValue, setResetValue] = useState(false)
 
-
+    /**
+     * Sets the first currency symbol and updates the corresponding token and form value.
+     * 
+     * @param symbol - The currency symbol (e.g., 'USDT', 'BTC') to be set.
+     * @param dropdown - The dropdown identifier (e.g., 1 for the first dropdown).
+     *                    Only updates when dropdown equals 1.
+     */
     const setCurrencyName = (symbol: string, dropdown: number) => {
-
+        // Check if the dropdown is the first one (dropdown === 1)
         if (dropdown === 1) {
             setFirstCurrency(symbol);
+            // Find the token from the coin list that matches the given symbol
             let token = props?.coinList?.filter((item: any) => {
                 return item.symbol === symbol
             });
@@ -44,17 +79,35 @@ const AdvertisementTabs = (props: propsData) => {
         }
     }
 
+    /**
+     * Handles the change in the selected payment method and updates the payment ID state.
+     * 
+     * @param id - The ID of the selected payment method.
+     */
     const onPaymentMethodChange = (id: any) => {
-
         setPaymentId(id);
-
     }
 
+    /**
+     * Handles the setting of the selected start date.
+     * 
+     * @param date - The date selected by the user to be set as the start date.
+     */
     const handleDate = (date: any) => {
         setStartDate(date);
-
     };
 
+    /**
+     * Clears all the form values and resets the relevant states.
+     * 
+     * This function is responsible for resetting the following states:
+     * - Clears the form value
+     * - Resets the selected payment method ID
+     * - Resets the selected token
+     * - Clears the first currency
+     * - Resets the start date
+     * - Sets the reset flag to true
+     */
     const clearAll = () => {
         setValue('');
         setPaymentId('');
@@ -63,6 +116,8 @@ const AdvertisementTabs = (props: propsData) => {
         setStartDate(null)
         setResetValue(true);
     };
+
+
     return (
         <>
             <div className='flex flex-wrap gap-20 items-center justify-between  mt-30 md:mt-40'>

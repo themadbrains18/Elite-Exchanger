@@ -16,7 +16,35 @@ import { truncateNumber } from "@/libs/subdomain";
 import { currencyFormatter } from "../snippets/market/buySellCard";
 import { useRouter } from "next/router";
 
-interface fullWidth {
+/**
+ * Interface for the props used in the BuySell component.
+ * 
+ * @interface BuySellProps
+ * 
+ * @property {boolean} [fullWidth] - Optional property to make the component take full width.
+ * @property {boolean} [heightAuto] - Optional property to adjust height automatically.
+ * @property {string} [inputId] - Optional ID for the input field.
+ * @property {string} [thumbId] - Optional ID for the thumbnail element.
+ * @property {string} [lineId] - Optional ID for the line element.
+ * @property {string} [radioId] - Optional ID for the radio button.
+ * @property {number} [popupMode] - Optional mode to control the popup behavior.
+ * @property {Function} [setPopupMode] - Optional function to set the popup mode.
+ * @property {Function} [setOverlay] - Optional function to set overlay visibility.
+ * @property {boolean} [overlay] - Optional flag to show or hide the overlay.
+ * @property {any} [assets] - Optional property holding asset data.
+ * @property {any} [currentToken] - Optional property holding current token information.
+ * @property {any} [marginMode] - Optional property holding margin mode data.
+ * @property {Function} [refreshWalletAssets] - Optional function to refresh wallet assets.
+ * @property {any} [positions] - Optional property holding positions data.
+ * @property {any} [openOrders] - Optional property holding open orders data.
+ * @property {any} [rewardsList] - Optional property holding a list of rewards.
+ * @property {any} [totalPoint] - Optional property holding total points data.
+ * @property {any} [minTrade] - Optional property for minimum trade value.
+ * @property {any} [maxTrade] - Optional property for maximum trade value.
+ * @property {any} [leverage] - Optional property for leverage information.
+ * @property {Function} [setOpnlong] - Optional function to handle opening long positions.
+ */
+interface BuySellProps {
   fullWidth?: boolean;
   heightAuto?: boolean;
   inputId?: string;
@@ -41,7 +69,7 @@ interface fullWidth {
   setOpnlong?: Function;
 }
 
-const BuySell = (props: fullWidth) => {
+const BuySell = (props: BuySellProps) => {
   // main tabs
   const [show, setShow] = useState(1);
   const { status, data: session } = useSession();
@@ -113,37 +141,79 @@ const BuySell = (props: fullWidth) => {
   // ------------------------------
   // Initial market price
   // ------------------------------
-  let marketPrice =
-    props?.currentToken?.token !== null
-      ? props?.currentToken?.token?.price
-      : props?.currentToken?.global_token?.price;
+  let marketPrice = props?.currentToken?.token !== null
+    ? props?.currentToken?.token?.price
+    : props?.currentToken?.global_token?.price;
 
+  /**
+* Converts a scientific notation number to a decimal format.
+* 
+* This function takes a value, converts it to a float, and then converts it
+* to a decimal format by trimming unnecessary trailing zeros after the decimal point.
+*
+* @param {any} value - The value to be converted. It can be a string or number in scientific notation.
+* @returns {any} The value converted to decimal format, or undefined if the input is invalid or falsy.
+*/
   const scientificToDecimal = (value: any): any => {
     if (value) {
       let val = parseFloat(value).toFixed(10) // Convert to decimal format, trimming unnecessary zeros
       val = val.replace(/\.?0+$/, "");
       return val
-
     }
-
   };
 
+  /**
+ * Truncates a number to a specified number of decimal places.
+ * 
+ * This function truncates a given number to a specific number of decimal places
+ * without rounding, using regular expressions to limit the number of decimal digits.
+ *
+ * @param {any} num - The number to be truncated. It can be a number or string.
+ * @param {number} decimals - The number of decimal places to keep after truncating.
+ * @returns {number} The truncated number with the specified decimal places.
+ */
   const truncateToSixNumber = (num: any, decimals: number) => {
     const regex = new RegExp(`^-?\\d+(?:\\.\\d{0,${decimals}})?`);
     const match = num?.toString().match(regex);
     return match ? parseFloat(match[0]) : num;
   };
-  useEffect(() => {
 
+  /**
+   * Effect that runs when the `marketPrice` changes.
+   * 
+   * This hook does the following:
+   * - Retrieves the 'preference' value from `localStorage`, defaulting to "Qty" if not found,
+   *   and sets it to the `preferenceSymbol` state.
+   * - If `showNes` is 2 and `percentage` is greater than 0, it calls `onChangeSizeInPercentage` 
+   *   with the `percentage` value.
+   *
+   * @param {number} marketPrice - The market price that triggers the effect when it changes.
+   */
+  useEffect(() => {
     let value = localStorage.getItem('preference') || "Qty"
     setPreferenceSymbol(value)
-
     if (showNes === 2 && percentage > 0) {
       onChangeSizeInPercentage(percentage)
     }
-
   }, [marketPrice])
 
+  /**
+ * Effect that updates various states based on changes in `props` and `tpsl`.
+ * 
+ * This hook performs the following actions:
+ * - Filters the assets to get the ones related to the "future_wallet" and with the token symbol 'USDT'.
+ * - Updates the `assetsList`, `assetsBalance`, and `availBalance` based on the filtered asset data.
+ * - If the symbol is 'USDT', it adds the `totalPoint` to the `rewardsAmount` and updates the balances.
+ * - Sets `profitLossConfirm` to true if both `tpsl.profit.leverage` and `tpsl.stopls.leverage` are non-zero.
+ * - Calculates the total `usedQty` by summing the quantities from the `positions` and `openOrders` and updates `positionMode` accordingly.
+ * 
+ * @param {string} props.currentToken.coin_symbol - The current token symbol used to trigger the effect.
+ * @param {Array} props.assets - The list of assets to filter and calculate balances from.
+ * @param {Object} tpsl - Contains profit and stop-loss leverage values.
+ * @param {string} prefernceSymbol - The user's symbol preference.
+ * @param {Array} props.positions - The list of positions that might influence `usedQty` and `positionMode`.
+ * @param {Array} props.openOrders - The list of open orders that might also influence `usedQty` and `positionMode`.
+ */
   useEffect(() => {
     let futureAssets = props?.assets?.filter((item: any) => {
       return item.walletTtype === "future_wallet";
@@ -165,7 +235,6 @@ const BuySell = (props: fullWidth) => {
     }
 
     if (asset?.length > 0) {
-
       let bal = Number(truncateNumber(Number(asset[0].balance) + rewardsAmount, 6))
       let assetbal = truncateNumber(Number(asset[0].balance), 6)
       setAssetsBalance(assetbal);
@@ -196,9 +265,19 @@ const BuySell = (props: fullWidth) => {
   }, [props?.currentToken?.coin_symbol, props.assets, tpsl, prefernceSymbol, props.positions, props?.refreshWalletAssets]);
 
 
-  // ===================================================================//
-  // =======Change wallet balance according to token change=============//
-  // ===================================================================//
+  /**
+ * Handles the change in selected coin from the dropdown and updates related states.
+ * 
+ * This function performs the following actions:
+ * - Sets the order type based on the selected token: 
+ *   - If the selected token is not "USDT", it sets the order type to "qty".
+ *   - If the selected token is "USDT", it sets the order type to "value".
+ * - Filters the assets to get the ones related to the "future_wallet" and with the selected token.
+ * - Adds `totalPoint` as `rewardsAmount` when the token is "USDT" and updates the `assetsBalance` and `availBalance`.
+ * - Updates the `symbol` state with the selected token symbol.
+ * 
+ * @param {string} token - The selected token symbol (e.g., "USDT", "BTC", etc.) from the dropdown.
+ */
   const onCoinDropDownChange = (token: any) => {
     if (token !== "USDT") {
       setOrderType("qty");
@@ -223,38 +302,35 @@ const BuySell = (props: fullWidth) => {
     }
 
     if (asset?.length > 0) {
-      // if (asset[0].balance === 0) {
-      //   setButtonStyle(true);
-      // } else {
-      //   setButtonStyle(false);
-      // }
       let bal = Number(asset[0].balance) + rewardsAmount;
       setAssetsBalance(Number(asset[0].balance));
       setAvailBalance(bal);
 
     } else {
       setAvailBalance(rewardsAmount);
-      // setButtonStyle(true);
       setAssetsBalance(0);
     }
     setSymbol(token);
   };
 
-  // ===================================================================//
-  // asset amount value using range slider //
-  // ===================================================================//
+  /**
+ * Handles the change in size based on the given percentage value and updates related states.
+ * 
+ * This function calculates the final size value based on the provided percentage (`value`) 
+ * and updates the `sizeValue` and validation messages accordingly. It considers various 
+ * conditions such as the `prefernceSymbol`, the `marketType`, and leverages the `maxTrade`, 
+ * `minTrade`, `entryPrice`, and `marketPrice` values. It also checks if the calculated margin 
+ * is greater than the available balance and updates the UI accordingly.
+ * 
+ * @param {number} value - The percentage value (e.g., 10 for 10%).
+ * @returns {number} The final calculated size value based on the given percentage.
+ */
   const onChangeSizeInPercentage = (value: number) => {
     setButtonStyle(true)
-
     setPercentage(Math.trunc(value));
-
     let finalValue = 0;
-
-
     if (showNes === 1) {
-
       if (prefernceSymbol === "Qty") {
-
         finalValue = (props.maxTrade) * (value / 100);
         setSizeValue(truncateNumber(finalValue, 6));
       } else {
@@ -265,32 +341,22 @@ const BuySell = (props: fullWidth) => {
     }
     else {
       if (prefernceSymbol === "Qty") {
-
         finalValue = (props.maxTrade) * (value / 100);
         setSizeValue(truncateNumber(finalValue, 6));
       } else {
-
         finalValue = (Number(truncateNumber(marketPrice, 6)) * props.maxTrade) * (value / 100);
         setSizeValue(truncateNumber(finalValue, 6));
       }
     }
 
     let propsLeverage = props?.marginMode?.leverage || props?.leverage
-
     let marginValue = prefernceSymbol === "Qty" ? (marketType === 'limit' ? ((entryPrice * finalValue) / propsLeverage) : ((marketPrice / finalValue)) / propsLeverage) : (finalValue / propsLeverage);
-
-
 
     if (finalValue !== 0 && finalValue < props?.minTrade) {
       setSizeValidate(`Minimum value: ${props?.minTrade}`)
-      // console.log(sizeValue,"==sizeValue");
       return;
     }
     else {
-
-      // console.log(marginValue, "margin value");
-      // console.log(avaibalance, "avaibalance value");
-
       if (marginValue > avaibalance) {
         setButtonStyle(true);
       }
@@ -300,14 +366,26 @@ const BuySell = (props: fullWidth) => {
 
       }
     }
-
     return finalValue;
-
   };
 
-  // ===================================================================//
-  // Submit form data in case of limit and market trading//
-  // ===================================================================//
+  /**
+ * Handles form submission for placing an order based on the selected order type (market or limit).
+ * 
+ * This function validates the input fields (entry price, size value) and calculates various 
+ * parameters like liquidation price, margin, and quantity before submitting the order. It 
+ * generates an order object with the necessary details and sets the `confirmOrderData` 
+ * for the confirmation popup.
+ * 
+ * The function performs checks based on whether the order type is a market or limit order, 
+ * handling both cases differently for quantity and liquidation price calculations. It also 
+ * ensures that the order does not fall below the minimum trade amount and adjusts the 
+ * margin based on the leverage value.
+ * 
+ * @param {string} orderMarkeType - The type of order, either 'market' or 'limit'.
+ * 
+ * @returns {void} 
+ */
   const submitForm = async (orderMarkeType: string) => {
     let obj;
 
@@ -321,33 +399,17 @@ const BuySell = (props: fullWidth) => {
         setSizeValidate("Amount must be greater than '0'");
         return;
       }
-
-      // console.log(entryPrice,"==entryprice");
-      // console.log(marketPrice,"==marketPrice");
-      // console.log(props?.marginMode?.leverage,"==props?.marginMode?.leverage");
-      
-      
-      let Liquidation_Price: any = ((marketType === 'limit' ? entryPrice : marketPrice )* (1 - 0.01)) / props?.marginMode?.leverage;
-// console.log(Liquidation_Price,"==liq price");
-
-
-      
-      
-      // Liquidation Price for long case
+      let Liquidation_Price: any = ((marketType === 'limit' ? entryPrice : marketPrice) * (1 - 0.01)) / props?.marginMode?.leverage;
       if (show === 1) {
         Liquidation_Price = (marketType === 'limit' ? entryPrice : marketPrice) - Liquidation_Price;
-        // console.log(Liquidation_Price,"==liquidaion price1");
       }
-      
-      // Liquidation Price for short case
+
       if (show === 2) {
         Liquidation_Price = (marketType === 'limit' ? entryPrice : marketPrice) + Liquidation_Price;
-        // console.log(Liquidation_Price,"==liquidaion price2");
       }
 
       let qty: any = scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 4));
       qty = qty?.toString().match(/^-?\d+(?:\.\d{0,4})?/)[0];
-
 
       if (prefernceSymbol === "Qty") {
         qty = sizeValue.toString();
@@ -358,22 +420,9 @@ const BuySell = (props: fullWidth) => {
         return;
       }
       let value: any = truncateNumber((qty * 0.055), 8);
-      // console.log(value,"==value");
-
       let releazedPnl: any = (marketPrice * value) / 100;
-      // console.log(releazedPnl,"==relaized pnl");
-
       let size: any = truncateNumber(qty * marketPrice, 8);
-
-      // let marginValue = size / props?.marginMode?.leverage;
-      // console.log(prefernceSymbol,"=prefernceSymbol");
-
-
-      // console.log(marketPrice,'=======entryPrice', sizeValue,'======sizeValue', props?.marginMode?.leverage,'=======leverage');
       let marginValue = prefernceSymbol === "Qty" ? (marketPrice * sizeValue) / props?.marginMode?.leverage : (sizeValue / props?.marginMode?.leverage);
-      // console.log(marginValue,"=marginValue");
-
-      // orderType === "qty" ? size / props?.marginMode?.leverage : sizeValue / props?.marginMode?.leverage;
       obj = {
         symbol:
           props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
@@ -406,15 +455,12 @@ const BuySell = (props: fullWidth) => {
       }
 
       if (isNaN(sizeValue) || sizeValue == undefined || sizeValue == null || sizeValue === 0 || sizeValue < 0 || sizeValue === "") {
-
         setSizeValidate("Amount must be greater than '0'");
         return;
       }
 
-
       let Liquidation_Price: any =
         (entryPrice * (1 - 0.01)) / props?.marginMode?.leverage;
-
 
       // Liquidation Price for long case
       if (show === 1) {
@@ -427,16 +473,10 @@ const BuySell = (props: fullWidth) => {
       }
 
       let qty: any = scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 4));
-
-      // console.log(qty,"===qty");
-
-
       qty = qty?.toString().match(/^-?\d+(?:\.\d{0,4})?/)[0];
-
 
       if (prefernceSymbol === "Qty") {
         qty = sizeValue.toString();
-        // console.log(qty, "==qty", props?.minTrade, "==props?.minTrade");
 
       }
       if (qty < props?.minTrade) {
@@ -444,22 +484,15 @@ const BuySell = (props: fullWidth) => {
         return;
       }
 
-
       let enter_Price: any = entryPrice;
       let amount: any = qty * entryPrice;
 
-      console.log(qty,entryPrice,amount,"===========amount");
-
-      if(isNaN(amount)){
+      if (isNaN(amount)) {
         setButtonStyle(false)
         return;
       }
 
-
       let marginValue = prefernceSymbol === "Qty" ? ((entryPrice * sizeValue) / props?.marginMode?.leverage) : sizeValue / props?.marginMode?.leverage;
-      console.log(marginValue, "=======marginValue limit");
-
-
       obj = {
         position_id: "--",
         user_id: session?.user?.user_id,
@@ -487,59 +520,63 @@ const BuySell = (props: fullWidth) => {
         position_mode: positionMode
       };
     }
-    // console.log(props?.marginMode?.leverage,"==props?.marginMode?.leverage");
-    // console.log(entryPrice,"==entryPrice");
-    // console.log(sizeValue,"==sizeValue");
-
-    // console.log(obj,"===sell order");
-
-
     setConfirmOrderData(obj);
     setConfirmModelPopup(1);
     setConfirmModelOverlay(true);
-
   };
 
+  /**
+ * Confirms the order by performing the necessary validations and submitting the order to the server.
+ * This function handles both the validation of the order quantity and available balance,
+ * as well as encrypting and sending the order data to the server for execution.
+ *
+ * @async
+ * @function confirmOrder
+ */
   const confirmOrder = async () => {
     try {
-
-      console.log(confirmOrderData,'===============');
-
-      // return;
+      /**
+     * Validates if the order quantity exceeds the maximum allowed trade quantity.
+     * If exceeded, an error is shown and the submission is halted.
+     */
       if (truncateNumber(usedQty + confirmOrderData?.qty, 3) > props?.maxTrade) {
-
         toast.error("Order failed. Order quantity is greater than maximum order quantity", { autoClose: 2000 })
-
         setButtonStyle(false);
-        // props?.refreshWalletAssets();
         setConfirmModelOverlay(false);
         setConfirmModelPopup(0);
         setFinalOrderSubmit(false);
-
         return;
       }
-      if((confirmOrderData.amount+(confirmOrderData?.realized_pnl||0))>avaibalance){
+      /**
+     * Validates if the total order amount including realized PnL exceeds the available balance.
+     * If exceeded, an error is shown and the submission is halted.
+     */
+      if ((confirmOrderData.amount + (confirmOrderData?.realized_pnl || 0)) > avaibalance) {
         toast.error("Order failed. Order quantity is greater than maximum order quantity", { autoClose: 2000 })
-
         setButtonStyle(false);
-        // props?.refreshWalletAssets();
         setConfirmModelOverlay(false);
         setConfirmModelPopup(0);
         setFinalOrderSubmit(false);
-
         return;
       }
 
       else {
         setButtonStyle(true);
         setFinalOrderSubmit(true);
+        /**
+       * Encrypts the order data before sending it to the server for processing.
+       * The encryption uses a secret passphrase from environment variables.
+       */
         const ciphertext = AES.encrypt(
           JSON.stringify(confirmOrderData),
           `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
         );
         let record = encodeURIComponent(ciphertext.toString());
 
-
+        /**
+      * Sends the order data to the appropriate server endpoint based on the market type.
+      * The request is a POST request with the encrypted order data.
+      */
         let reponse = await fetch(
           `${process.env.NEXT_PUBLIC_BASEURL}/future/${(marketType === "market" || (show === 2 && marketType === 'limit')) ? "position" : "openorder"
           }`,
@@ -553,6 +590,11 @@ const BuySell = (props: fullWidth) => {
           }
         ).then((response) => response.json());
 
+        /**
+       * Handles the response from the server after the order submission.
+       * If the order submission fails, an error message is displayed.
+       * If the order is successful, it checks if Take Profit / Stop Loss (TP/SL) is enabled and submits those orders.
+       */
         if (reponse?.data?.status !== 200) {
           toast.error(
             reponse?.data?.data?.message !== undefined
@@ -567,8 +609,11 @@ const BuySell = (props: fullWidth) => {
 
         }
         else {
-
           if (istpslchecked === true) {
+            /**
+           * If TP/SL is checked, send separate orders for Take Profit and Stop Loss.
+           * The respective order IDs are assigned to the TP/SL orders.
+           */
             if (tpsl.profit) {
               tpsl.profit.position_id = reponse?.data?.data?.result?.id;
             }
@@ -618,6 +663,10 @@ const BuySell = (props: fullWidth) => {
             wbsocket.send(JSON.stringify(position));
           }
 
+          /**
+         * Show success toast and reset the order form.
+         * The success message is derived from the server response.
+         */
           toast.success(reponse?.data?.data?.message, {
             position: 'top-center'
           });
@@ -653,9 +702,13 @@ const BuySell = (props: fullWidth) => {
     setIsTpSlchecked(event?.currentTarget?.checked);
   };
 
-  // ===================================================================//
-  // =====Validation in case of amount more than enter wallet value=====//
-  // ===================================================================//
+  /**
+ * Handles the change in the size value input field and updates the related state and UI elements.
+ * This function performs validation on the input value, calculates the margin value, 
+ * updates the leverage slider, and determines whether the button should be enabled or disabled.
+ *
+ * @param {React.ChangeEvent<HTMLInputElement>} e - The event triggered by changing the input value.
+ */
   const onChangeSizeValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPercentage(0)
     let value: any = e.target.value
@@ -666,6 +719,9 @@ const BuySell = (props: fullWidth) => {
     let rangeLine = document.getElementById("rangeLine3") as HTMLDivElement;
     let inputPercent = document.querySelector('.inputPercent') as HTMLInputElement;
 
+    /**
+   * If leverage is 0, reset the slider thumb position, input value, and range line width.
+   */
     if (leverage == 0) {
       sliderThumb?.setAttribute("style", 'left:0;');
       sliderThumb.innerText = "0X";
@@ -673,54 +729,44 @@ const BuySell = (props: fullWidth) => {
       rangeLine.setAttribute("style", 'width:0;');
     }
     if (regex.test(value) || value === "") {
-
       value = parseFloat(e.target.value) == 0 ? 0.00 : parseFloat(e.target.value);
-
-
       let propsLeverage = props?.marginMode?.leverage || props?.leverage
 
+      /**
+     * Calculate the margin value based on the preference symbol, market type, and leverage.
+     * It adjusts for the entry or market price based on the trade type.
+     */
       let marginValue = prefernceSymbol === "Qty" ? (marketType === 'limit' ? ((entryPrice * parseFloat(e.target.value)) / propsLeverage) : ((marketPrice * parseFloat(e.target.value))) / propsLeverage) : (parseFloat(e.target.value) / propsLeverage);
-
-      // console.log(marginValue, "===marginValue");
-
-
       if (isNaN(value)) {
-        // console.log("here in nan");
-
         setSizeValue(''); // Reset sizeValue to its current state
         return; // Exit early without updating state or applying further logic
       }
 
+      /**
+     * Validate the size value against the minimum trade value.
+     * If the value is below the minimum trade value, show a validation message and stop further execution.
+     */
       else if (value !== 0 && value < props?.minTrade) {
         setSizeValidate(`Minimum value: ${props?.minTrade}`)
-        // console.log(sizeValue, "==sizeValue");
         return;
       }
       else {
-        // console.log("valueee", value);
-
         setSizeValidate('')
         setSizeValue(value);
         setButtonStyle(true);
-
-        let leverage = propsLeverage
-
-
-        // console.log(marginValue, "margin value");
-        // console.log(avaibalance, "avaibalance value");
-
+        let leverage = propsLeverage;
+        /**
+      * Calculate and validate the quantity based on whether the preference symbol is 'Value' or 'Qty'.
+      * If the margin value is greater than the available balance, disable the button.
+      */
         if (prefernceSymbol === "Value") {
-          // console.log((truncateToSixNumber((parseFloat(e.target.value) / entryPrice).toFixed(12), 3)),"heree");
-
           let qty = marketType === 'limit' ? truncateToSixNumber((parseFloat(e.target.value) / entryPrice).toFixed(12), 3) : truncateToSixNumber((parseFloat(e.target.value) / marketPrice).toFixed(12), 3)
-
           if (qty >= 0.001 && marginValue < avaibalance) {
             setButtonStyle(false);
           }
           else {
             setButtonStyle(true)
           }
-
         }
         else {
           if (marginValue > avaibalance) {
@@ -729,24 +775,20 @@ const BuySell = (props: fullWidth) => {
           else {
             setButtonStyle(false)
           }
-
         }
 
+        /**
+       * Calculate the various fees involved in opening and closing positions (long and short).
+       * These fees are based on the margin value and leverage.
+       */
         const openPositionFee = (marginValue * 0.055) / 100;
         const longClosePositionFee = ((marginValue * (leverage - 1)) / leverage * 0.055) / 100;
         const shortClosePositionFee = (marginValue * ((leverage + 1) / leverage) * 0.055) / 100;
 
         const longCost = marginValue / leverage + openPositionFee + longClosePositionFee;
         const shortCost = marginValue / leverage + openPositionFee + shortClosePositionFee;
-
-        console.log(longCost * leverage, '===========long Cost==========', shortCost * leverage, '============short Cost============');
-
-
       }
     }
-
-
-
   };
 
   // ===================================================================//
@@ -1217,7 +1259,7 @@ const BuySell = (props: fullWidth) => {
                       {
                         showNes === 1
                           ? (sizeValue === 0 || sizeValue == Infinity || isNaN(sizeValue))
-                            ? 0.00 : (isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 4)))) || parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)))==Infinity) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)) : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3)))) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3))}{" "}
+                            ? 0.00 : (isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 4)))) || parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3))) == Infinity) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / entryPrice).toFixed(12), 3)) : isNaN(parseFloat(scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3)))) ? 0.00 : scientificToDecimal(truncateToSixNumber((sizeValue / marketPrice).toFixed(12), 3))}{" "}
                       {props?.currentToken?.coin_symbol}
                     </p>
                   </div>

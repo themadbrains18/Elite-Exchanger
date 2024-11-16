@@ -4,7 +4,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Autoplay, Pagination } from "swiper/modules";
-import IconsComponent from "../snippets/icons";
 import Link from "next/link";
 import { currencyFormatter } from "../snippets/market/buySellCard";
 import type { Swiper as SwiperInstance } from 'swiper';
@@ -33,13 +32,38 @@ const MarketCoin = (props: propsData) => {
     '/assets/chart/loss-graph4.png',
   ];
 
+  /**
+ * @function getRandomImage
+ * 
+ * This function returns a random image URL from the provided array of image URLs.
+ * 
+ * @param {string[]} images - The array of image URLs to choose from.
+ * @returns {string} A random image URL from the provided array.
+ */
   const getRandomImage = (images: string[]) => {
     const randomIndex = Math.floor(Math.random() * images.length);
     return images[randomIndex];
   };
 
+  /**
+ * @constant swiperRef
+ * 
+ * This reference is used to access the Swiper instance in order to control and 
+ * interact with the Swiper component programmatically.
+ * 
+ * @type {React.RefObject<SwiperInstance | null>}
+ */
   const swiperRef = useRef<SwiperInstance | null>(null);
 
+  /**
+ * @effect useEffect for Swiper instance update
+ * 
+ * This useEffect hook runs on the initial render and checks if the Swiper reference 
+ * (`swiperRef.current`) is available. If it is, the hook calls the `update()` method 
+ * on the Swiper instance to refresh the swiper state.
+ * 
+ * @returns {void}
+ */
   useEffect(() => {
     if (swiperRef.current) {
       swiperRef.current.update(); 

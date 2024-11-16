@@ -4,7 +4,19 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
-interface activeSection {
+/**
+ * Interface representing the props for the BuyAuthenticationModel component.
+ *
+ * @interface BuyAuthenticationModelProps
+ * @property {Function} setActive - A function to set the active state of the component.
+ * @property {Function} setShow - A function to set the visibility of the component.
+ * @property {string} [message] - Optional message to display in the component.
+ * @property {string} [title] - Optional title to display in the component.
+ * @property {boolean} [show] - Optional boolean to control the visibility of the component.
+ * @property {any} [actionPerform] - Optional function to perform an action in the component.
+ * @property {string} [type] - Optional type of the authentication action.
+ */
+interface BuyAuthenticationModelProps {
     setActive: Function;
     setShow: Function;
     message?: string;
@@ -14,11 +26,18 @@ interface activeSection {
     type?:string
 }
 
-const BuyAuthenticationModelPopup = (props: activeSection) => {
+const BuyAuthenticationModelPopup = (props: BuyAuthenticationModelProps) => {
     const { mode } = useContext(Context);
     const { status, data: session } = useSession();
     const route = useRouter();
 
+    /**
+     * Closes the popup/modal by setting the visibility state to false and deactivating the current step or process.
+     * This function is typically used to hide the popup/modal and reset any associated states when the user decides to close it.
+     *
+     * @function closePopup
+     * @returns {void}
+     */
     const closePopup = () => {
         props.setShow(false);
         props.setActive(false);

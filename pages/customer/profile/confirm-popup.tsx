@@ -1,11 +1,21 @@
 import Context from '@/components/contexts/context';
 import clickOutSidePopupClose from '@/components/snippets/clickOutSidePopupClose';
-import { AES } from 'crypto-js';
 import { signOut, useSession } from 'next-auth/react';
 import React, { useContext, useRef, useState } from 'react'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+/**
+ * ConfirmPopup component is used to display a modal for confirming actions with options to receive OTP
+ * either via SMS or Email based on the user's session data. It manages the sending of OTP and session expiry.
+ *
+ * @param props - The properties passed to the component that control the display and actions of the popup.
+ *  - setEnable: A function to control whether the popup is enabled.
+ *  - setShow: A function to control whether the popup is visible.
+ *  - type: The type of the action (e.g., OTP request).
+ *  - session: The current session data, including user info.
+ *  - snedOtpToUser: Function to send OTP to the user.
+ */
 interface activeSection {
   setEnable?: any,
   setShow?: any,
@@ -15,14 +25,22 @@ interface activeSection {
   snedOtpToUser?: any
 }
 
+/**
+ * ConfirmPopup component renders a modal that prompts the user to request an OTP.
+ * It handles session validation, OTP sending, and error handling.
+ * It also manages the closing of the popup when clicked outside.
+ */
 const ConfirmPopup = (props: activeSection) => {
   const { status } = useSession()
   const { mode } = useContext(Context);
   const [disable, setDisable] = useState(false);
 
+  /**
+   * Sends OTP to the user either via SMS or email.
+   * If the user session is expired, it triggers a sign-out and redirects the user.
+   */
   const sendOtp = async () => {
     try {
-
       setDisable(true);
       if (status === 'authenticated') {
         props.snedOtpToUser();
@@ -39,6 +57,9 @@ const ConfirmPopup = (props: activeSection) => {
     }
   }
 
+  /**
+   * Closes the popup and resets the state values.
+   */
   const closePopup = () => {
     props.setShow !== undefined && props?.setShow(false);
     props?.setEnable(0);
@@ -49,12 +70,8 @@ const ConfirmPopup = (props: activeSection) => {
   return (
     <>
       <ToastContainer position="top-right" limit={1}/>
-
-
       <div ref={wrapperRef} className='fixed top-[50%] z-[9] left-[50%] translate-x-[-50%] translate-y-[-50%] lg:bg-white lg:dark:bg-d-bg-primary lg:p-40 max-w-[557px] w-full rounded-10'>
-
         <div className="flex items-center justify-end pb-[10px] md:pb-[15px] ">
-
           <svg
             onClick={() => {
               props.setShow !== undefined && props?.setShow(false);
@@ -81,7 +98,6 @@ const ConfirmPopup = (props: activeSection) => {
             />
           </svg>
         </div>
-
         <div className=" lg:p-0 p-5  max-w-[calc(100%-30px)] md:mx-0 mx-auto md:mb-0 mb-[10px]  lg:bg-[transparent] lg:dark:bg-[transparent] bg-white lg:rounded-none rounded-10 dark:bg-d-bg-primary md:max-w-[562px] w-full">
           {props.session?.user?.number !== "null" && <div className="flex flex-col gap-[15px] lg:gap-5 mb-[30px]">
             <div className={`flex gap-5 items-center  w-full cursor-pointer bg-[transparent]`} >
@@ -118,7 +134,6 @@ const ConfirmPopup = (props: activeSection) => {
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               ></path>
             </svg>
-            
             }
            <span className='block'>Continue</span> </button>
         </div>

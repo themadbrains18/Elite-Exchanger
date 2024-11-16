@@ -11,8 +11,19 @@ import ReactPaginate from 'react-paginate';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import { formatDate, truncateNumber } from '@/libs/subdomain';
 
-interface dataTypes {
-
+/**
+ * Interface for the props passed to the DesktopTable component.
+ * 
+ * This interface defines the optional props that the DesktopTable component can accept.
+ * - firstCurrency: Represents the selected currency for the table.
+ * - paymentId: The ID of the selected payment method.
+ * - startDate: The start date for filtering or displaying data.
+ * - userPaymentMethod: A list or object representing the payment methods of the user.
+ * - selectedToken: The token currently selected by the user.
+ * - active: Represents an active state or flag used for conditional rendering or logic.
+ * - session: Contains session data, usually including user info and authentication details.
+ */
+interface DesktopTableProps {
     firstCurrency?: string;
     paymentId?: string;
     startDate?: string;
@@ -27,7 +38,8 @@ import dynamic from 'next/dynamic';
 const ConfirmationModel = dynamic(() => import('@/components/snippets/confirmation'), {
     loading: () => <p>Loading...</p>,
 })
-const DesktopTable = (props: dataTypes) => {
+
+const DesktopTable = (props: DesktopTableProps) => {
     const { mode } = useContext(Context);
     const [postList, setPostList] = useState([]);
     const [itemOffset, setItemOffset] = useState(0);
@@ -45,18 +57,45 @@ const DesktopTable = (props: dataTypes) => {
 
     const route = useRouter();
 
+    /**
+     * Effect to reset the item offset when the relevant filter properties change.
+     * 
+     * This effect runs whenever the `props.active`, `props.firstCurrency`, `props.paymentId`, or `props.startDate` change.
+     * It resets the `itemOffset` to 0, ensuring the list view starts from the top when the filters change.
+     */
     useEffect(() => {
         setItemOffset(0); // Reset itemOffset to 0 when filters change
     }, [props.active, props?.firstCurrency, props?.paymentId, props?.startDate]);
 
+    /**
+     * Effect to fetch advertisements when filters or item offset change.
+     * 
+     * This effect runs whenever any of the filter properties (`props.active`, `props.firstCurrency`, `props.paymentId`, `props.startDate`) or 
+     * the `itemOffset` changes. It calls the `getAds` function to fetch the ads based on the updated filters and offset.
+     */
     useEffect(() => {
         getAds(itemOffset);
     }, [props.active, itemOffset, props?.firstCurrency, props?.paymentId, props?.startDate])
 
 
+    /**
+     * Asynchronously fetches advertisements based on the provided filters and item offset.
+     * 
+     * This function retrieves a list of advertisements by calling an API endpoint with the relevant filter parameters:
+     * - `status`: Determines whether the advertisements are active, inactive, or all.
+     * - `itemOffset`: Used for pagination to fetch the corresponding set of ads.
+     * - `itemsPerPage`: Defines the number of ads to fetch per page.
+     * - `currency`: The token's ID (selectedToken) or "all" if no token is selected.
+     * - `pmMethod`: The payment method ID (paymentId) or "all" if no payment method is selected.
+     * - `date`: Filters by date, or "all" if no date is selected.
+     * 
+     * Once the data is fetched, it processes the payment methods for each post, matching them to user payment methods.
+     * It then updates the state with the total number of posts and the list of advertisements.
+     * 
+     * @param {number} itemOffset - The offset for pagination.
+     */
     const getAds = async (itemOffset: number) => {
         try {
-            // console.log("called");
             let paymentMethod = props?.paymentId !== undefined && props?.paymentId !== "" ? props?.paymentId : "all"
             let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
             let date = props?.startDate !== undefined && props?.startDate !== "" ? new Date(props?.startDate).toISOString() : "all"
@@ -64,7 +103,6 @@ const DesktopTable = (props: dataTypes) => {
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
-
 
             let userAllOrderList: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/advertisement?status=${props?.active === 1 ? true : props?.active === 2 ? false : "all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}&date=${date}`, {
                 method: "GET",
@@ -97,17 +135,38 @@ const DesktopTable = (props: dataTypes) => {
 
         }
     };
+
     const pageCount = Math.ceil(total / itemsPerPage);
 
+    /**
+     * Handles page click events for pagination and updates the item offset based on the selected page.
+     * 
+     * This function is triggered when the user clicks on a page number in the pagination component. 
+     * It calculates the new offset for the items to be displayed based on the selected page.
+     * The offset is calculated as the product of the selected page number and the number of items per page, 
+     * ensuring that the correct set of items is shown for the selected page.
+     * 
+     * @param {Object} event - The event object containing the selected page information.
+     * @param {number} event.selected - The index of the selected page (starts from 0).
+     */
     const handlePageClick = async (event: any) => {
         const newOffset = (event.selected * itemsPerPage) % total;
         setItemOffset(newOffset);
 
     };
 
-
+    /**
+     * Performs an action based on the authentication status of the user.
+     * 
+     * This function is called when the user attempts to perform an action related to a post. 
+     * It checks the user's authentication status and, if authenticated, performs a POST request 
+     * to update the post details. The post's ID and the user’s ID are encrypted before sending the request.
+     * If the request is successful, it updates the state to reflect the change; otherwise, it displays an error.
+     * If the user is unauthenticated, they are signed out and an error message is shown.
+     * 
+     * @async
+     */
     const actionPerform = async () => {
-
         if (status === 'authenticated') {
             setDisable(true)
             let obj = {
@@ -156,23 +215,40 @@ const DesktopTable = (props: dataTypes) => {
         }
     }
 
+    /**
+     * Updates the status of an advertisement based on its availability.
+     * 
+     * This function handles the logic for updating the status of an advertisement. 
+     * It first checks if the user is authenticated. If the advertisement's quantity is zero, 
+     * it returns early without making any changes. If the advertisement is available, 
+     * it sends an encrypted request with the post ID and user ID to update the advertisement status 
+     * using a PUT request. On success, it updates the post list and shows a success message. 
+     * If the update fails or the user is unauthenticated, an error message is displayed.
+     * 
+     * @async
+     * @param {any} postid - The advertisement post object containing the ID and quantity.
+     */
     const updateAdsStatus = async (postid: any) => {
-
+        // Check if the user is authenticated
         if (status === 'authenticated') {
             setDisable(true)
+            // If the post's quantity is zero, do nothing and re-enable the button
             if (postid?.quantity == 0) {
                 setDisable(false)
                 return
             }
             else {
+                // Prepare the request object containing the post ID and user ID
                 let obj = {
                     post_id: postid?.id,
                     user_id: session?.user?.user_id
                 }
 
+                // Encrypt the request object using AES encryption with a secret passphrase
                 const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
                 let record = encodeURIComponent(ciphertext.toString());
 
+                // Send a PUT request to the server to update the advertisement status
                 let putResponse: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/editadvertisement`, {
                     method: "PUT",
                     headers: {
@@ -208,7 +284,6 @@ const DesktopTable = (props: dataTypes) => {
         else if (status === 'unauthenticated') {
             toast.error('Unauthorized user!!')
         }
-
     }
 
 

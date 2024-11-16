@@ -15,18 +15,39 @@ import { useWebSocket } from "@/libs/WebSocketContext";
 import { currencyFormatter } from "./market/buySellCard";
 import { truncateNumber } from "@/libs/subdomain";
 
+/**
+ * Validates the input schema for spending and receiving amounts.
+ * 
+ * @function validateAmounts
+ * @param {Object} schema - The validation schema object.
+ * @param {number} schema.spend_amount - The amount to spend in INR. Must be a positive number.
+ * @param {number} schema.receive_amount - The token amount to receive. Must be a positive number.
+ * @returns {Object} A Yup schema object with validation rules applied.
+ * 
+ * @example
+ * const validationResult = schema.validate({ spend_amount: 100, receive_amount: 50 });
+ * console.log(validationResult);
+ */
 const schema = yup.object().shape({
   spend_amount: yup.number().positive("Spend amount must be greater than '0'.").required('Please enter amount in INR.').typeError('Please enter amount in INR.'),
   receive_amount: yup.number().positive("Recieve amount must be greater than '0'.").required('Please enter buy token amount.').typeError('Please enter buy token amount.')
 });
 
-interface activeSection {
+/**
+ * Props for the BuyPopup component.
+ * 
+ * @interface BuyPopupPops
+ * @property {boolean} show1 - Determines whether the popup is visible.
+ * @property {Function} setShow1 - Function to toggle the visibility of the popup.
+ * @property {any} selectedPost - The post selected by the user, passed as data to the popup.
+ */
+interface BuyPopupPops {
   show1: boolean;
   setShow1: Function;
   selectedPost: any;
 }
 
-const BuyPopup = (props: activeSection) => {
+const BuyPopup = (props: BuyPopupPops) => {
   const { mode } = useContext(Context);
   const route = useRouter();
   const [receiveAmount, setReceiveAmount] = useState<any>();
@@ -37,31 +58,66 @@ const BuyPopup = (props: activeSection) => {
   const [totalOrder, setTotalOrder] = useState(0);
   const [imgSrc, setImgSrc] = useState(false);
 
-  
-  
-  let {
-    register,
-    setValue,
-    handleSubmit,
-    watch,
-    reset,
-    setError,
-    getValues,
-    clearErrors,
-    formState,
-    formState: { errors },
-  } = useForm({
+  /**
+   * useForm hook for managing form state and validation.
+   * 
+   * @constant {Object} register - Function to register input fields with React Hook Form.
+   * @constant {Function} setValue - Sets a specific field value programmatically.
+   * @constant {Function} handleSubmit - Handles form submission with validation logic.
+   * @constant {Function} reset - Resets the form values to their initial state.
+   * @constant {Function} setError - Programmatically sets validation errors for specific fields.
+   * @constant {Function} clearErrors - Clears validation errors for specified fields.
+   * @constant {Object} errors - Object containing validation errors for the form fields.
+   * 
+   * @description This setup leverages the `yupResolver` schema for form validation using Yup.
+   */
+  let {register,setValue,handleSubmit,reset,setError,clearErrors,formState: { errors }} = useForm({
     resolver: yupResolver(schema)
   });
 
+  /**
+   * Reset form when the `show1` prop changes.
+   *
+   * @useEffect
+   * @description Resets the form values whenever the `show1` property from props changes.
+   * This ensures the form state remains consistent with the UI visibility.
+   * 
+   * @dependency [props.show1] - Trigger this effect when `props.show1` updates.
+   */
   useEffect(() => {
     reset()
   }, [props.show1])
 
+  /**
+   * Fetch total user orders when the user in `selectedPost` changes.
+   *
+   * @useEffect
+   * @description Calls the `getUserTotalOrders` function whenever a new user is selected 
+   * in the `selectedPost` object from props. Keeps user-related data updated.
+   * 
+   * @dependency [props?.selectedPost?.user] - Trigger this effect when the `user` field 
+   * in `props.selectedPost` updates.
+   */
   useEffect(() => {
     getUserTotalOrders();
   }, [props?.selectedPost?.user]);
 
+  /**
+ * Fetch and update total orders for the selected user.
+ *
+ * @async
+ * @function getUserTotalOrders
+ * @description This function fetches the total orders for the currently selected user
+ * using their `user_id` from the `selectedPost` object. The data is retrieved from the
+ * backend API and updates the `totalOrder` state with the response.
+ * 
+ * @returns {Promise<void>} A promise that resolves once the `totalOrder` state is updated.
+ *
+ * @example
+ * getUserTotalOrders();
+ * 
+ * @note The API endpoint used is derived from the `NEXT_PUBLIC_BASEURL` environment variable.
+ */
   const getUserTotalOrders = async () => {
     let masterPaymentMethod = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/postad?user_id=${props?.selectedPost?.user?.id}`, {
       method: "GET",

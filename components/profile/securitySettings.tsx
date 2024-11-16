@@ -40,14 +40,36 @@ const schema = yup.object().shape({
     .oneOf([yup.ref("new_password")], "Passwords must match."),
 });
 
-interface fixSection {
+/**
+ * Interface for Security Settings component props.
+ * Defines the properties and types used by the Security Settings component.
+ */
+interface SecuritySettingsProps {
+  /**
+  * Optional: Determines if the component should have a fixed position. 
+  * If true, the component remains in a fixed position on the screen.
+  */
   fixed?: boolean;
+  /**
+  * Optional: A numerical value that determines the visibility or display logic.
+  * Can be used to show or hide certain elements based on its value.
+  */
   show?: number;
+  /**
+  * Optional: A function used to update the visibility or display of the component.
+  * The function is used to set whether the component should be shown or hidden.
+  */
   setShow?: Function | any;
+  /**
+   * Required: The session data of the current user.
+   * This includes all necessary details for user authentication, preferences, etc.
+   */
   session: any;
+  /**
+   * Required: User activity details.
+   * This contains information about the recent activities of the user for display or tracking.
+   */
   activity: any;
-  // showActivity:boolean,
-  // setShowActivity:any
 }
 
 type UserSubmitForm = {
@@ -56,7 +78,7 @@ type UserSubmitForm = {
   confirmPassword?: string;
 };
 
-const SecuritySettings = (props: fixSection) => {
+const SecuritySettings = (props: SecuritySettingsProps) => {
   const [showActivity, setShowActivity] = useState(false);
   const [showAddressManagement, setShowAddressManagement] = useState(false);
 
@@ -70,25 +92,15 @@ const SecuritySettings = (props: fixSection) => {
   const [whitelist, setWhitelist] = useState(props.session?.user?.whitelist);
   const [sendOtpRes, setSendOtpRes] = useState<any>();
   const [successModal, setSuccessModal] = useState(false)
-
   const [confirmation, setConfirmation] = useState(false)
-
   const [antiFishingCode, setAntiFishingCode] = useState(false);
-
   const [pswd, setpswd] = useState('');
   const [checker, setChecker] = useState(false)
-
-  // auto generate password
   const [passwordLength, setPasswordLength] = useState(18);
-
   const [showOldPswd, setShowOldPswd] = useState(false);
   const [showpswd, setShowPswd] = useState(false);
   const [showconfirm, setShowconfirm] = useState(false);
   const [btnDisabled, setBtnDisabled] = useState(false);
-
-
-  // console.log(props?.session,"==sesionnn in secutity setting");
-
 
   let data = [
     {
@@ -167,14 +179,24 @@ const SecuritySettings = (props: fixSection) => {
     resolver: yupResolver(schema),
   });
 
+  /**
+ * Handles the form submission for changing the user's password.
+ * It processes the old and new password, encrypts the data, and sends a request
+ * to the server to update the password.
+ * 
+ * @param data - The data object containing the old and new password from the form.
+ */
   const onHandleSubmit = async (data: UserSubmitForm) => {
     try {
+      // Disable the submit button to prevent multiple submissions
       setBtnDisabled(true);
+      // Determine the username based on whether the email or number is available
       let username =
         props.session?.user.email !== "null"
           ? props.session?.user.email
           : props.session?.user?.number;
 
+      // Prepare the object to send in the API request
       let obj = {
         username: username,
         old_password: data?.old_password,
@@ -182,13 +204,17 @@ const SecuritySettings = (props: fixSection) => {
         otp: "string",
         step: 1
       };
+
+      // Check if session and user are available before making the request
       if (session !== undefined && session?.user !== undefined) {
+        // Encrypt the data before sending it to the server
         const ciphertext = AES.encrypt(
           JSON.stringify(obj),
           `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
         );
         let record = encodeURIComponent(ciphertext.toString());
 
+        // Send the encrypted data in a PUT request to update the user's password
         let userExist = await fetch(
           `${process.env.NEXT_PUBLIC_BASEURL}/user/changePassword`,
           {
@@ -201,14 +227,16 @@ const SecuritySettings = (props: fixSection) => {
           }
         );
         let res = await userExist.json();
+        // Handle the response based on whether a message is returned
         if (res.data.message) {
+          // If there's an error message, show a toast notification
           toast.error(res.data.message, { autoClose: 2000 });
           setTimeout(() => {
             setBtnDisabled(false)
           }, 3005)
         } else {
+          // If the password change is successful, show confirmation and reset form
           setConfirmation(true)
-
           setShow(true);
           setFormData(data);
           setTimeout(() => {
@@ -228,16 +256,32 @@ const SecuritySettings = (props: fixSection) => {
     }
   };
 
+  /**
+ * Resets the confirmation state and initiates the process for enabling the OTP input.
+ * 
+ * This function is typically called after a user submits or interacts with an OTP form,
+ * resetting the confirmation state and preparing the UI to handle the next step in the process.
+ */
   const confirmOtp = () => {
+    // Reset the confirmation state to false
     setConfirmation(false)
+    // Enable the input field by setting the enable state to 7
     setEnable(7);
     setShow(true);
   }
 
+  /**
+ * Sends an OTP to the user for password change validation.
+ * 
+ * This function checks the user's session and sends a request to the server to initiate 
+ * the OTP process for validating a password change. If successful, it updates the UI 
+ * and allows the user to input the received OTP.
+ */
   const snedOtpToUser = async () => {
     try {
+      // Determine the username based on email or phone number from the session data
       let username = props.session?.user.email !== 'null' ? props.session?.user.email : props.session?.user?.number
-
+      // Construct the payload object to send in the request
       let obj = {
         username: username,
         old_password: formData?.old_password,
@@ -247,9 +291,11 @@ const SecuritySettings = (props: fixSection) => {
       }
 
       if (status === 'authenticated') {
+        // Encrypt the object payload before sending it
         const ciphertext = AES.encrypt(JSON.stringify(obj), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
         let record = encodeURIComponent(ciphertext.toString());
 
+        // Send the request to the server to initiate the OTP process
         let userExist = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/changePassword`, {
           method: "PUT",
           headers: {
@@ -259,7 +305,7 @@ const SecuritySettings = (props: fixSection) => {
           body: JSON.stringify(record)
         })
         let res = await userExist.json();
-
+        // If OTP request is successful, update the UI and set OTP state
         if (res.status === 200) {
           toast.success(res.data.message)
           setSendOtpRes(res?.data?.otp);
@@ -271,6 +317,7 @@ const SecuritySettings = (props: fixSection) => {
         }
       }
       else {
+        // If the session has expired, notify the user and sign out
         toast.error('Your session is expired. Its auto redirect to login page');
         setTimeout(() => {
           signOut();
@@ -282,13 +329,24 @@ const SecuritySettings = (props: fixSection) => {
     }
   }
 
+  /**
+ * Final OTP verification to complete the password change process.
+ * 
+ * This function sends the OTP entered by the user along with the necessary data to the server 
+ * to verify the OTP and complete the password change process. Upon successful verification, 
+ * it triggers a success modal and updates the UI accordingly.
+ * 
+ * @param otp - The OTP entered by the user to verify the password change.
+ */
   const finalOtpVerification = async (otp: any) => {
     try {
+      // Determine the username based on email or phone number from session data
       let username =
         props.session?.user.email !== "null"
           ? props.session?.user.email
           : props.session?.user?.number;
 
+      // Construct the payload for the verification request
       let request = {
         username: username,
         old_password: formData?.old_password,
@@ -296,12 +354,16 @@ const SecuritySettings = (props: fixSection) => {
         otp: otp,
         step: 3
       };
+      // Encrypt the request payload for secure transmission
       const ciphertext = AES.encrypt(
         JSON.stringify(request),
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
       );
 
+      // Encode the encrypted payload
       let record = encodeURIComponent(ciphertext.toString());
+
+      // Send the request to the server for OTP verification
       let response = await fetch(
         `${process.env.NEXT_PUBLIC_BASEURL}/user/changePassword`,
         {
@@ -313,16 +375,13 @@ const SecuritySettings = (props: fixSection) => {
           body: JSON.stringify(record),
         }
       ).then((response) => response.json());
+
+      // If OTP verification is successful, trigger the success modal
       if (response.data.result) {
         setEnable(0),
-          // toast.success(response.data.message);
-          // setTimeout(() => {
-          //   signOut();
-          //   setEnable(0),
-          //     setShow(false);
-          // }, 1000);
           setSuccessModal(true)
       } else {
+        // If OTP verification fails, show an error message
         toast.error(response.data.message, { autoClose: 2000 });
       }
     } catch (error) {
@@ -330,29 +389,42 @@ const SecuritySettings = (props: fixSection) => {
     }
   }
 
-
+  /**
+   * Generates a random secure password containing a mix of lowercase, uppercase, numbers, 
+   * and special characters. The password is shuffled to ensure a random order and then 
+   * set in the form for both the 'new_password' and 'confirmPassword' fields.
+   * 
+   * The password is guaranteed to meet basic security criteria by including at least one 
+   * character from each character set (lowercase, uppercase, number, special characters).
+   * 
+   * @returns {Promise<void>} A Promise that resolves after generating and setting the password.
+   */
   const generatePassword = async () => {
-
+    // Define the character sets for each category
     const lowercaseCharset = "abcdefghijklmnopqrstuvwxyz";
     const uppercaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const numberCharset = "0123456789";
     const specialCharset = "!@#$%^&*()_+{};:<>,.?";
 
-    // Function to randomly select a character from a given charset
+    /**
+   * Helper function to randomly select a character from the given charset.
+   * 
+   * @param {string} charset - The character set to select from.
+   * @returns {string} A randomly selected character from the charset.
+   */
     function getRandomCharacter(charset: string) {
       const randomIndex = Math.floor(Math.random() * charset.length);
       return charset[randomIndex];
     }
 
     let password = "";
-
-    // Include at least one character from each charset
+    // Include at least one character from each charset to meet security requirements
     password += await getRandomCharacter(lowercaseCharset);
     password += await getRandomCharacter(uppercaseCharset);
     password += await getRandomCharacter(numberCharset);
     password += await getRandomCharacter(specialCharset);
 
-    // Fill the rest of the password with random characters
+    // Fill the rest of the password with random characters from any charset
     const remainingLength = passwordLength - 4; // Subtract 4 for the characters already added
     for (let i = 0; i < remainingLength; i++) {
       const randomCharset = [lowercaseCharset, uppercaseCharset, numberCharset, specialCharset][Math.floor(Math.random() * 4)];
@@ -362,17 +434,29 @@ const SecuritySettings = (props: fixSection) => {
     // Shuffle the password to randomize the character order
     password = password.split('').sort(() => Math.random() - 0.5).join('');
 
+    // Set the password in the form fields
     setpswd(password);
     setValue('new_password', password);
     setValue('confirmPassword', password);
   };
 
-
+  /**
+   * This effect runs every time the `errors` object changes, and it clears the 
+   * validation errors for `new_password`, `confirmPassword`, and `old_password` 
+   * fields after a 3-second delay.
+   * 
+   * The effect ensures that errors are cleared from the form fields after they 
+   * have been displayed for a brief period.
+   * 
+   * @param {object} errors - The validation errors object, typically from a form validation library like `react-hook-form`.
+   */
   useEffect(() => {
+    // Set a timeout to clear validation errors after 3 seconds
     setTimeout(() => {
       if (errors.new_password) {
         clearErrors('new_password');
       }
+      // Check if there is a validation error for 'confirmPassword' and clear it
       if (errors.confirmPassword) {
         clearErrors('confirmPassword');
       }
@@ -381,9 +465,6 @@ const SecuritySettings = (props: fixSection) => {
       }
 
     }, 3000);
-
-    // setWhitelist(props?.session?.user?.whitelist)
-
   }, [errors])
 
   return (
@@ -393,355 +474,355 @@ const SecuritySettings = (props: fixSection) => {
         className={`bg-black  z-[9] duration-300 fixed top-0 left-0 h-full w-full ${show ? "opacity-80 visible" : "opacity-0 invisible"
           }`}
       ></div>
-    
-        <section
-          className={`${props.show == 2 && "!left-[50%]"} ${props.fixed &&
-            "duration-300 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary overflow-y-scroll"
-            }  lg:p-40 px-[15px]`}
-        >
-          {/* only for mobile view */}
-          <div className="lg:hidden flex dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 bg-white w-full  rounded-bl-[20px] rounded-br-[20px]  z-[6] dark:bg-omega  h-[105px]">
-            <div className="grid grid-cols-[auto_1fr_auto] m-auto w-full px-[20px] items-center">
-              <div
-                onClick={() => {
-                  props.setShow(0);
-                  setShowActivity(false)
-                }}
-              >
-                <IconsComponent type="backIcon" hover={false} active={false} />
-              </div>
-              <div className="text-center">
-                <p className="sec-title">Security</p>
-              </div>
+
+      <section
+        className={`${props.show == 2 && "!left-[50%]"} ${props.fixed &&
+          "duration-300 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary overflow-y-scroll"
+          }  lg:p-40 px-[15px]`}
+      >
+        {/* only for mobile view */}
+        <div className="lg:hidden flex dark:shadow-none shadow-lg shadow-[#c3c3c317] fixed top-0 left-0 bg-white w-full  rounded-bl-[20px] rounded-br-[20px]  z-[6] dark:bg-omega  h-[105px]">
+          <div className="grid grid-cols-[auto_1fr_auto] m-auto w-full px-[20px] items-center">
+            <div
+              onClick={() => {
+                props.setShow(0);
+                setShowActivity(false)
+              }}
+            >
+              <IconsComponent type="backIcon" hover={false} active={false} />
+            </div>
+            <div className="text-center">
+              <p className="sec-title">Security</p>
             </div>
           </div>
+        </div>
 
-          {showActivity ? (
-            <Activity setShowActivity={setShowActivity} showActivity={showActivity} />
-          ) :
-            showAddressManagement ?
-              (
-                <AddressManagement setShowActivity={setShowAddressManagement} showActivity={showAddressManagement} />
-              )
-              :
-              (
-                <div className="max-[1023px] dark:bg-omega bg-white rounded-[10px]">
-                  <p className="sec-title lg:p-0 pl-20 pt-20">Security</p>
-                  <div className="py-[30px] md:py-[50px] px-20 lg:px-0">
-                    {data.map((item, index: number) => {
-                      return (
-                        <div
-                          key={index}
-                          className="flex md:flex-row flex-col gap-5 mb-[30px] last:mb-0 items-center"
-                        >
-                          <div className="flex items-start w-full gap-5">
-                            <div
-                              className={`p-2 rounded-5 max-w-[40px] w-full ${item.bg === "blue"
-                                ? "bg-primary-400"
-                                : item.bg === "red"
-                                  ? "bg-[#F87171]"
-                                  : "bg-[#6EE7B7]"
-                                }`}
-                            >
-                              <Image
-                                src={`/assets/security/${item.image}`}
-                                width={24}
-                                height={24}
-                                alt="security"
-                              />
-                            </div>
-                            <div className="w-full">
-                              <p className="info-14-18 mb-[5px] dark:text-white text-h-primary">
-                                {item.title}
-                              </p>
-                              <p className="info-12">{item.desc}</p>
-                              {
-                                item?.linkText &&
-                                <p onClick={() => { setShowAddressManagement(true) }} className="!text-primary font-bold info-14  mt-[5px] cursor-pointer">{item?.linkText}</p>
-                              }
-                            </div>
+        {showActivity ? (
+          <Activity setShowActivity={setShowActivity} showActivity={showActivity} />
+        ) :
+          showAddressManagement ?
+            (
+              <AddressManagement setShowActivity={setShowAddressManagement} showActivity={showAddressManagement} />
+            )
+            :
+            (
+              <div className="max-[1023px] dark:bg-omega bg-white rounded-[10px]">
+                <p className="sec-title lg:p-0 pl-20 pt-20">Security</p>
+                <div className="py-[30px] md:py-[50px] px-20 lg:px-0">
+                  {data.map((item, index: number) => {
+                    return (
+                      <div
+                        key={index}
+                        className="flex md:flex-row flex-col gap-5 mb-[30px] last:mb-0 items-center"
+                      >
+                        <div className="flex items-start w-full gap-5">
+                          <div
+                            className={`p-2 rounded-5 max-w-[40px] w-full ${item.bg === "blue"
+                              ? "bg-primary-400"
+                              : item.bg === "red"
+                                ? "bg-[#F87171]"
+                                : "bg-[#6EE7B7]"
+                              }`}
+                          >
+                            <Image
+                              src={`/assets/security/${item.image}`}
+                              width={24}
+                              height={24}
+                              alt="security"
+                            />
                           </div>
-                          {item.Add != false && (
-                            <div
-                              className={`py-[8px] cursor-pointer w-full pr-[10px] pl-1 block md:flex gap-[8px] items-center border rounded-5 border-grey-v-1 text-center dark:border-opacity-[15%] max-w-full md:max-w-fit  ${item?.title === "Email Authentication" && 'md:!max-w-[130px]'}`}
-                              onClick={() => {
-                                // console.log(props?.session?.user, '==========props?.session?.user');
-                                if (googleAuth === true) {
-                                  setActive(index + 1);
-                                  setShow(true);
-                                }
-                                else {
-                                  toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again', { position: 'top-center' })
-                                }
+                          <div className="w-full">
+                            <p className="info-14-18 mb-[5px] dark:text-white text-h-primary">
+                              {item.title}
+                            </p>
+                            <p className="info-12">{item.desc}</p>
+                            {
+                              item?.linkText &&
+                              <p onClick={() => { setShowAddressManagement(true) }} className="!text-primary font-bold info-14  mt-[5px] cursor-pointer">{item?.linkText}</p>
+                            }
+                          </div>
+                        </div>
+                        {item.Add != false && (
+                          <div
+                            className={`py-[8px] cursor-pointer w-full pr-[10px] pl-1 block md:flex gap-[8px] items-center border rounded-5 border-grey-v-1 text-center dark:border-opacity-[15%] max-w-full md:max-w-fit  ${item?.title === "Email Authentication" && 'md:!max-w-[130px]'}`}
+                            onClick={() => {
+                              // console.log(props?.session?.user, '==========props?.session?.user');
+                              if (googleAuth === true) {
+                                setActive(index + 1);
+                                setShow(true);
+                              }
+                              else {
+                                toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again', { position: 'top-center' })
+                              }
 
-                              }}
-                            >
-                              {/* <Image
+                            }}
+                          >
+                            {/* <Image
                           src="/assets/market/add.svg"
                           width={16}
                           height={16}
                           alt="add"
                         /> */}
-                              {item?.title === "Email Authentication" ? (
-                                <p className="nav-text-sm text-beta w-full asdasds text-center">
-                                  {props?.session?.user?.email !== "null"
-                                    ? "Change Email"
-                                    : "Add +"}
-                                </p>
-                              ) : (
-                                <p className="nav-text-sm text-beta w-full text-center">
-                                  {item?.title === "SMS Authentication" &&
-                                    props?.session?.user?.number == "null"
-                                    ? "Add +"
-                                    : "Change Number"}
-                                </p>
-                              )}
-                            </div>
-                          )}
+                            {item?.title === "Email Authentication" ? (
+                              <p className="nav-text-sm text-beta w-full asdasds text-center">
+                                {props?.session?.user?.email !== "null"
+                                  ? "Change Email"
+                                  : "Add +"}
+                              </p>
+                            ) : (
+                              <p className="nav-text-sm text-beta w-full text-center">
+                                {item?.title === "SMS Authentication" &&
+                                  props?.session?.user?.number == "null"
+                                  ? "Add +"
+                                  : "Change Number"}
+                              </p>
+                            )}
+                          </div>
+                        )}
 
-                          {item.CtaText == "Enable" ? (
-                            index === 0 ? (
-                              <></>
-                              // <button
-                              //   className={`max-w-full w-full md:max-w-[130px] h-40 ${props?.session?.user?.email == "null"
-                              //     ? "bg-primary text-white hover:bg-primary-800"
-                              //     : "bg-grey-v-2 !text-primary"
-                              //     }  rounded-5 info-16-18 `}
-                              //   onClick={() => {
-                              //     setEnable(index + 1);
-                              //     setShow(true);
-                              //   }}
-                              // >
-                              //   {props?.session?.user?.email == "null"
-                              //     ? "Enable"
-                              //     : "Disable"}
-                              // </button>
-                            ) : index === 1 ? (
+                        {item.CtaText == "Enable" ? (
+                          index === 0 ? (
+                            <></>
+                            // <button
+                            //   className={`max-w-full w-full md:max-w-[130px] h-40 ${props?.session?.user?.email == "null"
+                            //     ? "bg-primary text-white hover:bg-primary-800"
+                            //     : "bg-grey-v-2 !text-primary"
+                            //     }  rounded-5 info-16-18 `}
+                            //   onClick={() => {
+                            //     setEnable(index + 1);
+                            //     setShow(true);
+                            //   }}
+                            // >
+                            //   {props?.session?.user?.email == "null"
+                            //     ? "Enable"
+                            //     : "Disable"}
+                            // </button>
+                          ) : index === 1 ? (
+                            <button
+                              className={`max-w-full w-full md:max-w-[130px] h-40 ${props?.session?.user?.number == "null"
+                                ? "bg-primary text-white hover:bg-primary-800"
+                                : "bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800"
+                                }  rounded-5 info-16-18 `}
+                              onClick={() => {
+                                setEnable(index + 1);
+                                setShow(true);
+                              }}
+                            >
+                              {props?.session?.user?.number == "null"
+                                ? "Enable"
+                                : "Disable"}
+                            </button>
+                          ) : index === 2 ? (
+                            <button
+                              className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${googleAuth === false ? 'bg-primary text-white hover:bg-primary-800' : 'bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800'} `}
+                              onClick={() => {
+                                setEnable(index + 1);
+                                setShow(true);
+                              }}
+                            >
+                              {googleAuth === false
+                                ? "Enable"
+                                : "Disable"}
+                            </button>
+                          ) : index === 3 ? (
+                            <button
+                              className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${(props?.session?.user?.tradingPassword === null && tradePassword === false) ? 'bg-primary text-white hover:bg-primary-800' : 'bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800'} `}
+                              onClick={() => {
+                                setEnable(index + 1);
+                                setShow(true);
+                              }}
+                            >
+                              {(props?.session?.user?.tradingPassword === null && tradePassword === false)
+                                ? "Add"
+                                : "Edit"}
+                            </button>
+                          )
+                            : index === 5 ? (
                               <button
-                                className={`max-w-full w-full md:max-w-[130px] h-40 ${props?.session?.user?.number == "null"
-                                  ? "bg-primary text-white hover:bg-primary-800"
-                                  : "bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800"
-                                  }  rounded-5 info-16-18 `}
+                                className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${whitelist === false ? 'bg-primary text-white hover:bg-primary-800' : 'bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800'} `}
                                 onClick={() => {
-                                  setEnable(index + 1);
-                                  setShow(true);
+                                  if (googleAuth === true) {
+                                    setEnable(index + 1);
+                                    setShow(true);
+                                  }
+                                  else {
+                                    toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again', { position: 'top-center' })
+                                  }
                                 }}
                               >
-                                {props?.session?.user?.number == "null"
+                                {whitelist === false
                                   ? "Enable"
                                   : "Disable"}
                               </button>
-                            ) : index === 2 ? (
+                            )
+                              :
                               <button
-                                className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${googleAuth === false ? 'bg-primary text-white hover:bg-primary-800' : 'bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800'} `}
+                                className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${props?.session?.user?.antiphishing === null && antiFishingCode === false ? 'bg-primary text-white hover:bg-primary-800' : 'bg-grey-v-2 !text-primary hover:bg-primary-800 hover:!text-white'} `}
                                 onClick={() => {
-                                  setEnable(index + 1);
-                                  setShow(true);
+                                  if (googleAuth === true) {
+                                    setEnable(index + 1);
+                                    setShow(true);
+                                  }
+                                  else {
+                                    toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again', { position: 'top-center' })
+                                  }
                                 }}
                               >
-                                {googleAuth === false
-                                  ? "Enable"
-                                  : "Disable"}
-                              </button>
-                            ) : index === 3 ? (
-                              <button
-                                className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${(props?.session?.user?.tradingPassword === null && tradePassword === false) ? 'bg-primary text-white hover:bg-primary-800' : 'bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800'} `}
-                                onClick={() => {
-                                  setEnable(index + 1);
-                                  setShow(true);
-                                }}
-                              >
-                                {(props?.session?.user?.tradingPassword === null && tradePassword === false)
+                                {(props?.session?.user?.antiphishing === null && antiFishingCode === false)
                                   ? "Add"
                                   : "Edit"}
                               </button>
-                            )
-                              : index === 5 ? (
-                                <button
-                                  className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${whitelist === false ? 'bg-primary text-white hover:bg-primary-800' : 'bg-grey-v-2 !text-primary hover:!text-white hover:bg-primary-800'} `}
-                                  onClick={() => {
-                                    if (googleAuth === true) {
-                                      setEnable(index + 1);
-                                      setShow(true);
-                                    }
-                                    else {
-                                      toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again', { position: 'top-center' })
-                                    }
-                                  }}
-                                >
-                                  {whitelist === false
-                                    ? "Enable"
-                                    : "Disable"}
-                                </button>
-                              )
-                                :
-                                <button
-                                  className={`max-w-full w-full md:max-w-[130px] h-40 rounded-5 info-16-18  ${props?.session?.user?.antiphishing === null && antiFishingCode === false ? 'bg-primary text-white hover:bg-primary-800' : 'bg-grey-v-2 !text-primary hover:bg-primary-800 hover:!text-white'} `}
-                                  onClick={() => {
-                                    if (googleAuth === true) {
-                                      setEnable(index + 1);
-                                      setShow(true);
-                                    }
-                                    else {
-                                      toast.warning('Request failed. Google Two Factor Authentication has not been activated. Please check and try again', { position: 'top-center' })
-                                    }
-                                  }}
-                                >
-                                  {(props?.session?.user?.antiphishing === null && antiFishingCode === false)
-                                    ? "Add"
-                                    : "Edit"}
-                                </button>
-                          ) : (
-                            <button
-                              className="max-w-full asasdasds w-full flex cursor-pointer items-center justify-center md:max-w-[130px] h-40 bg-primary hover:bg-primary-800 rounded-5 info-16-18 text-white "
+                        ) : (
+                          <button
+                            className="max-w-full asasdasds w-full flex cursor-pointer items-center justify-center md:max-w-[130px] h-40 bg-primary hover:bg-primary-800 rounded-5 info-16-18 text-white "
+                            onClick={() => {
+                              setShowActivity(true);
+                            }}
+                          >
+                            {item.CtaText}
+                          </button>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="h-[1px] w-full bg-grey-v-2 dark:bg-opacity-[15%]"></div>
+
+                <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                  }
+                }}>
+                  <div className="py-[30px] md:py-[50px] lg:px-0 px-20">
+                    <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
+                      Change Password
+                    </p>
+
+                    <div className="mt-[30px] ">
+                      <div className="flex md:flex-row flex-col gap-[30px]">
+                        <div className=" w-full mb-[10px]">
+                          <p className="sm-text mb-[10px]">Old Password<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
+                          <div className="relative">
+                            <input
+                              type={`${showOldPswd === true ? "text" : "password"}`}
+                              {...register("old_password")}
+                              placeholder="Enter Old password"
+                              className="sm-text input-cta2 w-full"
+                              maxLength={32}
+                            />
+                            <Image
+                              src={`/assets/register/${showOldPswd === true ? "show.svg" : "hide.svg"}`}
+                              alt="eyeicon"
+                              width={24}
+                              height={24}
                               onClick={() => {
-                                setShowActivity(true);
+                                setShowOldPswd(!showOldPswd);
                               }}
-                            >
-                              {item.CtaText}
-                            </button>
+                              className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                            />
+                          </div>
+
+                        </div>
+                      </div>
+                      {errors.old_password && (
+                        <p className="errorMessage">
+                          {errors.old_password.message}
+                        </p>
+                      )}
+                      <div className="mt-5 flex gap-[30px] md:flex-row flex-col">
+                        <div className=" w-full">
+                          <div className="flex justify-between mb-[10px]">
+                            <p className="sm-text ">New Password<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
+                            <button type="button" className="!text-primary text-[14px] " onClick={() => generatePassword()}>Generate Password</button>
+                          </div>
+                          <div className='relative  flex justify-between gap-3 items-center mb-[10px]' onFocus={() => { setChecker(true) }} onBlur={() => { setChecker(false) }}>
+                            <input
+                              type={`${showpswd === true ? "text" : "password"}`}
+                              {...register("new_password")}
+                              onChange={(e: any) => setpswd(e.target.value)}
+                              placeholder="Enter new password"
+                              className="sm-text input-cta2 w-full"
+                              maxLength={32}
+                            />
+                            <Image
+                              src={`/assets/register/${showpswd === true ? "show.svg" : "hide.svg"}`}
+                              alt="eyeicon"
+                              width={24}
+                              height={24}
+                              onClick={() => {
+                                setShowPswd(!showpswd);
+                              }}
+                              className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                            />
+                            {checker &&
+                              <StrengthCheck2 password={pswd} />}
+                          </div>
+
+                          <StrengthCheck password={pswd} />
+                          {errors.new_password && (
+                            <p className="errorMessage">
+                              {errors.new_password.message}
+                            </p>
                           )}
                         </div>
-                      );
-                    })}
-                  </div>
-                  <div className="h-[1px] w-full bg-grey-v-2 dark:bg-opacity-[15%]"></div>
 
-                  <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
-                    <div className="py-[30px] md:py-[50px] lg:px-0 px-20">
-                      <p className="info-14-18 dark:text-white text-h-primary mb-[10px]">
-                        Change Password 
-                      </p>
-
-                      <div className="mt-[30px] ">
-                        <div className="flex md:flex-row flex-col gap-[30px]">
-                          <div className=" w-full mb-[10px]">
-                            <p className="sm-text mb-[10px]">Old Password<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
-                            <div className="relative">
-                              <input
-                                type={`${showOldPswd === true ? "text" : "password"}`}
-                                {...register("old_password")}
-                                placeholder="Enter Old password"
-                                className="sm-text input-cta2 w-full"
-                                maxLength={32}
-                              />
-                              <Image
-                                src={`/assets/register/${showOldPswd === true ? "show.svg" : "hide.svg"}`}
-                                alt="eyeicon"
-                                width={24}
-                                height={24}
-                                onClick={() => {
-                                  setShowOldPswd(!showOldPswd);
-                                }}
-                                className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                              />
-                            </div>
+                        <div className=" w-full">
+                          <p className="sm-text mb-[10px] h-[21px]">Re-enter password<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
+                          <div className="relative mb-[10px]">
+                            <input
+                              type={`${showpswd === true ? "text" : "password"}`}
+                              {...register("confirmPassword")}
+                              placeholder="Re-Enter password"
+                              className="sm-text input-cta2 w-full"
+                              autoComplete="off"
+                              maxLength={32}
+                            />
+                            <Image
+                              src={`/assets/register/${showpswd === true ? "show.svg" : "hide.svg"}`}
+                              alt="eyeicon"
+                              width={24}
+                              height={24}
+                              onClick={() => {
+                                setShowPswd(!showpswd);
+                              }}
+                              className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                            />
 
                           </div>
-                        </div>
-                        {errors.old_password && (
-                          <p className="errorMessage">
-                            {errors.old_password.message}
-                          </p>
-                        )}
-                        <div className="mt-5 flex gap-[30px] md:flex-row flex-col">
-                          <div className=" w-full">
-                            <div className="flex justify-between mb-[10px]">
-                              <p className="sm-text ">New Password<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
-                              <button type="button" className="!text-primary text-[14px] " onClick={() => generatePassword()}>Generate Password</button>
-                            </div>
-                            <div className='relative  flex justify-between gap-3 items-center mb-[10px]' onFocus={() => { setChecker(true) }} onBlur={() => { setChecker(false) }}>
-                              <input
-                                type={`${showpswd === true ? "text" : "password"}`}
-                                {...register("new_password")}
-                                onChange={(e: any) => setpswd(e.target.value)}
-                                placeholder="Enter new password"
-                                className="sm-text input-cta2 w-full"
-                                maxLength={32}
-                              />
-                              <Image
-                                src={`/assets/register/${showpswd === true ? "show.svg" : "hide.svg"}`}
-                                alt="eyeicon"
-                                width={24}
-                                height={24}
-                                onClick={() => {
-                                  setShowPswd(!showpswd);
-                                }}
-                                className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                              />
-                              {checker &&
-                                <StrengthCheck2 password={pswd} />}
-                            </div>
 
-                            <StrengthCheck password={pswd} />
-                            {errors.new_password && (
-                              <p className="errorMessage">
-                                {errors.new_password.message}
-                              </p>
-                            )}
-                          </div>
-
-                          <div className=" w-full">
-                            <p className="sm-text mb-[10px] h-[21px]">Re-enter password<span className="text-red-dark dark:text-[#9295a6]">*</span></p>
-                            <div className="relative mb-[10px]">
-                              <input
-                                type={`${showpswd === true ? "text" : "password"}`}
-                                {...register("confirmPassword")}
-                                placeholder="Re-Enter password"
-                                className="sm-text input-cta2 w-full"
-                                autoComplete="off"
-                                maxLength={32}
-                              />
-                              <Image
-                                src={`/assets/register/${showpswd === true ? "show.svg" : "hide.svg"}`}
-                                alt="eyeicon"
-                                width={24}
-                                height={24}
-                                onClick={() => {
-                                  setShowPswd(!showpswd);
-                                }}
-                                className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
-                              />
-
-                            </div>
-
-                            {errors.confirmPassword && (
-                              <p className="errorMessage">
-                                {errors.confirmPassword.message}
-                              </p>
-                            )}
-                          </div>
+                          {errors.confirmPassword && (
+                            <p className="errorMessage">
+                              {errors.confirmPassword.message}
+                            </p>
+                          )}
                         </div>
                       </div>
                     </div>
-                    <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-end  lg:px-0 px-20">
-                      {/* <p className="sm-text">
+                  </div>
+                  <div className="flex md:flex-row flex-col-reverse items-center gap-[10px] justify-end  lg:px-0 px-20">
+                    {/* <p className="sm-text">
                   To ensure your account is well protected, please use 8 or more
                   characters with a mix of letters, numbers & symbols.
                 </p> */}
-                      <button
-                        disabled={btnDisabled}
-                        type="submit"
-                        className={`solid-button w-full md:w-auto px-[23px] md:px-[51px] ${btnDisabled === true ? "cursor-not-allowed" : ''}`}
-                      >
-                        {btnDisabled &&
-                          <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
-                            <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />
-                          </svg>
-                        }
-                        Save
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              )}
-        </section>
-      
+                    <button
+                      disabled={btnDisabled}
+                      type="submit"
+                      className={`solid-button w-full md:w-auto px-[23px] md:px-[51px] ${btnDisabled === true ? "cursor-not-allowed" : ''}`}
+                    >
+                      {btnDisabled &&
+                        <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB" />
+                          <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor" />
+                        </svg>
+                      }
+                      Save
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+      </section>
+
 
       {enable === 1 && (
         <Verification
@@ -759,7 +840,7 @@ const SecuritySettings = (props: fixSection) => {
         <Verification
           setShow={setShow}
           setEnable={setEnable}
-          type="number" 
+          type="number"
           data={formData}
           session={props?.session}
           snedOtpToUser={snedOtpToUser}
@@ -778,7 +859,7 @@ const SecuritySettings = (props: fixSection) => {
         <ConfirmPopup
           setEnable={setEnable}
           setShow={setShow}
-          type="number" 
+          type="number"
           data={formData}
           session={props?.session}
           snedOtpToUser={snedOtpToUser}
@@ -823,7 +904,7 @@ const SecuritySettings = (props: fixSection) => {
         <AdNumber
           setShow={setShow}
           setActive={setActive}
-          type="number" 
+          type="number"
           session={props?.session}
         />
       )}

@@ -6,17 +6,16 @@ import { signIn, useSession } from "next-auth/react"
 import { toast } from 'react-toastify';
 import AES from 'crypto-js/aes';
 import CodeNotRecieved from "../snippets/codeNotRecieved";
-import { Session } from "inspector";
 
 interface propsData {
-  formData?: any,
-  data?: any,
-  api?: string,
-  setStep?: Function | undefined,
-  sendOtpRes?: any;
-  isEmail?: boolean;
-  isNumber?: boolean;
-  isTwoFa?: boolean;
+  formData?: any;         // Optional: Holds form data object, can be any type (could be refined to specific structure if known)
+  data?: any;             // Optional: General data object, type can be further specified as needed
+  api?: string;           // Optional: API endpoint as a string, specifying where to submit or fetch data
+  setStep?: Function | undefined; // Optional: Function to update the step, useful in multi-step forms
+  sendOtpRes?: any;       // Optional: Holds OTP response data, could specify a structure if known
+  isEmail?: boolean;      // Optional: Boolean flag to indicate if the input is an email
+  isNumber?: boolean;     // Optional: Boolean flag to indicate if the input is a number
+  isTwoFa?: boolean;      // Optional: Boolean flag to indicate if two-factor authentication is required
 }
 
 const SecurityCode = (props: propsData) => {
@@ -34,16 +33,22 @@ const SecurityCode = (props: propsData) => {
   const [authCode, setAuthCode] = useState('');
 
   const [reqCount, setReqCount] = useState(0);
+
   useEffect(() => {
 
+    // **1. Initial Order Time Calculation**
+    // Calls `orderTimeCalculation` to compute order-related timing, likely using OTP response data.
     orderTimeCalculation(props?.sendOtpRes);
-    
+
+    // **2. Email Masking for Display**
+    // If `isEmail` is true and a username exists in `formData`, mask the email address for security.
     if (props.isEmail && props.formData?.username) {
       const str = props.formData?.username.split('@');
       const substring = str[0].substring(0, 3);
       setEmailSplit(`${substring}****@${str[1]}`);
     }
-
+    // **3. Function: Handle OTP Input Change**
+    // Manages OTP input fields by focusing on the next field as users type and merging OTP segments.
     const handleInputChange = (e: any, setOtpState: Function, inputElements: NodeListOf<HTMLInputElement>) => {
       const [first, ...rest] = e.target.value;
       e.target.value = first ?? "";
@@ -55,23 +60,30 @@ const SecurityCode = (props: propsData) => {
         inputElements[index + 1].dispatchEvent(new Event("input"));
       }
 
+      // Combines all inputs into a single OTP string for submission or verification
       const otp = Array.from(inputElements).map(input => input.value).join('');
       setOtpState(otp);
     };
 
+    // **4. Function: Setup OTP Input Elements**
+    // Sets up keyboard and input listeners for each OTP input to enable smooth navigation between fields.
     const setupInputs = (selector: string, setOtpState: Function) => {
       const inputElements = document.querySelectorAll(selector) as NodeListOf<HTMLInputElement>;
 
       inputElements.forEach((input, index) => {
+        // Handles backspacing to move to the previous input field
         const onKeyDown = (e: KeyboardEvent) => {
           if (e.key === "Backspace" && !input.value) {
             inputElements[Math.max(0, index - 1)].focus();
           }
         };
+
+        // Manages input event to capture each OTP character
         const onInput = (e: any) => {
           handleInputChange(e, setOtpState, inputElements);
         };
 
+        // Adds event listeners for keydown and input events  
         input.addEventListener("keydown", onKeyDown);
         input.addEventListener("input", onInput);
 
@@ -82,29 +94,32 @@ const SecurityCode = (props: propsData) => {
       });
     };
 
+    // **5. Initialize OTP Input Setup**
+    // Sets up input listeners for different OTP sections.
     setupInputs(".input_wrapper input", setOtp);
     setupInputs(".input_wrapper2 input", setOtp2);
     setupInputs(".input_wrapper3 input", setAuthCode);
-
-    // return () => {
-    //   if (timerRef.current) clearInterval(timerRef.current);
-    // };
   }, []);
 
   const matchUserOtp = async () => {
     try {
+      // **1. Disable Submit Button and Handle Max Attempt Logic**
+      // Disables the submit button to prevent multiple requests and checks for maximum attempts.
+
       setBtnDisabled(true);
       if (reqCount >= 5) {
         setOtpMessage("Too many attempts");
       }
 
-
-// console.log(props?.formData,"=hgfhkjgdhfkgjk");
+      // **2. Prepare OTP and Auth Code for Verification**
+      // Sets the necessary fields in the formData object to proceed with the OTP matching process.
 
       props.formData.step = 3;
       props.formData.otp = fillOtp;
       props.formData.token = authCode;
 
+      // **3. Validation: Check for Empty OTP Field**
+      // Checks if the OTP field is empty and displays a message if so, resetting it after a timeout.
       if (fillOtp === '') {
         setOtpMessage('Please enter One-Time password to authenticate.');
         setTimeout(() => {
@@ -113,7 +128,13 @@ const SecurityCode = (props: propsData) => {
         setBtnDisabled(false);
         return;
       }
+      // **4. Clear OTP Error Message**
+      // Resets the OTP error message in case the OTP field is filled.
       setOtpMessage('');
+
+      // **5. Handling API-Specific Logic (Login, Register, Forget Password)**
+      // If the API is 'login', fetches location information (IP, country, region) to include in the form data.
+
       if (props.api === 'login') {
         var locationData: any;
         let ipInfoData = await fetch('https://ipapi.co/json/');
@@ -123,11 +144,14 @@ const SecurityCode = (props: propsData) => {
         props.formData.region = locationData?.region
       }
 
-
+      // **6. Encrypting and Sending Form Data**
+      // Encrypts the form data before sending it to the server using AES encryption.
 
       const ciphertext = AES.encrypt(JSON.stringify(props.formData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record = encodeURIComponent(ciphertext.toString());
 
+      // **7. Sending Request to Server**
+      // Sends the encrypted data to the API endpoint, depending on the provided API type (login, register, forget).
       let response = await fetch(`/api/user/${props.api}`, {
         method: "POST",
         headers: {
@@ -136,6 +160,8 @@ const SecurityCode = (props: propsData) => {
         body: JSON.stringify(record)
       }).then(response => response.json());
 
+      // **8. Handle Successful Response**
+      // Depending on the API type, handles successful login, registration, or password reset and provides feedback.
       if (response.data.status === 200) {
 
         if (props.api === 'login') {
@@ -149,12 +175,10 @@ const SecurityCode = (props: propsData) => {
         }
         else if (props.api === 'forget') {
           props?.setStep !== undefined && props?.setStep(3)
-          // setSuccessModal(true)
-          // toast.success(response?.data?.message);
-          // router.push('/login');
         }
       }
-
+      // **9. Handle Failed Response**
+      // Displays an error message if the response status is not 200 and resets the button state after a delay.
       else {
         toast.error(response.data.message !== undefined ? response.data.message : response.data.data, { position: "top-center" });
         setTimeout(() => {
@@ -167,14 +191,30 @@ const SecurityCode = (props: propsData) => {
     }
   }
 
+  /**
+ * **orderTimeCalculation** - This function calculates the remaining time for an OTP expiration and manages 
+ * the countdown timer for the OTP expiry process.
+ *
+ * @param otpRes - The OTP response object containing the expiration time for OTP.
+ */
   const orderTimeCalculation = async (otpRes: any) => {
 
+    // **1. Set Enable Flag to True** 
+    // Activates the OTP input or actions that depend on the OTP being valid.
     setEnable(true);
     let deadline = new Date(otpRes?.expire);
 
+    // **2. Parse Expiration Time**
+    // Converts the expiration time of OTP from the response to a Date object and adjusts the expiration time by adding 1 second.
     deadline.setMinutes(deadline.getMinutes());
     deadline.setSeconds(deadline.getSeconds() + 1);
+
+    // **3. Get Current Time**
+    // Gets the current time to compare against the OTP expiration time.
     let currentTime = new Date();
+
+    // **4. If Current Time is Less Than Deadline**
+    // If the current time is before the OTP expiration, sets up a countdown timer.
     if (currentTime < deadline) {
       if (Ref.current) clearInterval(Ref.current);
       const timer = setInterval(() => {
@@ -182,6 +222,9 @@ const SecurityCode = (props: propsData) => {
       }, 1000);
       Ref.current = timer;
     }
+
+    // **4. If Current Time is Less Than Deadline**
+    // If the current time is before the OTP expiration, sets up a countdown timer.
     else if (currentTime > deadline) {
       setOtp('')
       setEnable(false);
@@ -214,6 +257,15 @@ const SecurityCode = (props: propsData) => {
     }
   }
 
+  /**
+ * **getTimeRemaining** - This function calculates the remaining time until a specified deadline.
+ *
+ * @param e - The target deadline (in date string format) for the time calculation.
+ * @returns An object containing:
+ *   - `total`: Total time remaining in milliseconds.
+ *   - `minutes`: Remaining minutes until the deadline.
+ *   - `seconds`: Remaining seconds until the deadline.
+ */
   const getTimeRemaining = (e: any) => {
     let current: any = new Date();
     const total = Date.parse(e) - Date.parse(current);
@@ -223,6 +275,25 @@ const SecurityCode = (props: propsData) => {
       total, minutes, seconds
     };
   }
+
+  /**
+ * **sendOtp** - This function sends an OTP request to the server and handles the response based on the type of request (e.g., "forget").
+ * It also resets the OTP input fields and manages the timeout for OTP expiry.
+ * // **1. Reset Request Count and OTP Fields**
+      // Resets the request count to 0 and clears the OTP input fields.
+      // **2. Set Form Data for OTP Request**
+      // Prepares the form data with a step and clears any existing OTP.
+      // **3. Encrypt Form Data**
+      // Encrypts the form data using AES encryption for secure transmission.
+      // **4. Send OTP Request**
+      // Makes a POST request to the server to send the OTP, passing the encrypted form data.
+      // **5. Handle OTP Response for 'forget' API**
+      // If the API is 'forget', check if the OTP is returned and handle accordingly.
+      // **6. Handle OTP Response for Other APIs (Login, Register)**
+        // For other APIs, check if the request was successful and proceed accordingly.
+         // **7. Handle Errors**
+      // If an error occurs during the process, disable further actions and log the error.
+ */
 
   const sendOtp = async () => {
     try {
@@ -276,6 +347,17 @@ const SecurityCode = (props: propsData) => {
     }
   };
 
+  /**
+ * **handleKeyDown** - This function handles the keydown event for the OTP input field.
+ * When the "Enter" key is pressed, it validates if the OTP length is 6 characters.
+ * If valid, it calls the `matchUserOtp` function. If not, it shows a message to prompt the user to enter a valid OTP.
+ * // **1. Check for 'Enter' key press**
+    // The function listens for the "Enter" key and triggers further validation and actions if pressed.
+    // **2. Check OTP length**
+      // If the OTP entered has 6 digits, proceed to verify it by calling matchUserOtp().
+      // **3. Display OTP error message**
+        // If the OTP length is incorrect, display a message and clear it after 3 seconds.
+ */
   const handleKeyDown = (event: any) => {
     if (event.key === "Enter") {
       if (fillOtp.length === 6) {

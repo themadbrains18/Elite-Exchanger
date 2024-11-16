@@ -3,19 +3,34 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
 import Context from "../contexts/context";
 
-interface changeProps {
+/**
+ * Props for managing the visibility and enabling state of a component that handles scenarios
+ * when a code has not been received.
+ *
+ * @interface CodeNotRecievedProps
+ * @property {Function} setEnable - Function to enable or disable the component.
+ * @property {any} [setShow] - Optional function to manage the visibility of the component.
+ */
+interface CodeNotRecievedProps {
   setEnable: Function;
   setShow?: any;
 }
 
-const CodeNotRecieved = (props: changeProps) => {
+const CodeNotRecieved = (props: CodeNotRecievedProps) => {
   const { mode } = useContext(Context);
   const [active, setActive] = useState(1);
 
+  /**
+     * Closes the popup/modal by setting the visibility state to false and deactivating the current step or process.
+     * This function is typically used to hide the popup/modal and reset any associated states when the user decides to close it.
+     *
+     * @function closePopup
+     * @returns {void}
+     */
   const closePopup = () => {
-    props?.setShow &&   props?.setShow(true);
+    props?.setShow && props?.setShow(true);
     props.setEnable(false);
-    
+
   };
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
@@ -27,7 +42,7 @@ const CodeNotRecieved = (props: changeProps) => {
           }`}
       ></div>
       <div
-            ref={wrapperRef}
+        ref={wrapperRef}
         className="p-6 fixed max-h-[calc(100%-30px)] overscroll-none	 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  rounded-[10px] bg-white dark:bg-omega  z-[99] max-w-[calc(100%-36px)] md:max-w-[520px] w-full overflow-auto"
       >
         <div className="flex items-center justify-between mb-[16px]">
@@ -121,9 +136,9 @@ const CodeNotRecieved = (props: changeProps) => {
           <button
             className="solid-button w-full"
             onClick={() => {
-              props?.setShow &&    props?.setShow(true);
+              props?.setShow && props?.setShow(true);
               props.setEnable(false);
-              
+
             }}
           >
             OK

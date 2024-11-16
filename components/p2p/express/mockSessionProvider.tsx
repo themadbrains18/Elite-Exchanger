@@ -1,5 +1,13 @@
 import { SessionProvider } from 'next-auth/react';
 
+/**
+ * MockSessionProvider - A component to mock the session context for testing.
+ *
+ * This component is used to wrap child components with a mocked session for testing
+ * purposes. It simulates a user session and provides mock authentication data.
+ *
+ * @param children - The child components to be rendered within the mock session context.
+ */
 export const MockSessionProvider = ({ children }:any) => {
   const mockSession = {
     user:{

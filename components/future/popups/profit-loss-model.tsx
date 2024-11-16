@@ -7,35 +7,107 @@ import { truncateNumber } from '@/libs/subdomain';
 import { toast } from 'react-toastify';
 import { AES } from 'crypto-js';
 
-interface showPopup {
+/**
+ * Interface for the props used in the ProfitLossModal component.
+ * This interface defines the types for various props that control the modal's state,
+ * appearance, and behavior, including model visibility, token information, and 
+ * profit/loss settings.
+ */
+interface ProfitLossModalProps {
+    /**
+     * Controls the visibility of the modal popup (optional).
+     * This is typically a number indicating whether the modal should be shown or not.
+     */
     modelPopup?: number;
+
+    /**
+     * Function to control the model overlay state (optional).
+     * Used to toggle the overlay visibility when the modal is active.
+     */
     setModelOverlay?: any;
+
+    /**
+     * Function to control the visibility of the modal (optional).
+     * Typically used to open or close the modal based on certain conditions.
+     */
     setModelPopup?: any;
+
+    /**
+     * Indicates whether the overlay is visible or not (optional).
+     * The overlay provides a backdrop behind the modal to indicate focus.
+     */
     modelOverlay?: boolean;
+
+    /**
+     * The entry price for a position (optional).
+     * This is used to calculate profit or loss relative to the entry price.
+     */
     entryPrice?: any;
+
+    /**
+     * Information about the current token (optional).
+     * Contains data such as symbol or other relevant details for the token.
+     */
     currentToken?: any;
+
+    /**
+     * The leverage used for the trade (optional).
+     * This is used to calculate profit/loss based on leverage.
+     */
     leverage?: any;
+
+    /**
+     * The size value of the position (optional).
+     * Represents the quantity of the asset held in the position.
+     */
     sizeValue?: any;
+
+    /**
+     * Controls whether the modal should be shown or not (optional).
+     * This flag can be used to conditionally render the modal based on application state.
+     */
     show?: any;
+
+    /**
+     * Function to set the take profit (TP) and stop loss (SL) values (optional).
+     * Used to configure risk management levels for the position.
+     */
     setTpSl?: any;
+
+    /**
+     * The action type (optional).
+     * Determines the type of operation to perform, such as opening or closing a position.
+     */
     actionType?: any;
+
+    /**
+     * Function to confirm profit/loss settings (optional).
+     * Used to confirm or apply the profit/loss action within the modal.
+     */
     setProfitLossConfirm?: any;
+
+    /**
+     * The current position details (optional).
+     * Contains information about the position's state, such as entry, size, etc.
+     */
     position?: any;
 }
 
-const ProfitLossModal = (props: showPopup) => {
+const ProfitLossModal = (props: ProfitLossModalProps) => {
     const list = ['USDT', props?.currentToken?.coin_symbol];
     let { mode } = useContext(Context);
     const { status, data: session } = useSession()
-
     const [profit, setProfit] = useState(0);
     const [loss, setLoss] = useState(0);
-
     const [takeProfirValue, setTakeProfitValue] = useState(0);
     const [stopLossValue, setStopLossValue] = useState(0);
     const [errmsg, setErrmsg] = useState("");
 
-
+    /**
+     * Effect hook that updates the state for take profit, stop loss, profit, and loss values
+     * whenever the `position` prop changes. This hook ensures that the modal displays the latest
+     * profit and loss details for the selected position.
+     */
     useEffect(() => {
         if (props?.position && props?.position?.profitlosses && props?.position?.profitlosses.length > 0) {
             setTakeProfitValue(props?.position?.profitlosses[0]?.trigger_profit)
@@ -46,6 +118,14 @@ const ProfitLossModal = (props: showPopup) => {
 
     }, [props?.position]);
 
+    /**
+     * Updates the take profit value and calculates the potential profit based on the entry price and the 
+     * quantity for both long and short positions. The function handles the input for take profit value 
+     * and ensures that it doesn't go below zero.
+     * 
+     * If the value is valid and greater than zero, it calculates the profit or loss depending on whether 
+     * the position is 'long' or 'short'.
+     */
     const findTakeProfit = (e: any) => {
         if (e?.target?.value < 0) {
             return;
@@ -68,15 +148,22 @@ const ProfitLossModal = (props: showPopup) => {
             setTakeProfitValue(0);
             setProfit(0)
         }
-
     }
 
+    /**
+     * Updates the stop loss value and calculates the potential loss based on the entry price and the 
+     * quantity for both long and short positions. The function handles the input for stop loss value 
+     * and ensures that it doesn't go below zero.
+     * 
+     * If the value is valid and greater than zero, it calculates the loss depending on whether 
+     * the position is 'long' or 'short'.
+     */
     const findStopLoss = (e: any) => {
         if (e?.target?.value < 0) {
             return;
         }
         let newPriceValue = e?.target?.value;
-        if(newPriceValue > 0){
+        if (newPriceValue > 0) {
             setStopLossValue(e?.target?.value);
             if (props?.show === 'long') {
                 //=========== USDT PnL ================
@@ -89,40 +176,55 @@ const ProfitLossModal = (props: showPopup) => {
                 setLoss(truncateNumber(usdt_pnl, 6));
             }
         }
-        else{
+        else {
             setStopLossValue(0);
             setLoss(0);
         }
-        
     }
 
+    /**
+     * Stores the profit and loss data based on the current position and market prices. 
+     * The function handles both 'long' and 'short' positions and ensures that the 
+     * take-profit and stop-loss prices are set correctly in relation to the market price.
+     * 
+     * If the prices are not set within the valid range, error messages are displayed.
+     * Otherwise, the profit and loss data is encrypted and sent to the server via a POST request.
+     */
     const storeProfitLossData = async () => {
         try {
+            // Determine the token and its current market price
             let token = props?.currentToken?.token !== null ? props?.currentToken?.token : props?.currentToken?.global_token;
             let currentPrice = token?.price;
 
+            // Validation for 'long' position: Ensure take-profit and stop-loss prices are within valid ranges
             if (props?.show === 'long') {
+                // Take-Profit validation: must be less than market price
                 if (currentPrice > takeProfirValue && takeProfirValue > 0) {
                     toast.error('Take-Profit price must be greater than market Price', { position: 'top-center' })
                     return;
                 }
+                // Stop-Loss validation: must be lower than market or last entry price
                 if (currentPrice < stopLossValue || stopLossValue > parseFloat(props?.entryPrice) && stopLossValue > 0) {
                     toast.error('Stop loss price should be lower than market price or last entry price.', { position: 'top-center' });
                     return;
                 }
             }
 
+            // Validation for 'short' position: Ensure take-profit and stop-loss prices are within valid ranges
             if (props?.show === 'short') {
+                // Take-Profit validation: must be lower than market price
                 if (currentPrice < takeProfirValue && takeProfirValue > 0) {
                     toast.error('Take-Profit price should be lower than Last market Price', { position: 'top-center' });
                     return;
                 }
+                // Stop-Loss validation: must be higher than market price
                 if (currentPrice > stopLossValue && stopLossValue > 0) {
                     toast.error('Stop loss price should be higher than market price.', { position: 'top-center' });
                     return;
                 }
             }
 
+            // Construct the profit object to be sent for profit/loss order
             let profitobj = {
                 contract: props?.currentToken?.coin_symbol + props?.currentToken?.usdt_symbol,
                 position_id: '--',
@@ -176,6 +278,15 @@ const ProfitLossModal = (props: showPopup) => {
         }
     }
 
+    /**
+     * Closes the popup and resets profit/loss values.
+     * 
+     * This function is responsible for resetting the profit, loss, 
+     * stop-loss, and take-profit values to 0. It also hides the model overlay, 
+     * closes the popup, and resets the profit/loss confirmation status if applicable.
+     * 
+     * @returns {void}
+     */
     const closePopup = () => {
         setProfit(0);
         setLoss(0);
@@ -253,7 +364,7 @@ const ProfitLossModal = (props: showPopup) => {
                     <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative p-[15px] rounded-[5px] justify-between'>
                         <p className='top-label min-w-max'>Take Profit</p>
                         <div className='flex item-center justify-between'>
-                            <input type="text" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' maxLength={11} value={takeProfirValue === 0 ? '': takeProfirValue} onChange={(e: any) => {
+                            <input type="text" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' maxLength={11} value={takeProfirValue === 0 ? '' : takeProfirValue} onChange={(e: any) => {
                                 const value = e.target.value;
                                 const regex = /^\d{0,10}(\.\d{0,6})?$/;
                                 if (regex.test(value) || value === "") {
@@ -271,13 +382,13 @@ const ProfitLossModal = (props: showPopup) => {
                     </div>
                     <div className='mt-[10px]'>
                         <p className='top-label !text-[14px]'>
-                            Last Traded Price to {takeProfirValue} will trigger market Take Profit order; your expected {profit < 0 ?'loss' : 'profit'} will be {isNaN(profit) ? 0 : profit} USDT
+                            Last Traded Price to {takeProfirValue} will trigger market Take Profit order; your expected {profit < 0 ? 'loss' : 'profit'} will be {isNaN(profit) ? 0 : profit} USDT
                         </p>
                     </div>
                     <div className='flex items-center dark:bg-[#373d4e] bg-[#e5ecf0] mt-[15px] relative p-[15px] rounded-[5px] justify-between'>
                         <p className='top-label min-w-max'>Stop Loss</p>
                         <div className='flex item-center justify-between'>
-                            <input type="text" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' maxLength={11} value={stopLossValue === 0 ? '':stopLossValue} onChange={(e: any) => {
+                            <input type="text" autoFocus={true} className='max-w-[214px] text-end px-[10px] w-full outline-none dark:text-white text-black dark:bg-[#373d4e] bg-[#e5ecf0]' maxLength={11} value={stopLossValue === 0 ? '' : stopLossValue} onChange={(e: any) => {
                                 const value = e.target.value;
                                 const regex = /^\d{0,10}(\.\d{0,6})?$/;
                                 if (regex.test(value) || value === "") {
@@ -306,7 +417,7 @@ const ProfitLossModal = (props: showPopup) => {
                     {/* <div className='mt-[30px]'>
                         <p className='top-label !text-[14px]'>This setting applies to the entire position. Take Profit and Stop-loss automatically cancel after closing the position. A Market order is triggered when the stop price is reached. The order will be rejected if the position size exceeds the Max Market Order Qty limit.</p>
                     </div> */}
-                    <button disabled={takeProfirValue === 0 && stopLossValue === 0? true : false} className={`w-full max-w-full mt-[15px] solid-button ${takeProfirValue === 0 && stopLossValue === 0?'cursor-not-allowed opacity-25' : ''}`} onClick={storeProfitLossData}>Confirm</button>
+                    <button disabled={takeProfirValue === 0 && stopLossValue === 0 ? true : false} className={`w-full max-w-full mt-[15px] solid-button ${takeProfirValue === 0 && stopLossValue === 0 ? 'cursor-not-allowed opacity-25' : ''}`} onClick={storeProfitLossData}>Confirm</button>
                 </div>
             </div>
         </div>

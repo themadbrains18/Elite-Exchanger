@@ -10,11 +10,18 @@ import Meta from '@/components/snippets/meta';
 interface propsData{
   Watchlist?:any;
 } 
+
+// Dynamically loads the WatchListPage component with a custom loading state
 const WatchListPage = dynamic(() => import('@/components/watchlist/watchListPage'), {
   loading: () => <p>Loading...</p>, // Custom loading component or spinner
 });
 
-
+/**
+ * Watchlist component to render the user's personalized watchlist.
+ * 
+ * @param props - Contains the user's watchlist data to display.
+ * @returns JSX element that displays the watchlist page with the provided data.
+ */
 const Watchlist = (props: propsData) => {
   return (
     <>
@@ -26,11 +33,18 @@ const Watchlist = (props: propsData) => {
 
 export default Watchlist
 
+/**
+ * Server-side function to fetch the user's watchlist data.
+ * 
+ * @param context - The context of the server-side request, including request and response objects.
+ * @returns Object with props for the Watchlist component, including session and watchlist data.
+ */
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders()
   if (session) {
+    // Fetch the user's watchlist data from the API
       let userWatchList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/watchlist?userid=${session?.user?.user_id}`, {
         method: "GET",
         headers: {

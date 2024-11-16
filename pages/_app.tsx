@@ -20,23 +20,36 @@ interface ModeProps {
   mode: string;
 }
 
+// Dynamically loads Header component with a loading state
 const Header = dynamic(() => import('../components/header-footer/header') , {
   loading: () => <NavbarSkeleton/>,
 });
 
+// Dynamically loads Footer component with a loading state
 const Footer = dynamic(() => import('../components/header-footer/footer'), {
   loading: () => <FooterSkeleton/>,
 });
+
+// Dynamically loads Preference component with a loading state
 const Preference = dynamic(() => import('../components/sidebars/preference'), {
   loading: () => <p>Loading...</p>,
 });
 
-NProgress.configure({ showSpinner: false }); // You can configure it here
+// Configures NProgress to disable the spinner
+NProgress.configure({ showSpinner: false }); 
 
+// Event listeners to start and stop NProgress during route changes
 Router.events.on('routeChangeStart', () => NProgress.start());
 Router.events.on('routeChangeComplete', () => NProgress.done());
 Router.events.on('routeChangeError', () => NProgress.done());
 
+/**
+ * Main App component that wraps the entire application.
+ * 
+ * @param Component - The component to be rendered for the page.
+ * @param pageProps - Properties passed to the page component.
+ * @returns The App component which provides WebSocket, Session, and Context Providers.
+ */
 export default function App({ Component, pageProps: { sessions, ...pageProps } }: AppProps) {
   const [mode, setMode] = useState<string>('dark');
 

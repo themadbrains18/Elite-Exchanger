@@ -15,6 +15,16 @@ interface propsData {
     getProfitLossOrder?:Function;
     orders:any
 }
+
+/**
+ * ProfitLossTable component to display a table of profit/loss orders.
+ * It allows users to close individual positions and performs actions related to profit/loss orders.
+ * 
+ * @param {propsData} props - The component props.
+ * @param {number} show - Indicates whether the table should be shown.
+ * @param {Function} [getProfitLossOrder] - Function to fetch profit/loss data.
+ * @param {Array} orders - List of orders to display in the table.
+ */
 const ProfitLossTable: React.FC<propsData> = ({ show , getProfitLossOrder , orders }) => {
 
     const { status, data: session } = useSession();
@@ -27,18 +37,20 @@ const ProfitLossTable: React.FC<propsData> = ({ show , getProfitLossOrder , orde
         getProfitLossOrder && getProfitLossOrder();
     }, [show]);
 
-    
-    // function formatDate(date: any) {
-    //     const options: {} = { year: 'numeric', month: 'short', day: '2-digit' };
-    //     return new Date(date).toLocaleDateString('en-US', options)
-    // }
-
+    /**
+     * Opens the confirmation modal to close a specific position.
+     * 
+     * @param {string} position_id - The ID of the position to close.
+     */
     const closePosition = async (position_id: string) => {
         setPositionId(position_id);
         setActive(true);
         setShow(true);
     }
 
+     /**
+     * Performs the action to close the position and sends a request to the API.
+     */
     const actionPerform = async () => {
         try {
             if (session) {

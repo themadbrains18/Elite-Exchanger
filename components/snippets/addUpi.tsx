@@ -2,11 +2,30 @@ import React, { useContext } from "react";
 import Context from "../contexts/context";
 import Image from "next/image";
 
-interface activeSection {
+/**
+ * Interface for the properties of the AddUpi component.
+ * It defines the necessary methods to control the component's behavior and visibility.
+ *
+ * @interface AddUpiProps
+ */
+interface AddUpiProps {
+  /**
+   * A function that sets the active state of the component, typically used to determine which view or step 
+   * of the process should be displayed.
+   * 
+   * @type {Function}
+   */
   setActive: Function;
+  /**
+   * A function that controls the visibility of the component, often used to show or hide modals, popups, 
+   * or other UI elements.
+   * 
+   * @type {Function}
+   */
   setShow: Function;
 }
-const AddUpi = (props: activeSection) => {
+
+const AddUpi = (props: AddUpiProps) => {
   const { mode } = useContext(Context);
   return (
     <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
@@ -38,10 +57,10 @@ const AddUpi = (props: activeSection) => {
         </svg>
       </div>
       <form onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+        if (e.key === 'Enter') {
+          e.preventDefault();
+        }
+      }}>
         <div className="py-30 md:py-10">
           <div className="flex flex-col mb-[15px] md:mb-5 gap-[6px]">
             <label className="sm-text">UPI App</label>

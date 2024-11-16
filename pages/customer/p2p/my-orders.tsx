@@ -27,8 +27,13 @@ interface propsData {
   userPaymentMethod?: any;
 }
 
+/**
+ * MyOrders Component
+ * 
+ * Displays the details of a user's orders, including the order information, payment method, 
+ * remarks, and chat functionality. It also manages WebSocket messages for live updates on orders.
+ */
 const MyOrders = (props: propsData) => {
-
   const [paymentMethod, setPaymentMethod] = useState('');
   const [order, setOrderDetail] = useState(props.userOrder);
   const [newOrderList, setNewOrderList] = useState(props.orderList);
@@ -36,13 +41,22 @@ const MyOrders = (props: propsData) => {
   const { status, data: session } = useSession();
   const [active1, setActive1] = useState(false);
   const [show, setShow] = useState(false);
-
   const wbsocket = useWebSocket();
   const socketListenerRef = useRef<(event: MessageEvent) => void>();
   const router = useRouter();
   const { query } = router;
 
   useEffect(() => {
+
+    /**
+     * handleSocketMessage
+     * 
+     * Processes WebSocket messages and performs actions based on the event type (`order`, `buy`).
+     * - For `order` type: Fetches order details by `orderid`.
+     * - For `buy` type: Fetches the user's orders.
+     * 
+     * @param event - The incoming WebSocket event.
+     */
     const handleSocketMessage = (event: any) => {
       const data = JSON.parse(event.data).data;
       let eventDataType = JSON.parse(event.data).type;
@@ -78,7 +92,15 @@ const MyOrders = (props: propsData) => {
     }
   }, [query]);
 
-
+  /**
+     * getOrderByOrderId
+     * 
+     * Fetches order details for a given `orderid` and updates the state with the order details.
+     * Also handles showing specific modals or messages based on the order status.
+     * 
+     * @param orderid - The ID of the order to fetch.
+     * @param type - The type of the request (e.g., 'socket', 'onload').
+     */
   const getOrderByOrderId = async (orderid: any, type: string) => {
     let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {
       method: "GET",
@@ -103,6 +125,11 @@ const MyOrders = (props: propsData) => {
     }
   }
 
+  /**
+   * getUserOrders
+   * 
+   * Fetches the list of all user orders and updates the state with the order list.
+   */
   const getUserOrders = async () => {
     let userAllOrderList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/orderlist?userid=${props.session?.user?.user_id}&itemOffset=0&itemsPerPage=20`, {
       method: "GET",
@@ -117,7 +144,7 @@ const MyOrders = (props: propsData) => {
 
   return (
     <>
-    <Meta title='Trade History | Review Your Crypto Transactions' description='Access your complete trade history and review all your crypto transactions in one place. Analyze your trading patterns, track profits and losses, and gain insights into your investment strategy. Stay informed and optimize your trading decisions with our detailed trade history overview.'/>
+      <Meta title='Trade History | Review Your Crypto Transactions' description='Access your complete trade history and review all your crypto transactions in one place. Analyze your trading patterns, track profits and losses, and gain insights into your investment strategy. Stay informed and optimize your trading decisions with our detailed trade history overview.' />
       <ToastContainer limit={1} />
       <P2pLayout>
         {
@@ -149,6 +176,16 @@ const MyOrders = (props: propsData) => {
 
 export default MyOrders;
 
+/**
+ * getServerSideProps
+ * 
+ * Server-side function to fetch necessary data before rendering the page:
+ * - Session and user-related data (orders, payment methods, etc.).
+ * - Handles fetching of user-specific orders and payment methods.
+ * 
+ * @param context - The context object containing request data.
+ * @returns An object with props to be passed to the component.
+ */
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const session = await getServerSession(context.req, context.res, authOptions);

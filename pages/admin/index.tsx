@@ -4,7 +4,6 @@ import MarketOverview from "../../admin/admin-component/dashboard/marketOverview
 import RevenueRsources from "../../admin/admin-component/dashboard/revenueRsources";
 import Table from "../../admin/admin-snippet/table";
 import DasboardLayout from "../../components/layout/dasboard-layout";
-import Image from "next/image";
 import React, { useEffect } from "react";
 import { authOptions } from "../api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
@@ -24,61 +23,53 @@ interface propsData {
     user: any;
   };
 }
-const Index = (props: propsData) => {
 
-  useEffect(() => {
-    console.log(props.session, "======================");
-  }, []);
+
+/**
+ * Index component for the Dashboard page.
+ * It includes cards for user stats, trade stats, and charts like LineChart and MarketOverview.
+ */
+const Index = (props: propsData) => {
   return (
     <>
-    <Head>
-    <link rel="stylesheet" href="https://code.highcharts.com/css/highcharts.css"/>
-          <link rel="stylesheet" href="https://code.highcharts.com/css/stocktools/gui.css"/>
-            <link rel="stylesheet" href="https://code.highcharts.com/css/annotations/popup.css"/>
-    </Head>
-    <DasboardLayout>
-      <Cards userList={props?.userList} tradeList={props?.tradeList} />
-      <div className="flex items-start gap-[24px]">
-        <div className="max-w-[70%] w-full">
-          <div className="w-full mb-[24px]">
-            <LineChart />
-            {/* <Image
-              src="/assets/admin/Graph-dark.svg"
-              alt="img-description"
-              width={795}
-              height={405}
-              className="w-full dark:block hidden"
-              />
-              <Image
-              src="/assets/admin/Graph-light.svg"
-              alt="img-description"
-              width={795}
-              height={405}
-              className="w-full dark:hidden block"
-              /> */}
+      <Head>
+        <link rel="stylesheet" href="https://code.highcharts.com/css/highcharts.css" />
+        <link rel="stylesheet" href="https://code.highcharts.com/css/stocktools/gui.css" />
+        <link rel="stylesheet" href="https://code.highcharts.com/css/annotations/popup.css" />
+      </Head>
+      <DasboardLayout>
+        <Cards userList={props?.userList} tradeList={props?.tradeList} />
+        <div className="flex items-start gap-[24px]">
+          <div className="max-w-[70%] w-full">
+            <div className="w-full mb-[24px]">
+              <LineChart />
+            </div>
+            <Table coinList={props.topgainer} />
+            {/* <MarketOverview coinList={props.coinList} /> */}
+            <MarketOverview />
           </div>
-          <Table coinList={props.topgainer} />
-          {/* <MarketOverview coinList={props.coinList} /> */}
-          <MarketOverview />
+          <div className="max-w-[30%] w-full">
+            <RevenueRsources adminProfit={props?.adminProfit} activity={props?.activity} />
+          </div>
         </div>
-        <div className="max-w-[30%] w-full">
-          <RevenueRsources adminProfit={props?.adminProfit} activity={props?.activity} />
-        </div>
-      </div>
-    </DasboardLayout>
-</>
+      </DasboardLayout>
+    </>
   );
 };
 
+/**
+ * Server-side function to fetch data for the dashboard page.
+ * It fetches user assets, trades, profits, activity, and top gainer coins.
+ * 
+ * @param context - The context object that contains request and response.
+ * @returns props with fetched data if authenticated, or a redirect to login page if not authenticated.
+ */
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders();
 
-  // let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
-  //   method: "GET"
-  // }).then(response => response.json());
-
+  // Fetch top gainer coins
   let tokenList2 = await fetch(
     `${process.env.NEXT_PUBLIC_BASEURL}/token/topgainer`,
     {
@@ -86,14 +77,15 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     }
   ).then((response) => response.json());
 
+  // Initialize empty arrays for fetching data
   let userAssets: any = [];
   let users: any = [];
   let trades: any = [];
   let profit: any = [];
   let activityList: any = []
   if (session) {
-    // console.log(session)
 
+    // Fetch user assets for the logged-in user
     userAssets = await fetch(
       `${process.env.NEXT_PUBLIC_BASEURL}/user/assets?userid=${session?.user?.user_id}`,
       {
@@ -104,6 +96,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       }
     ).then((response) => response.json());
 
+    // Fetch the list of users
     users = await fetch(
       `${process.env.NEXT_PUBLIC_BASEURL}/user/all?itemOffset=0&itemsPerPage=10`,
       {
@@ -114,6 +107,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       }
     ).then((response) => response.json());
 
+    // Fetch admin profit data
     profit = await fetch(
       `${process.env.NEXT_PUBLIC_BASEURL}/user/adminProfit`,
       {
@@ -123,6 +117,8 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         },
       }
     ).then((response) => response.json());
+
+    // Fetch activity list
     activityList = await fetch(
       `${process.env.NEXT_PUBLIC_BASEURL}/activity/list`,
       {
@@ -133,8 +129,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
       }
     ).then((response) => response.json());
 
-
-
+    // Fetch trades
     trades = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/market/list?itemOffset=0&itemsPerPage=10`, {
       method: "GET",
       headers: {
@@ -159,6 +154,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
   else {
+    // Redirect to login if the session does not exist
     return {
       redirect: { destination: "/login" },
     };

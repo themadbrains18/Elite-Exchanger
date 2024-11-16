@@ -1,6 +1,13 @@
 import Meta from '@/components/snippets/meta'
 import React from 'react'
 
+/**
+ * CookiePolicy Component.
+ * This component displays the Cookie Policy page, providing information about the platform's cookie usage,
+ * including how cookies are used for improving functionality, analyzing traffic, and personalizing content.
+ * 
+ * @returns {JSX.Element} The rendered Cookie Policy page with a title and description.
+ */
 const CookiePolicy = () => {
     return (
         <>

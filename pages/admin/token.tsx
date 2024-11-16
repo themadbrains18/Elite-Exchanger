@@ -16,20 +16,42 @@ interface Session {
   topgainer: any,
   networkList: any,
 }
+
+/**
+ * Token Component
+ * 
+ * The main page for managing tokens, displaying various token-related information such as coin cards,
+ * top gainers, new tokens, added tokens, and a list of all coins.
+ * This page also handles real-time updates for token prices through WebSocket.
+ * 
+ * @param props - Contains token list, top gainers, and network list.
+ * @returns JSX element rendering the layout and token components.
+ */
 const Token = (props: Session) => {
 
   const [tokenList, setFreshTokenList] = useState(props.coinList);
 
+  /**
+   * Refresh the token list with new data.
+   * 
+   * @param data - The new list of tokens to be set.
+   */
   const refreshTokenList = (data: any) => {
     setFreshTokenList(data);
   }
 
   const wbsocket = useWebSocket();
   
+  /**
+   * Effect hook for setting up WebSocket and listening to price update events.
+   */
   useEffect(() => {
     socket();
   }, [wbsocket])
 
+  /**
+   * Set up the WebSocket connection to listen for price updates.
+   */
   const socket=()=>{
     if(wbsocket){
       wbsocket.onmessage = (event) => {
@@ -42,6 +64,9 @@ const Token = (props: Session) => {
     }
   }
 
+  /**
+   * Fetch the updated token list from the API.
+   */
   const refreshPriceTokenList = async () => {
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token/admin`, {
       method: "GET",
@@ -74,7 +99,12 @@ const Token = (props: Session) => {
   );
 };
 
-
+/**
+ * Fetch required data on the server side before rendering the page.
+ * 
+ * @param context - The context containing request and response information.
+ * @returns Props to be passed to the Token component.
+ */
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const session = await getServerSession(context.req, context.res, authOptions);

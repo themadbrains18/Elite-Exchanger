@@ -5,17 +5,30 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { ToastContainer } from "react-toastify";
 
+/**
+ * Interface for props used in the Participate component
+ * @param {any} eventData - Optional event data containing details for the referral program
+ */
 interface propsData {
   eventData?: any;
 }
 
+/**
+ * Participate component to render event participation options and invitation cards.
+ * Displays available tasks, referral bonuses, and a ReferPopup modal to invite friends.
+ *
+ * @param {propsData} props - Properties passed to the Participate component
+ * @returns {JSX.Element} The rendered Participate component
+ */
 const Participate = (props: propsData) => {
 
+  // Holds the list of referral program invites from eventData
   const participation = props?.eventData?.refer_program_invites;
   const [show, setShow] = useState(false);
   const [referEvent, setReferEvent] = useState('');
-
   const { status, data: session } = useSession();
+
+  // Router instance to handle navigation to login if the user is not authenticated
   const router = useRouter();
 
   return (

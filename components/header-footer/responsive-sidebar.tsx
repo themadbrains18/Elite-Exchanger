@@ -6,7 +6,20 @@ import { toast } from 'react-toastify';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
-interface defaultStates {
+/**
+ * Represents the default state and functions related to the menu and user data.
+ * 
+ * This interface is used to define the properties for components that manage menu visibility 
+ * and user-related details, including trading data for spot and future markets.
+ * 
+ * @interface defaultStatesProps
+ * @property {boolean} showMenu - Indicates whether the menu is visible or not.
+ * @property {Function} setShowMenu - Function to update the `showMenu` state.
+ * @property {any} [userDetail] - Optional user data, which could include details such as name, email, etc.
+ * @property {any} [spotTrade] - Optional data related to spot market trades.
+ * @property {any} [futureTrade] - Optional data related to future market trades.
+ */
+interface defaultStatesProps {
   showMenu: boolean;
   setShowMenu: Function;
   userDetail?: any;
@@ -14,7 +27,7 @@ interface defaultStates {
   futureTrade?: any;
 }
 
-const ResponsiveSidebar = (props: defaultStates) => {
+const ResponsiveSidebar = (props: defaultStatesProps) => {
 
   const { status, data: session } = useSession();
   const router = useRouter();
@@ -25,7 +38,18 @@ const ResponsiveSidebar = (props: defaultStates) => {
   const [imgSrc, setImgSrc] = useState(false);
   const [imgSrc2, setImgSrc2] = useState(false);
 
-
+/**
+ * This effect runs whenever the `userDetail` prop changes.
+ * 
+ * It performs the following operations:
+ * 1. If `userDetail` is available and doesn't contain a `message` property, it updates the display name (`duserName`) by capitalizing the first letter.
+ * 2. If the `session` is available, it checks the user's email or number and formats it. 
+ *    - If the email is available, it masks part of the email address (keeping the first 3 characters visible and masking the rest).
+ *    - If no email is available but the phone number is, it sets the phone number as `demail`.
+ *
+ * @effect
+ * @dependency props.userDetail - The user details provided as a prop. This triggers the effect when it changes.
+ */
   useEffect(() => {
     if (props.userDetail && props?.userDetail?.messgae === undefined && props.userDetail?.dName !== null && props.userDetail?.dName !== undefined) {
       setduserName(props.userDetail?.dName[0].toUpperCase() + props.userDetail?.dName.slice(1));
@@ -76,6 +100,17 @@ const ResponsiveSidebar = (props: defaultStates) => {
   ]
   const showLists = useRef<HTMLDivElement>(null);
 
+  /**
+ * Toggles the visibility of a list element and adjusts its height accordingly.
+ * 
+ * This function:
+ * 1. Checks if the `showLists` ref is defined and toggles the "show" class on the corresponding element.
+ * 2. If the "show" class is added, it sets the height of the element to its scroll height (the full height of the content).
+ * 3. If the "show" class is removed, it removes the inline style (height) from the element.
+ * 
+ * @sideEffect
+ * - Toggles the visibility of the list by adjusting its height.
+ */
   function showList() {
     if (showLists.current) {
       showLists.current.classList.toggle("show")
@@ -90,8 +125,22 @@ const ResponsiveSidebar = (props: defaultStates) => {
     }
   }
 
+  /**
+ * Handles the profile picture change event, performs validation, and uploads the new profile picture.
+ * 
+ * This function:
+ * 1. Checks if the user session is authenticated. If not, it shows an error message and redirects the user to the login page.
+ * 2. Reads the selected image file, sets it as the profile image preview, and prepares it for uploading.
+ * 3. Sends a POST request to the backend with the selected image as form data to update the user's profile picture.
+ * 
+ * @param {React.ChangeEvent<HTMLInputElement>} e - The change event triggered by the file input.
+ * 
+ * @sideEffect
+ * - Shows a toast notification if the session is expired.
+ * - Sets the profile image preview using `setProfileImg`.
+ * - Sends the image file to the server for profile picture update.
+ */
   const handleProfiledpChange = async (e: any) => {
-
     if (status === 'unauthenticated') {
       toast.error('Your session is expired. You are auto redirect to login page!!');
       setTimeout(() => {
@@ -126,6 +175,21 @@ const ResponsiveSidebar = (props: defaultStates) => {
 
   };
 
+  /**
+ * Toggles the height of the dropdown menu and handles menu item clicks.
+ * 
+ * This function performs the following operations:
+ * 1. It checks if the clicked element has a next sibling (the dropdown menu).
+ * 2. If the dropdown menu exists, it listens for clicks on the nested links and sets the menu state to `false` when any nested item is clicked.
+ * 3. It calculates the scroll height of the next sibling and applies it to the dropdown if the dropdown is shown. If the dropdown is hidden, it removes the height style.
+ * 
+ * @param {React.MouseEvent} e - The click event triggered when a menu item is clicked.
+ * 
+ * @sideEffect 
+ * - Modifies the state of the navigation menu visibility by calling `props.setShowMenu`.
+ * - Toggles the CSS class `show` on the clicked element to control dropdown visibility.
+ * - Sets or removes the inline `height` style of the dropdown to animate its expansion or collapse.
+ */
   function setDropdownHeight(e: any) {
     // console.log(e.currentTarget);
     // set false to nav menu when click on nested items in dropdown

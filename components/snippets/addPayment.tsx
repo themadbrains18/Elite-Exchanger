@@ -5,16 +5,39 @@ import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
-
-interface activeSection {
+/**
+ * Interface representing the props for the AddPayment component.
+ * This interface includes properties to manage the state and form for adding payment methods.
+ */
+interface AddPaymentProps {
+  /**
+   * Function to set the active state of the component.
+   * Used to toggle visibility or activation status of elements.
+   */
   setActive: Function,
+  /**
+  * Function to toggle the visibility of the component or modal.
+  * Can be used to show or hide the payment method form or popup.
+  */
   setShow: Function;
+  /**
+  * Optional property representing the master payment method.
+  * This could hold a reference to a specific payment method object when editing or pre-filling the form.
+  */
   masterPayMethod?: any,
+  /**
+   * Optional function to set the form's payment method.
+   * Used for controlling the payment method that the user selects or enters in the form.
+   */
   setFormMethod?: any,
+  /**
+   * Optional list of payment methods or related data.
+   * This can be used to display available methods or for rendering related information in the form.
+   */
   list?: any;
 }
 
-const AddPayment = (props: activeSection) => {
+const AddPayment = (props: AddPaymentProps) => {
   const { mode } = useContext(Context);
   const [paymentFields, setPaymentFields] = useState([]);
   const [enableFront, setEnableFront] = useState(false);
@@ -40,16 +63,19 @@ const AddPayment = (props: activeSection) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   /**
-   * On payment method change
-   * @param id 
-   */
+ * Function to handle the change of the payment method.
+ * It updates the form fields and resets the form based on the selected payment method.
+ *
+ * @param {any} id - The ID of the selected payment method. Used to filter the available methods.
+ */
   const onPaymentMethodChange = (id: any) => {
+    // Unregister all existing form fields and clear their values
     for (let nn in getValues()) {
       unregister(nn)
       setValue(nn, '')
     }
     reset();
-
+    // Find the selected payment method based on the ID
     let fieldsItem = props?.masterPayMethod?.filter((item: any) => {
       return item?.id === id;
     })
@@ -58,12 +84,20 @@ const AddPayment = (props: activeSection) => {
     setValue('selectPayment', fieldsItem[0]);
   }
 
+  /**
+ * Handles the file input change event, validating the file type and size before uploading.
+ * It uploads the valid image file to the server and handles errors related to file type or size.
+ *
+ * @param {any} e - The event object that contains the selected file.
+ */
   const handleFileChange = async (e: any) => {
     try {
+      // Clear any existing errors for the 'qr_code' field
       clearErrors('qr_code');
-
+      // Get the selected file
       let file = e.target.files[0];
       const fileType = file['type'];
+      // Validate file type
       if (!validImageTypes.includes(fileType)) {
         // invalid file type code goes here.
         setError("qr_code", {
@@ -119,32 +153,36 @@ const AddPayment = (props: activeSection) => {
       console.error(error);
     }
   };
-  
 
+  /**
+   * Handles the form submission, performs validation on the input data, checks if the phone number is already added, 
+   * and processes the payment method selection.
+   *
+   * @param {any} data - The form data containing payment method and phone number information.
+   * 
+   * @returns {void} - Does not return a value; it updates the state and calls external functions on form validation.
+   */
   const onHandleSubmit = (data: any) => {
-
+    // If form data is empty, show an error message and prevent submission
     if (Object.values(data).length == 0) {
       setErrMsg(true)
       return;
-
     }
     setDisable(true)
+    // Validate phone number length (must be 10 digits)
     if (data?.phonenumber?.length !== 10) {
       toast.error("Number contain 10 digits", { autoClose: 2000 });
       setTimeout(() => {
         setDisable(false)
       }, 3000)
       return;
-      // setError("phonenumber",{ type: "custom", message: "Number contain 10 digits" })
     }
     else {
-      // console.log(props?.list,"=props?.list");
-      
+      // Check if the phone number is already associated with the selected payment method
       let pmt = props?.list?.filter((item: any) => {
         return item.pm_name === data?.selectPayment?.payment_method && item.pmObject.phonenumber === data.phonenumber
       })
-// console.log(pmt,"=pmt");
-
+       // If the number is already added, show an error message
       if (pmt.length > 0) {
         toast.error("This Number is already added.", { autoClose: 2000 });
         setTimeout(() => {
@@ -152,29 +190,27 @@ const AddPayment = (props: activeSection) => {
         }, 3000)
         return;
       }
-      // console.log(qrCode,"==qrCode");
-
-
+      // Extract and clean up data to prepare for submission
       let pmid = data?.selectPayment?.id;
       let pm_name = data?.selectPayment?.payment_method;
       let master_method = data?.selectPayment;
+
+      // Check if a QR code is provided and valid
       if (qrCode !== "notValid" || data?.qr_code?.length > 0) {
         data.qr_code = qrCode;
       }
       else {
         delete data.qr_code
       }
-
+      // Remove selectPayment from the data before submission
       delete data.selectPayment;
-
+      // Prepare the object to be passed to the parent component
       let obj = {
         pmid: pmid,
         pm_name: pm_name,
         pmObject: data,
         master_method: master_method
       }
-      // console.log(obj,"==obj");
-
       props.setFormMethod(obj);
       props.setActive(2);
     }
@@ -221,10 +257,10 @@ const AddPayment = (props: activeSection) => {
       <p className="pt-40 info-14-18">When you sell your cryptocurrency, the added payment method will be shown to the buyer during the transaction. To accept cash transfer, please make sure the information is correct.</p>
 
       <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+        if (e.key === 'Enter') {
+          e.preventDefault();
+        }
+      }}>
         <div className="py-30 md:py-40">
           <div className="flex flex-col mb-[15px] md:mb-5 gap-10">
             <label className="sm-text">Payment Method</label>
@@ -233,7 +269,7 @@ const AddPayment = (props: activeSection) => {
               auto={false}
               widthFull={true} type="pmethod" onPaymentMethodChange={onPaymentMethodChange} />
             {
-            errMsg && (
+              errMsg && (
                 <p className="errorMessage">Please select payment method.</p>
               )
             }
@@ -241,7 +277,7 @@ const AddPayment = (props: activeSection) => {
 
           </div>
 
-          {paymentFields && paymentFields.length > 0 && paymentFields.map((item: any,index:number) => {
+          {paymentFields && paymentFields.length > 0 && paymentFields.map((item: any, index: number) => {
             // console.log(typeof item?.required,'===field require');
 
             return <Fragment key={index}>

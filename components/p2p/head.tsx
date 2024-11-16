@@ -3,29 +3,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { Fragment, useEffect, useState } from "react";
-import BuySellExpress from "./express/buySellExpress";
 import AuthenticationModelPopup from "../snippets/authenticationPopup";
 
 const Head = () => {
   const router = useRouter();
   const { status, data: session } = useSession();
-  // const [active, setActive] = useState(1);
 
   const [show, setShow] = useState(false);
   const [active, setActive] = useState(false);
-
-  // console.log(session?.user,'p2p head ',status);
 
   let autherizedTabs = [
     {
       linkText: "Buy",
       linkUrl: "/p2p/buy",
     },
-    // {
-    //   linkText: "Sell",
-    //   linkUrl: "/p2p/postad",
-    // },
-
     {
       linkText: "User Center",
       linkUrl: "/p2p/user-center",
@@ -48,16 +39,15 @@ const Head = () => {
       linkText: "Buy",
       linkUrl: "/p2p/buy",
     },
-    // {
-    //   linkText: "Sell",
-    //   linkUrl: "/p2p/sell",
-    // },
-    // {
-    //   linkText:"FAQ",
-    //   linkUrl:"/p2p/faq"
-    // }
   ];
 
+  /**
+   * Centers the active tab within its container by adjusting the scroll position.
+   * This function calculates the necessary scroll position to bring the active tab
+   * to the center of its container and applies a smooth scroll effect.
+   *
+   * @returns {void} Does not return any value.
+   */
   function centerActiveTab(): void {
     const container = document.querySelector('.links_wrapper') as HTMLElement | null;
     const activeTab = container?.querySelector('.tab.active') as HTMLElement | null;

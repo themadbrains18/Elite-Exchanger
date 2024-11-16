@@ -2,6 +2,17 @@ import React, { useRef, useEffect, useContext } from 'react'
 import { createChart, CrosshairMode } from 'lightweight-charts';
 import Context from '../contexts/context';
 
+/**
+ * CandleStickChart Component
+ * 
+ * This component renders a candlestick chart using the `lightweight-charts` library.
+ * It creates a chart in the `useEffect` hook, listens for updates to the `hloc_data` prop,
+ * and generates random price data to simulate live trading data.
+ * 
+ * @param {Object} props - The component props.
+ * @param {Array} props.hloc_data - The historical data to plot on the chart.
+ * @returns {JSX.Element} - The chart container element.
+ */
 const CandleStickChart = (props) => {
 
     const { mode } = useContext(Context)

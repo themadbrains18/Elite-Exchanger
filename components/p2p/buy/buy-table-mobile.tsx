@@ -6,7 +6,32 @@ import Image from 'next/image';
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 
-interface activeSection {
+/**
+ * Props for the BuyTableMobile component that manages the buy table display on mobile devices.
+ * It contains information related to the user's session, selected token, payment method, 
+ * and actions such as showing modals or selecting posts.
+ * 
+ * @interface BuyTableMobileProps
+ * 
+ * @property {Function} setShow1 - A function to control the visibility of a modal or table.
+ * @property {Function} [setSelectedPost] - Optional function to set the selected post for further actions.
+ * @property {string} [paymentId] - Optional string representing the payment method ID.
+ * @property {any} [selectedToken] - Optional selected token object, could be a specific cryptocurrency or token.
+ * @property {string} [firstCurrency] - Optional string representing the first selected currency in the transaction.
+ * @property {any} [session] - Optional session object that contains the user’s session details, such as user information and authentication status.
+ * 
+ * @example
+ * // Example usage:
+ * const props: BuyTableMobileProps = {
+ *   setShow1: (show: boolean) => { console.log(show); },
+ *   setSelectedPost: (post: any) => { console.log(post); },
+ *   paymentId: '123abc',
+ *   selectedToken: { id: 'token1', name: 'Bitcoin' },
+ *   firstCurrency: 'USD',
+ *   session: { user: { id: 'user1', name: 'John Doe' } }
+ * };
+ */
+interface BuyTableMobileProps {
     setShow1: any;
     setSelectedPost?: any;
     paymentId?: string;
@@ -15,32 +40,56 @@ interface activeSection {
     session?: any;
 }
 
-const BuyTableMobile = (props: activeSection) => {
+const BuyTableMobile = (props: BuyTableMobileProps) => {
     const [itemOffset, setItemOffset] = useState(0);
     const { mode } = useContext(Context);
     const { status, data: session } = useSession();
     const [total, setTotal] = useState(0)
-
     const [list, setList] = useState([])
-
     let itemsPerPage = 10;
 
+    /**
+     * useEffect hook that triggers the fetching of posts whenever the item offset, 
+     * selected currency, or payment ID changes.
+     * 
+     * @useEffect
+     * The effect fetches posts based on pagination and filters (payment method and selected token).
+     * 
+     * @param {number} itemOffset - The offset for pagination to fetch the correct set of posts.
+     * @param {string} [props?.firstCurrency] - Optional currency for filtering posts by the first currency.
+     * @param {string} [props?.paymentId] - Optional payment method ID for filtering posts by payment method.
+     * @param {any} [props?.selectedToken] - The selected token object used to filter posts based on currency.
+     * @param {any} [props?.session] - The session object containing user details for authentication.
+     */
     useEffect(() => {
         getAllPosts(itemOffset);
     }, [itemOffset, props?.firstCurrency, props?.paymentId]);
 
-
+    /**
+     * Asynchronous function that fetches all posts from the API based on pagination and filters.
+     * The function retrieves posts from a backend API and applies filters for the currency and payment method.
+     * It also processes the response to include user payment methods for each post.
+     * 
+     * @async
+     * @function getAllPosts
+     * @param {number} itemOffset - The offset for pagination to fetch posts.
+     * 
+     * @returns {void}
+     * 
+     * @throws {Error} Will throw an error if fetching posts fails.
+     * 
+     * @example
+     * // Example usage:
+     * getAllPosts(0);  // Fetch posts starting from the first item
+     */
     const getAllPosts = async (itemOffset: number) => {
         try {
-            //   console.log("=hereere", itemOffset);
-
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
 
             let paymentMethod = props?.paymentId !== undefined && props?.paymentId !== "" ? props?.paymentId : "all"
             let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
-
 
             let posts = await fetch(
                 `/api/p2p/buy?user_id=${props?.session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}`,
@@ -51,11 +100,6 @@ const BuyTableMobile = (props: activeSection) => {
                     },
                 }
             ).then((response) => response.json());
-
-
-            //   console.log(posts?.data?.data,"=posts?.data?.data");
-
-
             for (const post of posts?.data?.data) {
                 let payment_method: any = [];
                 for (const upid of post.p_method) {
@@ -67,47 +111,13 @@ const BuyTableMobile = (props: activeSection) => {
                 }
                 post.user_p_method = payment_method;
             }
-
-            //   console.log(posts, "==posts"); 
-            // Filter out posts where user_p_method array is empty
-            // posts.data.data = posts.data.data.filter((post: any) => post.user_p_method.length > 0);
-
             // Update totalLength based on filtered data length
             const totalLength = posts.data.data.length;
             setTotal(totalLength);
-
             setList(posts.data.data);
-
-            // let postData = [];
-            // let filter_posts = posts?.data?.data;
-            // postData= filter_posts
-            // if (props?.firstCurrency !== "") {
-            //   filter_posts = posts?.data?.data?.filter((item: any) => {
-            //     return props?.selectedToken?.id === item?.token_id;
-            //   });
-            //   postData = filter_posts;
-            // }
-            //  if (props?.paymentId !== "") {
-            //   let filterRecord=[]
-
-            //   for (const post of filter_posts) {
-            //     for (const upid of post.user_p_method) {
-
-            //       if (props?.paymentId === upid?.pmid) {
-            //         filterRecord.push(post);
-            //       }
-            //     }
-            //   }
-            //   postData = filterRecord;
-
-            // } else {
-            //   postData = filter_posts;
-            // }
-            // setList(postData)
             setTotal(posts?.data?.totalLength)
         } catch (error) {
             console.log("error in get token list", error);
-
         }
     };
 
@@ -116,6 +126,24 @@ const BuyTableMobile = (props: activeSection) => {
     // const currentItems = data?.data?.slice(itemOffset, endOffset);
     const pageCount = Math.ceil(total / itemsPerPage);
 
+    /**
+     * Handles the page click event for pagination.
+     * 
+     * This function is triggered when a user clicks a page number in a pagination component.
+     * It calculates the new offset based on the selected page and updates the item offset 
+     * to fetch the corresponding data.
+     * 
+     * @async
+     * @function handlePageClick
+     * @param {object} event - The event object triggered by the page click.
+     * @param {number} event.selected - The index of the selected page.
+     * 
+     * @returns {void}
+     * 
+     * @example
+     * // Example usage: 
+     * handlePageClick({ selected: 2 });  // Moves to the third page and fetches the data
+     */
     const handlePageClick = async (event: any) => {
         const newOffset = (event.selected * itemsPerPage) % total;
         setItemOffset(newOffset);

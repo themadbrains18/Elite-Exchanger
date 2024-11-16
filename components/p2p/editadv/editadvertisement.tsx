@@ -9,7 +9,36 @@ import { truncateNumber } from "@/libs/subdomain";
 import { currencyFormatter } from "@/components/snippets/market/buySellCard";
 import { toast, ToastContainer } from "react-toastify";
 
-interface propsData {
+/**
+ * Props for the EditAdvertisement component.
+ * 
+ * This interface defines the expected properties for the `EditAdvertisement` component,
+ * which is used to edit advertisements. It includes properties related to payment methods,
+ * token list, user assets, and the advertisement to be edited.
+ * 
+ * @interface EditAdverstisementPropsData
+ * 
+ * @property {any} [masterPayMethod] - The list of available master payment methods. 
+ * This is typically used to provide options for payment methods when editing an advertisement.
+ * 
+ * @property {any} [userPaymentMethod] - The list of payment methods associated with the current user. 
+ * It is used to pre-select payment methods when editing an advertisement.
+ * 
+ * @property {any} [tokenList] - The list of available tokens for the advertisement.
+ * This helps in selecting or filtering tokens when editing the advertisement.
+ * 
+ * @property {any} [assets] - The list of assets the user holds, used for selecting assets related to the advertisement.
+ * 
+ * @property {any} [editPost] - The advertisement data to be edited. This includes the details of the advertisement
+ * that will be updated through the component.
+ * 
+ * @example
+ * // Example usage of the EditAdverstisementPropsData interface:
+ * const EditAdvertisementComponent = (props: EditAdverstisementPropsData) => {
+ *   // Logic for handling payment methods, token list, and advertisement data
+ * };
+ */
+interface EditAdverstisementPropsData {
   masterPayMethod?: any;
   userPaymentMethod?: any;
   tokenList?: any;
@@ -26,7 +55,7 @@ const schema = yup.object().shape({
     .typeError("Please enter amount."),
 });
 
-const EditAdverstisement = (props: propsData) => {
+const EditAdverstisement = (props: EditAdverstisementPropsData) => {
   const [show, setShow] = useState(1);
   const [step, setStep] = useState(1);
   const [selectedAssets, setSelectedAssets] = useState(Object);
@@ -54,18 +83,50 @@ const EditAdverstisement = (props: propsData) => {
     resolver: yupResolver(schema),
   });
 
+  /**
+   * Effect hook that runs when `props.editPost` changes.
+   * 
+   * This hook filters the `tokenList` to find a token matching the `editPost.token_id`,
+   * then sets the selected token, the price of the post, and adjusts the price type display.
+   * 
+   * @effect
+   * - Fetches the corresponding token from the `tokenList` and sets it in the form.
+   * - Sets the price of the advertisement post using `truncateNumber`.
+   * - Determines the price type as either 'fixed' or 'variable' (1 or 2).
+   * 
+   * @param {Object} props - Component props, including `tokenList` and `editPost`.
+   * @param {Object} props.tokenList - List of available tokens for selection.
+   * @param {Object} props.editPost - The advertisement data being edited, including the `token_id` and `price`.
+   */
   useEffect(() => {
     let token = props?.tokenList?.filter((e: any) => {
       return e.id === props.editPost?.token_id;
     });
     if (token?.length > 0) {
       selectToken(token[0]);
-      setValue("price",truncateNumber(props?.editPost?.price, 4));
+      setValue("price", truncateNumber(props?.editPost?.price, 4));
     }
     let type = props.editPost?.price_type === 'fixed' ? 1 : 2;
     setShow(type)
   }, [props.editPost]);
 
+  /**
+   * Selects a token from the list and fetches its current price in INR.
+   * 
+   * This function sets the token as the selected token, clears any form validation errors,
+   * and fetches the price of the token in INR. It also sets the user's balance for the selected token
+   * and updates the UI state accordingly.
+   * 
+   * @param {Object} item - The token item to be selected.
+   * @param {string} item.id - The unique identifier of the token.
+   * @param {string} item.symbol - The symbol of the token, used for API requests.
+   * @param {string} item.tokenType - The type of the token (either 'global' or other).
+   * @param {number} item.price - The token's price, used when it's not 'global'.
+   * 
+   * @returns {Promise<void>} - This function is asynchronous and does not return a value.
+   * 
+   * @throws {Error} - If any error occurs during the API call or data processing.
+   */
   const selectToken = async (item: any) => {
     try {
       setValue("token_id", item?.id);
@@ -114,17 +175,43 @@ const EditAdverstisement = (props: propsData) => {
 
       setAssetsBalance(balances[0]?.balance);
       setLoading(false);
-    } catch (error:any) {
+    } catch (error: any) {
       setLoading(false);
       toast.error(error?.message);
     }
 
   };
 
+  /**
+   * Sets the payment method data for the second step.
+   * 
+   * This function is used to set the payment method data when a user selects a payment method 
+   * during the form submission process. It stores the data in the `step2Data` state.
+   * 
+   * @param {Object} data - The payment method data to be set for the second step.
+   * @param {string} data.paymentMethod - The selected payment method.
+   * @param {string} data.details - Additional details regarding the selected payment method.
+   * 
+   * @returns {void} - This function does not return a value.
+   */
   const setPaymentMethod = (data: any) => {
     setStep2Data(data);
   };
 
+  /**
+   * Handles the form submission for step 1 and progresses to step 2.
+   * 
+   * This function is triggered when the form for the first step is submitted. It adds the price 
+   * type (`'fixed'` or `'floating'`) based on the value of `show` and stores the form data in 
+   * the `step1Data` state. Then, it triggers the progression to step 2 by setting the step state to `2`.
+   * 
+   * @param {Object} data - The form data submitted in step 1.
+   * @param {string} data.price - The price entered by the user.
+   * @param {string} data.token_id - The ID of the selected token.
+   * @param {string} data.paymentMethod - The selected payment method.
+   * 
+   * @returns {void} - This function does not return a value.
+   */
   const onHandleSubmit = (data: any) => {
     data.price_type = show === 1 ? 'fixed' : 'floating';
     setStep1Data(data);
@@ -133,15 +220,15 @@ const EditAdverstisement = (props: propsData) => {
 
   return (
     <>
-       <ToastContainer limit={1} position="top-center"/>
+      <ToastContainer limit={1} position="top-center" />
       {step == 1 && (
         <div className="mt-30 md:mt-40">
           <p className="sec-title">Set Asset Type and Price</p>
           <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}>
             <div className="mt-40 flex md:flex-row flex-col first-letter:  gap-30 items-start">
               <div className="max-w-[1048px] w-full">
                 <div className=" md:p-40 border border-grey-v-1 dark:border-opacity-20 rounded-[6px]">
@@ -263,7 +350,7 @@ const EditAdverstisement = (props: propsData) => {
                       }`}
                     onClick={() => {
                       setShow(1);
-                      setValue('price',truncateNumber(props?.editPost?.price, 4))
+                      setValue('price', truncateNumber(props?.editPost?.price, 4))
                     }}
                     type="button"
                   >
@@ -315,8 +402,8 @@ const EditAdverstisement = (props: propsData) => {
                       setShow(2);
                       selectToken(selectedAssets);
                       let currentPrice = truncateNumber(inrPrice, 6)
-                      setValue('price',currentPrice)
-                  }}
+                      setValue('price', currentPrice)
+                    }}
                     type="button"
                   >
                     <div className="flex items-center mr-4  md:justify-unset justify-center">
@@ -384,7 +471,7 @@ const EditAdverstisement = (props: propsData) => {
                   <div className="md:mt-30 mt-20">
                     <p className="info-10-14">{show === 1 ? "Fixed (INR)" : "Floating (INR)"}</p>
                     <input
-                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}  
+                      type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
                       step={0.000001}
                       {...register("price", { required: true })}
                       name="price"
@@ -398,7 +485,7 @@ const EditAdverstisement = (props: propsData) => {
                       {errors?.price?.message}
                     </p>
                   )}
-                                    <p className="py-2 info-10-14 text-right">Bal: {truncateNumber(assetsBalance,6)}</p>
+                  <p className="py-2 info-10-14 text-right">Bal: {truncateNumber(assetsBalance, 6)}</p>
 
                 </div>
                 <button className="solid-button w-full text-center">

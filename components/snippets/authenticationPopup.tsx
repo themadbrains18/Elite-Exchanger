@@ -4,21 +4,70 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import clickOutSidePopupClose from "./clickOutSidePopupClose";
 
-interface activeSection {
+/**
+ * Interface for the properties of the AuthenticationModelPopup component.
+ * It defines the properties for managing the popup's visibility, content, and actions.
+ *
+ * @interface AuthenticationModelPopupProps
+ */
+interface AuthenticationModelPopupProps {
+    /**
+  * A function that sets the active state of the component or the current step in a multi-step process.
+  * 
+  * @type {Function}
+  */
     setActive: Function;
+    /**
+   * A function that controls the visibility of the component, such as opening or closing the popup/modal.
+   * 
+   * @type {Function}
+   */
     setShow: Function;
+    /**
+  * Optional message to be displayed in the popup, providing additional information or instructions.
+  * 
+  * @type {string | undefined}
+  */
     message?: string;
+    /**
+   * Optional title for the popup, used to describe the purpose or context of the popup.
+   * 
+   * @type {string | undefined}
+   */
     title?: string;
+    /**
+   * Optional boolean that determines whether the popup is currently visible.
+   * 
+   * @type {boolean | undefined}
+   */
     show?: boolean;
+    /**
+   * Optional action to be performed when the popup's associated action button is triggered. 
+   * This function is expected to handle the behavior when the user confirms or submits the popup's action.
+   * 
+   * @type {any | undefined}
+   */
     actionPerform?: any;
+    /**
+   * Optional boolean that determines whether the popup should be hidden or not based on some condition.
+   * 
+   * @type {boolean | undefined}
+   */
     hideVisibility?: boolean;
 }
 
-const AuthenticationModelPopup = (props: activeSection) => {
+const AuthenticationModelPopup = (props: AuthenticationModelPopupProps) => {
     const { mode } = useContext(Context);
     const { status, data: session } = useSession();
     const route = useRouter();
 
+    /**
+     * Closes the popup/modal by setting the visibility state to false and deactivating the current step or process.
+     * This function is typically used to hide the popup/modal and reset any associated states when the user decides to close it.
+     *
+     * @function closePopup
+     * @returns {void}
+     */
     const closePopup = () => {
         props.setShow(false);
         props.setActive(false);
@@ -112,7 +161,7 @@ const AuthenticationModelPopup = (props: activeSection) => {
                         </div>
                         <div>
                             {(session?.user?.tradingPassword === '' || session?.user?.tradingPassword === null) ? <button className="admin-outline-button !text-[#F44336] !border-[#f443361f] !px-[10px] !py-[4px] whitespace-nowrap" onClick={() => route.push('/profile/security')}>
-                             Verify
+                                Verify
                             </button> : <button className="admin-outline-button !px-[10px] !py-[4px] whitespace-nowrap">
                                 Approved
                             </button>}

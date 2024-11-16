@@ -12,11 +12,20 @@ import { useQRCode } from "next-qrcode";
 import clickOutSidePopupClose from "@/components/snippets/clickOutSidePopupClose";
 import ReactPaginate from "react-paginate";
 
-interface fixSection {
+/**
+ * Defines the properties for the AddressManagement component.
+ * 
+ * @interface AddressManagementProps
+ * @property {boolean} [showActivity] - Optional flag to control the visibility of activity-related content.
+ * @property {Function} setShowActivity - A function to update the `showActivity` state. Used to toggle the visibility 
+ *                                        of activity content within the component.
+ */
+interface AddressManagementProps {
   showActivity?: boolean;
   setShowActivity: Function;
 }
-const AddressManagement = (props: fixSection) => {
+
+const AddressManagement = (props: AddressManagementProps) => {
   const [active, setActive] = useState(false);
   const { mode } = useContext(Context);
   const { status, data: session } = useSession()
@@ -38,12 +47,31 @@ const AddressManagement = (props: fixSection) => {
   const pageCount = Math.ceil(total / itemsPerPage);
   const [isDisabled, setIsDisabled] = useState(false);
 
+  /**
+ * Fetches data for networks, tokens, and whitelist addresses whenever the `itemOffset` value changes.
+ * 
+ * This effect runs when the `itemOffset` state changes, and triggers three functions:
+ * 1. `getAllNetworks` - Fetches all available networks.
+ * 2. `getAllTokens` - Fetches all available tokens.
+ * 3. `getAllWhitelistAddress` - Fetches all whitelist addresses based on the current `itemOffset`.
+ * 
+ * @effect
+ */
   useEffect(() => {
     getAllNetworks()
     getAllTokens()
     getAllWhitelistAddress(itemOffset)
   }, [itemOffset])
 
+  /**
+ * Fetches the list of all networks from the API.
+ * 
+ * This function sends a GET request to the `/network` endpoint to retrieve the available networks.
+ * The request includes the user's access token in the headers for authorization.
+ * Once the data is fetched, it is stored in the component state via the `setData` function.
+ * 
+ * @async
+ */
   const getAllNetworks = async () => {
     try {
       let activity = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/network`, {
@@ -58,6 +86,15 @@ const AddressManagement = (props: fixSection) => {
     }
   }
 
+  /**
+ * Fetches the list of all tokens from the API.
+ * 
+ * This function sends a GET request to the `/token` endpoint to retrieve the available tokens.
+ * It does not require authorization as the request does not include any authentication headers.
+ * Once the data is fetched, it is stored in the component state via the `setTokens` function.
+ * 
+ * @async
+ */
   const getAllTokens = async () => {
     try {
       let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
@@ -69,6 +106,19 @@ const AddressManagement = (props: fixSection) => {
     }
   }
 
+  /**
+ * Fetches the list of whitelist addresses from the API.
+ * 
+ * This function sends a GET request to the `/address/list` endpoint, passing pagination parameters 
+ * such as `itemOffset` (for the starting index of the data) and `itemsPerPage` (for the number of items per page).
+ * It includes the user's access token in the request headers for authentication.
+ * Once the data is fetched, it updates the total number of items and the list of addresses in the component state
+ * via the `setTotal` and `setList` functions respectively.
+ * 
+ * @param itemOffset - The index of the first item to fetch (for pagination).
+ * 
+ * @async
+ */
   const getAllWhitelistAddress = async (itemOffset: number) => {
     try {
       let address = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/address/list?itemOffset=${itemOffset === undefined ? 0 : itemOffset}&itemsPerPage=${itemsPerPage}`, {
@@ -84,12 +134,33 @@ const AddressManagement = (props: fixSection) => {
     }
   }
 
+  /**
+ * Handles the page change event for pagination.
+ * 
+ * This function is triggered when the user clicks on a pagination control (e.g., a page number). 
+ * It calculates the new offset based on the selected page and the number of items per page. 
+ * The offset is then set in the state using the `setItemOffset` function, 
+ * which is used to fetch the corresponding data for the new page.
+ * 
+ * @param event - The event object that contains the information about the selected page.
+ * 
+ * @async
+ */
   const handlePageClick = async (event: any) => {
     const newOffset = (event.selected * itemsPerPage) % total;
     setItemOffset(newOffset);
-
   };
 
+  /**
+ * Updates the status of an address in the whitelist.
+ * 
+ * This function encrypts the provided data using AES encryption and sends a PUT request to update the address status.
+ * Upon successful update, it triggers the fetching of the updated whitelist addresses.
+ * 
+ * @param data - The data object that contains the details to be updated (e.g., address status).
+ * 
+ * @async
+ */
   const updateStatus = async (data: any) => {
     try {
       const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
@@ -106,9 +177,6 @@ const AddressManagement = (props: fixSection) => {
           body: JSON.stringify(record),
         }
       ).then((response) => response.json());
-
-      // console.log(responseStatus, "==responseStatus");
-
       if (responseStatus) {
         getAllWhitelistAddress(0);
       }
@@ -119,8 +187,18 @@ const AddressManagement = (props: fixSection) => {
     }
   };
 
+  /**
+ * Performs an action to delete an address from the whitelist.
+ * 
+ * This function checks the user's authentication status, encrypts the necessary data using AES encryption, 
+ * and sends a POST request to delete the address. Upon success, it triggers a toast notification, 
+ * refreshes the whitelist address list, and closes the confirmation modal.
+ * 
+ * If the user is not authenticated, an error message is shown and the user is signed out.
+ * 
+ * @async
+ */
   const actionPerform = async () => {
-
     if (status === 'authenticated') {
       let obj = {
         address_id: postId,
@@ -155,6 +233,16 @@ const AddressManagement = (props: fixSection) => {
     }
   }
 
+  /**
+ * Copies the provided address to the clipboard and displays a success message.
+ * 
+ * This function creates a temporary textarea element, sets its value to the provided address, 
+ * selects its content, and triggers the copy action using the `document.execCommand('copy')` method.
+ * It also disables the copy button temporarily and shows a toast notification indicating that the address was copied.
+ * After a short delay, it re-enables the copy button.
+ * 
+ * @param {string} address - The address to be copied to the clipboard.
+ */
   const copyCode = (address: string) => {
     setBtnDisabledCopy(true);
     const input = document.createElement('textarea')
@@ -170,6 +258,12 @@ const AddressManagement = (props: fixSection) => {
     }, 3000);
   }
 
+  /**
+ * Closes the popup by updating the state to hide the SVG component.
+ * 
+ * This function sets the `setShowSVG` state to `false`, which likely controls the visibility of a popup 
+ * or an SVG element. When called, it effectively hides the popup by updating the state to no longer display it.
+ */
   const closePopup = () => {
     setShowSVG(false)
   }
@@ -401,25 +495,25 @@ const AddressManagement = (props: fixSection) => {
                 );
               })}
               {list && list.length === 0 && (
-                    <tr>
-                      <td colSpan={6}>
-                        <div
-                          className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark"
-                            ? "text-[#ffffff]"
-                            : "text-[#000000]"
-                            }`}
-                        >
-                          <Image
-                            src="/assets/refer/empty.svg"
-                            alt="emplty table"
-                            width={107}
-                            height={104}
-                          />
-                          <p> No Record Found </p>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
+                <tr>
+                  <td colSpan={6}>
+                    <div
+                      className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark"
+                        ? "text-[#ffffff]"
+                        : "text-[#000000]"
+                        }`}
+                    >
+                      <Image
+                        src="/assets/refer/empty.svg"
+                        alt="emplty table"
+                        width={107}
+                        height={104}
+                      />
+                      <p> No Record Found </p>
+                    </div>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

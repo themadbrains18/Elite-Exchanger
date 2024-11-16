@@ -3,6 +3,16 @@ import React from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 
+/**
+ * OpenOrderHistoryTable Component
+ * 
+ * This component displays a table showing open orders with various details such as time, symbol, type,
+ * side, price, amount, and status.
+ * 
+ * @param {Object} props - The properties passed to the component.
+ * @param {Array} [props.openOrders] - An optional array of open order data to populate the table.
+ * @returns {JSX.Element} The rendered table with order data.
+ */
 interface propsData {
     openOrders?: any;
 }

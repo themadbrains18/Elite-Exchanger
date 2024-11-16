@@ -1,10 +1,10 @@
 import Image from "next/image";
-import React, {  useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import HeaderLogo from "../svg-snippets/headerLogo";
 import Link from "next/link";
 import TradeIcon from "../svg-snippets/trade-icon";
 import { Wallet } from "../svg-snippets/wallet-icon";
-import {  toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import Context from "../contexts/context";
@@ -40,7 +40,7 @@ const Header = (props: propsData) => {
 
 
   const [duserName, setduserName] = useState('');
-  
+
   const [shownNotifications, setShownNotifications] = useState(new Set());
 
   const linkList = [
@@ -72,6 +72,20 @@ const Header = (props: propsData) => {
 
   const socketListenerRef = useRef<(event: MessageEvent) => void>();
 
+  /**
+   * useEffect hook to handle WebSocket messages.
+   * 
+   * This effect listens for incoming WebSocket messages and handles different event types:
+   * 1. "user_notify": Triggers the function `getUserNotification()` to fetch notifications.
+   * 2. "profile": Updates the user details and username based on the incoming profile data.
+   *    - If the user ID matches the session user, it updates the `userDetail` and `duserName` state.
+   *    - If the user does not have a display name, the email or phone number is used as a fallback.
+   * 3. "order": Fetches order details by order ID when a new order event is received, ensuring
+   *    notifications for the same order are not repeated.
+   * 
+   * It also manages WebSocket event listeners and ensures proper cleanup when the component unmounts or
+   * when the `wbsocket` or `session` changes.
+   */
   useEffect(() => {
     // socket();
     const handleSocketMessage = (event: any) => {
@@ -108,6 +122,7 @@ const Header = (props: propsData) => {
       }
     };
 
+    // Attach the event listener if WebSocket is open and valid
     // wbsocket.addEventListener('message', handleSocketMessage);
     if (wbsocket && wbsocket.readyState === WebSocket.OPEN) {
       if (socketListenerRef.current) {
@@ -117,6 +132,7 @@ const Header = (props: propsData) => {
       wbsocket.addEventListener('message', handleSocketMessage);
     }
 
+    // Cleanup the event listener on component unmount or when `wbsocket` or `session` changes
     return () => {
       if (wbsocket) {
         wbsocket.removeEventListener('message', handleSocketMessage);
@@ -124,6 +140,17 @@ const Header = (props: propsData) => {
     };
   }, [wbsocket, session]);
 
+  /**
+   * useEffect hook to fetch user details and token list when session is available.
+   * 
+   * This effect performs the following actions:
+   * 1. If the `session` and `session.user` are defined, it triggers:
+   *    - `getUserBasicDetail()`: Fetches the basic user details.
+   *    - `getUserNotification()`: Fetches the user notifications.
+   * 2. It always calls `getTokenList()` to fetch the list of tokens.
+   * 
+   * The effect is triggered whenever the `session` object changes.
+   */
   useEffect(() => {
     if (session !== undefined && session?.user !== undefined) {
       getUserBasicDetail();
@@ -132,12 +159,14 @@ const Header = (props: propsData) => {
     getTokenList();
   }, [session]);
 
-  // const socket = () => {
-  //   if (wbsocket) {
-
-  //   }
-  // };
-
+  /**
+   * Fetches user notifications from the server based on the user's ID and access token.
+   * 
+   * This function performs the following actions:
+   * 1. Sends a GET request to the notification endpoint, passing the user's ID and access token in the headers.
+   * 2. Once the response is received, it filters the notifications where the status is either `0` or `false`.
+   * 3. Updates the state `setNotificationData` with the filtered notifications.
+   */
   const getUserNotification = async () => {
     let profileDashboard = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/notification?userid=${session?.user?.user_id}`, {
       method: "GET",
@@ -154,6 +183,17 @@ const Header = (props: propsData) => {
     }
   }
 
+  /**
+   * Fetches and updates the basic user details for the logged-in user.
+   * 
+   * This function performs the following actions:
+   * 1. Sends a GET request to the `/profile/dashboard` endpoint using the user's `user_id` and `access_token` in the request headers.
+   * 2. If the response is successful, it updates the `userDetail` state with the fetched user data.
+   * 3. Sets the display name (`duserName`) based on the following conditions:
+   *    - If `dName` is available in the user data, it sets it as the display name.
+   *    - If the user's email is available, it shows the first three characters followed by a masked email address.
+   *    - If the user's number is available, it sets the number as the display name.
+   */
   const getUserBasicDetail = async () => {
     let profileDashboard = await fetch(
       `${process.env.NEXT_PUBLIC_BASEURL}/profile/dashboard?userid=${session?.user?.user_id}`,
@@ -181,6 +221,15 @@ const Header = (props: propsData) => {
     }
   };
 
+  /**
+   * Fetches the list of tokens available for trading and updates the state with the filtered token data.
+   * 
+   * This function performs the following actions:
+   * 1. Sends a GET request to the `/token` endpoint to fetch the list of tokens.
+   * 2. Filters the token list to separate tokens that have a `tradepair` (for spot trading) and a `futuretradepair` (for future trading).
+   * 3. Updates the `SetSpotTrade` state with tokens that have a `tradepair`.
+   * 4. Updates the `SetFutureTrade` state with tokens that have a `futuretradepair`.
+   */
   const getTokenList = async () => {
     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/token`, {
       method: "GET"
@@ -195,6 +244,19 @@ const Header = (props: propsData) => {
     SetFutureTrade(future);
   }
 
+  /**
+   * Fetches the order details by order ID and handles notifications based on the order status.
+   * 
+   * This function performs the following actions:
+   * 1. Sends a GET request to the `/p2p/order` endpoint to fetch the order details using the provided `orderid`.
+   * 2. If the order data is returned:
+   *    - If the order status is `isCompleted` and the current user is the seller, a notification is shown to check the payment method.
+   *    - If the order status is `isProcess` and the current user is the seller, a notification is shown about a new order.
+   *    - If the order status is `isReleased` and the current user is the buyer, a notification is shown that assets were released.
+   * 
+   * @param {any} orderid - The unique ID of the order to fetch.
+   * @param {string} type - The type of action, not used in this function but could be extended in the future.
+   */
   const getOrderByOrderId = async (orderid: any, type: string) => {
     let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {
       method: "GET",
@@ -256,10 +318,10 @@ const Header = (props: propsData) => {
                               {spotTrade?.map((item: any, nesIndex: any) => {
                                 return (
                                   <li key={nesIndex + Date.now()} className="mb-[10px]">
-                                   
+
                                     <Link prefetch={false} href={`/chart/${item?.tradepair?.symbolOne}`}>
                                       <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full cursor-pointer" onClick={() => { router?.push(`/chart/${item?.tradepair?.symbolOne}`) }}>
-                                      <Image src={`${imgSrc2?'/assets/history/Coin.svg':item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)} className={`min-w-[30px] ${item?.symbol==="XRP"&&"bg-white rounded-full "}`}/>
+                                        <Image src={`${imgSrc2 ? '/assets/history/Coin.svg' : item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc2(true)} className={`min-w-[30px] ${item?.symbol === "XRP" && "bg-white rounded-full "}`} />
 
                                         <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                           <p className="info-14-18 dark:text-white">{item?.tradepair?.symbolOne}/{item?.tradepair?.symbolTwo}</p>
@@ -283,7 +345,7 @@ const Header = (props: propsData) => {
                                   <li key={nesIndex + Date.now()} className="mb-[10px]">
                                     <Link prefetch={false} href={`/future/${symbol}${item?.futuretradepair?.usdt_symbol}`} >
                                       <div className="flex gap-2 py-[10px] md:py-[15px] px-0 md:px-[5px] max-w-[150px] w-full">
-                                      <Image src={`${imgSrc?'/assets/history/Coin.svg':item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)}  className={`min-w-[30px] ${item?.symbol==="XRP"&&"bg-white rounded-full "}`}/>
+                                        <Image src={`${imgSrc ? '/assets/history/Coin.svg' : item?.image}`} width={30} height={30} alt="coins" onError={() => setImgSrc(true)} className={`min-w-[30px] ${item?.symbol === "XRP" && "bg-white rounded-full "}`} />
 
                                         <div className="flex items-start md:items-center justify-center md:flex-row flex-col gap-0 md:gap-[10px]">
                                           <p className="info-14-18 dark:text-white">{symbol}{item?.futuretradepair?.usdt_symbol}</p>
@@ -423,7 +485,7 @@ const Header = (props: propsData) => {
                       <div data-testid="notification-panel" className="absolute top-[96px] opacity-0 invisible duration-300  right-[0px] hover:block dropdown_wrapper notification-panel" >
                         <Notification notificationData={notificationData} getUserNotification={getUserNotification} />
                       </div>
-                    } 
+                    }
 
                   </div>
                 </div>
@@ -485,7 +547,7 @@ const Header = (props: propsData) => {
                 </div>
               )}
             </div>
-          {showMenu &&  <ResponsiveSidebar
+            {showMenu && <ResponsiveSidebar
               showMenu={showMenu}
               setShowMenu={setShowMenu}
               userDetail={userDetail}

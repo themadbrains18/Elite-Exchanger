@@ -18,18 +18,23 @@ import EmailChangeAlert from "../snippets/emailChangeAlert";
 import clickOutSidePopupClose from "../snippets/clickOutSidePopupClose";
 import CodeNotRecieved from "../snippets/codeNotRecieved";
 
+/**
+ * This function validates a user's input for either email or phone number.
+ * It checks if the input matches the required pattern for a valid email or phone number.
+ *
+ * @param {string} uname - The user's email or phone number to be validated.
+ * @returns {boolean} - Returns true if the input matches the validation rules, otherwise false.
+ */
 const schema = yup.object().shape({
   uname: yup
     .string()
     .required("Email / Phone is required.").matches(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})+$/, "Please enter valid email(letters, number and period('.')).")
-  // .test("email_or_phone", "Email / Phone is invalid", (value) => {
-  //   return validateEmail(value) || validatePhone(value);
-  // }),
 });
 
 const validateEmail = (email: string | undefined) => {
   return yup.string().email().isValidSync(email);
 };
+
 const validatePhone = (phone: string | undefined) => {
   return yup
     .number()
@@ -45,14 +50,24 @@ const validatePhone = (phone: string | undefined) => {
     .isValidSync(phone);
 };
 
-interface activeSection {
+/**
+ * Interface for the properties passed to the AdNumber component.
+ * This interface is used to define the required properties for the component, 
+ * including methods to manage the state and session information.
+ * 
+ * @property {Function} setActive - A function to set the active state of the component.
+ * @property {Function} setShow - A function to control the visibility of the component.
+ * @property {string} type - A string that defines the type of the ad or component.
+ * @property {any} session - The session information of the current user.
+ */
+interface AdNumberProps {
   setActive: Function;
   setShow: Function;
   type: string;
   session: any;
 }
 
-const AdNumber = (props: activeSection) => {
+const AdNumber = (props: AdNumberProps) => {
   const { mode } = useContext(Context);
   const [step, setStep] = useState(false);
   const [fillOtp, setOtp] = useState("");
@@ -84,6 +99,15 @@ const AdNumber = (props: activeSection) => {
     resolver: yupResolver(schema),
   });
 
+  /**
+ * useEffect hook for handling OTP input in a set of input fields.
+ * 
+ * - Moves focus to the next input field after a character is entered.
+ * - Moves focus to the previous input field if backspace is pressed on an empty field.
+ * - Updates OTP state by combining values from all input fields.
+ * 
+ * @param show - Dependency to trigger re-initialization of event listeners.
+ */
   useEffect(() => {
     const inputElements = document.querySelectorAll(".input_wrapper4 input");
 
@@ -119,12 +143,16 @@ const AdNumber = (props: activeSection) => {
         }
       });
     });
-
-
   }, [!show]);
 
-
+  /**
+   * Clears the 'uname' error after 3 seconds if it's present in the errors object.
+   * 
+   * @param errors - The form validation errors.
+   * @param clearErrors - Function to clear the specific error.
+   */
   useEffect(() => {
+    // Set a timeout to clear the 'uname' error after 3 seconds if it's present
     setTimeout(() => {
       if (errors.uname) {
         clearErrors('uname');
@@ -132,17 +160,30 @@ const AdNumber = (props: activeSection) => {
     }, 3000);
   }, [errors])
 
-
+  /**
+   * sendOtp - Function to handle OTP generation for the given username (email/phone number).
+   * 
+   * This function performs the following tasks:
+   * 1. Clears any existing OTP inputs.
+   * 2. Validates the provided email or phone number.
+   * 3. Encrypts the OTP request data using AES encryption.
+   * 4. Sends the request to the server for OTP generation.
+   * 5. Handles server response and updates UI states based on success or failure.
+   * 
+   * @returns {Promise<void>} - No return value. It updates the UI states like OTP input fields, success/error messages, etc.
+   */
   const sendOtp = async () => {
     try {
+      // Clear all OTP input fields
       const inputElements = document.querySelectorAll(".input_wrapper4 input");
-            inputElements.forEach((ele, index) => {
-              (inputElements[index] as HTMLInputElement).value = ""
-            })
+      inputElements.forEach((ele, index) => {
+        (inputElements[index] as HTMLInputElement).value = ""
+      })
       setOtp('')
       let uname = getValues("uname");
       if (uname !== "") {
         clearErrors();
+        // Validate email format using regular expression
         let isValidEmail = uname.match(/^([a-zA-Z0-9_\.])+\@(([a-zA-Z0-9])+\.)+([a-zA-Z0-9]{2,4})+$/);
         if (isValidEmail === null) {
           setError("uname", {
@@ -155,6 +196,7 @@ const AdNumber = (props: activeSection) => {
           return;
         }
         setDisabled(true);
+        // Prepare the object for OTP request based on type (email or phone number)
         let obj = {};
         if (props?.type === "email") {
           let username =
@@ -179,6 +221,8 @@ const AdNumber = (props: activeSection) => {
             otp: "string",
           };
         }
+
+        // Check if session exists (user is authenticated)
         if (session) {
           const ciphertext = AES.encrypt(
             JSON.stringify(obj),
@@ -186,6 +230,7 @@ const AdNumber = (props: activeSection) => {
           );
           let record = encodeURIComponent(ciphertext.toString());
 
+          // Send PUT request to update user with OTP request
           let userExist = await fetch(
             `${process.env.NEXT_PUBLIC_BASEURL}/user/update`,
             {
@@ -201,6 +246,7 @@ const AdNumber = (props: activeSection) => {
           // console.log(res);
           if (res?.data?.otp !== undefined) {
             setDisabled(false);
+            // If OTP exists in the response, show success toast and handle expiration time
             toast.success(res?.data?.message, { autoClose: 2000 });
             let expireTime = res?.data?.otp?.expire;
             orderTimeCalculation(expireTime);
@@ -209,6 +255,7 @@ const AdNumber = (props: activeSection) => {
             setStatuss(false);
             // setStatuss(true);
           } else {
+            // If OTP generation failed, show error and re-enable button after 3 seconds
             toast.error(res.data.message, { autoClose: 2500 });
             setTimeout(() => {
               setDisabled(false);
@@ -238,21 +285,40 @@ const AdNumber = (props: activeSection) => {
     }
   };
 
+  /**
+ * orderTimeCalculation - Function to calculate and manage the countdown timer 
+ * based on the provided expiration time.
+ * 
+ * This function performs the following tasks:
+ * 1. Calculates the remaining time until the provided expiration time.
+ * 2. Starts a countdown timer if the expiration time is in the future.
+ * 3. If the expiration time has passed, it stops the timer, hides the time display, 
+ *    resets OTP input fields, and updates the UI status.
+ * 
+ * @param {any} expireTime - The expiration time as a string or Date object.
+ * 
+ * @returns {void} - This function does not return a value. It modifies the UI and state.
+ */
   const orderTimeCalculation = async (expireTime: any) => {
+    // Convert expiration time to a Date object
     let deadline = new Date(expireTime);
 
+    // Set the deadline's minutes and seconds
     deadline.setMinutes(deadline.getMinutes());
     deadline.setSeconds(deadline.getSeconds() + 1);
     let currentTime = new Date();
 
+    // Check if the current time is before the deadline
     if (currentTime < deadline) {
       if (Ref.current) clearInterval(Ref.current);
+      // Start a new interval timer to update the remaining time every second
       const timer = setInterval(() => {
         calculateTimeLeft(deadline);
       }, 1000);
       Ref.current = timer;
     }
     else if (currentTime > deadline) {
+      // If the expiration time has passed, stop the countdown and hide the time display
       setShowTime(false);
       setStatuss(true);
       const inputElements = document.querySelectorAll(".input_wrapper4 input");
@@ -262,9 +328,21 @@ const AdNumber = (props: activeSection) => {
     }
   }
 
+  /**
+ * calculateTimeLeft - Function to calculate and update the remaining time.
+ * 
+ * This function is responsible for calculating the remaining time based on the 
+ * provided expiration time, formatting the time into a 'mm:ss' format, and 
+ * updating the timer on the UI. If the time has expired, it stops the timer and 
+ * resets the OTP input fields.
+ * 
+ * @param {any} e - The deadline date object or expiration time.
+ * 
+ * @returns {void} - This function updates the UI state and timer but does not return a value.
+ */
   const calculateTimeLeft = (e: any) => {
-    let { total, minutes, seconds }
-      = getTimeRemaining(e);
+    // Destructure total time, minutes, and seconds from the remaining time calculation
+    let { total, minutes, seconds } = getTimeRemaining(e);
 
     if (total >= 0) {
       setTimer(
@@ -283,6 +361,17 @@ const AdNumber = (props: activeSection) => {
     }
   }
 
+  /**
+   * getTimeRemaining - Function to calculate the remaining time from the current time to the given deadline.
+   * 
+   * This function takes a deadline time (in date format) and calculates the remaining time 
+   * in total milliseconds, minutes, and seconds from the current time.
+   * 
+   * @param {any} e - The deadline date object or expiration time.
+   * 
+   * @returns {Object} - An object containing the total remaining time in milliseconds, 
+   * minutes, and seconds.
+   */
   const getTimeRemaining = (e: any) => {
     let current: any = new Date();
     const total = Date.parse(e) - Date.parse(current);
@@ -293,6 +382,19 @@ const AdNumber = (props: activeSection) => {
     };
   }
 
+  /**
+ * onHandleSubmit - Function to handle the form submission, validate OTP, 
+ * and make a request to update the user information.
+ * 
+ * This function performs the following actions:
+ * 1. Checks if the OTP is empty and displays a message if so.
+ * 2. Prepares the request body with either email or phone number based on the type.
+ * 3. Encrypts the data and sends it to the backend via a PUT request.
+ * 4. If the response contains an error, it displays an error message.
+ * 5. If the request is successful, it proceeds to send session OTP and set form data for the next step.
+ * 
+ * @param {any} data - The form data containing the username (email or phone number).
+ */
   const onHandleSubmit = async (data: any) => {
     try {
       if (fillOtp === '') {
@@ -340,16 +442,9 @@ const AdNumber = (props: activeSection) => {
         if (res?.data?.message !== undefined) {
           toast.error(res?.data?.message, { autoClose: 2000 });
           // console.log("here");
-          
+
           setTimeout(() => {
             setBtnDisabled(false);
-            // if (Ref.current) clearInterval(Ref.current);
-            // setShowTime(false);
-            // setStatuss(true);
-            // const inputElements = document.querySelectorAll(".input_wrapper4 input");
-            // inputElements.forEach((ele, index) => {
-            //   (inputElements[index] as HTMLInputElement).value = ""
-            // })
           }, 3000);
         } else {
           await sendSessionOtp();
@@ -365,10 +460,24 @@ const AdNumber = (props: activeSection) => {
     } catch (error) { }
   };
 
+  /**
+ * sendSessionOtp - Function to send a session OTP request to the backend.
+ * 
+ * This function performs the following actions:
+ * 1. Retrieves the username (either email or phone number) from form data.
+ * 2. Prepares the request body with the username and step information.
+ * 3. Encrypts the data and sends it to the backend via a PUT request.
+ * 4. If the backend response contains OTP data, it sets the expiration time.
+ * 5. If the response contains an error message, it displays an error toast and re-enables the button.
+ * 
+ * @returns {void}
+ */
   const sendSessionOtp = async () => {
     try {
+      // Retrieve username (email or phone number) from form data
       let uname = getValues("uname");
       let obj = {};
+      // Prepare the request body for "email" type
       if (props?.type === "email") {
         let username = props.session?.user.email;
         obj = {
@@ -378,6 +487,8 @@ const AdNumber = (props: activeSection) => {
           step: 2
         };
       }
+
+      // If session exists and user information is available
       if (session !== undefined && session?.user !== undefined) {
         const ciphertext = AES.encrypt(
           JSON.stringify(obj),
@@ -385,6 +496,7 @@ const AdNumber = (props: activeSection) => {
         );
         let record = encodeURIComponent(ciphertext.toString());
 
+        // Make the request to the backend to update the user data
         let userExist = await fetch(
           `${process.env.NEXT_PUBLIC_BASEURL}/user/update`,
           {
@@ -396,13 +508,17 @@ const AdNumber = (props: activeSection) => {
             body: JSON.stringify(record),
           }
         );
+
+        // Parse the response from the backend
         let res = await userExist.json();
+
+        // If OTP is returned, set the expiration time
         if (res?.data?.otp !== undefined) {
           let expireTime = res?.data?.otp?.expire;
           setSecondExpireTime(expireTime);
         } else {
           // console.log("here2");
-          
+
           toast.error(res.data.message, { autoClose: 2500 });
           setTimeout(() => {
             setDisabled(false);
@@ -414,6 +530,16 @@ const AdNumber = (props: activeSection) => {
     }
   };
 
+  /**
+ * closePopup - Function to close the popup and reset related states.
+ * 
+ * This function performs the following actions:
+ * 1. Resets the timer by setting the timer state to an empty string.
+ * 2. Closes the popup by updating the `setShow` prop to `false`.
+ * 3. Resets the active state by calling `setActive` with `0` as an argument.
+ * 
+ * @returns {void}
+ */
   const closePopup = () => {
     setTimer('');
     props?.setShow(false);
@@ -422,10 +548,8 @@ const AdNumber = (props: activeSection) => {
   const wrapperRef = useRef(null);
   clickOutSidePopupClose({ wrapperRef, closePopup });
 
-
-
   return (
-    <div  ref={wrapperRef}>
+    <div ref={wrapperRef}>
       {show && props?.type === "email" ? (
         <EmailChangeAlert
           setShow={setShow}
@@ -434,8 +558,8 @@ const AdNumber = (props: activeSection) => {
         />
       ) : (
         <div
-        
-          className={`max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  ${popup===false  ?"opacity-100":"opacity-0"}`}
+
+          className={`max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]  ${popup === false ? "opacity-100" : "opacity-0"}`}
         >
           {step === false &&
             <>
@@ -479,8 +603,8 @@ const AdNumber = (props: activeSection) => {
                 <div className="py-30 md:py-40">
                   <div className="flex flex-col mb-[15px] md:mb-20 gap-10">
                     <label className="sm-text">
-                Enter new {props?.type === "Email" ? "mobile number" : "email address"} 
-              </label>
+                      Enter new {props?.type === "Email" ? "mobile number" : "email address"}
+                    </label>
                     <div>
                       <input
                         type="text"

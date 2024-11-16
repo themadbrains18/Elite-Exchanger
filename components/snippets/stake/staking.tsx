@@ -11,8 +11,21 @@ import "react-toastify/dist/ReactToastify.css";
 import { useSession } from "next-auth/react";
 import clickOutSidePopupClose from "../clickOutSidePopupClose";
 
+/**
+ * Schema for validating form data using Yup.
+ * Validates fields like `time` (string) and `amount` (number).
+ */
 const schema = yup.object().shape({
+    /**
+    * The `time` field is a required string.
+    * @type {string}
+    */
     time: yup.string().required("This field is required."),
+    /**
+     * The `amount` field is a required number that must be positive.
+     * It also includes custom error messages for different validation scenarios.
+     * @type {number}
+     */
     amount: yup
         .number()
         .positive("Amount must be greater than '0'.")
@@ -20,43 +33,80 @@ const schema = yup.object().shape({
         .typeError("Enter value must be number and positive value."),
 });
 
-interface activeSection {
+/**
+ * Props interface for the Staking Model component.
+ * 
+ * @interface StakingModelProps
+ */
+interface StakingModelProps {
+    /**
+    * A function to control the visibility of the model.
+    * It is used to show or hide the staking model.
+    * @param {boolean} value - A boolean value to show or hide the model.
+    */
     setShow1: Function;
+    /**
+     * The user session, typically includes details like user ID, authentication token, etc.
+     * @type {any}
+     */
     session: any;
+    /**
+     * The selected token object containing information about the token to stake.
+     * @type {any}
+     */
     token: any;
+    /**
+     * The balance of the selected coin that is available for staking.
+     * @type {number}
+     */
     selectedCoinBalance: number;
+    /**
+    * Optional callback to refresh the data after performing any action (like staking).
+    * @type {Function}
+    * @optional
+    */
     refreshData?: any;
 }
 
-const StakingModel = (props: activeSection) => {
+const StakingModel = (props: StakingModelProps) => {
     const { mode } = useContext(Context);
     const { data: session, status } = useSession();
     const [formData, setFormData] = useState();
     const [enable, setEnable] = useState(1);
     const [timeLock, setTimeLock] = useState(Object);
-
     const [totalStaked, setTotalStaked] = useState();
 
+    /**
+     * useEffect hook to fetch the user's staked data by token.
+     * This effect will run whenever the `props.token` changes.
+     */
     useEffect(() => {
         getUserStakedByToken()
     }, [props.token]);
 
+    /**
+ * Fetches the total amount of tokens staked by the user for the selected token.
+ * This function sends a GET request to the backend API to retrieve the staked amount.
+ * 
+ * @returns {void}
+ * @throws {Error} If the fetch operation or response parsing fails.
+ */
     const getUserStakedByToken = async () => {
         try {
+            // Retrieve the token ID from the props passed to the component
             let tokenid = props?.token?.id;
-    
+            // Send a GET request to fetch the staked data for the specific token and user
             let staked = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/staking?userid=${session?.user?.user_id}&tokenid=${tokenid}`, {
                 method: "GET",
                 headers: {
                     "Authorization": session?.user?.access_token
                 },
             }).then(response => response.json());
-    
+            // Set the total staked amount. If no data is found, set it to 0.
             setTotalStaked(staked.data[0].total === null ? 0 : staked.data[0].total);
-            
+
         } catch (error) {
-            console.log("error in token stake",error);
-            
+            console.log("error in token stake", error);
         }
     }
 
@@ -73,9 +123,22 @@ const StakingModel = (props: activeSection) => {
         resolver: yupResolver(schema),
     });
 
+    /**
+     * Handles form submission for staking tokens.
+     * This function performs the following tasks:
+     * 1. Validates the entered staking amount against the user's balance and minimum staking requirement.
+     * 2. Prepares the staking request data, including user ID, token ID, amount, APR, time lock duration, and time format.
+     * 3. Encrypts the data using AES encryption and sends the request to the backend for staking.
+     * 4. Handles the response from the backend, showing success or error messages accordingly.
+     * 
+     * @param {Object} data - The form data submitted by the user.
+     * @param {number} data.amount - The amount to be staked by the user.
+     * @param {string} data.time - The time format selected by the user for the staking period.
+     * @returns {void}
+     * @throws {Error} If the request fails or there is a network error.
+     */
     const onHandleSubmit = async (data: any) => {
         try {
-
             if (data.amount > props.selectedCoinBalance) {
                 toast.error('Insufficient balance');
                 return
@@ -122,21 +185,35 @@ const StakingModel = (props: activeSection) => {
         }
     };
 
+    /**
+     * Handles the change of the time lock selection.
+     * This function updates the time lock state and resets the corresponding time field in the form.
+     * 
+     * @param {Object} data - The time lock data selected by the user.
+     * @param {string} data.time - The selected time lock duration.
+     * @returns {void}
+     */
     const onTimeChange = (data: any) => {
         setTimeLock(data);
         setValue('time', data?.time);
         clearErrors('time');
     }
 
+    /**
+     * Closes the popup by setting the 'show' state to 0.
+     * This function is typically used to hide the modal or popup when invoked.
+     * 
+     * @returns {void}
+     */
     const closePopup = () => {
         props.setShow1(0);
-      }
-      const wrapperRef = useRef(null);
-      clickOutSidePopupClose({ wrapperRef, closePopup });
+    }
+    const wrapperRef = useRef(null);
+    clickOutSidePopupClose({ wrapperRef, closePopup });
 
     return (
         <>
-            <ToastContainer position="top-right" limit={1}/>
+            <ToastContainer position="top-right" limit={1} />
             {enable === 1 && (
                 <div ref={wrapperRef} className="max-h-[614px] lg:max-h-fit overflow-y-auto max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
                     <div className="flex items-center justify-between pb-[10px] md:pb-[15px] border-b border-grey-v-2 dark:border-opacity-[15%] dark:border-beta">
@@ -167,10 +244,10 @@ const StakingModel = (props: activeSection) => {
                         </svg>
                     </div>
                     <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+                        if (e.key === 'Enter') {
+                            e.preventDefault();
+                        }
+                    }}>
                         <div className="py-30 md:py-10">
                             {/* Available balance */}
                             <div className="mb-[15px] md:mb-5">

@@ -4,14 +4,23 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+/**
+ * PositionsHistoryTable component displays a table of trading position history
+ * with details such as symbol, filled/total quantity, price, trade type, order type,
+ * order status, order number, and order time.
+ * 
+ * @param {Object} props - The component's props.
+ * @param {Array} props.positions - List of position objects to be displayed in the table.
+ * @param {Object} props.currentToken - Current token data, if needed for future use (currently not used).
+ * 
+ * @returns {JSX.Element} A table showing the positions history with dynamic data.
+ */
 interface propsData {
     positions?: any;
     currentToken?: any;
 }
 
 const PositionsHistoryTable = (props: propsData) => {
-
-
     const router = useRouter();
     const { slug } = router.query;
 

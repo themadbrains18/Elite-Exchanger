@@ -5,27 +5,47 @@ import Image from "next/image";
 import Context from "../contexts/context";
 import { formatDate } from '@/libs/subdomain';
 
-interface fixSection {
+/**
+ * `ReferRewardsResProps` defines the properties expected for the referral rewards response component.
+ * 
+ * @property {boolean} [fixed] - Optionally, indicates whether the component should be fixed or not.
+ * @property {number} [show] - Optionally, the current step or state of visibility for the component (e.g., if it should be shown or hidden).
+ * @property {Function | any} [setShow] - Optionally, a function or setter to control the visibility state (used for managing the `show` property).
+ * @property {any} [session] - Optionally, the user session data, which may include authentication details and user information.
+ * @property {any} [rewardsList] - Optionally, a list of rewards associated with the user's referral program, which can be displayed or processed.
+ */
+interface ReferRewardsResProps {
   fixed?: boolean;
   show?: number;
   setShow?: Function | any;
   session?: any;
   rewardsList?: any;
 }
-const ReferRewardsRes = (props: fixSection) => {
+
+const ReferRewardsRes = (props: ReferRewardsResProps) => {
   const [active, setActive] = useState(1);
 
   const router = useRouter();
   const { mode } = useContext(Context)
   const [list, setList] = useState(props.rewardsList);
 
+  /**
+ * `updateClaimData` updates the claim status of a reward in the system.
+ * It sets the `claimed_on` date to the current date and the `expired_on` date to 7 days from the current date.
+ * The function then sends a PUT request to the rewards API to update the claim status.
+ *
+ * @param {any} data - The reward data containing information such as the reward ID.
+ * 
+ * @returns {Promise<void>} - A promise that resolves when the claim data is updated successfully.
+ */
   const updateClaimData = async (data: any) => {
-
     try {
+      // Create a new Date object to calculate the expiration date (7 days from today)
       const date = new Date();
       const theDayOfTheMonthOnNextWeek = date.getDate() + 7;
       date.setDate(theDayOfTheMonthOnNextWeek);
 
+      // Prepare the object to be sent in the PUT request
       let obj = {
         claimed_on: new Date(),
         expired_on: date,
@@ -33,6 +53,7 @@ const ReferRewardsRes = (props: fixSection) => {
         claim: true
       }
 
+      // Send a PUT request to update the reward data in the backend  
       let rewardsResponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/rewards`, {
         method: "PUT",
         headers: {
@@ -42,6 +63,7 @@ const ReferRewardsRes = (props: fixSection) => {
         body: JSON.stringify(obj)
       }).then(response => response.json());
 
+      // If the response contains data, update the local list with the new reward data
       if (rewardsResponse?.data) {
         const newState = list.map((obj: any) => {
           if (obj?.id === rewardsResponse?.data?.id) {
@@ -50,7 +72,7 @@ const ReferRewardsRes = (props: fixSection) => {
           // 👇️ otherwise return the object as is
           return obj;
         });
-
+        // Update the state with the new list
         setList(newState);
       }
     } catch (error) {
@@ -59,9 +81,22 @@ const ReferRewardsRes = (props: fixSection) => {
     }
   }
 
+  /**
+ * `filterRewards` filters the rewards list based on the provided ID.
+ * 
+ * - If the ID is 1, it returns all rewards.
+ * - If the ID is 2, it returns rewards that are claimed and still not expired.
+ * - If the ID is 4, it returns rewards that are claimed and expired.
+ * 
+ * @param {number} id - The ID used to filter the rewards list.
+ * 
+ * @returns {Promise<void>} - A promise that resolves when the rewards list is filtered and updated.
+ */
   const filterRewards = async (id: number) => {
     try {
+      // Check if there are any rewards in the rewards list
       if (props?.rewardsList.length > 0) {
+        // Filter the rewards list based on the ID passed
         let rewards = await props?.rewardsList.filter((item: any) => {
           if (id === 1) {
             return item
@@ -80,12 +115,15 @@ const ReferRewardsRes = (props: fixSection) => {
           }
         })
 
+        // Update the state with the filtered rewards
         setList(rewards);
       }
     } catch (error) {
       console.log(error);
     }
   }
+
+
   return (
     <div className={` ${props.show == 4 && "!left-[50%]"} ${props.fixed
       ? " duration-300 p-5 md:p-40 fixed pt-[145px] top-0 left-[160%] translate-x-[-50%] bg-off-white dark:bg-black-v-1 z-[6] w-full h-full pb-[20px] lg:dark:bg-d-bg-primary "
@@ -118,7 +156,7 @@ const ReferRewardsRes = (props: fixSection) => {
           {/* <button type='button' onClick={() => { setActive(3) }} className={`solid-button !px-[20px] !py-[10px] ${active == 3 ? '' : '!bg-[#5367ff42]'} `}>Used</button> */}
           <button type='button' onClick={() => { setActive(4); filterRewards(4) }} className={`solid-button !px-[20px] !py-[10px] ${active == 4 ? '' : '!bg-[#5367ff42]'}`}>Expired</button>
         </div>
-        <div className={`${list && list.length === 0?'':'grid'} max-[1250px]:grid-cols-1 grid-cols-2 gap-[10px] mt-[40px]`}>
+        <div className={`${list && list.length === 0 ? '' : 'grid'} max-[1250px]:grid-cols-1 grid-cols-2 gap-[10px] mt-[40px]`}>
           {list && list.length > 0 && list.map((item: any) => {
 
             if (item.claimed_on !== null) {

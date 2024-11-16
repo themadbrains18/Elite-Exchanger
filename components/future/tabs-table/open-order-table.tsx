@@ -15,6 +15,13 @@ interface propsData {
     openOrders?: any;
 }
 
+/**
+ * OpenOrderTable component displays open orders and allows users to close individual or all orders.
+ * It interacts with API, WebSocket for real-time updates, and handles order closing actions.
+ *
+ * @param {Object} props - The props object containing openOrders data.
+ * @param {Array} [props.openOrders] - Array of open order data.
+ */
 const OpenOrderTable = (props: propsData) => {
 
     const { status, data: session } = useSession();
@@ -25,17 +32,32 @@ const OpenOrderTable = (props: propsData) => {
 
     const wbsocket = useWebSocket();
 
+    /**
+     * This function is called when a user wants to close a specific open order.
+     * It triggers the display of a confirmation modal for the user to confirm the action.
+     *
+     * @param {string} id - The ID of the open order to be closed.
+     */
     const closeOpenOrder = async (id: string) => {
         setPositionId(id);
         setActive(true);
         setShow(true);
     }
+
+    /**
+     * This function is called when a user wants to close all open orders.
+     * It triggers the display of a confirmation modal for the user to confirm the action.
+     */
     const closeAllOpenOrder = async () => {
-        
         setActive1(true);
         setShow(true);
     }
 
+    /**
+     * This function handles the actual API call to close a specific open order.
+     * It encrypts the order ID, sends the request, and handles the response.
+     * Upon successful closure, it sends a WebSocket message to update the UI.
+     */
     const actionPerform = async () => {
         try {
             let obj = { "id": positionId };
@@ -76,10 +98,13 @@ const OpenOrderTable = (props: propsData) => {
         }
     }
 
+    /**
+     * This function handles the API call to close all open orders for the current user.
+     * It encrypts the user ID, sends the request, and handles the response.
+     * Upon successful closure, it sends a WebSocket message to update the UI.
+     */
     const confirmCloseAllOpenOrders = async () => {
-        try {
-
-            
+        try {     
           let obj = { "userid": session?.user?.user_id };
           const ciphertext = AES.encrypt(
             JSON.stringify(obj),

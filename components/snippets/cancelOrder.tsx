@@ -1,17 +1,31 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../contexts/context";
-import IconsComponent from "../snippets/icons";
 import clickOutSidePopupClose from "../snippets/clickOutSidePopupClose";
 
-interface activeSection {
+/**
+ * Interface representing the props for the CancelOrder component.
+ *
+ * @interface CancelOrderProps
+ * @property {Function} setEnable - A function to enable or disable the cancel order feature.
+ * @property {Function} setShow - A function to show or hide the cancel order component.
+ * @property {Function} actionPerform - A function to perform the cancel order action.
+ */
+interface CancelOrderProps {
     setEnable: Function;
     setShow: Function;
     actionPerform: Function;
 }
 
-const CancelOrder = (props: activeSection) => {
+const CancelOrder = (props: CancelOrderProps) => {
     const { mode } = useContext(Context);
 
+    /**
+     * Closes the popup/modal by setting the visibility state to false and deactivating the current step or process.
+     * This function is typically used to hide the popup/modal and reset any associated states when the user decides to close it.
+     *
+     * @function closePopup
+     * @returns {void}
+     */
     const closePopup = () => {
         props.setShow(false), props.setEnable(false);
     }

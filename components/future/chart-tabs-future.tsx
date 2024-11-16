@@ -6,6 +6,28 @@ import ProfitLossTable from './tabs-table/profit-loss-table';
 import { signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
+/**
+ * ChartTabsFuture component displays various trading-related data in tabbed sections.
+ * It allows users to view their current positions, open orders, position history,
+ * and profit/loss orders, with a dynamic UI that changes based on user interaction.
+ * 
+ * The component:
+ * - Retrieves profit/loss order data from an API when the component mounts.
+ * - Filters and displays position items, open orders, and TP/SL orders based on the selected symbol (`slug`).
+ * - Provides a tabbed interface to switch between different views:
+ *   - **Current Position**: Shows the current positions data.
+ *   - **Open Orders**: Displays open orders data.
+ *   - **TP/SL Orders**: Displays take-profit/stop-loss orders.
+ *   - **Position History**: Displays historical position data.
+ *   - **Order History**: Displays historical orders data.
+ *
+ * @param {Object} props - The props passed to the component.
+ * @param {any} [props.positions] - The positions data.
+ * @param {any} [props.openOrders] - The open orders data.
+ * @param {any} [props.currentToken] - The current token for authentication.
+ * @param {any} [props.positionHistoryData] - The position history data.
+ * @param {any} [props.openOrderHistoryData] - The open order history data.
+ */
 interface propsData {
     positions?: any;
     openOrders?: any;
@@ -21,16 +43,22 @@ const ChartTabsFuture = (props: propsData) => {
     const [openOrders, setOpenOrders] = useState([]);
     const [ordersTpSl, setTpSlOrders] = useState([]);
     const { status, data: session } = useSession();
-
-
     const router = useRouter();
     const { slug } = router.query;
 
-    // Get all Profit Loss Orders
+    /**
+     * Fetches the profit and loss orders data from the API and updates the state with the retrieved data.
+     * 
+     * This function:
+     * - Checks if the session is active and a valid access token is available.
+     * - Makes a GET request to the `/future/profitlossorder` endpoint with the access token in the headers.
+     * - If the request is successful, it sets the `orders` state with the fetched data.
+     * - If any error occurs during the request, it logs the error to the console.
+     * 
+     * @returns {Promise<void>} - Returns a promise that resolves when the API request is completed.
+     */
     const getProfitLossOrder = async () => {
         try {
-            // console.log(session,"=session");
-            
             if (session && session?.user?.access_token) {
                 let orderData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future/profitlossorder`, {
                     method: "GET",
@@ -38,38 +66,49 @@ const ChartTabsFuture = (props: propsData) => {
                         "Authorization": session?.user?.access_token
                     },
                 }).then(response => response.json());
-
-                // if(orderData?.message!=="Un")
                 setOrders(orderData?.data);
             }
         } catch (error) {
             console.log(error);
-            
+
         }
     }
 
-    useEffect(()=>{
-getProfitLossOrder()
-    },[])
-
-    
     useEffect(() => {
-        
-        if(props?.positions?.message!=="Unuthorized User"){
+        getProfitLossOrder()
+    }, [])
+
+    /**
+     * Effect hook that filters and sets various state values based on the current slug and prop values.
+     * 
+     * This `useEffect` hook runs whenever the following dependencies change: `slug`, `props?.positions`, `orders`, `props?.openOrders`.
+     * 
+     * The hook performs the following actions:
+     * - Checks if the user is authorized by verifying that `props?.positions?.message` is not "Unauthorized User".
+     * - Filters `props?.positions` to get only the items that match the `slug` and updates `positionItems` state.
+     * - Filters `orders` to get only the items where the `contract` matches the `slug` and updates `tpSlOrders` state.
+     * - Filters `props?.openOrders` to get only the items where the `symbol` matches the `slug` and updates `openOrders` state.
+     * - If the user is unauthorized, the `signOut` function is called to log the user out.
+     * 
+     * @returns {void} - No return value, as this hook only updates state and handles side-effects.
+     */
+    useEffect(() => {
+
+        if (props?.positions?.message !== "Unuthorized User") {
             let Filteritems = props?.positions?.filter((item: any) => {
                 if (item?.symbol == slug) {
                     return item;
                 }
             })
             setPositionItems(Filteritems);
-    
+
             let FilterTPSL = orders?.filter((item: any) => {
                 if (item?.contract == slug) {
                     return item;
                 }
             })
             setTpSlOrders(FilterTPSL);
-    
+
             let openOrderItems = props?.openOrders?.filter((item: any) => {
                 if (item?.symbol == slug) {
                     return item;
@@ -78,11 +117,11 @@ getProfitLossOrder()
             setOpenOrders(openOrderItems);
 
         }
-        else{
+        else {
             signOut();
         }
 
-    }, [slug,props?.positions,orders,props?.openOrders])
+    }, [slug, props?.positions, orders, props?.openOrders])
 
     return (
         <div className='bg-[#fafafa] dark:bg-[#1a1b1f]  border-t border-b dark:border-[#25262a] border-[#e5e7eb] py-[14px] px-[16px] max-w-full w-full'>

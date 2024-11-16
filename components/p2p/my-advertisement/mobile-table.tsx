@@ -9,7 +9,20 @@ import React, { Fragment, useContext, useEffect, useState } from 'react'
 import ReactPaginate from 'react-paginate';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-interface dataTypes {
+
+/**
+ * Interface for the props passed to the DesktopTable component.
+ * 
+ * This interface defines the optional props that the DesktopTable component can accept.
+ * - firstCurrency: Represents the selected currency for the table.
+ * - paymentId: The ID of the selected payment method.
+ * - startDate: The start date for filtering or displaying data.
+ * - userPaymentMethod: A list or object representing the payment methods of the user.
+ * - selectedToken: The token currently selected by the user.
+ * - active: Represents an active state or flag used for conditional rendering or logic.
+ * - session: Contains session data, usually including user info and authentication details.
+ */
+interface MobileTableProps {
     firstCurrency?: string;
     paymentId?: string;
     startDate?: string;
@@ -18,7 +31,8 @@ interface dataTypes {
     active?: any;
     session?: any;
 }
-const MobileTable = (props: dataTypes) => {
+
+const MobileTable = (props: MobileTableProps) => {
     const { mode } = useContext(Context)
     const route = useRouter();
     const [postList, setPostList] = useState([]);
@@ -30,13 +44,34 @@ const MobileTable = (props: dataTypes) => {
     const [show, setShow] = useState(false);
     const { data: session, status } = useSession()
 
+    /**
+     * Effect to fetch advertisements when filters or item offset change.
+     * 
+     * This effect runs whenever any of the filter properties (`props.active`, `props.firstCurrency`, `props.paymentId`, `props.startDate`) or 
+     * the `itemOffset` changes. It calls the `getAds` function to fetch the ads based on the updated filters and offset.
+     */
     useEffect(() => {
         getAds(itemOffset);
     }, [props.active, itemOffset, props?.firstCurrency, props?.paymentId, props?.startDate])
 
+    /**
+     * Asynchronously fetches advertisements based on the provided filters and item offset.
+     * 
+     * This function retrieves a list of advertisements by calling an API endpoint with the relevant filter parameters:
+     * - `status`: Determines whether the advertisements are active, inactive, or all.
+     * - `itemOffset`: Used for pagination to fetch the corresponding set of ads.
+     * - `itemsPerPage`: Defines the number of ads to fetch per page.
+     * - `currency`: The token's ID (selectedToken) or "all" if no token is selected.
+     * - `pmMethod`: The payment method ID (paymentId) or "all" if no payment method is selected.
+     * - `date`: Filters by date, or "all" if no date is selected.
+     * 
+     * Once the data is fetched, it processes the payment methods for each post, matching them to user payment methods.
+     * It then updates the state with the total number of posts and the list of advertisements.
+     * 
+     * @param {number} itemOffset - The offset for pagination.
+     */
     const getAds = async (itemOffset: number) => {
         try {
-            // console.log("called");
             let paymentMethod = props?.paymentId !== undefined && props?.paymentId !== "" ? props?.paymentId : "all"
             let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
             let date = props?.startDate !== undefined && props?.startDate !== "" ? new Date(props?.startDate).toISOString() : "all"
@@ -44,7 +79,6 @@ const MobileTable = (props: dataTypes) => {
             if (itemOffset === undefined) {
                 itemOffset = 0;
             }
-
 
             let userAllOrderList: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/advertisement?status=${props?.active === 1 ? true : props?.active === 2 ? false : "all"}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}&date=${date}`, {
                 method: "GET",
@@ -77,14 +111,35 @@ const MobileTable = (props: dataTypes) => {
     };
     const pageCount = Math.ceil(total / itemsPerPage);
 
+    /**
+     * Handles page click events for pagination and updates the item offset based on the selected page.
+     * 
+     * This function is triggered when the user clicks on a page number in the pagination component. 
+     * It calculates the new offset for the items to be displayed based on the selected page.
+     * The offset is calculated as the product of the selected page number and the number of items per page, 
+     * ensuring that the correct set of items is shown for the selected page.
+     * 
+     * @param {Object} event - The event object containing the selected page information.
+     * @param {number} event.selected - The index of the selected page (starts from 0).
+     */
     const handlePageClick = async (event: any) => {
         const newOffset = (event.selected * itemsPerPage) % total;
         setItemOffset(newOffset);
 
     };
 
+    /**
+     * Performs an action related to the advertisement.
+     * 
+     * This function handles the action of performing a POST request to update or perform an operation
+     * related to an advertisement. The function checks if the user is authenticated, prepares the request 
+     * object, encrypts the data using AES encryption, and sends the request. On success, it updates the 
+     * post list and resets certain UI states. If the request fails, it shows an error message. 
+     * If the user is unauthenticated, it signs out the user and shows an unauthorized error.
+     * 
+     * @async
+     */
     const actionPerform = async () => {
-
         if (status === 'authenticated') {
             let obj = {
                 post_id: postId,
@@ -123,8 +178,19 @@ const MobileTable = (props: dataTypes) => {
         }
     }
 
+    /**
+     * Updates the status of an advertisement.
+     * 
+     * This function updates the status of a specific advertisement by making a PUT request to the 
+     * server. It checks if the user is authenticated, prepares the request with necessary data, 
+     * encrypts it using AES encryption, and sends the request to the server. On successful response, 
+     * the function updates the post list, shows a success message, and resets certain UI states. 
+     * If the user is unauthenticated, an error message is displayed.
+     * 
+     * @async
+     * @param {string} postid - The ID of the advertisement to update.
+     */
     const updateAdsStatus = async (postid: string) => {
-
         if (status === 'authenticated') {
             let obj = {
                 post_id: postid,
@@ -160,11 +226,7 @@ const MobileTable = (props: dataTypes) => {
         else if (status === 'unauthenticated') {
             toast.error('Unauthorized user!!')
         }
-
     }
-
-    // console.log(postList,"============postList");
-
 
     return (
         <>

@@ -1,3 +1,12 @@
+/**
+ * Terms Component
+ *
+ * Displays a list of terms and conditions in an ordered format.
+ * Each item in the list represents a rule for the event, detailing
+ * requirements for eligibility, referral rewards, and other important guidelines.
+ *
+ * @returns {JSX.Element} The rendered Terms component
+ */
 const Terms = () => {
 
     const rulesList = [

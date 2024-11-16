@@ -9,11 +9,44 @@ import ConfirmPopupNew from "../snippets/confirm-popup-new";
 import VerificationNew from "../snippets/verificationNew";
 import clickOutSidePopupClose from "../snippets/clickOutSidePopupClose";
 
-interface activeSection {
+/**
+ * AntiPhishingCodeProps - Interface defining the props for the AntiPhishingCode component.
+ * 
+ * This interface is used to define the expected props for the component handling anti-phishing code logic.
+ * It includes properties for controlling visibility, session management, enabling/disabling actions,
+ * and setting the anti-phishing code.
+ * 
+ * @interface AntiPhishingCodeProps
+ */
+interface AntiPhishingCodeProps {
+  /**
+   * setShow - Function to control the visibility of the anti-phishing code component.
+   * 
+   * This function is typically used to show or hide the component based on certain conditions.
+   * @type {Function}
+   */
   setShow?: any;
+  /**
+   * session - Current session data, potentially containing user-related information.
+   * 
+   * This session object might include details like user authentication data or session token.
+   * @type {any}
+   */
   session?: any;
+  /**
+   * setEnable - Function to enable or disable actions or states within the component.
+   * 
+   * This can be used to toggle certain features or states in the component (like enabling/disabling buttons).
+   * @type {Function}
+   */
   setEnable?: any;
-  setAntiFishingCode?:any;
+  /**
+   * setAntiFishingCode - Function to set the anti-phishing code in the component's state.
+   * 
+   * This function is used to store the anti-phishing code that the user will input for security purposes.
+   * @type {Function}
+   */
+  setAntiFishingCode?: any;
 }
 
 type UserSubmitForm = {
@@ -27,32 +60,38 @@ const schema2 = yup.object().shape({
     .max(20)
     .matches(/^([a-zA-Z0-9_/_])+$/, 'Please enter valid code(letters, number).').typeError('Please enter 4-20 character.'),
 });
-const AntiPhishingCode = (props: activeSection) => {
+
+
+const AntiPhishingCode = (props: AntiPhishingCodeProps) => {
   const { mode } = useContext(Context);
   const [enable, setEnable] = useState(1);
   const [formData, setFormData] = useState<UserSubmitForm | null>();
 
 
-  let {
-    register,
-    setValue,
-    handleSubmit,
-    reset,
-    watch,
-    getValues,
-    clearErrors,
-    setError,
-    formState: { errors },
-  } = useForm({
+  let { register, handleSubmit, clearErrors, formState: { errors } } = useForm({
     resolver: yupResolver(schema2),
   });
 
-  useEffect(()=>{
+  /**
+ * useEffect hook to clear the 'antiphishing' error after 2.5 seconds.
+ * This runs whenever there is a change in the 'errors' object.
+ * 
+ * @param {object} errors - The form error state that tracks validation issues.
+ * @returns {void}
+ */
+  useEffect(() => {
     setTimeout(() => {
       clearErrors('antiphishing');
     }, 2500);
-  },[errors]);
+  }, [errors]);
 
+  /**
+ * Handles form submission for security settings.
+ * This function updates the form data and sets the enable state to 4 upon submission.
+ *
+ * @param {object} data - The form data containing user input values.
+ * @returns {void}
+ */
   const onHandleSubmit = async (data: any) => {
     try {
       setEnable(4);
@@ -62,26 +101,27 @@ const AntiPhishingCode = (props: activeSection) => {
     }
   };
 
+  /**
+ * Handles the final OTP verification and anti-phishing code validation.
+ * This function sends the OTP and anti-phishing code to the backend for validation and handles the response accordingly.
+ *
+ * @param {any} otp - The OTP entered by the user for final verification.
+ * @returns {void}
+ */
   const finalOtpVerification = async (otp: any) => {
     try {
-      let username =
-        props.session?.user.email !== "null"
-          ? props.session?.user.email
-          : props.session?.user?.number;
-      let request = {
-        username: username,
-        antiphishing: formData?.antiphishing,
-        otp: otp,
-      };
+      // Determine the username based on whether email or phone number is available
+      let username = props.session?.user.email !== "null" ? props.session?.user.email : props.session?.user?.number;
+      let request = { username: username, antiphishing: formData?.antiphishing, otp: otp, };
 
+      // Encrypt the request data for security before sending it to the server
       const ciphertext = AES.encrypt(
         JSON.stringify(request),
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
       );
 
       let record = encodeURIComponent(ciphertext.toString());
-      // console.log("hete");
-
+      // Send the request to the backend for anti-phishing validation
       let response = await fetch(
         `${process.env.NEXT_PUBLIC_BASEURL}/user/antiPhishing`,
         {
@@ -94,7 +134,7 @@ const AntiPhishingCode = (props: activeSection) => {
         }
       ).then((response) => response.json());
       if (response.data.result) {
-        toast.success(response.data.message,{autoClose:2000});
+        toast.success(response.data.message, { autoClose: 2000 });
         props.setAntiFishingCode(true);
         setTimeout(() => {
           setEnable(1);
@@ -102,16 +142,45 @@ const AntiPhishingCode = (props: activeSection) => {
           props.setShow(false);
         }, 3000);
       } else {
-        toast.error(response.data.message,{autoClose:2000});    
+        toast.error(response.data.message, { autoClose: 2000 });
       }
     } catch (error) { }
   };
 
+  /**
+ * closePopup - Function to handle the closing of a popup or modal.
+ * 
+ * This function will set the visibility of the popup to false and reset
+ * the enable status to 0 when called. It is typically used to close the 
+ * popup and reset its associated state.
+ * 
+ * @function closePopup
+ */
   const closePopup = () => {
     props?.setShow(false);
     props.setEnable(0);
   }
+
+  /**
+* wrapperRef - Reference to the wrapper element.
+* 
+* The `useRef` hook is used to reference the wrapper element that contains
+* the popup/modal to detect clicks outside of it. This allows the component
+* to close the popup when a user clicks outside the wrapper.
+* 
+* @type {React.RefObject<HTMLElement>}
+*/
   const wrapperRef = useRef(null);
+
+  /**
+ * clickOutSidePopupClose - Hook to close the popup when clicking outside.
+ * 
+ * This function is triggered when the user clicks outside the popup wrapper.
+ * It listens for a click event outside the referenced wrapper and invokes
+ * the `closePopup` function to close the popup.
+ * 
+ * @function clickOutSidePopupClose
+ */
   clickOutSidePopupClose({ wrapperRef, closePopup });
 
   return (
@@ -153,10 +222,10 @@ const AntiPhishingCode = (props: activeSection) => {
           </div>
 
           <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}>
             <div className="py-[30px] ">
               <div className="">
                 <div
@@ -176,13 +245,13 @@ const AntiPhishingCode = (props: activeSection) => {
                   </div>
                 </div>
 
-              {
-                errors?.antiphishing?.message && (
-                <p className={`${errors.antiphishing ? "text-red-dark" : "text-[#b7bdc6]"} text-[16px] mt-[10px] errorMessage`}>
-                  {errors?.antiphishing?.message}
-                </p>
-                )
-              }
+                {
+                  errors?.antiphishing?.message && (
+                    <p className={`${errors.antiphishing ? "text-red-dark" : "text-[#b7bdc6]"} text-[16px] mt-[10px] errorMessage`}>
+                      {errors?.antiphishing?.message}
+                    </p>
+                  )
+                }
               </div>
             </div>
 
@@ -208,7 +277,7 @@ const AntiPhishingCode = (props: activeSection) => {
           setEnable={setEnable}
           setShow={props?.setShow}
           parentSetEnable={props.setEnable}
-          type="number" 
+          type="number"
           data={formData}
           session={props?.session}
         />

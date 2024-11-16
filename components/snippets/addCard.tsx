@@ -2,12 +2,28 @@ import React, { useContext } from "react";
 import Context from "../contexts/context";
 import Image from "next/image";
 
-interface activeSection {
+/**
+ * Interface for the properties of the AddCard component.
+ * It defines the necessary methods to control the component's behavior and display.
+ *
+ * @interface AddCardProps
+ */
+interface AddCardProps {
+  /**
+   * A function that sets the active state of the component, controlling which view or step is currently displayed.
+   * 
+   * @type {Function}
+   */
   setActive: Function;
+  /**
+  * A function that controls the visibility of the component, typically used to show or hide modals or popups.
+  * 
+  * @type {Function}
+  */
   setShow: Function;
 }
 
-const AddCard = (props: activeSection) => {
+const AddCard = (props: AddCardProps) => {
   const { mode } = useContext(Context);
   return (
     <div className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-5 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
@@ -39,15 +55,15 @@ const AddCard = (props: activeSection) => {
         </svg>
       </div>
       <form onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+        if (e.key === 'Enter') {
+          e.preventDefault();
+        }
+      }}>
         <div className="py-30 md:py-10">
           <div className="flex flex-col mb-[15px] md:mb-5 gap-[6px]">
             <label className="sm-text">Number</label>
             <div className="border border-grey-v-1 dark:border-opacity-[15%]  gap-[15px] items-center flex rounded-5 p-[11px] md:p-[15px]">
-              <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="Enter Card Number" className="outline-none max-w-[355px] sm-text w-full bg-[transparent]" />
+              <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} placeholder="Enter Card Number" className="outline-none max-w-[355px] sm-text w-full bg-[transparent]" />
               <Image src="/assets/payment/visa.svg" width={24} height={24} alt="visa" />
             </div>
           </div>
@@ -61,7 +77,7 @@ const AddCard = (props: activeSection) => {
             <div className="flex flex-col mb-[15px] md:mb-5 gap-[6px] max-w-full md:max-w-[50%] w-full">
               <label className="sm-text">CVV</label>
               <div className="border border-grey-v-1 dark:border-opacity-[15%]  gap-[15px] items-center flex rounded-5 p-[11px] md:p-[15px]">
-                <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}   placeholder="Enter Card Number" className="outline-none max-w-full md:max-w-[131px] sm-text w-full bg-[transparent]" />
+                <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} placeholder="Enter Card Number" className="outline-none max-w-full md:max-w-[131px] sm-text w-full bg-[transparent]" />
                 <Image src="/assets/payment/info.svg" width={24} height={24} alt="visa" />
               </div>
             </div>

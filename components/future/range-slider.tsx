@@ -11,6 +11,37 @@ interface UniqueIds {
   min?: number;
 }
 
+/**
+ * RangeSlider Component
+ * 
+ * A customizable range slider with a draggable thumb and visual feedback on value changes. It allows users to 
+ * select a value within a given range, with visual updates on the slider's progress. The component is designed 
+ * to show a range (0-100) with optional leverage and step values. The slider's value is displayed as a multiplier 
+ * (e.g., `10X` for leverage).
+ * 
+ * It accepts the following props:
+ * 
+ * - `inputId`: The ID of the `<input>` element for the slider (used for accessibility and label association).
+ * - `thumbId`: The ID of the thumb element (used for visual positioning of the thumb).
+ * - `lineId`: The ID of the line element (used to represent the filled portion of the slider).
+ * - `onChangeSizeInPercentage`: A callback function to be invoked whenever the slider value changes, passing the 
+ *   value in percentage.
+ * - `rangetype`: An optional string that can be appended to the displayed value (e.g., 'X' for leverage).
+ * - `step`: The step interval for the slider, indicating how much the value should increment per step (default is 1).
+ * - `levrage`: The initial leverage value for the slider (default is 0).
+ * - `levrageValue`: The initial leverage value passed as a prop (if available).
+ * - `min`: The minimum value for the slider (default is 0).
+ * 
+ * @param {string} props.inputId - The ID for the slider's input element.
+ * @param {string} props.thumbId - The ID for the slider thumb element.
+ * @param {string} props.lineId - The ID for the slider line element.
+ * @param {Function} props.onChangeSizeInPercentage - Callback for value changes.
+ * @param {string} [props.rangetype] - Optional unit or type for the range (e.g., "X" for leverage).
+ * @param {number} [props.step=1] - The increment value of the slider.
+ * @param {number} [props.levrage=0] - The initial leverage value (if any).
+ * @param {number} [props.levrageValue=0] - The initial value for leverage passed in props.
+ * @param {number} [props.min=0] - The minimum value for the slider.
+ */
 const RangeSlider: React.FC<UniqueIds> = ({
   inputId,
   thumbId,
@@ -22,10 +53,11 @@ const RangeSlider: React.FC<UniqueIds> = ({
   levrageValue = 0,
   min = 0
 }) => {
-  const sliderRef = useRef<HTMLInputElement | null>(null);
-  const thumbRef = useRef<HTMLDivElement | null>(null);
-  const lineRef = useRef<HTMLDivElement | null>(null);
-  const isDragging = useRef<boolean>(false);
+  const sliderRef = useRef<HTMLInputElement | null>(null); // Ref for the slider input element
+  const thumbRef = useRef<HTMLDivElement | null>(null);  // Ref for the slider thumb element
+  const lineRef = useRef<HTMLDivElement | null>(null);   // Ref for the slider line element
+  const isDragging = useRef<boolean>(false); // Ref to track if the thumb is being dragged
+
 
   useEffect(() => {
     const sliderInput = sliderRef.current;
@@ -56,6 +88,14 @@ const RangeSlider: React.FC<UniqueIds> = ({
     }
   };
 
+  /**
+ * Handles the click (or touch) event on the slider track.
+ * Calculates the clicked position as a percentage of the total slider width
+ * and updates the slider value accordingly.
+ *
+ * @param {any} event - The mouse or touch event triggered by the user click/touch.
+ * This is used to get the position of the click/touch on the slider.
+ */
   const handleSliderClick = (event: any) => {
     const sliderRect = sliderRef.current?.getBoundingClientRect();
     if (sliderRect) {
@@ -70,6 +110,13 @@ const RangeSlider: React.FC<UniqueIds> = ({
     }
   };
 
+  /**
+ * Handles the movement of the slider while the user is dragging the thumb.
+ * It only processes the movement if the dragging state is true.
+ *
+ * @param {any} event - The mouse or touch event triggered during the dragging action.
+ * This event contains the current position of the mouse or touch on the screen.
+ */
   const handleMove = (event: any) => {
     if (isDragging.current) {
       handleSliderClick(event);

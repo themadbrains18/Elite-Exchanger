@@ -17,14 +17,18 @@ import StrengthCheck from "../snippets/strengthCheck";
 import { useSearchParams } from 'next/navigation'
 import StrengthCheck2 from "../snippets/strengthCheck2";
 
+/**
+ * 1. Username Validation**
+ * 2. Password Validation**
+ * 3. Confirm Password Validation**
+ * 4. Referral Code Validation (Optional)**
+ * 5. Terms and Conditions Agreement**
+ */
 const schema = yup.object().shape({
   username: yup.string()
     .required('Email / Phone is required.').matches(/^[a-zA-Z0-9]+(?:[._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+){0,1}\.[a-zA-Z]{2,4}$/
-, "Please enter valid email(letters, number and period('.')) or phone number."),
-  // .test('email_or_phone', 'Email / Phone is invalid', (value) => {
-  //   return yupValidateEmail(value) || validatePhone(value);
-  // }),
-  password: yup.string().min(8,"Password must have at least 8 characters").max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter.")
+      , "Please enter valid email(letters, number and period('.')) or phone number."),
+  password: yup.string().min(8, "Password must have at least 8 characters").max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter.")
     .matches(/\w*[A-Z]\w*/, "Password must have a capital letter.")
     .matches(/\d/, "Password must have a number.")
     .matches(/[!+@#$%^&*()\-_"=+{}; ?:,<.>]/, "Password must have a special character.")
@@ -61,30 +65,22 @@ const SignUp = () => {
     return yup.string().email().isValidSync(email)
   };
 
-  // const validatePhone = (phone: string | undefined) => {
-  //   return yup.number().integer().positive().test(
-  //     (phone) => {
-  //       return (phone && phone.toString().length >= 10 && phone.toString().length <= 14) ? true : false;
-  //     }
-  //   ).isValidSync(phone);
-  // };
-
+  /**
+   * Handles the form submission, performs validation, encrypts the data,
+   * and sends it to the backend for user registration.
+   *
+   * @param {any} data - The form data submitted by the user.
+   * @param {any} e - The event object from the form submission.
+   */
   const onHandleSubmit = async (data: any, e: any) => {
     try {
       e.preventDefault();
       setBtnDisabled(true);
-      let res = data.username.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+){0,1}\.[a-zA-Z]{2,4}$/)
-      // console.log(res, "==res");
-
-
+      let res = data.username.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+){0,1}\.[a-zA-Z]{2,4}$/);
       let isEmailExist = await validateEmail(data.username);
-
       const [localPart, domainPart] = data.username.includes('@') && data.username.split('@');
-
-      // console.log(localPart.length,"=local pat");
-      
-      if(localPart.length<3 || localPart.length>32){
-        setError('username',{message:"Username must be between 3 and 32 characters long."})
+      if (localPart.length < 3 || localPart.length > 32) {
+        setError('username', { message: "Username must be between 3 and 32 characters long." })
         setBtnDisabled(false)
         return;
       }
@@ -94,16 +90,17 @@ const SignUp = () => {
 
       // Combine the local part and the normalized domain part
       data.username = normalizedDomainPart;
-
       data.confirmPassword = true;
       data.otp = "string";
       data.step = 1;
       data.referral_id = referLink;
       setIsEmail(isEmailExist);
 
+      // Encrypt the form data to ensure security before sending it to the server.
       const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record = encodeURIComponent(ciphertext.toString());
 
+      // Send the encrypted form data to the backend for registration via a POST request.
       let userExist = await fetch(`/api/user/register`, {
         method: "POST",
         headers: {
@@ -113,29 +110,35 @@ const SignUp = () => {
       }).then(response => response.json());
 
       if (userExist.data.status === 200) {
+        // If registration is successful, re-enable the button, update the step, and store the form data.
         setBtnDisabled(false);
         setStep(1);
         setFormData(data);
       }
       else {
+        // If registration fails, show an error message and reset the form if needed.
         toast.error(userExist?.data?.data?.message !== undefined ? userExist?.data?.data?.message : userExist?.data?.data, { autoClose: 2000 });
+
+        // Reset the confirmation password field and re-enable the button after a delay.
         setTimeout(() => {
-          // reset()
-          // setpswd('');
-          // setValue('password', '');
           setValue('confirmPassword', getValues('password'));
-          // setValue('refeer_code', '');
           setBtnDisabled(false);
         }, 3000);
       }
     } catch (error) {
+      // Log any errors and re-enable the submit button.
       setBtnDisabled(false);
       console.log(error);
     }
   }
 
+  /**
+ * Generates a random password with at least one lowercase letter, one uppercase letter, 
+ * one number, and one special character, ensuring complexity and randomness.
+ * The password is then set to the state and input fields for confirmation.
+ */
   const generatePassword = async () => {
-
+    // Define character sets for different categories of characters.
     const lowercaseCharset = "abcdefghijklmnopqrstuvwxyz";
     const uppercaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const numberCharset = "0123456789";
@@ -147,41 +150,54 @@ const SignUp = () => {
       return charset[randomIndex];
     }
 
+    // Initialize the password string.
     let password = "";
-
-    // Include at least one character from each charset
+    // Ensure the password contains at least one character from each charset category.
     password += await getRandomCharacter(lowercaseCharset);
     password += await getRandomCharacter(uppercaseCharset);
     password += await getRandomCharacter(numberCharset);
     password += await getRandomCharacter(specialCharset);
 
-    // Fill the rest of the password with random characters
+    // Calculate how many more characters to add to reach the desired password length.
     const remainingLength = passwordLength - 4; // Subtract 4 for the characters already added
+
+    // Add random characters to complete the password to the desired length.
     for (let i = 0; i < remainingLength; i++) {
       const randomCharset = [lowercaseCharset, uppercaseCharset, numberCharset, specialCharset][Math.floor(Math.random() * 4)];
       password += await getRandomCharacter(randomCharset);
     }
 
-    // Shuffle the password to randomize the character order
+    // Shuffle the password characters to ensure randomness in the final order.
     password = password.split('').sort(() => Math.random() - 0.5).join('');
 
+    // Update the state with the generated password.
     setpswd(password);
+
+    // Set the password in the form fields for confirmation (password and confirmPassword).
     setValue('password', password);
     setValue('confirmPassword', password);
   };
 
-
+  /**
+   * Effect hook that clears form errors after 3 seconds and updates the referral code 
+   * if it is available in the query parameters.
+   */
   useEffect(() => {
+    // Set a timeout to clear form errors after 3 seconds.
     setTimeout(() => {
+      // Clear the password error if present.
       if (errors.password) {
         clearErrors('password');
       }
+      // Clear the username error if present.
       if (errors.username) {
         clearErrors('username');
       }
+      // Clear the confirm password error if present.
       if (errors.confirmPassword) {
         clearErrors('confirmPassword');
       }
+      // Clear the agree error if present.
       if (errors.agree) {
         clearErrors('agree');
       }
@@ -215,12 +231,12 @@ const SignUp = () => {
 
                 {/**Form Start  */}
                 <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }} autoComplete="new-password">
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                  }
+                }} autoComplete="new-password">
                   <div className="flex flex-col gap-[15px] lg:gap-10">
-                    <input type="text" autoComplete="new-password"  placeholder="Enter Email / Phone Number" autoCorrect="off" autoCapitalize="none" spellCheck="false" {...register('username')} name="username" className="input-cta !normal-case  "  style={{ textTransform: 'none' }}/>
+                    <input type="text" autoComplete="new-password" placeholder="Enter Email / Phone Number" autoCorrect="off" autoCapitalize="none" spellCheck="false" {...register('username')} name="username" className="input-cta !normal-case  " style={{ textTransform: 'none' }} />
                     {errors.username && <p className="errorMessage">{errors.username.message}</p>}
                     <div className="relative text-end">
                       <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
@@ -267,7 +283,7 @@ const SignUp = () => {
                   <div className="flex mt-[30px] gap-[10px] items-start">
                     <input type="checkbox" id="checkbox" {...register('agree')} className="mt-[6px]" />
                     <label htmlFor="checkbox" className=" cursor-pointer sm-text text-[14px] md:text-[16px] text-gamma dark:text-white leading-[24px]">
-                    By registering, I agree that I am 18 years of age or older and accept the{" "}
+                      By registering, I agree that I am 18 years of age or older and accept the{" "}
                       <Link prefetch={false} href="#" className="!text-primary">
                         User Agreements, Privacy Policy, Cookie Policy.
                       </Link>

@@ -1,6 +1,14 @@
 import Meta from '@/components/snippets/meta'
 import React from 'react'
 
+/**
+ * UserAgreement Component.
+ * This component renders the User Agreement page for users to review the terms and conditions
+ * governing their use of the crypto trading platform. It includes the Meta tags for SEO and a section 
+ * displaying the title of the User Agreement.
+ *
+ * @returns {JSX.Element} The rendered User Agreement page with Meta tags and section content.
+ */
 const UserAgreement = () => {
     return (
         <>

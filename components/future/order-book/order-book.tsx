@@ -3,34 +3,35 @@ import BuyTableFuture from './buy-table';
 import SelltableFuture from './sell-table';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import { truncateNumber } from '@/libs/subdomain';
-interface setHeight {
+
+/**
+ * Interface for the props of the OrderBookFuture component.
+ * 
+ * @property {number} [show] - Controls the visibility of the order book (optional).
+ * @property {any} [setShow] - Function to set the visibility of the order book (optional).
+ * @property {boolean} [widthFull] - Determines whether the component should span the full width (optional).
+ * @property {any} [currentToken] - The token information being used in the order book (optional).
+ * @property {any} [positionRecord] - A record of the user's positions related to the token (optional).
+ */
+interface orderBookFutureProps {
     show?: number;
     setShow?: any;
     widthFull?: boolean;
     currentToken?: any;
     positionRecord?: any;
 }
-const OrderBookFuture = (props: setHeight) => {
-    const [highlow, setHighlow] = useState<boolean>(true);
 
+const OrderBookFuture = (props: orderBookFutureProps) => {
     const [prevPrice, setPrevPrice] = useState<any>();
 
     useEffect(() => {
-
         setPrevPrice(props?.positionRecord[0])
-
     }, [props?.positionRecord]);
-
-
 
 
     return (
         <div className={`w-full bg-[#fafafa] dark:bg-[#1a1b1f] min-[990px]:border-l max-[991px]:border-t dark:border-[#25262a] border-[#e5e7eb] ${props.widthFull ? "max-w-full" : "max-w-[350px]"}  `}>
-            {/* order book head */}
             <div className='flex items-center gap-4'>
-
-
-
                 <div className='flex items-center justify-between gap-[10px] p-[10px]'>
                     <button className={`p-[5px] border border-[#ffffff26] rounded  ${props.show === 1 ? "dark:bg-[#373d4e] bg-[#e5ecf0]" : "bg-transparent"}`} aria-label='buy-sell-history' onClick={() => { props.setShow(1) }}>
                         <svg

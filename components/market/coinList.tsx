@@ -19,9 +19,7 @@ interface propsData {
 const CoinList = (props: propsData) => {
 
   const [active1, setActive1] = useState(2);
-  // const [topgainer, setTopGainers] = useState([]);
   const [favouriteToken, setFavouriteToken] = useState([]);
-
   const [spotTrade, SetSpotTrade] = useState([]);
   const [futureTrade, SetFutureTrade] = useState([]);
   const [search, setSearch] = useState('all');
@@ -53,6 +51,17 @@ const CoinList = (props: propsData) => {
     return item.tokenType === 'mannual'
   })
 
+  /**
+ * @function useEffect for managing token data
+ * 
+ * This useEffect hook runs whenever `props.coins` changes and performs 
+ * the following tasks:
+ * 1. Retrieves the favorite tokens from localStorage and updates the `favouriteToken` state.
+ * 2. Filters the `props.coins` array to find tokens with a `tradepair` value and sets the `spotTrade` state.
+ * 3. Filters the `props.coins` array to find tokens with a `futuretradepair` value and sets the `futureTrade` state.
+ * 
+ * @param {Array} props.coins - The list of all coins to be processed.
+ */
   useEffect(() => {
     // get favorite tokens
     let favItems = localStorage.getItem('favToken');
@@ -73,29 +82,12 @@ const CoinList = (props: propsData) => {
     });
     SetSpotTrade(spot);
 
-    //Get future trade token list
     // spot trade token
     let future = props.coins.filter((item: any) => {
       return item.futuretradepair !== null
     });
     SetFutureTrade(future);
-    // getFutureTardeList();
   }, [props?.coins]);
-
-
-
-  // const getFutureTardeList = async () => {
-  //   try {
-  //     let tokenList = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/future?qu=${search}`, {
-  //       method: "GET"
-  //     }).then(response => response.json());
-
-  //     SetFutureTrade(tokenList?.data);
-  //   } catch (error) {
-
-  //   }
-  // }
-
 
   return (
     <section className="mt-30">

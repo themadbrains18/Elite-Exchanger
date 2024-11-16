@@ -3,6 +3,12 @@ import Context from "../contexts/context";
 import { useRouter } from "next/router";
 import { currencyFormatter } from '../snippets/market/buySellCard';
 
+/**
+ * Interface defining the expected properties for the component.
+ * 
+ * - `coins` (optional): Represents data related to coins, could be any type of data depending on the usage (e.g., array of coin objects).
+ * - `show1` (optional): A boolean flag to conditionally render or control the display of a component or feature.
+ */
 interface propsData {
     coins?: any;
     show1?:boolean;
@@ -18,13 +24,21 @@ const CoinTypes = (props: propsData) => {
 
     const router = useRouter();
 
+    /**
+     * Effect hook to manage the filtering and setting of favorite coins.
+     * 
+     * This hook checks if any favorite coins are stored in localStorage and filters
+     * the coins passed through `props.coins` based on the saved favorite coin IDs.
+     * 
+     * Dependencies:
+     * - `mode`: This will trigger the effect when it changes.
+     * - `props?.coins`: The list of coins passed from the parent component.
+     */
     useEffect(() => {
-       
         let existItem: any = localStorage.getItem('futurefavToken');
         if (existItem) {
             existItem = JSON.parse(existItem);
         }
-
         let coinsItem = props?.coins?.filter((item: any) => {
             if (existItem?.includes(item?.id)) {
                 return item;
@@ -32,9 +46,18 @@ const CoinTypes = (props: propsData) => {
         })
         setfavCoin(coinsItem);
         setFilteredCoins(coinsItem);
-
     }, [mode, props?.coins]);
 
+    /**
+     * Toggles the fill color of an SVG element and manages the list of favorite coins in localStorage.
+     * 
+     * This function checks the current mode (dark or light) and applies a corresponding fill color to
+     * the clicked SVG element. It also updates the list of favorite coins stored in localStorage based
+     * on whether the coin ID is already present. The list of favorite coins is then updated in the state.
+     * 
+     * @param {Object} e - The event object triggered by clicking the SVG element.
+     * @param {Object} item - The coin object associated with the clicked SVG.
+     */
     function fillSvg(e: any, item: any) {
         if (mode == "dark") {
             e.currentTarget.classList.add("dark:fill-[#fff]");
@@ -69,9 +92,18 @@ const CoinTypes = (props: propsData) => {
         localStorage.setItem('futurefavToken', JSON.stringify(existItem));
     }
 
+    /**
+     * Filters the list of coins based on the search term entered by the user.
+     * 
+     * This function listens for input changes and filters the coins based on whether the `coin_symbol` 
+     * or `usdt_symbol` contains the search term (case insensitive). The coins are filtered from either
+     * the `favCoin` list (if `show` is 1) or the `props.coins` list (if `show` is 2), and the filtered 
+     * results are stored in the `filteredCoins` state.
+     * 
+     * @param {Object} e - The event object triggered by the input field change.
+     */
     const filterCoin = (e:any) =>{
         const searchTerm = e.target.value.toLowerCase();
-
         let record = [];
         if (show === 1) {
             record = favCoin.filter((item: any) => {
@@ -82,7 +114,6 @@ const CoinTypes = (props: propsData) => {
                 return item.coin_symbol.toLowerCase().includes(searchTerm) || item.usdt_symbol.toLowerCase().includes(searchTerm);
             });
         }
-
         setFilteredCoins(record);
     }
 

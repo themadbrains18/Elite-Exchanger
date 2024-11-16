@@ -6,7 +6,21 @@ import { toast } from 'react-toastify';
 import { useRouter } from "next/router";
 import EventTaskPopup from "../snippets/eventTaskPopup";
 import { formatDate } from "@/libs/subdomain";
-interface fixSection {
+
+/**
+ * The `ReferalProps` interface defines the props for the referral component.
+ * 
+ * @interface
+ * 
+ * @property {boolean} [fixed] - An optional boolean that determines if the referral component should be fixed (e.g., sticky).
+ * @property {number} [show] - An optional number that indicates the state for showing or hiding elements in the component.
+ * @property {Function} [setShow] - A function that sets the visibility state (used for showing or hiding elements).
+ * @property {any} [session] - An optional property representing the user's session, which could contain session-related data.
+ * @property {any} [referalList] - An optional list of referral data, which may include information about each referral.
+ * @property {any} [eventList] - An optional list of events, related to the referral system (e.g., campaigns or activities).
+ * @property {any} [rewardsList] - An optional list of rewards data tied to successful referrals.
+ */
+interface ReferalProps {
   fixed?: boolean;
   show?: number;
   setShow?: Function | any;
@@ -16,7 +30,7 @@ interface fixSection {
   rewardsList?: any;
 }
 
-const Referal = (props: fixSection) => {
+const Referal = (props: ReferalProps) => {
   const [show, setShow] = useState(false)
   const [referList, setReferList] = useState(props.referalList);
 
@@ -40,29 +54,61 @@ const Referal = (props: fixSection) => {
     },
   ];
 
+  /**
+ * The `copyCode` function is used to copy the referral code to the user's clipboard.
+ * 
+ * It disables the button temporarily to prevent multiple copies in quick succession,
+ * creates a hidden textarea element, sets its value to the referral code,
+ * selects the content, and executes the `copy` command to copy the referral code.
+ * Afterward, it shows a success toast notification and re-enables the button.
+ */
   const copyCode = () => {
+    // Disable the button to prevent multiple clicks
     setBtnDisabled(true);
+
+    // Create a hidden textarea element to copy the referral code
     const input = document.createElement('textarea')
     input.value = props?.session?.user?.refer_code
+
+    // Append the textarea to the body, select the text, and copy it to the clipboard
     document.body.appendChild(input)
     input.select()
     document.execCommand('copy')
     document.body.removeChild(input)
+
+    // Show a success toast notification
     toast.success('copy to clipboard', { autoClose: 2500 });
+
+    // Re-enable the button after 3 seconds
     setTimeout(() => {
       setBtnDisabled(false);
     }, 3000);
   }
 
+  /**
+ * The `copyLink` function is used to copy the referral link to the user's clipboard.
+ * 
+ * It disables the button temporarily to prevent multiple clicks in quick succession,
+ * creates a hidden textarea element, sets its value to the referral link,
+ * selects the content, and executes the `copy` command to copy the referral link.
+ * Afterward, it shows a success toast notification and re-enables the button.
+ */
   const copyLink = () => {
+    // Disable the button to prevent multiple clicks
     setBtnDisabled(true);
+    // Create a hidden textarea element to hold the referral link
     const input = document.createElement('textarea')
-    input.value = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}`
+    input.value = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/register?r=${props?.session?.user?.refer_code}`;
+
+     // Append the textarea to the body, select the text, and copy it to the clipboard
     document.body.appendChild(input)
     input.select()
     document.execCommand('copy')
     document.body.removeChild(input)
+
+    // Show a success toast notification
     toast.success('copy to clipboard', { autoClose: 2500 });
+    // Re-enable the button after 3 seconds
     setTimeout(() => {
       setBtnDisabled(false);
     }, 3000);
@@ -92,9 +138,6 @@ const Referal = (props: fixSection) => {
             <div className="text-center">
               <p className="sec-title">Refer Friends</p>
             </div>
-            {/* <div>
-              <IconsComponent type="editIcon" hover={false} active={false} />
-            </div> */}
           </div>
         </div>
 

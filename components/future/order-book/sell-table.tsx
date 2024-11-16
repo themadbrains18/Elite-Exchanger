@@ -2,6 +2,24 @@ import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import { truncateNumber } from '@/libs/subdomain';
 
 import React, { Fragment } from 'react'
+
+/**
+ * SelltableFuture Component
+ * 
+ * Displays a table for the "short" position records, including the entry price,
+ * quantity, and total margin for each position. The table is styled dynamically
+ * based on props for full height and token-related information.
+ * 
+ * @param {Object} props - The component props
+ * @param {number} [props.show] - Optional prop to control visibility or height
+ * @param {boolean} [props.fullHeight] - Optional prop to toggle between full or
+ * condensed height of the table
+ * @param {boolean} [props.showPrice] - Optional flag to show or hide price column
+ * @param {any} [props.currentToken] - Current token data, including coin_symbol
+ * @param {any} [props.positionRecord] - The position records to display in the table
+ * 
+ * @returns {JSX.Element} The rendered component
+ */
 interface setState {
     show?: number;
     fullHeight?: boolean;
@@ -9,6 +27,7 @@ interface setState {
     currentToken?: any;
     positionRecord?: any;
 }
+
 const SelltableFuture = (props: setState) => {
 
     let data = props?.positionRecord?.filter((item:any)=>{
@@ -17,13 +36,6 @@ const SelltableFuture = (props: setState) => {
 
     return (
         <>
-            {/* {
-                props.showPrice &&
-                <div className='bg-card-bg py-[6px] px-[20px] flex items-center justify-between dark:bg-omega bg-white my-[10px]'>
-                    <p className='info-18 !text-black dark:!text-white'>{props?.currentToken?.token !== null ? currencyFormatter((props?.currentToken?.token?.price)?.toFixed(5) ): currencyFormatter((props?.currentToken?.global_token?.price)?.toFixed(5))}</p>
-                    <p className='info-16 !text-black dark:!text-white !text-[14px] underline'>{props?.currentToken?.token !== null ? currencyFormatter((props?.currentToken?.token?.price)?.toFixed(5)) : currencyFormatter((props?.currentToken?.global_token?.price)?.toFixed(5))}</p>
-                </div>
-            } */}
             <div className={`p-[16px] pt-[0] overflow-y-auto orderTable ${props.fullHeight ? 'max-h-[274px] lg:max-h-[620px]' : 'max-h-[137px] lg:max-h-[310px]'} `}>
                 {/* head */}
                 <div className='grid grid-cols-3 gap-[10px] sticky top-0 bg-light bg-[#fafafa] dark:bg-[#1a1b1f]'>

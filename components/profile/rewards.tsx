@@ -5,24 +5,37 @@ import Image from "next/image";
 import Context from "../contexts/context";
 import { formatDate } from "@/libs/subdomain";
 
-interface fixSection {
+/**
+ * `RewardsProps` defines the properties for the Rewards component.
+ * 
+ * @property {Array<any>} [rewardsList] - An optional list of rewards. It can be an array of any type of reward data.
+ */
+interface RewardsProps {
     rewardsList?: any;
 }
 
-const Rewards = (props: fixSection) => {
+const Rewards = (props: RewardsProps) => {
     const [active, setActive] = useState(1);
     const { status, data: session } = useSession();
     const router = useRouter();
     const { mode } = useContext(Context)
     const [list, setList] = useState(props.rewardsList);
 
+    /**
+     * Updates the claim data for a reward and updates the state accordingly.
+     *
+     * @param {Object} data - The reward data to update.
+     * @param {number} data.id - The ID of the reward being claimed.
+     * @returns {Promise<void>} - A promise that resolves when the claim data has been updated.
+     */
     const updateClaimData = async (data: any) => {
-
         try {
+            // Calculate the expiration date as 7 days from the current date
             const date = new Date();
             const theDayOfTheMonthOnNextWeek = date.getDate() + 7;
             date.setDate(theDayOfTheMonthOnNextWeek);
 
+            // Prepare the request payload with the updated claim data
             let obj = {
                 claimed_on: new Date(),
                 expired_on: date,
@@ -30,6 +43,7 @@ const Rewards = (props: fixSection) => {
                 claim: true
             }
 
+            // Make an API request to update the reward data
             let rewardsResponse = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/rewards`, {
                 method: "PUT",
                 headers: {
@@ -39,6 +53,7 @@ const Rewards = (props: fixSection) => {
                 body: JSON.stringify(obj)
             }).then(response => response.json());
 
+            // If the response contains updated reward data, update the state
             if (rewardsResponse?.data) {
                 const newState = list.map((obj: any) => {
                     if (obj?.id === rewardsResponse?.data?.id) {
@@ -48,6 +63,7 @@ const Rewards = (props: fixSection) => {
                     return obj;
                 });
 
+                // Update the list state with the modified rewards data
                 setList(newState);
             }
         } catch (error) {
@@ -55,7 +71,14 @@ const Rewards = (props: fixSection) => {
         }
     }
 
+    /**
+     * Filters the rewards list based on the provided filter ID.
+     * 
+     * @param {number} id - The filter ID that determines which rewards to include in the filtered list.
+     * @returns {Promise<void>} - A promise that resolves when the rewards list has been filtered.
+     */
     const filterRewards = async (id: number) => {
+        // Use the filter method to return a list based on the filter ID
         let rewards = await props?.rewardsList.filter((item: any) => {
             if (id === 1) {
                 return item
@@ -74,6 +97,7 @@ const Rewards = (props: fixSection) => {
             }
         })
 
+        // Update the list with the filtered rewards
         setList(rewards);
     }
 
@@ -87,8 +111,8 @@ const Rewards = (props: fixSection) => {
                     {/* <button type='button' onClick={() => { setActive(3); filterRewards(3) }} className={`solid-button !px-[20px] !py-[10px] ${active == 3 ? '' : '!bg-[#5367ff42]'} `}>Used</button> */}
                     <button type='button' onClick={() => { setActive(4); filterRewards(4) }} className={`solid-button !px-[20px] !py-[10px] ${active == 4 ? '' : '!bg-[#5367ff42]'}`}>Expired</button>
                 </div>
-                <div className={`${list && list.length === 0?'':'grid'} max-[1250px]:grid-cols-1 grid-cols-2 gap-[10px] mt-[40px]`}>
-                    {list && list.map((item: any, index : number) => {
+                <div className={`${list && list.length === 0 ? '' : 'grid'} max-[1250px]:grid-cols-1 grid-cols-2 gap-[10px] mt-[40px]`}>
+                    {list && list.map((item: any, index: number) => {
                         if (item.claimed_on !== null) {
                             // ----------------------------------
                             // check if coupon expired or not
@@ -178,13 +202,13 @@ const Rewards = (props: fixSection) => {
                     {list && list.length === 0 &&
                         <div className={`${mode === "dark" ? 'text-[#ffffff] bg-black' : 'text-[#000000] bg-white'} rounded-[10px]`}>
                             <div className={` py-[50px] flex flex-col items-center justify-center ${mode === "dark" ? 'text-[#ffffff]' : 'text-[#000000]'}`}>
-                              <Image
-                                src="/assets/refer/empty.svg"
-                                alt="emplty table"
-                                width={107}
-                                height={104}
-                              />
-                              <p > No Record Found </p>
+                                <Image
+                                    src="/assets/refer/empty.svg"
+                                    alt="emplty table"
+                                    width={107}
+                                    height={104}
+                                />
+                                <p > No Record Found </p>
                             </div>
                         </div>
                     }

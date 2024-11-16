@@ -20,6 +20,16 @@ interface Session {
   usersCounts: any
 }
 
+/**
+ * User component
+ * 
+ * This component renders various user-related information, including:
+ * - A user card showing user counts
+ * - A list of top holders
+ * - A world map displaying the top 10 populous countries
+ * - A rounded doughnut chart for city activity
+ * - Traffic resources
+ */
 const User = (props: Session) => {
   const [cities, setCities] = useState([])
 
@@ -36,6 +46,12 @@ const User = (props: Session) => {
     { country: "mx", value: '127318112' },
   ];
 
+  /**
+   * useEffect Hook
+   * 
+   * This hook is used to process and group the activity data by region. 
+   * It updates the cities state with the activity count per region.
+   */
   useEffect(() => {
     const groupCount = props?.activity.reduce((countMap: any, item: any) => {
       const { region } = item;
@@ -79,11 +95,26 @@ const User = (props: Session) => {
 
 export default User;
 
-
+/**
+ * getServerSideProps function
+ * 
+ * This function is called on the server before rendering the page.
+ * It fetches various user-related data such as:
+ * - Users list
+ * - Network data
+ * - Activity data
+ * - User counts
+ * It also checks if the user is authenticated. If authenticated, it returns the necessary data as props,
+ * otherwise, it redirects to the login page.
+ * 
+ * @param context - The context object containing request and response.
+ * @returns props with user data or a redirect to login page if not authenticated.
+ */
 export async function getServerSideProps(context: GetServerSidePropsContext) {
   const { req } = context;
   const session = await getServerSession(context.req, context.res, authOptions);
   const providers = await getProviders();
+  // Check if the user is authenticated (has session)
   if (session) {
     let users = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/user/all?itemOffset=0&itemsPerPage=10`, {
       method: "GET",
@@ -130,6 +161,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     };
   }
   else {
+     // Redirect to login page if the user is not authenticated
     return {
       redirect: { destination: "/login" },
     };

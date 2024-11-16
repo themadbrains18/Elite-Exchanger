@@ -7,7 +7,24 @@ import ReactPaginate from 'react-paginate';
 import { currencyFormatter } from '@/components/snippets/market/buySellCard';
 import { truncateNumber } from '@/libs/subdomain';
 
-interface dataTypes {
+/**
+ * Props interface for the OrdersTable component.
+ *
+ * This interface defines the expected properties for the OrdersTable component, 
+ * which is responsible for displaying a table of orders. The component can be 
+ * configured to filter and manage orders based on various parameters such as 
+ * order status, payment methods, selected token, and dates.
+ *
+ * @interface OrdersTableProps
+ * @property {any} active - The active status for filtering orders. Can be used to filter orders based on their current status (e.g., pending, completed).
+ * @property {any} [setOrderId] - Optional callback to set the ID of a selected order.
+ * @property {string} [paymentId] - Optional payment ID to filter orders by a specific payment method.
+ * @property {string} [firstCurrency] - Optional currency to filter orders based on the selected currency.
+ * @property {string} [startDate] - Optional start date to filter orders by a date range.
+ * @property {any} [userPaymentMethod] - Optional user-specific payment method for filtering orders.
+ * @property {any} [selectedToken] - Optional selected token for filtering orders based on a specific token.
+ */
+interface OrdersTableProps {
     active: any;
     setOrderId?: any;
     paymentId?: string;
@@ -16,17 +33,13 @@ interface dataTypes {
     userPaymentMethod?: any;
     selectedToken?: any;
 }
-const OrdersTableMobile = (props: dataTypes) => {
-
+const OrdersTableMobile = (props: OrdersTableProps) => {
     const route = useRouter();
     const { mode } = useContext(Context);
-
     const [itemOffset, setItemOffset] = useState(0);
-
     const { status, data: session } = useSession();
     const [list, setList] = useState([])
     const [total, setTotal] = useState(0)
-
 
     let itemsPerPage = 10;
 
@@ -34,14 +47,34 @@ const OrdersTableMobile = (props: dataTypes) => {
         setItemOffset(0); // Reset itemOffset to 0 when filters change
     }, [props.active, props.selectedToken, props.startDate]);
 
-
+    /**
+     * Effect hook to fetch and update the list of orders when certain dependencies change.
+     *
+     * This `useEffect` is triggered whenever there are changes to the following dependencies:
+     * `itemOffset`, `props.active`, `props.selectedToken`, and `props.startDate`. 
+     * It invokes the `getAllOrders` function to fetch updated orders based on the current offset, 
+     * active status, selected token, and start date.
+     *
+     * @effect
+     * @returns {void} - This hook does not return anything, but it triggers the fetching of data
+     *                    and updates the state with the latest orders.
+     */
     useEffect(() => {
         getAllOrders(itemOffset);
     }, [itemOffset, props?.active, props?.selectedToken, props?.startDate]);
 
-    // console.log(session?.user.user_id)
-
-
+    /**
+     * Fetches all orders based on the current filter criteria (e.g., active status, token, start date).
+     * This function sends an HTTP GET request to the API to retrieve orders, and updates the state
+     * with the fetched order data and total count. It also handles pagination by adjusting the item
+     * offset based on the total number of orders.
+     *
+     * @param {number} itemOffset - The offset value for pagination, determining the starting point of the order list.
+     *
+     * @returns {void} - This function does not return any value. It updates the state with fetched data.
+     *
+     * @throws {Error} - Catches any error during the fetch process and logs it to the console.
+     */
     const getAllOrders = async (itemOffset: number) => {
         try {
             if (itemOffset === undefined) {
@@ -68,11 +101,31 @@ const OrdersTableMobile = (props: dataTypes) => {
     };
     const pageCount = Math.ceil(total / itemsPerPage);
 
+    /**
+     * Handles the page click event for pagination.
+     * This function calculates the new offset based on the selected page and updates the item offset state.
+     * It ensures that the correct set of items is fetched for the selected page.
+     *
+     * @param {Object} event - The event object from the page click, typically from a pagination component.
+     * @param {number} event.selected - The index of the selected page, used to calculate the new offset.
+     *
+     * @returns {void} - This function does not return any value. It updates the state with the new offset.
+     */
     const handlePageClick = async (event: any) => {
         const newOffset = (event.selected * itemsPerPage) % total;
         setItemOffset(newOffset);
-
     };
+
+    /**
+     * Formats a Date object into a readable string in the format: MM/DD/YYYY, hh:mm AM/PM.
+     *
+     * This function takes a Date object and converts it to a localized string representation
+     * with two-digit day, month, and year, as well as the time in 12-hour format with minutes.
+     *
+     * @param {Date} date - The Date object to format.
+     * 
+     * @returns {string} The formatted date string in the format MM/DD/YYYY, hh:mm AM/PM.
+     */
     function formatDate(date: Date) {
         const options: {} = {
             day: "2-digit",

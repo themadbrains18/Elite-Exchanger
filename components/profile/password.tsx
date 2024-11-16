@@ -11,7 +11,20 @@ import clickOutSidePopupClose from "../snippets/clickOutSidePopupClose";
 import CodeNotRecieved from "../snippets/codeNotRecieved";
 import Image from "next/image";
 
-interface activeSection {
+/**
+ * Represents the properties for the Password component.
+ * 
+ * @interface PasswordProps
+ * 
+ * @property {Function} setActive - Function to set the active state of the password-related UI. Used to toggle visibility or enable/disable elements.
+ * @property {Function} setShow - Function to control the visibility of a modal, screen, or section in the password component. Used to toggle showing or hiding.
+ * @property {Function} setStep - Function to manage the current step in a multi-step process. Typically used for form navigation or wizard-style flows.
+ * @property {string} type - A string that specifies the type of password (e.g., "new", "confirm", "reset"). Used to differentiate between various password-related tasks.
+ * @property {any} formData - Contains the data for the form, likely holding values like password, confirmation, or other relevant user information.
+ * @property {any} [secondExpireTime] - Optional property representing the expiration time for a second factor (e.g., OTP expiration time). Used to manage time-sensitive interactions.
+ * @property {Function} sendSessionOtp - Function to send an OTP for session verification. Likely used for two-factor authentication or session validation.
+ */
+interface PasswordProps {
   setActive: Function;
   setShow: Function;
   setStep: Function;
@@ -25,7 +38,7 @@ const schema = yup.object().shape({
   password: yup.string().required("Password is required."),
 });
 
-const Password = (props: activeSection) => {
+const Password = (props: PasswordProps) => {
   const { mode } = useContext(Context);
   const [fillOtp2, setOtp2] = useState("");
   let { data: session, status } = useSession();
@@ -90,12 +103,24 @@ const Password = (props: activeSection) => {
     });
   }, []);
 
-
+/**
+ * The `useEffect` hook runs every time the `secondExpireTime` prop changes.
+ * It triggers the `orderTimeCalculation` function with the updated expiration time.
+ * 
+ * @param {number} expireTime - The expiration timestamp passed from props to calculate the remaining time.
+ * @returns {void} This function doesn't return anything.
+ */
   useEffect(()=>{
     orderTimeCalculation(props.secondExpireTime);
-
   },[props.secondExpireTime])
 
+  /**
+ * The `orderTimeCalculation` function calculates the remaining time before an order expires.
+ * It is triggered whenever `secondExpireTime` changes and updates the UI accordingly.
+ * 
+ * @param {number} expireTime - The expiration timestamp to calculate the remaining time.
+ * @returns {void} This function doesn't return anything but updates the UI or internal state.
+ */
   const orderTimeCalculation = async (expireTime: any) => {
     setShowTime(true);
     setStatuss(false);
@@ -121,11 +146,20 @@ const Password = (props: activeSection) => {
     }
   }
 
+  /**
+ * The `calculateTimeLeft` function calculates the remaining time based on the event expiration.
+ * It updates the timer state with the remaining time in minutes and seconds format.
+ * If the timer expires, it clears the interval, hides the timer, and resets the input fields.
+ * 
+ * @param {any} e - The event object containing the expiration time information.
+ * @returns {void} This function doesn't return anything but updates the timer UI and manages state.
+ */
   const calculateTimeLeft = (e: any) => {
     let { total, minutes, seconds }
       = getTimeRemaining(e);
 
     if (total >= 0) {
+       // Set the remaining time in minutes:seconds format
       setTimer(
         (minutes > 9 ? minutes : '0' + minutes) + ':'
         + (seconds > 9 ? seconds : '0' + seconds)
@@ -142,6 +176,16 @@ const Password = (props: activeSection) => {
     }
   }
 
+  /**
+ * The `getTimeRemaining` function calculates the remaining time between the current time
+ * and the provided expiration time, returning the total time, minutes, and seconds remaining.
+ * 
+ * @param {any} e - The expiration time (date) to compare against the current time.
+ * @returns {Object} An object containing:
+ *   - `total`: The total time remaining in milliseconds.
+ *   - `minutes`: The remaining minutes.
+ *   - `seconds`: The remaining seconds.
+ */
   const getTimeRemaining = (e: any) => {
     let current: any = new Date();
     const total = Date.parse(e) - Date.parse(current);
@@ -152,6 +196,18 @@ const Password = (props: activeSection) => {
     };
   }
 
+  /**
+ * The `onHandleSubmit` function is triggered when the form is submitted. It performs the following tasks:
+ * 1. Validates that the OTP is entered.
+ * 2. Prepares an object with user data based on the type (email or number).
+ * 3. Encrypts the data using AES encryption.
+ * 4. Sends the encrypted data to update the user information.
+ * 5. Handles the response, showing success or error messages based on the outcome.
+ * 
+ * @param {any} data - The form data containing the password entered by the user.
+ * 
+ * @returns {void} 
+ */
   const onHandleSubmit = async (data: any) => {
     try {
       if (fillOtp2 === '') {
@@ -161,6 +217,7 @@ const Password = (props: activeSection) => {
         }, 3000);
         return;
       }
+      // Disable the submit button during the request
       setBtnDisabled(true);
       let obj = {};
       // let type =  props.session?.user.email!=='null'?'email':'number'
@@ -239,6 +296,14 @@ const Password = (props: activeSection) => {
     }
   };
 
+  /**
+ * The `closePopup` function is used to close the popup and reset the active state.
+ * It performs the following tasks:
+ * 1. Sets the `show` state to `false`, which hides the popup.
+ * 2. Resets the `active` state to `0`.
+ * 
+ * @returns {void} 
+ */
   const closePopup = () => {
     props?.setShow(false);
     props.setActive(0);

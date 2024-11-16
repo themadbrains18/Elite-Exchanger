@@ -15,22 +15,49 @@ import ResetSuccessful from "../snippets/resetSuccessful";
 
 
 const schema = yup.object().shape({
-  new_password: yup.string().min(8,"New password must be at least 8 characters").max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter.")
+  new_password: yup.string().min(8, "New password must be at least 8 characters").max(32).required().matches(/\w*[a-z]\w*/, "Password must have a small letter.")
     .matches(/\w*[A-Z]\w*/, "Password must have a capital letter.")
     .matches(/\d/, "Password must have a number.")
     .matches(/[!+@#$%^&*()\-_"=+{}; :,<.>]/, "Password must have a special character.")
     .matches(/^\S*$/, "Whitespaces are not allowed."),
   confirmPassword: yup.string()
-    .oneOf([yup.ref('new_password'),''], 'Passwords must match.').required('Confirm password is required'),
+    .oneOf([yup.ref('new_password'), ''], 'Passwords must match.').required('Confirm password is required'),
 });
 
 interface propsData {
-  formData?: any,
-  data?: any,
-  api?: string,
-  setStep?: Function,
+  /** 
+   * @property {any} [formData] - Holds the form data that is used within the component.
+   */
+  formData?: any;
+
+  /**
+   * @property {any} [data] - Represents additional data that may be used within the component.
+   */
+  data?: any;
+
+  /**
+   * @property {string} [api] - API endpoint or identifier used for making requests.
+   */
+  api?: string;
+
+  /**
+   * @property {Function} [setStep] - Callback function to set the current step in a process.
+   */
+  setStep?: Function;
+
+  /**
+   * @property {any} [sendOtpRes] - Response or data related to sending an OTP.
+   */
   sendOtpRes?: any;
+
+  /**
+   * @property {boolean} [isEmail] - Flag to determine if an email is being processed.
+   */
   isEmail?: boolean;
+
+  /**
+   * @property {boolean} [isNumber] - Flag to determine if a number is being processed.
+   */
   isNumber?: boolean;
 }
 
@@ -45,7 +72,7 @@ const ReEnterpass = (props: propsData) => {
   const [pswd, setpswd] = useState('');
   const [confirmation, setConfirmation] = useState(false)
   const [passwordLength, setPasswordLength] = useState(18);
-  const [checker,setChecker] = useState(false)
+  const [checker, setChecker] = useState(false)
   const [successModal, setSuccessModal] = useState(false);
 
   let {
@@ -59,13 +86,25 @@ const ReEnterpass = (props: propsData) => {
     resolver: yupResolver(schema),
   });
 
+  /**
+ * Generates a secure password containing at least one lowercase, uppercase, numeric, and special character.
+ * The generated password will be randomly shuffled for additional security.
+ * 
+ * @async
+ * @function generatePassword
+ * @returns {Promise<void>}
+ */
   const generatePassword = async () => {
     const lowercaseCharset = "abcdefghijklmnopqrstuvwxyz";
     const uppercaseCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const numberCharset = "0123456789";
     const specialCharset = "!@#$%^&*()_+{};:<>,.?";
 
-    // Function to randomly select a character from a given charset
+    /**
+   * Selects a random character from a given charset.
+   * @param {string} charset - The string of characters to select from.
+   * @returns {string} - A randomly selected character from the charset.
+   */
     function getRandomCharacter(charset: string) {
       const randomIndex = Math.floor(Math.random() * charset.length);
       return charset[randomIndex];
@@ -85,23 +124,34 @@ const ReEnterpass = (props: propsData) => {
     }
     // Shuffle the password to randomize the character order
     password = password.split('').sort(() => Math.random() - 0.5).join('');
-    setpswd(password);
-    setValue('new_password', password);
-    setValue('confirmPassword', password);
+    setpswd(password); // Presumably sets the password in state or storage
+    setValue('new_password', password); // Sets password in form field 'new_password'
+    setValue('confirmPassword', password); // Sets password in form field 'confirmPassword'
   };
 
+  /**
+ * Handles OTP confirmation, encrypts form data, and sends it to the server for verification.
+ * Displays success or error messages based on server response.
+ * 
+ * @async
+ * @function confirmOtp
+ * @returns {Promise<void>}
+ */
   const confirmOtp = async () => {
     try {
-      
+
       setConfirmation(false)
       setLayout(false)
       setBtnDisabled(true);
+
+      // Encrypt the form data using AES encryption
       const ciphertext = AES.encrypt(
         JSON.stringify(formData),
         `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`
       ).toString();
       let record = encodeURIComponent(ciphertext.toString());
-  
+
+      // Send encrypted data to the server for password reset or verification
       let responseData = await fetch(`/api/user/forget`, {
         method: "POST",
         mode: "cors",
@@ -110,32 +160,48 @@ const ReEnterpass = (props: propsData) => {
         },
         body: JSON.stringify(record),
       });
-  
+
+      // Parse the response JSON
       let res = await responseData.json();
-  
+
+      // Handle the response based on the server's response status
       if (res?.data?.status === 200) {
         setSuccessModal(true)
       } else {
-        toast.error(res.data.message,{autoClose:2500});
+        toast.error(res.data.message, { autoClose: 2500 });
         setTimeout(() => {
-          setBtnDisabled(false);  
+          setBtnDisabled(false);
         }, 3000);
       }
     } catch (error) {
-      console.log(error,"error in re enter password ");
-      
+      console.log(error, "error in re enter password ");
+
     }
   }
 
+  /**
+ * Handles form submission, updates form data with additional properties, 
+ * and triggers the next steps in the layout and confirmation process.
+ * 
+ * @async
+ * @function onHandleSubmit
+ * @param {any} data - Form data to be submitted and updated.
+ * @returns {Promise<void>}
+ */
   const onHandleSubmit = async (data: any) => {
     try {
 
+      // Activate layout and confirmation UI elements
       setLayout(true)
       setConfirmation(true)
+
+      // Append additional properties to the form data for the OTP process
       data.otp = props?.formData?.otp;
       data.type = "forget";
       data.step = 4;
-      data.username = props?.formData?.username
+      data.username = props?.formData?.username;
+
+      // Set the updated data as formData in the component state
       setFormData(data)
     } catch (error) { }
   };
@@ -156,7 +222,7 @@ const ReEnterpass = (props: propsData) => {
 
   return (
     <>
-      <ToastContainer limit={1}/>
+      <ToastContainer limit={1} />
       <section className="bg-primary-300 lg:dark:bg-black-v-1 xl:h-full  lg:bg-bg-primary relative overflow-hidden">
         <div className="flex h-full min-h-full bg-[url('/assets/register/ellipsebg.svg')] bg-[length:75%]  bg-no-repeat lg:bg-none ">
           <div className="max-w-full lg:max-w-[50%]  w-full lg:block hidden">
@@ -195,58 +261,58 @@ const ReEnterpass = (props: propsData) => {
                   Create new password
                 </p>
                 {/**Form Start  */}
-                <form onSubmit={handleSubmit(onHandleSubmit)}  onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  e.preventDefault();
-                }
-              }}>
+                <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                  }
+                }}>
 
                   <div className="relative text-end mb-[10px]">
                     <button type="button" className="!text-primary" onClick={() => generatePassword()}>Generate Password</button>
                   </div>
                   <div
-                        className="relative flex justify-between gap-2 items-center input-cta"
-                        onFocus={()=>{setChecker(true)}} onBlur={()=>{setChecker(false)}}
-                      >
-                        <input type={`${show === true ? "text" : "password"}`} {...register('new_password')}
-                          name="new_password" placeholder="New Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta lg:dark:shadow-[inset_0_50px_0_#121318] dark:shadow-[inset_0_50px_0_#080808] shadow-[inset_0_50px_0_#e2f2ff]" maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)}  />
-                        <Image
-                          data-testid="show-hide"
-                          src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
-                          alt="eyeicon"
-                          width={24}
-                          height={24}
-                          onClick={() => {
-                            setShow(!show);
-                          }}  
-                          className="cursor-pointer "
-                        />
-                      {checker && 
-                        <StrengthCheck2 password={pswd} />}
-                      </div>
-                      <StrengthCheck password={pswd} />
-                  {errors.new_password && <p className="errorMessage">{errors.new_password.message}</p>}
-                  <div className="relative">
-                  <div className="relative mt-[10px]">
-                    <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
+                    className="relative flex justify-between gap-2 items-center input-cta"
+                    onFocus={() => { setChecker(true) }} onBlur={() => { setChecker(false) }}
+                  >
+                    <input type={`${show === true ? "text" : "password"}`} {...register('new_password')}
+                      name="new_password" placeholder="New Password" className=" w-full password-input !bg-[transparent] focus:outline-none  !text-beta lg:dark:shadow-[inset_0_50px_0_#121318] dark:shadow-[inset_0_50px_0_#080808] shadow-[inset_0_50px_0_#e2f2ff]" maxLength={32} autoComplete="off" onChange={(e: any) => setpswd(e.target.value)} />
                     <Image
+                      data-testid="show-hide"
                       src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
-                      alt="eyeicon2"
+                      alt="eyeicon"
                       width={24}
                       height={24}
                       onClick={() => {
                         setShow(!show);
                       }}
-                      className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                      className="cursor-pointer "
                     />
+                    {checker &&
+                      <StrengthCheck2 password={pswd} />}
                   </div>
+                  <StrengthCheck password={pswd} />
+                  {errors.new_password && <p className="errorMessage">{errors.new_password.message}</p>}
+                  <div className="relative">
+                    <div className="relative mt-[10px]">
+                      <input type={`${show === true ? "text" : "password"}`} placeholder="Confirm Password"  {...register('confirmPassword')} name="confirmPassword" maxLength={32} className="input-cta w-full" />
+                      <Image
+                        src={`/assets/register/${show === true ? "show.svg" : "hide.svg"}`}
+                        alt="eyeicon2"
+                        width={24}
+                        height={24}
+                        onClick={() => {
+                          setShow(!show);
+                        }}
+                        className="cursor-pointer absolute top-[50%] right-[20px] translate-y-[-50%]"
+                      />
+                    </div>
 
-                  {errors.confirmPassword && <p className="errorMessage absolute">{errors.confirmPassword.message}</p>}
+                    {errors.confirmPassword && <p className="errorMessage absolute">{errors.confirmPassword.message}</p>}
                   </div>
 
                   <button
                     type="submit" disabled={btnDisabled}
-                    className={`my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-800 ${btnDisabled === true ? 'cursor-not-allowed':''}`}
+                    className={`my-[30px] lg:my-[50px] solid-button w-full hover:bg-primary-800 ${btnDisabled === true ? 'cursor-not-allowed' : ''}`}
                   >
                     {btnDisabled &&
                       <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -264,11 +330,11 @@ const ReEnterpass = (props: propsData) => {
       </section>
       {
         confirmation &&
-        <ConfirmationModel title="Reset Password" message="After reset password, Withdrawal will be restricted for 24 hours. Are you sure want to proceed?" actionPerform={confirmOtp}  setShow={setLayout} setActive={setConfirmation} />
+        <ConfirmationModel title="Reset Password" message="After reset password, Withdrawal will be restricted for 24 hours. Are you sure want to proceed?" actionPerform={confirmOtp} setShow={setLayout} setActive={setConfirmation} />
       }
-       {
+      {
         successModal &&
-        <ResetSuccessful setSuccessModal={setSuccessModal}/>
+        <ResetSuccessful setSuccessModal={setSuccessModal} />
       }
     </>
   )

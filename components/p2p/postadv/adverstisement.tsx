@@ -10,7 +10,27 @@ import { toast, ToastContainer } from "react-toastify";
 import { currencyFormatter } from "@/components/snippets/market/buySellCard";
 import { truncateNumber } from "@/libs/subdomain";
 
-interface propsData {
+/**
+ * Props for the Advertisement component, providing necessary data related to payment methods and assets.
+ * 
+ * @interface
+ * @property {any} [masterPayMethod] - The available master payment methods for the advertisement.
+ * @property {any} [userPaymentMethod] - The payment methods associated with the user.
+ * @property {any} [tokenList] - A list of tokens related to the advertisement.
+ * @property {any} [session] - The session details for the current user, typically containing authentication information.
+ * @property {any} [assets] - Information about the assets related to the advertisement.
+ * 
+ * @example
+ * // Example usage:
+ * const props: AdverstisementProps = {
+ *   masterPayMethod: paymentMethods,
+ *   userPaymentMethod: userMethods,
+ *   tokenList: tokenList,
+ *   session: currentSession,
+ *   assets: assetData
+ * };
+ */
+interface AdverstisementProps {
   masterPayMethod?: any;
   userPaymentMethod?: any;
   tokenList?: any;
@@ -24,7 +44,7 @@ const schema = yup.object().shape({
 });
 
 
-const Adverstisement = (props: propsData) => {
+const Adverstisement = (props: AdverstisementProps) => {
   const [show, setShow] = useState(1);
   const [step, setStep] = useState(1);
   const [selectedAssets, setSelectedAssets] = useState(Object);
@@ -33,12 +53,31 @@ const Adverstisement = (props: propsData) => {
   const [step2Data, setStep2Data] = useState(Object);
   const [assetsBalance, setAssetsBalance] = useState(0.00);
   const [loading, setLoading] = useState(false);
-
   const assets = props.tokenList;
   const cash = ["INR"];
-
   const router = useRouter()
 
+  /**
+   * Effect hook that runs when the `router.query` changes.
+   * - It filters the `tokenList` from props to select a token based on `token_id` in the router's query.
+   * - Sets the selected token to state using `selectToken`.
+   * - Extracts the price from `router.query` and sets it using `setValue` for the `price` field.
+   * 
+   * @effect
+   * - Runs whenever `router.query` changes.
+   * 
+   * @example
+   * useEffect(() => {
+   *   if (Object.keys(router?.query).length > 0) {
+   *     let token = props.tokenList.filter((item: any) => {
+   *       return item?.id === router?.query?.token_id
+   *     });
+   *     selectToken(token[0]);
+   *     let price: any = router?.query?.price;
+   *     setValue('price', price);
+   *   }
+   * }, [router.query]);
+   */
   useEffect(() => {
     if (Object.keys(router?.query).length > 0) {
       let token = props.tokenList.filter((item: any) => {
@@ -48,10 +87,6 @@ const Adverstisement = (props: propsData) => {
       let price: any = router?.query?.price;
       setValue('price', price);
     }
-    // if(show){
-    //   setInrPrice(0)
-    //   reset()
-    // }
   }, [router.query]);
 
   let {
@@ -69,6 +104,23 @@ const Adverstisement = (props: propsData) => {
     resolver: yupResolver(schema),
   });
 
+  /**
+ * Selects a token and updates the relevant fields based on the token's information.
+ * - Sets the token ID and clears any existing validation errors for the `token_id` field.
+ * - Fetches the price of the token (either global or specific to a particular token type) in INR using an external API.
+ * - Updates the `price` field with the token's price converted to INR.
+ * - Sets the selected token to state and updates the balance for the selected token from the assets list.
+ * 
+ * @param {any} item - The token object containing the token's information.
+ * 
+ * @example
+ * selectToken({
+ *   id: '123',
+ *   symbol: 'BTCB',
+ *   tokenType: 'global',
+ *   price: 50000,
+ * });
+ */
   const selectToken = async (item: any) => {
     try {
       setValue('token_id', item?.id);
@@ -95,7 +147,7 @@ const Adverstisement = (props: propsData) => {
         let data = await responseData.json();
         setLoading(false);
         setInrPrice(data?.rate);
-        setValue('price',truncateNumber( data?.rate,6));
+        setValue('price', truncateNumber(data?.rate, 6));
       }
       else {
         // let usdtToINR = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/price?fsym=USDT&tsyms=INR`, {
@@ -117,7 +169,7 @@ const Adverstisement = (props: propsData) => {
         setLoading(false);
         setInrPrice(item?.price * data?.rate);
         let price: any = item?.price * data?.rate
-        setValue('price', truncateNumber( inrPrice,6));
+        setValue('price', truncateNumber(inrPrice, 6));
       }
 
       setSelectedAssets(item);
@@ -142,9 +194,17 @@ const Adverstisement = (props: propsData) => {
     setStep2Data(data)
   }
 
+  /**
+ * Handles the form submission, checking if the user has sufficient balance before proceeding.
+ * - If the user has a positive balance, it sets the form data for step 1 and progresses to step 2.
+ * - If the user has insufficient balance, it shows an error toast.
+ * 
+ * @param {any} data - The form data submitted by the user.
+ * 
+ * @example
+ * onHandleSubmit({ price: 1000, token_id: '123', price_type: 'fixed' });
+ */
   const onHandleSubmit = (data: any) => {
-    // setStep1Data(data);
-    // setStep(2);
     if (assetsBalance > 0) {
       data.price_type = show === 1 ? 'fixed' : 'floating';
       setStep1Data(data);
@@ -157,15 +217,15 @@ const Adverstisement = (props: propsData) => {
 
   return (
     <>
-      <ToastContainer limit={1} position="top-center"/>
+      <ToastContainer limit={1} position="top-center" />
       {step == 1 && (
         <div className="mt-30 md:mt-40">
           <p className="sec-title">Set Asset Type and Price</p>
           <form onSubmit={handleSubmit(onHandleSubmit)} onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-              }
-            }}>
+            if (e.key === 'Enter') {
+              e.preventDefault();
+            }
+          }}>
             <div className="mt-40 flex md:flex-row flex-col first-letter:  gap-30 items-start">
 
               <div className="max-w-[1048px] w-full">
@@ -298,7 +358,7 @@ const Adverstisement = (props: propsData) => {
                     onClick={() => {
                       setShow(2);
                       selectToken(selectedAssets);
-                      let currentPrice = truncateNumber(inrPrice,6)
+                      let currentPrice = truncateNumber(inrPrice, 6)
                       setValue('price', currentPrice)
                     }}
                     type="button"
@@ -341,7 +401,7 @@ const Adverstisement = (props: propsData) => {
                   <div className="flex items-center justify-between gap-2 pb-[15px] border-b border-grey-v-1 dark:border-opacity-20">
                     <p className="info-14-18 dark:!text-white">Your Price</p>
                     {loading === true ? <div className='loader relative w-[35px] z-[2] h-[35px] top-0 right-0 border-[6px] border-[#d9e1e7] rounded-full animate-spin border-t-primary '></div>
-                      : <p className="sec-title md:!text-[18px] !text-[14px]">₹ {currencyFormatter(truncateNumber( inrPrice,6))}</p>
+                      : <p className="sec-title md:!text-[18px] !text-[14px]">₹ {currencyFormatter(truncateNumber(inrPrice, 6))}</p>
                     }
 
                   </div>
@@ -351,23 +411,23 @@ const Adverstisement = (props: propsData) => {
                   </div> */}
                   <div className="md:mt-30 mt-20">
                     <p className="info-10-14">{show === 1 ? "Fixed" : "Floating"} (INR)</p>
-                    <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()} 
-                      step={0.000001} {...register('price', { required: true })} name="price" disabled={show === 2 ? true : false} placeholder="Enter Amount" className="py-[14px] px-[15px] border rounded-5 border-grey-v-1 mt-[10px] w-full bg-[transparent] dark:border-opacity-20 outline-none info-16-18"  onChange={(e) => {
+                    <input type="number" onWheel={(e) => (e.target as HTMLElement).blur()}
+                      step={0.000001} {...register('price', { required: true })} name="price" disabled={show === 2 ? true : false} placeholder="Enter Amount" className="py-[14px] px-[15px] border rounded-5 border-grey-v-1 mt-[10px] w-full bg-[transparent] dark:border-opacity-20 outline-none info-16-18" onChange={(e) => {
                         const value = e.target.value;
                         const regex = /^\d{0,10}(\.\d{0,6})?$/;
                         if (regex.test(value) || value === "") {
-                              // console.log("ok");
-                              
+                          // console.log("ok");
+
                         } else {
                           e.target.value = value.slice(0, -1);
                         }
-                   
-                    }} />
+
+                      }} />
                   </div>
                   {errors?.price && (
                     <p className="errorMessage">{errors?.price?.message}</p>
                   )}
-                  <p className="py-2 info-10-14 text-right">Bal: {truncateNumber(assetsBalance,6)}</p>
+                  <p className="py-2 info-10-14 text-right">Bal: {truncateNumber(assetsBalance, 6)}</p>
                 </div>
 
                 <button
@@ -382,7 +442,7 @@ const Adverstisement = (props: propsData) => {
         </div>
       )}
       {step === 2 && <PaymentMethod step={step} setStep={setStep} setPaymentMethod={setPaymentMethod} masterPayMethod={props.masterPayMethod} userPaymentMethod={props.userPaymentMethod} selectedAssets={selectedAssets} assetsBalance={assetsBalance} price={step1Data.price} />}
-      {step === 3 && <Response step={step} setStep={setStep} step1Data={step1Data} step2Data={step2Data} session={props?.session}/>}
+      {step === 3 && <Response step={step} setStep={setStep} step1Data={step1Data} step2Data={step2Data} session={props?.session} />}
     </>
   );
 };

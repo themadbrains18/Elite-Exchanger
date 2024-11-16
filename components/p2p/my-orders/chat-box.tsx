@@ -7,10 +7,33 @@ import { toast } from 'react-toastify';
 import { useWebSocket } from '@/libs/WebSocketContext';
 import { useRouter } from 'next/router';
 
+/**
+ * Interface representing the props for the component.
+ * 
+ * This interface defines the optional properties passed to the component that manages the 
+ * order and seller user data.
+ * 
+ * @interface PropsData
+ */
 interface PropsData {
+    /**
+     * The seller's user information.
+     * This property holds data related to the seller, such as user ID, name, etc.
+     * It is optional and may or may not be provided.
+     * 
+     * @type {any}
+     */
     sellerUser?: any;
+    /**
+     * The order information.
+     * This property holds the details of the order, including order ID, status, items, etc.
+     * It is optional and may or may not be provided.
+     * 
+     * @type {any}
+     */
     order?: any;
 }
+
 interface ChatMessage {
     from: string;
     to: string;
@@ -42,18 +65,24 @@ const ChatBox = (props: PropsData) => {
     const { query } = router;
 
     useEffect(() => {
+        // Check if `query` exists to load the order and chat data for the specific order ID
         if (query) {
             getOrderByOrderId(query?.buy, 'onload');
             getChatByOrderId();
         }
         const handleSocketMessage = (event: any) => {
+            // Parse the WebSocket event data to retrieve the message details and type
             const data = JSON.parse(event.data).data;
             let eventDataType = JSON.parse(event.data).type;
+
+            // If the event type is "order", fetch updated order details by ID
             if (eventDataType === "order") {
                 getOrderByOrderId(query && query?.buy, 'socket');
             }
 
+            // If the event type is "chat" and the order ID matches, process the chat data
             if (eventDataType === 'chat' && data[0]?.orderid === query?.buy) {
+                // Avoid showing duplicate notifications for the same order ID
                 if (shownNotifications.has(data[0]?.orderid)) {
                     return;
                 }
@@ -79,6 +108,13 @@ const ChatBox = (props: PropsData) => {
         };
     }, [query, wbsocket]);
 
+    /**
+     * Fetches an order by its order ID and sets order details and seller user information.
+     *
+     * @param {any} orderid - The ID of the order to fetch.
+     * @param {string} type - The type of order being fetched.
+     * @returns {Promise<void>} - Returns a promise that resolves once the order details are set.
+     */
     const getOrderByOrderId = async (orderid: any, type: string) => {
         let userOrder: any = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/order?orderid=${orderid}`, {
             method: "GET",
@@ -92,10 +128,18 @@ const ChatBox = (props: PropsData) => {
 
     useEffect(() => {
         if (chatFeedRef.current) {
-          chatFeedRef.current.scrollTop = chatFeedRef.current.scrollHeight;
+            chatFeedRef.current.scrollTop = chatFeedRef.current.scrollHeight;
         }
-      }, [orderChat]);
+    }, [orderChat]);
 
+    /**
+    * Fetches chat messages by order ID and sets the chat data.
+    * 
+    * This function retrieves chat messages associated with a specific order and groups them.
+    * If an error occurs during the fetch, it is logged to the console.
+    *
+    * @returns {Promise<void>} - Returns a promise that resolves once the chat data is set and grouped.
+    */
     const getChatByOrderId = async () => {
         try {
             const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/chat?orderid=${query && query?.buy}`, {
@@ -114,6 +158,16 @@ const ChatBox = (props: PropsData) => {
         }
     };
 
+    /**
+     * Groups chat messages by their creation date.
+     * 
+     * This function organizes chat messages into groups based on their `createdAt` date.
+     * Messages created on the current day are grouped under "Today."
+     * The groups are sorted by date, with "Today" appearing last.
+     *
+     * @param {ChatMessage[]} messages - An array of chat messages to be grouped.
+     * @returns {void} - The grouped messages are set in state using `setGroupedMessages`.
+     */
     const groupMessages = (messages: ChatMessage[]) => {
         const grouped: GroupedMessages = {};
         const todayDate = new Date().toDateString();
@@ -140,6 +194,16 @@ const ChatBox = (props: PropsData) => {
         setGroupedMessages(sortedGrouped);
     };
 
+    /**
+     * Sends a chat message related to an order.
+     *
+     * This function encrypts the message and order details, sends the data to the server,
+     * and updates the chat messages if the message is successfully sent. 
+     * It also notifies the recipient via WebSocket.
+     *
+     * @param {string} msg - The message to send.
+     * @returns {Promise<void>} - Resolves when the message is sent and chat messages are updated.
+     */
     const sendMessage = async (msg: string) => {
         try {
             if (msg !== '') {
@@ -196,6 +260,15 @@ const ChatBox = (props: PropsData) => {
         }
     };
 
+    /**
+     * Handles file selection and uploads the selected file to the server.
+     *
+     * This function validates the file size, uploads the file to a specified URL, and updates the UI based on the upload result.
+     * Supported files should be under 2 MB, and PDFs are not allowed.
+     *
+     * @param {any} e - The event object from the file input.
+     * @returns {Promise<void>} - Resolves once the file upload process is complete.
+     */
     const handleFileChange = async (e: any) => {
         try {
             const file = e.target.files[0];
@@ -236,13 +309,21 @@ const ChatBox = (props: PropsData) => {
         }
     };
 
+    /**
+     * Handles the keydown event to send a message when the Enter key is pressed.
+     *
+     * This function checks if the pressed key is 'Enter' and triggers the `sendMessage` function with the current message.
+     *
+     * @param {any} event - The keydown event object.
+     * @returns {void}
+     */
     const handleKeyDown = (event: any) => {
         if (event.key === 'Enter') {
             sendMessage(message);
         }
     };
-    
-    
+
+
     const profileImg = sellerUser?.profile?.image ?? `${process.env.NEXT_PUBLIC_AVATAR_PROFILE}`;
 
     return (
@@ -279,7 +360,7 @@ const ChatBox = (props: PropsData) => {
                             </div>
 
                             <div>
-                                {messages && messages?.map((item: any,index:number) => (
+                                {messages && messages?.map((item: any, index: number) => (
                                     <Fragment key={index}>
                                         <div key={item.id} className={item.from !== session?.user?.user_id ? 'left gap-[4px] mb-2' : 'right flex items-start gap-[4px] mb-2'}>
                                             <div className="mt-[4px] p-[10px] ml-[auto] rounded-[6px] min-w-[60px] max-w-fit w-full dark:bg-[#232530] bg-primary-600 bottom-right">

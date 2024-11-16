@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import React, { useState } from 'react'
+
 interface propsData {
     list?: string[];
     showNes?: number;
@@ -8,33 +9,55 @@ interface propsData {
     onCoinDropDownChange?: any;
     fullWidth?: boolean;
     filterAsset?: any;
-    Spot?:string;
-    setCoinDefaultValue?:Function;
-    setSelectVal?:Function
+    Spot?: string;
+    setCoinDefaultValue?: Function;
+    setSelectVal?: Function
 }
+
+/**
+ * SelectDropdown component for displaying a customizable dropdown list.
+ * 
+ * The component renders a dropdown menu with a list of items. When an item is selected, it updates the input field and triggers any provided callback functions.
+ * 
+ * Props:
+ * - `list`: An array of strings representing the items to display in the dropdown.
+ * - `showNes`: A number controlling the styling of the input text (e.g., for different modes).
+ * - `defaultValue`: The default value to display in the input field when no item is selected.
+ * - `whiteColor`: A boolean to conditionally apply a white text color to the input.
+ * - `onCoinDropDownChange`: A function that is called when the dropdown value changes.
+ * - `fullWidth`: A boolean to make the dropdown take up the full width of its parent.
+ * - `filterAsset`: A function to filter assets based on the selected dropdown value.
+ * - `Spot`: A string that could be passed for additional filtering or logic.
+ * - `setCoinDefaultValue`: A function to set the default value of the dropdown.
+ * - `setSelectVal`: A function to update the selected value.
+ */
 const SelectDropdown = (props: propsData) => {
-
-    
-
     const [showDrop, setShowDrop] = useState(false);
+
+    /**
+     * Handles changing the selected value from the dropdown.
+     * Updates the input field, triggers the filter function, and calls any relevant callback functions.
+     * 
+     * @param e - The click event from the selected dropdown item.
+     */
     function changeInputVal(e: any) {
         let itemText = e.currentTarget.innerHTML;
         let parent = e.currentTarget.closest(".dropdown-parent1");
         let input = parent?.querySelector(".inputText");
         // input.innerHTML = itemText;
-        if(props?.setCoinDefaultValue !==undefined){
+        if (props?.setCoinDefaultValue !== undefined) {
             props.setCoinDefaultValue(itemText)
         }
-        else{
+        else {
             input.innerHTML = itemText;
         }
         if (props.filterAsset !== undefined) {
-            props?.filterAsset(itemText,props?.Spot);
+            props?.filterAsset(itemText, props?.Spot);
         }
-        if(props.onCoinDropDownChange !==undefined){
+        if (props.onCoinDropDownChange !== undefined) {
             props.onCoinDropDownChange(itemText);
         }
-        
+
     }
     return (
         <div className={`relative dropdown-parent1 ${props.fullWidth && 'max-w-full w-full'}`}>
@@ -48,7 +71,7 @@ const SelectDropdown = (props: propsData) => {
                     {
                         props.list?.map((item, index) => {
                             return (
-                                <li onClick={(e) => { changeInputVal(e); setShowDrop(false);  props.setSelectVal && props.setSelectVal(item) }} key={index} className='top-label py-[5px] px-[10px] cursor-pointer hover:dark:bg-[#373d4e] hover:bg-[#6a7c8114] hover:dark:text-[#fff] hover:text-[#000]'>{item}</li>
+                                <li onClick={(e) => { changeInputVal(e); setShowDrop(false); props.setSelectVal && props.setSelectVal(item) }} key={index} className='top-label py-[5px] px-[10px] cursor-pointer hover:dark:bg-[#373d4e] hover:bg-[#6a7c8114] hover:dark:text-[#fff] hover:text-[#000]'>{item}</li>
                             )
                         })
                     }

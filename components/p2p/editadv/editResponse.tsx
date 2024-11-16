@@ -17,7 +17,21 @@ const schema = yup.object().shape({
   auto_reply: yup.string().optional().default('')
 });
 
-interface activeSection {
+/**
+ * Props for the EditResponse component, which manages the multi-step process of editing a response.
+ * 
+ * This interface defines the properties used to control the flow of the editing process, including tracking the 
+ * current step, passing data between steps, and handling the edit of an existing post.
+ * 
+ * @interface EditResponseProps
+ * 
+ * @property {number} step - The current step in the editing process.
+ * @property {Function} setStep - Function to update the current step.
+ * @property {any} [step1Data] - Optional data from step 1, used to populate fields or settings for step 1.
+ * @property {any} [step2Data] - Optional data from step 2, used to populate fields or settings for step 2.
+ * @property {any} [editPost] - Optional data related to the post being edited, providing the post details that need to be modified.
+ */
+interface EditResponseProps {
   step: number;
   setStep: any;
   step1Data?: any;
@@ -25,7 +39,7 @@ interface activeSection {
   editPost?: any;
 }
 
-const EditResponse = (props: activeSection) => {
+const EditResponse = (props: EditResponseProps) => {
   const condition = [{ name: "Complete KYC", value: "complete_kyc" }, { name: "Holding More Than 0.01 BTC", value: "min_btc" }];
   // sconst status = ["Online Right Now", "Online, Manually later"]
 
@@ -35,12 +49,30 @@ const EditResponse = (props: activeSection) => {
 
   const wbsocket = useWebSocket();
 
+  /**
+ * Effect hook that sets form values based on the `editPost` prop data.
+ * It updates the form fields with `remarks`, `auto_reply`, and condition 
+ * values when the `editPost` changes.
+ */
   useEffect(() => {
+    /**
+     * Sets the 'remarks' field value from `editPost.remarks`.
+     */
     setValue('remarks', props?.editPost?.remarks);
+    /**
+     * Sets the 'auto_reply' field value from `editPost.auto_reply`.
+     */
     setValue('auto_reply', props?.editPost?.auto_reply);
+    /**
+     * Sets the 'condition' field to 'complete_kyc' if `editPost.complete_kyc` is true.
+     */
     if (props?.editPost?.complete_kyc) {
       setValue('condition', 'complete_kyc');
-    } else if (props?.editPost?.min_btc) {
+    }
+    /**
+    * If `complete_kyc` is not true, check if `min_btc` exists and set 'condition' to 'min_btc'.
+    */
+    else if (props?.editPost?.min_btc) {
       setValue('condition', 'min_btc');
     }
   }, [props?.editPost])
@@ -61,18 +93,23 @@ const EditResponse = (props: activeSection) => {
     defaultValues: { condition: '', status: '' },
   });
 
+  /**
+ * Handles form submission for editing an advertisement.
+ * Encrypts the form data and sends it to the server to update the advertisement.
+ * Upon successful response, updates the UI and triggers relevant events.
+ */
   const onHandleSubmit = async (data: any) => {
-
     try {
       setDisable(true);
-
       let p_method = [];
 
+      // Loop through the selected payment methods and create an array of objects with `upm_id`
       for (const pm of props?.step2Data?.p_method) {
         let obj = { "upm_id": pm };
         p_method.push(obj);
       }
 
+      // Prepare the form data for submission
       let formData = {
         "id": props?.editPost?.id,
         "user_id": session?.user?.user_id,
@@ -93,10 +130,11 @@ const EditResponse = (props: activeSection) => {
         "fundcode": '123456'
       }
 
-
+      // Encrypt the form data using AES encryption
       const ciphertext = AES.encrypt(JSON.stringify(formData), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`).toString();
       let record = encodeURIComponent(ciphertext.toString());
 
+      // Send the encrypted data to the backend server
       let responseData = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/p2p/editadvertisement`, {
         method: "POST",
         mode: "cors",
@@ -107,8 +145,10 @@ const EditResponse = (props: activeSection) => {
         body: JSON.stringify(record)
       })
 
+      // Parse the response from the server
       let res = await responseData.json();
 
+      // Check if the server response is successful
       if (res.data.status === 200) {
         if (wbsocket) {
           let post = {
@@ -135,29 +175,24 @@ const EditResponse = (props: activeSection) => {
       setDisable(false);
     }
 
-    // var formData = new FormData();
-    // formData.append("user_id", session?.user?.user_id);
-
-    // formData.append("token_id", props.step1Data?.token_id);
-    // formData.append("price", props.step1Data?.price);
-
-    // formData.append("quantity", props.step2Data?.quantity);
-    // formData.append("min_limit", props.step2Data?.min_limit);
-    // formData.append("max_limit", props.step2Data?.max_limit);
-    // formData.append("p_method", JSON.stringify(p_method));
-    // formData.append("payment_time", props.step2Data?.payment_time);
-
-    // formData.append("condition", data?.condition);
-    // formData.append("status", data?.status);
-    // formData.append("notes", data?.notes);
-    // formData.append("auto_reply", data?.auto_reply);
-
   }
 
+  /**
+   * Sets the condition value in the form.
+   * This function is called when a user selects a specific condition.
+   * 
+   * @param {any} item - The selected condition item that will be set in the form.
+   */
   const selectCondition = (item: any) => {
     setValue('condition', item)
   }
 
+  /**
+   * Sets the status value in the form.
+   * This function is called when a user selects a specific status.
+   * 
+   * @param {any} item - The selected status item that will be set in the form.
+   */
   const selectStatus = (item: any) => {
     setValue('status', item)
   }

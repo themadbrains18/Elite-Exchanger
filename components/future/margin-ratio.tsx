@@ -13,6 +13,31 @@ interface fullWidth {
     openOrders?: any;
     assets?: any;
 }
+
+/**
+ * MarginRatio Component
+ * 
+ * This component displays the margin balance and wallet balance in USDT, calculates the available margin 
+ * based on the user's positions and assets, and provides links for buying crypto or transferring funds.
+ * 
+ * It accepts the following props:
+ * - `fullWidth`: A boolean to determine whether the component should take full width or a limited width.
+ * - `heightAuto`: A boolean to adjust the component height automatically (not used in the component).
+ * - `popupMode`: The current mode of the popup (not used directly in the component).
+ * - `setPopupMode`: A function to set the current popup mode (used for showing transfer popup).
+ * - `setOverlay`: A function to set the visibility of the overlay (used for the transfer popup).
+ * - `balance`: The user's balance (not used directly in the component).
+ * - `positions`: An array of user's positions (used to calculate the margin balance).
+ * - `openOrders`: An array of open orders (not used in the component).
+ * - `assets`: An array of user's assets (used to get the available balance in USDT).
+ * 
+ * @param {fullWidth} props.fullWidth - Whether the component should take full width or not.
+ * @param {number} props.popupMode - The current popup mode.
+ * @param {Function} props.setPopupMode - Function to set the current popup mode.
+ * @param {Function} props.setOverlay - Function to control the overlay visibility.
+ * @param {Array} props.positions - List of user positions.
+ * @param {Array} props.assets - List of user assets.
+ */
 const MarginRatio = (props: fullWidth) => {
     const [avaibalance, setAvailBalance] = useState(0);
     const [marginBal, setMarginBal] = useState(0);

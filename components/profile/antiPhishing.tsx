@@ -1,24 +1,84 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Context from "../contexts/context";
-import IconsComponent from "../snippets/icons";
 import AntiPhishingCode from "./antiPhishingCode";
 import clickOutSidePopupClose from "../snippets/clickOutSidePopupClose";
 
-interface activeSection {
+/**
+ * AntiPhishingProps - Interface for managing the anti-phishing functionality.
+ * 
+ * This interface defines the props that the component uses for managing
+ * anti-phishing code and popup visibility. It allows external control of 
+ * various states within the component, such as enabling the feature, showing 
+ * a popup, and setting an anti-phishing code.
+ * 
+ * @interface AntiPhishingProps
+ */
+interface AntiPhishingProps {
+  /**
+   * setEnable - Function to enable or disable the anti-phishing feature.
+   * 
+   * This function is used to control the status of the anti-phishing feature.
+   */
   setEnable: Function;
+  /**
+   * setShow - Function to toggle the visibility of a popup or modal.
+   * 
+   * This function is responsible for showing or hiding the popup/modal 
+   * associated with the anti-phishing feature.
+   */
   setShow: Function;
+  /**
+   * session - Optional session object that may contain user-specific information.
+   * 
+   * This is an optional prop that can be used to pass session-related data 
+   * (e.g., user authentication details) to the component.
+   */
   session?: any;
+  /**
+   * setAntiFishingCode - Optional function to set or update the anti-phishing code.
+   * 
+   * This function can be used to store or modify the anti-phishing code.
+   */
   setAntiFishingCode?: Function;
 }
 
-const AntiPhishing = (props: activeSection) => {
+const AntiPhishing = (props: AntiPhishingProps) => {
   const { mode } = useContext(Context);
   const [active, setActive] = useState(false)
 
+  /**
+ * closePopup - Function to handle the closing of a popup or modal.
+ * 
+ * This function will set the visibility of the popup to false and reset
+ * the enable status to 0 when called. It is typically used to close the 
+ * popup and reset its associated state.
+ * 
+ * @function closePopup
+ */
   const closePopup = () => {
     props.setShow(false), props.setEnable(0);
   }
+
+  /**
+ * wrapperRef - Reference to the wrapper element.
+ * 
+ * The `useRef` hook is used to reference the wrapper element that contains
+ * the popup/modal to detect clicks outside of it. This allows the component
+ * to close the popup when a user clicks outside the wrapper.
+ * 
+ * @type {React.RefObject<HTMLElement>}
+ */
   const wrapperRef = useRef(null);
+
+  /**
+ * clickOutSidePopupClose - Hook to close the popup when clicking outside.
+ * 
+ * This function is triggered when the user clicks outside the popup wrapper.
+ * It listens for a click event outside the referenced wrapper and invokes
+ * the `closePopup` function to close the popup.
+ * 
+ * @function clickOutSidePopupClose
+ */
   clickOutSidePopupClose({ wrapperRef, closePopup });
 
   return (
@@ -28,7 +88,7 @@ const AntiPhishing = (props: activeSection) => {
         active ?
           <AntiPhishingCode session={props?.session} setEnable={props?.setEnable} setAntiFishingCode={props.setAntiFishingCode}
             setShow={props?.setShow} />
-          : 
+          :
           <div ref={wrapperRef} className="max-w-[calc(100%-30px)] md:max-w-[510px] w-full p-6 md:p-40 z-10 fixed rounded-10 bg-white dark:bg-omega top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
             <div className="flex items-center justify-between ">
               <p className="sec-title">Enable Anti-Phishing Code</p>

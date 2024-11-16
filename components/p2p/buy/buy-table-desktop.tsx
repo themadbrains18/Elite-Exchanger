@@ -28,30 +28,61 @@ const BuyTableDesktop = (props: activeSection) => {
   const [list, setList] = useState<any[]>([])
   const [total, setTotal] = useState(0)
   const [type, setType] = useState('')
-
-
   let itemsPerPage = 10;
 
+  /**
+   * React Hook to reset the `itemOffset` to 0 whenever `firstCurrency` or `paymentId` props change.
+   * This ensures the list is re-fetched when the filters are updated.
+   * 
+   * @useEffect
+   * 
+   * @example
+   * // Example usage: 
+   * // When the `props.firstCurrency` or `props.paymentId` is updated, 
+   * // the `itemOffset` is reset to 0.
+   */
   useEffect(() => {
     setItemOffset(0); // Reset itemOffset to 0 when filters change
   }, [props?.firstCurrency, props?.paymentId]);
 
+  /**
+   * React Hook to fetch and update the posts whenever `itemOffset`, `firstCurrency`, or `paymentId` change.
+   * This hook triggers a re-fetch of the data whenever these dependencies change.
+   * 
+   * @useEffect
+   * 
+   * @example
+   * // Example usage:
+   * // When `itemOffset`, `props.firstCurrency`, or `props.paymentId` change, 
+   * // this hook fetches the new posts based on updated parameters.
+   */
   useEffect(() => {
-
     getAllPosts(itemOffset);
-
   }, [itemOffset, props?.firstCurrency, props?.paymentId]);
 
+  /**
+   * Fetches posts based on the current filters such as `firstCurrency`, `paymentId`, and `selectedToken`.
+   * The function makes an API call to fetch posts and updates the local state with the fetched data.
+   * 
+   * @param {number} itemOffset - The offset value used for pagination.
+   * 
+   * @async
+   * @function
+   * 
+   * @returns {void} - This function updates the state with the fetched posts, and handles any errors during the fetch.
+   * 
+   * @example
+   * // Example usage:
+   * getAllPosts(0); // Fetch posts starting from itemOffset 0
+   */
   const getAllPosts = async (itemOffset: number) => {
     try {
-
       if (itemOffset === undefined) {
         itemOffset = 0;
       }
 
       let paymentMethod = props?.paymentId !== undefined && props?.paymentId !== "" ? props?.paymentId : "all"
       let currency = props?.selectedToken !== undefined && props?.selectedToken !== "" ? props?.selectedToken?.id : "all"
-
 
       let posts = await fetch(
         `/api/p2p/buy?user_id=${props?.session?.user?.user_id}&itemOffset=${itemOffset}&itemsPerPage=${itemsPerPage}&currency=${currency || "all"}&pmMethod=${paymentMethod}`,
@@ -76,54 +107,19 @@ const BuyTableDesktop = (props: activeSection) => {
         post.user_p_method = payment_method;
       }
 
-      // Filter out posts where user_p_method array is empty
-      // posts.data.data = posts.data.data.filter((post: any) => post.user_p_method.length > 0);
-
-      // Update totalLength based on filtered data length
-      // const totalLength = posts.data.data.length;
-      // setTotal(totalLength);
-
       setList(posts.data.data);
 
       if (posts?.data?.totalLength <= 10) {
         setItemOffset(0)
       }
 
-      // let postData = [];
-      // let filter_posts = posts?.data?.data;
-      // postData= filter_posts
-      // if (props?.firstCurrency !== "") {
-      //   filter_posts = posts?.data?.data?.filter((item: any) => {
-      //     return props?.selectedToken?.id === item?.token_id;
-      //   });
-      //   postData = filter_posts;
-      // }
-      //  if (props?.paymentId !== "") {
-      //   let filterRecord=[]
-
-      //   for (const post of filter_posts) {
-      //     for (const upid of post.user_p_method) {
-
-      //       if (props?.paymentId === upid?.pmid) {
-      //         filterRecord.push(post);
-      //       }
-      //     }
-      //   }
-      //   postData = filterRecord;
-
-      // } else {
-      //   postData = filter_posts;
-      // }
-      // setList(postData)
       setTotal(posts?.data?.totalLength)
     } catch (error) {
       console.log("error in get token list", error);
-
     }
   };
 
   if (list?.length > 0) {
-
     for (const post of list) {
       let payment_method: any = [];
       for (const upid of post?.p_method) {
@@ -137,19 +133,47 @@ const BuyTableDesktop = (props: activeSection) => {
     }
   }
 
-  // const endOffset = itemOffset + itemsPerPage;
-  // const currentItems = data?.data?.slice(itemOffset, endOffset);
   const pageCount = Math.ceil(total / itemsPerPage);
 
+  /**
+   * Handles page click events for pagination. Calculates the new offset based on the selected page
+   * and updates the state with the new offset.
+   * 
+   * @param {Object} event - The page click event object.
+   * @param {number} event.selected - The selected page index.
+   * 
+   * @async
+   * @function
+   * 
+   * @returns {void} - This function updates the `itemOffset` state based on the selected page.
+   * 
+   * @example
+   * // Example usage:
+   * handlePageClick({ selected: 2 }); // This would set the `itemOffset` for the 3rd page.
+   */
   const handlePageClick = async (event: any) => {
-    // console.log(event.selected * itemsPerPage);
-
-
-
     const newOffset = (event.selected * itemsPerPage) % total;
     setItemOffset(newOffset);
   };
 
+  /**
+   * Handles the buy action for a given item. It checks the user's KYC status and BTC balance 
+   * before proceeding with the purchase. If the user has not passed KYC or doesn't meet the minimum BTC balance,
+   * a modal will be shown to the user. Otherwise, the selected post is passed to the parent component for further action.
+   * 
+   * @param {Object} item - The item to be bought.
+   * @param {boolean} item.complete_kyc - Whether the user has completed KYC.
+   * @param {boolean} item.min_btc - Whether the user meets the minimum BTC balance for the transaction.
+   * @param {string} item.token_id - The token ID for the transaction.
+   * 
+   * @returns {void} - This function does not return any value, but triggers modals and updates the parent component state.
+   * 
+   * @throws {Error} - If any errors occur during the execution, the error is caught but not thrown.
+   * 
+   * @example
+   * // Example usage:
+   * handleBuy(item);
+   */
   const handleBuy = (item: any) => {
     try {
       if (session) {
@@ -176,9 +200,7 @@ const BuyTableDesktop = (props: activeSection) => {
           else {
             props.setShow1(true); props.setSelectedPost(item);
           }
-
         }
-
         else {
           props.setShow1(true); props.setSelectedPost(item);
         }
@@ -186,12 +208,11 @@ const BuyTableDesktop = (props: activeSection) => {
       else {
         props.setShow1(true); props.setSelectedPost(item);
       }
-
-
     } catch (error) {
 
     }
   }
+
   const startIndex = itemOffset + 1; // Starting index for the current page
 
   return (

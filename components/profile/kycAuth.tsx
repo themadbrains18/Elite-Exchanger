@@ -14,14 +14,51 @@ import "react-toastify/dist/ReactToastify.css";
 import { signOut, useSession } from "next-auth/react";
 import { Router, useRouter } from "next/router";
 
-interface fixSection {
+/**
+ * Props interface for the KYC (Know Your Customer) authentication component.
+ * This interface defines the expected properties for managing the KYC process when it requires 
+ * authentication verification, handling user session, UI states, and verification logic.
+ *
+ * @interface KycAuthProps
+ */
+interface KycAuthProps {
+  /**
+   * Optional boolean that determines whether the component should be fixed in position.
+   * If `true`, the component will stay fixed on the screen; otherwise, it will scroll with the page.
+   * @type {boolean}
+   */
   fixed?: boolean;
+  /**
+   * Optional number used to control the visibility or condition of the component.
+   * It can be used to trigger specific UI states, like showing or hiding the component.
+   * @type {number}
+   */
   show?: number;
+  /**
+   * Optional function to update the state or visibility of the component.
+   * This function allows external components to manage the display or interaction state of the KYC authentication component.
+   * @type {Function | any}
+   */
   setShow?: Function | any;
+  /**
+   * The current step or status in the KYC authentication process.
+   * It is used to track progress or control the flow of the KYC verification stages.
+   * @type {number}
+   */
   num: number;
+  /**
+   * Optional session object containing user-specific session data.
+   * This includes user authentication details, which are necessary for the KYC authentication process.
+   * @type {{ user: any }}
+   */
   session?: {
     user: any;
   };
+  /**
+   * Optional function to update the KYC verification status.
+   * It can be used to change the verification state, such as marking the user as verified after successful authentication.
+   * @type {Function | any}
+   */
   setVerified?: Function | any;
 }
 
@@ -42,14 +79,52 @@ const validFileExtensions: { [key: string]: string[] } = {
   image: ["jpg", "png", "jpeg", "svg", "zip"],
 };
 
+/**
+ * Validation schema for the form, used to validate the user's KYC (Know Your Customer) data.
+ * This schema ensures that all the required fields are provided with appropriate formats, 
+ * and performs custom checks for each field to ensure the data meets the expected criteria.
+ *
+ * @constant schema
+ * @type {Object}
+ */
 const schema = yup
   .object()
   .shape({
+    /**
+     * Country selection field.
+     * This is a required field that ensures the user selects a valid country from the options.
+     * @type {string}
+     */
     country: yup.string().required("Please select country."),
+    /**
+    * Full name field.
+    * This field is required and should be between 4 and 30 characters.
+    * It should only contain letters, spaces, and certain special characters.
+    * @type {string}
+    */
     fname: yup.string().required("Full name must be required.").min(4, "Must be greater than '4' charater.").max(30).matches(/^([a-zA-Z])+([\s*\S+\s+\S+\sa-zA-Z])+$/, 'Please enter only(letters).'),
     // lname: yup.string().required("This field is required"),
+
+    /**
+     * Document type selection field.
+     * This field ensures the user selects a valid document type.
+     * @type {string}
+     */
     doctype: yup.string().required("Please select Document type."),
+    /**
+    * Document number field.
+    * This is required and must be between 6 and 30 characters.
+    * It ensures the user enters a valid document number.
+    * @type {string}
+    */
     docnumber: yup.string().required("Please enter valid document number.").min(6, "Document Number must equal to identity number.").max(30),
+
+    /**
+     * Date of birth field.
+     * This field ensures the user provides a valid date.
+     * It is a required field and must be a valid date.
+     * @type {Date}
+     */
     dob: yup
       .date()
       .transform(function (value, originalValue) {
@@ -61,12 +136,37 @@ const schema = yup
       .typeError("please enter a valid date.")
       .required('This is required field.')
     ,
+
+    /**
+     * Document front side upload field.
+     * This field is required and ensures the user uploads the front side of the document.
+     * @type {mixed}
+     */
     idfront: yup.mixed().required("Please upload front side of  document."),
+    /**
+     * Document back side upload field.
+     * This field is required and ensures the user uploads the back side of the document.
+     * @type {mixed}
+     */
     idback: yup.mixed().required("Please upload back side of  document."),
+    /**
+     * Bank statement upload field.
+     * This field is required and ensures the user uploads a valid bank statement.
+     * @type {mixed}
+     */
     statement: yup.mixed().required("Please upload bank statement."),
   })
   .required();
 
+/**
+* Checks if the given file name has a valid file extension based on the specified file type.
+* It splits the file name to get the extension and compares it with the valid extensions for the given file type.
+* 
+* @param {string | undefined} fileName - The name of the file to check.
+* @param {string} fileType - The type of file (e.g., 'image', 'pdf', etc.) to validate against.
+* 
+* @returns {boolean} - Returns `true` if the file extension is valid for the given file type, otherwise returns `false`.
+*/
 function isValidFileType(fileName: string | undefined, fileType: string) {
   return (
     fileName &&
@@ -76,7 +176,7 @@ function isValidFileType(fileName: string | undefined, fileType: string) {
   );
 }
 
-const KycAuth = (props: fixSection) => {
+const KycAuth = (props: KycAuthProps) => {
   const [frontImg, setFrontImg] = useState("");
   const [formFrontImg, setFromFrontImg] = useState("");
   const [backImg, setBackImg] = useState("");
@@ -120,6 +220,14 @@ const KycAuth = (props: fixSection) => {
     resolver: yupResolver(schema),
   });
 
+  /**
+ * Handles the file drop event by preventing the default behavior, stopping propagation, and processing the dropped file.
+ * It checks if files were dropped and then calls `handleFileChange` with the first file in the list.
+ * 
+ * @param {DragEvent} e - The drag event triggered when files are dropped onto the drop zone.
+ * 
+ * @returns {void} - This function doesn't return any value. It triggers a file change handler if a file is dropped.
+ */
   async function handleDrop(e: any) {
     e.preventDefault();
     e.stopPropagation();
@@ -129,6 +237,14 @@ const KycAuth = (props: fixSection) => {
     }
   }
 
+  /**
+ * Handles the file drop event for the "back" file by preventing the default behavior, stopping propagation, and processing the dropped file.
+ * It checks if files were dropped and then calls `handleBackChange` with the first file in the list.
+ * 
+ * @param {DragEvent} e - The drag event triggered when files are dropped onto the drop zone.
+ * 
+ * @returns {void} - This function doesn't return any value. It triggers a back file change handler if a file is dropped.
+ */
   async function handleDropBack(e: any) {
     e.preventDefault();
     e.stopPropagation();
@@ -138,6 +254,14 @@ const KycAuth = (props: fixSection) => {
     }
   }
 
+  /**
+ * Handles the file drop event for the statement file by preventing the default behavior, stopping propagation, and processing the dropped file.
+ * It checks if files were dropped and then calls `handleSelfieChange` with the first file in the list.
+ * 
+ * @param {DragEvent} e - The drag event triggered when files are dropped onto the drop zone.
+ * 
+ * @returns {void} - This function doesn't return any value. It triggers a statement file change handler if a file is dropped.
+ */
   async function handleDropStatement(e: any) {
     e.preventDefault();
     e.stopPropagation();
@@ -147,34 +271,80 @@ const KycAuth = (props: fixSection) => {
     }
   }
 
+  /**
+ * Handles the drag leave event by preventing the default behavior, stopping the event propagation, 
+ * and setting the drag state to inactive, indicating the user has dragged the file out of the drop zone.
+ * 
+ * @param {DragEvent} e - The drag leave event triggered when the dragged file leaves the drop zone.
+ * 
+ * @returns {void} - This function doesn't return any value. It just sets the drag state to inactive.
+ */
   function handleDragLeave(e: any) {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
   }
 
+  /**
+ * Handles the drag over event by preventing the default behavior, stopping the event propagation, 
+ * and setting the drag state to active, indicating the user is currently dragging a file over the drop zone.
+ * 
+ * @param {DragEvent} e - The drag over event triggered when the user drags a file over the drop zone.
+ * 
+ * @returns {void} - This function doesn't return any value. It just sets the drag state to active.
+ */
   function handleDragOver(e: any) {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(true);
   }
 
+  /**
+ * Handles the drag enter event by preventing the default behavior, stopping the event propagation, 
+ * and setting the drag state to active, indicating the user has entered the drop zone with a file.
+ * 
+ * @param {DragEvent} e - The drag enter event triggered when the user drags a file into the drop zone.
+ * 
+ * @returns {void} - This function doesn't return any value. It just sets the drag state to active.
+ */
   function handleDragEnter(e: any) {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(true);
   }
 
+  /**
+ * Sets the document type value and clears any previous errors related to the document type field.
+ * 
+ * @param {any} document - The document object containing the fullname to set as the document type.
+ * 
+ * @returns {void} - This function doesn't return any value. It updates the document type value and clears errors.
+ */
   const getDocumentDetail = (document: any) => {
     setValue("doctype", document?.fullname);
     clearErrors("doctype");
   };
 
+  /**
+ * Handles the change of country selection by setting the selected country value and clearing any related errors.
+ * 
+ * @param {any} country - The selected country value to set.
+ * 
+ * @returns {void} - This function doesn't return any value. It updates the country value and clears errors.
+ */
   const getCountryChange = (country: any) => {
     setValue("country", country);
     clearErrors("country");
   };
 
+  /**
+ * Validates the selected date of birth by ensuring the user is at least 18 years old.
+ * If the age is less than 18, it sets an error and resets the date. Otherwise, it sets the date value.
+ * 
+ * @param {any} date - The selected date to validate and set as the user's date of birth.
+ * 
+ * @returns {void} - This function doesn't return any value. It validates and sets the date or sets an error if invalid.
+ */
   const handleDate = (date: any) => {
 
     let deadline = new Date(date);
@@ -195,27 +365,19 @@ const KycAuth = (props: fixSection) => {
     clearErrors("dob");
   };
 
-  // const readFile = (file: any) => {
-  //   return new Promise((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(file);
-
-  //     reader.onload = () => {
-  //       resolve(reader.result);
-  //     };
-  //     reader.onerror = reject;
-  //   });
-  // };
-
+  /**
+ * Handles the file change for the front side of the document. It checks the file type and size, uploads it, 
+ * and stores the file URL. It also handles any errors related to file type, size, or upload issues.
+ * 
+ * @param {any} file - The file object to be uploaded (front side of the document).
+ * 
+ * @returns {void} - This function doesn't return any value. It processes the file upload and sets the file URL.
+ */
   const handleFileChange = async (file: any) => {
     try {
-
-      // let file = e.target.files[0];
       const fileSize = file.size / 1024 / 1024;
-
       const fileType = file['type'];
       if (!validImageTypes.includes(fileType)) {
-        // invalid file type code goes here.
         setError("idfront", {
           type: "custom",
           message: "invalid file type, upload only (png, jpg,jpeg).",
@@ -266,20 +428,16 @@ const KycAuth = (props: fixSection) => {
       console.error(error);
       setEnableFront(false);
     }
-    // let files = e.target.files[0];
-    // setValue("idfront", files);
-    // setFromFrontImg(files)
-    // clearErrors("idfront");
-    // if (files) {
-    //   var reader = new FileReader();
-    //   reader.readAsDataURL(files);
-    //   reader.onloadend = function (e: any) {
-    //     setFrontImg(reader?.result as string);
-    //   }.bind(this);
-    // }
-
   };
 
+  /**
+ * Handles the file change for the back side of the document. It checks the file type and size, uploads it, 
+ * and stores the file URL. It also handles any errors related to file type, size, or upload issues.
+ * 
+ * @param {any} file - The file object to be uploaded (back side of the document).
+ * 
+ * @returns {void} - This function doesn't return any value. It processes the file upload and sets the file URL.
+ */
   const handleBackChange = async (file: any) => {
 
     try {
@@ -339,19 +497,16 @@ const KycAuth = (props: fixSection) => {
       setEnableBack(false);
     }
 
-    // let files = e.target.files[0];
-    // setFromBackImg(files);
-    // setValue("idback", files as string);
-    // if (files) {
-    //   var reader = new FileReader();
-    //   reader.readAsDataURL(files);
-    //   reader.onloadend = function (e: any) {
-    //     setBackImg(reader?.result as string);
-    //   }.bind(this);
-    // }
-
   };
 
+  /**
+ * Handles the file upload for the selfie document. It validates the file type and size, uploads the file,
+ * and stores the secure URL. It also handles any errors related to file type, size, or upload issues.
+ * 
+ * @param {any} file - The file object to be uploaded (selfie image).
+ * 
+ * @returns {void} - This function doesn't return any value. It processes the file upload and sets the file URL.
+ */
   const handleSelfieChange = async (file: any) => {
 
     try {
@@ -410,24 +565,19 @@ const KycAuth = (props: fixSection) => {
       console.error(error);
       setEnableStatement(false);
     }
-    // let files = e.target.files[0];
-    // setFormSelfieImg(files);
-    // setValue("statement", files as string);
-    // clearErrors("statement");
-    // if (files) {
-    //   var reader = new FileReader();
-    //   reader.readAsDataURL(files);
-    //   reader.onloadend = function (e: any) {
-    //     setSelfieImg(reader.result as string);
-    //   }.bind(this);
-    // }
-
   };
 
+  /**
+ * Handles the form submission for KYC (Know Your Customer) with encrypted data. It sends a POST request to 
+ * submit the KYC details, and handles success and failure responses from the server. It also manages session 
+ * expiration and user feedback through toast notifications.
+ * 
+ * @param {UserSubmitForm} data - The data from the form to be submitted, containing user details for KYC.
+ * 
+ * @returns {void} - This function doesn't return any value. It handles the form submission and updates UI accordingly.
+ */
   const onHandleSubmit = async (data: UserSubmitForm) => {
     try {
-
-
       const ciphertext = AES.encrypt(JSON.stringify(data), `${process.env.NEXT_PUBLIC_SECRET_PASSPHRASE}`);
       let record = encodeURIComponent(ciphertext.toString());
 
